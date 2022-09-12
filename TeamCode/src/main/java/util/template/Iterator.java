@@ -91,6 +91,13 @@ public interface Iterator {
         }
     }
 
+    /**
+     * Static helper method for looping through a list and counting some value
+     * @param list
+     * @param code
+     * @param <T>
+     * @return
+     */
     static <T> int forAllCount(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> code){
         int count = 0;
         for(T obj: list){

@@ -3,29 +3,52 @@ package util.template;
 import util.Timer;
 
 public interface Precision {
-    Timer timer1 = new Timer();
-    Timer timer2 = new Timer();
+    /**
+     * Used for precision tasks involving time
+     */
 
-    default void resetTimer(){
-        timer1.reset();
-        timer2.set(100);
+
+    /**
+     * Internal timer objects
+     */
+    Timer inputTime = new Timer();
+    Timer outputTime = new Timer();
+
+    /**
+     * Reset precision timers
+     */
+    default void resetPrecisionTimers(){
+        inputTime.reset();
+        outputTime.set(1000);
     }
 
-    default boolean isTrueForTime(boolean condition, double time){
+    /**
+     * Is the input true for some amount of time
+     * @param condition
+     * @param time
+     * @return true if input stayed true for time
+     */
+    default boolean isInputTrueForTime(boolean condition, double time){
         if(condition){
-            return timer1.seconds() > time;
+            return inputTime.seconds() > time;
         }else{
-            timer1.reset();
+            inputTime.reset();
+            return false;
         }
-        return false;
     }
 
-    default boolean trueForTime(boolean condition, double time){
+    /**
+     * Outputs true for some amount of time
+     * @param condition
+     * @param time
+     * @return true if condition has been true int the last time
+     */
+    default boolean outputTrueForTime(boolean condition, double time){
         if(condition){
-            timer2.reset();
+            outputTime.reset();
             return true;
         }else{
-            return timer2.seconds() < time;
+            return outputTime.seconds() < time;
         }
     }
 }

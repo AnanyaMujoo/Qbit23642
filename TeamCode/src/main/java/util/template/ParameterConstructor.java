@@ -12,26 +12,52 @@ import util.condition.Magnitude;
 
 import static global.General.fault;
 
-// TOD4 NEW
-// Implement this class everywhere else it needs to be
+// TODO NEW Implement this class everywhere else it needs to be
 
 @SuppressWarnings("all")
 public interface ParameterConstructor<T> {
+    /**
+     * Used to create a constructor with lots of parameters
+     */
+
+    /**
+     * Map from parameter type to number of constructors
+     */
     HashMap<ParameterType, Integer> constructorMap = new HashMap<>();
+    /**
+     * Map from parameter type to preproccessing codesegs
+     */
     HashMap<ParameterType, ReturnParameterCodeSeg> preprocessorMap = new HashMap<>();
 
     void construct(T[] in);
 
+    /**
+     * Add constructor given the type and the number of parameters
+     * @param parameterType
+     * @param numberOfParameters
+     */
     default void addConstructor(ParameterType parameterType, int numberOfParameters){
         constructorMap.put(parameterType, numberOfParameters);
         preprocessorMap.put(parameterType, input -> input);
     }
 
+    /**
+     * Add constructor given type, number of parameters, and preprocessing codeseg
+     * @param parameterType
+     * @param numberParameters
+     * @param preprocessor
+     */
     default void addConstructor(ParameterType parameterType, int numberParameters, ReturnParameterCodeSeg<T[], T[]> preprocessor){
         constructorMap.put(parameterType, numberParameters);
         preprocessorMap.put(parameterType, preprocessor);
     }
 
+    /**
+     * Method to create all construcors, must be called before constructors can be used
+     * @param inputType
+     * @param inputParameters
+     * @param defaults
+     */
     default void createConstructors(ParameterType inputType, T[] inputParameters, T[] defaults){
         if(constructorMap.containsKey(inputType)){
             int numberOfParameters = Objects.requireNonNull(constructorMap.get(inputType));
@@ -47,5 +73,8 @@ public interface ParameterConstructor<T> {
         }
     }
 
+    /**
+     * Interface to override with specific types of constructors
+     */
     public interface ParameterType {};
 }

@@ -18,7 +18,7 @@ public class StallDetector implements Precision {
     public StallDetector(DcMotor m){
         motor = m;
         profiler = new Profiler(() -> (double) motor.getCurrentPosition());
-        resetTimer();
+        resetPrecisionTimers();
     }
 
 
@@ -35,8 +35,8 @@ public class StallDetector implements Precision {
     public boolean isStalling() {
         if(hasBeenInitialized) {
             profiler.update();
-            boolean isStalling = isTrueForTime(Math.abs(motor.getPower() - offset) > maxPower && Math.abs(profiler.getDerivative()) < minSpeed, minTime);
-            return trueForTime(isStalling, disableTime);
+            boolean isStalling = isInputTrueForTime(Math.abs(motor.getPower() - offset) > maxPower && Math.abs(profiler.getDerivative()) < minSpeed, minTime);
+            return outputTrueForTime(isStalling, disableTime);
         }
         return false;
     }
