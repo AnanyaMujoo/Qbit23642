@@ -1,8 +1,13 @@
 package util.template;
 
+import java.util.ArrayList;
+
+import util.TerraThread;
 import util.Timer;
 import util.codeseg.CodeSeg;
+import util.codeseg.ParameterCodeSeg;
 import util.codeseg.ReturnCodeSeg;
+import util.codeseg.ReturnParameterCodeSeg;
 
 import static global.General.log;
 
@@ -72,4 +77,25 @@ public interface Iterator {
      * @param secs
      */
     default void pause(double secs){ whileTime(() -> {}, secs); }
+
+
+    /**
+     * Static helper method for looping through lists
+     * @param list
+     * @param code
+     * @param <T>
+     */
+    static<T> void forAll(ArrayList<T> list, ParameterCodeSeg<T> code){
+        for(T obj: list){
+            code.run(obj);
+        }
+    }
+
+    static <T> int forAllCount(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> code){
+        int count = 0;
+        for(T obj: list){
+            count += code.run(obj) ? 1:0;
+        }
+        return count;
+    }
 }

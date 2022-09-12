@@ -49,7 +49,7 @@ public class RobotFramework {
      */
     protected RobotFramework(){
         allRobotParts = new ArrayList<>();
-        TerraThread.init();
+        TerraThread.resetAllThreads();
         localPlane = new CoordinatePlane();
         rfsHandler = new RobotFunctions();
         robotFunctionsThread = new TerraThread("RobotFunctionsThread");

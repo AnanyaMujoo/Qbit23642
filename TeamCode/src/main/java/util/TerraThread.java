@@ -2,20 +2,20 @@ package util;
 
 
 import java.util.ArrayList;
-import java.util.TreeMap;
 
 import global.Constants;
-import util.codeseg.CodeSeg;
 import util.codeseg.ExceptionCodeSeg;
 import util.codeseg.ParameterCodeSeg;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.condition.Status;
+import util.template.Iterator;
+
 import static global.General.*;
 
-// TOD4 Threads dont stop in the middle of init in auton??
+// TODO Threads dont stop in the middle of init in auton?????
 
-public class TerraThread extends Thread {
+public class TerraThread extends Thread{
     /**
      * Class for handling and creating thread
      * NOTE: Thread should not be used raw without this class
@@ -38,18 +38,29 @@ public class TerraThread extends Thread {
      */
     private volatile boolean wasExceptionThrown = false;
 
+    /**
+     * Arraylist of all TerraThread instances
+     */
     public static ArrayList<TerraThread> allTerraThreads = new ArrayList<>();
 
+    /**
+     * Name of this instance
+     */
     private final String name;
 
-
+    /**
+     * Constructor, creates thread using name and adds it to the arraylist
+     * @param name
+     */
     public TerraThread(String name){
         this.name = name;
         allTerraThreads.add(this);
     }
 
-
-    public static void init(){
+    /**
+     * Initializes the TerraThread by resetting the arraylist (Remove any old threads)
+     */
+    public static void resetAllThreads(){
         allTerraThreads = new ArrayList<>();
     }
 
@@ -123,32 +134,33 @@ public class TerraThread extends Thread {
         }
     }
 
+    /**
+     * Loop Through all threads for exceptions
+     */
     public static synchronized void checkAllThreadsForExceptions(){
-        forAllThreads(TerraThread::checkForException);
+        Iterator.forAll(allTerraThreads, TerraThread::checkForException);
     }
 
+    /**
+     * Get number of started threads
+     * @return started thread
+     */
     public static synchronized int getNumberOfStartedThreads(){
         return allTerraThreads.size();
     }
 
+    /**
+     * Get number of active threads
+     * @return active threads
+     */
     public static synchronized int getNumberOfActiveThreads(){
-        int count = 0;
-        for(TerraThread thread: allTerraThreads){
-            if(!thread.wasExceptionThrown){
-                count++;
-            }
-        }
-        return count;
+        return Iterator.forAllCount(allTerraThreads, thread -> !thread.wasExceptionThrown);
     }
 
-
+    /**
+     * Stop updating all thread
+     */
     public static void stopUpdatingAllThreads(){
-        forAllThreads(TerraThread::stopUpdating);
-    }
-
-    public static synchronized void forAllThreads(ParameterCodeSeg<TerraThread> code){
-        for(TerraThread thread: allTerraThreads){
-           code.run(thread);
-        }
+        Iterator.forAll(allTerraThreads, TerraThread::stopUpdating);
     }
 }
