@@ -11,9 +11,18 @@ import static global.General.bot;
 import static global.General.log;
 
 public class AutoModuleInitialTest extends AutoUnitTest {
+    /**
+     * Tests automodule intials
+     */
 
-   int lastInitial = 0;
+    /**
+     * Last initial number
+     */
+    int lastInitial = 0;
 
+    /**
+     * Test automodule
+     */
     StageList testAutoModule = new StageList(
             new Stage(
                     new Initial(() -> lastInitial = 1),
@@ -24,6 +33,9 @@ public class AutoModuleInitialTest extends AutoUnitTest {
             )
     );
 
+    /**
+     * Loop through all the initials for 5 trials, checking order
+     */
     @Override
     protected void run() {
         lastInitial = 0;

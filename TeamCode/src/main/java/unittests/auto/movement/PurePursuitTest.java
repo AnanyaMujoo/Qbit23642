@@ -11,11 +11,20 @@ import unittests.auto.AutoUnitTest;
 import static global.General.*;
 
 public class PurePursuitTest extends AutoUnitTest {
+    /**
+     * Test pure pursuit
+     */
 
+    /**
+     * Generators, reactors, and executors
+     */
     LineGenerator generator;
     MecanumPurePursuitReactor reactor;
     MecanumExecutor executor;
 
+    /**
+     * Run method for testing
+     */
     @Override
     protected void run() {
         generator = new LineGenerator();

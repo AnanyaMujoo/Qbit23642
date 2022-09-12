@@ -15,8 +15,7 @@ import static global.General.*;
  */
 
 public class CoordinatePlaneTest extends TeleUnitTest {
-    // TODO4 FIX
-    // Make this test more things
+    // TODO FIX Make this test more things
     public CoordinatePlane coordinatePlane = new CoordinatePlane();
 
     @Override

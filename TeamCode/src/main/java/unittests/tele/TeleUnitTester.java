@@ -34,9 +34,13 @@ public class TeleUnitTester extends Tele implements UnitTester{
         /**
          * Framework
          */
+//        add(new GyroTest());
+//        add(new ThreadTest());
+//        add(new MecanumCarouselTest());
+
         addAll(
-//              new GyroTest()
-//            new ThreadTest()
+//              new GyroTest(),
+//            new ThreadTest(),
 //            new MecanumCarouselTest(),
 //            new MecanumDriveTest(),
 //            new MecanumIntakeTest(),
@@ -76,7 +80,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
          * Sensors
          */
         addAll(
-            new ColorTest()
+//            new ColorTest()
 //            new DistanceTest(),
 //            new GyroTest(),
 //            new OdometryTest(),
