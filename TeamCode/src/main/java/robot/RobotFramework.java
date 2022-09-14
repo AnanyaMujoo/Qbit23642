@@ -10,6 +10,7 @@ import teleutil.independent.IndependentRunner;
 import util.TerraThread;
 import util.User;
 import util.codeseg.ParameterCodeSeg;
+import util.template.Iterator;
 
 import static global.General.*;
 
@@ -66,7 +67,7 @@ public class RobotFramework {
      */
     public void init(){
         setUser(mainUser);
-        forAllParts(RobotPart::init);
+        Iterator.forAll(allRobotParts, RobotPart::init);
         robotFunctionsThread.start();
         odometryThread.start();
         backgroundThread.start();
@@ -101,7 +102,7 @@ public class RobotFramework {
      * Stops all of the robotparts by setting all of the cmotors and cservos to 0 power
      * NOTE: This will only work if the current user is main user, do NOT use this in a thread
      */
-    public void halt(){ forAllParts(RobotPart::halt); }
+    public void halt(){ Iterator.forAll(allRobotParts, RobotPart::halt);}
 
     /**
      * Adds an automodule (or list of stages) to the robotfunctions to add it to the queue
@@ -116,14 +117,14 @@ public class RobotFramework {
      * NOTE: This does not change the access of the user which must be updated explicity with checkAccess
      * @param newUser
      */
-    public synchronized void setUser(User newUser){ forAllParts(part -> part.switchUser(newUser)); }
+    public synchronized void setUser(User newUser){ Iterator.forAll(allRobotParts, part -> part.switchUser(newUser)); }
 
     /**
      * Checks the access of the potential user to all of the robot parts
      * This should be called every time a user wants to use the robot, to check if the current user privileges are updated
      * @param potentialUser
      */
-    public synchronized void checkAccess(User potentialUser){ forAllParts(part -> part.checkAccess(potentialUser)); }
+    public synchronized void checkAccess(User potentialUser){ Iterator.forAll(allRobotParts, part -> part.checkAccess(potentialUser)); }
 
     /**
      * Cancel all of the automodules by emptying the robot functions queue
@@ -137,7 +138,7 @@ public class RobotFramework {
      * Set the user to main and halt all of the robot parts that aren't the main user
      */
     public void setUserMainAndHalt() {
-        forAllParts(part -> {
+        Iterator.forAll(allRobotParts, part -> {
             if (!part.getUser().equals(mainUser)){
                 part.switchUser(mainUser);
                 part.checkAccess(mainUser);
@@ -155,17 +156,6 @@ public class RobotFramework {
      * Pause the automodules
      */
     public void pauseAutoModules() { rfsHandler.pauseNow(); }
-
-    /**
-     * This runs the specified code for all of the robot parts.
-     * The type parameter code segment will accept the current robotpart
-     * @param run
-     */
-    private void forAllParts(ParameterCodeSeg<RobotPart> run){
-        for(RobotPart part: allRobotParts){
-            run.run(part);
-        }
-    }
 
 
     public void addIndependent(Independent independent){
