@@ -2,6 +2,7 @@ package util.template;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.TreeMap;
 
 import util.TerraThread;
 import util.Timer;
@@ -94,6 +95,12 @@ public interface Iterator {
 
     static<T> void forAll(Collection<T> list, ParameterCodeSeg<T> code){
         for(T obj: list){
+            code.run(obj);
+        }
+    }
+
+    static<T> void forAll(TreeMap<?, T> list, ParameterCodeSeg<T> code){
+        for(T obj: list.values()){
             code.run(obj);
         }
     }

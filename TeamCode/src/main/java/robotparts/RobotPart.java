@@ -38,6 +38,7 @@ import static global.General.*;
 import robotparts.electronics.input.ITouch;
 import util.User;
 import util.codeseg.ParameterCodeSeg;
+import util.template.Iterator;
 
 public class RobotPart {
     /**
@@ -45,6 +46,8 @@ public class RobotPart {
      * When making a new part of the robot part make sure to extend this class
      * then override the init method
      */
+
+    // TODO Backgroud thread fix
 
 
     /**
@@ -192,7 +195,7 @@ public class RobotPart {
      * NOTE: This should only be called in a thread that has access to use the robot
      */
     public void halt(){
-        forAllElectronics(Electronic::halt);
+        Iterator.forAll(electronics, Electronic::halt);
     }
 
     /**
@@ -220,19 +223,13 @@ public class RobotPart {
      */
     public synchronized boolean checkAccess(User potentialUser){
         if(potentialUser.equals(currentUser)) {
-            forAllElectronics(e -> e.access.allow());
+            Iterator.forAll(electronics, e -> e.access.allow());
             return true;
         }else{
-            forAllElectronics(e -> e.access.deny());
+            Iterator.forAll(electronics, e -> e.access.deny());
             return false;
         }
     }
-
-    /**
-     * For all electronics run...
-     * @param run
-     */
-    private void forAllElectronics(ParameterCodeSeg<Electronic> run){ for(Electronic e: electronics.values()){ run.run(e); } }
 
     /**
      * For all electronics of a certain encoderType run...
@@ -273,7 +270,10 @@ public class RobotPart {
      */
     public Stop returnPart(){return new Stop(() -> switchUser(mainUser));}
 
-
+    /**
+     * Make part used for backgroud task
+     * @return
+     */
     public Initial usePartForBackgroundTask(){return new Initial(() -> switchUser(User.BACK));}
 
     /**

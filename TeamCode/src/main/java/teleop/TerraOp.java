@@ -16,6 +16,8 @@ import static global.General.*;
 
 public class TerraOp extends Tele{
 
+    // TODO large on press handler support/default?
+
     @Override
     public void initTele() {
 
