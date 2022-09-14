@@ -1,17 +1,14 @@
 package teleutil.independent;
 
-import robotparts.sensors.TwoOdometry;
-import teleutil.Modes;
-import teleutil.independent.Independent;
-import util.User;
+import global.Modes;
 import util.condition.DecisionList;
-import util.condition.DecisionList.Decision;
 
 import static global.General.automodules;
 import static global.General.bot;
-import static global.General.independents;
 
 public class Independents {
+
+    // TODO CLEAN UP? FIX? Independents clean up?
 
     public Independent MoveForAllianceForward(){return new Independent(i -> {
         i.addCancelAutoModules();

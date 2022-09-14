@@ -9,6 +9,7 @@ import util.codeseg.ReturnCodeSeg;
 import util.codeseg.ParameterCodeSeg;
 import util.condition.Status;
 import util.store.Item;
+import util.template.Iterator;
 
 public class Selector<T> {
     /**
@@ -232,9 +233,7 @@ public class Selector<T> {
      * @param seg
      */
     public void runToAll(ParameterCodeSeg<T> seg){
-        for(Item<T> item: items){
-            seg.run(item.getValue());
-        }
+        Iterator.forAll(items, item -> seg.run(item.getValue()));
     }
 
     /**

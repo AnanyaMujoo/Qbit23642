@@ -16,6 +16,7 @@ import teleutil.independent.Independent;
 import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.condition.DecisionList;
+import util.template.Iterator;
 
 public class GamepadHandler {
     /**
@@ -107,17 +108,13 @@ public class GamepadHandler {
      * Define all of the buttons
      */
     public void defineAllButtons() {
-        for (Button b : Button.values()) {
-            handlerMap.put(b, new ButtonHandler(b, this));
-        }
+        Iterator.forAll(Button.values(), b -> handlerMap.put(b, new ButtonHandler(b, this)));
     }
 
     /**
      * Run using the handlerMap
      */
     public void run() {
-        for (ButtonHandler handler : handlerMap.values()) {
-            handler.run();
-        }
+        Iterator.forAll(handlerMap.values(), ButtonHandler::run);
     }
 }

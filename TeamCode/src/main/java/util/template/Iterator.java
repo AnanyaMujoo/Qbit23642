@@ -1,6 +1,7 @@
 package util.template;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import util.TerraThread;
 import util.Timer;
@@ -80,7 +81,7 @@ public interface Iterator {
 
 
     /**
-     * Static helper method for looping through lists
+     * Static helper methods for looping through lists
      * @param list
      * @param code
      * @param <T>
@@ -91,13 +92,18 @@ public interface Iterator {
         }
     }
 
-    /**
-     * Static helper method for looping through a list and counting some value
-     * @param list
-     * @param code
-     * @param <T>
-     * @return
-     */
+    static<T> void forAll(Collection<T> list, ParameterCodeSeg<T> code){
+        for(T obj: list){
+            code.run(obj);
+        }
+    }
+
+    static<T> void forAll(T[] list, ParameterCodeSeg<T> code){
+        for(T obj: list){
+            code.run(obj);
+        }
+    }
+
     static <T> int forAllCount(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> code){
         int count = 0;
         for(T obj: list){

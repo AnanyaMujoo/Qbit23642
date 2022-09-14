@@ -2,12 +2,11 @@ package robotparts.hardware.mecanum;
 
 import com.qualcomm.robotcore.hardware.Servo;
 
-import automodules.StageList;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import robotparts.RobotPart;
 import robotparts.electronics.positional.PServo;
-import teleutil.Modes;
+import global.Modes;
 
 public class MecanumOuttake extends RobotPart {
     /**

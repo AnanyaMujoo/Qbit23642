@@ -1,19 +1,17 @@
 package automodules;
 
-import org.checkerframework.common.subtyping.qual.Bottom;
-
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import elements.FieldSide;
 import elements.Level;
 import robotparts.RobotPart;
-import teleutil.Modes;
+import global.Modes;
 import util.condition.DecisionList;
 
 import static global.General.bot;
 import static global.General.fieldSide;
-import static teleutil.Modes.OuttakeMode.ALLIANCE;
-import static teleutil.Modes.OuttakeMode.SHARED;
+import static global.Modes.OuttakeMode.ALLIANCE;
+import static global.Modes.OuttakeMode.SHARED;
 
 public class AutoModules {
 

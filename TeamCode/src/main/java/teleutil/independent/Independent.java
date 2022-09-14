@@ -7,6 +7,7 @@ import util.codeseg.ParameterCodeSeg;
 import static global.General.bot;
 
 public class Independent extends MecanumAuto {
+    // TODO clean up independents
     private final ParameterCodeSeg<Independent> define;
 
     public Independent(ParameterCodeSeg<Independent> define){

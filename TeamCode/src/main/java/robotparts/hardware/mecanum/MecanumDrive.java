@@ -1,7 +1,6 @@
 package robotparts.hardware.mecanum;
 
 import static global.General.bot;
-import static global.General.fieldSide;
 
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
@@ -13,14 +12,12 @@ import automodules.stage.Stage;
 import automodules.stage.Stop;
 import autoutil.executors.Executor;
 import autoutil.executors.MecanumExecutorArcsPID;
-import elements.FieldSide;
-import elements.Level;
 import geometry.circles.AngleType;
 import geometry.position.Pose;
 import math.misc.Logistic;
 import robotparts.RobotPart;
 import robotparts.electronics.continuous.CMotor;
-import teleutil.Modes.*;
+import global.Modes.*;
 
 /**
  * NOTE: Uncommented

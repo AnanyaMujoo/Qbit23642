@@ -1,16 +1,14 @@
 package teleutil.independent;
 
-import elements.Ball;
 import robot.RobotFramework;
-import teleutil.Modes;
+import global.Modes;
 import util.User;
 
 import static global.General.bot;
-import static global.General.log;
 import static global.General.mainUser;
 
 public class IndependentRunner {
-    // TOD4 Why do we need this?
+    // TODO Why do we need this?
     public volatile boolean isIndependentRunning = false;
     public volatile boolean disabled = false;
 

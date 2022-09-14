@@ -2,21 +2,16 @@ package teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import java.util.Arrays;
-
 import elements.FieldSide;
-import teleutil.Modes;
 import teleutil.button.Button;
 import teleutil.button.OnNotHeldEventHandler;
 import teleutil.button.OnPressEventHandler;
 import teleutil.button.OnTurnOffEventHandler;
 import teleutil.button.OnTurnOnEventHandler;
-import util.User;
 
 import static global.General.bot;
 import static global.General.gph1;
 import static global.General.*;
-import static teleutil.Modes.OuttakeMode.*;
 
 
 public class TerraOp extends Tele{

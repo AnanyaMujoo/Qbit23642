@@ -1,8 +1,17 @@
-package teleutil;
+package global;
 
 import util.condition.DecisionList.Decision;
 
 public class Modes {
+    /**
+     * Class to hold modes (different types of movement/control)
+     */
+
+
+    /**
+     * List of mode types
+     */
+
     public enum OuttakeMode implements Decision {
         SHARED,
         ALLIANCE
