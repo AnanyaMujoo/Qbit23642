@@ -8,6 +8,8 @@ import static java.lang.Math.*;
  * NOTE: Uncommented
  */
 
+// TODO FIX GEOMETRY PACKAGE
+
 public abstract class GeometryObject {
     public GeometryObject getRelativeTo(Pose origin) {
         return this;

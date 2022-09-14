@@ -11,6 +11,8 @@ import math.calculus.Differentiator;
 import math.calculus.Integrator;
 
 public class Display extends Drawer {
+    // TODO FIX DISPLAY
+
     private static final int width = 700;
     private static final int height = 700;
 
