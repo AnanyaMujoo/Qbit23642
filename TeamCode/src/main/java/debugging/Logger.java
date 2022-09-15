@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import teleutil.Selector;
 import util.store.Item;
+import util.template.Iterator;
 
 import static global.General.*;
 
@@ -117,11 +118,11 @@ public class Logger {
      * To see the logs go to logcat and then the assert tab
      */
     public void showLogs(){
-        for(Entry<String, Log> entry: logs.entrySet()){
+        Iterator.forAll(logs.entrySet(), entry -> {
             String name = entry.getValue().getName();
             String value = entry.getValue().getValues().toString();
             android.util.Log.println(android.util.Log.ASSERT, name, value);
-        }
+        });
         android.util.Log.println(android.util.Log.ASSERT, "Number of logs", Integer.toString(logNum));
     }
 }
