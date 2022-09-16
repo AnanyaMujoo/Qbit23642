@@ -6,7 +6,7 @@ import autoutil.executors.TankExecutor;
 import geometry.circles.AngleType;
 import unittests.auto.AutoUnitTest;
 
-// TODO REMOVE
+// TODO 4 REMOVE
 public class ArcTest extends AutoUnitTest {
     @Override
     public void defineExecutorAndAddPoints() {

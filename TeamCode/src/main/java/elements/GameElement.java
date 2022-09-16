@@ -1,6 +1,6 @@
 package elements;
 
-import util.condition.DecisionList.Decision;
+import util.condition.Decision;
 
 public enum GameElement implements Decision {
     /**

@@ -1,10 +1,8 @@
 package elements;
 
-import util.condition.DecisionList;
+import util.condition.Decision;
 
-// TODO MOVE INTO ONE CLASS
-
-public enum Level implements DecisionList.Decision {
+public enum Level implements Decision {
     BOTTOM,
     MIDDLE,
     TOP

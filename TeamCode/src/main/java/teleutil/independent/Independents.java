@@ -9,7 +9,7 @@ import static global.General.bot;
 
 public class Independents implements RobotUser {
 
-    // TODO FIX Independents clean up?
+    // TODO 4 FIX Independents clean up?
 
     public Independent MoveForAllianceForward(){return new Independent(i -> {
         i.addCancelAutoModules();

@@ -53,9 +53,4 @@ public class DecisionList {
             fault.warn("No option " + currentDecision.toString() + " found", Expectation.SURPRISING, Magnitude.MODERATE);
         }
     }
-
-    /**
-     * Implemented if the class represents a type of decision
-     */
-    public interface Decision {}
 }

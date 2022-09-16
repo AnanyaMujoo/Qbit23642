@@ -5,7 +5,7 @@ import util.Timer;
 
 import static global.General.bot;
 
-// TODO REMOVE
+// TODO 4 REMOVE
 @Deprecated
 public class MoveTest extends AutoUnitTest {
 

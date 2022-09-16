@@ -1,7 +1,10 @@
 package elements;
-import util.condition.DecisionList.Decision;
+import util.condition.Decision;
 
 public enum Case implements Decision {
+    /**
+     * Which case is it?
+     */
     LEFT(Level.BOTTOM),
     CENTER(Level.MIDDLE),
     RIGHT(Level.TOP);
@@ -28,9 +31,4 @@ public enum Case implements Decision {
                 return null;
         }
     }
-
-//    @Override
-//    public String toString() {
-//        return getLevel().toString();
-//    }
 }

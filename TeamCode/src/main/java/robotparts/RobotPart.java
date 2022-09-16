@@ -48,7 +48,7 @@ public class RobotPart implements RobotUser {
      * then override the init method
      */
 
-    // TODO Backgroud thread fix
+    // TODO 4 FIX Backgroud thread easier to use
 
 
     /**

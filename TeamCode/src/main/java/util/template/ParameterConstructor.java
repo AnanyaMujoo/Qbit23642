@@ -12,7 +12,7 @@ import util.condition.Magnitude;
 
 import static global.General.fault;
 
-// TODO NEW Implement this class everywhere else it needs to be
+// TODO 4 NEW Implement this class everywhere else it needs to be
 
 @SuppressWarnings("all")
 public interface ParameterConstructor<T> {

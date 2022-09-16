@@ -1,6 +1,6 @@
 package global;
 
-import util.condition.DecisionList.Decision;
+import util.condition.Decision;
 
 public class Modes {
     /**

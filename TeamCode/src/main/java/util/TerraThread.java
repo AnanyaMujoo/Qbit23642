@@ -13,7 +13,9 @@ import util.template.Iterator;
 
 import static global.General.*;
 
-// TODO PROBLEM Threads dont stop in the middle of init in auton?????
+// TODO 3 PROBLEM Threads dont stop in the middle of init in auton?????
+
+// TODO 3 FIX Create and test all unit tests
 
 public class TerraThread extends Thread{
     /**

@@ -8,7 +8,7 @@ import static global.General.bot;
 import static global.General.mainUser;
 
 public class IndependentRunner {
-    // TODO FIX Why do we need this?
+    // TODO 4 FIX Why do we need this?
     public volatile boolean isIndependentRunning = false;
     public volatile boolean disabled = false;
 

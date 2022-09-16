@@ -1,5 +1,5 @@
 package elements;
-import util.condition.DecisionList.Decision;
+import util.condition.Decision;
 
 public enum FieldSide implements Decision {
     /**
