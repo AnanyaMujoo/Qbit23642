@@ -14,6 +14,8 @@ import static global.General.*;
 
 public abstract class Lift extends PMotorRobotPart {
 
+    // TODO 4 Why do we need this?
+
     @Override
     public double getOverallTarget(double in) {
         return in/Math.sin(getAngle());

@@ -15,6 +15,7 @@ import robotparts.electronics.continuous.CMotor;
 import util.Timer;
 
 public class MecanumCarousel extends RobotPart {
+    // TODO 4 Please make automodules easier to make
     private CMotor carousel;
 
     private final Timer timerA = new Timer();

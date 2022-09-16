@@ -73,6 +73,8 @@ public class RobotPart implements RobotUser {
      */
     public void init() {}
 
+    // TODO 4 Fix, maybe use parameter constructor?, maybe use enum?, clean up?
+
     /**
      * Create different robot parts from a set of parameters
      */

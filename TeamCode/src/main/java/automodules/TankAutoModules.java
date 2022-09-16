@@ -8,7 +8,7 @@ public class TankAutoModules {
     /**
      * Define AutoModules here as a stage list
      */
-    // TOD4 FIX
+    // TODO 4 REMOVE Why do we need this?
             // Remove the inputted RobotParts
     public StageList IntakeAuto = new StageList(
         bot.tankLift.liftEncoder(0.4, 0),

@@ -15,6 +15,8 @@ import util.codeseg.ReturnParameterCodeSeg;
 
 public abstract class TwoLift extends RobotPart {
 
+    // TODO 4 REMOVE Why do we need this?
+
     public PMotor motorUp;
     public PMotor motorDown;
 

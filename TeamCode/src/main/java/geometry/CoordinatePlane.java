@@ -18,8 +18,7 @@ import static java.lang.Math.*;
 
 public class CoordinatePlane {
 
-    // TODO3 NEW
-    // Finish all geometric classes in polygon
+    // TODO 4 NEW Finish all geometric classes in polygon
 
 
     protected final Pose origin = new Pose(new Point(0, 0), 0);
