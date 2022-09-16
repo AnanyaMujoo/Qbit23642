@@ -12,51 +12,50 @@ import teleutil.button.OnTurnOnEventHandler;
 import static global.General.bot;
 import static global.General.gph1;
 import static global.General.*;
+import static teleutil.button.Button.*;
+
 
 
 public class TerraOp extends Tele{
 
-    // TODO large on press handler support/default?
+
 
     @Override
     public void initTele() {
 
-        gph1.link(Button.X, OnPressEventHandler.class, () -> {
-            bot.cancelAutoModules();
-            bot.cancelIndependent();
-        });
+        gph1.link(X, () -> bot.cancelAll());
 
-//        gph1.link(Button.DPAD_DOWN, OnPressEventHandler.class, bot::pauseAutoModules);
-//        gph1.link(Button.DPAD_UP, OnPressEventHandler.class, bot::resumeAutoModules);
+//        gph1.link(Button.DPAD_DOWN,  bot::pauseAutoModules);
+//        gph1.link(Button.DPAD_UP,  bot::resumeAutoModules);
 
         gph1.link(Button.LEFT_TRIGGER, automodules.OneDuck);
-        gph1.link(Button.RIGHT_TRIGGER, OnPressEventHandler.class, lift::cycleLevelUp);
-        gph1.link(Button.RIGHT_BUMPER, OnPressEventHandler.class, outtake::cycleOuttakeMode);
-        gph1.link(Button.LEFT_BUMPER, OnPressEventHandler.class, outtake::cycleSharedMode);
-        gph1.link(Button.RIGHT_STICK_BUTTON, OnPressEventHandler.class, drive::cycleDriveUp);
-        gph1.link(Button.LEFT_STICK_BUTTON, OnPressEventHandler.class, () -> intake.moveRaw(-1));
+        gph1.link(Button.RIGHT_TRIGGER, lift::cycleLevelUp);
+        gph1.link(Button.RIGHT_BUMPER, outtake::cycleOuttakeMode);
+        gph1.link(Button.LEFT_BUMPER, outtake::cycleSharedMode);
+        gph1.link(Button.RIGHT_STICK_BUTTON,  drive::cycleDriveUp);
+        gph1.link(Button.LEFT_STICK_BUTTON,  () -> intake.moveRaw(-1));
 
         gph1.link(Button.A, automodules.IntakeCombined);
 
         gph1.link(Button.B, independents.Backward);
         gph1.link(Button.Y, independents.Forward);
 
-        gph1.link(Button.DPAD_RIGHT,OnPressEventHandler.class, outtake::collectCap);
-        gph1.link(Button.DPAD_DOWN,OnPressEventHandler.class, outtake::readyCap);
-        gph1.link(Button.DPAD_LEFT,OnPressEventHandler.class, outtake::dropCap);
-        gph1.link(Button.DPAD_UP, OnPressEventHandler.class, outtake::startCap);
+        gph1.link(Button.DPAD_RIGHT, outtake::collectCap);
+        gph1.link(Button.DPAD_DOWN, outtake::readyCap);
+        gph1.link(Button.DPAD_LEFT, outtake::dropCap);
+        gph1.link(Button.DPAD_UP,  outtake::startCap);
 
-        gph2.link(Button.RIGHT_TRIGGER, OnPressEventHandler.class, outtake::lock);
-        gph2.link(Button.LEFT_TRIGGER, OnPressEventHandler.class, outtake::drop);
+        gph2.link(Button.RIGHT_TRIGGER,  outtake::lock);
+        gph2.link(Button.LEFT_TRIGGER,  outtake::drop);
         gph2.link(Button.RIGHT_BUMPER, OnTurnOnEventHandler.class, () -> intake.move(1));
         gph2.link(Button.RIGHT_BUMPER, OnTurnOffEventHandler.class, () -> intake.move(0));
-        gph2.link(Button.LEFT_BUMPER, OnPressEventHandler.class, () -> intake.move(-1));
+        gph2.link(Button.LEFT_BUMPER,  () -> intake.move(-1));
         gph2.link(Button.LEFT_BUMPER, OnNotHeldEventHandler.class, () -> intake.move(0));
-        gph2.link(Button.RIGHT_STICK_BUTTON, OnPressEventHandler.class, outtake::turnToHorizontal);
-        gph2.link(Button.LEFT_STICK_BUTTON, OnPressEventHandler.class, outtake::turnToStart);
-        gph2.link(Button.DPAD_RIGHT, OnPressEventHandler.class, outtake::sharedTurretRight);
-        gph2.link(Button.DPAD_DOWN, OnPressEventHandler.class, outtake::turretCenter);
-        gph2.link(Button.DPAD_LEFT, OnPressEventHandler.class, outtake::sharedTurretLeft);
+        gph2.link(Button.RIGHT_STICK_BUTTON,  outtake::turnToHorizontal);
+        gph2.link(Button.LEFT_STICK_BUTTON,  outtake::turnToStart);
+        gph2.link(Button.DPAD_RIGHT,  outtake::sharedTurretRight);
+        gph2.link(Button.DPAD_DOWN,  outtake::turretCenter);
+        gph2.link(Button.DPAD_LEFT,  outtake::sharedTurretLeft);
 
         lift.resetEncoder();
 

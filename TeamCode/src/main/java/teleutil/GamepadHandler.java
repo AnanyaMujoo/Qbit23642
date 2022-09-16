@@ -17,6 +17,7 @@ import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.condition.DecisionList;
 import util.template.Iterator;
+import teleutil.button.Button.*;
 
 public class GamepadHandler {
     /**
@@ -75,6 +76,13 @@ public class GamepadHandler {
     }
 
     /**
+     * Default link method, uses on press handler
+     */
+    public void link(Button b, CodeSeg codeSeg){
+        link(b, OnPressEventHandler.class, codeSeg);
+    }
+
+    /**
      * Link method used to link a button to a button handler to run some code
      * @param b
      * @param type
@@ -95,6 +103,8 @@ public class GamepadHandler {
     public void link(Button b, Independent independent){
         link(b, OnPressEventHandler.class, () -> bot.addIndependent(independent));
     }
+
+
 
     /**
      * Unlink all of the button handlers
