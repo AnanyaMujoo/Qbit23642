@@ -13,13 +13,13 @@ public class TerraAutoDuck extends MecanumAuto {
     @Override
     public void initAuto() {
         scan();
-        setBackgroundTasks(bot.lift::holdPosition);
-        bot.outtake.midCap();
+        setBackgroundTasks(lift::holdPosition);
+        outtake.midCap();
     }
 
     @Override
     public void define() {
-        bot.outtake.midCap();
+        outtake.midCap();
         addWaypoint(20,10,45);
         customSide(FieldSide.BLUE, () -> {
             addSetpoint(30,20,90);

@@ -17,8 +17,10 @@ public class InternalCameraTest extends AutoUnitTest {
      */
     @Override
     public void init() {
-        bot.camera.setInternalScanner(teamElementScanner);
-        bot.camera.startInternalCamera();
+
+        camera.setInternalScanner(teamElementScanner);
+
+        camera.startInternalCamera();
     }
 
     /**
@@ -27,7 +29,8 @@ public class InternalCameraTest extends AutoUnitTest {
     @Override
     protected void run() {
         whileActive(() -> {
-            log.show("Internal Camera FPS", bot.camera.getInternalFPS());
+            log.show("Internal Camera FPS",
+                    camera.getInternalFPS());
             log.show("Detected Case", teamElementScanner.getCase());
         });
     }
@@ -37,6 +40,7 @@ public class InternalCameraTest extends AutoUnitTest {
      */
     @Override
     public void stop() {
-        bot.camera.stopInternalCamera();
+
+        camera.stopInternalCamera();
     }
 }

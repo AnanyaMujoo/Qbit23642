@@ -22,6 +22,7 @@ import automodules.stage.Initial;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robot.RobotFramework;
+import robot.RobotUser;
 import robotparts.electronics.continuous.CMotor;
 import robotparts.electronics.continuous.CServo;
 import robotparts.electronics.input.ICamera;
@@ -40,7 +41,7 @@ import util.User;
 import util.codeseg.ParameterCodeSeg;
 import util.template.Iterator;
 
-public class RobotPart {
+public class RobotPart implements RobotUser {
     /**
      * Represents a part of the robot like the drivetrain or the intake
      * When making a new part of the robot part make sure to extend this class

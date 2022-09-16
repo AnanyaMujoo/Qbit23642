@@ -89,7 +89,7 @@ public class TankOdometry extends RobotPart {
     // NOTE: Odometry modules are to the left and to the back of the center of the robot
     public double[] getPosChangeCenter() {
         processTheta();
-        double gyroReading = bot.gyro.getRightHeadingRad();
+        double gyroReading = gyro.getRightHeadingRad();
         double dtheta = gyroReading - curPos[2];
 
         while (abs(dtheta) > PI) {

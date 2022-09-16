@@ -72,9 +72,9 @@ public class MecanumCarousel extends RobotPart {
     public Stage spinOneDuckMoving(double time, double minPow, double maxPow,double k,  double f, double s, double t) {
         return new Stage(
                 usePart(),
-                bot.drive.usePart(),
+                drive.usePart(),
                 new Initial(timerA::reset),
-                bot.drive.mainMove(f,s,t),
+                drive.mainMove(f,s,t),
                 new Main(() ->{
                     double secs = timerA.seconds();
                     double halfTime = time/2;
@@ -89,8 +89,8 @@ public class MecanumCarousel extends RobotPart {
                 }),
                 exitTime(time),
                 stop(),
-                bot.drive.stopMove(),
-                bot.drive.returnPart(),
+                drive.stopMove(),
+                drive.returnPart(),
                 returnPart()
         );
     }

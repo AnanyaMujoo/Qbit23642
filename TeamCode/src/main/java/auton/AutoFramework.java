@@ -103,8 +103,8 @@ public abstract class AutoFramework extends Auto{
     public void scan(){
         scanning = true;
         caseScanner = getCaseScanner();
-        bot.camera.setExternalScanner(caseScanner);
-        bot.camera.startExternalCamera();
+        camera.setExternalScanner(caseScanner);
+        camera.startExternalCamera();
         while (!isStarted()){
             caseDetected = caseScanner.getCase();
             log.show("Case Detected: ", caseDetected);
@@ -116,7 +116,7 @@ public abstract class AutoFramework extends Auto{
     public void runAuto() {
         define();
         if(scanning) {
-            bot.camera.stopExternalCamera();
+            camera.stopExternalCamera();
         }
         for(AutoSegment<? extends Reactor, ? extends Generator> autoSegment: segments){
             executor = getExecutor();

@@ -15,15 +15,15 @@ public class TerraAutoCycles extends MecanumAuto {
     public void initAuto() {
         scan();
         setBackgroundTasks(() -> {
-            bot.lift.holdPosition();
-            bot.intake.move(-0.8);
+            lift.holdPosition();
+            intake.move(-0.8);
         });
-        bot.intake.scale = 0.6;
+        intake.scale = 0.6;
     }
 
     @Override
     public void define() {
-        bot.outtake.midCap();
+        outtake.midCap();
         addWaypoint(20, 20, -60);
         customNumber(5, i -> {
             addCancelAutoModules();

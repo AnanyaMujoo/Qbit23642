@@ -1,12 +1,13 @@
 package teleutil.independent;
 
 import global.Modes;
+import robot.RobotUser;
 import util.condition.DecisionList;
 
 import static global.General.automodules;
 import static global.General.bot;
 
-public class Independents {
+public class Independents implements RobotUser {
 
     // TODO CLEAN UP? FIX? Independents clean up?
 
@@ -44,15 +45,15 @@ public class Independents {
 //        i.addSetpoint(-30, -50, 30);
     });}
 
-    public DecisionList MoveForForward = new DecisionList(bot.outtake::getOuttakeMode)
+    public DecisionList MoveForForward = new DecisionList(outtake::getOuttakeMode)
             .addOption(Modes.OuttakeMode.ALLIANCE, () -> bot.addIndependent(MoveForAllianceForward()))
             .addOption(Modes.OuttakeMode.SHARED, () -> bot.addIndependent(MoveForSharedForward()));
 
-    public DecisionList MoveForBackward = new DecisionList(bot.outtake::getOuttakeMode)
+    public DecisionList MoveForBackward = new DecisionList(outtake::getOuttakeMode)
             .addOption(Modes.OuttakeMode.ALLIANCE, () -> bot.addIndependent(MoveForAllianceBackward()))
             .addOption(Modes.OuttakeMode.SHARED, () -> bot.addIndependent(MoveForSharedBackward()));
 
-    public DecisionList Forward = new DecisionList(bot.drive::getIndependentMode)
+    public DecisionList Forward = new DecisionList(drive::getIndependentMode)
             .addOption(Modes.IndependentMode.MANUAL, () -> {
                 bot.cancelAutoModules();
                 bot.addAutoModule(automodules.ResetLiftAndOuttake);
@@ -62,11 +63,11 @@ public class Independents {
                 MoveForForward.check();
             });
 
-    public DecisionList Backward = new DecisionList(bot.drive::getIndependentMode)
+    public DecisionList Backward = new DecisionList(drive::getIndependentMode)
             .addOption(Modes.IndependentMode.MANUAL, automodules.SetUpForBoth::check)
             .addOption(Modes.IndependentMode.USING, () -> {
                 bot.independentRunner.enableIndependent();
-                bot.odometry.reset();
+                odometry.reset();
                 MoveForBackward.check();
             });
 

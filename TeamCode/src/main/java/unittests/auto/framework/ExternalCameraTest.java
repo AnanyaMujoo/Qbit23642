@@ -18,8 +18,8 @@ public class ExternalCameraTest extends AutoUnitTest {
      */
     @Override
     public void init() {
-        bot.camera.setExternalScanner(teamElementScanner);
-        bot.camera.startExternalCamera();
+        camera.setExternalScanner(teamElementScanner);
+        camera.startExternalCamera();
     }
 
     /**
@@ -28,7 +28,7 @@ public class ExternalCameraTest extends AutoUnitTest {
     @Override
     protected void run() {
         whileActive(() -> {
-            log.show("External Camera FPS", bot.camera.getInternalFPS());
+            log.show("External Camera FPS", camera.getInternalFPS());
             log.show("Detected Case", teamElementScanner.getCase());
         });
     }
@@ -38,6 +38,6 @@ public class ExternalCameraTest extends AutoUnitTest {
      */
     @Override
     public void stop() {
-        bot.camera.stopExternalCamera();
+        camera.stopExternalCamera();
     }
 }

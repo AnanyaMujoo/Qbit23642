@@ -30,76 +30,76 @@ public class TerraOp extends Tele{
 //        gph1.link(Button.DPAD_UP, OnPressEventHandler.class, bot::resumeAutoModules);
 
         gph1.link(Button.LEFT_TRIGGER, automodules.OneDuck);
-        gph1.link(Button.RIGHT_TRIGGER, OnPressEventHandler.class, bot.lift::cycleLevelUp);
-        gph1.link(Button.RIGHT_BUMPER, OnPressEventHandler.class, bot.outtake::cycleOuttakeMode);
-        gph1.link(Button.LEFT_BUMPER, OnPressEventHandler.class, bot.outtake::cycleSharedMode);
-        gph1.link(Button.RIGHT_STICK_BUTTON, OnPressEventHandler.class, bot.drive::cycleDriveUp);
-        gph1.link(Button.LEFT_STICK_BUTTON, OnPressEventHandler.class, () -> bot.intake.moveRaw(-1));
+        gph1.link(Button.RIGHT_TRIGGER, OnPressEventHandler.class, lift::cycleLevelUp);
+        gph1.link(Button.RIGHT_BUMPER, OnPressEventHandler.class, outtake::cycleOuttakeMode);
+        gph1.link(Button.LEFT_BUMPER, OnPressEventHandler.class, outtake::cycleSharedMode);
+        gph1.link(Button.RIGHT_STICK_BUTTON, OnPressEventHandler.class, drive::cycleDriveUp);
+        gph1.link(Button.LEFT_STICK_BUTTON, OnPressEventHandler.class, () -> intake.moveRaw(-1));
 
         gph1.link(Button.A, automodules.IntakeCombined);
 
         gph1.link(Button.B, independents.Backward);
         gph1.link(Button.Y, independents.Forward);
 
-        gph1.link(Button.DPAD_RIGHT,OnPressEventHandler.class, bot.outtake::collectCap);
-        gph1.link(Button.DPAD_DOWN,OnPressEventHandler.class, bot.outtake::readyCap);
-        gph1.link(Button.DPAD_LEFT,OnPressEventHandler.class, bot.outtake::dropCap);
-        gph1.link(Button.DPAD_UP, OnPressEventHandler.class, bot.outtake::startCap);
+        gph1.link(Button.DPAD_RIGHT,OnPressEventHandler.class, outtake::collectCap);
+        gph1.link(Button.DPAD_DOWN,OnPressEventHandler.class, outtake::readyCap);
+        gph1.link(Button.DPAD_LEFT,OnPressEventHandler.class, outtake::dropCap);
+        gph1.link(Button.DPAD_UP, OnPressEventHandler.class, outtake::startCap);
 
-        gph2.link(Button.RIGHT_TRIGGER, OnPressEventHandler.class, bot.outtake::lock);
-        gph2.link(Button.LEFT_TRIGGER, OnPressEventHandler.class, bot.outtake::drop);
-        gph2.link(Button.RIGHT_BUMPER, OnTurnOnEventHandler.class, () -> bot.intake.move(1));
-        gph2.link(Button.RIGHT_BUMPER, OnTurnOffEventHandler.class, () -> bot.intake.move(0));
-        gph2.link(Button.LEFT_BUMPER, OnPressEventHandler.class, () -> bot.intake.move(-1));
-        gph2.link(Button.LEFT_BUMPER, OnNotHeldEventHandler.class, () -> bot.intake.move(0));
-        gph2.link(Button.RIGHT_STICK_BUTTON, OnPressEventHandler.class, bot.outtake::turnToHorizontal);
-        gph2.link(Button.LEFT_STICK_BUTTON, OnPressEventHandler.class, bot.outtake::turnToStart);
-        gph2.link(Button.DPAD_RIGHT, OnPressEventHandler.class, bot.outtake::sharedTurretRight);
-        gph2.link(Button.DPAD_DOWN, OnPressEventHandler.class, bot.outtake::turretCenter);
-        gph2.link(Button.DPAD_LEFT, OnPressEventHandler.class, bot.outtake::sharedTurretLeft);
+        gph2.link(Button.RIGHT_TRIGGER, OnPressEventHandler.class, outtake::lock);
+        gph2.link(Button.LEFT_TRIGGER, OnPressEventHandler.class, outtake::drop);
+        gph2.link(Button.RIGHT_BUMPER, OnTurnOnEventHandler.class, () -> intake.move(1));
+        gph2.link(Button.RIGHT_BUMPER, OnTurnOffEventHandler.class, () -> intake.move(0));
+        gph2.link(Button.LEFT_BUMPER, OnPressEventHandler.class, () -> intake.move(-1));
+        gph2.link(Button.LEFT_BUMPER, OnNotHeldEventHandler.class, () -> intake.move(0));
+        gph2.link(Button.RIGHT_STICK_BUTTON, OnPressEventHandler.class, outtake::turnToHorizontal);
+        gph2.link(Button.LEFT_STICK_BUTTON, OnPressEventHandler.class, outtake::turnToStart);
+        gph2.link(Button.DPAD_RIGHT, OnPressEventHandler.class, outtake::sharedTurretRight);
+        gph2.link(Button.DPAD_DOWN, OnPressEventHandler.class, outtake::turretCenter);
+        gph2.link(Button.DPAD_LEFT, OnPressEventHandler.class, outtake::sharedTurretLeft);
 
-        bot.lift.resetEncoder();
+        lift.resetEncoder();
 
-        bot.intake.scale = 0.8;
+        intake.scale = 0.8;
 
-//        bot.drive.setIndependentMode(Modes.IndependentMode.USING);
+//        drive.setIndependentMode(Modes.IndependentMode.USING);
     }
 
     @Override
     public void startTele() {
-        bot.outtake.midCap();
+        outtake.midCap();
     }
 
     @Override
     public void loopTele() {
-        bot.drive.moveSmoothTele(-gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
+        drive.moveSmoothTele(-gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
 
         if(gamepad2.right_stick_y == 0){
-            bot.lift.holdPosition();
+            lift.holdPosition();
         }else {
-            bot.lift.move(-gamepad2.right_stick_y);
+            lift.move(-gamepad2.right_stick_y);
         }
 
-        log.show("OuttakeMode", bot.outtake.getOuttakeMode());
-        log.show("SharedMode", bot.outtake.getSharedMode());
-        log.show("DriveMode", bot.drive.getDriveMode());
-        log.show("LevelMode", bot.lift.getLevelMode());
-        log.show("IndependentMode", bot.drive.getIndependentMode());
+        log.show("OuttakeMode", outtake.getOuttakeMode());
+        log.show("SharedMode", outtake.getSharedMode());
+        log.show("DriveMode", drive.getDriveMode());
+        log.show("LevelMode", lift.getLevelMode());
+        log.show("IndependentMode", drive.getIndependentMode());
 
 
 
 
-//        log.show("wasrun", bot.independentRunner.wasRun);
-//        log.show("numsegs", bot.independentRunner.numSegs);
-//        log.show("Access", bot.drive.checkAccess(User.BACK));
-//        log.show("odmety pos", Arrays.toString(bot.odometry.getPose()));
-//        log.show("horz", bot.odometry.getHorizontalEncoderPosition());
-//        log.show("vert", bot.odometry.getVerticalEncoderPosition());
-//        log.show("Other pos", bot.lift.getPositionDown());
-//        log.show("Current Power", bot.lift.motorUp.getPower());
-//        log.show("PositionUp", bot.lift.getPositionUp());
-//        log.show("Velocity", bot.lift.positionHolder.getVelocity());
-//        log.show("Power", bot.lift.positionHolder.getOutput());
+//        log.show("wasrun", independentRunner.wasRun);
+//        log.show("numsegs", independentRunner.numSegs);
+//        log.show("Access", drive.checkAccess(User.BACK));
+//        log.show("odmety pos", Arrays.toString(odometry.getPose()));
+//        log.show("horz", odometry.getHorizontalEncoderPosition());
+//        log.show("vert", odometry.getVerticalEncoderPosition());
+//        log.show("Other pos", lift.getPositionDown());
+//        log.show("Current Power", lift.motorUp.getPower());
+//        log.show("PositionUp", lift.getPositionUp());
+//        log.show("Velocity", lift.positionHolder.getVelocity());
+//        log.show("Power", lift.positionHolder.getOutput());
 
 
 

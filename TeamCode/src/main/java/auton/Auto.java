@@ -4,9 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import elements.FieldSide;
 import global.Common;
+import robot.RobotUser;
 import util.template.Iterator;
 
-public abstract class Auto extends LinearOpMode implements Common, Iterator {
+public abstract class Auto extends LinearOpMode implements Common, Iterator, RobotUser {
     /**
      * Base class for autons
      * NOTE: If the methods are overriden then make sure the call super.<method name>

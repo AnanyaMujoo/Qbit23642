@@ -16,6 +16,6 @@ public class MecanumIntakeTest extends TeleUnitTest {
 
     @Override
     protected void loop() {
-        bot.intake.move(-gamepad1.right_stick_y);
+        intake.move(-gamepad1.right_stick_y);
     }
 }

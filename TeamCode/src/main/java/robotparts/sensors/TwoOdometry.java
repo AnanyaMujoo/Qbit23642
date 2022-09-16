@@ -47,7 +47,7 @@ public class TwoOdometry extends TankOdometry {
         lastHorizontalEncoderPos = 0;
         lastVerticalEncoderPos = 0;
         heading = 0;
-        bot.gyro.reset();
+        gyro.reset();
     }
 
 
@@ -96,7 +96,7 @@ public class TwoOdometry extends TankOdometry {
     }
 
     private void updateHeading(){
-        heading = bot.gyro.getRightHeadingRad();
+        heading = gyro.getRightHeadingRad();
     }
 
     public void updatePosition(){
