@@ -72,6 +72,6 @@ public class AccessTest extends TeleUnitTest {
         /**
          * Access in the new thread starts at true, wait 2 secs, false, wait 2 secs, true
          */
-        log.showAndRecord("Access is allowed in thread?", threadAccess);
+        log.showAndRecord("Access is allowed in thread? (True, 2 secs,  False, 2 secs, True)", threadAccess);
     }
 }

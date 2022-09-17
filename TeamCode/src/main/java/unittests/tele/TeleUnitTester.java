@@ -6,7 +6,19 @@ import elements.FieldSide;
 import teleop.Tele;
 
 import unittests.UnitTester;
+import unittests.tele.framework.AccessTest;
+import unittests.tele.framework.AutoModuleTest;
+import unittests.tele.framework.CommonTest;
+import unittests.tele.framework.FaultTest;
+import unittests.tele.framework.GamepadTest;
 import unittests.tele.framework.LagTest;
+import unittests.tele.framework.LoggerTest;
+import unittests.tele.framework.RobotFrameworkTest;
+import unittests.tele.framework.RobotFunctionsTest;
+import unittests.tele.framework.SelectorTest;
+import unittests.tele.framework.StageTest;
+import unittests.tele.framework.StorageTest;
+import unittests.tele.framework.SynchroniserTest;
 import unittests.tele.framework.ThreadTest;
 import unittests.tele.hardware.Mecanum.MecanumCarouselTest;
 import unittests.tele.hardware.Mecanum.MecanumDriveTest;
@@ -34,37 +46,23 @@ public class TeleUnitTester extends Tele implements UnitTester{
         /**
          * Framework
          */
-//        add(new GyroTest());
-//        add(new ThreadTest());
-//        add(new MecanumCarouselTest());
 
-        addAll(
-//              new GyroTest(),
-//            new ThreadTest(),
-//            new MecanumCarouselTest(),
-//            new MecanumDriveTest(),
-//            new MecanumIntakeTest(),
-//            new MecanumLiftAndOuttakeTest(),
-//            new MecanumLiftTest()
-//            new MecanumOuttakeTest()
-//            new OdometryServoTest(),
-//            new AccessTest(),
-//            new CommonTest(),
-//            new CoordinatePlaneTest(),
-//            new LoggerTest(),
-//            new FaultTest(),
-//            new GamepadTest(),
-//            new RobotFunctionsTest(),
-//            new ThreadTest(),
-//            new StorageTest(),
-//            new AutoModuleTest(),
-//            new LagTest()
-//            new SelectorTest(),
-//            new SynchroniserTest(),
-//            new RobotPartTest(),
-//            new RobotFrameworkTest(),
-//            new ElectronicsTest()
-        );
+        add(new AccessTest());
+        add(new AutoModuleTest());
+        add(new CommonTest());
+        add(new FaultTest());
+        add(new GamepadTest());
+        add(new LagTest());
+        add(new LoggerTest());
+        add(new RobotFrameworkTest());
+        add(new RobotFunctionsTest());
+        add(new SelectorTest());
+        add(new StageTest());
+        add(new StorageTest());
+        add(new SynchroniserTest());
+        add(new ThreadTest());
+
+
         /**
          * Hardware
          */

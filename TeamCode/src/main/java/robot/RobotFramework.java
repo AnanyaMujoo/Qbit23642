@@ -51,6 +51,7 @@ public class RobotFramework {
     protected RobotFramework(){
         allRobotParts = new ArrayList<>();
         TerraThread.resetAllThreads();
+        Configs.setCurrentConfig();
         localPlane = new CoordinatePlane();
         rfsHandler = new RobotFunctions();
         robotFunctionsThread = new TerraThread("RobotFunctionsThread");
