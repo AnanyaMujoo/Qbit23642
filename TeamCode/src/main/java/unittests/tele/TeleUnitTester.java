@@ -6,28 +6,6 @@ import elements.FieldSide;
 import teleop.Tele;
 
 import unittests.UnitTester;
-import unittests.tele.framework.AccessTest;
-import unittests.tele.framework.AutoModuleTest;
-import unittests.tele.framework.CommonTest;
-import unittests.tele.framework.FaultTest;
-import unittests.tele.framework.GamepadTest;
-import unittests.tele.framework.LagTest;
-import unittests.tele.framework.LoggerTest;
-import unittests.tele.framework.RobotFrameworkTest;
-import unittests.tele.framework.RobotFunctionsTest;
-import unittests.tele.framework.SelectorTest;
-import unittests.tele.framework.StageTest;
-import unittests.tele.framework.StorageTest;
-import unittests.tele.framework.SynchroniserTest;
-import unittests.tele.framework.ThreadTest;
-import unittests.tele.hardware.Mecanum.MecanumCarouselTest;
-import unittests.tele.hardware.Mecanum.MecanumDriveTest;
-import unittests.tele.hardware.Mecanum.MecanumIntakeTest;
-import unittests.tele.hardware.Mecanum.MecanumLiftAndOuttakeTest;
-import unittests.tele.hardware.Mecanum.MecanumLiftTest;
-import unittests.tele.hardware.Mecanum.MecanumOuttakeTest;
-import unittests.tele.sensor.ColorTest;
-import unittests.tele.sensor.GyroTest;
 
 import static global.General.*;
 
@@ -55,13 +33,19 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new GamepadTest());
 //        add(new LagTest());
 //        add(new LoggerTest());
-//        add(new RobotFrameworkTest());
-//        add(new RobotFunctionsTest());
 //        add(new SelectorTest());
 //        add(new StageTest());
 //        add(new StorageTest());
 //        add(new SynchroniserTest());
 //        add(new ThreadTest());
+
+
+        /**
+         * Framework (needs hardware)
+         */
+//        add(new RobotFrameworkTest());
+//        add(new RobotFunctionsTest());
+//        add(new RobotPartTest());
 
 
         /**

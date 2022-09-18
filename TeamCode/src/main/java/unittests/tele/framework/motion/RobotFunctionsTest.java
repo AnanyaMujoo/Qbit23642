@@ -1,4 +1,4 @@
-package unittests.tele.framework;
+package unittests.tele.framework.motion;
 
 import automodules.stage.Exit;
 import automodules.stage.Initial;

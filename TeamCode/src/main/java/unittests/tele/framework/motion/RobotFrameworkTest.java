@@ -1,4 +1,4 @@
-package unittests.tele.framework;
+package unittests.tele.framework.motion;
 
 import robot.RobotFramework;
 import unittests.tele.TeleUnitTest;
@@ -12,6 +12,7 @@ public class RobotFrameworkTest extends TeleUnitTest {
      */
 
 
+    // TODO 4 FIX Make this work for any robot (test robot part)?
     /**
      * Test robot framework (not directly but through Terrabot)
      * NOTE: Since allrobotparts is a static arraylist all of the parts terrabot should be here

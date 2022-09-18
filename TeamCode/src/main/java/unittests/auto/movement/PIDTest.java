@@ -1,4 +1,4 @@
-package unittests.auto.framework;
+package unittests.auto.movement;
 
 import java.util.Arrays;
 

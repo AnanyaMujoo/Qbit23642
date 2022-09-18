@@ -1,4 +1,4 @@
-package unittests.tele.framework;
+package unittests.tele.framework.motion;
 import teleutil.button.Button;
 import teleutil.button.OnPressEventHandler;
 import unittests.tele.TeleUnitTest;

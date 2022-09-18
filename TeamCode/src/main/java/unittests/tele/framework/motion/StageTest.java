@@ -1,4 +1,4 @@
-package unittests.tele.framework;
+package unittests.tele.framework.motion;
 import automodules.stage.Stage;
 import robotparts.RobotPart;
 import unittests.tele.TeleUnitTest;
