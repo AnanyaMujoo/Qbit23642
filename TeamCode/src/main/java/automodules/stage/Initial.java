@@ -1,7 +1,7 @@
 package automodules.stage;
 
 import util.codeseg.CodeSeg;
-// TODO 3 TEST Check if initials works more?
+
 public class Initial extends StageComponent{
     /**
      * Initial runs once in the start of a stage

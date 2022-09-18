@@ -17,6 +17,8 @@ import static global.General.*;
 
 // TODO 3 FIX Create and test all unit tests
 
+// TODO 3 TEST Check if initials works more?
+
 public class TerraThread extends Thread{
     /**
      * Class for handling and creating thread

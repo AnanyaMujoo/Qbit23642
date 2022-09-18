@@ -36,6 +36,7 @@ public class StorageTest extends TeleUnitTest {
         output.add(4.0);
         output.add(6.0);
         storage.addData("Data", input, output);
+
         storage.saveItems();
     }
 
@@ -45,6 +46,7 @@ public class StorageTest extends TeleUnitTest {
          * Show the values of the items to be stored
          * Should match with the values in parenthesis
          */
+        log.showAndRecord("Number of items (8)", storage.numItems());
         log.showAndRecord("St (Test)", storage.getItem("St").getValue());
         log.showAndRecord("In (1)", storage.getItem("In").getValue());
         log.showAndRecord("Fl (1.0)", storage.getItem("Fl").getValue());

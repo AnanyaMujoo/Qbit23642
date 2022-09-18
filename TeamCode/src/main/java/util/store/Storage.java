@@ -29,6 +29,21 @@ public class Storage {
     public static Gson gson = new Gson();
 
     /**
+     * Out directory file
+     */
+    public static File outDir;
+
+
+    /**
+     * Storage constructor, created directories FTC_Files, and current
+     */
+    public Storage(){
+        File filepath = Environment.getExternalStorageDirectory();
+        File ftcDir = setDir(filepath.getAbsolutePath()+"/FTC_Files/", "FTC Dir");
+        outDir = setDir(ftcDir.getAbsolutePath() + "/current/", "Out Dir");
+    }
+
+    /**
      * Add an item given a name and a value
      * @param name
      * @param value
@@ -64,7 +79,7 @@ public class Storage {
     public void saveItems(){
         fault.log("No items to save", Expectation.SURPRISING, Magnitude.MINOR, items.isEmpty(), false);
         for(Item<?> i: items) {
-            saveText("current", i.getName(), i.toString());
+            saveText(i.getName(), i.toString());
         }
     }
 
@@ -75,6 +90,15 @@ public class Storage {
         items = new ArrayList<>();
     }
 
+
+    /**
+     * Get the number of items that are currently in storage (for this session)
+     * @return numItems
+     */
+    public int numItems(){
+        return items.size();
+    }
+
     /**
      * Get the item using the name
      * NOTE: This gets it from the storage not the arraylist so the arraylist could be empty when this is called
@@ -82,7 +106,7 @@ public class Storage {
      * @return itemValue
      */
     public Item<?> getItem(String name){
-        return Item.fromString(name, readText("current", name));
+        return Item.fromString(name, readText(name));
     }
 
     /**
@@ -91,18 +115,17 @@ public class Storage {
      * @return data
      */
     public Data<?, ?> getData(String name){
-        return Data.fromString(name, readText("current", Data.getInputName(name)), readText("current", Data.getOutputName(name)));
+        return Data.fromString(name, readText( Data.getInputName(name)), readText(Data.getOutputName(name)));
     }
 
     /**
      * Save the text using the directory name, the filename, and the string to save
-     * @param dirname
      * @param filename
      * @param in
      */
-    private void saveText(String dirname, String filename, String in)  {
+    private void saveText(String filename, String in)  {
         ExceptionCatcher.catchIO(() -> {
-            PrintWriter out = new PrintWriter(makeOutputFolder(dirname).getAbsolutePath()+"/" + filename + ".txt");
+            PrintWriter out = new PrintWriter(outDir.getAbsolutePath()+"/" + filename + ".txt");
             out.println(in);
             out.flush();
             out.close();
@@ -111,29 +134,27 @@ public class Storage {
 
     /**
      * Read the text from the directory name, and the filename
-     * @param dirname
      * @param filename
      * @return text
      */
-    private String readText(String dirname, String filename) {
+    private String readText(String filename) {
         final String[] out = {""};
         ExceptionCatcher.catchIO(() -> {
-            Scanner scan = new Scanner(new BufferedReader(new FileReader(makeOutputFolder(dirname).getAbsolutePath()+"/" + filename + ".txt")));
+            Scanner scan = new Scanner(new BufferedReader(new FileReader(outDir.getAbsolutePath()+"/" + filename + ".txt")));
             out[0] = scan.nextLine();
         });
         return out[0];
     }
 
     /**
-     * Make the output folder from the specified directory name
-     * NOTE: All files and folders will be under the FTC_Files folder
-     * @param dirname
-     * @return output directory
+     * Create the desired directory if it doesn't exist, or return the file if it does
+     * @return directory
      */
-    private File makeOutputFolder(String dirname){
-        File filepath = Environment.getExternalStorageDirectory();
-        File ftcDir = new File(filepath.getAbsolutePath()+"/FTC_Files/");
-        File outDir = new File(ftcDir.getAbsolutePath()+"/"+dirname+"/");
-        return outDir;
+    private File setDir(String dirpath, String name){
+        File dir = new File(dirpath);
+        if(!dir.exists()) {
+            log.record("Creating " + name+ ", Succeeded:", dir.mkdir());
+        }
+        return dir;
     }
 }

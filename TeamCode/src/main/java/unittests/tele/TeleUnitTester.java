@@ -47,20 +47,21 @@ public class TeleUnitTester extends Tele implements UnitTester{
          * Framework
          */
 
-        add(new AccessTest());
-        add(new AutoModuleTest());
-        add(new CommonTest());
-        add(new FaultTest());
-        add(new GamepadTest());
-        add(new LagTest());
-        add(new LoggerTest());
-        add(new RobotFrameworkTest());
-        add(new RobotFunctionsTest());
-        add(new SelectorTest());
-        add(new StageTest());
-        add(new StorageTest());
-        add(new SynchroniserTest());
-        add(new ThreadTest());
+//        Works as of 3.29.5
+//        add(new AccessTest());
+//        add(new AutoModuleTest());
+//        add(new CommonTest());
+//        add(new FaultTest());
+//        add(new GamepadTest());
+//        add(new LagTest());
+//        add(new LoggerTest());
+//        add(new RobotFrameworkTest());
+//        add(new RobotFunctionsTest());
+//        add(new SelectorTest());
+//        add(new StageTest());
+//        add(new StorageTest());
+//        add(new SynchroniserTest());
+//        add(new ThreadTest());
 
 
         /**

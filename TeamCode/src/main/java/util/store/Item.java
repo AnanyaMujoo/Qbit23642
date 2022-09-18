@@ -136,9 +136,9 @@ public class Item<T> {
     @Override
     public String toString(){
         if(!type.equals(ItemType.ARRAYLIST)) {
-            return type.toString() + ":" + value.toString();
+            return type + ":" + value.toString();
         }else{
-            return type.toString() + ":" + Storage.gson.toJson(value);
+            return type + ":" + Storage.gson.toJson(value);
         }
     }
 
