@@ -8,6 +8,7 @@ import robotparts.RobotPart;
 import robotparts.electronics.continuous.CMotor;
 import robotparts.electronics.continuous.CServo;
 import robotparts.electronics.positional.PServo;
+import util.Timer;
 import util.condition.Status;
 
 import static global.General.*;
@@ -17,6 +18,7 @@ public class UnitTest implements RobotUser {
      * Status of the unit test, starts at idle
      */
     protected Status status = Status.IDLE;
+    protected Timer timer = new Timer();
 
     /**
      * For init and stop see tele, run tests the UnitTest

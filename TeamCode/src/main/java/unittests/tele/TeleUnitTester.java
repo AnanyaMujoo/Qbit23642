@@ -6,6 +6,8 @@ import elements.FieldSide;
 import teleop.Tele;
 
 import unittests.UnitTester;
+import unittests.tele.framework.AutoModuleInitialTest;
+import unittests.tele.framework.DecisionTest;
 
 import static global.General.*;
 
@@ -38,6 +40,9 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new StorageTest());
 //        add(new SynchroniserTest());
 //        add(new ThreadTest());
+
+        add(new AutoModuleInitialTest());
+        add(new DecisionTest());
 
 
         /**

@@ -17,10 +17,6 @@ public class AccessTest extends TeleUnitTest {
      */
     private final Access access = new Access();
     /**
-     * Timer
-     */
-    private final Timer timer = new Timer();
-    /**
      * Thread to test different thread using access
      */
     private Thread thread;

@@ -28,6 +28,7 @@ public class TeleUnitTest extends UnitTest {
     @Override
     public final void test(){
         if(status.equals(Status.IDLE)){
+            timer.reset();
             start();
             status = Status.ACTIVE;
         }else{
