@@ -1,6 +1,5 @@
 package util;
 
-
 import java.util.ArrayList;
 
 import global.Constants;
@@ -12,12 +11,6 @@ import util.condition.Status;
 import util.template.Iterator;
 
 import static global.General.*;
-
-// TODO 3 PROBLEM Threads dont stop in the middle of init in auton?????
-
-// TODO 3 FIX Create and test all unit tests
-
-// TODO 3 TEST Check if initials works more?
 
 public class TerraThread extends Thread{
     /**

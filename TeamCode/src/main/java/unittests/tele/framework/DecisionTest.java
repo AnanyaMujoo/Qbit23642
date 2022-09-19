@@ -47,8 +47,8 @@ public class DecisionTest extends TeleUnitTest {
         log.show("Should cycle between RED, GREEN, and BLUE");
         if(timer.seconds() > 1){
             timer.reset();
-            showColor.check();
             changeColor.check();
         }
+        showColor.check();
     }
 }

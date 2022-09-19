@@ -7,6 +7,8 @@ import static global.General.log;
 import auton.Auto;
 import elements.FieldSide;
 import unittests.UnitTester;
+import unittests.auto.framework.IteratorTest;
+import unittests.auto.framework.ThreadStopTest;
 import unittests.auto.framework.movement.PurePursuitTest;
 import util.condition.Status;
 
@@ -29,6 +31,15 @@ public class AutoUnitTester extends Auto implements UnitTester {
     public void createUnitTests(){
         /**
          * Framework
+         */
+
+        // Works as of ???
+        add(new IteratorTest());
+        add(new ThreadStopTest());
+
+
+        /**
+         * Other
          */
         addAll(
 //                new ArcTest()
