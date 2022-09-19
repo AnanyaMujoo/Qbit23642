@@ -54,6 +54,6 @@ public class IteratorTest extends AutoUnitTest {
         /**
          * Display counts
          */
-        whileActive(() -> log.show("Counts {6, 1, 1}", Arrays.toString(counts)));
+        whileActive(() -> timer.seconds() < 5, () -> log.show("Counts {6, 1, 1}", Arrays.toString(counts)));
     }
 }

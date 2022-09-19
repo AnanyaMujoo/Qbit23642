@@ -50,6 +50,10 @@ public abstract class Auto extends LinearOpMode implements Common, Iterator, Rob
 
     @Override
     public boolean condition() {
-        return opModeIsActive();
+        if(isStarted()) {
+            return opModeIsActive();
+        }else{
+            return opModeInInit();
+        }
     }
 }
