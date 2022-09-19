@@ -1,14 +1,9 @@
-package unittests.auto.movement;
+package unittests.auto.framework.movement;
 
 import autoutil.executors.MecanumExecutor;
 import autoutil.generators.LineGenerator;
-import autoutil.generators.PoseGenerator;
-import autoutil.reactors.mecanum.MecanumPIDReactor;
 import autoutil.reactors.mecanum.MecanumPurePursuitReactor;
-import geometry.position.Point;
-import geometry.position.Pose;
 import unittests.auto.AutoUnitTest;
-import static global.General.*;
 
 public class PurePursuitTest extends AutoUnitTest {
     /**

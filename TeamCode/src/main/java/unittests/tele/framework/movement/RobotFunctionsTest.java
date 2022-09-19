@@ -1,14 +1,6 @@
-package unittests.tele.framework.motion;
+package unittests.tele.framework.movement;
 
-import automodules.stage.Exit;
-import automodules.stage.Initial;
-import automodules.stage.Main;
-import automodules.stage.Stage;
-import automodules.stage.Stop;
 import unittests.tele.TeleUnitTest;
-import util.User;
-
-import static global.General.*;
 
 public class RobotFunctionsTest extends TeleUnitTest {
     /**

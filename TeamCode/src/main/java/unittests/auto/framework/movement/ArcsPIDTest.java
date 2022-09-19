@@ -1,4 +1,4 @@
-package unittests.auto.movement;
+package unittests.auto.framework.movement;
 
 import static java.lang.Math.PI;
 

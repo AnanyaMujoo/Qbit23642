@@ -1,4 +1,4 @@
-package unittests.tele.framework.motion;
+package unittests.tele.framework.movement;
 
 import robot.RobotFramework;
 import unittests.tele.TeleUnitTest;

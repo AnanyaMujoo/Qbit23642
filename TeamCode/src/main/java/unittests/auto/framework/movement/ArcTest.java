@@ -1,9 +1,6 @@
-package unittests.auto.movement;
+package unittests.auto.framework.movement;
 
-import autoutil.executors.MecanumExecutor;
 import autoutil.executors.MecanumExecutorArcsPID;
-import autoutil.executors.TankExecutor;
-import geometry.circles.AngleType;
 import unittests.auto.AutoUnitTest;
 
 // TODO 4 REMOVE

@@ -7,7 +7,7 @@ import static global.General.log;
 import auton.Auto;
 import elements.FieldSide;
 import unittests.UnitTester;
-import unittests.auto.movement.PurePursuitTest;
+import unittests.auto.framework.movement.PurePursuitTest;
 import util.condition.Status;
 
 @SuppressWarnings("ALL")

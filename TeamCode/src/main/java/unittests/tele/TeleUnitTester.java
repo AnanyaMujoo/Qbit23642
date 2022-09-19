@@ -8,6 +8,7 @@ import teleop.Tele;
 import unittests.UnitTester;
 import unittests.tele.framework.AutoModuleInitialTest;
 import unittests.tele.framework.DecisionTest;
+import unittests.tele.framework.ParameterConstructorTest;
 
 import static global.General.*;
 
@@ -43,6 +44,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
 
         add(new AutoModuleInitialTest());
         add(new DecisionTest());
+        add(new ParameterConstructorTest());
 
 
         /**

@@ -1,9 +1,5 @@
-package unittests.tele.framework.motion;
-import automodules.stage.Stage;
-import robotparts.RobotPart;
+package unittests.tele.framework.movement;
 import unittests.tele.TeleUnitTest;
-
-import static global.General.*;
 
 public class StageTest extends TeleUnitTest {
     /**
