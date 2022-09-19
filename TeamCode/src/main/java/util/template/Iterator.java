@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeMap;
 
+import automodules.stage.StageComponent;
 import util.TerraThread;
 import util.Timer;
 import util.codeseg.CodeSeg;
@@ -117,5 +118,14 @@ public interface Iterator {
             count += code.run(obj) ? 1:0;
         }
         return count;
+    }
+
+    static <T> boolean forAllCondition(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> code){
+        for(T obj: list){
+            if(code.run(obj)){
+                return true;
+            }
+        }
+        return false;
     }
 }

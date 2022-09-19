@@ -28,7 +28,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
          * Framework
          */
 
-//        Works as of 3.29.9
+//        Works as of 3.29.10
 //        add(new AccessTest());
 //        add(new AutoModuleTest());
 //        add(new CommonTest());
@@ -41,7 +41,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new StorageTest());
 //        add(new SynchroniserTest());
 //        add(new ThreadTest());
-        add(new AutoModuleInitialTest()); // Does not work
+//        add(new AutoModuleInitialTest());
 //        add(new DecisionTest());
 //        add(new ParameterConstructorTest());
 

@@ -5,7 +5,9 @@ import org.checkerframework.checker.units.qual.A;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import robotparts.RobotPart;
 import util.codeseg.ParameterCodeSeg;
+import util.template.Iterator;
 
 public class Stage {
     /**
@@ -27,6 +29,7 @@ public class Stage {
      */
     public Stage(StageComponent...stageComponents){
         components.addAll(Arrays.asList(stageComponents));
+        addDefaults();
     }
 
     /**
@@ -49,7 +52,7 @@ public class Stage {
      * Start the stage
      */
     public void start(){
-        runForAllStageComponents(StageComponent::start);
+        Iterator.forAll(components, StageComponent::start);
         hasStarted = true;
     }
 
@@ -57,7 +60,7 @@ public class Stage {
      * Loop
      */
     public void loop(){
-        runForAllStageComponents(StageComponent::loop);
+        Iterator.forAll(components, StageComponent::loop);
     }
 
     /**
@@ -65,19 +68,14 @@ public class Stage {
      * @return should stop
      */
     public boolean shouldStop(){
-        for(StageComponent sc: components){
-            if(sc.shouldStop()){
-                return true;
-            }
-        }
-        return false;
+        return Iterator.forAllCondition(components, StageComponent::shouldStop);
     }
 
     /**
      * Run on stop
      */
     public void runOnStop(){
-        runForAllStageComponents(StageComponent::runOnStop);
+        Iterator.forAll(components, StageComponent::runOnStop);
         hasStarted = false;
     }
 
@@ -89,13 +87,13 @@ public class Stage {
         return isPause;
     }
 
+
     /**
-     * Internal method to run for all stage components using a parameter code seg
-     * @param code
+     * Add default components if they are not added
      */
-    private void runForAllStageComponents(ParameterCodeSeg<StageComponent> code){
-        for(StageComponent sc: components){
-            code.run(sc);
+    private void addDefaults(){
+        if(Iterator.forAllCount(components, comp -> comp instanceof Exit) == 0){
+            components.add(RobotPart.exitAlways());
         }
     }
 

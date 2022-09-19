@@ -3,6 +3,7 @@ package unittests.tele.framework;
 import automodules.StageList;
 import automodules.stage.Initial;
 import automodules.stage.Stage;
+import robotparts.RobotPart;
 import unittests.tele.TeleUnitTest;
 import util.Timer;
 import util.condition.Expectation;
@@ -41,10 +42,11 @@ public class AutoModuleInitialTest extends TeleUnitTest {
      * Number of trials to execute (2 secs between trials)
      */
     private final int numTrials = 5;
+
     /**
      * Current trial number
      */
-    private int trialNum = 1;
+    private int trialNum = 0;
 
     /**
      * Start with one autoModule
@@ -59,16 +61,16 @@ public class AutoModuleInitialTest extends TeleUnitTest {
      */
     @Override
     protected void loop() {
-        if(timer.seconds() > 2 && trialNum <= numTrials) {
-            timer.reset();
-            lastInitial = 0;
-            bot.addAutoModule(testAutoModule);
-            log.show("Trial #" + trialNum + " of " + numTrials + " Last Initial Number", lastInitial);
-            trialNum++;
-        }else if(timer.seconds() > 1){
-            log.show("LastInitial", lastInitial);
-
-//            fault.check("Initials failed to be in order", Expectation.SURPRISING, Magnitude.CRITICAL, trialNum == 5, true);
+        log.showAndRecord("Trial #" + trialNum + " of " + numTrials + " Last Initial Number", lastInitial);
+        if(trialNum < numTrials) {
+            if (timer.seconds() > 2) {
+                timer.reset();
+                lastInitial = 0;
+                bot.addAutoModule(testAutoModule);
+                trialNum++;
+            } else if (timer.seconds() > 1) {
+                fault.check("Initials failed to be in order", Expectation.SURPRISING, Magnitude.CRITICAL, lastInitial == 5, true);
+            }
         }
     }
 }
