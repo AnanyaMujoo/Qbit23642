@@ -18,8 +18,6 @@ public class AutoModuleInitialTest extends TeleUnitTest {
      * Tests automodule intials
      */
 
-    // TODO 3 FIX BUG WITH INITIALS
-
     /**
      * Last initial number
      */

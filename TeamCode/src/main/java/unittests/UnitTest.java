@@ -29,6 +29,11 @@ public class UnitTest implements RobotUser {
     public void stop(){}
 
     /**
+     * Reset the timer
+     */
+    public void resetTimerIfIdle(){ if(status.equals(Status.IDLE)){ timer.reset();} }
+
+    /**
      * Reset the status to idle
      */
     public void reset(){

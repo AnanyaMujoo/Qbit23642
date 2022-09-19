@@ -2,11 +2,16 @@ package unittests.auto.framework;
 
 import unittests.auto.AutoUnitTest;
 import util.Timer;
+import util.template.Iterator;
+
 import static global.General.log;
 
 import static global.General.bot;
 
 import android.app.ActionBar;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class IteratorTest extends AutoUnitTest {
     /**
@@ -15,16 +20,17 @@ public class IteratorTest extends AutoUnitTest {
 
 
     /**
-     * Timer to test while active
+     * Test lists for testing forAll methods
      */
-    Timer timer = new Timer();
+    private final ArrayList<Integer> array1 = new ArrayList<>(Arrays.asList(1,2,3));
+    private final ArrayList<Integer> array2 = new ArrayList<>(Arrays.asList(4,5,6));
+    private final int[] counts = new int[3];
 
     @Override
-    public void init() {
-        /**
-         * Reset the timer
-         */
-        timer.reset();
+    public void onStart() {
+        Iterator.forAll(array1, i -> counts[0]+=i);
+        counts[1] = Iterator.forAllCount(array2, i->i==4);
+        counts[2] = Iterator.forAllCondition(array2, i->i==5)?1:0;
     }
 
     @Override
@@ -44,5 +50,10 @@ public class IteratorTest extends AutoUnitTest {
          */
         log.show("Pausing for one second");
         pause(1);
+
+        /**
+         * Display counts
+         */
+        whileActive(() -> log.show("Counts {6, 1, 1}", Arrays.toString(counts)));
     }
 }

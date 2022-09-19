@@ -149,6 +149,7 @@ public interface UnitTester {
             /**
              * If the selector is active then run the current test
              */
+            selector.runToCurrentItem(UnitTest::resetTimerIfIdle);
             selector.runToCurrentItem(UnitTest::test);
             /**
              * If in autonomous mode tell when the test is done

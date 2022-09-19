@@ -22,6 +22,8 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common {
      * @link UnitTest
      */
 
+    // TODO 4 FIX Kind of broken?
+
     /**
      * Static linear opmode
      */
@@ -84,6 +86,7 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common {
      * Run runs once after start
      * NOTE: This is equivalent to loop in TeleUnitTest except it runs once
      */
+    // TODO 4 FIX broken?
     protected void run() {
         if (executor != null) {
             onStart();

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeMap;
 
-import automodules.stage.StageComponent;
-import util.TerraThread;
 import util.Timer;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
@@ -23,7 +21,7 @@ public interface Iterator {
     /**
      * Private timer for internal methods
      */
-    Timer timer = new Timer();
+    Timer time = new Timer();
 
     /**
      * Method to define the condition to check (make this return true for default behavior)
@@ -67,8 +65,8 @@ public interface Iterator {
     default void whileTime(CodeSeg code, double secs){
         boolean oldShouldUpdate = log.getShouldUpdateOnShow();
         log.setShouldUpdateOnShow(false);
-        timer.reset();
-        while (condition() && timer.seconds() < secs){
+        time.reset();
+        while (condition() && time.seconds() < secs){
             code.run();
             log.showTelemetry();
         }
