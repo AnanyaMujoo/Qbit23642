@@ -34,7 +34,10 @@ public class RobotFramework {
      */
     public static TerraThread odometryThread;
 
-
+    // TODO 4 FIX Background thread
+    /**
+     * Background thread
+     */
     public static TerraThread backgroundThread;
     /**
      * rfsHandler is used for running rfs code. Stages can be added to the queue

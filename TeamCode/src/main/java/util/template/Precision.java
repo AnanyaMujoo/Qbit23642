@@ -1,6 +1,7 @@
 package util.template;
 
 import util.Timer;
+import util.codeseg.CodeSeg;
 
 public interface Precision {
     /**
@@ -49,6 +50,32 @@ public interface Precision {
             return true;
         }else{
             return outputTime.seconds() < time;
+        }
+    }
+
+
+    /**
+     * Helper methods for running on a condition
+     * @param condition
+     * @param onTrue
+     * @return condition
+     */
+    static boolean runOnCondition(boolean condition, CodeSeg onTrue){
+        if(condition){
+            onTrue.run();
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    static boolean runOnCondition(boolean condition, CodeSeg onTrue, CodeSeg onFalse){
+        if(condition){
+            onTrue.run();
+            return true;
+        }else{
+            onFalse.run();
+            return false;
         }
     }
 }

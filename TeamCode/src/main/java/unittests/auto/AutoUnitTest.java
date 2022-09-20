@@ -14,6 +14,7 @@ import unittests.UnitTest;
 import util.codeseg.CodeSeg;
 import util.template.Iterator;
 import util.condition.Status;
+import util.template.Precision;
 
 public class AutoUnitTest extends UnitTest implements Iterator, Common {
     /**
@@ -117,10 +118,8 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common {
 
     @Override
     public boolean condition() {
-        if(linearOpMode.isStarted()) {
-            return linearOpMode.opModeIsActive() && (executor == null || !executor.finished());
-        }else{
-            return linearOpMode.opModeInInit();
-        }
+        return Precision.runOnCondition(linearOpMode.isStopRequested(), this::end);
+        // TODO 4 FIX Figure out if we need this?
+        // linearOpMode.opModeIsActive() && (executor == null || !executor.finished()
     }
 }

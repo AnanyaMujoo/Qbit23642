@@ -6,6 +6,7 @@ import elements.FieldSide;
 import global.Common;
 import robot.RobotUser;
 import util.template.Iterator;
+import util.template.Precision;
 
 public abstract class Auto extends LinearOpMode implements Common, Iterator, RobotUser {
     /**
@@ -50,10 +51,6 @@ public abstract class Auto extends LinearOpMode implements Common, Iterator, Rob
 
     @Override
     public boolean condition() {
-        if(isStarted()) {
-            return opModeIsActive();
-        }else{
-            return opModeInInit();
-        }
+        return Precision.runOnCondition(isStopRequested(), this::end);
     }
 }
