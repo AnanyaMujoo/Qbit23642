@@ -51,6 +51,6 @@ public abstract class Auto extends LinearOpMode implements Common, Iterator, Rob
 
     @Override
     public boolean condition() {
-        return Precision.runOnCondition(isStopRequested(), this::end);
+        return !Precision.runOnCondition(isStopRequested(), this::end);
     }
 }

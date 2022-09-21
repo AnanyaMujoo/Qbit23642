@@ -1,6 +1,8 @@
 package unittests.auto.framework;
 
+import robot.RobotFramework;
 import unittests.auto.AutoUnitTest;
+import util.TerraThread;
 
 import static global.General.log;
 
@@ -13,7 +15,8 @@ public class ThreadStopTest extends AutoUnitTest {
      */
     @Override
     public void init() {
-        whileActive(() -> log.show("Stop this test, or move on"));
+        whileActive(() -> linearOpMode.opModeInInit(),
+                () -> log.show("Stop this test, or move on. Number of threads {3}", TerraThread.getNumberOfStartedThreads()));
     }
 
     /**

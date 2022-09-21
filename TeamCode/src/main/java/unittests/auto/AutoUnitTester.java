@@ -33,8 +33,8 @@ public class AutoUnitTester extends Auto implements UnitTester {
          * Framework
          */
 
-        // Works as of ???
-        add(new IteratorTest());
+        // Works as of 3.29.16
+//        add(new IteratorTest());
 //        add(new ThreadStopTest());
 
 

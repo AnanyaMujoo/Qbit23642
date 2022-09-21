@@ -27,7 +27,7 @@ public class IteratorTest extends AutoUnitTest {
     private final int[] counts = new int[3];
 
     @Override
-    public void onStart() {
+    public void start() {
         Iterator.forAll(array1, i -> counts[0]+=i);
         counts[1] = Iterator.forAllCount(array2, i->i==4);
         counts[2] = Iterator.forAllCondition(array2, i->i==5)?1:0;

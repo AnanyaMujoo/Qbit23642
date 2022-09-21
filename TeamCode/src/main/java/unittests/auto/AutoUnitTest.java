@@ -42,6 +42,10 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common {
         if (executor != null) executor.complete();
     }
 
+
+    protected void start() {}
+
+
     public void onStart() {}
 
     public void duringLoop() {}
@@ -111,6 +115,7 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common {
     @Override
     public final void test() {
         if(status.equals(Status.IDLE)){
+            start();
             run();
             status = Status.ACTIVE;
         }
@@ -118,7 +123,7 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common {
 
     @Override
     public boolean condition() {
-        return Precision.runOnCondition(linearOpMode.isStopRequested(), this::end);
+        return !Precision.runOnCondition(linearOpMode.isStopRequested(), this::end);
         // TODO 4 FIX Figure out if we need this?
         // linearOpMode.opModeIsActive() && (executor == null || !executor.finished()
     }
