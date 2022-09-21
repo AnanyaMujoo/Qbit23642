@@ -12,7 +12,7 @@ public class Configs implements RobotUser{
     /**
      * Used when there is only part to test
      */
-    public static RobotConfig TestConfig = new RobotConfig(tankLift);
+    public static RobotConfig TestConfig = new RobotConfig(testPart);
 
     /**
      * Used for tank robots
@@ -29,7 +29,7 @@ public class Configs implements RobotUser{
      * Current Config
      */
     public static void setCurrentConfig(){
-        setConfig(MecanumConfig);
+        setConfig(TestConfig);
     }
 
 }

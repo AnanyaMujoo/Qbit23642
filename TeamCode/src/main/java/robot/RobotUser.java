@@ -12,6 +12,7 @@ import robotparts.sensors.TwoOdometry;
 import robotparts.unused.DistanceSensors;
 import robotparts.unused.Leds;
 import robotparts.unused.TankOdometry;
+import robotparts.unused.TestPart;
 import robotparts.unused.TouchSensors;
 import robotparts.unused.tank.TankCarousel;
 import robotparts.unused.tank.TankDrive;
@@ -57,4 +58,6 @@ public interface RobotUser {
     TouchSensors touchSensors = new TouchSensors();
     DistanceSensors distanceSensors = new DistanceSensors();
     Leds leds = new Leds();
+
+    TestPart testPart = new TestPart();
 }
