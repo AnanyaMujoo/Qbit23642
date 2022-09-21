@@ -62,17 +62,17 @@ public class MecanumDrive extends RobotPart {
      * @param t Turn Power
      */
     public void moveSmooth(double f, double s, double t) {
-        Logistic movementCurveForward = new Logistic(10, 5);
-        Logistic movementCurveStrafe = new Logistic(30, 6);
-        Logistic movementCurveTurn = new Logistic(30, 6);
+        Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 10.0, 5.0);
+        Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
+        Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
         move(movementCurveForward.fodd(f), movementCurveStrafe.fodd(s), movementCurveTurn.fodd(t));
     }
 
     public void moveSmoothTele(double f, double s, double t) {
         if(!bot.independentRunner.isIndependentRunning){
-            Logistic movementCurveForward = new Logistic(10, 5);
-            Logistic movementCurveStrafe = new Logistic(30, 6);
-            Logistic movementCurveTurn = new Logistic(30, 6);
+            Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 10.0, 5.0);
+            Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
+            Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
             double scale = 1;
             if (driveMode.equals(DriveMode.MEDIUM)) {
                 scale = 0.75;

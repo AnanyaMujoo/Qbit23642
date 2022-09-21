@@ -5,7 +5,7 @@ import math.Function;
 import util.template.ParameterConstructor;
 
 public class Logistic extends Function implements ParameterConstructor<Double> {
-    // TODO 3 TEST This
+
     private double m;
     private double b;
     private double k;
@@ -22,7 +22,7 @@ public class Logistic extends Function implements ParameterConstructor<Double> {
      * @param pars
      */
     public Logistic(LogisticParameterType type, Double... pars){
-        addConstructor(LogisticParameterType.RANGE_ONE, 2, in -> new Double[]{1+in[0]*Math.exp(-in[1]), in[0], in[1]});
+        addConstructor(LogisticParameterType.ONE_ONE, 2, in -> new Double[]{1+in[0]*Math.exp(-in[1]), in[0], in[1]});
         addConstructor(LogisticParameterType.STANDARD_FORM, 3);
         createConstructors(type, pars, new Double[]{1.0,1.0,1.0});
     }
@@ -34,30 +34,6 @@ public class Logistic extends Function implements ParameterConstructor<Double> {
     @Override
     public void construct(Double[] in) {
         m = in[0]; b = in[1]; k = in[2];
-    }
-
-
-    /**
-     * Define the logistic using m, b, and k
-     * @param m
-     * @param b
-     * @param k
-     */
-    public Logistic(double m, double b, double k){
-        this.m = m;
-        this.b = b;
-        this.k = k;
-    }
-
-    /**
-     * Define the logistic such that m is always 1 (the max range is from 0-1)
-     * @param b
-     * @param k
-     */
-    public Logistic(double b, double k){
-        this.m = 1+b*Math.exp(-k);
-        this.b = b;
-        this.k = k;
     }
 
 
@@ -79,9 +55,11 @@ public class Logistic extends Function implements ParameterConstructor<Double> {
 
     /**
      * Type of parameters
+     * ONE_ONE - Goes through (1,1)
+     * STANDARD_FORM - Define with all params
      */
     public enum LogisticParameterType implements ParameterType{
-        RANGE_ONE,
+        ONE_ONE,
         STANDARD_FORM
     }
 }
