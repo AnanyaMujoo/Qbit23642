@@ -6,7 +6,7 @@ import robotparts.RobotPart;
 import robotparts.electronics.positional.PMotor;
 import robotparts.electronics.positional.PServo;
 
-public class TestPart extends RobotPart {
+public class CustomTestPart extends RobotPart {
     private PServo arm1, arm2, turn, claw;
 
     @Override

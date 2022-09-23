@@ -5,14 +5,9 @@ import static robot.RobotConfig.setConfig;
 public class Configs implements RobotUser{
 
     /**
-     * Used when there is nothing on the robot
+     * Used to test only the test part
      */
-    public static RobotConfig EmptyConfig = new RobotConfig();
-
-    /**
-     * Used when there is only part to test
-     */
-    public static RobotConfig TestConfig = new RobotConfig(testPart);
+    public static RobotConfig TestConfig = new RobotConfig(customTestPart);
 
     /**
      * Used for tank robots

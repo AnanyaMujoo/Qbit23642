@@ -1,35 +1,37 @@
 package unittests.tele.hardware;
 
+import robot.RobotUser;
 import robotparts.electronics.continuous.CMotor;
+import robotparts.unused.CustomTestPart;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.*;
 
 public class RobotPartTest extends TeleUnitTest {
     /**
-     * Class that tests robot part by creating a test robot part
+     * Class that tests the test robot part
      */
 
-    // TODO 4 FIX Make this work for any part
+    private final CustomTestPart part = RobotUser.customTestPart;
 
     /**
-     * Uses the intake robotpart as the test part
-     * NOTE: The robot must have an intake robotpart for this to work
+     * Uses the test robot part
      */
     @Override
     protected void loop() {
         /**
          * Should show config of test part properly (i.e. directions correct, run without encoder, etc.)
          */
-//        showConfig(bot.tankIntake);
-//        /**
-//         * Should be 1
-//         */
-//        log.show("Test part electronics size", bot.tankIntake.getElectronicsOfType(CMotor.class).size());
-//        /**
-//         * Should be TELE
-//         */
-//        log.show("Test part current user", bot.tankIntake.getUser());
+
+        showConfig(part);
+        /**
+         * Should be 1
+         */
+        log.show("Test part electronics size", part.getElectronicsOfType(CMotor.class).size());
+        /**
+         * Should be TELE
+         */
+        log.show("Test part current user", part.getUser());
     }
 
     /**

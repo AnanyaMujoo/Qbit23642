@@ -22,7 +22,7 @@ public class PMotor extends Electronic {
     private final IEncoder motorEncoder;
     private final StallDetector detector;
 
-    // TODO NEW Make this have functionality to use custom PID
+    // TODO 4 NEW Make this have functionality to use custom PID
 
     /**
      * Constructor to create a pmotor
