@@ -5,11 +5,11 @@ import unittests.auto.AutoUnitTest;
 
 // TODO 4 REMOVE
 public class ArcTest extends AutoUnitTest {
-    @Override
-    public void defineExecutorAndAddPoints() {
-        executor = new MecanumExecutorArcsPID(linearOpMode);
-        addExecutorFuncs(
-            setPoint(10, 10, Math.PI/2)
-        );
-    }
+//    @Override
+//    public void defineExecutorAndAddPoints() {
+//        executor = new MecanumExecutorArcsPID(linearOpMode);
+//        addExecutorFuncs(
+//            setPoint(10, 10, Math.PI/2)
+//        );
+//    }
 }

@@ -9,6 +9,7 @@ import elements.FieldSide;
 import unittests.UnitTester;
 import unittests.auto.framework.IteratorTest;
 import unittests.auto.framework.ThreadStopTest;
+import unittests.auto.framework.movement.MoveTimeTest;
 import unittests.auto.framework.movement.PurePursuitTest;
 import util.condition.Status;
 
@@ -33,9 +34,18 @@ public class AutoUnitTester extends Auto implements UnitTester {
          * Framework
          */
 
-        // Works as of 3.29.16
+//        Works as of 3.29.16
 //        add(new IteratorTest());
 //        add(new ThreadStopTest());
+
+        // TODO 4 TEST
+
+        /**
+         * Framework (needs hardware, in movement package)
+         */
+//        Works as of ??
+        add(new MoveTimeTest());
+
 
 
         /**
