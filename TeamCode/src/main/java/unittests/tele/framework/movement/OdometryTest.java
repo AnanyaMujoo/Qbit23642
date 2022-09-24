@@ -9,7 +9,7 @@ import static global.General.gamepad1;
 import static global.General.log;
 
 public class OdometryTest extends TeleUnitTest {
-    // TODO 4 NEW Create this / fix this
+    // TODO 4 NEW Create this
 
 
     @Override

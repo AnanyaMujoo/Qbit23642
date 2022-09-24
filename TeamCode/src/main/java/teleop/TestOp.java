@@ -11,7 +11,7 @@ import static global.General.gph1;
 @TeleOp(name = "TestOp", group = "TeleOp")
 public class TestOp extends Tele {
 
-    private final CustomTestPart part = RobotUser.customTestPart;
+    private final CustomTestPart part = customTestPart;
 
 
     @Override

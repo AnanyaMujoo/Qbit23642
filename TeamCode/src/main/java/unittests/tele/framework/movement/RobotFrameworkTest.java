@@ -1,6 +1,7 @@
 package unittests.tele.framework.movement;
 
 import robot.RobotFramework;
+import robotparts.RobotPart;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.bot;
@@ -11,8 +12,8 @@ public class RobotFrameworkTest extends TeleUnitTest {
      * Class that tests robotframework by running methods
      */
 
+    private final RobotPart part = intake;
 
-    // TODO 4 FIX Make this work for any robot (test robot part)?
     /**
      * Test robot framework (not directly but through Terrabot)
      * NOTE: Since allrobotparts is a static arraylist all of the parts terrabot should be here
@@ -26,6 +27,6 @@ public class RobotFrameworkTest extends TeleUnitTest {
         /**
          * Should be TELE
          */
-        log.show("Test part current user", bot.tankIntake.getUser());
+        log.show("Test part current user", part.getUser());
     }
 }

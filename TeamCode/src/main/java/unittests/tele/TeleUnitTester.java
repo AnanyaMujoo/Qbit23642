@@ -8,8 +8,14 @@ import teleop.Tele;
 import unittests.UnitTester;
 import unittests.tele.framework.AutoModuleInitialTest;
 import unittests.tele.framework.DecisionTest;
+import unittests.tele.framework.GeometryTest;
 import unittests.tele.framework.MathTest;
 import unittests.tele.framework.ParameterConstructorTest;
+import unittests.tele.framework.PhysicsTest;
+import unittests.tele.framework.movement.AutoModuleTest;
+import unittests.tele.framework.movement.RobotFrameworkTest;
+import unittests.tele.framework.movement.RobotFunctionsTest;
+import unittests.tele.hardware.RobotPartTest;
 
 import static global.General.*;
 
@@ -31,14 +37,12 @@ public class TeleUnitTester extends Tele implements UnitTester{
 
 //        Works as of 3.29.16
 //        add(new AccessTest());
-//        add(new AutoModuleTest());
 //        add(new CommonTest());
 //        add(new FaultTest());
 //        add(new GamepadTest());
 //        add(new LagTest());
 //        add(new LoggerTest());
 //        add(new SelectorTest());
-//        add(new StageTest());
 //        add(new StorageTest());
 //        add(new SynchroniserTest());
 //        add(new ThreadTest());
@@ -47,13 +51,23 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new ParameterConstructorTest());
 //        add(new MathTest());
 
+//        Works as of ??
+//        add(new GeometryTest());
+//        add(new PhysicsTest());
+
+
+
+// TODO 4 TEST
+
 
         /**
-         * Framework (needs hardware)
+         * Framework (needs hardware, in movement package)
          */
-//        add(new RobotFrameworkTest());
-//        add(new RobotFunctionsTest());
-//        add(new RobotPartTest());
+//      Works as of ??
+        add(new RobotFrameworkTest());
+        add(new RobotPartTest());
+        add(new RobotFunctionsTest());
+        add(new AutoModuleTest());
 
 
         /**
