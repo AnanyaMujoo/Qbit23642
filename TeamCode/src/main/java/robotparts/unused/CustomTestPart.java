@@ -17,10 +17,10 @@ public class CustomTestPart extends RobotPart {
         claw = createPServo("claw", Servo.Direction.FORWARD, 0, 1);
 
         arm1.addPosition("start", 0.0);
-        arm1.addPosition("end", 1.0);
+        arm1.addPosition("end", 0.3);
 
         arm2.addPosition("start", 0.0);
-        arm2.addPosition("end", 1.0);
+        arm2.addPosition("end", 0.4);
 
 
         turn.addPosition("start", 0.0);
@@ -28,10 +28,10 @@ public class CustomTestPart extends RobotPart {
 
 
         claw.addPosition("open", 0.0);
-        claw.addPosition("close", 1.0);
+        claw.addPosition("close", 0.5);
 
 
-
+        moveToStart();
 
 
     }
@@ -56,5 +56,6 @@ public class CustomTestPart extends RobotPart {
         arm1.setPosition("end");
         arm2.setPosition("end");
         turn.setPosition("flipped");
+        claw.setPosition("close");
     }
 }
