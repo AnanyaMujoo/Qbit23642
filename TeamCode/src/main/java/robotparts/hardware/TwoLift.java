@@ -13,9 +13,10 @@ import robotparts.RobotPart;
 import robotparts.electronics.positional.PMotor;
 import util.codeseg.ReturnParameterCodeSeg;
 
+@Deprecated
 public abstract class TwoLift extends RobotPart {
 
-    // TODO 4 REMOVE Why do we need this?
+    // TODO 4 FIX Twolift, lift, and PMotorRobotPart fixes
 
     public PMotor motorUp;
     public PMotor motorDown;

@@ -10,6 +10,7 @@ import static global.General.bot;
 public class Independents implements RobotUser {
 
     // TODO 4 FIX Independents clean up?
+    // Why do we need Independent Runner?
 
     public Independent MoveForAllianceForward(){return new Independent(i -> {
         i.addCancelAutoModules();

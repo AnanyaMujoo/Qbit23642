@@ -34,7 +34,7 @@ public class RobotFramework {
      */
     public static TerraThread odometryThread;
 
-    // TODO 4 FIX Background thread
+    // TODO 4 FIX Background thread easier to use
     /**
      * Background thread
      */

@@ -8,7 +8,7 @@ import static java.lang.Math.*;
  * NOTE: Uncommented
  */
 
-// TODO 4 NEW GEOMETRY PACKAGE
+// TODO 4 NEW Geometry package
 
 public abstract class GeometryObject {
     public GeometryObject getRelativeTo(Pose origin) {

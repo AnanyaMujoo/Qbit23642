@@ -1,4 +1,4 @@
-package robotparts.unused;
+package robotparts.sensors.odometry;
 
 import robotparts.RobotPart;
 import robotparts.electronics.input.IEncoder;
@@ -12,8 +12,8 @@ import static robot.RobotFramework.*;
  * NOTE: Uncommented
  */
 
-// TODO 4 REMOVE?
 
+@Deprecated
 public class TankOdometry extends RobotPart {
 
     private final double ODO1_TO_CENTER_X;

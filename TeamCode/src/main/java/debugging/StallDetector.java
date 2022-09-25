@@ -6,7 +6,7 @@ import util.template.Precision;
 import autoutil.profilers.Profiler;
 
 public class StallDetector implements Precision {
-    // TODO 4 FIX THIS
+    // TODO 4 FIX Stall Detector
     private final Profiler profiler;
     private final DcMotor motor;
     private double maxPower;

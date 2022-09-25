@@ -5,7 +5,7 @@ import robotparts.RobotPart;
 import robotparts.electronics.output.OLed;
 import robotparts.electronics.output.OLed.*;
 
-// TODO 4 IMPLEMENT
+// TODO 4 NEW Implement this
 
 public class Leds extends RobotPart {
     /**

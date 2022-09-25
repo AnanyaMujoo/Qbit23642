@@ -1,10 +1,8 @@
-package robotparts.sensors;
+package robotparts.sensors.odometry;
 
 import geometry.position.Vector2;
 import robotparts.electronics.input.IEncoder;
-import robotparts.unused.TankOdometry;
 
-import static global.General.bot;
 import static robot.RobotFramework.odometryThread;
 
 // TOD4

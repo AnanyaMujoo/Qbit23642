@@ -48,8 +48,6 @@ public class RobotPart implements RobotUser {
      * then override the init method
      */
 
-    // TODO 4 FIX Backgroud thread easier to use
-
 
     /**
      * TreeMap to store the list of electronics

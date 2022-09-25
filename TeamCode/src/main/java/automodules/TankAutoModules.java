@@ -4,11 +4,11 @@ import static global.General.*;
 
 import robotparts.RobotPart;
 
+@Deprecated
 public class TankAutoModules {
     /**
      * Define AutoModules here as a stage list
      */
-    // TODO 4 REMOVE Why do we need this?
             // Remove the inputted RobotParts
     public StageList IntakeAuto = new StageList(
         bot.tankLift.liftEncoder(0.4, 0),

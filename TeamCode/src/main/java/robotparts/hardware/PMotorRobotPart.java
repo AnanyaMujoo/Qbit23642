@@ -9,8 +9,8 @@ import robotparts.RobotPart;
 import robotparts.electronics.positional.PMotor;
 import util.codeseg.ReturnParameterCodeSeg;
 
+@Deprecated
 public abstract class PMotorRobotPart extends RobotPart {
-    // TODO 4 REMOVE Why do we need this?
 
     public PMotor[] motors;
 
