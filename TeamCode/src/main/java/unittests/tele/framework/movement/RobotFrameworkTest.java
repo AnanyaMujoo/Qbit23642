@@ -1,6 +1,7 @@
 package unittests.tele.framework.movement;
 
 import robot.RobotFramework;
+import robot.RobotUser;
 import robotparts.RobotPart;
 import unittests.tele.TeleUnitTest;
 
@@ -12,7 +13,10 @@ public class RobotFrameworkTest extends TeleUnitTest {
      * Class that tests robotframework by running methods
      */
 
-    private final RobotPart part = intake;
+    @Override
+    protected RobotPart getTestPart() {
+        return intake;
+    }
 
     /**
      * Test robot framework (not directly but through Terrabot)
@@ -27,6 +31,6 @@ public class RobotFrameworkTest extends TeleUnitTest {
         /**
          * Should be TELE
          */
-        log.show("Test part current user", part.getUser());
+        log.show("Test part current user", getTestPart().getUser());
     }
 }

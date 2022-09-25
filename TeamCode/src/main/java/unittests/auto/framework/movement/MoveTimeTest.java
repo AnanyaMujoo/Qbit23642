@@ -1,5 +1,6 @@
 package unittests.auto.framework.movement;
 
+import robotparts.RobotPart;
 import robotparts.hardware.mecanum.MecanumDrive;
 import unittests.auto.AutoUnitTest;
 import util.Timer;
@@ -12,14 +13,17 @@ public class MoveTimeTest extends AutoUnitTest {
      * Tests moving for some time
      */
 
-    private final MecanumDrive part = drive;
+    @Override
+    protected MecanumDrive getTestPart() {
+        return drive;
+    }
 
     /**
      * Run method uses while time (Robot moves forward at .3 power for 1 s)
      */
     @Override
     protected void run() {
-        whileTime(() -> part.move(0.3, 0, 0), 1);
+        whileTime(() -> getTestPart().move(0.3, 0, 0), 1);
     }
 
 }

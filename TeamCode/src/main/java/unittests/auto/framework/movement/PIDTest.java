@@ -3,6 +3,8 @@ package unittests.auto.framework.movement;
 import java.util.Arrays;
 
 import autoutil.controllers.PID;
+import robotparts.RobotPart;
+import robotparts.hardware.mecanum.MecanumDrive;
 import unittests.auto.AutoUnitTest;
 
 import static global.General.bot;
@@ -13,6 +15,10 @@ public class PIDTest extends AutoUnitTest {
      * Tests PID (Proportional Integral Derivative)
      */
 
+    @Override
+    protected MecanumDrive getTestPart() {
+        return drive;
+    }
 
     /**
      * PID object to test
@@ -34,11 +40,11 @@ public class PIDTest extends AutoUnitTest {
         whileActive(() -> !testPID.isAtTarget(), () -> {
             testPID.update();
             log.show("Error, Output", "\n"+ testPID.getError()+", \n"+ testPID.getOutput());
-            bot.tankDrive.move(testPID.getOutput(),0);
+            getTestPart().move(testPID.getOutput(),0, 0);
         });
 
         testPID.reset();
-        bot.tankDrive.move(0,0);
+        getTestPart().move(0,0, 0);
 
         log.show("Done with movement");
 

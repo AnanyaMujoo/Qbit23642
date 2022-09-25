@@ -9,10 +9,15 @@ import unittests.tele.TeleUnitTest;
 import static global.General.bot;
 
 public class StageTest extends TeleUnitTest {
+
     /**
      * Tests custom stages (or modules)
      */
-    private final MecanumDrive part = drive;
+
+    @Override
+    protected MecanumDrive getTestPart() {
+        return drive;
+    }
 
     @Override
     protected void start() {
@@ -24,11 +29,11 @@ public class StageTest extends TeleUnitTest {
                 RobotPart.exitTime(1)
         ));
         bot.rfsHandler.addToQueue(new Stage(
-                part.usePart(),
-                part.mainMove(0.3, 0.0, 0.0),
+                getTestPart().usePart(),
+                getTestPart().mainMove(0.3, 0.0, 0.0),
                 RobotPart.exitTime(1),
-                part.stopMove(),
-                part.returnPart()
+                getTestPart().stopMove(),
+                getTestPart().returnPart()
         ));
     }
 
@@ -38,11 +43,11 @@ public class StageTest extends TeleUnitTest {
      */
     @Override
     protected void loop() {
-        part.move(-0.3, 0, 0);
+        getTestPart().move(-0.3, 0, 0);
     }
 
     @Override
     public void stop() {
-        part.move(0,0, 0);
+        getTestPart().move(0,0, 0);
     }
 }

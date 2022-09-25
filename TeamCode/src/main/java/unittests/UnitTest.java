@@ -67,4 +67,12 @@ public class UnitTest implements RobotUser {
     protected void showConfig(String name, CServo crservo){
         log.showAndRecord("CRServo: "+ name, "Dir: "+ crservo.getDirection());
     }
+
+
+    /**
+     * Override if using a testPart
+     */
+    protected RobotPart getTestPart(){
+        return null;
+    }
 }

@@ -5,6 +5,7 @@ import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
+import robotparts.RobotPart;
 import robotparts.hardware.mecanum.MecanumDrive;
 import robotparts.unused.CustomTestPart;
 import unittests.tele.TeleUnitTest;
@@ -18,8 +19,10 @@ public class RobotFunctionsTest extends TeleUnitTest {
      * Tests robotfunctions directly
      */
 
-    private final MecanumDrive part = drive;
-
+    @Override
+    protected MecanumDrive getTestPart() {
+        return drive;
+    }
 
     @Override
     public void start() {
@@ -28,25 +31,25 @@ public class RobotFunctionsTest extends TeleUnitTest {
          * NOTE: This uses custom stage components
          */
         bot.rfsHandler.addToQueue(new Stage(
-                new Initial(() -> part.switchUser(User.ROFU)),
-                new Main(() -> part.move(0.3, 0, 0)),
+                new Initial(() -> getTestPart().switchUser(User.ROFU)),
+                new Main(() -> getTestPart().move(0.3, 0, 0)),
                 new Exit(() -> bot.rfsHandler.timer.seconds() > 1),
-                new Stop(() -> part.move(0,0, 0)),
-                new Stop(() -> part.switchUser(mainUser))
+                new Stop(() -> getTestPart().move(0,0, 0)),
+                new Stop(() -> getTestPart().switchUser(mainUser))
         ));
         bot.rfsHandler.addToQueue(new Stage(
-                new Initial(() -> part.switchUser(User.ROFU)),
-                new Main(() -> part.move(-0.3, 0, 0)),
+                new Initial(() -> getTestPart().switchUser(User.ROFU)),
+                new Main(() -> getTestPart().move(-0.3, 0, 0)),
                 new Exit(() -> bot.rfsHandler.timer.seconds() > 1),
-                new Stop(() -> part.move(0,0, 0)),
-                new Stop(() -> part.switchUser(mainUser))
+                new Stop(() -> getTestPart().move(0,0, 0)),
+                new Stop(() -> getTestPart().switchUser(mainUser))
         ));
         bot.rfsHandler.addToQueue(new Stage(
-                new Initial(() -> part.switchUser(User.ROFU)),
-                new Main(() -> part.move(0, 0, 0.5)),
+                new Initial(() -> getTestPart().switchUser(User.ROFU)),
+                new Main(() -> getTestPart().move(0, 0, 0.5)),
                 new Exit(() -> bot.rfsHandler.timer.seconds() > 1),
-                new Stop(() -> part.move(0,0, 0)),
-                new Stop(() -> part.switchUser(mainUser))
+                new Stop(() -> getTestPart().move(0,0, 0)),
+                new Stop(() -> getTestPart().switchUser(mainUser))
         ));
     }
 }
