@@ -7,6 +7,7 @@ import automodules.TankAutoModules;
 import debugging.Synchroniser;
 import elements.FieldSide;
 import robot.TerraBot;
+import robotparts.sensors.Cameras;
 import teleutil.independent.Independents;
 import teleutil.GamepadHandler;
 import debugging.Fault;
@@ -15,7 +16,6 @@ import util.User;
 import util.store.Storage;
 
 import static global.General.*;
-import static global.General.fieldSide;
 
 public interface Common{
     /**
@@ -50,6 +50,10 @@ public interface Common{
          * NOTE: the user is automatically set from the type of opMode
          */
         mainUser = User.getUserFromTypeOfOpMode(thisOpMode);
+        /**
+         * Set the view ID
+         */
+        cameraMonitorViewId = Cameras.getCameraMonitorViewId();
         /**
          * Create the storage
          */

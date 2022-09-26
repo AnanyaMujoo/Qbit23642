@@ -9,6 +9,9 @@ import robotparts.Electronic;
  */
 
 public class OLed extends Electronic {
+    /**
+     * Should be configured as the name of the LED plus r or g for the red and green channels respectively
+     */
     private DigitalChannel red;
     private DigitalChannel green;
     public OLed(DigitalChannel r, DigitalChannel g){

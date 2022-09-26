@@ -79,4 +79,8 @@ public class General {
      * NOTE: This should either be TELE or AUTO
      */
     public static User mainUser;
+    /**
+     * Camera Monitor View ID, used for camera viewing
+     */
+    public static int cameraMonitorViewId;
 }

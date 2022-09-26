@@ -6,6 +6,8 @@ import autoutil.vision.Scanner;
 import robotparts.RobotPart;
 import robotparts.electronics.input.ICamera;
 
+import static global.General.hardwareMap;
+
 public class Cameras extends RobotPart {
     private ICamera ecam;
     private ICamera icam;
@@ -34,6 +36,15 @@ public class Cameras extends RobotPart {
 
     public double getInternalFPS(){
         return icam.getFramesPerSecond();
+    }
+
+
+    /**
+     * Used to get the monitor view Id (To view what the camera is seeing)
+     * @return monitor id
+     */
+    public static int getCameraMonitorViewId(){
+        return hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
     }
 
 }

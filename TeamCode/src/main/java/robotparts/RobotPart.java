@@ -1,5 +1,7 @@
 package robotparts;
 
+import android.os.strictmode.CredentialProtectedWhileLockedViolation;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
@@ -100,10 +102,40 @@ public class RobotPart implements RobotUser {
                 return new CMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             case CMOTOR_REVERSE_FLOAT:
                 return new CMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case CSERVO_FORWARD:
+                return new CServo(hardwareMap.get(CRServo.class, name), DcMotorSimple.Direction.FORWARD);
+            case CSERVO_REVERSE:
+                return new CServo(hardwareMap.get(CRServo.class, name), DcMotorSimple.Direction.REVERSE);
+            case PMOTOR_FORWARD:
+                return new PMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case PMOTOR_REVERSE:
+                return new PMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.BRAKE, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             case PSERVO_FORWARD:
                 return new PServo(hardwareMap.get(Servo.class, name), Servo.Direction.FORWARD, 0, 1);
-            case PMOTOR_REVERSE:
+            case PSERVO_REVERSE:
                 return new PServo(hardwareMap.get(Servo.class, name), Servo.Direction.REVERSE, 0, 1);
+            case ICAMERA_EXTERNAL:
+                return new ICamera(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, name)), ICamera.CameraType.EXTERNAL, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+            case ICAMERA_EXTERNAL_DISPLAY:
+                return new ICamera(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, name), cameraMonitorViewId), ICamera.CameraType.EXTERNAL, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+            case ICAMERA_INTERNAL:
+                return new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK), ICamera.CameraType.INTERNAL, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+            case ICAMERA_INTERNAL_DISPLAY:
+                return new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId), ICamera.CameraType.INTERNAL, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+            case ICOLOR:
+                return new IColor(hardwareMap.get(ColorRangeSensor.class, name));
+            case IDISTANCE:
+                return new IDistance(hardwareMap.get(DistanceSensor.class, name));
+            case IENCODER_NORMAL:
+                return new IEncoder(hardwareMap.get(DcMotor.class, IEncoder.getMotorName(name)), IEncoder.EncoderType.NORMAL);
+            case IENCODER_MOTOR:
+                return new IEncoder(hardwareMap.get(DcMotor.class, IEncoder.getMotorName(name)), IEncoder.EncoderType.MOTOR);
+            case IGYRO:
+                return new IGyro(hardwareMap.get(BNO055IMU.class, name));
+            case ITOUCH:
+                return new ITouch(hardwareMap.get(TouchSensor.class, name));
+            case OLED:
+                return new OLed(hardwareMap.get(DigitalChannel.class,  "g" + name), hardwareMap.get(DigitalChannel.class,  "r" + name));
             default:
                 fault.check("Electronic creation does not match any known type", Expectation.INCONCEIVABLE, Magnitude.CATASTROPHIC);
                 return null;
