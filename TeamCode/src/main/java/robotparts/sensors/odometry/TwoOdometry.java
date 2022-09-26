@@ -6,8 +6,7 @@ import robotparts.electronics.input.IEncoder;
 
 import static robot.RobotFramework.odometryThread;
 
-// TOD4
-// make proper reset method
+// TODO 4 NEW make proper reset method
 public class TwoOdometry extends TankOdometry {
 
     private volatile IEncoder horizontalEncoder;

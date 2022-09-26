@@ -17,7 +17,12 @@ public class Configs implements RobotUser{
     /**
      * Used for mecanum robots
      */
-    RobotConfig MecanumConfig = new RobotConfig(drive, gyro, odometry, camera, carousel, intake, lift, outtake, color);
+    RobotConfig MecanumConfig = new RobotConfig(mecanumDrive, gyro, odometry, camera, mecanumCarousel, mecanumIntake, mecanumLift, mecanumOuttake, color);
+
+    /**
+     * Used for PowerPlay robot
+     */
+    RobotConfig PowerPlay = new RobotConfig(drive, intake, lift, outtake);
 
     /**
      * Current Config

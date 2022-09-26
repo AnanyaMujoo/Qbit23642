@@ -26,7 +26,7 @@ public class MecanumExecutorArcsPID extends Executor {
 
     @Override
     public void move(double f, double t) {
-        bot.drive.move(f, 0, t);
+        bot.mecanumDrive.move(f, 0, t);
     }
 
     @Override

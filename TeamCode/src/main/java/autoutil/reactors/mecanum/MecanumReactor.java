@@ -1,12 +1,7 @@
 package autoutil.reactors.mecanum;
 
-import java.util.Arrays;
-
 import autoutil.reactors.Reactor;
-import geometry.position.Point;
 import geometry.position.Pose;
-import geometry.position.Vector2;
-import robotparts.sensors.GyroSensors;
 
 import static global.General.bot;
 import static global.General.log;
@@ -48,7 +43,7 @@ public abstract class MecanumReactor extends Reactor {
         movementController.update(getPose(), pathSegment);
         headingController.update(getPose(), pathSegment);
 
-        bot.drive.move(movementController.getOutputY(), movementController.getOutputX(), headingController.getOutput());
+        bot.mecanumDrive.move(movementController.getOutputY(), movementController.getOutputX(), headingController.getOutput());
         log.show("Ypow", movementController.getOutputY());
         log.show("errr", movementController.yController.getError());
 //        log.show("yPID state (Err, Int, Der)", Arrays.toString(controllers.get(1).getErrorState()));

@@ -40,7 +40,7 @@ public class MecanumExecutor extends ExecutorNew implements Iterator {
                 if(!((PathAutoModule) pathSegment).isCancel){
                     ((PathAutoModule) pathSegment).runAutoModule();
                     if (!((PathAutoModule) pathSegment).isConcurrent()) {
-                        bot.drive.move(0, 0, 0);
+                        bot.mecanumDrive.move(0, 0, 0);
                         whileActive(() -> !((PathAutoModule) pathSegment).isDoneWithAutoModule(), () -> {
                             backgroundTasks.run();
                         });
@@ -50,13 +50,13 @@ public class MecanumExecutor extends ExecutorNew implements Iterator {
                 }
             }else if(pathSegment instanceof PathPause){
                 ((PathPause) pathSegment).startPausing();
-                bot.drive.move(0,0,0);
+                bot.mecanumDrive.move(0,0,0);
                 whileActive(() -> !((PathPause) pathSegment).isDonePausing(), () -> {
                     backgroundTasks.run();
                 });
             }
         }
-        bot.drive.move(0,0,0);
+        bot.mecanumDrive.move(0,0,0);
     }
 
     @Override

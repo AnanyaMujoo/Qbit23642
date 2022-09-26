@@ -1,11 +1,9 @@
 package unittests.tele.framework.movement;
 
 import robot.RobotFramework;
-import robot.RobotUser;
 import robotparts.RobotPart;
 import unittests.tele.TeleUnitTest;
 
-import static global.General.bot;
 import static global.General.log;
 
 public class RobotFrameworkTest extends TeleUnitTest {
@@ -15,7 +13,7 @@ public class RobotFrameworkTest extends TeleUnitTest {
 
     @Override
     protected RobotPart getTestPart() {
-        return intake;
+        return mecanumIntake;
     }
 
     /**

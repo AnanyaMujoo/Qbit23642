@@ -7,7 +7,6 @@ import elements.Case;
 import elements.FieldSide;
 
 import static global.General.automodules;
-import static global.General.bot;
 
 public class TerraAutoCycles extends MecanumAuto {
 
@@ -15,15 +14,15 @@ public class TerraAutoCycles extends MecanumAuto {
     public void initAuto() {
         scan();
         setBackgroundTasks(() -> {
-            lift.holdPosition();
-            intake.move(-0.8);
+            mecanumLift.holdPosition();
+            mecanumIntake.move(-0.8);
         });
-        intake.scale = 0.6;
+        mecanumIntake.scale = 0.6;
     }
 
     @Override
     public void define() {
-        outtake.midCap();
+        mecanumOuttake.midCap();
         addWaypoint(20, 20, -60);
         customNumber(5, i -> {
             addCancelAutoModules();

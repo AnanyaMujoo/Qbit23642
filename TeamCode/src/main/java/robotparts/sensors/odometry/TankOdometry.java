@@ -13,7 +13,7 @@ import static robot.RobotFramework.*;
  * NOTE: Uncommented
  */
 
-
+// TODO 4 NEW Make odometry good
 @Deprecated
 public class TankOdometry extends RobotPart {
 

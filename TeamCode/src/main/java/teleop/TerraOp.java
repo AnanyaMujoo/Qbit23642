@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import elements.FieldSide;
 import teleutil.button.Button;
 import teleutil.button.OnNotHeldEventHandler;
-import teleutil.button.OnPressEventHandler;
 import teleutil.button.OnTurnOffEventHandler;
 import teleutil.button.OnTurnOnEventHandler;
 
@@ -29,61 +28,61 @@ public class TerraOp extends Tele{
 //        gph1.link(Button.DPAD_UP,  bot::resumeAutoModules);
 
         gph1.link(Button.LEFT_TRIGGER, automodules.OneDuck);
-        gph1.link(Button.RIGHT_TRIGGER, lift::cycleLevelUp);
-        gph1.link(Button.RIGHT_BUMPER, outtake::cycleOuttakeMode);
-        gph1.link(Button.LEFT_BUMPER, outtake::cycleSharedMode);
-        gph1.link(Button.RIGHT_STICK_BUTTON,  drive::cycleDriveUp);
-        gph1.link(Button.LEFT_STICK_BUTTON,  () -> intake.moveRaw(-1));
+        gph1.link(Button.RIGHT_TRIGGER, mecanumLift::cycleLevelUp);
+        gph1.link(Button.RIGHT_BUMPER, mecanumOuttake::cycleOuttakeMode);
+        gph1.link(Button.LEFT_BUMPER, mecanumOuttake::cycleSharedMode);
+        gph1.link(Button.RIGHT_STICK_BUTTON,  mecanumDrive::cycleDriveUp);
+        gph1.link(Button.LEFT_STICK_BUTTON,  () -> mecanumIntake.moveRaw(-1));
 
         gph1.link(Button.A, automodules.IntakeCombined);
 
         gph1.link(Button.B, independents.Backward);
         gph1.link(Button.Y, independents.Forward);
 
-        gph1.link(Button.DPAD_RIGHT, outtake::collectCap);
-        gph1.link(Button.DPAD_DOWN, outtake::readyCap);
-        gph1.link(Button.DPAD_LEFT, outtake::dropCap);
-        gph1.link(Button.DPAD_UP,  outtake::startCap);
+        gph1.link(Button.DPAD_RIGHT, mecanumOuttake::collectCap);
+        gph1.link(Button.DPAD_DOWN, mecanumOuttake::readyCap);
+        gph1.link(Button.DPAD_LEFT, mecanumOuttake::dropCap);
+        gph1.link(Button.DPAD_UP,  mecanumOuttake::startCap);
 
-        gph2.link(Button.RIGHT_TRIGGER,  outtake::lock);
-        gph2.link(Button.LEFT_TRIGGER,  outtake::drop);
-        gph2.link(Button.RIGHT_BUMPER, OnTurnOnEventHandler.class, () -> intake.move(1));
-        gph2.link(Button.RIGHT_BUMPER, OnTurnOffEventHandler.class, () -> intake.move(0));
-        gph2.link(Button.LEFT_BUMPER,  () -> intake.move(-1));
-        gph2.link(Button.LEFT_BUMPER, OnNotHeldEventHandler.class, () -> intake.move(0));
-        gph2.link(Button.RIGHT_STICK_BUTTON,  outtake::turnToHorizontal);
-        gph2.link(Button.LEFT_STICK_BUTTON,  outtake::turnToStart);
-        gph2.link(Button.DPAD_RIGHT,  outtake::sharedTurretRight);
-        gph2.link(Button.DPAD_DOWN,  outtake::turretCenter);
-        gph2.link(Button.DPAD_LEFT,  outtake::sharedTurretLeft);
+        gph2.link(Button.RIGHT_TRIGGER,  mecanumOuttake::lock);
+        gph2.link(Button.LEFT_TRIGGER,  mecanumOuttake::drop);
+        gph2.link(Button.RIGHT_BUMPER, OnTurnOnEventHandler.class, () -> mecanumIntake.move(1));
+        gph2.link(Button.RIGHT_BUMPER, OnTurnOffEventHandler.class, () -> mecanumIntake.move(0));
+        gph2.link(Button.LEFT_BUMPER,  () -> mecanumIntake.move(-1));
+        gph2.link(Button.LEFT_BUMPER, OnNotHeldEventHandler.class, () -> mecanumIntake.move(0));
+        gph2.link(Button.RIGHT_STICK_BUTTON,  mecanumOuttake::turnToHorizontal);
+        gph2.link(Button.LEFT_STICK_BUTTON,  mecanumOuttake::turnToStart);
+        gph2.link(Button.DPAD_RIGHT,  mecanumOuttake::sharedTurretRight);
+        gph2.link(Button.DPAD_DOWN,  mecanumOuttake::turretCenter);
+        gph2.link(Button.DPAD_LEFT,  mecanumOuttake::sharedTurretLeft);
 
-        lift.resetEncoder();
+        mecanumLift.resetEncoder();
 
-        intake.scale = 0.8;
+        mecanumIntake.scale = 0.8;
 
 //        drive.setIndependentMode(Modes.IndependentMode.USING);
     }
 
     @Override
     public void startTele() {
-        outtake.midCap();
+        mecanumOuttake.midCap();
     }
 
     @Override
     public void loopTele() {
-        drive.moveSmoothTele(-gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
+        mecanumDrive.moveSmoothTele(-gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
 
         if(gamepad2.right_stick_y == 0){
-            lift.holdPosition();
+            mecanumLift.holdPosition();
         }else {
-            lift.move(-gamepad2.right_stick_y);
+            mecanumLift.move(-gamepad2.right_stick_y);
         }
 
-        log.show("OuttakeMode", outtake.getOuttakeMode());
-        log.show("SharedMode", outtake.getSharedMode());
-        log.show("DriveMode", drive.getDriveMode());
-        log.show("LevelMode", lift.getLevelMode());
-        log.show("IndependentMode", drive.getIndependentMode());
+        log.show("OuttakeMode", mecanumOuttake.getOuttakeMode());
+        log.show("SharedMode", mecanumOuttake.getSharedMode());
+        log.show("DriveMode", mecanumDrive.getDriveMode());
+        log.show("LevelMode", mecanumLift.getLevelMode());
+        log.show("IndependentMode", mecanumDrive.getIndependentMode());
 
 
 

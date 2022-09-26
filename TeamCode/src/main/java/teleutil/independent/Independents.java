@@ -9,7 +9,7 @@ import static global.General.bot;
 
 public class Independents implements RobotUser {
 
-    // TODO 4 FIX Independents clean up?
+    // TODO 4 NEW Independents clean up, create new
     // Why do we need Independent Runner?
 
     public Independent MoveForAllianceForward(){return new Independent(i -> {
@@ -46,15 +46,15 @@ public class Independents implements RobotUser {
 //        i.addSetpoint(-30, -50, 30);
     });}
 
-    public DecisionList MoveForForward = new DecisionList(outtake::getOuttakeMode)
+    public DecisionList MoveForForward = new DecisionList(mecanumOuttake::getOuttakeMode)
             .addOption(Modes.OuttakeMode.ALLIANCE, () -> bot.addIndependent(MoveForAllianceForward()))
             .addOption(Modes.OuttakeMode.SHARED, () -> bot.addIndependent(MoveForSharedForward()));
 
-    public DecisionList MoveForBackward = new DecisionList(outtake::getOuttakeMode)
+    public DecisionList MoveForBackward = new DecisionList(mecanumOuttake::getOuttakeMode)
             .addOption(Modes.OuttakeMode.ALLIANCE, () -> bot.addIndependent(MoveForAllianceBackward()))
             .addOption(Modes.OuttakeMode.SHARED, () -> bot.addIndependent(MoveForSharedBackward()));
 
-    public DecisionList Forward = new DecisionList(drive::getIndependentMode)
+    public DecisionList Forward = new DecisionList(mecanumDrive::getIndependentMode)
             .addOption(Modes.IndependentMode.MANUAL, () -> {
                 bot.cancelAutoModules();
                 bot.addAutoModule(automodules.ResetLiftAndOuttake);
@@ -64,7 +64,7 @@ public class Independents implements RobotUser {
                 MoveForForward.check();
             });
 
-    public DecisionList Backward = new DecisionList(drive::getIndependentMode)
+    public DecisionList Backward = new DecisionList(mecanumDrive::getIndependentMode)
             .addOption(Modes.IndependentMode.MANUAL, automodules.SetUpForBoth::check)
             .addOption(Modes.IndependentMode.USING, () -> {
                 bot.independentRunner.enableIndependent();

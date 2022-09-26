@@ -1,11 +1,8 @@
 package unittests.auto.framework.movement;
 
-import robotparts.RobotPart;
-import robotparts.hardware.mecanum.MecanumDrive;
+import robotparts.hardware.Drive;
+import robotparts.unused.mecanumold.MecanumDrive;
 import unittests.auto.AutoUnitTest;
-import util.Timer;
-
-import static global.General.bot;
 
 
 public class MoveTimeTest extends AutoUnitTest {
@@ -15,7 +12,7 @@ public class MoveTimeTest extends AutoUnitTest {
 
     @Override
     protected MecanumDrive getTestPart() {
-        return drive;
+        return mecanumDrive;
     }
 
     /**

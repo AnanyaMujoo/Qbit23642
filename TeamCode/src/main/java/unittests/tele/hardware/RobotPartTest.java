@@ -1,9 +1,7 @@
 package unittests.tele.hardware;
 
-import robot.RobotUser;
 import robotparts.RobotPart;
 import robotparts.electronics.continuous.CMotor;
-import robotparts.unused.CustomTestPart;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.*;
@@ -13,7 +11,7 @@ public class RobotPartTest extends TeleUnitTest {
      * Class that tests the test robot part
      */
 
-    private final RobotPart part = intake;
+    private final RobotPart part = mecanumIntake;
 
     /**
      * Uses the test robot part

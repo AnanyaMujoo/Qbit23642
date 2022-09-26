@@ -3,8 +3,8 @@ package unittests.auto.framework.movement;
 import java.util.Arrays;
 
 import autoutil.controllers.PID;
-import robotparts.RobotPart;
-import robotparts.hardware.mecanum.MecanumDrive;
+import robotparts.hardware.Drive;
+import robotparts.unused.mecanumold.MecanumDrive;
 import unittests.auto.AutoUnitTest;
 
 import static global.General.bot;
@@ -17,7 +17,7 @@ public class PIDTest extends AutoUnitTest {
 
     @Override
     protected MecanumDrive getTestPart() {
-        return drive;
+        return mecanumDrive;
     }
 
     /**

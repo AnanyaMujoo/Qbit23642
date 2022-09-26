@@ -1,9 +1,8 @@
 package unittests.tele.framework.movement;
 import automodules.stage.Stage;
-import automodules.stage.Stop;
 import robotparts.RobotPart;
-import robotparts.hardware.mecanum.MecanumDrive;
-import robotparts.unused.CustomTestPart;
+import robotparts.hardware.Drive;
+import robotparts.unused.mecanumold.MecanumDrive;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.bot;
@@ -16,7 +15,7 @@ public class StageTest extends TeleUnitTest {
 
     @Override
     protected MecanumDrive getTestPart() {
-        return drive;
+        return mecanumDrive;
     }
 
     @Override

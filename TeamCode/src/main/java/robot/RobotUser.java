@@ -1,10 +1,10 @@
 package robot;
 
-import robotparts.hardware.mecanum.MecanumCarousel;
-import robotparts.hardware.mecanum.MecanumDrive;
-import robotparts.hardware.mecanum.MecanumIntake;
-import robotparts.hardware.mecanum.MecanumLift;
-import robotparts.hardware.mecanum.MecanumOuttake;
+import robotparts.unused.mecanumold.MecanumCarousel;
+import robotparts.hardware.Drive;
+import robotparts.hardware.Intake;
+import robotparts.hardware.Lift;
+import robotparts.hardware.Outtake;
 import robotparts.sensors.Cameras;
 import robotparts.sensors.ColorSensors;
 import robotparts.sensors.GyroSensors;
@@ -14,12 +14,16 @@ import robotparts.unused.Leds;
 import robotparts.sensors.odometry.TankOdometry;
 import robotparts.unused.CustomTestPart;
 import robotparts.unused.TouchSensors;
-import robotparts.unused.tank.TankCarousel;
-import robotparts.unused.tank.TankDrive;
-import robotparts.unused.tank.TankIntake;
-import robotparts.unused.tank.TankLift;
-import robotparts.unused.tank.TankOuttake;
-import robotparts.unused.tank.TankTurret;
+import robotparts.unused.mecanumold.MecanumDrive;
+import robotparts.unused.mecanumold.MecanumIntake;
+import robotparts.unused.mecanumold.MecanumLift;
+import robotparts.unused.mecanumold.MecanumOuttake;
+import robotparts.unused.tankold.TankCarousel;
+import robotparts.unused.tankold.TankDrive;
+import robotparts.unused.tankold.TankIntake;
+import robotparts.unused.tankold.TankLift;
+import robotparts.unused.tankold.TankOuttake;
+import robotparts.unused.tankold.TankTurret;
 
 public interface RobotUser {
     /**
@@ -31,12 +35,11 @@ public interface RobotUser {
     /**
      * USED
      */
+    Drive drive = new Drive();
+    Intake intake = new Intake();
+    Lift lift = new Lift();
+    Outtake outtake = new Outtake();
 
-    MecanumDrive drive = new MecanumDrive();
-    MecanumCarousel carousel = new MecanumCarousel();
-    MecanumIntake intake = new MecanumIntake();
-    MecanumLift lift = new MecanumLift();
-    MecanumOuttake outtake = new MecanumOuttake();
 
     ColorSensors color = new ColorSensors();
     GyroSensors gyro = new GyroSensors();
@@ -46,6 +49,11 @@ public interface RobotUser {
     /**
      * UNUSED
      */
+    MecanumOuttake mecanumOuttake = new MecanumOuttake();
+    MecanumDrive mecanumDrive = new MecanumDrive();
+    MecanumIntake mecanumIntake = new MecanumIntake();
+    MecanumLift mecanumLift = new MecanumLift();
+    MecanumCarousel mecanumCarousel = new MecanumCarousel();
 
     TankDrive tankDrive = new TankDrive();
     TankIntake tankIntake = new TankIntake();
