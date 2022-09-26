@@ -1,5 +1,7 @@
 package robot;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.ArrayList;
 
 import automodules.StageList;
@@ -47,6 +49,12 @@ public class RobotFramework {
 
     public IndependentRunner independentRunner;
 
+
+    /**
+     * Configs object, stores all configs
+     */
+    public final Configs configs = new Configs();
+
     /**
      * Constructor for creating a robotFramework, this should be overridden by terraBot by extending this class
      * Objects are instantiated here, and rfsHandler is also initialized, which sets the update code
@@ -54,7 +62,7 @@ public class RobotFramework {
     protected RobotFramework(){
         allRobotParts = new ArrayList<>();
         TerraThread.resetAllThreads();
-        Configs.setCurrentConfig();
+        configs.setCurrentConfig();
         localPlane = new CoordinatePlane();
         rfsHandler = new RobotFunctions();
         robotFunctionsThread = new TerraThread("RobotFunctionsThread");

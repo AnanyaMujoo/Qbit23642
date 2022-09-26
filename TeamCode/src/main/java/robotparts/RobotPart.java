@@ -40,6 +40,7 @@ import robotparts.electronics.positional.PServo;
 import static global.General.*;
 
 import robotparts.electronics.input.ITouch;
+import robotparts.sensors.Cameras;
 import util.User;
 import util.codeseg.ParameterCodeSeg;
 import util.condition.Expectation;
@@ -185,21 +186,27 @@ public class RobotPart implements RobotUser {
     }
 
     protected ICamera createExternalCamera(String name, OpenCvCameraRotation orientation, boolean turnOnDisplay){
+        ICamera camera;
         if(turnOnDisplay) {
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            return new ICamera(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, name), cameraMonitorViewId), ICamera.CameraType.EXTERNAL, orientation);
+            camera = new ICamera(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, name), cameraMonitorViewId), ICamera.CameraType.EXTERNAL, orientation);
         }else{
-            return new ICamera(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, name)), ICamera.CameraType.EXTERNAL, orientation);
+            camera = new ICamera(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, name)), ICamera.CameraType.EXTERNAL, orientation);
         }
+        addElectronic(name, camera);
+        return camera;
     }
 
     protected ICamera createInternalCamera(OpenCvCameraRotation orientation, boolean turnOnDisplay){
+        ICamera camera;
         if(turnOnDisplay) {
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            return new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId), ICamera.CameraType.INTERNAL, orientation);
+            camera = new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId), ICamera.CameraType.INTERNAL, orientation);
         }else{
-            return new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK), ICamera.CameraType.INTERNAL, orientation);
+            camera =  new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK), ICamera.CameraType.INTERNAL, orientation);
         }
+        addElectronic("icam",camera);
+        return camera;
     }
 
     /**
