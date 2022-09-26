@@ -16,6 +16,7 @@ import geometry.circles.AngleType;
 import geometry.position.Pose;
 import math.misc.Logistic;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 import global.Modes.*;
 
@@ -34,10 +35,10 @@ public class MecanumDrive extends RobotPart {
 
     @Override
     public void init() {
-        fr = createCMotor("fr", Direction.REVERSE);
-        br = createCMotor("br", Direction.REVERSE);
-        fl = createCMotor("fl", Direction.FORWARD);
-        bl = createCMotor("bl", Direction.FORWARD);
+        fr = create("fr", ElectronicType.CMOTOR_REVERSE);
+        br = create("br", ElectronicType.CMOTOR_REVERSE);
+        fl = create("fl", ElectronicType.CMOTOR_FORWARD);
+        bl = create("bl", ElectronicType.CMOTOR_FORWARD);
     }
 
     /**

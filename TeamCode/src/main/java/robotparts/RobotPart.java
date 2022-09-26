@@ -77,7 +77,7 @@ public class RobotPart implements RobotUser {
      */
     public void init() {}
 
-    // TODO 4 FINISH
+    // TODO 4 FIX Finish this and implement it everywhere it needs to be
 
 
 
