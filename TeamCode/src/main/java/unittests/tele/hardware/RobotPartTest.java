@@ -28,7 +28,7 @@ public class RobotPartTest extends TeleUnitTest {
         /**
          * Should be 1
          */
-        log.show("Test part electronics size", part.getElectronicsOfType(CMotor.class).size());
+        log.show("Test part electronics size {1}", part.getElectronicsOfType(CMotor.class).size());
         /**
          * Should be TELE
          */

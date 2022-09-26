@@ -56,18 +56,15 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new PhysicsTest());
 
 
-
-        // TODO 4 TEST
-
-
         /**
          * Framework (needs hardware, in movement package)
          */
-//      Works as of ??
-        add(new RobotFrameworkTest());
-        add(new RobotPartTest());
-        add(new RobotFunctionsTest());
-        add(new AutoModuleTest());
+
+//        Works as of 4.0.8
+//        add(new RobotFrameworkTest());
+//        add(new RobotPartTest());
+//        add(new RobotFunctionsTest());
+//        add(new AutoModuleTest());
 
 
         /**
