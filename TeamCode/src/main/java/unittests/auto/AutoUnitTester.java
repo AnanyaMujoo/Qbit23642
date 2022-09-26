@@ -10,6 +10,7 @@ import unittests.UnitTester;
 import unittests.auto.framework.IteratorTest;
 import unittests.auto.framework.ThreadStopTest;
 import unittests.auto.framework.movement.MoveTimeTest;
+import unittests.auto.framework.movement.PIDTest;
 import unittests.auto.framework.movement.PurePursuitTest;
 import util.condition.Status;
 
@@ -38,13 +39,13 @@ public class AutoUnitTester extends Auto implements UnitTester {
 //        add(new IteratorTest());
 //        add(new ThreadStopTest());
 
-        // TODO 4 TEST
-
         /**
          * Framework (needs hardware, in movement package)
          */
-//        Works as of ??
-        add(new MoveTimeTest());
+//        Works as of 4.0.8
+//        add(new MoveTimeTest());
+//        add(new PIDTest());
+//        add(new PurePursuitTest());
 
 
 
