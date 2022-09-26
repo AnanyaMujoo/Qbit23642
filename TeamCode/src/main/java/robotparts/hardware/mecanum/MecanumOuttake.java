@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PServo;
 import global.Modes;
 
@@ -22,11 +23,11 @@ public class MecanumOuttake extends RobotPart {
 
     @Override
     public void init() {
-        od = createPServo("od", Servo.Direction.FORWARD, 0, 1);
-        or = createPServo("or", Servo.Direction.FORWARD, 0, 1);
-        ol = createPServo("ol", Servo.Direction.REVERSE, 0, 1);
-        ot = createPServo("ot", Servo.Direction.FORWARD, 0, 1);
-        cap = createPServo("cap", Servo.Direction.REVERSE, 0, 1);
+        od = create("od", ElectronicType.PSERVO_FORWARD);
+        or = create("or", ElectronicType.PSERVO_FORWARD);
+        ol = create("ol", ElectronicType.PSERVO_REVERSE);
+        ot = create("ot", ElectronicType.PSERVO_FORWARD);
+        cap = create("cap", ElectronicType.PSERVO_REVERSE);
 
         cap.addPosition("start", 0.0);
         cap.addPosition("hold", 0.5);

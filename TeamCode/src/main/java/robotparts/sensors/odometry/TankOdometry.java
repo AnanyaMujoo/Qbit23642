@@ -1,6 +1,7 @@
 package robotparts.sensors.odometry;
 
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
 import util.codeseg.ExceptionCodeSeg;
 
@@ -37,7 +38,7 @@ public class TankOdometry extends RobotPart {
 
     @Override
     public void init() {
-        yEnc = createEncoder("bl", "cEnc", IEncoder.EncoderType.NORMAL);
+        yEnc = create("blEnc", ElectronicType.IENCODER_NORMAL);
         update();
         curPos = new double[] { 0, 0, 0 };
         odometryThread.setExecutionCode(odometryUpdateCode);

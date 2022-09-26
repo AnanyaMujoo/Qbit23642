@@ -80,11 +80,17 @@ public class RobotPart implements RobotUser {
      */
     public void init() {}
 
-    // TODO 4 FIX Finish this and implement it everywhere it needs to be
-
-
-
-
+    /**
+     * Creates electronic given name and type
+     * Ex: To create a CMotor named fr that has a default direction of forward
+     *
+     * fr = create(fr, ElectronicType.CMOTOR_FORWARD);
+     *
+     * @param name
+     * @param type
+     * @param <T>
+     * @return electronic
+     */
     @SuppressWarnings("unchecked")
     protected <T extends Electronic> T create(String name, ElectronicType type){
         Electronic newElectronic = createFromType(name, type);
@@ -92,6 +98,12 @@ public class RobotPart implements RobotUser {
         return (T) newElectronic;
     }
 
+    /**
+     * Get electronic object from type
+     * @param name
+     * @param type
+     * @return
+     */
     private Electronic createFromType(String name, ElectronicType type){
         switch (type){
             case CMOTOR_FORWARD:
@@ -110,18 +122,22 @@ public class RobotPart implements RobotUser {
                 return new PMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             case PMOTOR_REVERSE:
                 return new PMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.BRAKE, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case PMOTOR_FORWARD_FLOAT:
+                return new PMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case PMOTOR_REVERSE_FLOAT:
+                return new PMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             case PSERVO_FORWARD:
-                return new PServo(hardwareMap.get(Servo.class, name), Servo.Direction.FORWARD, 0, 1);
+                return new PServo(hardwareMap.get(Servo.class, name), Servo.Direction.FORWARD);
             case PSERVO_REVERSE:
-                return new PServo(hardwareMap.get(Servo.class, name), Servo.Direction.REVERSE, 0, 1);
+                return new PServo(hardwareMap.get(Servo.class, name), Servo.Direction.REVERSE);
             case ICAMERA_EXTERNAL:
                 return new ICamera(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, name)), ICamera.CameraType.EXTERNAL, OpenCvCameraRotation.SIDEWAYS_RIGHT);
             case ICAMERA_EXTERNAL_DISPLAY:
                 return new ICamera(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, name), cameraMonitorViewId), ICamera.CameraType.EXTERNAL, OpenCvCameraRotation.SIDEWAYS_RIGHT);
             case ICAMERA_INTERNAL:
-                return new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK), ICamera.CameraType.INTERNAL, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+                return new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK), ICamera.CameraType.INTERNAL, OpenCvCameraRotation.UPRIGHT);
             case ICAMERA_INTERNAL_DISPLAY:
-                return new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId), ICamera.CameraType.INTERNAL, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+                return new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId), ICamera.CameraType.INTERNAL, OpenCvCameraRotation.UPRIGHT);
             case ICOLOR:
                 return new IColor(hardwareMap.get(ColorRangeSensor.class, name));
             case IDISTANCE:
@@ -140,105 +156,6 @@ public class RobotPart implements RobotUser {
                 fault.check("Electronic creation does not match any known type", Expectation.INCONCEIVABLE, Magnitude.CATASTROPHIC);
                 return null;
         }
-    }
-
-    /**
-     * Create different robot parts from a set of parameters
-     */
-    protected CMotor createCMotor(String name, DcMotor.Direction dir){
-        CMotor cmotor = new CMotor(hardwareMap.get(DcMotor.class, name), dir, DcMotor.ZeroPowerBehavior.BRAKE, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        addElectronic(name, cmotor);
-        return cmotor;
-    }
-
-    protected CMotor createCMotor(String name, DcMotor.Direction dir, DcMotor.ZeroPowerBehavior zpb, DcMotor.RunMode mode){
-        CMotor cmotor = new CMotor(hardwareMap.get(DcMotor.class, name), dir, zpb, mode);
-        addElectronic(name, cmotor);
-        return cmotor;
-    }
-
-    protected CServo createCServo(String name, CRServo.Direction dir){
-        CServo cservo = new CServo(hardwareMap.get(CRServo.class, name), dir);
-        addElectronic(name, cservo);
-        return cservo;
-    }
-
-    protected PServo createPServo(String name, Servo.Direction dir, double startpos, double endpos){
-        PServo pservo = new PServo(hardwareMap.get(Servo.class, name), dir, startpos, endpos);
-        addElectronic(name, pservo);
-        return pservo;
-    }
-
-    protected PMotor createPMotor(String name, DcMotor.Direction dir){
-        PMotor pmotor = new PMotor(hardwareMap.get(DcMotor.class, name), dir, DcMotor.ZeroPowerBehavior.BRAKE, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        addElectronic(name, pmotor);
-        return pmotor;
-    }
-
-    protected PMotor createPMotor(String name, DcMotor.Direction dir, DcMotor.ZeroPowerBehavior zph){
-        PMotor pmotor = new PMotor(hardwareMap.get(DcMotor.class, name), dir, zph, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        addElectronic(name, pmotor);
-        return pmotor;
-    }
-
-    protected IGyro createGyro(String name){
-        IGyro gyro = new IGyro(hardwareMap.get(BNO055IMU.class, name));
-        addElectronic(name, gyro);
-        return gyro;
-    }
-
-    protected IDistance createDistanceSensor(String name){
-        IDistance distanceSensor = new IDistance(hardwareMap.get(DistanceSensor.class, name));
-        addElectronic(name, distanceSensor);
-        return distanceSensor;
-    }
-
-    protected IColor createColorSensor(String name){
-        IColor colorSensor = new IColor(hardwareMap.get(ColorRangeSensor.class, name));
-        addElectronic(name, colorSensor);
-        return colorSensor;
-    }
-
-    protected ITouch createTouchSensor(String name){
-        ITouch touchSensor = new ITouch(hardwareMap.get(TouchSensor.class, name));
-        addElectronic(name, touchSensor);
-        return touchSensor;
-    }
-
-    protected IEncoder createEncoder(String motor, String name, IEncoder.EncoderType encoderType){
-        IEncoder encoder = new IEncoder(hardwareMap.get(DcMotor.class, motor), encoderType);
-        addElectronic(name, encoder);
-        return encoder;
-    }
-
-    protected OLed createLED(String name){
-        OLed led = new OLed(hardwareMap.get(DigitalChannel.class,  "g" + name), hardwareMap.get(DigitalChannel.class,  "r" + name));
-        addElectronic(name, led);
-        return led;
-    }
-
-    protected ICamera createExternalCamera(String name, OpenCvCameraRotation orientation, boolean turnOnDisplay){
-        ICamera camera;
-        if(turnOnDisplay) {
-            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            camera = new ICamera(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, name), cameraMonitorViewId), ICamera.CameraType.EXTERNAL, orientation);
-        }else{
-            camera = new ICamera(OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, name)), ICamera.CameraType.EXTERNAL, orientation);
-        }
-        addElectronic(name, camera);
-        return camera;
-    }
-
-    protected ICamera createInternalCamera(OpenCvCameraRotation orientation, boolean turnOnDisplay){
-        ICamera camera;
-        if(turnOnDisplay) {
-            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-            camera = new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId), ICamera.CameraType.INTERNAL, orientation);
-        }else{
-            camera =  new ICamera(OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK), ICamera.CameraType.INTERNAL, orientation);
-        }
-        addElectronic("icam",camera);
-        return camera;
     }
 
     /**
@@ -306,12 +223,6 @@ public class RobotPart implements RobotUser {
             return false;
         }
     }
-
-    /**
-     * For all electronics of a certain encoderType run...
-     * @param run
-     */
-    private <T extends Electronic> void forAllElectronicsOfType(Class<T> encoderType, ParameterCodeSeg<T> run){ for(Electronic e: getElectronicsOfType(encoderType).values()){ run.run((T) e); } }
 
     /**
      * Exit based on time

@@ -11,6 +11,7 @@ import automodules.stage.Stop;
 import elements.FieldSide;
 import math.polynomial.Linear;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 import util.Timer;
 
@@ -23,7 +24,7 @@ public class MecanumCarousel extends RobotPart {
 
     @Override
     public void init() {
-        carousel = createCMotor("car", DcMotorSimple.Direction.REVERSE);
+        carousel = create("car", ElectronicType.CMOTOR_REVERSE);
     }
 
     public void move(double power) {

@@ -1,6 +1,7 @@
 package robotparts.unused;
 
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.ITouch;
 
 public class TouchSensors extends RobotPart {
@@ -11,7 +12,7 @@ public class TouchSensors extends RobotPart {
 
     @Override
     public void init() {
-        tso = createTouchSensor("tso");
+        tso = create("tso", ElectronicType.ITOUCH);
     }
 
     /**

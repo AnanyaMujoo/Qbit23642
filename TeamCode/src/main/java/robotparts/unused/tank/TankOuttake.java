@@ -6,6 +6,7 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import elements.GameElement;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PServo;
 
 import static global.General.bot;
@@ -21,7 +22,8 @@ public class TankOuttake extends RobotPart {
      */
     @Override
     public void init(){
-        lo = createPServo("lo", Servo.Direction.FORWARD, 0.25, 0.5);
+        lo = create("lo", ElectronicType.PSERVO_FORWARD);
+        lo.scaleRange(0.25, 0.5);
         lo.addPosition("cubeLock", 0.0);
         lo.addPosition("ballLock", 0.25);
         lo.addPosition("aligned", 0.35);

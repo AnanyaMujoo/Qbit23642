@@ -4,6 +4,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import autoutil.vision.Scanner;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.ICamera;
 
 import static global.General.hardwareMap;
@@ -14,7 +15,7 @@ public class Cameras extends RobotPart {
 
     @Override
     public void init() {
-        ecam = createExternalCamera("ecam", OpenCvCameraRotation.SIDEWAYS_RIGHT, false);
+        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL);
 //        icam = createInternalCamera(OpenCvCameraRotation.UPRIGHT, false);
     }
 

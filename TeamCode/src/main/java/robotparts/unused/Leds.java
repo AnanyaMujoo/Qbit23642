@@ -2,6 +2,7 @@ package robotparts.unused;
 
 
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.output.OLed;
 import robotparts.electronics.output.OLed.*;
 
@@ -18,10 +19,10 @@ public class Leds extends RobotPart {
 
     @Override
     public void init() {
-        ledfr = createLED("ledfr");
-        ledbr = createLED("ledbr");
-        ledfl = createLED("ledfl");
-        ledbl = createLED("ledbl");
+        ledfr = create("ledfr", ElectronicType.OLED);
+        ledbr = create("ledbr", ElectronicType.OLED);
+        ledfl = create("ledfl", ElectronicType.OLED);
+        ledbl = create("ledbl", ElectronicType.OLED);
     }
 
     /**

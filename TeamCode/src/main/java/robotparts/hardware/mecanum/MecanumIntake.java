@@ -10,6 +10,7 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 
 public class MecanumIntake extends RobotPart {
@@ -21,7 +22,7 @@ public class MecanumIntake extends RobotPart {
      */
     @Override
     public void init() {
-        in = createCMotor("in", DcMotorSimple.Direction.FORWARD);
+        in = create("in", ElectronicType.CMOTOR_FORWARD);
     }
 
     public void move(double pow) {

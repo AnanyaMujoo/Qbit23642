@@ -1,6 +1,7 @@
 package robotparts.sensors.odometry;
 
 import geometry.position.Vector2;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
 
 import static robot.RobotFramework.odometryThread;
@@ -51,8 +52,8 @@ public class TwoOdometry extends TankOdometry {
 
     @Override
     public void init() {
-        horizontalEncoder = createEncoder("bl", "cEnc", IEncoder.EncoderType.NORMAL);
-        verticalEncoder = createEncoder("fl", "rEnc", IEncoder.EncoderType.NORMAL);
+        horizontalEncoder = create("blEnc", ElectronicType.IENCODER_NORMAL);
+        verticalEncoder = create("flEnc", ElectronicType.IENCODER_NORMAL);
         horizontalEncoder.reset();
         verticalEncoder.reset();
         lastHorizontalEncoderPos = horizontalEncoder.getPos();

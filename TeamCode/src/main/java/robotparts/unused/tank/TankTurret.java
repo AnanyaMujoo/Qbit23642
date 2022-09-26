@@ -10,6 +10,7 @@ import automodules.stage.Stop;
 import elements.FieldSide;
 import global.Constants;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
 import util.User;
 import util.condition.Expectation;
@@ -36,7 +37,7 @@ public class TankTurret extends RobotPart {
      */
     @Override
     public void init() {
-        tr = createPMotor("tr", DcMotorSimple.Direction.FORWARD);
+        tr = create("tr", ElectronicType.PMOTOR_FORWARD);
     }
 
     /**

@@ -2,6 +2,7 @@ package robotparts.sensors;
 
 import geometry.circles.AngleType;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IGyro;
 
 
@@ -16,7 +17,7 @@ public class GyroSensors extends RobotPart {
 
     @Override
     public void init() {
-        gsr = createGyro("gsl");
+        gsr = create("gsl", ElectronicType.IGYRO);
 //        gsl = createGyro("gsl");
     }
 

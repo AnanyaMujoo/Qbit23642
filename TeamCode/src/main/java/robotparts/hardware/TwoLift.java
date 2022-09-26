@@ -10,6 +10,7 @@ import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stop;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
 import util.codeseg.ReturnParameterCodeSeg;
 
@@ -32,8 +33,8 @@ public abstract class TwoLift extends RobotPart {
 
     @Override
     public void init() {
-        motorUp = createPMotor("lil", DcMotorSimple.Direction.REVERSE);
-        motorDown = createPMotor("lir", DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT);
+        motorUp = create("lil", ElectronicType.PMOTOR_REVERSE);
+        motorDown = create("lir", ElectronicType.PMOTOR_REVERSE_FLOAT);
         resetEncoder();
     }
 

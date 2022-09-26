@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import automodules.stage.Exit;
 import elements.GameElement;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IColor;
 
 
@@ -22,7 +23,7 @@ public class ColorSensors extends RobotPart {
 
     @Override
     public void init() {
-        cso = createColorSensor("cso");
+        cso = create("cso", ElectronicType.ICOLOR);
     }
 
     /**

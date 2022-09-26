@@ -7,6 +7,7 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 
 import static global.General.bot;
@@ -22,7 +23,7 @@ public class TankIntake extends RobotPart {
      */
     @Override
     public void init() {
-        in = createCMotor("in", DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        in = create("in", ElectronicType.CMOTOR_FORWARD_FLOAT);
     }
 
     /**

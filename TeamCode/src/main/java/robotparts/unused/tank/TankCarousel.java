@@ -6,6 +6,7 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CServo;
 
 public class TankCarousel extends RobotPart {
@@ -20,8 +21,8 @@ public class TankCarousel extends RobotPart {
      */
     @Override
     public void init() {
-        cl = createCServo("cl", CRServo.Direction.REVERSE);
-        cr = createCServo("cr", CRServo.Direction.FORWARD);
+        cl = create("cl", ElectronicType.CSERVO_REVERSE);
+        cr = create("cr", ElectronicType.CMOTOR_FORWARD);
     }
 
     /**

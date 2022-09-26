@@ -8,6 +8,7 @@ import automodules.stage.Stage;
 import automodules.stage.Stop;
 import math.misc.Logistic;
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 import robotparts.electronics.positional.PServo;
 import util.User;
@@ -29,11 +30,11 @@ public class TankDrive extends RobotPart {
      */
     @Override
     public void init(){
-        fr = createCMotor("fr", DcMotorSimple.Direction.REVERSE);
-        br = createCMotor("br", DcMotorSimple.Direction.REVERSE);
-        fl = createCMotor("fl", DcMotorSimple.Direction.FORWARD);
-        bl = createCMotor("bl", DcMotorSimple.Direction.FORWARD);
-        re = createPServo("re", Servo.Direction.REVERSE, 0, 1);
+        fr = create("fr", ElectronicType.CMOTOR_REVERSE);
+        br = create("br", ElectronicType.CMOTOR_REVERSE);
+        fl = create("fl", ElectronicType.CMOTOR_FORWARD);
+        bl = create("bl", ElectronicType.CMOTOR_FORWARD);
+        re = create("re", ElectronicType.PSERVO_REVERSE);
         re.addPosition("up", 1);
         re.addPosition("down", 0.2);
         if(mainUser.equals(User.AUTO)){

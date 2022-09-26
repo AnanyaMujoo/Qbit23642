@@ -3,6 +3,7 @@ package robotparts.unused.tank;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import global.Constants;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
 import robotparts.hardware.Lift;
 import util.codeseg.ReturnParameterCodeSeg;
@@ -29,7 +30,7 @@ public class TankLift extends Lift {
     @Override
     public PMotor[] getMotors() {
         return new PMotor[] {
-            createPMotor("li", DcMotorSimple.Direction.FORWARD)
+            create("li", ElectronicType.PMOTOR_FORWARD)
         };
     }
 
