@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -15,6 +16,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
 import java.util.Map.*;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import automodules.stage.Exit;
@@ -23,6 +25,7 @@ import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robot.RobotFramework;
 import robot.RobotUser;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 import robotparts.electronics.continuous.CServo;
 import robotparts.electronics.input.ICamera;
@@ -39,7 +42,10 @@ import static global.General.*;
 import robotparts.electronics.input.ITouch;
 import util.User;
 import util.codeseg.ParameterCodeSeg;
+import util.condition.Expectation;
+import util.condition.Magnitude;
 import util.template.Iterator;
+import util.template.ParameterConstructor;
 
 public class RobotPart implements RobotUser {
     /**
@@ -71,7 +77,37 @@ public class RobotPart implements RobotUser {
      */
     public void init() {}
 
-    // TODO 4 FIX maybe use parameter constructor?, maybe use enum?, clean up?
+    // TODO 4 FINISH
+
+
+
+
+    @SuppressWarnings("unchecked")
+    protected <T extends Electronic> T create(String name, ElectronicType type){
+        Electronic newElectronic = createFromType(name, type);
+        addElectronic(name, Objects.requireNonNull(newElectronic));
+        return (T) newElectronic;
+    }
+
+    private Electronic createFromType(String name, ElectronicType type){
+        switch (type){
+            case CMOTOR_FORWARD:
+                return new CMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.BRAKE, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case CMOTOR_REVERSE:
+                return new CMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.BRAKE, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case CMOTOR_FORWARD_FLOAT:
+                return new CMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case CMOTOR_REVERSE_FLOAT:
+                return new CMotor(hardwareMap.get(DcMotor.class, name), DcMotorSimple.Direction.REVERSE, DcMotor.ZeroPowerBehavior.FLOAT, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            case PSERVO_FORWARD:
+                return new PServo(hardwareMap.get(Servo.class, name), Servo.Direction.FORWARD, 0, 1);
+            case PMOTOR_REVERSE:
+                return new PServo(hardwareMap.get(Servo.class, name), Servo.Direction.REVERSE, 0, 1);
+            default:
+                fault.check("Electronic creation does not match any known type", Expectation.INCONCEIVABLE, Magnitude.CATASTROPHIC);
+                return null;
+        }
+    }
 
     /**
      * Create different robot parts from a set of parameters

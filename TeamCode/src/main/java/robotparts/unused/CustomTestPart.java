@@ -3,6 +3,7 @@ package robotparts.unused;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
 import robotparts.electronics.positional.PServo;
 
@@ -11,10 +12,10 @@ public class CustomTestPart extends RobotPart {
 
     @Override
     public void init() {
-        arm1 = createPServo("arm1", Servo.Direction.FORWARD, 0, 1);
-        arm2 = createPServo("arm2", Servo.Direction.FORWARD, 0, 1);
-        turn = createPServo("turn", Servo.Direction.FORWARD, 0, 1);
-        claw = createPServo("claw", Servo.Direction.FORWARD, 0, 1);
+        arm1 = create("arm1", ElectronicType.PSERVO_FORWARD);
+        arm2 = create("arm2", ElectronicType.PSERVO_FORWARD);
+        turn = create("turn", ElectronicType.PSERVO_FORWARD);
+        claw = create("claw", ElectronicType.PSERVO_FORWARD);
 
         arm1.addPosition("start", 0.0);
         arm1.addPosition("end", 0.3);
