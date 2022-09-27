@@ -23,14 +23,14 @@ public class TerraAutoDuck extends MecanumAuto {
         addWaypoint(20,10,45);
         customSide(FieldSide.BLUE, () -> {
             addSetpoint(30,20,90);
-            addAutoModule(automodules.OneDuckAutoBlue);
+            addAutoModule(OneDuckAutoBlue);
         }, FieldSide.RED, () -> {
             addSetpoint(30,20,180);
             addSetpoint(65,15,210);
-            addAutoModule(automodules.OneDuckAutoRed);
+            addAutoModule(OneDuckAutoRed);
         });
         customCase(Case.RIGHT, () -> {
-            addConcurrentAutoModule(automodules.AllianceLiftUp(automodules.LiftUpTopFast));
+            addConcurrentAutoModule(AllianceLiftUp(LiftUpTopFast));
             addSetpoint(-15,40,135);
             customSide(FieldSide.BLUE, () -> {
                 addSetpoint(-28,55,135);
@@ -38,16 +38,16 @@ public class TerraAutoDuck extends MecanumAuto {
                 addSetpoint(-28,55,130);
             });
         }, Case.CENTER, () -> {
-            addConcurrentAutoModule(automodules.AllianceLiftUp(automodules.LiftUpMiddleFast));
+            addConcurrentAutoModule(AllianceLiftUp(LiftUpMiddleFast));
             addSetpoint(-15,40,135);
             addSetpoint(-35,60,135);
         }, Case.LEFT, () -> {
-            addConcurrentAutoModule(automodules.AllianceLiftUp(automodules.LiftUpBottomFast));
+            addConcurrentAutoModule(AllianceLiftUp(LiftUpBottomFast));
             addSetpoint(-15,40,135);
             addSetpoint(-42,67,135);
         });
         addCancelAutoModules();
-        addAutoModule(automodules.ResetLiftAndOuttake);
+        addAutoModule(ResetLiftAndOuttake);
         customSide(FieldSide.BLUE, () -> {
             addSetpoint(28,62,90);
         }, FieldSide.RED, () -> {

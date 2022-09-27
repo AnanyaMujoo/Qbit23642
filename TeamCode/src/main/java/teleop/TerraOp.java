@@ -27,14 +27,14 @@ public class TerraOp extends Tele{
 //        gph1.link(Button.DPAD_DOWN,  bot::pauseAutoModules);
 //        gph1.link(Button.DPAD_UP,  bot::resumeAutoModules);
 
-        gph1.link(Button.LEFT_TRIGGER, automodules.OneDuck);
+        gph1.link(Button.LEFT_TRIGGER, OneDuck);
         gph1.link(Button.RIGHT_TRIGGER, mecanumLift::cycleLevelUp);
         gph1.link(Button.RIGHT_BUMPER, mecanumOuttake::cycleOuttakeMode);
         gph1.link(Button.LEFT_BUMPER, mecanumOuttake::cycleSharedMode);
         gph1.link(Button.RIGHT_STICK_BUTTON,  mecanumDrive::cycleDriveUp);
         gph1.link(Button.LEFT_STICK_BUTTON,  () -> mecanumIntake.moveRaw(-1));
 
-        gph1.link(Button.A, automodules.IntakeCombined);
+        gph1.link(Button.A, IntakeCombined);
 
         gph1.link(Button.B, independents.Backward);
         gph1.link(Button.Y, independents.Forward);

@@ -1,6 +1,6 @@
 package robotparts.unused.mecanumold;
 
-import automodules.StageList;
+import automodules.AutoModule;
 import automodules.stage.Exit;
 import automodules.stage.Initial;
 import automodules.stage.Main;
@@ -156,8 +156,8 @@ public class MecanumDrive extends RobotPart {
         );
     }
 
-    public StageList mainChangeDrive(DriveMode driveMode) {
-        return new StageList(new Stage(
+    public AutoModule mainChangeDrive(DriveMode driveMode) {
+        return new AutoModule(new Stage(
                 usePart(),
                 mainCycleDrive(driveMode),
                 exitAlways(),

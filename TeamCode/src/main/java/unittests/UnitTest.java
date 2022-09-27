@@ -2,6 +2,7 @@ package unittests;
 
 import java.util.Map.*;
 
+import automodules.AutoModuleUser;
 import robot.RobotConfig;
 import robot.RobotUser;
 import robotparts.RobotPart;
@@ -13,7 +14,7 @@ import util.condition.Status;
 
 import static global.General.*;
 
-public class UnitTest implements RobotUser {
+public class UnitTest implements RobotUser, AutoModuleUser {
     /**
      * Status of the unit test, starts at idle
      */

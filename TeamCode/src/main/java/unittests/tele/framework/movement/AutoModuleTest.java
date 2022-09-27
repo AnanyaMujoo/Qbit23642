@@ -15,7 +15,7 @@ public class AutoModuleTest extends TeleUnitTest {
         /**
          * Link gamepad handlers
          */
-        gph1.link(Button.A, OnPressEventHandler.class,() -> bot.addAutoModule(automodules.IntakeOut));
+        gph1.link(Button.A, OnPressEventHandler.class,() -> bot.addAutoModule(IntakeOut));
         gph1.link(Button.B, OnPressEventHandler.class, bot::cancelAutoModules);
         gph1.link(Button.RIGHT_BUMPER, OnPressEventHandler.class, bot::pauseAutoModules);
         gph1.link(Button.LEFT_BUMPER, OnPressEventHandler.class, bot::resumeAutoModules);

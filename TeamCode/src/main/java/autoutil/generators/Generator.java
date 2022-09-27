@@ -1,11 +1,9 @@
 package autoutil.generators;
 
-import automodules.StageList;
+import automodules.AutoModule;
 import autoutil.paths.Path;
 import autoutil.paths.PathAutoModule;
 import autoutil.paths.PathPause;
-import autoutil.paths.PathPose;
-import geometry.position.Pose;
 
 public abstract class Generator {
 
@@ -17,11 +15,11 @@ public abstract class Generator {
 
     public abstract void add(double x, double y, double heading);
 
-    public void addAutoModule(StageList automodule){
+    public void addAutoModule(AutoModule automodule){
         path.addSegment(new PathAutoModule(automodule, false));
     }
 
-    public void addConcurrentAutoModule(StageList automodule){
+    public void addConcurrentAutoModule(AutoModule automodule){
         path.addSegment(new PathAutoModule(automodule, true));
     }
 

@@ -43,7 +43,7 @@ public class MecanumCarousel extends RobotPart {
         );
     }
 
-    private Stop stop() {
+    public Stop stop() {
         return new Stop(() -> move(0));
     }
 

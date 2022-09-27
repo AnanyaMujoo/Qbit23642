@@ -1,17 +1,14 @@
 package robot;
 
-import org.checkerframework.checker.units.qual.C;
-
 import java.util.ArrayList;
 
-import automodules.StageList;
+import automodules.AutoModule;
 import geometry.CoordinatePlane;
 import robotparts.RobotPart;
 import teleutil.independent.Independent;
 import teleutil.independent.IndependentRunner;
 import util.TerraThread;
 import util.User;
-import util.codeseg.ParameterCodeSeg;
 import util.template.Iterator;
 
 import static global.General.*;
@@ -120,7 +117,7 @@ public class RobotFramework {
      * Adds an automodule (or list of stages) to the robotfunctions to add it to the queue
      * @param autoModule
      */
-    public void addAutoModule(StageList autoModule){
+    public void addAutoModule(AutoModule autoModule){
         rfsHandler.addAutoModule(autoModule);
     }
 

@@ -2,7 +2,7 @@ package auton;
 
 import java.util.ArrayList;
 
-import automodules.StageList;
+import automodules.AutoModule;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import autoutil.executors.ExecutorNew;
@@ -17,8 +17,6 @@ import geometry.position.Point;
 import geometry.position.Pose;
 import robot.RobotFramework;
 import robotparts.RobotPart;
-import util.Timer;
-import util.User;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
 import util.condition.DecisionList;
@@ -84,7 +82,7 @@ public abstract class AutoFramework extends Auto{
     }
 
     public void addAutomodule(DecisionList decisionList){
-        addAutoModule(new StageList(new Stage(new Main(decisionList::check), RobotPart.exitAlways())));
+        addAutoModule(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways())));
     }
 
     public void customSide(FieldSide sideOne, CodeSeg one, FieldSide sideTwo, CodeSeg two){
@@ -153,11 +151,11 @@ public abstract class AutoFramework extends Auto{
         addSegment(getWaypointReactor(), getWaypointGenerator(), x, y, h);
     }
 
-    public void addAutoModule(StageList autoModule){
+    public void addAutoModule(AutoModule autoModule){
         getLastSegment().getGenerator().addAutoModule(autoModule);
     }
 
-    public void addConcurrentAutoModule(StageList autoModule){
+    public void addConcurrentAutoModule(AutoModule autoModule){
         getLastSegment().getGenerator().addConcurrentAutoModule(autoModule);
     }
 

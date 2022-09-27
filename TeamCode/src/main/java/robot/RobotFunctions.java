@@ -4,9 +4,8 @@ import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Queue;
 
-import automodules.StageList;
+import automodules.AutoModule;
 import util.User;
-import util.codeseg.CodeSeg;
 import util.codeseg.ExceptionCodeSeg;
 import util.condition.Status;
 import util.Timer;
@@ -93,7 +92,7 @@ public class RobotFunctions {
      * Add all of the stages in the automodule to the queue
      * @param autoModule
      */
-    public final void addAutoModule(StageList autoModule){
+    public final void addAutoModule(AutoModule autoModule){
         if (rfsQueue.isEmpty()) {
             timer.reset();
             robotFunctionsThread.setStatus(Status.ACTIVE);

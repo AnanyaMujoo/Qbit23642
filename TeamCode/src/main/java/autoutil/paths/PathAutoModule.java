@@ -1,17 +1,17 @@
 package autoutil.paths;
 
-import automodules.StageList;
+import automodules.AutoModule;
 
 import static global.General.bot;
 
 public class PathAutoModule extends PathSegment2{
-    private StageList automodule;
+    private AutoModule automodule;
     private boolean isConcurrent;
     public boolean isCancel = false;
     public PathAutoModule(boolean isCancel){
         this.isCancel = isCancel;
     }
-    public PathAutoModule(StageList automodule, boolean isConcurrent){
+    public PathAutoModule(AutoModule automodule, boolean isConcurrent){
         this.automodule = automodule;
         this.isConcurrent = isConcurrent;
     }

@@ -2,13 +2,14 @@ package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import automodules.AutoModuleUser;
 import elements.FieldSide;
 import global.Common;
 import robot.RobotUser;
 import util.template.Iterator;
 import util.template.Precision;
 
-public abstract class Auto extends LinearOpMode implements Common, Iterator, RobotUser {
+public abstract class Auto extends LinearOpMode implements Common, Iterator, RobotUser, AutoModuleUser {
     /**
      * Base class for autons
      * NOTE: If the methods are overriden then make sure the call super.<method name>

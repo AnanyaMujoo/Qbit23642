@@ -6,8 +6,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import automodules.AutoModules;
-import automodules.TankAutoModules;
 import debugging.Synchroniser;
 import elements.FieldSide;
 import robot.TerraBot;
@@ -71,8 +69,6 @@ public class General {
     /**
      * AutoModules (executes series of steps to make driving easier)
      */
-    public static TankAutoModules tankAutoModules;
-    public static AutoModules automodules;
     public static Independents independents;
     /**
      * The main user

@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 import automodules.stage.Stage;
 
-public class StageList {
+public class AutoModule {
     /**
      * List of stages
      */
@@ -15,17 +15,17 @@ public class StageList {
      * Create a stage list using the robot parts used
      * @param stageArray
      */
-    public StageList(Stage... stageArray){
+    public AutoModule(Stage... stageArray){
         stages.addAll(Arrays.asList(stageArray));
     }
 
-    public StageList add(Stage... stageArray){
+    public AutoModule add(Stage... stageArray){
         stages.addAll(Arrays.asList(stageArray));
         return this;
     }
 
-    public StageList add(StageList... other) {
-        for (StageList list : other) {
+    public AutoModule add(AutoModule... other) {
+        for (AutoModule list : other) {
             stages.addAll(list.stages);
         }
         return this;

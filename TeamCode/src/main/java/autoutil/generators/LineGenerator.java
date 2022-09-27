@@ -1,10 +1,6 @@
 package autoutil.generators;
 
-import automodules.StageList;
-import autoutil.paths.PathAutoModule;
-import autoutil.paths.PathLine;
 import autoutil.paths.PathLine2;
-import autoutil.paths.PathPose;
 import geometry.position.Point;
 import geometry.position.Pose;
 

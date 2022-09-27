@@ -1,7 +1,5 @@
 package robotparts;
 
-import android.os.strictmode.CredentialProtectedWhileLockedViolation;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorRangeSensor;
@@ -21,8 +19,10 @@ import java.util.Map.*;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import automodules.AutoModule;
 import automodules.stage.Exit;
 import automodules.stage.Initial;
+import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robot.RobotFramework;
@@ -42,13 +42,10 @@ import robotparts.electronics.positional.PServo;
 import static global.General.*;
 
 import robotparts.electronics.input.ITouch;
-import robotparts.sensors.Cameras;
 import util.User;
-import util.codeseg.ParameterCodeSeg;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.template.Iterator;
-import util.template.ParameterConstructor;
 
 public class RobotPart implements RobotUser {
     /**
@@ -187,9 +184,7 @@ public class RobotPart implements RobotUser {
      * Halt the cmotors and cservos (i.e. set the power to 0)
      * NOTE: This should only be called in a thread that has access to use the robot
      */
-    public void halt(){
-        Iterator.forAll(electronics, Electronic::halt);
-    }
+    public void halt(){ Iterator.forAll(electronics, Electronic::halt); }
 
     /**
      * Get the currentUser
@@ -244,6 +239,12 @@ public class RobotPart implements RobotUser {
     public static Exit exitNever(){return new Exit(() -> false);}
 
     /**
+     * Stop the part
+     * @return stop
+     */
+    public Stop stop(){ return new Stop(this::halt); }
+
+    /**
      * Use this robot part
      * NOTE: This must be called before the robot part can be used in a stage
      * @return initial
@@ -271,4 +272,13 @@ public class RobotPart implements RobotUser {
     public static Stage pause(double time){
         return new Stage(exitTime(time));
     }
+
+
+
+    protected void move(double fp, double sp, double tp){}
+    protected Main main(double fp, double sp, double tp){ return new Main(() -> move(fp, sp, tp)); }
+    protected Stage moveTime(double fp, double sp, double tp, double t){ return new Stage(usePart(), main(fp, sp, tp), exitTime(t), stop(), returnPart()); }
+    protected AutoModule MoveTime(double fp, double sp, double tp, double t){ return new AutoModule(moveTime(fp, sp, tp, t)); }
+
+    protected void move(double p){}
 }

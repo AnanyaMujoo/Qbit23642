@@ -6,7 +6,6 @@ import auton.MecanumAuto;
 import elements.Case;
 import elements.FieldSide;
 
-import static global.General.automodules;
 
 public class TerraAutoCycles extends MecanumAuto {
 
@@ -27,29 +26,29 @@ public class TerraAutoCycles extends MecanumAuto {
         customNumber(5, i -> {
             addCancelAutoModules();
             customCase(Case.RIGHT, () -> {
-                addConcurrentAutoModule(automodules.AllianceLiftUp(automodules.LiftUpTopFast));
+                addConcurrentAutoModule(AllianceLiftUp(LiftUpTopFast));
                 if(i==0) {
                     addSetpoint(30, 47, -137);
                 }else if(i>0){
                     addSetpoint(30+i, 35+i, -140);
                 }
             }, Case.CENTER, () -> {
-                addConcurrentAutoModule(automodules.AllianceLiftUp(automodules.LiftUpMiddleFast));
+                addConcurrentAutoModule(AllianceLiftUp(LiftUpMiddleFast));
                 addPause(0.5);
                 addSetpoint(37, 54, -137);
             }, Case.LEFT, () -> {
-                addConcurrentAutoModule(automodules.AllianceLiftUp(automodules.LiftUpBottomFast));
+                addConcurrentAutoModule(AllianceLiftUp(LiftUpBottomFast));
                 addPause(0.5);
                 addSetpoint(44, 61, -137);
             });
             addCancelAutoModules();
-            addConcurrentAutoModule(automodules.ResetLiftAndOuttake);
+            addConcurrentAutoModule(ResetLiftAndOuttake);
             addPause(0.6);
             addWaypoint(45, 25, -115);
             addWaypoint(45, -10, -95);
             addWaypoint(0, -10, -95);
             if(i < 4) {
-                addConcurrentAutoModule(automodules.IntakeCombined);
+                addConcurrentAutoModule(IntakeCombined);
                 addWaypoint(-50 - (3*i), -10, -90);
                 addPause(0.5);
                 addWaypoint(0, -10, -85);

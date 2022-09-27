@@ -1,6 +1,6 @@
 package unittests.unused.tank;
 
-import automodules.StageList;
+import automodules.AutoModule;
 import teleutil.button.Button;
 import teleutil.button.OnPressEventHandler;
 import unittests.tele.TeleUnitTest;
@@ -10,10 +10,10 @@ public class TankLiftTest extends TeleUnitTest {
     /**
      * Tests the lift
      */
-    public StageList test = new StageList(
+    public AutoModule test = new AutoModule(
             bot.tankLift.liftEncoder(0.5, 30)
     );
-    public StageList test2 = new StageList(
+    public AutoModule test2 = new AutoModule(
             bot.tankLift.liftTime(0.6, 0.5)
     );
 

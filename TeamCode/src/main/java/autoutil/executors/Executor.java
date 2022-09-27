@@ -6,8 +6,9 @@ import static global.General.*;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
-import automodules.StageList;
+import automodules.AutoModule;
 import geometry.circles.AngleType;
+import robotparts.RobotPart;
 import util.codeseg.CodeSeg;
 
 /**
@@ -59,7 +60,7 @@ public abstract class Executor extends MovementExecutor {
      * Put before the movement you want it synchronized with
      * @param rf SyncedRF to add
      */
-    public void addSynchronizedRF(StageList rf) {
+    public void addSynchronizedRF(AutoModule rf) {
         if (!syncedSegsExist[curPath]) {
             syncedSegsExist[curPath] = true;
             syncedSegs.put(curPath, new LinkedList<>());
@@ -72,7 +73,7 @@ public abstract class Executor extends MovementExecutor {
      * Put it between the two movements you want to put it between
      * @param rf RobotFunction to execute
      */
-    public void addUnsynchronizedRF(StageList rf) {
+    public void addUnsynchronizedRF(AutoModule rf) {
         if (!unSyncedSegsExist[curPath]) {
             unSyncedSegsExist[curPath] = true;
             unSyncedSegs.put(curPath, new LinkedList<>());
@@ -85,7 +86,7 @@ public abstract class Executor extends MovementExecutor {
      * @param time duration
      */
     public void addPause(double time) {
-        addUnsynchronizedRF(tankAutoModules.pause(time));
+        addUnsynchronizedRF(new AutoModule(RobotPart.pause(time)));
     }
 
     /**

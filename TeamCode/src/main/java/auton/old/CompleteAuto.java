@@ -4,13 +4,12 @@ import static global.General.fault;
 
 import androidx.annotation.NonNull;
 
-import automodules.StageList;
+import automodules.AutoModule;
 import auton.Auto;
 import autoutil.executors.Executor;
 import elements.FieldSide;
 import geometry.circles.AngleType;
 import util.codeseg.CodeSeg;
-import util.codeseg.ParameterCodeSeg;
 
 /**
  * Runs Autonomous with an Executor
@@ -94,7 +93,7 @@ public abstract class CompleteAuto extends Auto {
      * @param rf RobotFunction to be added
      * @return CodeSeg to be inputted into addExecutorFuncs
      */
-    public CodeSeg unsyncedRF(StageList rf) {
+    public CodeSeg unsyncedRF(AutoModule rf) {
         return () -> executor.addUnsynchronizedRF(rf);
     }
 
@@ -103,7 +102,7 @@ public abstract class CompleteAuto extends Auto {
      * @param rf RobotFunction to be added
      * @return CodeSeg to be inputted into addExecutorFuncs
      */
-    public CodeSeg syncedRF(StageList rf) {
+    public CodeSeg syncedRF(AutoModule rf) {
         return () -> executor.addSynchronizedRF(rf);
     }
 

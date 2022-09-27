@@ -1,7 +1,5 @@
 package autoutil.generators;
 
-import automodules.StageList;
-import autoutil.paths.PathAutoModule;
 import autoutil.paths.PathPose;
 
 public class PoseGenerator extends Generator{

@@ -1,11 +1,9 @@
 package unittests.tele.framework;
 
-import automodules.StageList;
+import automodules.AutoModule;
 import automodules.stage.Initial;
 import automodules.stage.Stage;
-import robotparts.RobotPart;
 import unittests.tele.TeleUnitTest;
-import util.Timer;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 
@@ -26,7 +24,7 @@ public class AutoModuleInitialTest extends TeleUnitTest {
     /**
      * Test automodule
      */
-    StageList testAutoModule = new StageList(
+    AutoModule testAutoModule = new AutoModule(
             new Stage(
                     new Initial(() -> {if(lastInitial == 0){lastInitial++;}}),
                     new Initial(() -> {if(lastInitial == 1){lastInitial++;}}),

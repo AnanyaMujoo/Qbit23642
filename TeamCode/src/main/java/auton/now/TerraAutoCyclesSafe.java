@@ -6,7 +6,6 @@ import auton.MecanumAuto;
 import elements.Case;
 import elements.FieldSide;
 
-import static global.General.automodules;
 
 public class TerraAutoCyclesSafe extends MecanumAuto {
 
@@ -27,20 +26,20 @@ public class TerraAutoCyclesSafe extends MecanumAuto {
         customNumber(1, i -> {
             addCancelAutoModules();
             customCase(Case.RIGHT, () -> {
-                addConcurrentAutoModule(automodules.AllianceLiftUp(automodules.LiftUpTopFast));
+                addConcurrentAutoModule(AllianceLiftUp(LiftUpTopFast));
                 addPause(0.5);
                 addSetpoint(30, 47, -137);
             }, Case.CENTER, () -> {
-                addConcurrentAutoModule(automodules.AllianceLiftUp(automodules.LiftUpMiddleFast));
+                addConcurrentAutoModule(AllianceLiftUp(LiftUpMiddleFast));
                 addPause(0.5);
                 addSetpoint(37, 54, -137);
             }, Case.LEFT, () -> {
-                addConcurrentAutoModule(automodules.AllianceLiftUp(automodules.LiftUpBottomFast));
+                addConcurrentAutoModule(AllianceLiftUp(LiftUpBottomFast));
                 addPause(0.5);
                 addSetpoint(44, 61, -137);
             });
             addCancelAutoModules();
-            addConcurrentAutoModule(automodules.ResetLiftAndOuttake);
+            addConcurrentAutoModule(ResetLiftAndOuttake);
             addPause(0.6);
             addWaypoint(45, 25, -115);
             addWaypoint(45, -10, -95);

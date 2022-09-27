@@ -1,19 +1,11 @@
 package unittests.auto;
 
 import static global.General.bot;
-import static global.General.fault;
-
-import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import automodules.StageList;
-import autoutil.executors.Executor;
-import geometry.circles.AngleType;
 import global.Common;
-import robotparts.RobotPart;
 import unittests.UnitTest;
-import util.codeseg.CodeSeg;
 import util.template.Iterator;
 import util.condition.Status;
 import util.template.Precision;

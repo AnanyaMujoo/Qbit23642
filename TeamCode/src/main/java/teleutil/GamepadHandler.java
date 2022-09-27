@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import java.util.Objects;
 import java.util.TreeMap;
 
-import automodules.StageList;
+import automodules.AutoModule;
 import teleutil.button.Button;
 import teleutil.button.ButtonEventHandler;
 import teleutil.button.ButtonHandler;
@@ -17,7 +17,6 @@ import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.condition.DecisionList;
 import util.template.Iterator;
-import teleutil.button.Button.*;
 
 public class GamepadHandler {
     /**
@@ -92,7 +91,7 @@ public class GamepadHandler {
         Objects.requireNonNull(handlerMap.get(b)).addEvent(type, codeSeg);
     }
 
-    public void link(Button b, StageList list) {
+    public void link(Button b, AutoModule list) {
         link(b, OnPressEventHandler.class, () -> bot.addAutoModule(list));
     }
 
