@@ -138,7 +138,6 @@ public class TankTurret extends RobotPart {
     public Main main(double power){return new Main(()-> move(power));}
     public Exit exitReachedTarget(){return new Exit(this::hasReachedTarget);}
 
-    public Stop stop(){return new Stop(()-> bot.tankTurret.move(0));}
     public Stop swapTurretTargetsTele() { return new Stop(this::swapTargetsTeleIfReady); }
 
     public Stop stopEncoder(){return new Stop(this::stopAndResetMode);}

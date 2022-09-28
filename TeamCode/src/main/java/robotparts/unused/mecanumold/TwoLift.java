@@ -73,7 +73,5 @@ public abstract class TwoLift extends RobotPart {
     public Exit exitReachedTargetUp(){return new Exit(this::hasReachedTargetUp);}
     public Exit exitReachedTargetDown(){return new Exit(this::hasReachedTargetDown);}
 
-    public Stop stop(){return new Stop(() -> move(0));}
-
     public Stop stopEncoder(){return new Stop(this::stopAndResetMode);}
 }

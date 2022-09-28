@@ -6,13 +6,6 @@ import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 
-/**
- * NOTE: Uncommented
- */
-
-/**
- * Create Motors
- */
 public class Drive extends RobotPart {
 
     private CMotor fr, br, fl, bl;
@@ -25,13 +18,6 @@ public class Drive extends RobotPart {
         bl = create("bl", ElectronicType.CMOTOR_FORWARD);
     }
 
-    /**
-     * Raw movement
-     *
-     * @param f Forward Power
-     * @param s Strafe Power
-     * @param t Turn Power
-     */
     @Override
     public void move(double f, double s, double t) {
         fr.setPower(f - s - t);

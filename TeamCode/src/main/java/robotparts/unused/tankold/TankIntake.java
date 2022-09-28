@@ -41,14 +41,6 @@ public class TankIntake extends RobotPart {
     }
 
     /**
-     * Stops the intake
-     * @return stop
-     */
-    public Stop stop() {
-        return new Stop(() -> move(0));
-    }
-
-    /**
      * Turns on the intake until a freight is detected
      * NOTE: Uses the colorsensor to detect this
      * @param power

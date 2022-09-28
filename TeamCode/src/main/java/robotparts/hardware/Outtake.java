@@ -10,15 +10,8 @@ import robotparts.electronics.positional.PServo;
 import global.Modes;
 
 public class Outtake extends RobotPart {
-    /**
-     * orel is Outtake Release Controller
-     * over is Outtake Vertical Controller
-     * ohor is Outtake Horizontal Controller
-     */
-    private PServo od, or, ol, ot, cap;
 
-    private Modes.OuttakeMode outtakeMode = Modes.OuttakeMode.ALLIANCE;
-    private Modes.SharedMode sharedMode = Modes.SharedMode.NORMAL;
+    private PServo od, or, ol, ot;
 
 
     @Override
@@ -27,14 +20,7 @@ public class Outtake extends RobotPart {
         or = create("or", ElectronicType.PSERVO_FORWARD);
         ol = create("ol", ElectronicType.PSERVO_REVERSE);
         ot = create("ot", ElectronicType.PSERVO_FORWARD);
-        cap = create("cap", ElectronicType.PSERVO_REVERSE);
 
-        cap.addPosition("start", 0.0);
-        cap.addPosition("hold", 0.5);
-        cap.addPosition("down", 0.7);
-        cap.addPosition("end", 1.0);
-
-        cap.addPosition("mid", 0.2);
 
         od.addPosition("releaseLeft", 0.0);
         od.addPosition("lock", 0.53);
@@ -51,69 +37,16 @@ public class Outtake extends RobotPart {
 
         lock();
         turretCenter();
-        startCap();
 
     }
 
-
-    public void startCap(){cap.setPosition("start");}
-
-    public void collectCap(){
-        cap.setPosition("end");
-    }
-
-    public void readyCap(){
-        cap.setPosition("hold");
-    }
-
-    public void dropCap(){
-        cap.setPosition("down");
-    }
-
-    public void midCap(){cap.setPosition("mid");}
-
-    /**
-     * Releases the release servo
-     */
     public void drop() { od.setPosition("releaseRight"); }
-
-    /**
-     * Locks the release servo
-     */
     public void lock() { od.setPosition("lock"); }
-
-    /**
-     * Moves the horizontal servo for shared shipping hub
-     */
     public void sharedTurretRight() { ot.setPosition("sharedRight"); }
-
-    /**
-     * Moves the horizontal servo for shared shipping hub
-     */
     public void sharedTurretLeft() { ot.setPosition("sharedLeft"); }
-
-    /**
-     * Moves the horizontal servo for everything except shared shipping hub
-     */
     public void turretCenter() { ot.setPosition("center"); }
-
-    /**
-     * Moves the vertical servo for locking
-     */
-    public void turnToStart() {
-        or.setPosition("start");
-        ol.setPosition("start");
-    }
-
-    /**
-     * Moves the vertical servo for releasing
-     */
-    public void turnToHorizontal() {
-        or.setPosition("horizontal");
-        ol.setPosition("horizontal");
-    }
-
-
+    public void turnToStart() { or.setPosition("start"); ol.setPosition("start"); }
+    public void turnToHorizontal() { or.setPosition("horizontal"); ol.setPosition("horizontal"); }
 
     public Stage stageDrop(double t) { return super.customTime(this::drop, t); } //0.25
     public Stage stageLock(double t) { return super.customTime(this::lock, t); } //0.25
@@ -123,31 +56,5 @@ public class Outtake extends RobotPart {
     public Stage stageTurnToStart(double t) {return super.customTime(this::turnToStart, t); } //0.05
     public Stage stageTurnToHorizontal(double t) { return super.customTime(this::turnToHorizontal, t); } //0.05
 
-    public void setOuttakeMode(Modes.OuttakeMode outtakeMode){ this.outtakeMode = outtakeMode; }
-    public Modes.OuttakeMode getOuttakeMode(){ return outtakeMode; }
 
-
-    public void cycleOuttakeMode(){
-        if(outtakeMode.equals(Modes.OuttakeMode.SHARED)){
-            setOuttakeMode(Modes.OuttakeMode.ALLIANCE);
-        }else{
-            setOuttakeMode(Modes.OuttakeMode.SHARED);
-        }
-    }
-
-    public void cycleSharedMode(){
-        if(sharedMode.equals(Modes.SharedMode.CENTER)){
-            setSharedMode(Modes.SharedMode.NORMAL);
-        }else{
-            setSharedMode(Modes.SharedMode.CENTER);
-        }
-    }
-
-    public Modes.SharedMode getSharedMode() {
-        return sharedMode;
-    }
-
-    public void setSharedMode(Modes.SharedMode sharedMode) {
-        this.sharedMode = sharedMode;
-    }
 }

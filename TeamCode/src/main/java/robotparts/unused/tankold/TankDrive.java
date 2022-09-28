@@ -76,9 +76,6 @@ public class TankDrive extends RobotPart {
         return new Main(() -> move(forward, turn));
     }
 
-    public Stop stop(){
-        return new Stop(() -> move(0,0));
-    }
 
     public Stage liftOdo() {
         return new Stage(

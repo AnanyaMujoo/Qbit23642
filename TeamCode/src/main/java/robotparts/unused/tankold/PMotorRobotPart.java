@@ -149,12 +149,6 @@ public abstract class PMotorRobotPart extends RobotPart {
 
 
     /**
-     * Stop the motors
-     * @return
-     */
-    public Stop stop(){return new Stop(() -> move(0));}
-
-    /**
      * Stops the motors and reset the mode
      * @return
      */

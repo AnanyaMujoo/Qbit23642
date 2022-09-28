@@ -42,10 +42,6 @@ public class MecanumCarousel extends RobotPart {
         );
     }
 
-    public Stop stop() {
-        return new Stop(() -> move(0));
-    }
-
     public Stage spinOneDuck(double time, double minPow, double maxPow) {
         return new Stage(
                 usePart(),

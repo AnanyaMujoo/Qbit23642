@@ -13,9 +13,7 @@ import robotparts.electronics.continuous.CMotor;
 public class Intake extends RobotPart {
 
     private CMotor in;
-    /**
-     * Create Intake Motor
-     */
+
     @Override
     public void init() {
         in = create("in", ElectronicType.CMOTOR_FORWARD);

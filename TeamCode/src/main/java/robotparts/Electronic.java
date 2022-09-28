@@ -2,10 +2,11 @@ package robotparts;
 
 import org.checkerframework.checker.units.qual.A;
 
+import automodules.StageBuilder;
 import util.Access;
 import util.condition.Status;
 
-public class Electronic {
+public class Electronic extends StageBuilder {
     /**
      * Naming conventions for electronics
      * C -> continuous
