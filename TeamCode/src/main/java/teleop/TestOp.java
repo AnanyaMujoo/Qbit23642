@@ -10,7 +10,7 @@ import static global.General.gph1;
 @TeleOp(name = "TestOp", group = "TeleOp")
 public class TestOp extends Tele {
     {
-        fieldSide = FieldSide.UNKNOWN;
+        fieldSide = FieldSide.RED;
     }
 
 
