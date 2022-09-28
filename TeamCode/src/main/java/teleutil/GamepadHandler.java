@@ -66,6 +66,10 @@ public class GamepadHandler {
      */
     public TreeMap<Button, ButtonHandler> handlerMap = new TreeMap<>();
 
+
+
+    public double ry, rx, ly, lx, rt, lt;
+
     /**
      * Constructor to create a gamepad handler
      * @param gp
@@ -125,10 +129,21 @@ public class GamepadHandler {
         Iterator.forAll(Button.values(), b -> handlerMap.put(b, new ButtonHandler(b, this)));
     }
 
+    private void updateValues(){
+        ry = -gamepad.right_stick_y;
+        rx = gamepad.right_stick_x;
+        ly = -gamepad.left_stick_y;
+        lx = gamepad.left_stick_x;
+        rt = gamepad.right_trigger;
+        lt = gamepad.left_trigger;
+    }
+
     /**
      * Run using the handlerMap
      */
     public void run() {
+        updateValues();
         Iterator.forAll(handlerMap.values(), ButtonHandler::run);
     }
+
 }

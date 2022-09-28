@@ -25,7 +25,7 @@ public interface AutoModuleUser extends RobotUser {
             .addOption(FieldSide.UNKNOWN, DriveForward)
             .addOption(FieldSide.RED, DriveBackward);
 
-    AutoModule Intake = new AutoModule(intake.intakeUntilFreight(1));
+    AutoModule IntakeUntilFreightNew = new AutoModule(intake.intakeUntilFreight(1));
 
 
 

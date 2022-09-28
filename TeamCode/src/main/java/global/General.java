@@ -46,8 +46,7 @@ public class General {
      * Gamepad handlers, used to make using the gamepads easier
      */
     public static GamepadHandler gph1;
-    // TOD4
-    // Make defualt onpress handler
+
     public static GamepadHandler gph2;
     /**
      * Logger object to store logs
