@@ -16,6 +16,7 @@ import teleutil.independent.Independent;
 import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.condition.DecisionList;
+import util.condition.OutputList;
 import util.template.Iterator;
 
 public class GamepadHandler {
@@ -97,6 +98,10 @@ public class GamepadHandler {
 
     public void link(Button b, DecisionList decisionList){
         link(b, OnPressEventHandler.class, decisionList::check);
+    }
+
+    public void link(Button b, OutputList outputList){
+        link(b, (AutoModule) outputList.check());
     }
 
     public void link(Button b, Independent independent){

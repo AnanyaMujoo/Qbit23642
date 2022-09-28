@@ -19,6 +19,11 @@ public interface AutoModuleUser extends RobotUser {
 
 
     AutoModule DriveForward = new AutoModule(drive.moveTime(0.3, 0, 0, 1));
+    AutoModule DriveBackward = new AutoModule(drive.moveTime(-0.3, 0, 0, 1));
+
+    OutputList DriveField = new OutputList(() -> fieldSide)
+            .addOption(FieldSide.UNKNOWN, DriveForward)
+            .addOption(FieldSide.RED, DriveBackward);
 
 
 
@@ -61,9 +66,6 @@ public interface AutoModuleUser extends RobotUser {
 
     default AutoModule AllianceLiftUp(AutoModule liftUp){return new AutoModule().add(OuttakeLockFast, OuttakeHorizontalFast, liftUp, OuttakeAlliance, changeDrive(Modes.DriveMode.SLOW));}
     static AutoModule AllianceLiftUp2(AutoModule liftUp){return new AutoModule().add(OuttakeLockFast, OuttakeHorizontalFast, liftUp, OuttakeAlliance, changeDrive2(Modes.DriveMode.SLOW));}
-
-    public OutputList<AutoModule> s = new OutputList<AutoModule>(mecanumLift::getLevelMode)
-            .addOption(Level.TOP, AllianceLiftUp2(LiftUpTopFast));
 
     public DecisionList SetUpForAllianceShippingHub = new DecisionList(mecanumLift::getLevelMode)
             .addOption(Level.TOP, () -> bot.addAutoModule(AllianceLiftUp2(LiftUpTopFast)))

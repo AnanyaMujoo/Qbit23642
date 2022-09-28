@@ -1,13 +1,14 @@
 package util.condition;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 
 import static global.General.fault;
 
-public class OutputList<T> {
+public class OutputList {
 
     /**
      * Class to store a list of outputs
@@ -17,7 +18,7 @@ public class OutputList<T> {
     /**
      * Map from decisions to outputs
      */
-    private final HashMap<Decision, T> outputs = new HashMap<>();
+    private final HashMap<Decision, Object> outputs = new HashMap<>();
 
     /**
      * Condition to check
@@ -37,16 +38,16 @@ public class OutputList<T> {
      * @param obj
      * @return outputList
      */
-    public OutputList<T> addOption(Decision decision, T obj){
+    public OutputList addOption(Decision decision, Object obj){
         outputs.put(decision, obj);
         return this;
     }
 
-    public T check(){
+    public <T> T check(){
         Decision currentDecision = condition.run();
         T o = null;
         if(outputs.containsKey(currentDecision)){
-            o = outputs.get(currentDecision);
+            o = (T) outputs.get(currentDecision);
         }else{
             fault.check("No option " + currentDecision.toString() + " found", Expectation.SURPRISING, Magnitude.CRITICAL);
         }
