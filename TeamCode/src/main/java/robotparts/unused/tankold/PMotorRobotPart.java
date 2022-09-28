@@ -83,7 +83,7 @@ public abstract class PMotorRobotPart extends RobotPart {
      * Sets the lift target in cm
      * @param h
      */
-    public void setTarget(double h){
+    public void setTarget2(double h){
         for (int i = 0; i < motors.length; i++) if (!disabled[i]) {
             motors[i].setPosition(getTargets[i].run(h));
         }
@@ -95,7 +95,7 @@ public abstract class PMotorRobotPart extends RobotPart {
      * @return
      */
     public Initial initialSetTarget(double height){
-        return new Initial(() -> setTarget(getOverallTarget(height/ CM_PER_TICK())));
+        return new Initial(() -> setTarget2(getOverallTarget(height/ CM_PER_TICK())));
     }
 
     public double getOverallTarget(double in) { return in; }

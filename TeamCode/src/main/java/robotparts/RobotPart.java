@@ -15,6 +15,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
 
+import java.util.ArrayList;
 import java.util.Map.*;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -43,6 +44,9 @@ import static global.General.*;
 
 import robotparts.electronics.input.ITouch;
 import util.User;
+import util.codeseg.CodeSeg;
+import util.codeseg.ParameterCodeSeg;
+import util.codeseg.ReturnCodeSeg;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.template.Iterator;
@@ -170,10 +174,10 @@ public class RobotPart implements RobotUser {
      * @return Electronic TreeMap
      */
     @SuppressWarnings("unchecked")
-    public <T> TreeMap<String, T> getElectronicsOfType(Class<T> encoderType) {
+    public <T> TreeMap<String, T> getElectronicsOfType(Class<T> electronicType) {
         TreeMap<String, T> ret = new TreeMap<>();
         for (Entry<String, Electronic> o : electronics.entrySet()) {
-            if (o.getValue().getClass().equals(encoderType)) {
+            if (o.getValue().getClass().equals(electronicType)) {
                 ret.put(o.getKey(), (T) o.getValue());
             }
         }
@@ -274,11 +278,38 @@ public class RobotPart implements RobotUser {
     }
 
 
+    /**
+     * Methods to override and use to create stages
+     */
 
     protected void move(double fp, double sp, double tp){}
     protected Main main(double fp, double sp, double tp){ return new Main(() -> move(fp, sp, tp)); }
     protected Stage moveTime(double fp, double sp, double tp, double t){ return new Stage(usePart(), main(fp, sp, tp), exitTime(t), stop(), returnPart()); }
     protected AutoModule MoveTime(double fp, double sp, double tp, double t){ return new AutoModule(moveTime(fp, sp, tp, t)); }
+    protected final Stage moveCustomExit(double fp, double sp, double tp, Exit exit){ return new Stage(usePart(), main(fp, sp, tp), exit, stop(), returnPart()); }
 
     protected void move(double p){}
+    protected Main main(double p){ return new Main(() -> move(p)); }
+    protected Stage moveTime(double p, double t){ return new Stage(usePart(), main(p), exitTime(t), stop(), returnPart()); }
+    protected Stage moveNow(double p){ return new Stage(usePart(), main(p), exitAlways(), stop(), returnPart()); }
+    protected AutoModule MoveTime(double p, double t){ return new AutoModule(moveTime(p, t)); }
+    protected final Stage customExit(double p, Exit exit){ return new Stage(usePart(), main(p), exit, stop(), returnPart()); }
+    protected final Stage customExit(double p, ReturnCodeSeg<Boolean> exit){ return new Stage(usePart(), main(p), new Exit(exit), stop(), returnPart()); }
+
+
+    protected final Stage customTime(CodeSeg m, double t){ return new Stage(usePart(), new Main(m), exitTime(t), stop(), returnPart()); }
+    protected final Stage customTime(Main m, double t){ return new Stage(usePart(), m, exitTime(t), stop(), returnPart()); }
+
+
+    protected Initial setTarget(double target){ return new Initial(() -> {}); }
+    protected Exit exitTarget(){ return exitAlways(); }
+    protected Stop stopTarget(){ return new Stop(() -> forAllPMotors(PMotor::stopAndReset));}
+
+
+    private void forAllPMotors(ParameterCodeSeg<PMotor> code){
+        Iterator.forAll(getElectronicsOfType(PMotor.class), code);
+    }
+
+
+
 }

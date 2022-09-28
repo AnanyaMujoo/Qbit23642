@@ -63,7 +63,7 @@ public class TankTurret extends RobotPart {
      * Set the target angle for the turret
      * @param angle
      */
-    public void setTarget(double angle){
+    public void setTarget2(double angle){
         tr.setPosition(angle*Constants.TURRET_ANGLE_DEG_TO_TICKS);
     }
 

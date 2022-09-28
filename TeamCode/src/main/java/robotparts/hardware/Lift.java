@@ -23,42 +23,38 @@ import util.codeseg.CodeSeg;
 import util.codeseg.ReturnParameterCodeSeg;
 
 public class Lift extends RobotPart {
-
-    // TODO 4 NEW Make the lift classes again
-
-}
+//
+//    // TODO 4 NEW Make the lift classes again
+//
 //
 //    public PositionHolder positionHolder;
 //    private final double UP_SCALE_CONST = 0.96;
 //    private Level levelMode = Level.TOP;
-
+//
 //
 //    @Override
-//    public void move(double p){
-//        if(p > 0){
+//    public void move(double p) {
+//        if (p > 0) {
 //            motorUp.setPower(p + getRestPows()[0]);
 //            motorDown.setPower(0);
-//        }else if (p < 0){
+//        } else if (p < 0) {
 //            motorUp.setPower(0);
 //            motorDown.setPower(p + getRestPows()[1]);
-//        }else{
+//        } else {
 //            motorUp.setPower(getRestPows()[0]);
 //            motorDown.setPower(getRestPows()[1]);
 //        }
 //    }
-
-    // TOD4 FIX
-    // Why do we need this?
 //
 //    @Override
-//    public void moveDown(double p){
-//        if(p > 0){
+//    public void moveDown(double p) {
+//        if (p > 0) {
 //            motorUp.setPower(p + getRestPows()[0]);
 //            motorDown.setPower(0);
-//        }else if (p < 0){
+//        } else if (p < 0) {
 //            motorUp.setPower(-0.005);
 //            motorDown.setPower(p + getRestPows()[1]);
-//        }else{
+//        } else {
 //            motorUp.setPower(getRestPows()[0]);
 //            motorDown.setPower(getRestPows()[1]);
 //        }
@@ -69,7 +65,7 @@ public class Lift extends RobotPart {
 //    public void init() {
 //        super.init();
 //
-//        positionHolder = new PositionHolder(0.0, 0.007,0.003, 0.1);
+//        positionHolder = new PositionHolder(0.0, 0.007, 0.003, 0.1);
 //        positionHolder.setProcessVariable(this::getPositionUp);
 //
 //
@@ -79,7 +75,7 @@ public class Lift extends RobotPart {
 ////        motorDown.useStallDetector(0.2, getRestPows()[1],200,0.03, 2);
 //    }
 //
-//    public double getVelocity(){
+//    public double getVelocity() {
 //        return positionHolder.getVelocity();
 //    }
 //
@@ -90,7 +86,7 @@ public class Lift extends RobotPart {
 //
 //    @Override
 //    protected double getAngle() {
-//        return Math.PI/4;
+//        return Math.PI / 4;
 //    }
 //
 //    @Override
@@ -98,63 +94,73 @@ public class Lift extends RobotPart {
 //        return 1 / Constants.LIFT_CM_TO_TICKS;
 //    }
 //
-//    public Stage liftTime(double power, double time){return new Stage(
-//            usePart(),
-//            main(power),
-//            exitTime(time),
-//            stop(),
-//            returnPart()
-//    );}
+//    public Stage liftTime(double power, double time) {
+//        return new Stage(
+//                usePart(),
+//                main(power),
+//                exitTime(time),
+//                stop(),
+//                returnPart()
+//        );
+//    }
 //
 //
-//    public Stage liftPow(double power){return new Stage(
-//            usePart(),
-//            main(power),
-//            exitAlways(),
-//            returnPart()
-//    );}
+//    public Stage liftPow(double power) {
+//        return new Stage(
+//                usePart(),
+//                main(power),
+//                exitAlways(),
+//                returnPart()
+//        );
+//    }
+//
 //    /**
 //     * Lift to a certain position
+//     *
 //     * @param power
 //     * @param height
 //     * @return
 //     */
-//    public Stage liftEncoderUp(double power, double height){return new Stage(
-//            usePart(),
-//            initialSetTargetUp(height*UP_SCALE_CONST),
-//            main(power),
-//            exitReachedTargetUp(),
-//            stopEncoder(),
-//            returnPart()
-//    );}
-//
-//
-//    public Stage liftEncoderDown(double power, double height){return new Stage(
-//            usePart(),
-//            initialSetTargetDown(height),
-//            mainDown(power),
-//            exitReachedTargetDown(),
-//            stopEncoder(),
-//            returnPart()
-//    );}
-//
-//    public double getPositionUp(){
-//        return motorUp.getPosition()*CM_PER_TICK();
-//    }
-//
-//    public double getPositionDown(){
-//        return motorDown.getPosition()*CM_PER_TICK();
+//    public Stage liftEncoderUp(double power, double height) {
+//        return new Stage(
+//                usePart(),
+//                initialSetTargetUp(height * UP_SCALE_CONST),
+//                main(power),
+//                exitReachedTargetUp(),
+//                stopEncoder(),
+//                returnPart()
+//        );
 //    }
 //
 //
-//    public void holdPosition(){
-//        if(getPositionUp() > 10) {
+//    public Stage liftEncoderDown(double power, double height) {
+//        return new Stage(
+//                usePart(),
+//                initialSetTargetDown(height),
+//                mainDown(power),
+//                exitReachedTargetDown(),
+//                stopEncoder(),
+//                returnPart()
+//        );
+//    }
+//
+//    public double getPositionUp() {
+//        return motorUp.getPosition() * CM_PER_TICK();
+//    }
+//
+//    public double getPositionDown() {
+//        return motorDown.getPosition() * CM_PER_TICK();
+//    }
+//
+//
+//    public void holdPosition() {
+//        if (getPositionUp() > 10) {
 //            if (motorUp.isAllowed() && motorDown.isAllowed()) {
 //                positionHolder.update();
 //                motorUp.setPower(positionHolder.getOutput() + getRestPows()[0]);
 //                motorDown.setPower(getRestPows()[1]);
 //            }
-//        }else{
+//        } else {
 //            motorUp.setPower(0.08);
 //            motorDown.setPower(-0.1);
 //        }
@@ -162,25 +168,25 @@ public class Lift extends RobotPart {
 //    }
 //
 //
-//    public void cycleLevelUp(){
+//    public void cycleLevelUp() {
 //        levelMode = nextLevel();
 //    }
 //
-//    public void cycleLevelDown(){
+//    public void cycleLevelDown() {
 //        cycleLevelUp();
 //        cycleLevelUp();
 //    }
 //
-//    public Level getLevelMode(){
+//    public Level getLevelMode() {
 //        return levelMode;
 //    }
 //
-//    public void setLevelMode(Level level){
+//    public void setLevelMode(Level level) {
 //        levelMode = level;
 //    }
 //
-//    private Level nextLevel(){
-//        switch (levelMode){
+//    private Level nextLevel() {
+//        switch (levelMode) {
 //            case TOP:
 //                return Level.BOTTOM;
 //            case MIDDLE:
@@ -190,14 +196,7 @@ public class Lift extends RobotPart {
 //        }
 //        return null;
 //    }
-
-
-
-
-
 //
-//@Deprecated
-//public abstract class Lift extends PMotorRobotPart {
 //
 //    @Override
 //    public double getOverallTarget(double in) {
@@ -266,8 +265,8 @@ public class Lift extends RobotPart {
 //    );}
 //
 //}
-
-
+//
+//
 //
 //@Deprecated
 //public abstract class PMotorRobotPart extends RobotPart {
@@ -418,11 +417,8 @@ public class Lift extends RobotPart {
 //     * @return
 //     */
 //    public Stop stopEncoder(){return new Stop(this::stopAndResetMode);}
-//}
-
 //
-//@Deprecated
-//public abstract class TwoLift extends RobotPart {
+//
 //
 //    public PMotor motorUp;
 //    public PMotor motorDown;
@@ -482,5 +478,6 @@ public class Lift extends RobotPart {
 //    public Stop stop(){return new Stop(() -> move(0));}
 //
 //    public Stop stopEncoder(){return new Stop(this::stopAndResetMode);}
-//}
-//
+
+}
+

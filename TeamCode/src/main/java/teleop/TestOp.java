@@ -20,6 +20,7 @@ public class TestOp extends Tele {
         gph1.link(Button.X, drive.MoveTime(0.3,0,0,1));
         gph1.link(Button.Y, DriveForward);
         gph1.link(Button.B, DriveField);
+        gph1.link(Button.A, Intake);
 
     }
 

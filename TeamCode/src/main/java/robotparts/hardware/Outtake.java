@@ -113,32 +113,15 @@ public class Outtake extends RobotPart {
         ol.setPosition("horizontal");
     }
 
-    /**
-     * Mains for all of the above functions
-     * @return Main for related function
-     */
-    private Main mainDrop() { return new Main(this::drop); }
-    private Main mainLock() { return new Main(this::lock); }
-    private Main mainCenterTurret() { return new Main(this::turretCenter); }
-    private Main mainSharedTurretRight() { return new Main(this::sharedTurretRight); }
-    private Main mainSharedTurretLeft() { return new Main(this::sharedTurretLeft); }
-    private Main mainTurnToStart() { return new Main(this::turnToStart); }
-    private Main mainTurnToHorizontal() { return new Main(this::turnToHorizontal); }
 
-    /**
-     * Stages for all the above functions
-     * @param main
-     * @param t
-     * @return
-     */
-    public Stage buildStageTime(Main main, double t){ return new Stage(usePart(), main, exitTime(t), returnPart()); }
-    public Stage stageDrop(double t) { return buildStageTime(mainDrop(), t); } //0.25
-    public Stage stageLock(double t) { return buildStageTime(mainLock(), t); } //0.25
-    public Stage stageCenterTurret(double t) { return buildStageTime(mainCenterTurret(), t); }
-    public Stage stageSharedTurretRight(double t) { return buildStageTime(mainSharedTurretRight(), t); } // 0.5
-    public Stage stageSharedTurretLeft(double t) { return buildStageTime(mainSharedTurretLeft(), t); } //0.5
-    public Stage stageTurnToStart(double t) { return buildStageTime(mainTurnToStart(), t); } //0.05
-    public Stage stageTurnToHorizontal(double t) { return buildStageTime(mainTurnToHorizontal(), t); } //0.05
+
+    public Stage stageDrop(double t) { return super.customTime(this::drop, t); } //0.25
+    public Stage stageLock(double t) { return super.customTime(this::lock, t); } //0.25
+    public Stage stageCenterTurret(double t) { return super.customTime(this::turretCenter, t); }
+    public Stage stageSharedTurretRight(double t) { return super.customTime(this::sharedTurretRight, t); } // 0.5
+    public Stage stageSharedTurretLeft(double t) { return super.customTime(this::sharedTurretLeft, t); } //0.5
+    public Stage stageTurnToStart(double t) {return super.customTime(this::turnToStart, t); } //0.05
+    public Stage stageTurnToHorizontal(double t) { return super.customTime(this::turnToHorizontal, t); } //0.05
 
     public void setOuttakeMode(Modes.OuttakeMode outtakeMode){ this.outtakeMode = outtakeMode; }
     public Modes.OuttakeMode getOuttakeMode(){ return outtakeMode; }
