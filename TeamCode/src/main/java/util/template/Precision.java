@@ -2,6 +2,7 @@ package util.template;
 
 import util.Timer;
 import util.codeseg.CodeSeg;
+import util.codeseg.ReturnParameterCodeSeg;
 
 public interface Precision {
     /**
@@ -77,5 +78,10 @@ public interface Precision {
             onFalse.run();
             return false;
         }
+    }
+
+
+    static ReturnParameterCodeSeg<Double, Double> invert(ReturnParameterCodeSeg<Double, Double> input){
+        return output -> output/input.run(1.0);
     }
 }

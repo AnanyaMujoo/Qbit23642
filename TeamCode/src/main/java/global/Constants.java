@@ -18,16 +18,16 @@ public class Constants {
     public static final double ANG_ACC_ARC = 0.05;
     public static final double LINE_ACC_PATH = 0.05;
 
-    public static final double ORBITAL_TICK_PER_REV = 537.6;
+    public static final double ORBITAL_TICKS_PER_REV = 537.6;
 
     /**
      * Constant for converting lift height to ticks for the motor to rotate
      */
-    public static final double LIFT_CM_TO_TICKS = ((ORBITAL_TICK_PER_REV)/(Math.PI*3))/3; //in ticks/cm , (ticks/rev)/(cm/rev), accounting for gear ratio
+    public static final double LIFT_CM_TO_TICKS = ((ORBITAL_TICKS_PER_REV)/(Math.PI*3))/3; //in ticks/cm , (ticks/rev)/(cm/rev), accounting for gear ratio
     /**
      * Constant for converting the angle of the turret in degrees to ticks for the motor to rotate
      */
-    public static final double TURRET_ANGLE_DEG_TO_TICKS = (ORBITAL_TICK_PER_REV/360.0)*4; //(8192.0/360.0)*4.0; //ticks/deg, (ticks/deg)*ratio
+    public static final double TURRET_ANGLE_DEG_TO_TICKS = (ORBITAL_TICKS_PER_REV /360.0)*4; //(8192.0/360.0)*4.0; //ticks/deg, (ticks/deg)*ratio
     /**
      * Rest power for the lift to prevent gravity from bringing it down
      */

@@ -1,26 +1,11 @@
 package robotparts.hardware;
 
-import static global.General.fault;
-
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-import java.util.Arrays;
-
-import automodules.stage.Exit;
-import automodules.stage.Initial;
-import automodules.stage.Main;
 import automodules.stage.Stage;
-import automodules.stage.Stop;
 import autoutil.controllers.PositionHolder;
-import elements.Level;
 import global.Constants;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
-import robotparts.electronics.continuous.CMotor;
 import robotparts.electronics.positional.PMotor;
-import util.codeseg.CodeSeg;
-import util.codeseg.ReturnParameterCodeSeg;
 
 public class Lift extends RobotPart {
 
@@ -43,8 +28,9 @@ public class Lift extends RobotPart {
     public void init() {
         motorUp = create("lil", ElectronicType.PMOTOR_REVERSE);
         motorDown = create("lir", ElectronicType.PMOTOR_REVERSE_FLOAT);
-        positionHolder = new PositionHolder(0.0, 0.007, 0.003, 0.1);
-//        positionHolder.setProcessVariable(this::getPositionUp);
+        motorUp.setToLinear(Constants.ORBITAL_TICKS_PER_REV,1.5, 3,45);
+        motorDown.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 3, 45);
+        motorUp.setPositionHolder(new PositionHolder(0.0, 0.007, 0.003, 0.1));
     }
 
 

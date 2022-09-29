@@ -3,14 +3,18 @@ package robotparts.electronics.positional;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import autoutil.controllers.PositionHolder;
 import debugging.StallDetector;
 import robotparts.Electronic;
 import robotparts.electronics.input.IEncoder;
 import util.Timer;
+import util.codeseg.ReturnParameterCodeSeg;
 import util.condition.Expectation;
 import util.condition.Magnitude;
+import util.template.Precision;
 
 import static global.General.fault;
+import static java.lang.Math.*;
 
 public class PMotor extends Electronic {
     /**
@@ -21,6 +25,10 @@ public class PMotor extends Electronic {
     private final DcMotor.ZeroPowerBehavior zeroPowerBehavior;
     private final IEncoder motorEncoder;
     private final StallDetector detector;
+    private MovementType movementType = MovementType.ROTATIONAL;
+    private ReturnParameterCodeSeg<Double, Double> outputToTicks = input -> input;
+    private ReturnParameterCodeSeg<Double, Double> ticksToOutput = input -> input;
+    private PositionHolder positionHolder = new PositionHolder(0, 0, 0,0);
 
     // TODO 4 NEW Make this have functionality to use custom PID
 
@@ -50,6 +58,23 @@ public class PMotor extends Electronic {
         motorEncoder.reset();
     }
 
+    public void setToLinear(double ticksPerRev, double radius, double ratio, double angle){
+        movementType = MovementType.LINEAR;
+        outputToTicks = distance -> (distance/(2*Math.PI*radius))*ticksPerRev*(ratio/cos(toRadians(angle)));
+        ticksToOutput = Precision.invert(outputToTicks);
+    }
+
+    public void setToRotational(double ticksPerRev, double ratio){
+        movementType = MovementType.ROTATIONAL;
+        outputToTicks = distance -> (distance/360)*ticksPerRev*ratio;
+        ticksToOutput = Precision.invert(outputToTicks);
+    }
+
+    public void setPositionHolder(PositionHolder holder){
+        positionHolder = holder;
+        positionHolder.setProcessVariable(this::getPosition);
+    }
+
     /**
      * Set the power of the pmotor
      * @param p
@@ -66,22 +91,20 @@ public class PMotor extends Electronic {
     }
 
     /**
-     * Set the position in ticks to move to
-     * @param pos
+     * Set the position to move to
+     * @param distance
      */
-    public void setPosition(double pos){
+    public void setPosition(double distance){
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor.setTargetPosition((int)(pos));
+        motor.setTargetPosition(outputToTicks.run(distance).intValue());
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     /**
-     * Get the target position in ticks
+     * Get the target position
      * @return target
      */
-    public double getTarget() {
-        return motor.getTargetPosition();
-    }
+    public double getTarget() { return ticksToOutput.run((double) motor.getTargetPosition()); }
 
     /**
      * Get the power of the motor
@@ -101,9 +124,7 @@ public class PMotor extends Electronic {
      * Get the position of the motor
      * @return ticks
      */
-    public double getPosition(){
-        return motorEncoder.getPos();
-    }
+    public double getPosition(){ return ticksToOutput.run(motorEncoder.getPos()); }
 
     /**
      * Gets the logical direction of the pmotor
@@ -140,4 +161,15 @@ public class PMotor extends Electronic {
      */
     @Override
     public void halt(){ setPower(0); }
+
+
+
+
+    /**
+     * Type of movement preformed
+     */
+    public enum MovementType{
+        ROTATIONAL,
+        LINEAR
+    }
 }
