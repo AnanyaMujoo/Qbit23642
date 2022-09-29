@@ -24,6 +24,7 @@ public class TestOp extends Tele {
     OutputList DriveField = new OutputList(() -> fieldSide)
             .addOption(FieldSide.UNKNOWN, DriveForward)
             .addOption(FieldSide.RED, DriveBackward);
+    AutoModule IntakeUntilFreightNew = new AutoModule(intake.intakeUntilFreight(1));
 
 
     @Override
