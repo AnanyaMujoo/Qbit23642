@@ -20,12 +20,16 @@ public class TerraOp extends Tele {
 
     @Override
     public void initTele() {
-        gph1.link(Button.A, intake.MoveTime(1, 1));
+        gph1.link(X, () -> bot.cancelAll());
+        gph1.link(Button.A, IntakeNew);
+        gph1.link(Button.B, BackwardNew);
+        gph1.link(Button.Y, ForwardNew);
     }
 
     @Override
     public void loopTele() {
         drive.move(gph1.ry, gph1.rx, gph1.lx);
+        lift.move(gph2.ry);
     }
 
 

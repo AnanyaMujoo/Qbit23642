@@ -91,6 +91,6 @@ public class StageBuilder {
     protected Initial setTarget(double target){ return new Initial(() -> {}); }
     protected Exit exitTarget(){ return exitAlways(); }
     protected Stop stopTarget(){ return new Stop(() -> {});}
-    protected Stage moveTarget(){ return new Stage(); }
+    protected Stage moveTarget(double power, double target){ return new Stage(); }
 
 }

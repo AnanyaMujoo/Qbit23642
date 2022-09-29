@@ -18,14 +18,31 @@ import static global.Modes.OuttakeMode.SHARED;
 public interface AutoModuleUser extends RobotUser {
 
 
-    AutoModule DriveForward = new AutoModule(drive.moveTime(0.3, 0, 0, 1));
-    AutoModule DriveBackward = new AutoModule(drive.moveTime(-0.3, 0, 0, 1));
+    AutoModule IntakeNew = new AutoModule(
+            outtake.stageDrop(0.05),
+            intake.intakeUntilFreight(1),
+            outtake.stageLock(0.05),
+            intake.moveTime(-1, 1)
+    );
 
-    OutputList DriveField = new OutputList(() -> fieldSide)
-            .addOption(FieldSide.UNKNOWN, DriveForward)
-            .addOption(FieldSide.RED, DriveBackward);
+    AutoModule BackwardNew = new AutoModule(
+            outtake.stageLock(0.05),
+            outtake.stageTurnToHorizontal(0.05),
+            lift.moveTarget(1.0, 42),
+            outtake.stageCenterTurret(0.05)
+    );
 
-    AutoModule IntakeUntilFreightNew = new AutoModule(intake.intakeUntilFreight(1));
+    AutoModule ForwardNew = new AutoModule(
+            outtake.stageDrop(0.15),
+            outtake.stageCenterTurret(0.25),
+            outtake.stageLock(0.05),
+            outtake.stageTurnToStart(0.05),
+            lift.moveTarget(-0.5, 0)
+    );
+
+
+
+
 
 
 

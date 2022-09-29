@@ -3,6 +3,10 @@ package robotparts.electronics.positional;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import automodules.stage.Exit;
+import automodules.stage.Initial;
+import automodules.stage.Stage;
+import automodules.stage.Stop;
 import autoutil.controllers.PositionHolder;
 import debugging.StallDetector;
 import robotparts.Electronic;
@@ -90,6 +94,11 @@ public class PMotor extends Electronic {
         }
     }
 
+    public void setPowerAdjusted(double p){
+        positionHolder.update();
+        motor.setPower(positionHolder.getOutput() + p);
+    }
+
     /**
      * Set the position to move to
      * @param distance
@@ -163,13 +172,40 @@ public class PMotor extends Electronic {
     public void halt(){ setPower(0); }
 
 
-
-
     /**
      * Type of movement preformed
      */
     public enum MovementType{
         ROTATIONAL,
         LINEAR
+    }
+
+    /**
+     * Stage components
+     */
+
+    @Override
+    protected Initial setTarget(double target) {
+        return new Initial(() -> setPosition(target));
+    }
+
+    @Override
+    protected Exit exitTarget() {
+        return new Exit(this::hasReachedPosition);
+    }
+
+    @Override
+    protected Stop stopTarget() {
+        return new Stop(this::stopAndReset);
+    }
+
+    @Override
+    protected void move(double p) {
+        setPower(p);
+    }
+
+    @Override
+    public Stage moveTarget(double power, double target) {
+        return new Stage(usePart(), setTarget(target), main(power), exitTarget(), stopTarget(),returnPart());
     }
 }
