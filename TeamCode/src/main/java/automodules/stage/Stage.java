@@ -10,6 +10,7 @@ import util.codeseg.ParameterCodeSeg;
 import util.template.Iterator;
 
 public class Stage {
+
     /**
      * Stage has an arraylist of stagecomponents
      */
@@ -95,6 +96,11 @@ public class Stage {
         if(Iterator.forAllCount(components, comp -> comp instanceof Exit) == 0){
             components.add(RobotPart.exitAlways());
         }
+    }
+
+    public Stage combine(Stage stage){
+        Iterator.forAll(stage.components, components::add);
+        return this;
     }
 
 }

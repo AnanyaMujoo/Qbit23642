@@ -178,16 +178,4 @@ public class PMotor extends Electronic {
         ROTATIONAL,
         LINEAR
     }
-
-    /**
-     * Stage components
-     */
-
-
-
-//
-//    public final Stage moveTarget(double power, double target) {
-////        return new Stage(usePart(), new Main(()->{}), exitTarget(), stopTarget(),returnPart());
-//        return new Stage();
-//    }
 }

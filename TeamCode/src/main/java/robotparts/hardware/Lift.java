@@ -22,7 +22,7 @@ public class Lift extends RobotPart {
         motorDown = create("lir", ElectronicType.PMOTOR_REVERSE_FLOAT);
         motorUp.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 0.333, 45);
         motorDown.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 0.333, 45);
-        motorUp.setPositionHolder(new PositionHolder(0.0, 0.007, 0.003, 0.1));
+//        motorUp.setPositionHolder(new PositionHolder(0.0, 0.007, 0.003, 0.1));
     }
 
 
@@ -33,10 +33,9 @@ public class Lift extends RobotPart {
             motorDown.move(p < 0 ? p + restPowDown : 0);
         } else {
             if (motorUp.getPosition() > 10) {
-                if (motorUp.isAllowed() && motorDown.isAllowed()) {
-                    motorUp.setPowerAdjusted(restPowUp);
-                    motorDown.move(restPowDown);
-                }
+                motorUp.move(restPowUp);
+                motorDown.move(restPowDown);
+//                motorUp.setPowerAdjusted(restPowUp);
             } else {
                 motorUp.move(0.08);
                 motorDown.move(-0.1);
@@ -56,11 +55,7 @@ public class Lift extends RobotPart {
     }
 
     public Stage stageLift(double power, double target) {
-        if(power > 0) {
-            return moveTarget(() -> motorUp, power, target);
-        }else{
-            return moveTarget(() -> motorDown, power, target);
-        }
+        return moveTarget(() -> motorUp, () -> motorDown, power, power>0?power:power*0.5, target);
     }
 
 }
