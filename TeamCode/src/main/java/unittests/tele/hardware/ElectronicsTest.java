@@ -38,7 +38,7 @@ public class ElectronicsTest extends TeleUnitTest {
          */
         gph1.link(Button.A, OnPressEventHandler.class, () -> in.setPower(0.2));
         gph1.link(Button.B, OnPressEventHandler.class, () -> cr.setPower(0.2));
-        gph1.link(Button.Y, OnPressEventHandler.class, () -> li.setPower(0.2));
+        gph1.link(Button.Y, OnPressEventHandler.class, () -> li.move(0.2));
         gph1.link(Button.RIGHT_BUMPER, OnPressEventHandler.class, () -> lo.setPosition("start"));
     }
 

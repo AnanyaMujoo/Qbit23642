@@ -14,7 +14,6 @@ import util.User;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 
-import static global.General.bot;
 import static global.General.fault;
 import static global.General.fieldSide;
 import static global.General.mainUser;
@@ -43,7 +42,7 @@ public class TankTurret extends RobotPart {
      * @param power
      */
     public void move(double power) {
-        tr.setPower(power);
+        tr.move(power);
     }
 
     /**
@@ -64,7 +63,7 @@ public class TankTurret extends RobotPart {
      * @param angle
      */
     public void setTarget2(double angle){
-        tr.setPosition(angle*Constants.TURRET_ANGLE_DEG_TO_TICKS);
+        tr.setTarget(angle*Constants.TURRET_ANGLE_DEG_TO_TICKS);
     }
 
     /**
@@ -72,7 +71,7 @@ public class TankTurret extends RobotPart {
      * @return hasReached
      */
     public boolean hasReachedTarget(){
-        return tr.hasReachedPosition();
+        return tr.exitTarget();
     }
 
     /**
@@ -126,7 +125,7 @@ public class TankTurret extends RobotPart {
      * Stop and reset the mode
      */
     public void stopAndResetMode() {
-        tr.stopAndReset();
+        tr.stopTarget();
     }
 
     /**

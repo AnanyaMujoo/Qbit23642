@@ -43,24 +43,24 @@ public abstract class TwoLift extends RobotPart {
     }
 
     public Initial initialSetTargetUp(double height){
-        return new Initial(() -> motorUp.setPosition(height/ CM_PER_TICK()));
+        return new Initial(() -> motorUp.setTarget(height/ CM_PER_TICK()));
     }
 
     public Initial initialSetTargetDown(double height){
-        return new Initial(() -> motorDown.setPosition(height/ CM_PER_TICK()));
+        return new Initial(() -> motorDown.setTarget(height/ CM_PER_TICK()));
     }
 
     public void stopAndResetMode() {
-        motorUp.stopAndReset();
-        motorDown.stopAndReset();
+        motorUp.stopTarget();
+        motorDown.stopTarget();
     }
 
     public boolean hasReachedTargetUp() {
-        return motorUp.hasReachedPosition();
+        return motorUp.exitTarget();
     }
 
     public boolean hasReachedTargetDown() {
-        return motorDown.hasReachedPosition();
+        return motorDown.exitTarget();
     }
 
     public Main mainDown(double power){

@@ -20,8 +20,8 @@ public class Lift extends RobotPart {
     public void init() {
         motorUp = create("lil", ElectronicType.PMOTOR_REVERSE);
         motorDown = create("lir", ElectronicType.PMOTOR_REVERSE_FLOAT);
-        motorUp.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 3, 45);
-        motorDown.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 3, 45);
+        motorUp.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 0.333, 45);
+        motorDown.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 0.333, 45);
         motorUp.setPositionHolder(new PositionHolder(0.0, 0.007, 0.003, 0.1));
     }
 
@@ -29,17 +29,17 @@ public class Lift extends RobotPart {
     @Override
     public void move(double p) {
         if (p != 0) {
-            motorUp.setPower(p > 0 ? p + restPowUp : 0);
-            motorDown.setPower(p < 0 ? p + restPowDown : 0);
+            motorUp.move(p > 0 ? p + restPowUp : 0);
+            motorDown.move(p < 0 ? p + restPowDown : 0);
         } else {
             if (motorUp.getPosition() > 10) {
                 if (motorUp.isAllowed() && motorDown.isAllowed()) {
                     motorUp.setPowerAdjusted(restPowUp);
-                    motorDown.setPower(restPowDown);
+                    motorDown.move(restPowDown);
                 }
             } else {
-                motorUp.setPower(0.08);
-                motorDown.setPower(-0.1);
+                motorUp.move(0.08);
+                motorDown.move(-0.1);
             }
         }
 
@@ -55,12 +55,11 @@ public class Lift extends RobotPart {
         return super.moveNow(p);
     }
 
-    @Override
-    public Stage moveTarget(double power, double target) {
+    public Stage stageLift(double power, double target) {
         if(power > 0) {
-            return motorUp.moveTarget(power, target);
+            return moveTarget(() -> motorUp, power, target);
         }else{
-            return motorDown.moveTarget(power, target);
+            return moveTarget(() -> motorDown, power, target);
         }
     }
 

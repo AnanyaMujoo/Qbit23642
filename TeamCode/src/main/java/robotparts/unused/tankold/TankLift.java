@@ -1,7 +1,5 @@
 package robotparts.unused.tankold;
 
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
 import global.Constants;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
@@ -45,7 +43,7 @@ public class TankLift extends Lift {
     @Override
     public void move(double pow) {
         for(PMotor p: motors){
-            p.setPower(pow);
+            p.move(pow);
         }
     }
 

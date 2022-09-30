@@ -85,7 +85,7 @@ public abstract class PMotorRobotPart extends RobotPart {
      */
     public void setTarget2(double h){
         for (int i = 0; i < motors.length; i++) if (!disabled[i]) {
-            motors[i].setPosition(getTargets[i].run(h));
+            motors[i].setTarget(getTargets[i].run(h));
         }
     }
 
@@ -118,7 +118,7 @@ public abstract class PMotorRobotPart extends RobotPart {
      * Stops and resets the mode of the positional motor
      */
     public void stopAndResetMode() {
-        for (PMotor li : motors) li.stopAndReset();
+        for (PMotor li : motors) li.stopTarget();
     }
 
     public boolean hasReachedTarget() {
@@ -136,7 +136,7 @@ public abstract class PMotorRobotPart extends RobotPart {
     public boolean[] hasReachedTargetEach(){
         boolean[] reachedTarget = new boolean[motors.length];
         for (int i = 0; i < motors.length; i++) {
-            reachedTarget[i] = motors[i].hasReachedPosition();
+            reachedTarget[i] = motors[i].exitTarget();
         }
         return reachedTarget;
     }

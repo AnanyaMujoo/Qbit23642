@@ -6,12 +6,10 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robotparts.electronics.positional.PMotor;
-import util.User;
 import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 
 import static global.General.bot;
-import static global.General.mainUser;
 
 public class StageBuilder {
     /**
@@ -88,9 +86,10 @@ public class StageBuilder {
     protected final Stage customTime(Main m, double t){ return new Stage(usePart(), m, exitTime(t), stop(), returnPart()); }
 
 
-    protected Initial setTarget(double target){ return new Initial(() -> {}); }
-    protected Exit exitTarget(){ return exitAlways(); }
-    protected Stop stopTarget(){ return new Stop(() -> {});}
-    protected Stage moveTarget(double power, double target){ return new Stage(); }
+    protected void setTarget(double target){}
+    protected boolean exitTarget(){ return true; }
+    protected void stopTarget(){}
+
+    protected final Stage moveTarget(ReturnCodeSeg<PMotor> motor, double power, double target){ return new Stage(usePart(), new Initial(() -> motor.run().setTarget(target)), new Main(() -> motor.run().move(power)), new Exit(() -> motor.run().exitTarget()), new Stop(() -> motor.run().stopTarget()), returnPart()); }
 
 }

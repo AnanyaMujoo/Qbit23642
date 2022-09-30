@@ -3,15 +3,10 @@ package robotparts.electronics.positional;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import automodules.stage.Exit;
-import automodules.stage.Initial;
-import automodules.stage.Stage;
-import automodules.stage.Stop;
 import autoutil.controllers.PositionHolder;
 import debugging.StallDetector;
 import robotparts.Electronic;
 import robotparts.electronics.input.IEncoder;
-import util.Timer;
 import util.codeseg.ReturnParameterCodeSeg;
 import util.condition.Expectation;
 import util.condition.Magnitude;
@@ -83,7 +78,8 @@ public class PMotor extends Electronic {
      * Set the power of the pmotor
      * @param p
      */
-    public void setPower(double p){
+    @Override
+    public final void move(double p){
         if(access.isAllowed()){
             if(!detector.isStalling()){
                 motor.setPower(p);
@@ -103,7 +99,8 @@ public class PMotor extends Electronic {
      * Set the position to move to
      * @param distance
      */
-    public void setPosition(double distance){
+    @Override
+    public final void setTarget(double distance){
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor.setTargetPosition(outputToTicks.run(distance).intValue());
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -125,7 +122,8 @@ public class PMotor extends Electronic {
      * Has the motor reached the target
      * @return if the motor is busy
      */
-    public boolean hasReachedPosition(){
+    @Override
+    public boolean exitTarget(){
         return !motor.isBusy();
     }
 
@@ -144,8 +142,9 @@ public class PMotor extends Electronic {
     /**
      * Stop and reset the mode of the pmotor
      */
-    public void stopAndReset(){
-        setPower(0);
+    @Override
+    public void stopTarget(){
+        move(0);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
@@ -169,7 +168,7 @@ public class PMotor extends Electronic {
      * NOTE: This should only be called in a thread that has access to use the robot
      */
     @Override
-    public void halt(){ setPower(0); }
+    public void halt(){ move(0); }
 
 
     /**
@@ -184,28 +183,11 @@ public class PMotor extends Electronic {
      * Stage components
      */
 
-    @Override
-    protected Initial setTarget(double target) {
-        return new Initial(() -> setPosition(target));
-    }
 
-    @Override
-    protected Exit exitTarget() {
-        return new Exit(this::hasReachedPosition);
-    }
 
-    @Override
-    protected Stop stopTarget() {
-        return new Stop(this::stopAndReset);
-    }
-
-    @Override
-    protected void move(double p) {
-        setPower(p);
-    }
-
-    @Override
-    public Stage moveTarget(double power, double target) {
-        return new Stage(usePart(), setTarget(target), main(power), exitTarget(), stopTarget(),returnPart());
-    }
+//
+//    public final Stage moveTarget(double power, double target) {
+////        return new Stage(usePart(), new Main(()->{}), exitTarget(), stopTarget(),returnPart());
+//        return new Stage();
+//    }
 }

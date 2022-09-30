@@ -14,14 +14,14 @@ public class MecanumLift extends TwoLift {
     @Override
     public void move(double p){
         if(p > 0){
-            motorUp.setPower(p + getRestPows()[0]);
-            motorDown.setPower(0);
+            motorUp.move(p + getRestPows()[0]);
+            motorDown.move(0);
         }else if (p < 0){
-            motorUp.setPower(0);
-            motorDown.setPower(p + getRestPows()[1]);
+            motorUp.move(0);
+            motorDown.move(p + getRestPows()[1]);
         }else{
-            motorUp.setPower(getRestPows()[0]);
-            motorDown.setPower(getRestPows()[1]);
+            motorUp.move(getRestPows()[0]);
+            motorDown.move(getRestPows()[1]);
         }
     }
 
@@ -31,14 +31,14 @@ public class MecanumLift extends TwoLift {
     @Override
     public void moveDown(double p){
         if(p > 0){
-            motorUp.setPower(p + getRestPows()[0]);
-            motorDown.setPower(0);
+            motorUp.move(p + getRestPows()[0]);
+            motorDown.move(0);
         }else if (p < 0){
-            motorUp.setPower(-0.005);
-            motorDown.setPower(p + getRestPows()[1]);
+            motorUp.move(-0.005);
+            motorDown.move(p + getRestPows()[1]);
         }else{
-            motorUp.setPower(getRestPows()[0]);
-            motorDown.setPower(getRestPows()[1]);
+            motorUp.move(getRestPows()[0]);
+            motorDown.move(getRestPows()[1]);
         }
     }
 
@@ -129,12 +129,12 @@ public class MecanumLift extends TwoLift {
         if(getPositionUp() > 10) {
             if (motorUp.isAllowed() && motorDown.isAllowed()) {
                 positionHolder.update();
-                motorUp.setPower(positionHolder.getOutput() + getRestPows()[0]);
-                motorDown.setPower(getRestPows()[1]);
+                motorUp.move(positionHolder.getOutput() + getRestPows()[0]);
+                motorDown.move(getRestPows()[1]);
             }
         }else{
-            motorUp.setPower(0.08);
-            motorDown.setPower(-0.1);
+            motorUp.move(0.08);
+            motorDown.move(-0.1);
         }
 //        motorUp.setPower(getRestPows()[0]);
     }
