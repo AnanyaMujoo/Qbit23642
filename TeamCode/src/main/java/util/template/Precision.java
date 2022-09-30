@@ -54,6 +54,10 @@ public interface Precision {
         }
     }
 
+    default boolean inputOutputTrueForTime(boolean condition, double inputTime, double outputTime){
+        return outputTrueForTime(isInputTrueForTime(condition, inputTime), outputTime);
+    }
+
 
     /**
      * Helper methods for running on a condition
