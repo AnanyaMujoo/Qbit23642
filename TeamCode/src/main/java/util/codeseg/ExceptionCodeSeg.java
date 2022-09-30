@@ -5,6 +5,7 @@ package util.codeseg;
  * Created as follows: () -> <do something that could throw an exception>
  * @param <E>
  */
+@FunctionalInterface
 public interface ExceptionCodeSeg<E extends Throwable> {
     void run() throws E;
 }

@@ -5,6 +5,7 @@ package util.codeseg;
  * Created as follows: () -> {return <something>}
  * @param <R>
  */
+@FunctionalInterface
 public interface ReturnCodeSeg<R> {
     R run();
 }

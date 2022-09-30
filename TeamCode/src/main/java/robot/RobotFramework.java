@@ -32,8 +32,6 @@ public class RobotFramework {
      * The odometry thread is used to update odometry
      */
     public static TerraThread odometryThread;
-
-    // TODO 4 FIX Background thread easier to use
     /**
      * Background thread
      */

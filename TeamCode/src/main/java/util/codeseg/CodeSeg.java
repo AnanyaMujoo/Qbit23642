@@ -5,6 +5,7 @@ package util.codeseg;
  * Created as follows: () -> <code to run> or
  * () -> {<multiline code to run>}
  */
+@FunctionalInterface
 public interface CodeSeg {
     void run();
 }

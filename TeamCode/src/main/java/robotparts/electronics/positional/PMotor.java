@@ -31,8 +31,6 @@ public class PMotor extends Electronic {
 
     // TODO 4 NEW Make this have functionality to use custom PID
 
-    // TODO 4 FIX Make this have inbuilt methods for setting position in units and targets, modes linear/etc
-
     /**
      * Constructor to create a pmotor
      * @param m

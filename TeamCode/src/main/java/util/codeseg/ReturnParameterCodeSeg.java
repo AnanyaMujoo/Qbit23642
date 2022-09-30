@@ -6,6 +6,7 @@ package util.codeseg;
  * @param <P>
  * @param <R>
  */
+@FunctionalInterface
 public interface ReturnParameterCodeSeg<P, R>{
     R run(P input);
 }

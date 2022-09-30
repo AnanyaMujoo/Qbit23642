@@ -10,6 +10,8 @@ public class PositionHolder extends Controller1D{
     private final double deltaPowerUp;
     private final double deltaPowerDown;
 
+    // TODO 4 NEW Create position holder and test
+
     public PositionHolder(double restPower, double deltaPowerUp,double deltaPowerDown,  double velocityThreshold){
         this.restPower = restPower;
         this.deltaPowerUp = deltaPowerUp;
