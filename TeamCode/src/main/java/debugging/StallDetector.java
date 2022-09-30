@@ -1,6 +1,10 @@
 package debugging;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 import util.template.Precision;
 import autoutil.profilers.Profiler;
@@ -8,7 +12,7 @@ import autoutil.profilers.Profiler;
 public class StallDetector implements Precision {
     // TODO 4 FIX Stall Detector
     private final Profiler profiler;
-    private final DcMotor motor;
+    private final DcMotorEx motor;
     private double maxPower;
     private double minSpeed;
     private double minTime;
@@ -17,7 +21,10 @@ public class StallDetector implements Precision {
     private boolean hasBeenInitialized = false;
 
     public StallDetector(DcMotor m){
-        motor = m;
+        motor = (DcMotorEx) m;
+//        motor.getVelocity(AngleUnit.DEGREES);
+//        motor.getCurrent(CurrentUnit.MILLIAMPS);
+
         profiler = new Profiler(() -> (double) motor.getCurrentPosition());
         resetPrecisionTimers();
     }

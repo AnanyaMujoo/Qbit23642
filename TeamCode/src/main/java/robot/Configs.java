@@ -22,7 +22,7 @@ public class Configs implements RobotUser{
     /**
      * Used for PowerPlay robot
      */
-    RobotConfig PowerPlay = new RobotConfig(drive, intake, lift, outtake, color);
+    RobotConfig PowerPlay = new RobotConfig(drive, intake, lift, outtake, carousel, color);
 
     /**
      * Current Config

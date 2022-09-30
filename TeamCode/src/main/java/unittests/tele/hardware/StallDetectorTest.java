@@ -1,19 +1,23 @@
 package unittests.tele.hardware;
 
+import robotparts.RobotPart;
 import robotparts.electronics.positional.PMotor;
+import robotparts.hardware.Carousel;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.bot;
 import static global.General.gamepad1;
+import static global.General.gph1;
 import static global.General.log;
 
 public class StallDetectorTest extends TeleUnitTest {
 
+
+    private final Carousel part = carousel;
+
     @Override
     protected void loop() {
-
-        bot.tankLift.move(-gamepad1.right_stick_y);
-        log.show("Power", bot.tankLift.getElectronicsOfType(PMotor.class).get("li").getPower());
-        log.show("Speed", bot.tankLift.getElectronicsOfType(PMotor.class).get("li").getStallDerivative());
+        carousel.move(gph1.ry);
+        log.show("Stalling", carousel.car.detector.isStalling());
     }
 }

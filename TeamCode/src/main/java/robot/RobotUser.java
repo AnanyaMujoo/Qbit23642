@@ -1,5 +1,8 @@
 package robot;
 
+import org.checkerframework.checker.units.qual.C;
+
+import robotparts.hardware.Carousel;
 import robotparts.unused.mecanumold.MecanumCarousel;
 import robotparts.hardware.Drive;
 import robotparts.hardware.Intake;
@@ -39,6 +42,7 @@ public interface RobotUser {
     Intake intake = new Intake();
     Lift lift = new Lift();
     Outtake outtake = new Outtake();
+    Carousel carousel = new Carousel();
 
 
     ColorSensors color = new ColorSensors();

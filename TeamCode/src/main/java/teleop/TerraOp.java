@@ -24,6 +24,7 @@ public class TerraOp extends Tele {
         gph1.link(Button.A, IntakeNew);
         gph1.link(Button.B, BackwardNew);
         gph1.link(Button.Y, ForwardNew);
+        gph1.link(Button.RIGHT_TRIGGER, DuckNew);
     }
 
     @Override
@@ -31,10 +32,6 @@ public class TerraOp extends Tele {
         drive.move(gph1.ry, gph1.rx, gph1.lx);
         lift.move(gph2.ry);
     }
-
-
-
-
 
 
     @TeleOp(name = "TerraOpBlue", group = "TeleOp")

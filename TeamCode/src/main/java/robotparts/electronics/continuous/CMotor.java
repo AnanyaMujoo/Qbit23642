@@ -3,6 +3,7 @@ package robotparts.electronics.continuous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import debugging.StallDetector;
 import robotparts.Electronic;
 
 public class CMotor extends Electronic {
@@ -19,6 +20,8 @@ public class CMotor extends Electronic {
      */
     private final DcMotor.ZeroPowerBehavior zeroPowerBehavior;
 
+    public final StallDetector detector;
+
     /**
      * Constructor with parameters
      * @param m
@@ -30,6 +33,8 @@ public class CMotor extends Electronic {
         motor = m;
         direction = dir;
         zeroPowerBehavior = zpb;
+
+        detector = new StallDetector(motor);
 
         motor.setDirection(direction);
         motor.setZeroPowerBehavior(zeroPowerBehavior);

@@ -23,7 +23,7 @@ public class PMotor extends Electronic {
     private final DcMotorSimple.Direction direction;
     private final DcMotor.ZeroPowerBehavior zeroPowerBehavior;
     private final IEncoder motorEncoder;
-    private final StallDetector detector;
+    public final StallDetector detector;
     private MovementType movementType = MovementType.ROTATIONAL;
     private ReturnParameterCodeSeg<Double, Double> outputToTicks = input -> input;
     private ReturnParameterCodeSeg<Double, Double> ticksToOutput = input -> input;

@@ -1,5 +1,6 @@
 package util;
 
+import automodules.stage.Initial;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 
@@ -50,5 +51,10 @@ public class Timer {
     public double seconds(){
         fault.warn("Used timer before reset", Expectation.SURPRISING, Magnitude.CRITICAL, hasBeenReset, true);
         return gameTime.seconds()-startTime;
+    }
+
+
+    public Initial initialReset(){
+        return new Initial(this::reset);
     }
 }

@@ -103,4 +103,9 @@ public class Stage {
         return this;
     }
 
+    public Stage combine(StageComponent... stageComponents){
+        components.addAll(Arrays.asList(stageComponents));
+        return this;
+    }
+
 }

@@ -1,5 +1,7 @@
 package automodules;
 
+import org.checkerframework.checker.units.qual.A;
+
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import elements.FieldSide;
@@ -38,6 +40,10 @@ public interface AutoModuleUser extends RobotUser {
             outtake.stageLock(0.05),
             outtake.stageTurnToStart(0.05),
             lift.stageLift(-0.5, 0)
+    );
+
+    AutoModule DuckNew = new AutoModule(
+            carousel.spinOneDuck(2,0.4,0.7)
     );
 
 
