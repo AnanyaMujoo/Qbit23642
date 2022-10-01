@@ -5,14 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import autoutil.paths.PathAutoModule;
 import autoutil.paths.PathPause;
 import autoutil.paths.PathPose;
-import autoutil.paths.PathSegment2;
+import autoutil.paths.PathSegment;
 import geometry.position.Pose;
 import util.codeseg.ReturnCodeSeg;
 import util.template.Iterator;
 
 import static global.General.bot;
 
-public class MecanumExecutor extends ExecutorNew implements Iterator {
+public class MecanumExecutor extends Executor implements Iterator {
 
     public MecanumExecutor(LinearOpMode opMode) {
         super(opMode);
@@ -25,7 +25,7 @@ public class MecanumExecutor extends ExecutorNew implements Iterator {
     @Override
     public void followPath() {
         reactor.init();
-        for(PathSegment2 pathSegment: path.getSegments()){
+        for(PathSegment pathSegment: path.getSegments()){
             reactor.setPathSegment(pathSegment);
             if(pathSegment instanceof PathPose) {
                 for (Pose pose : pathSegment.getPoses()) {

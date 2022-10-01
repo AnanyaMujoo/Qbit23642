@@ -71,20 +71,18 @@ public class StageBuilder {
     protected Main main(double fp, double sp, double tp){ return new Main(() -> move(fp, sp, tp)); }
     protected Stage moveTime(double fp, double sp, double tp, double t){ return new Stage(usePart(), main(fp, sp, tp), exitTime(t), stop(), returnPart()); }
     protected AutoModule MoveTime(double fp, double sp, double tp, double t){ return new AutoModule(moveTime(fp, sp, tp, t)); }
-    protected final Stage moveCustomExit(double fp, double sp, double tp, Exit exit){ return new Stage(usePart(), main(fp, sp, tp), exit, stop(), returnPart()); }
 
     protected void move(double p){}
     protected Main main(double p){ return new Main(() -> move(p)); }
     protected Stage moveTime(double p, double t){ return new Stage(usePart(), main(p), exitTime(t), stop(), returnPart()); }
     protected Stage moveNow(double p){ return new Stage(usePart(), main(p), exitAlways(), stop(), returnPart()); }
     protected AutoModule MoveTime(double p, double t){ return new AutoModule(moveTime(p, t)); }
+
+    protected final Stage moveCustomExit(double fp, double sp, double tp, Exit exit){ return new Stage(usePart(), main(fp, sp, tp), exit, stop(), returnPart()); }
     protected final Stage customExit(double p, Exit exit){ return new Stage(usePart(), main(p), exit, stop(), returnPart()); }
     protected final Stage customExit(double p, ReturnCodeSeg<Boolean> exit){ return new Stage(usePart(), main(p), new Exit(exit), stop(), returnPart()); }
-
-
     protected final Stage customTime(CodeSeg m, double t){ return new Stage(usePart(), new Main(m), exitTime(t), stop(), returnPart()); }
     protected final Stage customTime(Main m, double t){ return new Stage(usePart(), m, exitTime(t), stop(), returnPart()); }
-
 
     protected void setTarget(double target){}
     protected boolean exitTarget(){ return true; }

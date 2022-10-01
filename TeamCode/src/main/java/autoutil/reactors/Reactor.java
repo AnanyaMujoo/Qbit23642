@@ -1,18 +1,15 @@
 package autoutil.reactors;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import autoutil.controllers.Controller1D;
-import autoutil.controllers.Controller2D;
-import autoutil.paths.PathSegment2;
+import autoutil.controllers.control1D.Controller1D;
+import autoutil.controllers.control2D.Controller2D;
+import autoutil.paths.PathSegment;
 import geometry.position.Pose;
 
 public abstract class Reactor {
 
     protected Controller2D movementController;
     protected Controller1D headingController;
-    protected PathSegment2 pathSegment;
+    protected PathSegment pathSegment;
 
     public abstract void init();
     public abstract Pose getPose();
@@ -26,7 +23,7 @@ public abstract class Reactor {
         this.headingController = headingController;
     }
 
-    public void setPathSegment(PathSegment2 pathSegment){
+    public void setPathSegment(PathSegment pathSegment){
         this.pathSegment = pathSegment;
     }
 

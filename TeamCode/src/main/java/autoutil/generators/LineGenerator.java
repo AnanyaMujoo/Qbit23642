@@ -1,6 +1,6 @@
 package autoutil.generators;
 
-import autoutil.paths.PathLine2;
+import autoutil.paths.PathLine;
 import geometry.position.Point;
 import geometry.position.Pose;
 
@@ -16,7 +16,7 @@ public class LineGenerator extends Generator{
     @Override
     public void add(double x, double y, double heading) {
         Pose newPose = new Pose(new Point(x, y), Math.toRadians(heading));
-        path.addSegment(new PathLine2(oldPose, newPose));
+        path.addSegment(new PathLine(oldPose, newPose));
         oldPose = newPose;
     }
 }

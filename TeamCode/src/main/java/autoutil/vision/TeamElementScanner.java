@@ -11,6 +11,7 @@ import elements.Case;
 
 public class TeamElementScanner extends CaseScanner{
 
+    // TODO 4 NEW Create new team element scanner/make better framework
     @Override
     protected Rect[] defineRegions() {
         return defaultRegionGenerator(new Point(width/2.0,(height/2.0)+0.0), 60, 130);

@@ -3,10 +3,12 @@ package robotparts.sensors.odometry;
 import geometry.position.Vector2;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
+import unused.tankold.TankOdometry;
 
 import static robot.RobotFramework.odometryThread;
 
-// TODO 4 NEW make proper reset method
+// TODO 4 NEW make proper reset method and Odometry
+// Remove dependence on tank odometry
 public class TwoOdometry extends TankOdometry {
 
     private volatile IEncoder horizontalEncoder;

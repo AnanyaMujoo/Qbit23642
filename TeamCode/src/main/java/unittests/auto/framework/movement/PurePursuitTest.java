@@ -2,7 +2,7 @@ package unittests.auto.framework.movement;
 
 import autoutil.executors.MecanumExecutor;
 import autoutil.generators.LineGenerator;
-import autoutil.reactors.mecanum.MecanumPurePursuitReactor;
+import autoutil.reactors.MecanumPurePursuitReactor;
 import unittests.auto.AutoUnitTest;
 
 public class PurePursuitTest extends AutoUnitTest {

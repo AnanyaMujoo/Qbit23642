@@ -36,16 +36,16 @@ public class AutoUnitTester extends Auto implements UnitTester {
          */
 
 //        Works as of 3.29.16
-//        add(new IteratorTest());
-//        add(new ThreadStopTest());
+        add(new IteratorTest());
+        add(new ThreadStopTest());
 
         /**
          * Framework (needs hardware, in movement package)
          */
 //        Works as of 4.0.8
-//        add(new MoveTimeTest());
-//        add(new PIDTest());
-//        add(new PurePursuitTest());
+        add(new MoveTimeTest());
+        add(new PIDTest());
+        add(new PurePursuitTest());
 
 
 

@@ -4,7 +4,7 @@ import automodules.AutoModule;
 
 import static global.General.bot;
 
-public class PathAutoModule extends PathSegment2{
+public class PathAutoModule extends PathSegment {
     private AutoModule automodule;
     private boolean isConcurrent;
     public boolean isCancel = false;

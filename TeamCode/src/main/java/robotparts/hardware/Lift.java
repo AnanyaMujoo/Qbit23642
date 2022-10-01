@@ -1,7 +1,6 @@
 package robotparts.hardware;
 
 import automodules.stage.Stage;
-import autoutil.controllers.PositionHolder;
 import global.Constants;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;

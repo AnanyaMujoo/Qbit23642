@@ -3,7 +3,7 @@ package robotparts.electronics.positional;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import autoutil.controllers.PositionHolder;
+import autoutil.controllers.control1D.PositionHolder;
 import debugging.StallDetector;
 import robotparts.Electronic;
 import robotparts.electronics.input.IEncoder;

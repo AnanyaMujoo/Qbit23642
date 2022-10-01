@@ -5,6 +5,7 @@ import math.Function;
 import math.Operator;
 import util.codeseg.ReturnCodeSeg;
 
+// TODO 4 NEW Finish math classes
 public class Differentiator extends Operator {
     private double derivative;
     public void differentiate(double t, double step){

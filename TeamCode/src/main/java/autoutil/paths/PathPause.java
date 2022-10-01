@@ -2,7 +2,7 @@ package autoutil.paths;
 
 import util.Timer;
 
-public class PathPause extends PathSegment2{
+public class PathPause extends PathSegment {
     private final double time;
     private final Timer timer = new Timer();
 

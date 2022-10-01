@@ -8,9 +8,9 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import autoutil.generators.ArcGenerator;
-import autoutil.paths.FinalPathArc;
-import autoutil.paths.PathSegment;
+import unused.mecanumold.oldauto.ArcGenerator;
+import unused.mecanumold.oldauto.FinalPathArc;
+import unused.mecanumold.oldauto.PathSegment;
 import geometry.position.Pose;
 
 /**

@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import autoutil.executors.Executor;
-import autoutil.executors.MecanumExecutorArcsPID;
+import unused.mecanumold.oldauto.Executor;
+import unused.mecanumold.oldauto.MecanumExecutorArcsPID;
 import geometry.circles.AngleType;
 import geometry.position.Pose;
 

@@ -17,6 +17,8 @@ import static global.General.fault;
 
 public class Profiler {
 
+    // TODO 4 NEW Create method for running average
+
 
     private final ReturnCodeSeg<Double> processVariable;
     private final Integrator integrator;

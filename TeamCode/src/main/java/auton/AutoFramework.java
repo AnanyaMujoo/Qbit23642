@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import automodules.AutoModule;
 import automodules.stage.Main;
 import automodules.stage.Stage;
-import autoutil.executors.ExecutorNew;
+import autoutil.executors.Executor;
 import autoutil.generators.Generator;
 import autoutil.generators.PoseGenerator;
 import autoutil.reactors.Reactor;
-import autoutil.reactors.mecanum.MecanumPIDReactor;
+import autoutil.reactors.MecanumPIDReactor;
 import autoutil.vision.CaseScanner;
 import elements.Case;
 import elements.FieldSide;
@@ -27,11 +27,13 @@ import static global.General.mainUser;
 
 public abstract class AutoFramework extends Auto{
 
+    // TODO 4 NEW Make AutoFramework better/clean up
+
     protected FieldSide fieldSide = FieldSide.UNKNOWN;
 
-    public abstract ExecutorNew getExecutor();
+    public abstract Executor getExecutor();
 
-    protected ExecutorNew executor;
+    protected Executor executor;
 
     protected Pose lastPose = new Pose(new Point(0,0),0);
 

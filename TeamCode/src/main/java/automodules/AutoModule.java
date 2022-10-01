@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import automodules.stage.Stage;
+import util.template.Iterator;
 
 public class AutoModule {
     /**
@@ -25,9 +26,7 @@ public class AutoModule {
     }
 
     public AutoModule add(AutoModule... other) {
-        for (AutoModule list : other) {
-            stages.addAll(list.stages);
-        }
+        Iterator.forAll(other, list -> stages.addAll(list.stages));
         return this;
     }
 

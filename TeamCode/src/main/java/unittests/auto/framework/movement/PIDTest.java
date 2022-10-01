@@ -2,9 +2,8 @@ package unittests.auto.framework.movement;
 
 import java.util.Arrays;
 
-import autoutil.controllers.PID;
-import robotparts.hardware.Drive;
-import robotparts.unused.mecanumold.MecanumDrive;
+import autoutil.controllers.control1D.PID;
+import unused.mecanumold.MecanumDrive;
 import unittests.auto.AutoUnitTest;
 
 import static global.General.bot;

@@ -6,17 +6,28 @@ import elements.FieldSide;
 import teleop.Tele;
 
 import unittests.UnitTester;
+import unittests.tele.framework.AccessTest;
 import unittests.tele.framework.AutoModuleInitialTest;
+import unittests.tele.framework.CommonTest;
 import unittests.tele.framework.DecisionTest;
+import unittests.tele.framework.FaultTest;
+import unittests.tele.framework.GamepadTest;
 import unittests.tele.framework.GeometryTest;
+import unittests.tele.framework.LagTest;
+import unittests.tele.framework.LoggerTest;
 import unittests.tele.framework.MathTest;
 import unittests.tele.framework.ParameterConstructorTest;
 import unittests.tele.framework.PhysicsTest;
+import unittests.tele.framework.SelectorTest;
+import unittests.tele.framework.StorageTest;
+import unittests.tele.framework.SynchroniserTest;
+import unittests.tele.framework.ThreadTest;
 import unittests.tele.framework.movement.AutoModuleTest;
+import unittests.tele.framework.movement.OdometryTest;
 import unittests.tele.framework.movement.RobotFrameworkTest;
 import unittests.tele.framework.movement.RobotFunctionsTest;
-import unittests.tele.hardware.RobotPartTest;
-import unittests.tele.hardware.StallDetectorTest;
+import unittests.tele.framework.movement.StageTest;
+import unittests.tele.framework.movement.StallDetectorTest;
 
 import static global.General.*;
 
@@ -37,24 +48,23 @@ public class TeleUnitTester extends Tele implements UnitTester{
          */
 
 //        Works as of 3.29.16
-//        add(new AccessTest());
-//        add(new CommonTest());
-//        add(new FaultTest());
-//        add(new GamepadTest());
-//        add(new LagTest());
-//        add(new LoggerTest());
-//        add(new SelectorTest());
-//        add(new StorageTest());
-//        add(new SynchroniserTest());
-//        add(new ThreadTest());
-//        add(new AutoModuleInitialTest());
-//        add(new DecisionTest());
-//        add(new ParameterConstructorTest());
-//        add(new MathTest());
+        add(new AccessTest());
+        add(new AutoModuleInitialTest());
+        add(new CommonTest());
+        add(new DecisionTest());
+        add(new FaultTest());
+        add(new GamepadTest());
+        add(new GeometryTest());
+        add(new LagTest());
+        add(new LoggerTest());
+        add(new MathTest());
+        add(new ParameterConstructorTest());
+        add(new PhysicsTest());
+        add(new SelectorTest());
+        add(new StorageTest());
+        add(new SynchroniserTest());
+        add(new ThreadTest());
 
-//        Works as of ??
-//        add(new GeometryTest());
-//        add(new PhysicsTest());
 
 
         /**
@@ -62,34 +72,12 @@ public class TeleUnitTester extends Tele implements UnitTester{
          */
 
 //        Works as of 4.0.8
-//        add(new RobotFrameworkTest());
-//        add(new RobotPartTest());
-//        add(new RobotFunctionsTest());
-//        add(new AutoModuleTest());
-//        add(new StallDetectorTest());
-
-
-        /**
-         * Hardware
-         */
-        addAll(
-//            new TankDriveTest(),
-//            new IntakeTest(),
-//            new LiftTest(),
-//            new TurretTest(),
-//            new OuttakeTest(),
-//            new CarouselTest()
-        );
-        /**
-         * Sensors
-         */
-        addAll(
-//            new ColorTest()
-//            new DistanceTest(),
-//            new GyroTest(),
-//            new OdometryTest(),
-//            new TouchTest()
-        );
+        add(new AutoModuleTest());
+        add(new OdometryTest());
+        add(new RobotFrameworkTest());
+        add(new RobotFunctionsTest());
+        add(new StageTest());
+        add(new StallDetectorTest());
     }
 
     /**
