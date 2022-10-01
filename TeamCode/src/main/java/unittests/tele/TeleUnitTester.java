@@ -16,6 +16,7 @@ import unittests.tele.framework.movement.AutoModuleTest;
 import unittests.tele.framework.movement.RobotFrameworkTest;
 import unittests.tele.framework.movement.RobotFunctionsTest;
 import unittests.tele.hardware.RobotPartTest;
+import unittests.tele.hardware.StallDetectorTest;
 
 import static global.General.*;
 
@@ -65,6 +66,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new RobotPartTest());
 //        add(new RobotFunctionsTest());
 //        add(new AutoModuleTest());
+//        add(new StallDetectorTest());
 
 
         /**

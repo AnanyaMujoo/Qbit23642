@@ -1,8 +1,11 @@
 package unittests.tele.hardware;
 
+import debugging.StallDetector;
 import robotparts.RobotPart;
+import robotparts.electronics.continuous.CMotor;
 import robotparts.electronics.positional.PMotor;
 import robotparts.hardware.Carousel;
+import robotparts.hardware.Lift;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.bot;
@@ -13,18 +16,19 @@ import static global.General.log;
 public class StallDetectorTest extends TeleUnitTest {
 
 
-    private final Carousel part = carousel;
+    private final Lift part = lift;
+    private final StallDetector detector = part.motorUp.getStallDetector();
 
     @Override
     public void init() {
-        carousel.car.detector.init(5.0, 8.0);
+        detector.setCustomThresholds(10, 3);
     }
 
     @Override
     protected void loop() {
-        carousel.move(gph1.ry);
-        log.show("Speed (deg/s)", carousel.car.detector.getMotorSpeed());
-        log.show("Current (amps)", carousel.car.detector.getMotorCurrent());
-        log.show("Stalling", carousel.car.detector.isStalling());
+        part.move(gph1.ry);
+        log.show("Speed (deg/s)", detector.getMotorSpeed());
+        log.show("Current (amps)", detector.getMotorCurrent());
+        log.show("Stalling", detector.isStalling());
     }
 }

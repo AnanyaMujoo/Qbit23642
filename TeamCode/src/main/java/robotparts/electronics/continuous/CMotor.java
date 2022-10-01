@@ -5,6 +5,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import debugging.StallDetector;
 import robotparts.Electronic;
+import util.condition.Expectation;
+import util.condition.Magnitude;
+
+import static global.General.bot;
+import static global.General.fault;
 
 public class CMotor extends Electronic {
     /**
@@ -34,7 +39,7 @@ public class CMotor extends Electronic {
         direction = dir;
         zeroPowerBehavior = zpb;
 
-        detector = new StallDetector(motor);
+        detector = new StallDetector(motor, 10, 8 );
 
         motor.setDirection(direction);
         motor.setZeroPowerBehavior(zeroPowerBehavior);
@@ -47,7 +52,17 @@ public class CMotor extends Electronic {
      * Sets the power of the motor if access is allowed
      * @param p
      */
-    public void setPower(double p){ if(access.isAllowed()){ motor.setPower(p); } }
+    public void setPower(double p){
+        if(access.isAllowed()){
+            if(!detector.isStalling()){
+                motor.setPower(p);
+            }else{
+                motor.setPower(0);
+                bot.cancelAutoModules();
+                fault.warn("Motor is stalling", Expectation.EXPECTED, Magnitude.CRITICAL);
+            }
+        }
+    }
 
     /**
      * Gets the direction of the motor

@@ -12,6 +12,7 @@ import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.template.Precision;
 
+import static global.General.bot;
 import static global.General.fault;
 import static java.lang.Math.*;
 
@@ -23,7 +24,7 @@ public class PMotor extends Electronic {
     private final DcMotorSimple.Direction direction;
     private final DcMotor.ZeroPowerBehavior zeroPowerBehavior;
     private final IEncoder motorEncoder;
-    public final StallDetector detector;
+    private final StallDetector detector;
     private MovementType movementType = MovementType.ROTATIONAL;
     private ReturnParameterCodeSeg<Double, Double> outputToTicks = input -> input;
     private ReturnParameterCodeSeg<Double, Double> ticksToOutput = input -> input;
@@ -40,7 +41,7 @@ public class PMotor extends Electronic {
      */
     public PMotor(DcMotor m, DcMotor.Direction dir, DcMotor.ZeroPowerBehavior zpb, DcMotor.RunMode mode){
         motor = m;
-        detector = new StallDetector(motor);
+        detector = new StallDetector(motor, 10, 8);
         direction = dir;
         zeroPowerBehavior = zpb;
 
@@ -83,6 +84,7 @@ public class PMotor extends Electronic {
                 motor.setPower(p);
             }else{
                 motor.setPower(0);
+                bot.cancelAutoModules();
                 fault.warn("Motor is stalling", Expectation.EXPECTED, Magnitude.CRITICAL);
             }
         }
@@ -118,12 +120,10 @@ public class PMotor extends Electronic {
 
     /**
      * Has the motor reached the target
-     * @return if the motor is busy
+     * @return if the motor is not busy (done) or is stalling (prevent damage)
      */
     @Override
-    public boolean exitTarget(){
-        return !motor.isBusy();
-    }
+    public boolean exitTarget(){ return !motor.isBusy() || detector.isStalling(); }
 
     /**
      * Get the position of the motor
@@ -153,12 +153,12 @@ public class PMotor extends Electronic {
         motorEncoder.reset();
     }
 
-    public void useStallDetector(double maxPower, double powerOffset, double minSpeed, double minTime, double disableTime){
-        detector.init(maxPower, powerOffset, minSpeed, minTime, disableTime);
+    public StallDetector getStallDetector(){
+        return detector;
     }
 
-    public double getStallDerivative(){
-        return detector.getCurrentDerivative();
+    public MovementType getMovementType(){
+        return movementType;
     }
 
     /**
