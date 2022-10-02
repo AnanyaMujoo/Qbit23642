@@ -11,10 +11,11 @@ import robotparts.electronics.continuous.CServo;
 import robotparts.electronics.positional.PServo;
 import util.Timer;
 import util.condition.Status;
+import util.template.Precision;
 
 import static global.General.*;
 
-public class UnitTest implements RobotUser, AutoModuleUser {
+public class UnitTest implements RobotUser, AutoModuleUser, Precision {
     /**
      * Status of the unit test, starts at idle
      */

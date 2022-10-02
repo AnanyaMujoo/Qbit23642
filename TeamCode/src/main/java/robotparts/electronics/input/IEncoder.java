@@ -1,17 +1,24 @@
 package robotparts.electronics.input;
 
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
+import java.util.List;
+
 import global.Constants;
+import robot.BackgroundTask;
 import robotparts.Electronic;
 import util.condition.Expectation;
 import util.condition.Magnitude;
+import util.template.Iterator;
 
+import static global.General.bot;
 import static global.General.fault;
+import static global.General.hardwareMap;
 
 public class IEncoder extends Electronic {
     /**
@@ -32,6 +39,11 @@ public class IEncoder extends Electronic {
      */
     private final EncoderType encoderType;
 
+
+    private volatile double position = 0; // ticks
+    private volatile double angularVelocity = 0; // radians
+    private volatile double current = 0; // amps
+
     /**
      * Constructor to create the encoder
      * @param m
@@ -41,22 +53,34 @@ public class IEncoder extends Electronic {
         motor = (DcMotorEx) m;
         encoderType = t;
         resetPrecisionTimers();
+        if(encoderType.equals(EncoderType.PMOTOR)) {
+            bot.addBackgroundTask(new BackgroundTask(this::updatePMotor));
+        }else if(encoderType.equals(EncoderType.CMOTOR)){
+            bot.addBackgroundTask(new BackgroundTask(this::updateCMotor));
+        }
     }
 
-    /**
-     * Get the current position in ticks
-     * @return position
-     */
-    public double getPos() { return throttle(motor::getCurrentPosition, Constants.ENCODER_READ_RATE); }
 
-    public double getAngularVelocity(){ return throttle(() -> motor.getVelocity(AngleUnit.DEGREES), Constants.ENCODER_READ_RATE);}
+    private void updateCMotor(){
+        current = motor.getCurrent(CurrentUnit.AMPS);
+    }
 
-    public double getCurrent(){ return throttle(() -> motor.getCurrent(CurrentUnit.AMPS), Constants.ENCODER_READ_RATE); }
+    private void updatePMotor(){
+        position = motor.getCurrentPosition();
+        angularVelocity = motor.getVelocity(AngleUnit.RADIANS);
+        current = motor.getCurrent(CurrentUnit.AMPS);
+    }
+
+    public double getPos() { return position; }
+
+    public double getAngularVelocity(){ return angularVelocity; }
+
+    public double getCurrent(){ return current; }
 
 
     /**
      * Get the type of encoder
-     * @return
+     * @return type
      */
     public EncoderType getType(){
         return encoderType;
@@ -75,7 +99,8 @@ public class IEncoder extends Electronic {
      */
     public enum EncoderType {
         NORMAL,
-        MOTOR
+        PMOTOR,
+        CMOTOR
     }
 
     /**
@@ -86,5 +111,10 @@ public class IEncoder extends Electronic {
     public static String getMotorName(String encoderName){
         fault.check("Encoder named incorrectly", Expectation.EXPECTED, Magnitude.MODERATE, encoderName.endsWith("Enc"), true);
         return encoderName.substring(0, encoderName.length() - 3);
+    }
+
+    public static void setEncoderReadingAuto(){
+        List<LynxModule> allHubs = hardwareMap.getAll(LynxModule.class);
+        Iterator.forAll(allHubs, module -> module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO));
     }
 }

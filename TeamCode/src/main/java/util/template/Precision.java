@@ -108,8 +108,8 @@ public interface Precision {
     default  <T> T throttle(ReturnCodeSeg<T> output, double millis){
         if(throttleTime.seconds() > (millis/1000.0)){
             lastThrottleVal[0] = output.run();
+            throttleTime.reset();
         }
-        throttleTime.reset();
         return (T) lastThrottleVal[0];
     }
 
@@ -118,7 +118,7 @@ public interface Precision {
     default void throttle(CodeSeg code, double millis){
         if(throttleTime.seconds() > (millis/1000.0)){
             code.run();
+            throttleTime.reset();
         }
-        throttleTime.reset();
     }
 }

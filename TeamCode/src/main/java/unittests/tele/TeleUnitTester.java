@@ -8,6 +8,7 @@ import teleop.Tele;
 import unittests.UnitTester;
 import unittests.tele.framework.AccessTest;
 import unittests.tele.framework.AutoModuleInitialTest;
+import unittests.tele.framework.BackgroundTest;
 import unittests.tele.framework.CommonTest;
 import unittests.tele.framework.DecisionTest;
 import unittests.tele.framework.FaultTest;
@@ -65,6 +66,8 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new SynchroniserTest());
 //        add(new ThreadTest());
 
+        add(new BackgroundTest());
+
 
 
         /**
@@ -77,7 +80,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new RobotFrameworkTest());
 //        add(new RobotFunctionsTest());
 //        add(new StageTest());
-//        add(new StallDetectorTest());
+        add(new StallDetectorTest());
 
     }
 

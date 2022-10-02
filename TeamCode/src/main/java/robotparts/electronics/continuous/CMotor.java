@@ -41,8 +41,8 @@ public class CMotor extends Electronic {
         motor = m;
         direction = dir;
         zeroPowerBehavior = zpb;
-        motorEncoder = new IEncoder(motor, IEncoder.EncoderType.MOTOR);
-        detector = new StallDetector(motorEncoder, 10, 8 );
+        motorEncoder = new IEncoder(motor, IEncoder.EncoderType.CMOTOR);
+        detector = new StallDetector(motorEncoder, 10, 10);
 
         motor.setDirection(direction);
         motor.setZeroPowerBehavior(zeroPowerBehavior);

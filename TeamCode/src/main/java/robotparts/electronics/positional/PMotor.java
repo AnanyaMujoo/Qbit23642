@@ -41,7 +41,7 @@ public class PMotor extends Electronic {
      */
     public PMotor(DcMotor m, DcMotor.Direction dir, DcMotor.ZeroPowerBehavior zpb, DcMotor.RunMode mode){
         motor = m;
-        motorEncoder = new IEncoder(motor, IEncoder.EncoderType.MOTOR);
+        motorEncoder = new IEncoder(motor, IEncoder.EncoderType.PMOTOR);
         detector = new StallDetector(motorEncoder, 10, 8);
         direction = dir;
         zeroPowerBehavior = zpb;

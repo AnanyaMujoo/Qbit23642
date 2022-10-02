@@ -146,8 +146,10 @@ public class RobotPart extends StageBuilder implements RobotUser {
                 return new IDistance(hardwareMap.get(DistanceSensor.class, name));
             case IENCODER_NORMAL:
                 return new IEncoder(hardwareMap.get(DcMotor.class, IEncoder.getMotorName(name)), IEncoder.EncoderType.NORMAL);
-            case IENCODER_MOTOR:
-                return new IEncoder(hardwareMap.get(DcMotor.class, IEncoder.getMotorName(name)), IEncoder.EncoderType.MOTOR);
+            case IENCODER_PMOTOR:
+                return new IEncoder(hardwareMap.get(DcMotor.class, IEncoder.getMotorName(name)), IEncoder.EncoderType.PMOTOR);
+            case IENCODER_CMOTOR:
+                return new IEncoder(hardwareMap.get(DcMotor.class, IEncoder.getMotorName(name)), IEncoder.EncoderType.CMOTOR);
             case IGYRO:
                 return new IGyro(hardwareMap.get(BNO055IMU.class, name));
             case ITOUCH:

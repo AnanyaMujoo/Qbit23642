@@ -35,7 +35,7 @@ public class StallDetector implements Precision {
         maxCurrent = maxCurrentThresh;
     }
 
-    public double getMotorSpeed(){ return abs(encoder.getAngularVelocity()); }
+    public double getMotorSpeed(){ return abs(Math.toDegrees(encoder.getAngularVelocity())); }
 
     public double getMotorCurrent(){
         return abs(encoder.getCurrent());

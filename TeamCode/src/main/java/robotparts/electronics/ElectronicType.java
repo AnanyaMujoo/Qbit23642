@@ -23,7 +23,8 @@ public enum ElectronicType {
     ICOLOR,
     IDISTANCE,
     IENCODER_NORMAL,
-    IENCODER_MOTOR,
+    IENCODER_PMOTOR,
+    IENCODER_CMOTOR,
     IGYRO,
     ITOUCH,
     OLED

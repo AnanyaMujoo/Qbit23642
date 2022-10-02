@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import automodules.AutoModule;
 import geometry.CoordinatePlane;
 import robotparts.RobotPart;
+import robotparts.electronics.input.IEncoder;
 import teleutil.independent.Independent;
 import teleutil.independent.IndependentRunner;
 import util.TerraThread;
@@ -41,8 +42,9 @@ public class RobotFramework {
      */
     public RobotFunctions rfsHandler;
 
-
     public IndependentRunner independentRunner;
+
+    public BackgroundFunctions backHandler;
 
 
     /**
@@ -60,11 +62,13 @@ public class RobotFramework {
         configs.setCurrentConfig();
         localPlane = new CoordinatePlane();
         rfsHandler = new RobotFunctions();
+        backHandler = new BackgroundFunctions();
         robotFunctionsThread = new TerraThread("RobotFunctionsThread");
         odometryThread = new TerraThread("OdometryThread");
         backgroundThread = new TerraThread("BackgroundThread");
         independentRunner = new IndependentRunner();
         rfsHandler.init();
+        backHandler.init();
     }
 
     /**
@@ -74,6 +78,7 @@ public class RobotFramework {
      */
     public void init(){
         setUser(mainUser);
+        IEncoder.setEncoderReadingAuto();
         Iterator.forAll(allRobotParts, RobotPart::init);
         robotFunctionsThread.start();
         odometryThread.start();
@@ -97,10 +102,7 @@ public class RobotFramework {
      * @link halt
      */
     public void stop(){
-        cancelAutoModules();
-        RobotFramework.backgroundThread.stopUpdating();
-        cancelIndependents();
-        independentRunner.disableIndependent();
+        cancelAll();
         TerraThread.stopUpdatingAllThreads();
         halt();
     }
@@ -117,6 +119,10 @@ public class RobotFramework {
      */
     public void addAutoModule(AutoModule autoModule){
         rfsHandler.addAutoModule(autoModule);
+    }
+
+    public void addBackgroundTask(BackgroundTask backgroundTask){
+        backHandler.addBackgroundTask(backgroundTask);
     }
 
     /**
@@ -139,6 +145,11 @@ public class RobotFramework {
     public void cancelAutoModules(){
         setUserMainAndHalt();
         rfsHandler.emptyQueue();
+    }
+
+    public void cancelBackgroundTasks(){
+        setUserMainAndHalt();
+        backHandler.emptyTaskList();
     }
 
     /**
@@ -177,5 +188,6 @@ public class RobotFramework {
     public void cancelAll(){
         cancelAutoModules();
         cancelIndependents();
+        cancelBackgroundTasks();
     }
 }
