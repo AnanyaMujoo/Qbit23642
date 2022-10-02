@@ -41,7 +41,8 @@ public class PMotor extends Electronic {
      */
     public PMotor(DcMotor m, DcMotor.Direction dir, DcMotor.ZeroPowerBehavior zpb, DcMotor.RunMode mode){
         motor = m;
-        detector = new StallDetector(motor, 10, 8);
+        motorEncoder = new IEncoder(motor, IEncoder.EncoderType.MOTOR);
+        detector = new StallDetector(motorEncoder, 10, 8);
         direction = dir;
         zeroPowerBehavior = zpb;
 
@@ -50,8 +51,6 @@ public class PMotor extends Electronic {
         motor.setMode(mode);
 
         motor.setPower(0);
-
-        motorEncoder = new IEncoder(motor, IEncoder.EncoderType.MOTOR);
 
         motorEncoder.reset();
     }

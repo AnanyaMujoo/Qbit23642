@@ -1,7 +1,12 @@
 package robotparts.electronics.input;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
+import global.Constants;
 import robotparts.Electronic;
 import util.condition.Expectation;
 import util.condition.Magnitude;
@@ -20,12 +25,12 @@ public class IEncoder extends Electronic {
     /**
      * Motor that the encoder refrences
      */
-    private DcMotor motor;
+    private final DcMotorEx motor;
     /**
      * Type of encoder
      * @link Type
      */
-    private EncoderType encoderType;
+    private final EncoderType encoderType;
 
     /**
      * Constructor to create the encoder
@@ -33,17 +38,21 @@ public class IEncoder extends Electronic {
      * @param t
      */
     public IEncoder(DcMotor m, EncoderType t) {
-        motor = m;
+        motor = (DcMotorEx) m;
         encoderType = t;
+        resetPrecisionTimers();
     }
 
     /**
      * Get the current position in ticks
-     * @return
+     * @return position
      */
-    public double getPos() {
-        return motor.getCurrentPosition();
-    }
+    public double getPos() { return throttle(motor::getCurrentPosition, Constants.ENCODER_READ_RATE); }
+
+    public double getAngularVelocity(){ return throttle(() -> motor.getVelocity(AngleUnit.DEGREES), Constants.ENCODER_READ_RATE);}
+
+    public double getCurrent(){ return throttle(() -> motor.getCurrent(CurrentUnit.AMPS), Constants.ENCODER_READ_RATE); }
+
 
     /**
      * Get the type of encoder

@@ -5,8 +5,9 @@ import org.checkerframework.checker.units.qual.A;
 import automodules.StageBuilder;
 import util.Access;
 import util.condition.Status;
+import util.template.Precision;
 
-public class Electronic extends StageBuilder {
+public class Electronic extends StageBuilder implements Precision {
     /**
      * Naming conventions for electronics
      * C -> continuous

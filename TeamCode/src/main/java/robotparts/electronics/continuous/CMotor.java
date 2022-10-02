@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import debugging.StallDetector;
 import robotparts.Electronic;
+import robotparts.electronics.input.IEncoder;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 
@@ -16,6 +17,8 @@ public class CMotor extends Electronic {
      * DcMotor object since its continuous
      */
     private final DcMotor motor;
+
+    private final IEncoder motorEncoder;
     /**
      * Logical direction of the motor (what is positive)
      */
@@ -38,8 +41,8 @@ public class CMotor extends Electronic {
         motor = m;
         direction = dir;
         zeroPowerBehavior = zpb;
-
-        detector = new StallDetector(motor, 10, 8 );
+        motorEncoder = new IEncoder(motor, IEncoder.EncoderType.MOTOR);
+        detector = new StallDetector(motorEncoder, 10, 8 );
 
         motor.setDirection(direction);
         motor.setZeroPowerBehavior(zeroPowerBehavior);

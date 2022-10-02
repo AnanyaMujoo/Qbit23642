@@ -10,7 +10,12 @@ public class Constants {
     /**
      *  Minimum  refresh rate allowed before robot is considered to be lagging
      */
-    public static final double MINIMUM_REFRESH_RATE = 30; //hz
+    public static final int MINIMUM_REFRESH_RATE = 30; //hz
+
+    /**
+     * Encoder update rate, all readings are throttled to this
+     */
+    public static final int ENCODER_READ_RATE = 30; //hz
 
     /**
      * Accuracies for creating points in arc and line generations in Autonomous
