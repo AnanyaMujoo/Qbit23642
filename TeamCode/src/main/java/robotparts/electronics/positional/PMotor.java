@@ -156,6 +156,8 @@ public class PMotor extends Electronic {
         return detector;
     }
 
+    public IEncoder getMotorEncoder(){ return motorEncoder; }
+
     public MovementType getMovementType(){
         return movementType;
     }

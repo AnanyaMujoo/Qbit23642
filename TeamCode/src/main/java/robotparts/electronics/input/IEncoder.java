@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 import java.util.List;
 
+import autoutil.profilers.Profiler;
 import global.Constants;
 import robot.BackgroundTask;
 import robotparts.Electronic;
@@ -44,6 +45,9 @@ public class IEncoder extends Electronic {
     private volatile double angularVelocity = 0; // radians
     private volatile double current = 0; // amps
 
+
+    private final Profiler profiler;
+
     /**
      * Constructor to create the encoder
      * @param m
@@ -58,6 +62,7 @@ public class IEncoder extends Electronic {
         }else if(encoderType.equals(EncoderType.CMOTOR)){
             bot.addBackgroundTask(new BackgroundTask(this::updateCMotor));
         }
+        profiler = new Profiler(this::getAngularVelocity);
     }
 
 
@@ -74,6 +79,10 @@ public class IEncoder extends Electronic {
     public double getPos() { return position; }
 
     public double getAngularVelocity(){ return angularVelocity; }
+
+    public double getAngularVelocityStable(){
+        return profiler.getRunningAverage(5);
+    }
 
     public double getCurrent(){ return current; }
 

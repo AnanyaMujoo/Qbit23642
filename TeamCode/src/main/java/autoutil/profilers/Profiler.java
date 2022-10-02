@@ -12,12 +12,11 @@ import util.Timer;
 import util.codeseg.ReturnCodeSeg;
 import util.condition.Expectation;
 import util.condition.Magnitude;
+import util.template.Iterator;
 
 import static global.General.fault;
 
 public class Profiler {
-
-    // TODO 4 NEW Create method for running average
 
 
     private final ReturnCodeSeg<Double> processVariable;
@@ -110,6 +109,15 @@ public class Profiler {
 
     public double getIntegral(){
         return integrator.getIntegral();
+    }
+
+
+    public double getRunningAverage(int num){
+        if(getUpdateNumber() > num){
+            return Iterator.forAllAverage((ArrayList<Double>) values.subList(num-5, num));
+        }else{
+            return Iterator.forAllAverage(values);
+        }
     }
 
 }

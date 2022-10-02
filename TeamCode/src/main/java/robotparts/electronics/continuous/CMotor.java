@@ -75,6 +75,8 @@ public class CMotor extends Electronic {
         return direction;
     }
 
+    public IEncoder getMotorEncoder(){ return motorEncoder; }
+
     /**
      * Sets the power of the motor to 0
      * NOTE: This should only be called in a thread that has access to use the robot

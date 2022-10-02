@@ -18,8 +18,6 @@ import static teleutil.button.Button.X;
 
 public class TerraOp extends Tele {
 
-    // TODO 4 FIX Make background thread to read values/ make method to do something slowly, Precision method
-
     @Override
     public void initTele() {
         gph1.link(X, () -> bot.cancelAll());
@@ -32,7 +30,7 @@ public class TerraOp extends Tele {
     @Override
     public void loopTele() {
         drive.move(gph1.ry, gph1.rx, gph1.lx);
-//        lift.move(gph2.ry);
+        lift.move(gph2.ry);
     }
 
 

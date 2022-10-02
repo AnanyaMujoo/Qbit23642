@@ -126,4 +126,11 @@ public interface Iterator {
         }
         return false;
     }
+
+
+    static double forAllAverage(ArrayList<Double> list){
+        final double[] sum = {0};
+        Iterator.forAll(list, l->sum[0]+=l);
+        return (double)sum[0]/list.size();
+    }
 }
