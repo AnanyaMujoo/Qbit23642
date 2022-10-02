@@ -25,7 +25,7 @@ public class RobotFunctionsTest extends TeleUnitTest {
     @Override
     public void start() {
         /**
-         * Move the robot forward (1s) , then backward (1s), then turn clockwise (1s)
+         * Move the robot forward (1s) , then backward (1s)
          * NOTE: This uses custom stage components
          */
         bot.rfsHandler.addToQueue(new Stage(
@@ -42,12 +42,10 @@ public class RobotFunctionsTest extends TeleUnitTest {
                 new Stop(() -> getTestPart().move(0,0, 0)),
                 new Stop(() -> getTestPart().switchUser(mainUser))
         ));
-        bot.rfsHandler.addToQueue(new Stage(
-                new Initial(() -> getTestPart().switchUser(User.ROFU)),
-                new Main(() -> getTestPart().move(0, 0, 0.5)),
-                new Exit(() -> bot.rfsHandler.timer.seconds() > 1),
-                new Stop(() -> getTestPart().move(0,0, 0)),
-                new Stop(() -> getTestPart().switchUser(mainUser))
-        ));
+    }
+
+    @Override
+    public void stop() {
+        mecanumDrive.halt();
     }
 }

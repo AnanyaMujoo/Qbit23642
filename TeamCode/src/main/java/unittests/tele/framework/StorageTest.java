@@ -54,8 +54,8 @@ public class StorageTest extends TeleUnitTest {
         log.showAndRecord("Bo (true)", storage.getItem("Bo").getValue());
         log.showAndRecord("FieldSide (Right)", FieldSide.create((String) storage.getItem("FieldSide").getValue()));
         log.showAndRecord("FieldColor (Red)", fieldSide.name());
-        log.showAndRecord("DataInput ([1,2,3])", storage.getData("Data").getInput().getValue());
-        log.showAndRecord("DataOutput ([2,4,6])", storage.getData("Data").getOutput().getValue());
+        log.showAndRecord("DataInput {1.0,2.0,3.0}", storage.getData("Data").getInput().getValue());
+        log.showAndRecord("DataOutput {2.0,4.0,6.0}", storage.getData("Data").getOutput().getValue());
     }
 
     @Override

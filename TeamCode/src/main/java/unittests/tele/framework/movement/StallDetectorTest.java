@@ -7,6 +7,7 @@ import robotparts.electronics.positional.PMotor;
 import robotparts.hardware.Carousel;
 import robotparts.hardware.Lift;
 import unittests.tele.TeleUnitTest;
+import unused.mecanumold.MecanumLift;
 
 import static global.General.bot;
 import static global.General.gamepad1;
@@ -16,7 +17,7 @@ import static global.General.log;
 public class StallDetectorTest extends TeleUnitTest {
 
 
-    private final Lift part = lift;
+    private final MecanumLift part = mecanumLift;
     private final StallDetector detector = part.motorUp.getStallDetector();
 
     @Override

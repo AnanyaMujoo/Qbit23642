@@ -28,11 +28,11 @@ public class CommonTest extends TeleUnitTest {
         /**
          * Check the main user (should be TELE)
          */
-        log.show("Current User", mainUser.toString());
+        log.show("Current User {TELE} ", mainUser.toString());
         /**
          * Throws a fault if the main user is not tele
          * NOTE: If this test does not crash, this works
          */
-        fault.warn("Main user is not TELE", mainUser.toString().equals(User.TELE.toString()), true);
+        fault.check("Main user is not TELE", mainUser.toString().equals(User.TELE.toString()), true);
     }
 }

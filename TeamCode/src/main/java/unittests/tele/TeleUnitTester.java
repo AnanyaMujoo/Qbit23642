@@ -47,23 +47,23 @@ public class TeleUnitTester extends Tele implements UnitTester{
          * Framework
          */
 
-//        Works as of 3.29.16
-        add(new AccessTest());
-        add(new AutoModuleInitialTest());
-        add(new CommonTest());
-        add(new DecisionTest());
-        add(new FaultTest());
-        add(new GamepadTest());
-        add(new GeometryTest());
-        add(new LagTest());
-        add(new LoggerTest());
-        add(new MathTest());
-        add(new ParameterConstructorTest());
-        add(new PhysicsTest());
-        add(new SelectorTest());
-        add(new StorageTest());
-        add(new SynchroniserTest());
-        add(new ThreadTest());
+//        Works as of 4.2.5
+//        add(new AccessTest());
+//        add(new AutoModuleInitialTest());
+//        add(new CommonTest());
+//        add(new DecisionTest());
+//        add(new FaultTest());
+//        add(new GamepadTest());
+//        add(new GeometryTest());
+//        add(new LagTest());
+//        add(new LoggerTest());
+//        add(new MathTest());
+//        add(new ParameterConstructorTest());
+//        add(new PhysicsTest());
+//        add(new SelectorTest());
+//        add(new StorageTest());
+//        add(new SynchroniserTest());
+//        add(new ThreadTest());
 
 
 
@@ -71,13 +71,14 @@ public class TeleUnitTester extends Tele implements UnitTester{
          * Framework (needs hardware, in movement package)
          */
 
-//        Works as of 4.0.8
-        add(new AutoModuleTest());
-        add(new OdometryTest());
-        add(new RobotFrameworkTest());
-        add(new RobotFunctionsTest());
-        add(new StageTest());
-        add(new StallDetectorTest());
+//        Works as of 4.2.5
+//        add(new AutoModuleTest());
+//        add(new OdometryTest());
+//        add(new RobotFrameworkTest());
+//        add(new RobotFunctionsTest());
+//        add(new StageTest());
+//        add(new StallDetectorTest());
+
     }
 
     /**
