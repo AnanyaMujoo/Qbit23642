@@ -57,11 +57,12 @@ public class IEncoder extends Electronic {
         motor = (DcMotorEx) m;
         encoderType = t;
         resetPrecisionTimers();
-        if(encoderType.equals(EncoderType.PMOTOR)) {
-            bot.addBackgroundTask(new BackgroundTask(this::updatePMotor));
-        }else if(encoderType.equals(EncoderType.CMOTOR)){
-            bot.addBackgroundTask(new BackgroundTask(this::updateCMotor));
-        }
+        // TODO 4 FIX Add back in
+//        if(encoderType.equals(EncoderType.PMOTOR)) {
+//            bot.addBackgroundTask(new BackgroundTask(this::updatePMotor));
+//        }else if(encoderType.equals(EncoderType.CMOTOR)){
+//            bot.addBackgroundTask(new BackgroundTask(this::updateCMotor));
+//        }
         profiler = new Profiler(this::getAngularVelocity);
     }
 

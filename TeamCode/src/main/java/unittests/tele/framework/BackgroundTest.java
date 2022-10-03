@@ -12,32 +12,41 @@ import static global.General.log;
 
 public class BackgroundTest extends TeleUnitTest {
 
-    // TODO 4 TEST
+    // TODO 4 TEST and clean up
 
     private volatile int a = 3;
     private int b = 4;
     private volatile int c = 5;
 
+    private final Timer timer1 = new Timer();
     private final Timer timer2 = new Timer();
 
-    private final BackgroundTask task1 = new BackgroundTask(() -> { a = 5; pause(); a = 3; pause(); });
+//    private final BackgroundTask task1 = new BackgroundTask(() -> {
+//                a = 5; pause1(); a = 3; pause1();
+//    });
 
-    private final BackgroundTask task2 = new BackgroundTask(
-            () -> throttle(() -> (b = b==4?6:4), 250), 2);
+    private final BackgroundTask task2 = new BackgroundTask(() -> throttle(() -> {b = b==4?6:4;}, 500), 4);
 
-    private final BackgroundTask task3 = new BackgroundTask(() -> { c = 7; pause(); c = 5; pause(); }, new Exit(() -> timer2.seconds() > 4));
+    private final BackgroundTask task3 = new BackgroundTask(() -> {
+        c = 7; pause2(); c = 5; pause2();
+        }, new Exit(() -> timer.seconds() > 6));
 
-    private void pause(){
-        while (timer.seconds() < 0.25){}
-        timer.reset();
+    private void pause1(){
+        timer1.reset();
+        while (timer1.seconds() < 0.5){}
+    }
+
+    private void pause2(){
+        timer2.reset();
+        while (timer2.seconds() < 0.5){}
     }
 
     @Override
     protected void start() {
-        bot.addBackgroundTask(task1);
+        bot.cancelBackgroundTasks();
+//        bot.addBackgroundTask(task1);
         bot.addBackgroundTask(task2);
         bot.addBackgroundTask(task3);
-        timer2.reset();
     }
 
     @Override

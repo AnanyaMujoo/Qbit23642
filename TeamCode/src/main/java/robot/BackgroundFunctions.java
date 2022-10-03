@@ -31,7 +31,14 @@ public class BackgroundFunctions {
         bot.checkAccess(User.BACK);
         if(!tasks.isEmpty()){
             Iterator.forAll(tasks, BackgroundTask::run);
-            Iterator.forAll(tasks, task -> { if(task.isDone()){ tasks.remove(task); }});
+            // TODO 4 FIX
+            for (int i = 0; i < tasks.size(); i++) {
+                if(tasks.get(i).isDone()){
+                    tasks.remove(i);
+                    break;
+                }
+            }
+//            Iterator.forAll(tasks, task -> { if(task.isDone()){ tasks.remove(task); }});
         } else {
             backgroundThread.setStatus(Status.IDLE);
         }
@@ -39,12 +46,10 @@ public class BackgroundFunctions {
 
     public void init(){
         backgroundThread.setExecutionCode(updateCode);
+        backgroundThread.setStatus(Status.ACTIVE);
     }
 
     public final void addBackgroundTask(BackgroundTask task){
-        if (tasks.isEmpty()) {
-            backgroundThread.setStatus(Status.ACTIVE);
-        }
         tasks.add(task);
     }
 
