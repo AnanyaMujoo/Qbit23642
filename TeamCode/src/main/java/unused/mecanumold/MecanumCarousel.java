@@ -16,7 +16,7 @@ import util.Timer;
 @Deprecated
 public class MecanumCarousel extends RobotPart {
 
-    private CMotor carousel;
+    public CMotor carousel;
 
     private final Timer timerA = new Timer();
 

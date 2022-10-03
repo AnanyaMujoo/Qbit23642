@@ -7,6 +7,7 @@ import robotparts.electronics.positional.PMotor;
 import robotparts.hardware.Carousel;
 import robotparts.hardware.Lift;
 import unittests.tele.TeleUnitTest;
+import unused.mecanumold.MecanumCarousel;
 import unused.mecanumold.MecanumLift;
 
 import static global.General.bot;
@@ -23,6 +24,10 @@ public class StallDetectorTest extends TeleUnitTest {
     private final MecanumLift part = mecanumLift;
     private final PMotor motor = part.motorUp;
     private final StallDetector detector = motor.getStallDetector();
+
+//    private final MecanumCarousel part = mecanumCarousel;
+//    private final CMotor motor = part.carousel;
+//    private final StallDetector detector = motor.getStallDetector();
 
     @Override
     public void init() {

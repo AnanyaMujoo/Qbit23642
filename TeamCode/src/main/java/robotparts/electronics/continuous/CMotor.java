@@ -82,4 +82,8 @@ public class CMotor extends Electronic {
      * NOTE: This should only be called in a thread that has access to use the robot
      */
     public void halt(){ setPower(0); }
+
+    public StallDetector getStallDetector() {
+        return detector;
+    }
 }
