@@ -1,7 +1,9 @@
 package robotparts.electronics.positional;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import autoutil.controllers.control1D.PositionHolder;
 import debugging.StallDetector;
@@ -20,17 +22,17 @@ public class PMotor extends Electronic {
     /**
      * DcMotor object and related parameters
      */
-    private final DcMotor motor;
+    private final DcMotorEx motor;
     private final DcMotorSimple.Direction direction;
     private final DcMotor.ZeroPowerBehavior zeroPowerBehavior;
     private final IEncoder motorEncoder;
     private final StallDetector detector;
+    private final PIDFCoefficients defaultCoeffs;
     private MovementType movementType = MovementType.ROTATIONAL;
     private ReturnParameterCodeSeg<Double, Double> outputToTicks = input -> input;
     private ReturnParameterCodeSeg<Double, Double> ticksToOutput = input -> input;
     private PositionHolder positionHolder = new PositionHolder(0, 0, 0,0);
-
-    // TODO 4 NEW Make this have functionality to use custom PID
+    private PIDFCoefficients currentCoeffs;
 
     /**
      * Constructor to create a pmotor
@@ -40,9 +42,11 @@ public class PMotor extends Electronic {
      * @param mode
      */
     public PMotor(DcMotor m, DcMotor.Direction dir, DcMotor.ZeroPowerBehavior zpb, DcMotor.RunMode mode){
-        motor = m;
+        motor = (DcMotorEx) m;
         motorEncoder = new IEncoder(motor, IEncoder.EncoderType.PMOTOR);
         detector = new StallDetector(motorEncoder, 10, 8);
+        defaultCoeffs = motor.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+        currentCoeffs = defaultCoeffs;
         direction = dir;
         zeroPowerBehavior = zpb;
 
@@ -54,6 +58,8 @@ public class PMotor extends Electronic {
 
         motorEncoder.reset();
     }
+
+
 
     public void setToLinear(double ticksPerRev, double radius, double ratio, double angle){
         movementType = MovementType.LINEAR;
@@ -71,6 +77,14 @@ public class PMotor extends Electronic {
         positionHolder = holder;
         positionHolder.setProcessVariable(this::getPosition);
     }
+
+    public void scalePIDFCoefficients(double ps, double is, double ds, double fs){ currentCoeffs = new PIDFCoefficients(defaultCoeffs.p*ps,defaultCoeffs.i*is,defaultCoeffs.d*ds,defaultCoeffs.f*fs); motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, currentCoeffs); }
+    public void scalePIDCoefficients(double ps, double is, double ds){ scalePIDFCoefficients(ps, is, ds, 1);}
+    public void setPIDFCoefficients(double p, double i, double d, double f){ currentCoeffs = new PIDFCoefficients(p, i, d, f); motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, currentCoeffs); }
+    public void setPIDCoefficients(double p, double i, double d){ setPIDFCoefficients(p, i, d, defaultCoeffs.f); }
+    public PIDFCoefficients getDefaultPIDFCoefficients(){ return defaultCoeffs; }
+    public PIDFCoefficients getCurrentPIDFCoefficients(){ return currentCoeffs; }
+
 
     /**
      * Set the power of the pmotor
