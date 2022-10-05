@@ -28,10 +28,10 @@ public class PMotor extends Electronic {
     private final IEncoder motorEncoder;
     private final StallDetector detector;
     private final PIDFCoefficients defaultCoeffs;
+    private final PositionHolder positionHolder = new PositionHolder(0);
     private MovementType movementType = MovementType.ROTATIONAL;
     private ReturnParameterCodeSeg<Double, Double> outputToTicks = input -> input;
     private ReturnParameterCodeSeg<Double, Double> ticksToOutput = input -> input;
-    private PositionHolder positionHolder = new PositionHolder(0, 0, 0,0);
     private PIDFCoefficients currentCoeffs;
 
     /**
@@ -45,6 +45,7 @@ public class PMotor extends Electronic {
         motor = (DcMotorEx) m;
         motorEncoder = new IEncoder(motor, IEncoder.EncoderType.PMOTOR);
         detector = new StallDetector(motorEncoder, 10, 8);
+        positionHolder.setProcessVariable(motorEncoder::getAngularVelocity);
         defaultCoeffs = motor.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
         currentCoeffs = defaultCoeffs;
         direction = dir;
@@ -60,6 +61,20 @@ public class PMotor extends Electronic {
     }
 
 
+    public void setRestPower(double restPower){
+        positionHolder.activate();
+        positionHolder.setRestPower(restPower);
+    }
+
+    public void removeRestPow(){
+        positionHolder.deactivate();
+    }
+
+    public PositionHolder getPositionHolder(){
+        return positionHolder;
+    }
+
+
 
     public void setToLinear(double ticksPerRev, double radius, double ratio, double angle){
         movementType = MovementType.LINEAR;
@@ -71,11 +86,6 @@ public class PMotor extends Electronic {
         movementType = MovementType.ROTATIONAL;
         outputToTicks = distance -> (distance/360)*ticksPerRev*ratio;
         ticksToOutput = Precision.invert(outputToTicks);
-    }
-
-    public void setPositionHolder(PositionHolder holder){
-        positionHolder = holder;
-        positionHolder.setProcessVariable(this::getPosition);
     }
 
     public void scalePIDFCoefficients(double ps, double is, double ds, double fs){ currentCoeffs = new PIDFCoefficients(defaultCoeffs.p*ps,defaultCoeffs.i*is,defaultCoeffs.d*ds,defaultCoeffs.f*fs); motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, currentCoeffs); }
@@ -94,18 +104,14 @@ public class PMotor extends Electronic {
     public final void move(double p){
         if(access.isAllowed()){
             if(!detector.isStalling()){
-                motor.setPower(p);
+                positionHolder.update();
+                motor.setPower(positionHolder.getOutput() + p);
             }else{
                 motor.setPower(0);
                 bot.cancelAutoModules();
                 fault.warn("Motor is stalling", Expectation.EXPECTED, Magnitude.CRITICAL);
             }
         }
-    }
-
-    public void setPowerAdjusted(double p){
-        positionHolder.update();
-        motor.setPower(positionHolder.getOutput() + p);
     }
 
     /**

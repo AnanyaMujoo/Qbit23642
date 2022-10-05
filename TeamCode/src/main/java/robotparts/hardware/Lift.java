@@ -14,6 +14,8 @@ public class Lift extends RobotPart {
     public double restPowUp = 0.12;
     public double restPowDown = -0.05;
 
+    // TODO 4 FIX Rest pow here
+
     ;
     @Override
     public void init() {

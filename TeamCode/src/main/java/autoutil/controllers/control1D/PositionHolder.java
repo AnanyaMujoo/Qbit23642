@@ -9,30 +9,34 @@ public class PositionHolder extends Controller1D {
     private double restPower;
     private final double deltaPowerUp;
     private final double deltaPowerDown;
+    private volatile boolean isUsed = false;
 
-    // TODO 4 NEW Create position holder and test
-
-    public PositionHolder(double restPower, double deltaPowerUp,double deltaPowerDown,  double velocityThreshold){
-        this.restPower = restPower;
-        this.deltaPowerUp = deltaPowerUp;
-        this.deltaPowerDown = deltaPowerDown;
-        this.velocityThreshold = velocityThreshold;
+    public PositionHolder(double restPower, double deltaPowerUp, double deltaPowerDown,  double velocityThreshold){
+        this.restPower = restPower; this.deltaPowerUp = deltaPowerUp; this.deltaPowerDown = deltaPowerDown; this.velocityThreshold = velocityThreshold;
     }
+
+    public PositionHolder(double restPower){
+        this.restPower = restPower; this.deltaPowerUp = 0.005; this.deltaPowerDown = -0.005; this.velocityThreshold = 10;
+    }
+
+    public void setRestPower(double restPower){
+        this.restPower = restPower;
+    }
+
+    public void deactivate(){ isUsed = false; }
+
+    public void activate(){ isUsed = true; }
 
     @Override
     public void update(Pose pose, PathSegment pathSegment) {
-        updateProfilers();
-        if(Math.abs(getVelocity()) > velocityThreshold) {
-            if(getVelocity() > 0){
-                restPower -= deltaPowerDown;
-            }else{
-                restPower += deltaPowerUp;
+        if(isUsed) {
+            updateProcessVariable();
+            if (Math.abs(getCurrentValue()) > velocityThreshold) {
+                restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
             }
+            setOutput(restPower);
+        }else{
+            setOutput(0);
         }
-        setOutput(restPower);
-    }
-
-    public double getVelocity(){
-        return processVariableProfiler.getDerivative();
     }
 }

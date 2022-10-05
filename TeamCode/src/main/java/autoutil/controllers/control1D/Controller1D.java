@@ -38,8 +38,12 @@ public abstract class Controller1D {
         update(new Pose(new Point(0,0),0), new PathPose(0,0,0));
     }
 
-    public void updateProfilers(){
+    public void updateProcessVariable(){
         currentValue = processVariable.run();
+    }
+
+    public void updateProfilers(){
+        updateProcessVariable();
         processVariableProfiler.update();
         errorProfiler.update();
     }

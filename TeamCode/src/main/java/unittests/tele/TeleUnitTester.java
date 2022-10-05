@@ -26,6 +26,7 @@ import unittests.tele.framework.ThreadTest;
 import unittests.tele.framework.movement.AutoModuleTest;
 import unittests.tele.framework.movement.CustomPMotorPIDTest;
 import unittests.tele.framework.movement.OdometryTest;
+import unittests.tele.framework.movement.PositionHolderTest;
 import unittests.tele.framework.movement.RobotFrameworkTest;
 import unittests.tele.framework.movement.RobotFunctionsTest;
 import unittests.tele.framework.movement.StageTest;
@@ -81,6 +82,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new StageTest());
 //        add(new StallDetectorTest());
         add(new CustomPMotorPIDTest());
+        add(new PositionHolderTest());
 
     }
 

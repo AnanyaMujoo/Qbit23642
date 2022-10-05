@@ -58,10 +58,6 @@ public class MecanumLift extends TwoLift {
 //        motorDown.useStallDetector(0.2, getRestPows()[1],200,0.03, 2);
     }
 
-    public double getVelocity(){
-        return positionHolder.getVelocity();
-    }
-
     @Override
     protected double[] getRestPows() {
         return new double[]{0.12, -0.05};
