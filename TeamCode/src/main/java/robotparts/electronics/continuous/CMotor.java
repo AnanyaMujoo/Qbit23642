@@ -51,6 +51,11 @@ public class CMotor extends Electronic {
         motor.setPower(0);
     }
 
+
+    public void useStallDetector(){
+        motorEncoder.setUpdateCMotor();
+    }
+
     /**
      * Sets the power of the motor if access is allowed
      * @param p

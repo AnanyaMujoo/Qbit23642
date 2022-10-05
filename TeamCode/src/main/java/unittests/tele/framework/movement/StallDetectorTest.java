@@ -17,10 +17,6 @@ import static global.General.log;
 
 public class StallDetectorTest extends TeleUnitTest {
 
-    // TODO 4 TEST
-    // Test CMotors too
-
-
     private final MecanumLift part = mecanumLift;
     private final PMotor motor = part.motorUp;
     private final StallDetector detector = motor.getStallDetector();
@@ -32,13 +28,13 @@ public class StallDetectorTest extends TeleUnitTest {
     @Override
     public void init() {
         detector.setCustomThresholds(10, 3);
+//        motor.useStallDetector();
     }
 
     @Override
     protected void loop() {
         part.move(gph1.ry);
         log.show("Speed (deg/s)", detector.getMotorSpeed());
-        log.show("Stable Speed (deg/s)", Math.toDegrees(motor.getMotorEncoder().getAngularVelocityStable()));
         log.show("Current (amps)", detector.getMotorCurrent());
         log.show("Stalling", detector.isStalling());
     }

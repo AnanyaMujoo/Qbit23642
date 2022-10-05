@@ -4,18 +4,18 @@ public class Constants {
 
     private Constants(){}
     /**
-     * Refresh rate for threads, tested at 100 and 60 hz
+     * Default refresh rate for threads, tested at 100 and 60 hz
      */
-    public static final int THREAD_REFRESH_RATE = 60; //hz
+    public static final int DEFAULT_THREAD_REFRESH_RATE = 60; //hz
+
+    /**
+     * Background thread update rate (note this is the highest possible)
+     */
+    public static final int BACKGROUND_THREAD_REFRESH_RATE = 1000; //hz
     /**
      *  Minimum  refresh rate allowed before robot is considered to be lagging
      */
     public static final int MINIMUM_REFRESH_RATE = 30; //hz
-
-    /**
-     * Encoder update rate, all readings are throttled to this
-     */
-    public static final int ENCODER_READ_RATE = 30; //hz
 
     /**
      * Accuracies for creating points in arc and line generations in Autonomous

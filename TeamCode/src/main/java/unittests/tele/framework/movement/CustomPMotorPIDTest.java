@@ -20,17 +20,19 @@ public class CustomPMotorPIDTest extends TeleUnitTest {
 
     @Override
     public void init() {
-        motor.scalePIDFCoefficients(0.5,1,1,1);
+        motor.scalePIDFCoefficients(0.3,1,1,1);
     }
 
     @Override
     protected void start() {
         gph1.link(Button.B, LiftUpTopFast);
+        gph1.link(Button.Y, LiftReset);
         gph1.link(Button.X, bot::cancelAutoModules);
     }
 
     @Override
     protected void loop() {
+        mecanumLift.holdPosition();
         log.show("Default Coeffs", motor.getDefaultPIDFCoefficients().toString());
         log.show("Current Coeffs", motor.getCurrentPIDFCoefficients().toString());
     }

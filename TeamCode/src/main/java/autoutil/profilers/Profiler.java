@@ -23,8 +23,8 @@ public class Profiler {
     private final Integrator integrator;
     private final Differentiator differentiator;
     private final Timer timer = new Timer();
-    private ArrayList<Double> values = new ArrayList<>();
-    private ArrayList<Double> times = new ArrayList<>();
+    private volatile ArrayList<Double> values = new ArrayList<>();
+    private volatile ArrayList<Double> times = new ArrayList<>();
 
     public Profiler(ReturnCodeSeg<Double> processVariable){
         this.processVariable = processVariable;
@@ -112,9 +112,14 @@ public class Profiler {
     }
 
 
-    public double getRunningAverage(int num){
+    public synchronized double getRunningAverage(int num){
         if(getUpdateNumber() > num){
-            return Iterator.forAllAverage((ArrayList<Double>) values.subList(num-5, num));
+            ArrayList<Double> nums = new ArrayList<>();
+            int s = values.size();
+            for (int i = s-num; i < s; i++) {
+                nums.add(values.get(i));
+            }
+            return Iterator.forAllAverage(nums);
         }else{
             return Iterator.forAllAverage(values);
         }

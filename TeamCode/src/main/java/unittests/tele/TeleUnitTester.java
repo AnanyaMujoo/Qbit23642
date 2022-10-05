@@ -24,6 +24,7 @@ import unittests.tele.framework.StorageTest;
 import unittests.tele.framework.SynchroniserTest;
 import unittests.tele.framework.ThreadTest;
 import unittests.tele.framework.movement.AutoModuleTest;
+import unittests.tele.framework.movement.CustomPMotorPIDTest;
 import unittests.tele.framework.movement.OdometryTest;
 import unittests.tele.framework.movement.RobotFrameworkTest;
 import unittests.tele.framework.movement.RobotFunctionsTest;
@@ -65,9 +66,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new StorageTest());
 //        add(new SynchroniserTest());
 //        add(new ThreadTest());
-
-        add(new BackgroundTest());
-
+//        add(new BackgroundTest());
 
 
         /**
@@ -80,7 +79,8 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new RobotFrameworkTest());
 //        add(new RobotFunctionsTest());
 //        add(new StageTest());
-        add(new StallDetectorTest());
+//        add(new StallDetectorTest());
+        add(new CustomPMotorPIDTest());
 
     }
 

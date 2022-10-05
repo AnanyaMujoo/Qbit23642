@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import automodules.AutoModule;
 import geometry.CoordinatePlane;
+import global.Constants;
 import robotparts.RobotPart;
 import robotparts.electronics.input.IEncoder;
 import teleutil.independent.Independent;
@@ -65,7 +66,7 @@ public class RobotFramework {
         backHandler = new BackgroundFunctions();
         robotFunctionsThread = new TerraThread("RobotFunctionsThread");
         odometryThread = new TerraThread("OdometryThread");
-        backgroundThread = new TerraThread("BackgroundThread");
+        backgroundThread = new TerraThread("BackgroundThread", Constants.BACKGROUND_THREAD_REFRESH_RATE);
         independentRunner = new IndependentRunner();
         rfsHandler.init();
         backHandler.init();

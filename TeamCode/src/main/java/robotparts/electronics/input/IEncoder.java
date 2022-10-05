@@ -59,23 +59,25 @@ public class IEncoder extends Electronic {
         resetPrecisionTimers();
         if(encoderType.equals(EncoderType.PMOTOR)) {
             bot.addBackgroundTask(new BackgroundTask(this::updatePMotor));
-        }else if(encoderType.equals(EncoderType.CMOTOR)){
-            bot.addBackgroundTask(new BackgroundTask(this::updateCMotor));
         }
         profiler = new Profiler(this::getAngularVelocity);
     }
 
+    public void setUpdateCMotor(){
+        if(encoderType.equals(EncoderType.CMOTOR)){
+            bot.addBackgroundTask(new BackgroundTask(this::updateCMotor));
+        }else{
+            fault.check("Motor is not of type CMotor for update", Expectation.INCONCEIVABLE, Magnitude.MINOR);
+        }
+    }
+
     private void updateCMotor(){ current = motor.getCurrent(CurrentUnit.AMPS); }
 
-    private void updatePMotor(){ position = motor.getCurrentPosition(); angularVelocity = motor.getVelocity(AngleUnit.RADIANS); current = motor.getCurrent(CurrentUnit.AMPS); }
+    private void updatePMotor(){ position = motor.getCurrentPosition(); angularVelocity = motor.getVelocity(AngleUnit.RADIANS); current = motor.getCurrent(CurrentUnit.AMPS); profiler.update(); }
 
     public double getPos() { return position; }
 
     public double getAngularVelocity(){ return angularVelocity; }
-
-    public double getAngularVelocityStable(){
-        return profiler.getRunningAverage(5);
-    }
 
     public double getCurrent(){ return current; }
 

@@ -46,11 +46,28 @@ public class TerraThread extends Thread{
     private final String name;
 
     /**
+     * Refresh rate in Hz (cycles p
+     */
+    private final double updateRate;
+
+    /**
      * Constructor, creates thread using name and adds it to the arraylist
      * @param name
      */
     public TerraThread(String name){
         this.name = name;
+        this.updateRate = Constants.DEFAULT_THREAD_REFRESH_RATE;
+        allTerraThreads.add(this);
+    }
+
+    /**
+     * Constructor, same as above except sets custom update rate
+     * @param name
+     * @param updateRate
+     */
+    public TerraThread(String name, double updateRate){
+        this.name = name;
+        this.updateRate = updateRate;
         allTerraThreads.add(this);
     }
 
@@ -101,7 +118,7 @@ public class TerraThread extends Thread{
             /**
              * Wait according to the thread refresh rate
              */
-            ExceptionCatcher.catchInterrupted(()-> sleep(1000/Constants.THREAD_REFRESH_RATE));
+            ExceptionCatcher.catchInterrupted(()-> sleep((long) (1000.0/updateRate)));
         }
     }
 
