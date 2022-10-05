@@ -1,18 +1,7 @@
 package robot;
 
-import android.os.Build;
-
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Queue;
 
-import androidx.annotation.RequiresApi;
-import automodules.AutoModule;
-import automodules.stage.Stage;
-import util.Timer;
 import util.User;
 import util.codeseg.ExceptionCodeSeg;
 import util.condition.Status;
@@ -20,21 +9,25 @@ import util.template.Iterator;
 
 import static global.General.bot;
 import static robot.RobotFramework.backgroundThread;
-import static robot.RobotFramework.robotFunctionsThread;
 
 public class BackgroundFunctions {
 
     public volatile ArrayList<BackgroundTask> tasks;
+    public volatile ArrayList<BackgroundTask> taskBuffer;
 
     public BackgroundFunctions(){
         tasks = new ArrayList<>();
+        taskBuffer = new ArrayList<>();
     }
+
+    private volatile boolean clearTasks = false;
 
     public ExceptionCodeSeg<RuntimeException> updateCode = () -> {
         bot.checkAccess(User.BACK);
         if(!tasks.isEmpty()){
             Iterator.forAll(tasks, BackgroundTask::run);
             removeCompletedTasks();
+            checkAndClearTaskList();
         } else {
             backgroundThread.setStatus(Status.IDLE);
         }
@@ -45,13 +38,24 @@ public class BackgroundFunctions {
         backgroundThread.setStatus(Status.ACTIVE);
     }
 
-    public final void addBackgroundTask(BackgroundTask task){
-        tasks.add(task);
+    public final synchronized void addBackgroundTask(BackgroundTask task){
+        if(!clearTasks) {
+            tasks.add(task);
+        }else {
+            taskBuffer.add(task);
+        }
     }
 
-    public final void emptyTaskList(){
-        tasks.clear();
-    }
+    public final synchronized void emptyTaskList(){ clearTasks = true; }
 
-    private void removeCompletedTasks(){ for(int i = tasks.size() - 1; i >= 0; --i) { if(tasks.get(i).isDone()) { tasks.remove(i); }}}
+    private synchronized void removeCompletedTasks(){ for(int i = tasks.size() - 1; i >= 0; --i) { if(tasks.get(i).isDone()) { tasks.remove(i); }}}
+
+    private synchronized void checkAndClearTaskList(){
+        if(clearTasks){
+            tasks.clear();
+            tasks.addAll(taskBuffer);
+            taskBuffer.clear();
+            clearTasks = false;
+        }
+    }
 }

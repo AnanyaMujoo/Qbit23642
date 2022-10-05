@@ -70,7 +70,7 @@ public class RobotFunctions {
      * if the queue is not empty and the oldest stage is a pause then delete it and start the thread again
      * (by setting the status to active)
      */
-    public void resume() {
+    public synchronized void resume() {
         if (!rfsQueue.isEmpty() && rfsQueue.peek().isPause()) {
             rfsQueue.poll();
             timer.reset();
@@ -92,7 +92,7 @@ public class RobotFunctions {
      * Add all of the stages in the automodule to the queue
      * @param autoModule
      */
-    public final void addAutoModule(AutoModule autoModule){
+    public final synchronized void addAutoModule(AutoModule autoModule){
         if (rfsQueue.isEmpty()) {
             timer.reset();
             robotFunctionsThread.setStatus(Status.ACTIVE);
@@ -105,7 +105,7 @@ public class RobotFunctions {
      * @param s
      * @link addAutoModule
      */
-    public final void addToQueue(Stage s) {
+    public final synchronized void addToQueue(Stage s) {
         if (rfsQueue.isEmpty()) {
             timer.reset();
             robotFunctionsThread.setStatus(Status.ACTIVE);
@@ -116,7 +116,7 @@ public class RobotFunctions {
     /**
      * Pause the robotfunction queue in the current state after the stage has ended
      */
-    public final void pauseNow() {
+    public final synchronized void pauseNow() {
         Queue<Stage> newStages = new LinkedList<>();
         if (!rfsQueue.isEmpty()) {
             newStages.add(rfsQueue.poll());
@@ -131,7 +131,7 @@ public class RobotFunctions {
     /**
      * Empty the queue and reset the timer
      */
-    public final void emptyQueue(){
+    public final synchronized void emptyQueue(){
         if (!rfsQueue.isEmpty()) {
             Stage s = rfsQueue.peek();
             rfsQueue.clear();

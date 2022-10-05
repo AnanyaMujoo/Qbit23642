@@ -10,9 +10,8 @@ import util.codeseg.CodeSeg;
 import static global.General.bot;
 import static global.General.log;
 
+@SuppressWarnings("all")
 public class BackgroundTest extends TeleUnitTest {
-
-    // TODO 4 TEST
 
     private volatile int a = 3;
     private int b = 4;
