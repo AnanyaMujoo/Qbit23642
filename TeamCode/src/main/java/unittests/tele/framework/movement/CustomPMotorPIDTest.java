@@ -13,14 +13,12 @@ import static global.General.log;
 
 public class CustomPMotorPIDTest extends TeleUnitTest {
 
-    // TODO 4 Test
-
     private final MecanumLift part = mecanumLift;
     private final PMotor motor = part.motorUp;
 
     @Override
     public void init() {
-        motor.scalePIDFCoefficients(0.3,1,1,1);
+        motor.scalePIDFCoefficients(0.3,2,1,1);
     }
 
     @Override
