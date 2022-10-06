@@ -16,6 +16,7 @@ import util.template.Precision;
 
 import static global.General.bot;
 import static global.General.fault;
+import static global.General.log;
 import static java.lang.Math.*;
 
 public class PMotor extends Electronic {
@@ -44,7 +45,7 @@ public class PMotor extends Electronic {
     public PMotor(DcMotor m, DcMotor.Direction dir, DcMotor.ZeroPowerBehavior zpb, DcMotor.RunMode mode){
         motor = (DcMotorEx) m;
         motorEncoder = new IEncoder(motor, IEncoder.EncoderType.PMOTOR);
-        detector = new StallDetector(motorEncoder, 10, 8);
+        detector = new StallDetector(motorEncoder, 10, 10);
         positionHolder.setProcessVariable(motorEncoder::getAngularVelocity);
         defaultCoeffs = motor.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
         currentCoeffs = defaultCoeffs;
@@ -108,8 +109,13 @@ public class PMotor extends Electronic {
                 motor.setPower(positionHolder.getOutput() + p);
             }else{
                 motor.setPower(0);
-                bot.cancelAutoModules();
                 fault.warn("Motor is stalling", Expectation.EXPECTED, Magnitude.CRITICAL);
+                // TODO 4 Check
+                if(bot.rfsHandler.rfsQueue.size() != 0){
+                    bot.cancelAutoModules();
+                    fault.warn("Stopped all AutoModules", Expectation.SURPRISING, Magnitude.MODERATE);
+                    log.setShouldUpdateOnShow(false);
+                }
             }
         }
     }

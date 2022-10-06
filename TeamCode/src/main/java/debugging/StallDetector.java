@@ -49,7 +49,8 @@ public class StallDetector implements Precision {
         return getMotorCurrent() > maxCurrent;
     }
 
+    // TODO 4 CHECK Count = 2?
     public boolean isStalling() {
-        return outputTrueForTime(isMotorVelocityLow()&&isMotorCurrentHigh(), 1);
+        return outputTrueForTime(isInputTrueForCount(isMotorVelocityLow()&&isMotorCurrentHigh(),2), 1);
     }
 }

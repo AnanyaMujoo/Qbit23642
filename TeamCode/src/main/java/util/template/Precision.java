@@ -20,6 +20,7 @@ public interface Precision {
     Timer debounceTimer = new Timer();
 
     Object[] lastThrottleVal = new Object[1];
+    int[] counter = new int[1];
 
     /**
      * Reset precision timers
@@ -72,6 +73,16 @@ public interface Precision {
         return outputTrueForTime(isInputTrueForTime(condition, inputTime), outputTime);
     }
 
+    default boolean isInputTrueForCount(boolean condition, int count){
+        if(condition){
+            counter[0] += 1;
+            return counter[0] >= count;
+        }else{
+            counter[0] = 0;
+            return false;
+        }
+    }
+
 
     /**
      * Helper methods for running on a condition
@@ -87,6 +98,8 @@ public interface Precision {
             return false;
         }
     }
+
+
 
     static boolean runOnCondition(boolean condition, CodeSeg onTrue, CodeSeg onFalse){
         if(condition){
