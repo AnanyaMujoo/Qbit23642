@@ -28,9 +28,8 @@ public class PositionHolder extends Controller1D {
     public void activate(){ isUsed = true; }
 
     @Override
-    public void update(Pose pose, PathSegment pathSegment) {
+    protected void updateController(Pose pose, PathSegment pathSegment) {
         if(isUsed) {
-            updateProcessVariable();
             if (Math.abs(getCurrentValue()) > velocityThreshold) {
                 restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
             }

@@ -61,8 +61,7 @@ public class PID extends Controller1D implements ParameterConstructor<Double> {
     public void setMaximumDerivative(double maximumDerivative){this.maximumDerivative = maximumDerivative;}
     
     @Override
-    public void update(Pose pose, PathSegment pathSegment){
-        updateProfilers();
+    protected void updateController(Pose pose, PathSegment pathSegment){
         if(Math.abs(getError()) > maximumIntegralRange){
             errorProfiler.resetIntegral();
         }

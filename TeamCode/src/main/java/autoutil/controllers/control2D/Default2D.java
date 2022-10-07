@@ -11,7 +11,7 @@ public class Default2D extends Controller2D{
     }
 
     @Override
-    public void update(Pose pose, PathSegment pathSegment) {
+    protected void updateController(Pose pose, PathSegment pathSegment) {
         xController.update(pose, pathSegment);
         yController.update(pose, pathSegment);
         Vector2 powerVector = new Vector2(xController.getOutput(), yController.getOutput());

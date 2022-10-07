@@ -5,7 +5,7 @@ import geometry.position.Pose;
 
 public class BangBang extends Controller1D {
 
-    private double s;
+    private final double s;
     private double maximumTime;
 
     public BangBang(double s, double maximumTime, double accuracy){
@@ -17,8 +17,7 @@ public class BangBang extends Controller1D {
     public void setMaximumTime(double maximumTime){ this.maximumTime = maximumTime; }
 
     @Override
-    public void update(Pose pose, PathSegment pathSegment) {
-        updateProfilers();
+    protected void updateController(Pose pose, PathSegment pathSegment) {
         if(!isWithinAccuracyRange()) {
             if (getError() > 0) {
                 setOutput(s);

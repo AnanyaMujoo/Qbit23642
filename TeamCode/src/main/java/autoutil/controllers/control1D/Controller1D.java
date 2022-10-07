@@ -32,9 +32,15 @@ public abstract class Controller1D {
         return (Math.abs(getError()) < accuracy);
     }
 
+    protected abstract void updateController(Pose pose, PathSegment pathSegment);
 
-    public abstract void update(Pose pose, PathSegment pathSegment);
+    public final void update(Pose pose, PathSegment pathSegment){
+        updateProfilers();
+        updateController(pose, pathSegment);
+    }
+
     public final void update(){
+        updateProfilers();
         update(new Pose(new Point(0,0),0), new PathPose(0,0,0));
     }
 

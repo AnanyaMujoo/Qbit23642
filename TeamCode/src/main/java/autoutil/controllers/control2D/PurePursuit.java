@@ -51,7 +51,7 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     }
 
     @Override
-    public void update(Pose pose, PathSegment pathSegment) {
+    public void updateController(Pose pose, PathSegment pathSegment) {
         Line currentLine = new Line(new Point(0,0), new Point(0,0));
         if(pathSegment instanceof PathLine){
             currentLine = ((PathLine) pathSegment).getLine();
