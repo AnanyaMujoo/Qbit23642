@@ -62,21 +62,15 @@ public interface Precision {
         }
     }
 
-    /**
-     * Combines the above two methods
-     * @param condition
-     * @param inputTime
-     * @param outputTime
-     * @return
-     */
-    default boolean inputOutputTrueForTime(boolean condition, double inputTime, double outputTime){
-        return outputTrueForTime(isInputTrueForTime(condition, inputTime), outputTime);
-    }
-
     default boolean isInputTrueForCount(boolean condition, int count){
         if(condition){
             counter[0] += 1;
-            return counter[0] >= count;
+            if(counter[0] >= count){
+                counter[0] = 0;
+                return true;
+            }else{
+                return false;
+            }
         }else{
             counter[0] = 0;
             return false;

@@ -11,8 +11,6 @@ import static global.General.log;
 
 public class PositionHolderTest extends TeleUnitTest {
 
-    // TODO 4 Test
-
     private final Lift part = lift;
     private final PMotor motor = part.motorUp;
     private final PositionHolder positionHolder = motor.getPositionHolder();

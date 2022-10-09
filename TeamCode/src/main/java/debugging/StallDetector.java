@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
+import automodules.stage.Initial;
+import automodules.stage.Stop;
 import robotparts.electronics.input.IEncoder;
 import util.template.Precision;
 import autoutil.profilers.Profiler;
@@ -18,6 +20,7 @@ public class StallDetector implements Precision {
     private final IEncoder encoder;
     private double minSpeed;
     private double maxCurrent;
+    public final double stallTime = 0.1;
 
     /**
      * @param minSpeedThresh (deg/s) ~10
@@ -49,8 +52,7 @@ public class StallDetector implements Precision {
         return getMotorCurrent() > maxCurrent;
     }
 
-    // TODO 4 CHECK Count = 2?
     public boolean isStalling() {
-        return outputTrueForTime(isInputTrueForCount(isMotorVelocityLow()&&isMotorCurrentHigh(),2), 1);
+        return outputTrueForTime(isMotorVelocityLow() && isInputTrueForTime(isMotorCurrentHigh(), stallTime), 1);
     }
 }

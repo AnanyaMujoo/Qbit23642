@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import autoutil.controllers.control1D.PAR;
 import autoutil.controllers.control1D.PID;
+import robotparts.hardware.Drive;
 import unittests.auto.AutoUnitTest;
 import unused.mecanumold.MecanumDrive;
 
@@ -12,12 +13,13 @@ import static global.General.log;
 
 public class PARTest extends AutoUnitTest {
 
-    // TODO 4 Test (Change coeffs)
+    // TODO 4 TEST (Change coeffs)
+    // Check odometry
 
 
     @Override
-    protected MecanumDrive getTestPart() {
-        return mecanumDrive;
+    protected Drive getTestPart() {
+        return drive;
     }
 
     PAR testPAR = new PAR(0.05, 0.5, 0.1);

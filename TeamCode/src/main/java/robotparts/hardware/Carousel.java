@@ -2,6 +2,7 @@ package robotparts.hardware;
 
 import java.sql.Time;
 
+import automodules.AutoModule;
 import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
@@ -30,6 +31,10 @@ public class Carousel extends RobotPart {
         car.setPower(power * (fieldSide == FieldSide.BLUE ? -1 : 1));
     }
 
+    @Override
+    public AutoModule MoveTime(double p, double t) {
+        return super.MoveTime(p, t);
+    }
 
     public Stage spinOneDuck(double time, double minPow, double maxPow) {
         return customTime(new Main(() ->{

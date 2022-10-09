@@ -11,6 +11,7 @@ import util.condition.Magnitude;
 
 import static global.General.bot;
 import static global.General.fault;
+import static global.General.log;
 
 public class CMotor extends Electronic {
     /**
@@ -66,8 +67,8 @@ public class CMotor extends Electronic {
                 motor.setPower(p);
             }else{
                 motor.setPower(0);
+                fault.warn("Motor is stalling, stopped all AutoModules", Expectation.EXPECTED, Magnitude.CRITICAL);
                 bot.cancelAutoModules();
-                fault.warn("Motor is stalling", Expectation.EXPECTED, Magnitude.CRITICAL);
             }
         }
     }

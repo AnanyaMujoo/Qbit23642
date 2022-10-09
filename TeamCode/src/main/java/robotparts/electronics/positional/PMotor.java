@@ -109,13 +109,8 @@ public class PMotor extends Electronic {
                 motor.setPower(positionHolder.getOutput() + p);
             }else{
                 motor.setPower(0);
-                fault.warn("Motor is stalling", Expectation.EXPECTED, Magnitude.CRITICAL);
-                // TODO 4 Check
-                if(bot.rfsHandler.rfsQueue.size() != 0){
-                    bot.cancelAutoModules();
-                    fault.warn("Stopped all AutoModules", Expectation.SURPRISING, Magnitude.MODERATE);
-                    log.setShouldUpdateOnShow(false);
-                }
+                fault.warn("Motor is stalling, stopped all AutoModules", Expectation.EXPECTED, Magnitude.CRITICAL);
+                bot.cancelAutoModules();
             }
         }
     }
