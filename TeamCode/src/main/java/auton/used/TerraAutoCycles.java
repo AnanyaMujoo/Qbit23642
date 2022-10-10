@@ -5,6 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import auton.MecanumAuto;
 import elements.Case;
 import elements.FieldSide;
+import robot.BackgroundTask;
+
+import static global.General.bot;
 
 
 public class TerraAutoCycles extends MecanumAuto {
@@ -12,10 +15,10 @@ public class TerraAutoCycles extends MecanumAuto {
     @Override
     public void initAuto() {
         scan();
-        setBackgroundTasks(() -> {
+        bot.addBackgroundTask(new BackgroundTask(() -> {
             mecanumLift.holdPosition();
             mecanumIntake.move(-0.8);
-        });
+        }));
         mecanumIntake.scale = 0.6;
     }
 

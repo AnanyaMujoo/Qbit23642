@@ -23,6 +23,8 @@ public class Point extends GeometryObject {
         return new Point(nx, ny);
     }
 
+    public static Point zero(){ return new Point(0,0); }
+
     public String toString() {
         return x + " " + y;
     }

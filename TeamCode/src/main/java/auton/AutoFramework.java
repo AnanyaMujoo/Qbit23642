@@ -26,16 +26,20 @@ import static global.General.log;
 import static global.General.mainUser;
 
 public abstract class AutoFramework extends Auto{
-
     // TODO 4 NEW Make AutoFramework better/clean up
 
-    protected FieldSide fieldSide = FieldSide.UNKNOWN;
-
     public abstract Executor getExecutor();
+    public abstract Reactor getSetpointReactor();
+    public abstract Reactor getWaypointReactor();
+    public abstract Generator getSetpointGenerator();
+    public abstract Generator getWaypointGenerator();
+    public abstract CaseScanner getCaseScanner();
+
 
     protected Executor executor;
 
-    protected Pose lastPose = new Pose(new Point(0,0),0);
+
+    protected Pose lastPose = Pose.zero();
 
     protected ArrayList<AutoSegment<? extends Reactor, ? extends Generator>> segments = new ArrayList<>();
 
@@ -45,35 +49,9 @@ public abstract class AutoFramework extends Auto{
 
     protected boolean isIndependent = false;
 
-    public final double scale = 0.95;
-//    public boolean canceled = false;
-
     public abstract void define();
-    public abstract Reactor getSetpointReactor();
-    public abstract Reactor getWaypointReactor();
-    public abstract Generator getSetpointGenerator();
-    public abstract Generator getWaypointGenerator();
-    public abstract CaseScanner getCaseScanner();
 
-    public void makeIndependent(){
-        isIndependent = true;
-    }
-
-    public void setBackgroundTasks(CodeSeg backgroundTasks){
-        RobotFramework.backgroundThread.setExecutionCode(() -> {
-            if(!isStopRequested()) {
-                bot.checkAccess(mainUser);
-                backgroundTasks.run();
-                update(false);
-            }else{
-                RobotFramework.backgroundThread.stopUpdating();
-            }
-        });
-//        executor.setBackgroundTasks(() -> {
-//            backgroundTasks.run();
-//            update(false);
-//        });
-    }
+    public void makeIndependent(){ isIndependent = true; }
 
     public boolean isFlipped(){
         return fieldSide.equals(FieldSide.RED);
@@ -134,8 +112,8 @@ public abstract class AutoFramework extends Auto{
     }
 
     public void addSetpoint(double x, double y, double h){
-        x *= scale;
-        y *= scale;
+//        x *= scale;
+//        y *= scale;
         if(isFlipped()){
             x = -x;
             h = -h;
@@ -144,8 +122,8 @@ public abstract class AutoFramework extends Auto{
     }
 
     public void addWaypoint(double x, double y, double h){
-        x *= scale;
-        y *= scale;
+//        x *= scale;
+//        y *= scale;
         if(isFlipped()){
             x = -x;
             h = -h;

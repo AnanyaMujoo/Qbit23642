@@ -42,6 +42,9 @@ public class Pose extends GeometryObject {
 
     public void rotate(double a) { ang += a; ang = boundAngleTo2Pi(ang);}
 
+
+    public static Pose zero(){ return new Pose(Point.zero(), 0); }
+
     @Override
     public String toString() {
         return "Position{" +
