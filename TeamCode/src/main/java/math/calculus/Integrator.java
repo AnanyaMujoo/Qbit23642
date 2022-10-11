@@ -11,10 +11,10 @@ public class Integrator extends Operator {
         integral += (step/6.0)*(function.f(t) + (4*function.f(t + (step/2))) + function.f(t + step));
     }
     public void integrate(Point f1, Point f2){
-        integral += ((f2.x - f1.x)/2)*(f1.y + f2.y);
+        integral += ((f2.getX() - f1.getX())/2)*(f1.getY() + f2.getY());
     }
     public void integrate(Point f1, Point f2, Point f3){
-        integral += (((f3.x-f1.x)/6.0)*(f1.y + (4*f2.y) + f3.y));
+        integral += (((f3.getX()-f1.getX())/6.0)*(f1.getY()+ (4*f2.getY()) + f3.getY()));
     }
     public double getIntegral(){
         return integral;

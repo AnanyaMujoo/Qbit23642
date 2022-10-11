@@ -6,8 +6,8 @@ import static global.General.*;
 
 @Deprecated
 public class TankExecutor extends Executor {
-    @Override
-    public void move(double f, double t) {
-        bot.tankDrive.move(f, t);
-    }
+//    @Override
+//    public void move(double f, double t) {
+//        bot.tankDrive.move(f, t);
+//    }
 }

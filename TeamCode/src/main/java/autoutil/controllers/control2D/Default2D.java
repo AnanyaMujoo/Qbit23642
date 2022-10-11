@@ -15,7 +15,7 @@ public class Default2D extends Controller2D{
         xController.update(pose, pathSegment);
         yController.update(pose, pathSegment);
         Vector2 powerVector = new Vector2(xController.getOutput(), yController.getOutput());
-        powerVector.rotate(pose.ang);
+        powerVector.rotate(pose.getAngle());
         setOutputX(powerVector.getX());
         setOutputY(powerVector.getY());
         isAtTarget =  xController.isAtTarget() && yController.isAtTarget();

@@ -29,7 +29,7 @@ public class MecanumExecutor extends Executor implements Iterator {
             reactor.setPathSegment(pathSegment);
             if(pathSegment instanceof PathPose) {
                 for (Pose pose : pathSegment.getPoses()) {
-                    reactor.setTarget(pose.asArray());
+                    reactor.setTarget(pose);
                     whileActive(() -> !reactor.isAtTarget(), ()-> {
                         reactor.moveToTarget();
                         backgroundTasks.run();

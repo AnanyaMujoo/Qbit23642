@@ -48,7 +48,7 @@ public class DisplayOld extends JPanel {
     public void paintComponent(Graphics g) {
         for (PathSegment ps : pathToDisplay.segments) {
             for (Pose p : ps.points) {
-                g.fillOval(pX(p.p.x), pY(p.p.y), 5, 5);
+//                g.fillOval(pX(p.p.x), pY(p.p.y), 5, 5);
             }
         }
     }

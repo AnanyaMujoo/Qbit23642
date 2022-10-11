@@ -38,21 +38,21 @@ public class PathArc extends PathSegment{
         Pose newStPt = arc.getPositionFromTheta(arc.arcSt);
         Pose newEndPt = arc.getPositionFromTheta(arc.arcEnd);
         if (x) {
-            newStPt.p.x *= -1;
-            newStPt.ang *= -1;
-            newEndPt.p.x *= -1;
-            newEndPt.ang *= -1;
-            arc.center.x *= -1;
+//            newStPt.p.x *= -1;
+//            newStPt.ang *= -1;
+//            newEndPt.p.x *= -1;
+//            newEndPt.ang *= -1;
+//            arc.center.x *= -1;
         }
         if (y) {
-            newStPt.p.y *= -1;
-            newStPt.ang *= -1;
-            newEndPt.p.y *= -1;
-            newEndPt.ang *= -1;
-            arc.center.y *= -1;
+//            newStPt.p.y *= -1;
+//            newStPt.ang *= -1;
+//            newEndPt.p.y *= -1;
+//            newEndPt.ang *= -1;
+//            arc.center.y *= -1;
         }
-        CircularArc v1 = new CircularArc(arc.center, newStPt.p, newEndPt.p, arc.r);
-        CircularArc v2 = new CircularArc(arc.center, newEndPt.p, newStPt.p, arc.r);
-        arc = (v1.getArcLength() < v2.getArcLength()) ? v1 : v2;
+//        CircularArc v1 = new CircularArc(arc.center, newStPt.p, newEndPt.p, arc.r);
+//        CircularArc v2 = new CircularArc(arc.center, newEndPt.p, newStPt.p, arc.r);
+//        arc = (v1.getArcLength() < v2.getArcLength()) ? v1 : v2;
     }
 }

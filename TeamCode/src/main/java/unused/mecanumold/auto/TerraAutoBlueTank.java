@@ -4,7 +4,6 @@ import automodules.AutoModule;
 import auton.Auto;
 import unused.tankold.TankExecutor;
 import elements.FieldSide;
-import geometry.circles.AngleType;
 import robotparts.RobotPart;
 import util.Timer;
 
@@ -31,29 +30,29 @@ public class TerraAutoBlueTank extends Auto {
     @Override
     public void runAuto() {
         TankExecutor executor = new TankExecutor();
-        executor.addSetpoint(70, 30, PI/2, AngleType.RADIANS);
+//        executor.addSetpoint(70, 30, PI/2, AngleType.RADIANS);
         executor.addUnsynchronizedRF(SpinCarousel);
         executor.addSynchronizedRF(IntakeAuto);
-        executor.addSetpoint(-50, 43, -PI/2, AngleType.RADIANS);
-        executor.addSetpoint(-65, 43, -PI/2, AngleType.RADIANS);
+//        executor.addSetpoint(-50, 43, -PI/2, AngleType.RADIANS);
+//        executor.addSetpoint(-65, 43, -PI/2, AngleType.RADIANS);
         executor.addUnsynchronizedRF(Backward);
         executor.addPause(2);
         executor.addUnsynchronizedRF(Forward);
-        executor.addSetpoint(-40, 43, -PI/2, AngleType.RADIANS);
-        executor.addSetpoint(-70, 15, -PI/2, AngleType.RADIANS);
-        executor.addSetpoint(-90, 15, -PI/2, AngleType.RADIANS);
+//        executor.addSetpoint(-40, 43, -PI/2, AngleType.RADIANS);
+//        executor.addSetpoint(-70, 15, -PI/2, AngleType.RADIANS);
+//        executor.addSetpoint(-90, 15, -PI/2, AngleType.RADIANS);
         executor.addUnsynchronizedRF(LiftOdometry);
         executor.addUnsynchronizedRF(MoveCWTime(0.5));
         executor.addUnsynchronizedRF(MoveForwardTime(2));
         executor.addUnsynchronizedRF(ResetTurretAndLift);
-
-        executor.complete();
+//
+//        executor.complete();
 
         waitForStart();
 
         ready();
         bot.tankOuttake.lockCube();
-        executor.resumeMove();
+//        executor.resumeMove();
 
         while (opModeIsActive() && !executor.finished()) {
             executor.update();

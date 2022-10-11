@@ -1,6 +1,5 @@
 package robotparts.sensors;
 
-import geometry.circles.AngleType;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IGyro;
@@ -41,9 +40,9 @@ public class GyroSensors extends RobotPart {
         return heading;
     }
 
-    public double getRightHeadingRad() { return AngleType.degToRad(getRightHeadingDeg()); }
+    public double getRightHeadingRad() { return Math.toRadians(getRightHeadingDeg()); }
     public double getLeftHeadingDeg() { return gsl.getHeading(); }
-    public double getLeftHeadingRad() { return AngleType.degToRad(getRightHeadingDeg()); }
+    public double getLeftHeadingRad() { return Math.toDegrees(getRightHeadingDeg()); }
 
     public void reset(){
         heading = 0;

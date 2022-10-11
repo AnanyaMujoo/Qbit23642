@@ -58,9 +58,9 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
         }else{
             fault.check("Use Line Generator for Pure Pursuit", Expectation.UNEXPECTED, Magnitude.CATASTROPHIC);
         }
-        Point targetPos = getTargetPos(pose.p, currentLine);
-        xController.setTarget(targetPos.x);
-        yController.setTarget(targetPos.y);
+        Point targetPos = getTargetPos(pose.getPoint(), currentLine);
+        xController.setTarget(targetPos.getX());
+        yController.setTarget(targetPos.getY());
 //        log.show("targetpos", targetPos.toString());
 //        log.show("ytarget",  yController.getTarget());
 //        log.show("yerr", yController.getError());
@@ -70,7 +70,7 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
         yController.update(pose, pathSegment);
         updateRadius(currentLine.getlength());
         Vector2 powerVector = new Vector2(xController.getOutput(), yController.getOutput());
-        powerVector.rotate(pose.ang);
+        powerVector.rotate(pose.getAngle());
         setOutputX(powerVector.getX());
         setOutputY(powerVector.getY());
     }
@@ -84,8 +84,8 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     }
 
     public double solve(Point currentPos, Line currentLine){
-        double dx = currentLine.p1.x-currentPos.x;
-        double dy = currentLine.p1.y-currentPos.y;
+        double dx = currentLine.p1.getX()-currentPos.getX();
+        double dy = currentLine.p1.getY()-currentPos.getY();
         double a = Math.pow(Trigonometry.pythag(currentLine.mx, currentLine.my),2);
         double b = 2*((dx*currentLine.mx)+(dy*currentLine.my));
         double c = Math.pow(Trigonometry.pythag(dx, dy),2)-Math.pow(currentRadius,2);

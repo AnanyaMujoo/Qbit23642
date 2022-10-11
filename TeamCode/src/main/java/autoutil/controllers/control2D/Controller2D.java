@@ -1,6 +1,7 @@
 package autoutil.controllers.control2D;
 
 import autoutil.controllers.control1D.Controller1D;
+import geometry.position.Point;
 import util.codeseg.ReturnCodeSeg;
 
 public abstract class Controller2D extends Controller1D {
@@ -16,9 +17,9 @@ public abstract class Controller2D extends Controller1D {
         this.yController = yController;
     }
 
-    public void setTarget(double[] target){
-        xController.setTarget(target[0]);
-        yController.setTarget(target[1]);
+    public void setTarget(Point point){
+        xController.setTarget(point.getX());
+        yController.setTarget(point.getY());
     }
 
     public void setProcessVariable(ReturnCodeSeg<Double> processVariableX, ReturnCodeSeg<Double> processVariableY){

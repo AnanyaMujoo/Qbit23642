@@ -40,12 +40,12 @@ public class DisplayPath extends JPanel {
 
     @Override
     public void paintComponent(Graphics g) {
-        for (PathSegment ps : pathToDisplay.segments) {
-            for (Pose p : ps.points) {
-                g.fillOval(pX(p.p.x), pY(p.p.y), 5, 5);
-                System.out.println(p.p.x + " " + p.p.y + " " + p.ang);
-            }
-        }
+//        for (PathSegment ps : pathToDisplay.segments) {
+//            for (Pose p : ps.points) {
+//                g.fillOval(pX(p.p.x), pY(p.p.y), 5, 5);
+//                System.out.println(p.p.x + " " + p.p.y + " " + p.ang);
+//            }
+//        }
     }
 
     private int pX(double x){

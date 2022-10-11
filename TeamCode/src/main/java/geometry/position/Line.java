@@ -9,7 +9,7 @@ import static java.lang.Math.*;
  */
 
 public class Line extends GeometryObject {
-    //start coords (x1,y1) end coords (x2,y2) mx is slope in x dir from 0-1 and my is the same for y
+
     public Point p1;
     public Point p2;
     public double mx;
@@ -20,14 +20,14 @@ public class Line extends GeometryObject {
         this.p1 = p1;
         this.p2 = p2;
 
-        mx = p2.x-p1.x;
-        my = p2.y-p1.y;
+        mx = p2.getX()-p1.getX();
+        my = p2.getY()-p1.getY();
 
     }
 
     //Gets the position of the line at a certain t value
     public Point getAt(double t){
-        return new Point ((p1.x)+(mx*t), (p1.y)+(my*t));
+        return new Point ((p1.getX())+(mx*t), (p1.getY())+(my*t));
     }
 
     //Gets the length of the line
@@ -35,10 +35,10 @@ public class Line extends GeometryObject {
         return sqrt(pow(mx, 2) + pow(my, 2));
     }
 
-    @Override
-    public GeometryObject getRelativeTo(Pose origin) {
-        return new Line(p1.getRelativeTo(origin), p2.getRelativeTo(origin));
-    }
+//    @Override
+//    public GeometryObject getRelativeTo(Pose origin) {
+//        return new Line(p1.getRelativeTo(origin), p2.getRelativeTo(origin));
+//    }
 
     public String toString() {
         return "Line {" +

@@ -9,8 +9,8 @@ public class PathLine extends PathPose{
     private final Line line;
 
     public PathLine(Pose start, Pose end){
-        super(end.p.x, end.p.y, end.ang);
-        line = new Line(start.p,end.p);
+        super(end.getX(), end.getY(), end.getAngle());
+        line = new Line(start.getPoint(),end.getPoint());
     }
 
     public Line getLine(){

@@ -1,15 +1,5 @@
 package display;
 
-import geometry.circles.AngleType;
-import geometry.polygons.Rect;
-import geometry.polygons.Triangle;
-import geometry.position.Line;
-import geometry.position.Point;
-import geometry.position.Pose;
-import math.Function;
-import math.calculus.Differentiator;
-import math.calculus.Integrator;
-
 public class Display extends Drawer {
     // TODO 4 NEW Create Display
 
@@ -17,7 +7,7 @@ public class Display extends Drawer {
     private static final int height = 700;
 
     public static void main(String[] args) {
-        drawWindow(width, height, "Bbox");
+//        drawWindow(width, height, "Bbox");
 
 
 //        Function f = new Function() {

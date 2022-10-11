@@ -13,7 +13,7 @@ public abstract class Reactor {
 
     public abstract void init();
     public abstract Pose getPose();
-    public abstract void setTarget(double[] target);
+    public abstract void setTarget(Pose target);
     public abstract void nextTarget();
     public abstract boolean isAtTarget();
     public abstract void moveToTarget();

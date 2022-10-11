@@ -8,7 +8,6 @@ import automodules.AutoModule;
 import auton.Auto;
 import unused.mecanumold.oldauto.Executor;
 import elements.FieldSide;
-import geometry.circles.AngleType;
 import util.codeseg.CodeSeg;
 
 /**
@@ -74,7 +73,8 @@ public abstract class CompleteAuto extends Auto {
      */
     public CodeSeg wayPoint(double x, double y, double h) {
         checkHeadingWrong(h);
-        return () -> executor.addWaypoint(x, y, h, AngleType.RADIANS);
+//        return () -> executor.addWaypoint(x, y, h, AngleType.RADIANS);
+        return () -> {};
     }
 
     /**
@@ -86,7 +86,8 @@ public abstract class CompleteAuto extends Auto {
      */
     public CodeSeg setPoint(double x, double y, double h) {
         checkHeadingWrong(h);
-        return () -> executor.addSetpoint(x, y, h, AngleType.RADIANS);
+//        return () -> executor.addSetpoint(x, y, h, AngleType.RADIANS);
+        return () -> {};
     }
 
     /**
@@ -146,7 +147,7 @@ public abstract class CompleteAuto extends Auto {
     @Override
     public void initAuto() {
         defineExecutorAndAddPoints();
-        executor.complete();
+//        executor.complete();
         onInit();
         activate(getSide());
     }
@@ -159,7 +160,7 @@ public abstract class CompleteAuto extends Auto {
     public void runAuto() {
         onStart();
 
-        executor.resumeMove();
+//        executor.resumeMove();
 
         while (opModeIsActive() && !executor.finished()) {
             executor.update();

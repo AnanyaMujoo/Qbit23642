@@ -12,10 +12,10 @@ public class Differentiator extends Operator {
         derivative = (function.f(t+step)-function.f(t-step))/(2*step);
     }
     public void differentiate(Point f1, Point f2){
-        derivative = (f2.y-f1.y)/(f2.x-f1.x);
+        derivative = (f2.getY()-f1.getY())/(f2.getX()-f1.getX());
     }
     public void differentiate(Point f1, Point f2, Point f3){
-        derivative = (f3.y-f1.y)/(f3.x-f1.x);
+        derivative = (f3.getY()-f1.getY())/(f3.getX()-f1.getX());
     }
     public double getDerivative(){return derivative;}
 }

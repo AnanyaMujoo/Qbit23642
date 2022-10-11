@@ -5,13 +5,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import auton.MecanumAuto;
 import elements.Case;
 import elements.FieldSide;
+import robot.BackgroundTask;
+
+import static global.General.bot;
 
 public class TerraAutoDuck extends MecanumAuto {
 
     @Override
     public void initAuto() {
         scan();
-        setBackgroundTasks(mecanumLift::holdPosition);
+        bot.addBackgroundTask(new BackgroundTask(mecanumLift::holdPosition));
         mecanumOuttake.midCap();
     }
 

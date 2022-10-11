@@ -14,7 +14,7 @@ public class Linear extends Polynomial{
         this.b = b;
     }
     public Linear(Point p1, Point p2){
-        super((p2.y-p1.y)/(p2.x-p1.x) , p1.y - (p1.x*(p2.y-p1.y)/(p2.x-p1.x)));
+        super((p2.getY()-p1.getY())/(p2.getX()-p1.getX()) , p1.getY() - (p1.getX()*(p2.getY()-p1.getY())/(p2.getX()-p1.getX())));
         this.m = a(0);
         this.b = a(1);
     }

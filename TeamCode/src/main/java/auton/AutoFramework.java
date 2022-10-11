@@ -39,7 +39,7 @@ public abstract class AutoFramework extends Auto{
     protected Executor executor;
 
 
-    protected Pose lastPose = Pose.zero();
+    protected Pose lastPose = new Pose();
 
     protected ArrayList<AutoSegment<? extends Reactor, ? extends Generator>> segments = new ArrayList<>();
 

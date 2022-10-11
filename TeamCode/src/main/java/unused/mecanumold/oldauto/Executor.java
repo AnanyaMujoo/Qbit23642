@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.TreeMap;
 
 import automodules.AutoModule;
-import geometry.circles.AngleType;
 import robotparts.RobotPart;
 import util.codeseg.CodeSeg;
 
@@ -41,7 +40,7 @@ public abstract class Executor extends MovementExecutor {
 
     //region CONSTRUCTORS
     public Executor() {
-        super(0, 0, PI/2, AngleType.RADIANS);
+//        super(0, 0, PI/2, AngleType.RADIANS);
         fillBoolArrs();
     }
 
@@ -62,11 +61,11 @@ public abstract class Executor extends MovementExecutor {
      * @param rf SyncedRF to add
      */
     public void addSynchronizedRF(AutoModule rf) {
-        if (!syncedSegsExist[curPath]) {
-            syncedSegsExist[curPath] = true;
-            syncedSegs.put(curPath, new LinkedList<>());
-        }
-        syncedSegs.get(curPath).add(() -> bot.addAutoModule(rf));
+//        if (!syncedSegsExist[curPath]) {
+//            syncedSegsExist[curPath] = true;
+//            syncedSegs.put(curPath, new LinkedList<>());
+//        }
+//        syncedSegs.get(curPath).add(() -> bot.addAutoModule(rf));
     }
 
     /**
@@ -75,11 +74,11 @@ public abstract class Executor extends MovementExecutor {
      * @param rf RobotFunction to execute
      */
     public void addUnsynchronizedRF(AutoModule rf) {
-        if (!unSyncedSegsExist[curPath]) {
-            unSyncedSegsExist[curPath] = true;
-            unSyncedSegs.put(curPath, new LinkedList<>());
-        }
-        unSyncedSegs.get(curPath).add(() -> bot.addAutoModule(rf));
+//        if (!unSyncedSegsExist[curPath]) {
+//            unSyncedSegsExist[curPath] = true;
+//            unSyncedSegs.put(curPath, new LinkedList<>());
+//        }
+//        unSyncedSegs.get(curPath).add(() -> bot.addAutoModule(rf));
     }
 
     /**
@@ -95,8 +94,9 @@ public abstract class Executor extends MovementExecutor {
      * @return
      */
     public boolean finished() {
-        return finishedMove() && !unSyncedSegsExist[curPath] && !syncedSegsExist[curPath]
-                && bot.rfsHandler.rfsQueue.isEmpty();
+//        return finishedMove() && !unSyncedSegsExist[curPath] && !syncedSegsExist[curPath]
+//                && bot.rfsHandler.rfsQueue.isEmpty();
+        return false;
     }
 
     /**
@@ -104,24 +104,24 @@ public abstract class Executor extends MovementExecutor {
      */
     public void update() {
         if (!runningCodeSeg) {
-            // Not doing an unsynced RF
-            if (!moveRunning) {
-                // Updating unsynced RFs
-                if (unSyncedSegsExist[curPath]) {
-                    runningCodeSeg = true;
-                    unSyncedSegs.get(curPath).poll().run();
-                    unSyncedSegsExist[curPath] = !unSyncedSegs.get(curPath).isEmpty();
-                } else if (!finishedMove()) {
-                    resumeMove();
-                }
-            } else {
-                // Updating synced RFs and movement
-                if (syncedSegsExist[curPath]) {
-                    syncedSegs.get(curPath).poll().run();
-                    syncedSegsExist[curPath] = !syncedSegs.get(curPath).isEmpty();
-                }
-                updateMovement();
-            }
+//            // Not doing an unsynced RF
+//            if (!moveRunning) {
+//                // Updating unsynced RFs
+//                if (unSyncedSegsExist[curPath]) {
+//                    runningCodeSeg = true;
+//                    unSyncedSegs.get(curPath).poll().run();
+//                    unSyncedSegsExist[curPath] = !unSyncedSegs.get(curPath).isEmpty();
+//                } else if (!finishedMove()) {
+//                    resumeMove();
+//                }
+//            } else {
+//                // Updating synced RFs and movement
+//                if (syncedSegsExist[curPath]) {
+//                    syncedSegs.get(curPath).poll().run();
+//                    syncedSegsExist[curPath] = !syncedSegs.get(curPath).isEmpty();
+//                }
+//                updateMovement();
+//            }
         } else {
             // Waiting for unsynced RF to finish
             runningCodeSeg = !bot.rfsHandler.rfsQueue.isEmpty();

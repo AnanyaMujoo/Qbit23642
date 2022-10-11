@@ -44,49 +44,52 @@ public class CircularArc extends Circle {
             }
             ret = ret2;
         }
-        if (angDis(p, ret.get(0)) > 0.5) {
-            for (Pose pose : ret) {
-                pose.ang += PI;
-            }
-        }
+//        if (angDis(p, ret.get(0)) > 0.5) {
+//            for (Pose pose : ret) {
+//                pose.ang += PI;
+//            }
+//        }
         return ret;
     }
 
     private double angDis(Pose a, Pose b) {
-        if (a.ang > PI/2 && b.ang < PI/2) {
-            return (PI - a.ang) + (PI - b.ang);
-        }
-        return abs(a.ang - b.ang);
+//        if (a.ang > PI/2 && b.ang < PI/2) {
+//            return (PI - a.ang) + (PI - b.ang);
+//        }
+//        return abs(a.ang - b.ang);
+        return 0;
     }
 
     private double dis(Pose a, Pose b) {
-        return sqrt(pow(a.p.x - b.p.x, 2) + pow(a.p.y - b.p.y, 2));
+//        return sqrt(pow(a.p.x - b.p.x, 2) + pow(a.p.y - b.p.y, 2));
+        return 0;
     }
 
     public boolean goingCW(Pose p) {
-        if (p.p.x > center.x) {
-            if (p.p.y > center.y) {
-                return p.ang == 0 || (p.ang >= 3 * PI / 2 && p.ang <= 2 * PI);
-            } else if (p.p.y < center.y) {
-                return p.ang >= PI && p.ang <= 3 * PI / 2;
-            } else {
-                return p.ang == 3 * PI / 2;
-            }
-        } else if (p.p.x < center.x) {
-            if (p.p.y > center.y) {
-                return p.ang >= 0 && p.ang <= PI / 2;
-            } else if (p.p.y < center.y) {
-                return p.ang >= PI / 2 && p.ang <= PI;
-            } else {
-                return p.ang == PI/2;
-            }
-        } else {
-            if (p.p.y > center.y) {
-                return p.ang == 0;
-            } else {
-                return p.ang == PI;
-            }
-        }
+//        if (p.p.x > center.x) {
+//            if (p.p.y > center.y) {
+//                return p.ang == 0 || (p.ang >= 3 * PI / 2 && p.ang <= 2 * PI);
+//            } else if (p.p.y < center.y) {
+//                return p.ang >= PI && p.ang <= 3 * PI / 2;
+//            } else {
+//                return p.ang == 3 * PI / 2;
+//            }
+//        } else if (p.p.x < center.x) {
+//            if (p.p.y > center.y) {
+//                return p.ang >= 0 && p.ang <= PI / 2;
+//            } else if (p.p.y < center.y) {
+//                return p.ang >= PI / 2 && p.ang <= PI;
+//            } else {
+//                return p.ang == PI/2;
+//            }
+//        } else {
+//            if (p.p.y > center.y) {
+//                return p.ang == 0;
+//            } else {
+//                return p.ang == PI;
+//            }
+//        }
+        return true;
     }
 
     public double getArcLength() {

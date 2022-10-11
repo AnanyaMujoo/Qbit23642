@@ -8,7 +8,6 @@ import automodules.stage.Stage;
 import automodules.stage.Stop;
 import unused.mecanumold.oldauto.Executor;
 import unused.mecanumold.oldauto.MecanumExecutorArcsPID;
-import geometry.circles.AngleType;
 import geometry.position.Pose;
 import global.Modes.DriveMode;
 import global.Modes.IndependentMode;
@@ -111,14 +110,14 @@ public class MecanumDrive extends RobotPart {
     public Initial setPath(Pose[][] poses) {
         return new Initial(() -> {
             executor = new MecanumExecutorArcsPID(() -> true);
-            executor.addSetpoint(bot.odometry.getCurX(), bot.odometry.getCurY(),
-                    bot.odometry.getCurThetaRad(), AngleType.RADIANS);
-            for (Pose[] p : poses) {
-                for (int i = 0; i < p.length - 1; i++) {
-                    executor.addWaypoint(p[i].p.x, p[i].p.y, p[i].ang, AngleType.RADIANS);
-                }
-                executor.addSetpoint(p[p.length - 1].p.x, p[p.length - 1].p.y, p[p.length - 1].ang, AngleType.RADIANS);
-            }
+//            executor.addSetpoint(bot.odometry.getCurX(), bot.odometry.getCurY(),
+//                    bot.odometry.getCurThetaRad(), AngleType.RADIANS);
+//            for (Pose[] p : poses) {
+//                for (int i = 0; i < p.length - 1; i++) {
+//                    executor.addWaypoint(p[i].p.x, p[i].p.y, p[i].ang, AngleType.RADIANS);
+//                }
+//                executor.addSetpoint(p[p.length - 1].p.x, p[p.length - 1].p.y, p[p.length - 1].ang, AngleType.RADIANS);
+//            }
         });
     }
 

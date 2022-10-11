@@ -14,41 +14,41 @@ public class Rect extends Quadrilateral {
     public Point ll, ur;
 
     public Rect(Point ll, Point ur){
-        double x1 = Math.min(ll.x, ur.x);
-        double x2 = Math.max(ll.x, ur.x);
-        double y1 = Math.min(ll.y, ur.y);
-        double y2 = Math.max(ll.y, ur.y);
+        double x1 = Math.min(ll.getX(), ur.getX());
+        double x2 = Math.max(ll.getX(), ur.getX());
+        double y1 = Math.min(ll.getY(), ur.getY());
+        double y2 = Math.max(ll.getY(), ur.getY());
         this.ll = new Point(x1, y1);
         this.ur = new Point(x2, y2);
     }
 
     //Gets area of rect
     public double getArea(){
-        return Math.abs((ll.x - ur.x) * (ll.y - ur.y));
+        return Math.abs((ll.getX() - ur.getX()) * (ll.getY() - ur.getY()));
     }
     //Gets different corner values where x1 is left x2 right y1 top y2 bottom
     public double getX1(){
-        return ll.x;
+        return ll.getX();
     }
     public double getX2(){
-        return ur.x;
+        return ur.getX();
     }
     public double getY1(){
-        return ll.y;
+        return ll.getY();
     }
     public double getY2(){
-        return ur.y;
+        return ur.getY();
     }
 
     //Returns a cropped version of the current rectangle
     public Rect crop(int left, int top, int right, int bottom) {
-        return new Rect(new Point(ll.x+left, ll.y+bottom),  new Point(ur.x-right, ur.y-top));
+        return new Rect(new Point(ll.getX() +left, ll.getY()+bottom),  new Point(ur.getX() -right, ur.getY()-top));
     }
 
-    @Override
-    public GeometryObject getRelativeTo(Pose origin) {
-        return super.getRelativeTo(origin);
-    }
+//    @Override
+//    public GeometryObject getRelativeTo(Pose origin) {
+//        return super.getRelativeTo(origin);
+//    }
 
     //Creates a string representation
     public String toString() {

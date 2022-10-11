@@ -54,8 +54,8 @@ public class TerraAutoBlueMec extends CompleteAuto {
                 setPoint(-90, 0, -PI/2),
                 setPoint(-100, 0, -PI/2)
             );
-            executor.complete();
-            executor.resumeMove();
+//            executor.complete();
+//            executor.resumeMove();
         }
     }
 

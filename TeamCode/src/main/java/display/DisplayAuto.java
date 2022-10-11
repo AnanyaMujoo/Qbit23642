@@ -22,7 +22,7 @@ public class DisplayAuto extends Drawer{
 //    }
 
     public static void main(String[] args) {
-        drawWindow(800,800, "DisplayAuto");
+//        drawWindow(800,800, "DisplayAuto");
 //        System.out.println(i);
     }
 }

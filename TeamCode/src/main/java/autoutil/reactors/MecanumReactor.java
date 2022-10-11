@@ -2,6 +2,7 @@ package autoutil.reactors;
 
 import autoutil.reactors.Reactor;
 import geometry.position.Pose;
+import robotparts.sensors.GyroSensors;
 
 import static global.General.bot;
 import static global.General.log;
@@ -10,9 +11,9 @@ public abstract class MecanumReactor extends Reactor {
 
     @Override
     public void init() {
-        movementController.setProcessVariable(() -> getPose().p.x, () -> getPose().p.y);
-        headingController.setProcessVariable(() -> getPose().ang);
-//        headingController.setProcessError(() -> GyroSensors.processThetaError(headingController.getRawError()));
+        movementController.setProcessVariable(() -> getPose().getX(), () -> getPose().getY());
+        headingController.setProcessVariable(() -> getPose().getAngle());
+        headingController.setProcessError(() -> GyroSensors.processThetaError(headingController.getRawError()));
         nextTarget();
     }
 
@@ -22,9 +23,9 @@ public abstract class MecanumReactor extends Reactor {
     }
 
     @Override
-    public void setTarget(double[] target) {
-        movementController.setTarget(target);
-        headingController.setTarget(target[2]);
+    public void setTarget(Pose pose) {
+        movementController.setTarget(pose.getPoint());
+        headingController.setTarget(pose.getAngle());
     }
 
     @Override

@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 
 import unused.mecanumold.oldauto.Executor;
 import unused.mecanumold.oldauto.MecanumExecutorArcsPID;
-import geometry.circles.AngleType;
 import geometry.position.Pose;
 
 /**
@@ -39,22 +38,22 @@ public class DisplayExecutor extends JPanel {
 //        executor.addSetpoint(-65, 40, -PI/2, AngleType.RADIANS);
 ////        executor.addSetpoint(-60, 40, -3 * PI/4, AngleType.RADIANS);
 //        executor.addSetpoint(-75, 35, -PI/2, AngleType.RADIANS);
-        executor.addSetpoint(70, 30, PI/2, AngleType.RADIANS);
-        executor.addSetpoint(-50, 43, -PI/2, AngleType.RADIANS);
-        executor.addSetpoint(-60, 30, PI, AngleType.RADIANS);
-        executor.addSetpoint(-90, 0, -PI/2, AngleType.RADIANS);
-        executor.complete();
+//        executor.addSetpoint(70, 30, PI/2, AngleType.RADIANS);
+//        executor.addSetpoint(-50, 43, -PI/2, AngleType.RADIANS);
+//        executor.addSetpoint(-60, 30, PI, AngleType.RADIANS);
+//        executor.addSetpoint(-90, 0, -PI/2, AngleType.RADIANS);
+//        executor.complete();
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        for (ArrayList<Pose> poses : executor.paths) {
-            for (Pose p : poses) {
-                g.fillOval(pX(p.p.x), pY(p.p.y), 5, 5);
-                System.out.println(p.p.x + " " + p.p.y + " " + p.ang);
-            }
-            System.out.println("---");
-        }
+//        for (ArrayList<Pose> poses : executor.paths) {
+//            for (Pose p : poses) {
+////                g.fillOval(pX(p.p.x), pY(p.p.y), 5, 5);
+////                System.out.println(p.p.x + " " + p.p.y + " " + p.ang);
+//            }
+//            System.out.println("---");
+//        }
         System.out.println("---");
         System.out.println("---");
     }
