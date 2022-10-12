@@ -17,16 +17,16 @@ public class Matrix2D {
     // | a b |
     // | c d |
 
-    // | tr tl |
-    // | br bl |
+    // | tl tr |
+    // | bl br |
 
     private final GeneralMatrixF matrix;
 
     public Matrix2D(
-            double tr, double tl,
-            double br, double bl
+            double tl, double tr,
+            double bl, double br
     ){
-        matrix = new GeneralMatrixF(2,2, new float[]{(float) tr, (float) tl, (float) br, (float) bl});
+        matrix = new GeneralMatrixF(2,2, new float[]{(float) tl, (float) tr, (float) bl, (float) br});
     }
 
     public Vector multiply(Vector vector){

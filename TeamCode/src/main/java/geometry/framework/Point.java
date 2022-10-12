@@ -20,9 +20,9 @@ public class Point {
     public void scale(double scale){ this.x *= scale; this.y *= scale;}
     public void scale(Point p, double scale){ applyMatrixTransformation(p, Matrix2D.getScaleMatrix(scale)); }
     public void translate(double deltaX, double deltaY) {x += deltaX; y+= deltaY;}
-    public void rotate(double angle){ set(Matrix2D.getRotationMatrix(angle).multiply(this)); }
-    public void rotate(Point p, double angle){ applyMatrixTransformation(p, Matrix2D.getRotationMatrix(angle)); }
-    private void applyMatrixTransformation(Point p, Matrix2D matrix){ Point offsetPoint = matrix.multiply(getSubtracted(p)); set(getAdded(offsetPoint)); }
+    public void rotate(double angle){ set(Matrix2D.getRotationMatrix(Math.toRadians(angle)).multiply(this)); }
+    public void rotate(Point p, double angle){ applyMatrixTransformation(p, Matrix2D.getRotationMatrix(Math.toRadians(angle))); }
+    private void applyMatrixTransformation(Point p, Matrix2D matrix){ Point offsetPoint = matrix.multiply(getSubtracted(p)); set(p.getAdded(offsetPoint)); }
     public Point getAdded(Point p){ return new Point(getX() + p.getX(), getY() + p.getY()); }
     public Point getSubtracted(Point p){ return new Point(getX() - p.getX(), getY() - p.getY()); }
     public double getDistanceTo(Point p2){ return sqrt(pow(getX()-p2.getX(), 2) + pow(getY()-p2.getY(), 2));}

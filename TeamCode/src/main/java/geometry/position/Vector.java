@@ -17,7 +17,7 @@ import static java.lang.Math.*;
 
 public class Vector extends GeometryObject {
     private final Point p;
-    private double theta;
+    private double theta; // Always in radians (effectively final)
 
     public Vector(double x, double y){
         p = new Point(x, y); setTheta();
@@ -35,7 +35,7 @@ public class Vector extends GeometryObject {
         return p.getDistanceToOrigin();
     }
     public double getTheta() { return Math.toDegrees(theta); }
-    private void setTheta(){ theta = atan2(getY(), getX());}
+    private void setTheta(){ theta = atan2(getY(), getX()); }
 
     public Vector getCopy(){
         return new Vector(getX(), getY());

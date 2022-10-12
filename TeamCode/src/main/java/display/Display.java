@@ -1,5 +1,8 @@
 package display;
 
+import geometry.framework.Point;
+import geometry.position.Vector;
+
 public class Display extends Drawer {
     // TODO 4 NEW Create Display
 
@@ -7,6 +10,12 @@ public class Display extends Drawer {
     private static final int height = 700;
 
     public static void main(String[] args) {
+
+//        Point p = new Point(1,2);
+//        p.rotate(new Point(), 90);
+//        System.out.println(p);
+//        Vector v = new Vector(1,2);
+//        System.out.println(v.getRotated(90));
 //        drawWindow(width, height, "Bbox");
 
 

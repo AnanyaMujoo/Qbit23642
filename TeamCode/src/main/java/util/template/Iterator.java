@@ -126,6 +126,16 @@ public interface Iterator {
         }
         return false;
     }
+    @SuppressWarnings("unchecked")
+    static <T> ArrayList<T> forAllOfType(ArrayList<? super T> list, Class<T> type){
+        ArrayList<T> out = new ArrayList<>();
+        for(Object obj: list){
+            if(obj.getClass().equals(type)){
+                out.add((T) obj);
+            }
+        }
+        return out;
+    }
 
 
     static double forAllAverage(ArrayList<Double> list){
