@@ -1,19 +1,15 @@
 package display;
 
 
-import static java.lang.Math.PI;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import unused.mecanumold.oldauto.Executor;
 import unused.mecanumold.oldauto.MecanumExecutorArcsPID;
-import geometry.position.Pose;
 
 /**
  * NOTE: Uncommented

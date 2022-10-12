@@ -1,6 +1,6 @@
 package robotparts.sensors.odometry;
 
-import geometry.position.Vector2;
+import geometry.position.Vector;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
 import unused.tankold.TankOdometry;
@@ -21,14 +21,14 @@ public class TwoOdometry extends TankOdometry {
     private volatile double lastHorizontalEncoderPos;
     private volatile double lastVerticalEncoderPos;
 
-    private volatile Vector2 positionOdometryCenter = new Vector2(0,0);
-    private volatile Vector2 positionRobotCenter = new Vector2(0,0);
-    private volatile Vector2 localOdometryCenterOffset;
+    private volatile Vector positionOdometryCenter = new Vector(0,0);
+    private volatile Vector positionRobotCenter = new Vector(0,0);
+    private volatile Vector localOdometryCenterOffset;
     private volatile double heading = 0;
 
     public TwoOdometry() {
         super(0.0);
-        localOdometryCenterOffset = new Vector2(0.0, 12.6);
+        localOdometryCenterOffset = new Vector(0.0, 12.6);
     }
 
     public synchronized void reset(){
@@ -37,9 +37,9 @@ public class TwoOdometry extends TankOdometry {
     }
 
     public synchronized void resetOnce(){
-        positionOdometryCenter = new Vector2(0,0);
-        positionRobotCenter = new Vector2(0,0);
-        localOdometryCenterOffset = new Vector2(0.0, 12.6);
+        positionOdometryCenter = new Vector(0,0);
+        positionRobotCenter = new Vector(0,0);
+        localOdometryCenterOffset = new Vector(0.0, 12.6);
         horizontalEncoder.reset();
         verticalEncoder.reset();
         startHorz = getHorizontalEncoderPositionRaw();
@@ -100,11 +100,11 @@ public class TwoOdometry extends TankOdometry {
     }
 
     public void updatePosition(){
-        Vector2 localDelta = new Vector2(getLocalHorizontalDelta(), getLocalVerticalDelta());
-        Vector2 globalDelta = localDelta.getRotated(-heading);
+        Vector localDelta = new Vector(getLocalHorizontalDelta(), getLocalVerticalDelta());
+        Vector globalDelta = localDelta.getRotated(-heading);
         positionOdometryCenter.add(globalDelta);
-        Vector2 globalOdometryCenterOffset = localOdometryCenterOffset.getRotated(heading);
-        positionRobotCenter = positionOdometryCenter.getAdded(globalOdometryCenterOffset).getAdded(localOdometryCenterOffset.getNegative());
+        Vector globalOdometryCenterOffset = localOdometryCenterOffset.getRotated(heading);
+        positionRobotCenter = positionOdometryCenter.getAdded(globalOdometryCenterOffset.getSubtracted(localOdometryCenterOffset));
     }
 
     public void update(){

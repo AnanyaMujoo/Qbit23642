@@ -1,7 +1,6 @@
 package autoutil.paths;
 
 import geometry.position.Line;
-import geometry.position.Point;
 import geometry.position.Pose;
 
 public class PathLine extends PathPose{

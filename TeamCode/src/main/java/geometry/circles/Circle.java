@@ -1,7 +1,7 @@
 package geometry.circles;
 
-import geometry.GeometryObject;
-import geometry.position.Point;
+import geometry.framework.GeometryObject;
+import geometry.framework.Point;
 import geometry.position.Pose;
 
 import static java.lang.Math.*;

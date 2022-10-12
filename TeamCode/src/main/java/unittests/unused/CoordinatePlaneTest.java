@@ -1,13 +1,7 @@
 package unittests.unused;
 
-import geometry.*;
-import geometry.position.Line;
-import geometry.position.Point;
-import geometry.position.Pose;
-import geometry.position.Vector;
+import geometry.framework.CoordinatePlane;
 import unittests.tele.TeleUnitTest;
-
-import static global.General.*;
 
 /**
  * NOTE: Uncommented

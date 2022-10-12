@@ -10,8 +10,6 @@ import javax.swing.JPanel;
 
 import unused.mecanumold.oldauto.ArcGenerator;
 import unused.mecanumold.oldauto.FinalPathArc;
-import unused.mecanumold.oldauto.PathSegment;
-import geometry.position.Pose;
 
 /**
  * NOTE: Uncommented

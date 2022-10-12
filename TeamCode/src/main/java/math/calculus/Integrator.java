@@ -1,9 +1,7 @@
 package math.calculus;
 
-import geometry.position.Point;
-import math.Function;
+import geometry.framework.Point;
 import math.Operator;
-import util.codeseg.ReturnCodeSeg;
 
 public class Integrator extends Operator {
     private double integral;

@@ -2,7 +2,6 @@ package unused.mecanumold.oldauto;
 
 import java.util.ArrayList;
 
-import geometry.position.Point;
 import geometry.position.Pose;
 
 @Deprecated

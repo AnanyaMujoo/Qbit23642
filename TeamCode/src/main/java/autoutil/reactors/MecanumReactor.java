@@ -1,6 +1,5 @@
 package autoutil.reactors;
 
-import autoutil.reactors.Reactor;
 import geometry.position.Pose;
 import robotparts.sensors.GyroSensors;
 

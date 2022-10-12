@@ -1,23 +1,6 @@
 package display;
 
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import geometry.position.Line;
-import geometry.position.Point;
-import geometry.position.Pose;
-import geometry.position.Vector;
 
 public class Drawer extends JPanel {
 //    protected Graphics2D g;

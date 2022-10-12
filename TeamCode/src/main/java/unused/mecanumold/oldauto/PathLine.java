@@ -1,7 +1,7 @@
 package unused.mecanumold.oldauto;
 
 import geometry.position.Line;
-import geometry.position.Point;
+import geometry.framework.Point;
 import geometry.position.Pose;
 import global.Constants;
 
@@ -17,11 +17,11 @@ public class PathLine extends PathSegment{
     @Override
     public void generatePoints(Pose pose) {
         for (double a = 0; a <= 1; a += Constants.LINE_ACC_PATH) {
-            if (Math.abs(Math.atan2(line.my, line.mx) - pose.getAngle()) < Math.PI/4) {
-                points.add(new Pose(getAt(a), Math.atan2(line.my, line.mx)));
-            } else {
-                points.add(new Pose(getAt(a), Math.atan2(-line.my, -line.mx)));
-            }
+//            if (Math.abs(Math.atan2(line.my, line.mx) - pose.getAngle()) < Math.PI/4) {
+//                points.add(new Pose(getAt(a), Math.atan2(line.my, line.mx)));
+//            } else {
+//                points.add(new Pose(getAt(a), Math.atan2(-line.my, -line.mx)));
+//            }
         }
     }
 

@@ -1,5 +1,5 @@
 package math.polynomial;
-import geometry.position.Point;
+import geometry.framework.Point;
 
 /**
  * NOTE: Uncommented

@@ -1,11 +1,5 @@
 package display;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
-import geometry.position.Line;
-import geometry.position.Point;
-
 public class DisplayAuto extends Drawer{
 //    static int i = 0;
 //    @Override

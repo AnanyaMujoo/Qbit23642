@@ -1,13 +1,7 @@
 package unused.mecanumold.oldauto;
 
-import static global.General.bot;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import autoutil.executors.MecanumExecutor;
-import autoutil.generators.PoseGenerator;
-import autoutil.reactors.MecanumPIDReactor;
-import geometry.position.Pose;
 import util.codeseg.ReturnCodeSeg;
 
 @Deprecated

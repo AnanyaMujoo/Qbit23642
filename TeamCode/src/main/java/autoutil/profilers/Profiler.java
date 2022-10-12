@@ -1,11 +1,8 @@
 package autoutil.profilers;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 
-import geometry.position.Point;
-import math.Function;
+import geometry.framework.Point;
 import math.calculus.Differentiator;
 import math.calculus.Integrator;
 import util.Timer;

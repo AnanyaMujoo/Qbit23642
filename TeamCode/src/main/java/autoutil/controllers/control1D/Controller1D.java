@@ -3,7 +3,7 @@ package autoutil.controllers.control1D;
 import autoutil.paths.PathPose;
 import autoutil.paths.PathSegment;
 import autoutil.profilers.Profiler;
-import geometry.position.Point;
+import geometry.framework.Point;
 import geometry.position.Pose;
 import util.codeseg.ReturnCodeSeg;
 

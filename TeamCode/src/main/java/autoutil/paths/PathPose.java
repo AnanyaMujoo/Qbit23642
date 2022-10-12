@@ -1,6 +1,6 @@
 package autoutil.paths;
 
-import geometry.position.Point;
+import geometry.framework.Point;
 import geometry.position.Pose;
 
 public class PathPose extends PathSegment {

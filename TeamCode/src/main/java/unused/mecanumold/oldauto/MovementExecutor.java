@@ -1,13 +1,5 @@
 package unused.mecanumold.oldauto;
 
-import java.util.*;
-
-import geometry.position.Pose;
-import unused.tankold.TankReactor;
-
-import static global.General.*;
-import static java.lang.Math.*;
-
 /**
  * Handles all arc-movement
  */

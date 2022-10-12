@@ -4,8 +4,8 @@ package geometry.polygons;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import geometry.GeometryObject;
-import geometry.position.Point;
+import geometry.framework.GeometryObject;
+import geometry.framework.Point;
 
 /**
  * NOTE: Uncommented

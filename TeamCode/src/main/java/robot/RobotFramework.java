@@ -3,7 +3,7 @@ package robot;
 import java.util.ArrayList;
 
 import automodules.AutoModule;
-import geometry.CoordinatePlane;
+import geometry.framework.CoordinatePlane;
 import global.Constants;
 import robotparts.RobotPart;
 import robotparts.electronics.input.IEncoder;

@@ -2,7 +2,6 @@ package autoutil.paths;
 
 import java.util.ArrayList;
 
-import geometry.position.Point;
 import geometry.position.Pose;
 
 public abstract class PathSegment {

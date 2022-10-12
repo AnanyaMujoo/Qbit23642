@@ -2,7 +2,7 @@ package unused.mecanumold.oldauto;
 
 import geometry.circles.Circle;
 import geometry.circles.CircularArc;
-import geometry.position.Point;
+import geometry.framework.Point;
 import geometry.position.Pose;
 import global.Constants;
 

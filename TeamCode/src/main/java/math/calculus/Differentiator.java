@@ -1,9 +1,7 @@
 package math.calculus;
 
-import geometry.position.Point;
-import math.Function;
+import geometry.framework.Point;
 import math.Operator;
-import util.codeseg.ReturnCodeSeg;
 
 // TODO 4 NEW Finish math classes
 public class Differentiator extends Operator {

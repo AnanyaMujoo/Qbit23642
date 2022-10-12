@@ -4,9 +4,9 @@ import autoutil.controllers.control1D.PID;
 import autoutil.paths.PathLine;
 import autoutil.paths.PathSegment;
 import geometry.position.Line;
-import geometry.position.Point;
+import geometry.framework.Point;
 import geometry.position.Pose;
-import geometry.position.Vector2;
+import geometry.position.Vector;
 import math.misc.Exponential;
 import math.polynomial.Quadratic;
 import math.trigonmetry.Trigonometry;
@@ -65,11 +65,11 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
 //        log.show("ytarget",  yController.getTarget());
 //        log.show("yerr", yController.getError());
         log.show("Current raduis", currentRadius);
-        log.show("Current length", currentLine.getlength());
+        log.show("Current length", currentLine.getLength());
         xController.update(pose, pathSegment);
         yController.update(pose, pathSegment);
-        updateRadius(currentLine.getlength());
-        Vector2 powerVector = new Vector2(xController.getOutput(), yController.getOutput());
+        updateRadius(currentLine.getLength());
+        Vector powerVector = new Vector(xController.getOutput(), yController.getOutput());
         powerVector.rotate(pose.getAngle());
         setOutputX(powerVector.getX());
         setOutputY(powerVector.getY());
@@ -84,10 +84,10 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     }
 
     public double solve(Point currentPos, Line currentLine){
-        double dx = currentLine.p1.getX()-currentPos.getX();
-        double dy = currentLine.p1.getY()-currentPos.getY();
-        double a = Math.pow(Trigonometry.pythag(currentLine.mx, currentLine.my),2);
-        double b = 2*((dx*currentLine.mx)+(dy*currentLine.my));
+        double dx = currentLine.getStartPoint().getX()-currentPos.getX();
+        double dy = currentLine.getStartPoint().getY()-currentPos.getY();
+        double a = Math.pow(Trigonometry.pythag(currentLine.getSlopeX(), currentLine.getSlopeY()),2);
+        double b = 2*((dx*currentLine.getSlopeX())+(dy*currentLine.getSlopeY()));
         double c = Math.pow(Trigonometry.pythag(dx, dy),2)-Math.pow(currentRadius,2);
         Quadratic quadratic = new Quadratic(a, b, c);
         double ans = quadratic.roots()[0];

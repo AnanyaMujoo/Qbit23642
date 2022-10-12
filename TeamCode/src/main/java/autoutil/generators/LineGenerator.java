@@ -1,7 +1,7 @@
 package autoutil.generators;
 
 import autoutil.paths.PathLine;
-import geometry.position.Point;
+import geometry.framework.Point;
 import geometry.position.Pose;
 
 public class LineGenerator extends Generator{

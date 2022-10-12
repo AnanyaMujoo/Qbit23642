@@ -2,7 +2,6 @@ package autoutil.controllers.control1D;
 
 import autoutil.paths.PathSegment;
 import geometry.position.Pose;
-import util.Timer;
 
 public class PAR extends Controller1D{
 

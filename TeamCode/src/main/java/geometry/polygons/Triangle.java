@@ -1,7 +1,7 @@
 package geometry.polygons;
 import java.util.Arrays;
 
-import geometry.position.Point;
+import geometry.framework.Point;
 public class Triangle extends Polygon {
     //defining the input points
     Point p1;

@@ -1,8 +1,7 @@
 package geometry.position;
 
-import geometry.GeometryObject;
-
-import static java.lang.Math.*;
+import geometry.framework.GeometryObject;
+import geometry.framework.Point;
 
 /**
  * NOTE: Uncommented
@@ -10,40 +9,32 @@ import static java.lang.Math.*;
 
 public class Line extends GeometryObject {
 
-    public Point p1;
-    public Point p2;
-    public double mx;
-    public double my;
+    private final Point ps;
+    private final Point pe;
+    private final double mx;
+    private final double my;
 
-    //Define line using endpoints
-    public Line(Point p1, Point p2){
-        this.p1 = p1;
-        this.p2 = p2;
-
-        mx = p2.getX()-p1.getX();
-        my = p2.getY()-p1.getY();
-
+    public Line(Point ps, Point pe){
+        this.ps = ps; this.pe = pe; mx = pe.getX()-ps.getX(); my = pe.getY()-ps.getY();
+        addPoints(ps, pe);
     }
 
-    //Gets the position of the line at a certain t value
+    public Point getStartPoint(){ return ps; }
+    public Point getEndPoint(){ return pe; }
+
     public Point getAt(double t){
-        return new Point ((p1.getX())+(mx*t), (p1.getY())+(my*t));
+        return new Point ((ps.getX())+(mx*t), (ps.getY())+(my*t));
     }
 
-    //Gets the length of the line
-    public double getlength(){
-        return sqrt(pow(mx, 2) + pow(my, 2));
-    }
+    public double getSlopeX(){ return mx; }
+    public double getSlopeY() {return my; }
 
-//    @Override
-//    public GeometryObject getRelativeTo(Pose origin) {
-//        return new Line(p1.getRelativeTo(origin), p2.getRelativeTo(origin));
-//    }
+    public double getLength(){ return ps.getDistanceTo(pe); }
 
     public String toString() {
         return "Line {" +
-                " p1: " + p1 +
-                ", p2: " + p2 +
+                " ps: " + ps +
+                ", pe: " + pe +
                 ", mx: " + mx +
                 ", my: " + my +
                 '}';

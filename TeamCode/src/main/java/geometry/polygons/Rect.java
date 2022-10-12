@@ -1,8 +1,6 @@
 package geometry.polygons;
 
-import geometry.GeometryObject;
-import geometry.position.Point;
-import geometry.position.Pose;
+import geometry.framework.Point;
 
 /**
  * NOTE: Uncommented

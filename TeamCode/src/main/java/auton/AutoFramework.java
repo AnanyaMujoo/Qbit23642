@@ -13,17 +13,14 @@ import autoutil.reactors.MecanumPIDReactor;
 import autoutil.vision.CaseScanner;
 import elements.Case;
 import elements.FieldSide;
-import geometry.position.Point;
+import geometry.framework.Point;
 import geometry.position.Pose;
-import robot.RobotFramework;
 import robotparts.RobotPart;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
 import util.condition.DecisionList;
 
-import static global.General.bot;
 import static global.General.log;
-import static global.General.mainUser;
 
 public abstract class AutoFramework extends Auto{
     // TODO 4 NEW Make AutoFramework better/clean up

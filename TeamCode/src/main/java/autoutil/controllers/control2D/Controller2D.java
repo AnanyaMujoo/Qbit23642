@@ -1,7 +1,7 @@
 package autoutil.controllers.control2D;
 
 import autoutil.controllers.control1D.Controller1D;
-import geometry.position.Point;
+import geometry.framework.Point;
 import util.codeseg.ReturnCodeSeg;
 
 public abstract class Controller2D extends Controller1D {

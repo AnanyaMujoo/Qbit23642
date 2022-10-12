@@ -2,7 +2,7 @@ package geometry.circles;
 
 import java.util.ArrayList;
 
-import geometry.position.Point;
+import geometry.framework.Point;
 import geometry.position.Pose;
 
 import static java.lang.Math.*;
