@@ -18,11 +18,18 @@ public class PARTest extends AutoUnitTest {
 
 
     @Override
-    protected Drive getTestPart() {
-        return drive;
+    protected MecanumDrive getTestPart() {
+        return mecanumDrive;
     }
 
-    PAR testPAR = new PAR(0.05, 0.5, 0.1);
+    PAR testPAR;
+
+    @Override
+    protected void start() {
+        // 0.005, 0.5, 0.00
+        odometry.reset();
+        testPAR = new PAR(0.003, 0.45, 0.08);
+    }
 
     @Override
     protected void run() {
@@ -30,6 +37,7 @@ public class PARTest extends AutoUnitTest {
 
         testPAR.setProcessVariable(() -> bot.odometry.getCurY());
         testPAR.setTarget(20);
+        testPAR.setAccuracy(0.5);
 
         log.show("Target (20)", testPAR.getTarget());
 

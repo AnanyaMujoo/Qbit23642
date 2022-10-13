@@ -6,6 +6,7 @@ import geometry.position.Pose;
 public class PAR extends Controller1D{
 
     // TODO 4 CHECK Works?
+    // TODO 4 FIX Make error stopping general smt
 
     //Using x(t) we can calculate v(x)
     //1. First calculate v(t) which is d/dt(x(t))
@@ -14,10 +15,12 @@ public class PAR extends Controller1D{
 
     //Rest pow
     public double restPow = 0;
-    //Approach rate [0,1] lower means stops farther away
+    //Approach rate [0,1] higher means stops farther away
     public double approachRate = 0;
     //Proportional coeff
     public double proportionalCoeff = 0;
+
+
 
     public PAR(double proportionalCoeff, double approachRate, double restPow){
         this.proportionalCoeff = proportionalCoeff;
@@ -37,6 +40,8 @@ public class PAR extends Controller1D{
     protected void updateController(Pose pose, PathSegment pathSegment) {
         if(!isWithinAccuracyRange()){
             setOutput((proportionalCoeff * (VofS() - processVariableProfiler.getDerivative())) + Math.signum(getError())*restPow);
+        }else {
+            isAtTarget = true;
         }
     }
 }

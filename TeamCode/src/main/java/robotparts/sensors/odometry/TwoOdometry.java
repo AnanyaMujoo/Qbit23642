@@ -96,7 +96,7 @@ public class TwoOdometry extends TankOdometry {
     }
 
     private void updateHeading(){
-        heading = gyro.getRightHeadingRad();
+        heading = gyro.getRightHeadingDeg();
     }
 
     public void updatePosition(){

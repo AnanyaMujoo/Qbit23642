@@ -13,6 +13,11 @@ public class OdometryTest extends TeleUnitTest {
 
 
     @Override
+    public void init() {
+        odometry.reset();
+    }
+
+    @Override
     protected void loop() {
         bot.mecanumDrive.moveSmooth(-gamepad1.right_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_x);
         log.show("Raw Horizontal Odometry Position", bot.odometry.getHorizontalEncoderPosition());

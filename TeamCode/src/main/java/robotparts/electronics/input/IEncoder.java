@@ -59,6 +59,8 @@ public class IEncoder extends Electronic {
         resetPrecisionTimers();
         if(encoderType.equals(EncoderType.PMOTOR)) {
             bot.addBackgroundTask(new BackgroundTask(this::updatePMotor));
+        }else if(encoderType.equals(EncoderType.NORMAL)){
+            bot.addBackgroundTask(new BackgroundTask(this::updateNormal));
         }
         profiler = new Profiler(this::getAngularVelocity);
     }
@@ -74,6 +76,8 @@ public class IEncoder extends Electronic {
     private void updateCMotor(){ current = motor.getCurrent(CurrentUnit.AMPS); }
 
     private void updatePMotor(){ position = motor.getCurrentPosition(); angularVelocity = motor.getVelocity(AngleUnit.RADIANS); current = motor.getCurrent(CurrentUnit.AMPS); profiler.update(); }
+
+    private void updateNormal(){ position = motor.getCurrentPosition(); angularVelocity = motor.getVelocity(AngleUnit.RADIANS); }
 
     public double getPos() { return position; }
 

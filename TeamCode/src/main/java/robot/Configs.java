@@ -28,8 +28,8 @@ public class Configs implements RobotUser{
      * Current Config
      */
     public void setCurrentConfig(){
-        setConfig(PowerPlay);
-//        setConfig(MecanumConfig);
+//        setConfig(PowerPlay);
+        setConfig(MecanumConfig);
     }
 
 }
