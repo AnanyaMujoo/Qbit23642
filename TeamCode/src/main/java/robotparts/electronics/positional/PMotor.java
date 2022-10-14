@@ -62,7 +62,7 @@ public class PMotor extends Electronic {
     }
 
 
-    public void setRestPower(double restPower){ positionHolder.setRestPower(restPower); }
+    public void setRestPower(double restPower){ positionHolder.setRestOutput(restPower); }
 
     public void holdPosition(){ positionHolder.activate(); move(0); }
 

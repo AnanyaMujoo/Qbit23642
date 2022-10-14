@@ -19,23 +19,28 @@ public class PositionHolder extends Controller1D {
         this.restPower = restPower; this.deltaPowerUp = 0.004; this.deltaPowerDown = -0.004; this.velocityThreshold = Math.toRadians(10);
     }
 
-    public void setRestPower(double restPower){
-        this.restPower = restPower;
-    }
-
     public void deactivate(){ isUsed = false; }
-
     public void activate(){ isUsed = true; }
 
     @Override
+    protected double setDefaultAccuracy() { return 0; }
+
+    @Override
+    protected double setDefaultMinimumTimeReachedTarget() { return 1; }
+
+    @Override
+    protected double setDefaultRestOutput() { return restPower; }
+
+    @Override
     protected void updateController(Pose pose, PathSegment pathSegment) {
-        if(isUsed) {
-            if (Math.abs(getCurrentValue()) > velocityThreshold) {
-                restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
-            }
-            setOutput(restPower);
-        }else{
-            setOutput(0);
+        if(isUsed && Math.abs(getCurrentValue()) > velocityThreshold) {
+            restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
         }
     }
+
+    @Override
+    protected double setOutput() { return isUsed ? restPower : 0; }
+
+    @Override
+    protected boolean hasReachedTarget() { return false; }
 }

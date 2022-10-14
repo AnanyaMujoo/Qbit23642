@@ -11,8 +11,6 @@ import util.template.Iterator;
  * NOTE: Uncommented
  */
 
-// TODO 4 NEW Geometry package
-
 public abstract class GeometryObject {
 
     protected Point anchorPoint = new Point();

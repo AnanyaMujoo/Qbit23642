@@ -5,106 +5,64 @@ import autoutil.paths.PathSegment;
 import autoutil.profilers.Profiler;
 import geometry.framework.Point;
 import geometry.position.Pose;
+import global.Constants;
 import util.codeseg.ReturnCodeSeg;
+import util.template.Precision;
 
-public abstract class Controller1D {
-
-    protected ReturnCodeSeg<Double> processVariable;
-    protected ReturnCodeSeg<Double> processError = this::getRawError;
+public abstract class Controller1D implements Precision {
+    private ReturnCodeSeg<Double> processVariable;
+    private ReturnCodeSeg<Double> processError = this::getRawError;
     protected Profiler processVariableProfiler = new Profiler(this::getCurrentValue);
     protected Profiler errorProfiler = new Profiler(this::getError);
 
     private double output = 0;
-    protected boolean isAtTarget = false;
+    private boolean isAtTarget = false;
 
-    protected double currentValue = 0;
-    protected double  targetValue = 0;
-    protected double currentTime = 0;
+    private double currentValue = 0;
+    private double  targetValue = 0;
 
-    protected double accuracy = 0;
+    private double restOutput = setDefaultRestOutput();
+    private double minimumTime = setDefaultMinimumTimeReachedTarget();
+    private double accuracy = setDefaultAccuracy();
 
+    protected abstract double setDefaultAccuracy();
+    protected abstract double setDefaultMinimumTimeReachedTarget();
+    protected abstract double setDefaultRestOutput();
+    protected abstract void updateController(Pose pose, PathSegment pathSegment);
+    protected abstract double setOutput();
+    protected abstract boolean hasReachedTarget();
 
     public void setAccuracy(double accuracy){
         this.accuracy = accuracy;
     }
-
-    public boolean isWithinAccuracyRange(){
-        return (Math.abs(getError()) < accuracy);
-    }
-
-    protected abstract void updateController(Pose pose, PathSegment pathSegment);
-
+    public void setMinimumTime(double minimumTime){ this.minimumTime = minimumTime; }
+    public void setRestOutput(double restOutput){ this.restOutput = restOutput; }
+    public boolean isWithinAccuracyRange(){ return (Math.abs(getError()) < accuracy); }
+    private double getRestOutput(){ return !isWithinAccuracyRange() ? Math.signum(getError()) * restOutput : 0;}
     public final void update(Pose pose, PathSegment pathSegment){
-        updateProfilers();
-        updateController(pose, pathSegment);
-    }
-
-    public final void update(){
-        updateProfilers();
-        update(new Pose(new Point(0,0),0), new PathPose(0,0,0));
-    }
-
-    public void updateProcessVariable(){
         currentValue = processVariable.run();
-    }
-
-    public void updateProfilers(){
-        updateProcessVariable();
         processVariableProfiler.update();
         errorProfiler.update();
+        updateController(pose, pathSegment);
+        isAtTarget = isInputTrueForTime(isWithinAccuracyRange()&&hasReachedTarget(), minimumTime);
+        output = setOutput() + getRestOutput();
     }
-
-    public double getCurrentValue(){
+    public final void update(){ update(new Pose(new Point(0,0),0), new PathPose(0,0,0)); }
+    protected double getCurrentValue(){
         return currentValue;
     }
-
     public double getOutput(){
         return output;
     }
-
-    public void setOutput(double output){this.output = output;}
-
-    public void setTarget(double targetValue){
-        this.targetValue = targetValue;
-    }
-
-    public double getTarget(){
-        return targetValue;
-    }
-
-    public double getRawError(){
-        return targetValue-currentValue;
-    }
-
-    public double getError(){
-        return processError.run();
-    }
-
-
-    public void setProcessVariable(ReturnCodeSeg<Double> processVariable){
-        this.processVariable = processVariable;
-    }
-
-    public void setProcessError(ReturnCodeSeg<Double> processError){
-        this.processError = processError;
-    }
-
-
-    public boolean isAtTarget(){ return isAtTarget;}
-
-    public void reset(){
-        targetValue = 0;
-        errorProfiler.reset();
-        processVariableProfiler.reset();
-        isAtTarget = false;
-    }
-
-
-    public double[] getErrorState(){
-        return new double[]{getError(), errorProfiler.getIntegral(), errorProfiler.getDerivative()};
-    }
-
-    public double[] getProcessVariableState(){
-        return new double[]{currentValue, processVariableProfiler.getIntegral(), processVariableProfiler.getDerivative()};
-    }
+    public void setTarget(double targetValue){ this.targetValue = targetValue; }
+    public double getTarget(){ return targetValue; }
+    public double getRawError(){ return targetValue-currentValue; }
+    public double getError(){ return processError.run(); }
+    public void setProcessVariable(ReturnCodeSeg<Double> processVariable){ this.processVariable = processVariable; }
+    public void setProcessError(ReturnCodeSeg<Double> processError){ this.processError = processError; }
+    public boolean maxDerivativeTarget(double maxDerivative){ return (processVariableProfiler.getDerivative() < maxDerivative); }
+    public boolean isAtTarget(){ return isAtTarget; }
+    public void reset(){ targetValue = 0; errorProfiler.reset(); processVariableProfiler.reset(); isAtTarget = false; }
+    public double[] getErrorState(){ return new double[]{getError(), errorProfiler.getIntegral(), errorProfiler.getDerivative()}; }
+    public double[] getProcessVariableState(){ return new double[]{currentValue, processVariableProfiler.getIntegral(), processVariableProfiler.getDerivative()}; }
 }

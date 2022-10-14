@@ -22,7 +22,7 @@ public class PIDTest extends AutoUnitTest {
     /**
      * PID object to test
      */
-    PID testPID = new PID(PID.PIDParameterType.DEFAULT_ALL, .05,0.005,0.005, 0.2, 0.05, 50.0, 5.0);
+    PID testPID = new PID(PID.PIDParameterType.DEFAULT_ALL, .05,0.005,0.005, 10.0, 5.0);
 
     @Override
     protected void run() {
@@ -30,9 +30,6 @@ public class PIDTest extends AutoUnitTest {
 
         testPID.setProcessVariable(() -> bot.odometry.getCurY());
         testPID.setTarget(20);
-        testPID.setMinimumOutput(0.05);
-        testPID.setMaximumTime(0.05);
-        testPID.setMaximumDerivative(10);
 
         log.show("Target (20)", testPID.getTarget());
 

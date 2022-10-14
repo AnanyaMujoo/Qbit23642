@@ -13,20 +13,15 @@ import static global.General.log;
 
 public class PARTest extends AutoUnitTest {
 
-    // TODO 4 TEST (Change coeffs)
-    // Check odometry
-
+    private PAR testPAR;
 
     @Override
     protected MecanumDrive getTestPart() {
         return mecanumDrive;
     }
 
-    PAR testPAR;
-
     @Override
     protected void start() {
-        // 0.005, 0.5, 0.00
         odometry.reset();
         testPAR = new PAR(0.003, 0.45, 0.08);
     }
@@ -37,7 +32,6 @@ public class PARTest extends AutoUnitTest {
 
         testPAR.setProcessVariable(() -> bot.odometry.getCurY());
         testPAR.setTarget(20);
-        testPAR.setAccuracy(0.5);
 
         log.show("Target (20)", testPAR.getTarget());
 

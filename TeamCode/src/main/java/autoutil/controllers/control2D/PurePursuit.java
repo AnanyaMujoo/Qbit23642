@@ -23,6 +23,7 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     private double kx;
     private double ky;
     private double radiusK;
+    private double t = 0;
 
     private final Exponential radiusLogistic;
 
@@ -75,6 +76,11 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
         setOutputY(powerVector.getY());
     }
 
+    @Override
+    protected double setOutput() {
+        return 0;
+    }
+
     public void updateRadius(double dis){
         currentRadius = maxRadius*radiusLogistic.f(dis);
     }
@@ -90,17 +96,14 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
         double b = 2*((dx*currentLine.getSlopeX())+(dy*currentLine.getSlopeY()));
         double c = Math.pow(Trigonometry.pythag(dx, dy),2)-Math.pow(currentRadius,2);
         Quadratic quadratic = new Quadratic(a, b, c);
-        double ans = quadratic.roots()[0];
-        if(!Double.isNaN(ans)) {
-            if(ans > 0.99){
-                isAtTarget = true;
-                return 1;
-            }else {
-                return ans;
-            }
-        }else{
-            return 1;
-        }
+        t = quadratic.roots()[0];
+        if(Double.isNaN(t)) { t = 1; }
+        return t;
+    }
+
+    @Override
+    protected boolean hasReachedTarget() {
+        return t > 0.99;
     }
 
     public enum PurePursuitParameterType implements ParameterType {

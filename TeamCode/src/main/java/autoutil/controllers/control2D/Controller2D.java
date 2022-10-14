@@ -49,4 +49,17 @@ public abstract class Controller2D extends Controller1D {
         return yOutput;
     }
 
+
+    @Override
+    protected double setDefaultMinimumTimeReachedTarget() { return 0; }
+
+    @Override
+    protected double setDefaultAccuracy() { return 0; }
+
+    @Override
+    protected double setDefaultRestOutput() { return 0; }
+
+    @Override
+    protected double setOutput() { return 0; }
+
 }

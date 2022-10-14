@@ -45,7 +45,7 @@ public class AutoUnitTester extends Auto implements UnitTester {
          */
 //        Works as of 4.2.5
 //        add(new MoveTimeTest());
-//        add(new PIDTest());
+        add(new PIDTest()); // TODO TEST
         add(new PARTest());
 
 //        Works????

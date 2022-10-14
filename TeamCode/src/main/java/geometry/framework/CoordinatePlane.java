@@ -21,7 +21,6 @@ public class CoordinatePlane {
     public static final Point origin = new Point();
 
     // TODO 4 NEW Finish all geometric classes in polygon
-    // NOTE THAT THERE IS STILL A DEGREES RADIANS ISSUE PLEASE FIX
 
 
 

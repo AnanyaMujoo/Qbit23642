@@ -4,33 +4,25 @@ import autoutil.paths.PathSegment;
 import geometry.position.Pose;
 
 public class BangBang extends Controller1D {
+    private final double power;
 
-    private final double s;
-    private double maximumTime;
-
-    public BangBang(double s, double maximumTime, double accuracy){
-        this.s = s;
-        this.maximumTime = maximumTime;
-        this.accuracy = accuracy;
-    }
-
-    public void setMaximumTime(double maximumTime){ this.maximumTime = maximumTime; }
+    public BangBang(double power){ this.power = power; }
 
     @Override
-    protected void updateController(Pose pose, PathSegment pathSegment) {
-        if(!isWithinAccuracyRange()) {
-            if (getError() > 0) {
-                setOutput(s);
-            } else {
-                setOutput(-s);
-            }
-        }else{
-            if((errorProfiler.getCurrentTime() - currentTime) > maximumTime){
-                isAtTarget = true;
-            }else{
-                setOutput(0);
-                currentTime = errorProfiler.getCurrentTime();
-            }
-        }
-    }
+    protected double setDefaultAccuracy() { return 1; }
+
+    @Override
+    protected double setDefaultMinimumTimeReachedTarget() { return 0.5; }
+
+    @Override
+    protected double setDefaultRestOutput() { return power; }
+
+    @Override
+    protected void updateController(Pose pose, PathSegment pathSegment) {}
+
+    @Override
+    protected double setOutput() { return 0; }
+
+    @Override
+    protected boolean hasReachedTarget() { return true; }
 }
