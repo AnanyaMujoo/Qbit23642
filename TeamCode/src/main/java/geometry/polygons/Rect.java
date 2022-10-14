@@ -13,8 +13,8 @@ public class Rect extends Quadrilateral {
 
     public Rect(Point bl, Point tr){
         super(bl, tr);
-        bl = p1;
-        tr = p3;
+        this.bl = bl;
+        this.tr = tr;
     }
 //
 //    //Gets area of rect
@@ -49,4 +49,10 @@ public class Rect extends Quadrilateral {
 //    public String toString() {
 //        return "X1: " + getX1() + ", Y1: " + getY1() + ", X2: " + getX2() + ", Y2: " + getY2();
 //    }
+
+
+    @Override
+    public String toString() {
+        return "Rect {" + "bl=" + bl + ", tr=" + tr + '}';
+    }
 }

@@ -23,5 +23,6 @@ public class Quadrilateral extends Polygon {
         this.p2 = new Point(x1, y2);
         this.p3 = new Point(x2, y2);
         this.p4 = new Point(x2, y1);
+        addPoints(p1, p2, p3, p4);
     }
 }

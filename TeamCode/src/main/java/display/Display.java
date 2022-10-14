@@ -1,6 +1,8 @@
 package display;
 
 import geometry.framework.Point;
+import geometry.polygons.Rect;
+import geometry.polygons.Triangle;
 import geometry.position.Vector;
 
 public class Display extends Drawer {
@@ -10,6 +12,15 @@ public class Display extends Drawer {
     private static final int height = 700;
 
     public static void main(String[] args) {
+
+        Triangle triangle = new Triangle(new Point(3,3), new Point(4,5), new Point(8,1));
+        Rect rect = new Rect(new Point(3,3), new Point(8,8));
+
+        System.out.println(triangle.getArea());
+        System.out.println(triangle.getBoundingBox());
+        System.out.println(rect.getArea());
+
+
 
 //        Point p = new Point(1,2);
 //        p.rotate(new Point(), 90);

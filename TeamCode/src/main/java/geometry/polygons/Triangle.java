@@ -12,11 +12,12 @@ public class Triangle extends Polygon {
         addPoints(p1, p2, p3);
     }
 
-    public double area() {
-        double side1 = Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
-        double side2 = Math.sqrt(Math.pow(p2.getX() - p3.getX(), 2) + Math.pow(p2.getY() - p3.getY(), 2));
-        double side3 = Math.sqrt(Math.pow(p3.getX() - p1.getX(), 2) + Math.pow(p3.getY() - p1.getY(), 2));
-        double s = (side1 + side2 + side3) / 2;
-        return Math.pow((s * (s - side1) * (s - side2) * (s - side3)), 0.5);
+    public Point getP1() { return p1; }
+    public Point getP2() { return p2; }
+    public Point getP3() { return p3; }
+
+    @Override
+    public String toString() {
+        return "Triangle {" + "p1=" + p1 + ", p2=" + p2 + ", p3=" + p3 + '}';
     }
 }
