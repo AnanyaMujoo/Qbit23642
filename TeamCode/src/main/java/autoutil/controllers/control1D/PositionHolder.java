@@ -16,11 +16,14 @@ public class PositionHolder extends Controller1D {
     }
 
     public PositionHolder(double restPower){
-        this.restPower = restPower; this.deltaPowerUp = 0.004; this.deltaPowerDown = -0.004; this.velocityThreshold = Math.toRadians(10);
+        this.restPower = restPower; this.deltaPowerUp = 0.003; this.deltaPowerDown = -0.003; this.velocityThreshold = Math.toRadians(10);
     }
 
     public void deactivate(){ isUsed = false; }
     public void activate(){ isUsed = true; }
+
+    @Override
+    public void setRestOutput(double restOutput) { this.restPower = restOutput; }
 
     @Override
     protected double setDefaultAccuracy() { return 0; }
@@ -29,7 +32,7 @@ public class PositionHolder extends Controller1D {
     protected double setDefaultMinimumTimeReachedTarget() { return 1; }
 
     @Override
-    protected double setDefaultRestOutput() { return restPower; }
+    protected double setDefaultRestOutput() { return 0; }
 
     @Override
     protected void updateController(Pose pose, PathSegment pathSegment) {

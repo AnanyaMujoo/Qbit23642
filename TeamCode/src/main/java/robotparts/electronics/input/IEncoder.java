@@ -63,6 +63,7 @@ public class IEncoder extends Electronic {
             bot.addBackgroundTask(new BackgroundTask(this::updateNormal));
         }
         profiler = new Profiler(this::getAngularVelocity);
+        reset();
     }
 
     public void setUpdateCMotor(){

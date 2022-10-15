@@ -6,7 +6,7 @@ import util.template.ParameterConstructor;
 import util.template.Precision;
 import static java.lang.Math.*;
 
-public class PID extends Controller1D implements ParameterConstructor<Double>,Precision {
+public class PID extends Controller1D implements ParameterConstructor<Double> {
 
     private double kp;
     private double ki;
