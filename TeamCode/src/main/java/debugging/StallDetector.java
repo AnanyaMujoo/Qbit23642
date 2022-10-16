@@ -53,7 +53,6 @@ public class StallDetector implements Precision {
     }
 
     public boolean isStalling() {
-        return false;
-//        return outputTrueForTime(isMotorVelocityLow() && isInputTrueForTime(isMotorCurrentHigh(), stallTime), 1);
+        return outputTrueForTime(isMotorVelocityLow() && isInputTrueForTime(isMotorCurrentHigh(), stallTime), 1);
     }
 }

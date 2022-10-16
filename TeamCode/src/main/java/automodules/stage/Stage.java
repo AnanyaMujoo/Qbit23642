@@ -1,12 +1,9 @@
 package automodules.stage;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import robotparts.RobotPart;
-import util.codeseg.ParameterCodeSeg;
 import util.template.Iterator;
 
 public class Stage {
@@ -69,7 +66,7 @@ public class Stage {
      * @return should stop
      */
     public boolean shouldStop(){
-        return Iterator.forAllCondition(components, StageComponent::shouldStop);
+        return Iterator.forAllConditionOR(components, StageComponent::shouldStop);
     }
 
     /**

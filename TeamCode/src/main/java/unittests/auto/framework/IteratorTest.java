@@ -1,14 +1,9 @@
 package unittests.auto.framework;
 
 import unittests.auto.AutoUnitTest;
-import util.Timer;
 import util.template.Iterator;
 
 import static global.General.log;
-
-import static global.General.bot;
-
-import android.app.ActionBar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +25,7 @@ public class IteratorTest extends AutoUnitTest {
     public void start() {
         Iterator.forAll(array1, i -> counts[0]+=i);
         counts[1] = Iterator.forAllCount(array2, i->i==4);
-        counts[2] = Iterator.forAllCondition(array2, i->i==5)?1:0;
+        counts[2] = Iterator.forAllConditionOR(array2, i->i==5)?1:0;
     }
 
     @Override

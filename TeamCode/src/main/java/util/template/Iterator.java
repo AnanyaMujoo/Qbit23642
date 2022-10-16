@@ -118,13 +118,22 @@ public interface Iterator {
         return count;
     }
 
-    static <T> boolean forAllCondition(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> code){
+    static <T> boolean forAllConditionOR(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> code){
         for(T obj: list){
             if(code.run(obj)){
                 return true;
             }
         }
         return false;
+    }
+
+    static <T> boolean forAllConditionAND(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> code){
+        for(T obj: list){
+            if(!code.run(obj)){
+                return false;
+            }
+        }
+        return true;
     }
     @SuppressWarnings("unchecked")
     static <T> ArrayList<T> forAllOfType(ArrayList<? super T> list, Class<T> type){
