@@ -7,7 +7,7 @@ import util.Access;
 import util.condition.Status;
 import util.template.Precision;
 
-public class Electronic extends StageBuilder implements Precision {
+public class Electronic extends StageBuilder {
     /**
      * Naming conventions for electronics
      * C -> continuous
@@ -16,6 +16,7 @@ public class Electronic extends StageBuilder implements Precision {
      * I -> input
      */
 
+    protected final Precision precision = new Precision();
 
     /**
      * Status represents the current status of the electronic part

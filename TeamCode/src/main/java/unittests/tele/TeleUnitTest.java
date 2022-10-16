@@ -29,7 +29,6 @@ public class TeleUnitTest extends UnitTest {
     public final void test(){
         if(status.equals(Status.IDLE)){
             timer.reset();
-            resetPrecisionTimers();
             start();
             status = Status.ACTIVE;
         }else{

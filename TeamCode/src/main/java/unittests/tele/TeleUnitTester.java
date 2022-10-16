@@ -82,7 +82,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new StageTest());
 //        add(new StallDetectorTest());
 //        add(new CustomPMotorPIDTest());
-        add(new PositionHolderTest()); // TODO TEST
+//        add(new PositionHolderTest());
 
     }
 

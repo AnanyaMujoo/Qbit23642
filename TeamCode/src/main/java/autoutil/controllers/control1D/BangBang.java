@@ -4,9 +4,8 @@ import autoutil.paths.PathSegment;
 import geometry.position.Pose;
 
 public class BangBang extends Controller1D {
-    private final double power;
 
-    public BangBang(double power){ this.power = power; }
+    public BangBang(double power){ setRestOutput(power); }
 
     @Override
     protected double setDefaultAccuracy() { return 1; }
@@ -15,7 +14,7 @@ public class BangBang extends Controller1D {
     protected double setDefaultMinimumTimeReachedTarget() { return 0.5; }
 
     @Override
-    protected double setDefaultRestOutput() { return power; }
+    protected double setDefaultRestOutput() { return 0; }
 
     @Override
     protected void updateController(Pose pose, PathSegment pathSegment) {}

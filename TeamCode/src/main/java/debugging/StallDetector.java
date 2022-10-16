@@ -15,7 +15,9 @@ import autoutil.profilers.Profiler;
 import static java.lang.Math.abs;
 import static java.lang.Math.min;
 
-public class StallDetector implements Precision {
+public class StallDetector {
+
+    private final Precision precision = new Precision();
 
     private final IEncoder encoder;
     private double minSpeed;
@@ -30,7 +32,6 @@ public class StallDetector implements Precision {
         encoder = e;
         minSpeed = minSpeedThresh;
         maxCurrent = maxCurrentThresh;
-        resetPrecisionTimers();
     }
 
     public void setCustomThresholds(double minSpeedThresh, double maxCurrentThresh){
@@ -53,6 +54,6 @@ public class StallDetector implements Precision {
     }
 
     public boolean isStalling() {
-        return outputTrueForTime(isMotorVelocityLow() && isInputTrueForTime(isMotorCurrentHigh(), stallTime), 1);
+        return precision.outputTrueForTime(isMotorVelocityLow() && precision.isInputTrueForTime(isMotorCurrentHigh(), stallTime), 1);
     }
 }

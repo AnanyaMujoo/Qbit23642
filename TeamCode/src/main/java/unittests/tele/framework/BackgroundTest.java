@@ -21,7 +21,7 @@ public class BackgroundTest extends TeleUnitTest {
     private final Timer timer2 = new Timer();
 
     private final BackgroundTask task1 = new BackgroundTask(() -> { a = 5; pause1(); a = 3; pause1();});
-    private final BackgroundTask task2 = new BackgroundTask(() -> throttle(() -> {b = b==4?6:4;}, 500), 3);
+    private final BackgroundTask task2 = new BackgroundTask(() -> precision.throttle(() -> {b = b==4?6:4;}, 500), 3);
     private final BackgroundTask task3 = new BackgroundTask(() -> { c = 7; pause2(); c = 5; pause2(); }, new Exit(() -> timer.seconds() > 6));
 
     private void pause1(){ timer1.reset(); while (timer1.seconds() < 0.5){}}

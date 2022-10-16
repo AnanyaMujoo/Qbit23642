@@ -12,6 +12,8 @@ import static robot.RobotFramework.backgroundThread;
 
 public class BackgroundFunctions {
 
+    // TODO 4 FIX Problem where some stages dont run?
+
     public final ArrayList<BackgroundTask> tasks;
     public final ArrayList<BackgroundTask> taskBuffer;
 

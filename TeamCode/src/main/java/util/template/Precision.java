@@ -5,27 +5,23 @@ import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.codeseg.ReturnParameterCodeSeg;
 
-public interface Precision {
+public class Precision {
     /**
      * Used for precision tasks involving time
      */
 
-
     /**
      * Internal timer objects
      */
-    Timer inputTime = new Timer();
-    Timer outputTime = new Timer();
-    Timer throttleTime = new Timer();
-    Timer debounceTimer = new Timer();
+    private final Timer inputTime = new Timer();
+    private final Timer outputTime = new Timer();
+    private final Timer throttleTime = new Timer();
+    private final Timer debounceTimer = new Timer();
 
-    Object[] lastThrottleVal = new Object[1];
-    int[] counter = new int[1];
+    private Object lastThrottleVal;
+    private int counter = 0;
 
-    /**
-     * Reset precision timers
-     */
-    default void resetPrecisionTimers(){
+    public Precision(){
         inputTime.reset();
         outputTime.set(1000);
         throttleTime.reset();
@@ -38,7 +34,7 @@ public interface Precision {
      * @param time
      * @return true if input stayed true for time
      */
-    default boolean isInputTrueForTime(boolean condition, double time){
+    public boolean isInputTrueForTime(boolean condition, double time){
         if(condition){
             return inputTime.seconds() > time;
         }else{
@@ -53,7 +49,7 @@ public interface Precision {
      * @param time
      * @return true if condition has been true int the last time
      */
-    default boolean outputTrueForTime(boolean condition, double time){
+    public boolean outputTrueForTime(boolean condition, double time){
         if(condition){
             outputTime.reset();
             return true;
@@ -62,17 +58,17 @@ public interface Precision {
         }
     }
 
-    default boolean isInputTrueForCount(boolean condition, int count){
+    public boolean isInputTrueForCount(boolean condition, int count){
         if(condition){
-            counter[0] += 1;
-            if(counter[0] >= count){
-                counter[0] = 0;
+            counter += 1;
+            if(counter >= count){
+                counter = 0;
                 return true;
             }else{
                 return false;
             }
         }else{
-            counter[0] = 0;
+            counter = 0;
             return false;
         }
     }
@@ -84,7 +80,7 @@ public interface Precision {
      * @param onTrue
      * @return condition
      */
-    static boolean runOnCondition(boolean condition, CodeSeg onTrue){
+    public static boolean runOnCondition(boolean condition, CodeSeg onTrue){
         if(condition){
             onTrue.run();
             return true;
@@ -93,9 +89,7 @@ public interface Precision {
         }
     }
 
-
-
-    static boolean runOnCondition(boolean condition, CodeSeg onTrue, CodeSeg onFalse){
+    public static boolean runOnCondition(boolean condition, CodeSeg onTrue, CodeSeg onFalse){
         if(condition){
             onTrue.run();
             return true;
@@ -106,23 +100,23 @@ public interface Precision {
     }
 
 
-    static ReturnParameterCodeSeg<Double, Double> invert(ReturnParameterCodeSeg<Double, Double> input){
+    public static ReturnParameterCodeSeg<Double, Double> invert(ReturnParameterCodeSeg<Double, Double> input){
         return output -> output/input.run(1.0);
     }
 
 
     @SuppressWarnings("unchecked")
-    default  <T> T throttle(ReturnCodeSeg<T> output, double millis){
+    public  <T> T throttle(ReturnCodeSeg<T> output, double millis){
         if(throttleTime.seconds() > (millis/1000.0)){
-            lastThrottleVal[0] = output.run();
+            lastThrottleVal = output.run();
             throttleTime.reset();
         }
-        return (T) lastThrottleVal[0];
+        return (T) lastThrottleVal;
     }
 
 
     @SuppressWarnings("unchecked")
-    default void throttle(CodeSeg code, double millis){
+    public void throttle(CodeSeg code, double millis){
         if(throttleTime.seconds() > (millis/1000.0)){
             code.run();
             throttleTime.reset();

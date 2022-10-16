@@ -9,7 +9,10 @@ import global.Constants;
 import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
-public abstract class Controller1D implements Precision {
+public abstract class Controller1D {
+
+    private final Precision precision = new Precision();
+
     private ReturnCodeSeg<Double> processVariable;
     private ReturnCodeSeg<Double> processError = this::getRawError;
     protected Profiler processVariableProfiler = new Profiler(this::getCurrentValue);
@@ -38,13 +41,13 @@ public abstract class Controller1D implements Precision {
     public void setMinimumTime(double minimumTime){ this.minimumTime = minimumTime; }
     public void setRestOutput(double restOutput){ this.restOutput = restOutput; }
     public boolean isWithinAccuracyRange(){ return (Math.abs(getError()) < accuracy); }
-    private double getRestOutput(){ return !isWithinAccuracyRange() ? Math.signum(getError()) * restOutput : 0;}
+    public double getRestOutput(){ return !isWithinAccuracyRange() ? Math.signum(getError()) * restOutput : 0;}
     public final void update(Pose pose, PathSegment pathSegment){
         currentValue = processVariable.run();
         processVariableProfiler.update();
         errorProfiler.update();
         updateController(pose, pathSegment);
-        isAtTarget = isInputTrueForTime(isWithinAccuracyRange()&&hasReachedTarget(), minimumTime);
+        isAtTarget = precision.isInputTrueForTime(isWithinAccuracyRange()&&hasReachedTarget(), minimumTime);
         output = setOutput() + getRestOutput();
     }
     public final void update(){ update(new Pose(new Point(0,0),0), new PathPose(0,0,0)); }

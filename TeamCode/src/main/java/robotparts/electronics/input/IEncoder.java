@@ -56,7 +56,6 @@ public class IEncoder extends Electronic {
     public IEncoder(DcMotor m, EncoderType t) {
         motor = (DcMotorEx) m;
         encoderType = t;
-        resetPrecisionTimers();
         if(encoderType.equals(EncoderType.PMOTOR)) {
             bot.addBackgroundTask(new BackgroundTask(this::updatePMotor));
         }else if(encoderType.equals(EncoderType.NORMAL)){

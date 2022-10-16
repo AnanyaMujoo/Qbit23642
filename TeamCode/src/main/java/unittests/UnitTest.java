@@ -15,7 +15,11 @@ import util.template.Precision;
 
 import static global.General.*;
 
-public class UnitTest implements RobotUser, AutoModuleUser, Precision {
+public class UnitTest implements RobotUser, AutoModuleUser {
+
+
+    protected final Precision precision = new Precision();
+
     /**
      * Status of the unit test, starts at idle
      */

@@ -43,10 +43,10 @@ public class AutoUnitTester extends Auto implements UnitTester {
         /**
          * Framework (needs hardware, in movement package)
          */
-//        Works as of 4.2.5
+//        Works as of 4.3.11
 //        add(new MoveTimeTest());
-//        add(new PIDTest()); // TODO TEST
-        add(new PARTest());
+//        add(new PIDTest());
+//        add(new PARTest());
 
 //        Works????
 //        add(new PurePursuitTest());
