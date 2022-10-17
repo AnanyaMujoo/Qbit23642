@@ -20,7 +20,7 @@ public class Lift extends RobotPart {
         motorDown = create("lir", ElectronicType.PMOTOR_REVERSE_FLOAT);
         motorUp.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 0.333, 45);
         motorDown.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 0.333, 45);
-        motorUp.setRestPower(restPowUp);
+        motorUp.usePositionHolder(restPowUp);
     }
 
 

@@ -1,6 +1,7 @@
 package robot;
 
 import robotparts.hardware.Carousel;
+import unittests.tele.framework.movement.AutoModuleTest;
 import unused.mecanumold.MecanumCarousel;
 import robotparts.hardware.Drive;
 import robotparts.hardware.Intake;
@@ -74,5 +75,7 @@ public interface RobotUser {
      */
 
     CustomTestPart customTestPart = new CustomTestPart();
+
+    AutoModuleTest.TestPart2 testPart2 = new AutoModuleTest.TestPart2();
 
 }

@@ -75,7 +75,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
          */
 
 //        Works as of 4.2.5
-//        add(new AutoModuleTest());
+        add(new AutoModuleTest());
 //        add(new OdometryTest());
 //        add(new RobotFrameworkTest());
 //        add(new RobotFunctionsTest());
@@ -83,7 +83,6 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new StallDetectorTest());
 //        add(new CustomPMotorPIDTest());
 //        add(new PositionHolderTest());
-
     }
 
     /**

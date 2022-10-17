@@ -62,7 +62,7 @@ public class PMotor extends Electronic {
     }
 
 
-    public void setRestPower(double restPower){ positionHolder.setRestOutput(restPower); }
+    public void usePositionHolder(double restPower){ positionHolder.setRestOutput(restPower); }
 
     public void holdPosition(){ positionHolder.activate(); move(0); }
 
@@ -84,8 +84,11 @@ public class PMotor extends Electronic {
         ticksToOutput = Precision.invert(outputToTicks);
     }
 
+    @Deprecated
     public void scalePIDFCoefficients(double ps, double is, double ds, double fs){ currentCoeffs = new PIDFCoefficients(defaultCoeffs.p*ps,defaultCoeffs.i*is,defaultCoeffs.d*ds,defaultCoeffs.f*fs); motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, currentCoeffs); }
+    @Deprecated
     public void scalePIDCoefficients(double ps, double is, double ds){ scalePIDFCoefficients(ps, is, ds, 1);}
+
     public void setPIDFCoefficients(double p, double i, double d, double f){ currentCoeffs = new PIDFCoefficients(p, i, d, f); motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, currentCoeffs); }
     public void setPIDCoefficients(double p, double i, double d){ setPIDFCoefficients(p, i, d, defaultCoeffs.f); }
 

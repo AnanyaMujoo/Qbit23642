@@ -22,7 +22,7 @@ public class TerraOp extends Tele {
     public void initTele() {
         gph1.link(X, () -> bot.cancelAll());
         gph1.link(Button.A, IntakeNew);
-        gph1.link(Button.B, BackwardNew); // TODO TEST
+        gph1.link(Button.B, BackwardNew);
         gph1.link(Button.Y, ForwardNew);
         gph1.link(Button.RIGHT_TRIGGER, DuckNew);
     }

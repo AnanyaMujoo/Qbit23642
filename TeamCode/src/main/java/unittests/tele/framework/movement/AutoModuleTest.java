@@ -1,34 +1,101 @@
 package unittests.tele.framework.movement;
+import automodules.AutoModule;
+import automodules.stage.Initial;
+import automodules.stage.Main;
+import automodules.stage.Stage;
+import global.Constants;
+import robotparts.RobotPart;
+import robotparts.electronics.ElectronicType;
+import robotparts.electronics.positional.PMotor;
 import teleutil.button.Button;
-import teleutil.button.OnPressEventHandler;
 import unittests.tele.TeleUnitTest;
 
-import static global.General.*;
+import static global.General.bot;
+import static global.General.gamepad1;
+import static global.General.gph1;
+import static global.General.log;
 
 public class AutoModuleTest extends TeleUnitTest {
     /**
      * Test automodules using intake as an example
      */
 
+    public static class TestPart2 extends RobotPart {
+        public PMotor car;
+
+        @Override
+        public void init() {
+            car = create("car", ElectronicType.PMOTOR_FORWARD);
+            car.setToRotational(Constants.ORBITAL_TICKS_PER_REV, 1);
+        }
+
+        @Override
+        protected void move(double p) { car.move(p); }
+
+        @Override
+        public AutoModule MoveTime(double p, double t) {
+            return super.MoveTime(p, t);
+        }
+
+        public Stage stageRotate(double power, double deg){
+            return moveTarget(() -> car, power, deg);
+        }
+    }
+
+    private final AutoModule module = new AutoModule(
+            testPart2.stageRotate(1, 360)
+    );
+
+    private final AutoModule module2 = new AutoModule(
+            testPart2.stageRotate(1, 0)
+    );
+
     @Override
     protected void start() {
         /**
          * Link gamepad handlers
          */
-        gph1.link(Button.A, OnPressEventHandler.class,() -> bot.addAutoModule(IntakeOut));
-        gph1.link(Button.B, OnPressEventHandler.class, bot::cancelAutoModules);
-        gph1.link(Button.RIGHT_BUMPER, OnPressEventHandler.class, bot::pauseAutoModules);
-        gph1.link(Button.LEFT_BUMPER, OnPressEventHandler.class, bot::resumeAutoModules);
+//        gph1.link(Button.B, () -> {bot.cancelAutoModules(); bot.addAutoModule(module); });
+//        gph1.link(Button.Y, () -> {bot.cancelAutoModules(); bot.addAutoModule(module2); });
+        gph1.link(Button.A, () -> bot.cancelAutoModules());
+
+        gph1.link(Button.RIGHT_BUMPER, () -> { bot.addAutoModule(testPart2.MoveTime(1,0.5));});
+//        gph1.link(Button.LEFT_BUMPER, testPart2.MoveTime(-1,0.5));
+
+//        gph1.link(Button.A, OnPressEventHandler.class,() -> bot.addAutoModule(IntakeOut));
+//        gph1.link(Button.B, OnPressEventHandler.class, bot::cancelAutoModules);
+//        gph1.link(Button.RIGHT_BUMPER, OnPressEventHandler.class, bot::pauseAutoModules);
+//        gph1.link(Button.LEFT_BUMPER, OnPressEventHandler.class, bot::resumeAutoModules);
     }
 
     @Override
     protected void loop() {
+        if(gamepad1.b){
+           bot.cancelAutoModules();
+           bot.addAutoModule(module);
+        }
+
+        if(gamepad1.y){
+            bot.cancelAutoModules();
+            bot.addAutoModule(module2);
+        }
+
+//        if(gamepad1.right_bumper){
+//            bot.cancelAutoModules();
+//            bot.addAutoModule(testPart2.MoveTime(1,0.5));
+//        }
+
+        if(gamepad1.left_bumper){
+            bot.cancelAutoModules();
+            bot.addAutoModule(testPart2.MoveTime(-1,0.5));
+        }
         /**
          * Should run automodules
          */
-        log.show("Click a to start intake");
-        log.show("Click b to cancel the AutoModules");
-        log.show("Click right bumper to pause the AutoModules");
-        log.show("Click left bumper to resume the AutoModules");
+        log.show("Pos", testPart2.car.getPosition());
+//        log.show("Click a to start intake");
+//        log.show("Click b to cancel the AutoModules");
+//        log.show("Click right bumper to pause the AutoModules");
+//        log.show("Click left bumper to resume the AutoModules");
     }
 }
