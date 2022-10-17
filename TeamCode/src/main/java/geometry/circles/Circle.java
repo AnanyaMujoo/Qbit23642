@@ -2,7 +2,9 @@ package geometry.circles;
 
 import geometry.framework.GeometryObject;
 import geometry.framework.Point;
+import geometry.framework.Tracer;
 import geometry.position.Pose;
+import global.Constants;
 
 import static java.lang.Math.*;
 
@@ -10,29 +12,24 @@ import static java.lang.Math.*;
  * NOTE: Uncommented
  */
 
-public class Circle extends GeometryObject {
-    public Point center;
-    public double r; // center is (h, k) and radius is r
+public class Circle extends GeometryObject implements Tracer {
+
+    protected final Point center;
+    protected final double r;
 
     public Circle(Point center, double r) {
         this.center = center;
         this.r = r;
+        addPoints(center);
     }
 
-    public double getThetaFromPoint(Point p) {
-        double ang = atan2(p.getY() - center.getY(), p.getX() - center.getX());
-        ang %= 2 * PI;
-        return ang;
-    }
+    public double getCenterX(){ return center.getX(); }
+    public double getCenterY(){ return center.getY(); }
+    public Point getCenter() { return center; }
+    public double getRadius(){ return r; }
 
-    public Pose getPositionFromTheta(double theta) {
-        Point p = new Point(center.getX() + r * cos(theta), center.getY() + r * sin(theta));
-        double ang = PI/2 - atan2(p.getY() - center.getY(), center.getX() - p.getX());
-        return new Pose(p, ang);
+    @Override
+    public Point getAt(double t) {
+        return center.getRotated(t/360.0);
     }
-
-//    @Override
-//    public GeometryObject getRelativeTo(Pose origin) {
-//        return new Circle(center.getRelativeTo(origin), r);
-//    }
 }

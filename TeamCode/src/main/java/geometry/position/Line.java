@@ -2,12 +2,13 @@ package geometry.position;
 
 import geometry.framework.GeometryObject;
 import geometry.framework.Point;
+import geometry.framework.Tracer;
 
 /**
  * NOTE: Uncommented
  */
 
-public class Line extends GeometryObject {
+public class Line extends GeometryObject implements Tracer {
 
     private final Point ps;
     private final Point pe;
@@ -22,6 +23,7 @@ public class Line extends GeometryObject {
     public Point getStartPoint(){ return ps; }
     public Point getEndPoint(){ return pe; }
 
+    @Override
     public Point getAt(double t){
         return new Point ((ps.getX())+(mx*t), (ps.getY())+(my*t));
     }

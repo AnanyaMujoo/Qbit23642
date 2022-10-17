@@ -17,7 +17,6 @@ import static robot.RobotFramework.robotFunctionsThread;
 
 public class RobotFunctions {
 
-    // TODO 4 FIX Problem where some stages dont run?
 
     /**
      * List of all robot functions currently in the queue (LinkedList is a FIFO Queue)
@@ -140,8 +139,6 @@ public class RobotFunctions {
                 Stage s = rfsQueue.peek();
                 rfsQueue.clear();
                 s.runOnStop();
-            } else {
-                rfsQueue.clear();
             }
             timer.reset();
         }

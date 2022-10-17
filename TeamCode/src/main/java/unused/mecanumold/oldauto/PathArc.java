@@ -12,31 +12,31 @@ public class PathArc extends PathSegment{
     private boolean trueSt;
 
     public PathArc(Circle generated, Point startPoint, Point endPoint, boolean trueSt) {
-        arc = new CircularArc(generated.center, startPoint, endPoint, generated.r);
+//        arc = new CircularArc(generated.getCenter(), startPoint, endPoint, generated.getRadius());
         this.trueSt = trueSt;
     }
 
     public PathArc(Circle generated, double st, double en) {
-        arc = new CircularArc(generated.center, st, en, generated.r);
+//        arc = new CircularArc(generated.getCenter(), st, en, generated.getRadius());
     }
 
-    public double getArcLength() {
-        return arc.getArcLength();
-    }
+//    public double getArcLength() {
+//        return arc.getArcLength();
+//    }
 
     @Override
     public void generatePoints(Pose pose) {
-        points.addAll(arc.getPoints(Constants.ANG_ACC_ARC, trueSt, pose));
+//        points.addAll(arc.getPoints(Constants.ANG_ACC_ARC, trueSt, pose));
     }
 
-    public boolean goingCW(Pose p) {
-        return arc.goingCW(p);
-    }
+//    public boolean goingCW(Pose p) {
+//        return arc.goingCW(p);
+//    }
 
     @Override
     public void flip(boolean x, boolean y) {
-        Pose newStPt = arc.getPositionFromTheta(arc.arcSt);
-        Pose newEndPt = arc.getPositionFromTheta(arc.arcEnd);
+//        Pose newStPt = arc.getPositionFromTheta(arc.arcSt);
+//        Pose newEndPt = arc.getPositionFromTheta(arc.arcEnd);
         if (x) {
 //            newStPt.p.x *= -1;
 //            newStPt.ang *= -1;

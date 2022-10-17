@@ -238,7 +238,8 @@ public class ArcGenerator {
     private PathArc getShorterArc(Circle c, Point p1, Point p2) {
         PathArc arc1 = new PathArc(c, p1, p2, true);
         PathArc arc2 = new PathArc(c, p2, p1, false);
-        return arc1.getArcLength() > arc2.getArcLength() ? arc2 : arc1;
+        return arc1;
+//        return arc1.getArcLength() > arc2.getArcLength() ? arc2 : arc1;
     }
 
     /**

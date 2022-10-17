@@ -144,7 +144,7 @@ public class RobotFramework {
      * Cancel all of the automodules by emptying the robot functions queue
      */
     public void cancelAutoModules(){
-        setUserMainAndHalt();
+//        setUserMainAndHalt(); // TODO CHECK
         rfsHandler.emptyQueue();
     }
 

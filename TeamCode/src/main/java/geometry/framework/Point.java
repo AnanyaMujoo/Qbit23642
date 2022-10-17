@@ -1,6 +1,8 @@
 package geometry.framework;
 
+import geometry.position.Vector;
 import math.linearalgebra.Matrix2D;
+import util.codeseg.ParameterCodeSeg;
 
 import static java.lang.Math.*;
 
@@ -25,8 +27,14 @@ public class Point {
     private void applyMatrixTransformation(Point p, Matrix2D matrix){ Point offsetPoint = matrix.multiply(getSubtracted(p)); set(p.getAdded(offsetPoint)); }
     public Point getAdded(Point p){ return new Point(getX() + p.getX(), getY() + p.getY()); }
     public Point getSubtracted(Point p){ return new Point(getX() - p.getX(), getY() - p.getY()); }
+    public Point getRotated(double angle){ return getCopy(p -> p.rotate(angle));}
+    public Point getRotated(Point c, double angle){ return getCopy(p -> p.rotate(c, angle)); }
     public double getDistanceTo(Point p2){ return sqrt(pow(getX()-p2.getX(), 2) + pow(getY()-p2.getY(), 2));}
     public double getDistanceToOrigin(){ return getDistanceTo(new Point()); }
+    public Point getCopy(){
+        return new Point(getX(), getY());
+    }
+    public Point getCopy(ParameterCodeSeg<Point> operation){ Point copy = getCopy(); operation.run(copy); return copy; }
     public String toString() { return "Point {x:" + x + ", y:" + y + "}"; }
 }
 

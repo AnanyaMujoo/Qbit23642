@@ -9,6 +9,7 @@ import java.util.Collections;
 
 import geometry.framework.GeometryObject;
 import geometry.framework.Point;
+import geometry.position.Line;
 import util.template.Iterator;
 
 /**
@@ -16,6 +17,16 @@ import util.template.Iterator;
  */
 
 public class Polygon extends GeometryObject {
+
+
+    public final ArrayList<Line> getLines(){
+        ArrayList<Line> lines = new ArrayList<>();
+        for (int i = 1; i < points.size(); i++){
+            lines.add(new Line(points.get(i-1), points.get(i)));
+        }
+        lines.add(new Line(points.get(points.size()-1), points.get(0)));
+        return lines;
+    }
 
 
     public final double getArea(){
