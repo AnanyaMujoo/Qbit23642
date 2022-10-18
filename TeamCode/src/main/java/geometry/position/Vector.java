@@ -24,6 +24,11 @@ public class Vector extends GeometryObject {
         addPoints(p);
     }
 
+    public Vector(Point start, Point end){
+        p = end.getSubtracted(start);
+        addPoints(p);
+    }
+
     public double getX() {
         return p.getX();
     }
@@ -45,12 +50,16 @@ public class Vector extends GeometryObject {
     public void add(Vector v2){ translate(v2.getPoint().getX(), v2.getPoint().getY() ); }
     public void subtract(Vector v2){ translate(-v2.getPoint().getX(), -v2.getPoint().getY() ); }
     public void invert(){ scale(-1); }
+    public void reflectX(){ p.reflectX(); }
+    public void reflectY(){ p.reflectY(); }
 
     public Vector getAdded(Vector v2){ return getCopy(v -> v.add(v2)); }
     public Vector getSubtracted(Vector v2){ return getCopy(v -> v.subtract(v2)); }
     public Vector getRotated(double phi){ return getCopy(v -> v.rotate(phi)); }
     public Vector getScaled(double scale){ return getCopy(v -> v.scale(scale)); }
     public Vector getInverted(){ return getCopy(Vector::invert); }
+    public Vector getReflectedX(){ return getCopy(Vector::reflectX); }
+    public Vector getReflectedY(){ return getCopy(Vector::reflectY); }
 
     public String toString() { return String.format(Locale.US,"Vector {x: %f, y: %f, length: %f, theta: %f}", getX(), getY(), getLength(), getTheta()); }
 }

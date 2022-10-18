@@ -1,9 +1,15 @@
 package display;
 
+import java.util.ArrayList;
+
 import geometry.framework.Point;
+import geometry.polygons.Hexagon;
+import geometry.polygons.Quadrilateral;
 import geometry.polygons.Rect;
 import geometry.polygons.Triangle;
+import geometry.position.Line;
 import geometry.position.Vector;
+import util.template.Iterator;
 
 public class Display extends Drawer {
     // TODO 4 NEW Create Display
@@ -12,13 +18,21 @@ public class Display extends Drawer {
     private static final int height = 700;
 
     public static void main(String[] args) {
+//
+//        Triangle triangle = new Triangle(new Point(3,3), new Point(4,5), new Point(8,1));
+//        Rect rect = new Rect(new Point(3,3), new Point(8,8));
+//        Rect rect2 = new Rect(new Point(3,3), 3, 3, 45);
+//        ArrayList<Line> lines = rect.getLines();
+//        Hexagon hexagon = new Hexagon(new Point(3,3), new Point(3,5));
 
-        Triangle triangle = new Triangle(new Point(3,3), new Point(4,5), new Point(8,1));
-        Rect rect = new Rect(new Point(3,3), new Point(8,8));
-
-        System.out.println(triangle.getArea());
-        System.out.println(triangle.getBoundingBox());
-        System.out.println(rect.getArea());
+//        System.out.println(triangle.getArea());
+//        System.out.println(triangle.getBoundingBox());
+//        System.out.println(rect.getArea());
+//        System.out.println(rect2);
+//        System.out.println(rect2.getBoundingBox());
+//        System.out.println(lines.size());
+//        Iterator.forAll(lines, System.out::println);
+//        System.out.println(hexagon);
 
 
 
