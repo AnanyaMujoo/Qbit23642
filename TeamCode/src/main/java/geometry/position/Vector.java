@@ -10,6 +10,7 @@ import geometry.framework.GeometryObject;
 import geometry.framework.Point;
 import global.General;
 import math.linearalgebra.Matrix2D;
+import math.linearalgebra.Vector3D;
 import util.codeseg.ParameterCodeSeg;
 
 import static java.lang.Math.atan2;
@@ -27,6 +28,10 @@ public class Vector extends GeometryObject {
     public Vector(Point start, Point end){
         p = end.getSubtracted(start);
         addPoints(p);
+    }
+
+    public Vector(double angle){
+        this(Math.cos(Math.toRadians(angle)), Math.sin(Math.toRadians(angle)));
     }
 
     public Vector(Point end){ this(new Point(), end); }
@@ -62,6 +67,14 @@ public class Vector extends GeometryObject {
     public Vector getInverted(){ return getCopy(Vector::invert); }
     public Vector getReflectedX(){ return getCopy(Vector::reflectX); }
     public Vector getReflectedY(){ return getCopy(Vector::reflectY); }
+
+    public double getCrossProduct(Vector in){ return Vector3D.getCrossProduct(this, in); }
+    public double getDotProduct(Vector in){ return Vector3D.getDotProduct(this, in); }
+
+    public Vector getUnitVector(){ return this.getScaled(1.0/this.getLength()); }
+
+    public static Vector xHat(){ return new Vector(1,0); }
+    public static Vector yHat(){ return new Vector(0,1); }
 
     public String toString() { return String.format(Locale.US,"Vector {x: %f, y: %f, length: %f, theta: %f}", getX(), getY(), getLength(), getTheta()); }
 }

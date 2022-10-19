@@ -42,6 +42,8 @@ public class GyroSensors extends RobotPart {
         lastAngle = currentangle;
     }
 
+    public double getHeading(){ return heading; }
+
     /**
      * Get headings in radians and degrees
      * @return heading

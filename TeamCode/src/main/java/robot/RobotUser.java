@@ -1,6 +1,7 @@
 package robot;
 
 import robotparts.hardware.Carousel;
+import robotparts.sensors.TwoOdometry;
 import unittests.tele.framework.movement.AutoModuleTest;
 import unused.mecanumold.MecanumCarousel;
 import robotparts.hardware.Drive;
@@ -48,6 +49,8 @@ public interface RobotUser {
     GyroSensors gyro = new GyroSensors();
     Cameras camera = new Cameras();
     TwoOdometryOld odometry = new TwoOdometryOld();
+
+    TwoOdometry twoOdometry = new TwoOdometry();
 
     /**
      * UNUSED

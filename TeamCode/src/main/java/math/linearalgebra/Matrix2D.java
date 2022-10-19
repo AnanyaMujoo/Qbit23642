@@ -1,6 +1,7 @@
 package math.linearalgebra;
 
 import org.firstinspires.ftc.robotcore.external.matrices.GeneralMatrixF;
+import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 
 import geometry.framework.Point;
@@ -45,6 +46,15 @@ public class Matrix2D {
 
     public static Matrix2D getRotationMatrix(double angle){
         return new Matrix2D(cos(angle), -sin(angle), sin(angle), cos(angle));
+    }
+
+    public Matrix2D getInverted(){
+        MatrixF mat = matrix.inverted();
+        return new Matrix2D(mat.get(0,0), mat.get(0,1), mat.get(1,0), mat.get(1,1));
+    }
+
+    public static Vector solve(Matrix2D matrix, Vector out){
+        return matrix.getInverted().multiply(out);
     }
 
 }
