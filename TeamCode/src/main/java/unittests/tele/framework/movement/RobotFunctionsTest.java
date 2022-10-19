@@ -31,14 +31,14 @@ public class RobotFunctionsTest extends TeleUnitTest {
         bot.rfsHandler.addToQueue(new Stage(
                 new Initial(() -> getTestPart().switchUser(User.ROFU)),
                 new Main(() -> getTestPart().move(0.3, 0, 0)),
-                new Exit(() -> bot.rfsHandler.timer.seconds() > 1),
+                new Exit(() -> bot.rfsHandler.getTimer().seconds() > 1),
                 new Stop(() -> getTestPart().move(0,0, 0)),
                 new Stop(() -> getTestPart().switchUser(mainUser))
         ));
         bot.rfsHandler.addToQueue(new Stage(
                 new Initial(() -> getTestPart().switchUser(User.ROFU)),
                 new Main(() -> getTestPart().move(-0.3, 0, 0)),
-                new Exit(() -> bot.rfsHandler.timer.seconds() > 1),
+                new Exit(() -> bot.rfsHandler.getTimer().seconds() > 1),
                 new Stop(() -> getTestPart().move(0,0, 0)),
                 new Stop(() -> getTestPart().switchUser(mainUser))
         ));

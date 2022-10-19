@@ -19,7 +19,7 @@ public class PathAutoModule extends PathSegment {
         bot.addAutoModule(automodule);
     }
     public boolean isDoneWithAutoModule(){
-        return bot.rfsHandler.rfsQueue.isEmpty();
+        return bot.rfsHandler.getRfsQueue().isEmpty();
     }
     public boolean isConcurrent(){return isConcurrent;}
 

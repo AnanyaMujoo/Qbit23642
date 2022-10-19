@@ -22,11 +22,11 @@ public class RobotFunctions {
      * List of all robot functions currently in the queue (LinkedList is a FIFO Queue)
      *
      */
-    public final Queue<Stage> rfsQueue = new LinkedList<>();
+    private final Queue<Stage> rfsQueue = new LinkedList<>();
     /**
      * Timer for robotfunctions, resets after every stage is run
      */
-    public final Timer timer = new Timer();
+    private final Timer timer = new Timer();
     /**
      * Define the updateCode codeseg to contain the code that will run in the Thread
      */
@@ -50,6 +50,9 @@ public class RobotFunctions {
                  */
                 if (!Objects.requireNonNull(s).hasStarted()) {
                     s.start();
+                    synchronized (timer) {
+                        timer.reset();
+                    }
                 }
                 s.loop();
                 /**
@@ -59,7 +62,6 @@ public class RobotFunctions {
                 if (s.shouldStop() && !s.isPause()) {
                     s.runOnStop();
                     rfsQueue.poll();
-                    timer.reset();
                 } else if (s.isPause()) {
                     robotFunctionsThread.setStatus(Status.IDLE);
                 }
@@ -77,7 +79,6 @@ public class RobotFunctions {
     public void resume() {
         if (!rfsQueue.isEmpty() && rfsQueue.peek().isPause()) {
             rfsQueue.poll();
-            timer.reset();
             robotFunctionsThread.setStatus(Status.ACTIVE);
         }
     }
@@ -138,9 +139,13 @@ public class RobotFunctions {
             if (!rfsQueue.isEmpty()) {
                 Stage s = rfsQueue.peek();
                 rfsQueue.clear();
+                assert s != null;
                 s.runOnStop();
             }
-            timer.reset();
         }
     }
+
+
+    public Timer getTimer(){ return timer; }
+    public Queue<Stage> getRfsQueue(){ return rfsQueue; }
 }

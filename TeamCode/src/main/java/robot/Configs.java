@@ -8,7 +8,6 @@ public class Configs implements RobotUser{
      * Used to test only the test part
      */
     RobotConfig TestConfig = new RobotConfig(customTestPart);
-
     RobotConfig TestConfig2 = new RobotConfig(testPart2);
 
     /**
@@ -24,15 +23,13 @@ public class Configs implements RobotUser{
     /**
      * Used for PowerPlay robot
      */
-    RobotConfig PowerPlay = new RobotConfig(drive, intake, lift, outtake, carousel, color, testPart2);
+    RobotConfig PowerPlay = new RobotConfig(drive, intake, lift, outtake, carousel, color);
 
     /**
      * Current Config
      */
     public void setCurrentConfig(){
         setConfig(PowerPlay);
-//        setConfig(TestConfig2);
-//        setConfig(PowerPlay);
 //        setConfig(MecanumConfig);
     }
 

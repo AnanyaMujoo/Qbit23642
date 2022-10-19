@@ -124,7 +124,7 @@ public abstract class Executor extends MovementExecutor {
 //            }
         } else {
             // Waiting for unsynced RF to finish
-            runningCodeSeg = !bot.rfsHandler.rfsQueue.isEmpty();
+            runningCodeSeg = !bot.rfsHandler.getRfsQueue().isEmpty();
         }
     }
 

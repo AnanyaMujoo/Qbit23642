@@ -22,8 +22,6 @@ public class AutoModuleTest extends TeleUnitTest {
      * Test automodules using intake as an example
      */
 
-    // TODO TEST
-
     public static class TestPart2 extends RobotPart {
         public PMotor car;
 
@@ -54,54 +52,26 @@ public class AutoModuleTest extends TeleUnitTest {
             testPart2.stageRotate(1, 0)
     );
 
-
-    private final Timer timerB = new Timer();
-    private final Timer timerY = new Timer();
-
-    private final double timeC = 0.3;
-
     @Override
     protected void start() {
         /**
          * Link gamepad handlers
          */
-//        gph1.link(Button.B, () -> {bot.cancelAutoModules(); bot.addAutoModule(module); });
-//        gph1.link(Button.Y, () -> {bot.cancelAutoModules(); bot.addAutoModule(module2); });
-        gph1.link(Button.A, () -> bot.cancelAutoModules());
-
-//        gph1.link(Button.RIGHT_BUMPER, () -> { bot.addAutoModule(testPart2.MoveTime(1,0.5));});
-//        gph1.link(Button.LEFT_BUMPER, testPart2.MoveTime(-1,0.5));
-
-//        gph1.link(Button.A, OnPressEventHandler.class,() -> bot.addAutoModule(IntakeOut));
-//        gph1.link(Button.B, OnPressEventHandler.class, bot::cancelAutoModules);
-//        gph1.link(Button.RIGHT_BUMPER, OnPressEventHandler.class, bot::pauseAutoModules);
-//        gph1.link(Button.LEFT_BUMPER, OnPressEventHandler.class, bot::resumeAutoModules);
-
-        timerB.reset();
-        timerY.reset();
+        gph1.link(Button.B, module);
+        gph1.link(Button.Y, module2);
+        gph1.link(Button.A, bot::cancelAutoModules);
+        gph1.link(Button.RIGHT_BUMPER,  bot::pauseAutoModules);
+        gph1.link(Button.LEFT_BUMPER, bot::resumeAutoModules);
     }
 
     @Override
     protected void loop() {
-        if(gamepad1.b && timerB.seconds() > timeC){
-           bot.cancelAutoModules();
-           bot.addAutoModule(testPart2.MoveTime(1,0.5));
-           timerB.reset();
-        }
-
-        if(gamepad1.y && timerY.seconds() > timeC){
-            bot.cancelAutoModules();
-            bot.addAutoModule(testPart2.MoveTime(-1,0.5));
-            timerY.reset();
-        }
-
         /**
          * Should run automodules
          */
-//        log.show("Pos", testPart2.car.getPosition());
-//        log.show("Click a to start intake");
-//        log.show("Click b to cancel the AutoModules");
-//        log.show("Click right bumper to pause the AutoModules");
-//        log.show("Click left bumper to resume the AutoModules");
+        log.show("Click b or y to start");
+        log.show("Click a to cancel the AutoModules");
+        log.show("Click right bumper to pause the AutoModules");
+        log.show("Click left bumper to resume the AutoModules");
     }
 }

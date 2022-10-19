@@ -34,6 +34,7 @@ public class PMotor extends Electronic {
     private ReturnParameterCodeSeg<Double, Double> outputToTicks = input -> input;
     private ReturnParameterCodeSeg<Double, Double> ticksToOutput = input -> input;
     private PIDFCoefficients currentCoeffs;
+    private final double exitTimeDelay = 0.1;
 
     /**
      * Constructor to create a pmotor
@@ -102,6 +103,7 @@ public class PMotor extends Electronic {
 
     /**
      * Set the power of the pmotor
+     * NOTE: Use halt to stop the motors (otherwise will be set with restPower)
      * @param p
      */
     @Override
@@ -117,6 +119,12 @@ public class PMotor extends Electronic {
             }
         }
     }
+
+    /**
+     * Sets the power of motor without access checking, stall detection, or restPower
+     * @param power
+     */
+    public void setPowerRaw(double power){ motor.setPower(power); }
 
     /**
      * Set the position to move to
@@ -146,7 +154,9 @@ public class PMotor extends Electronic {
      * @return if the motor is not busy (done) or is stalling (prevent damage)
      */
     @Override
-    public boolean exitTarget(){ return !motor.isBusy() || detector.isStalling(); }
+    public boolean exitTarget(){
+        return (!motor.isBusy() || detector.isStalling()) && bot.rfsHandler.getTimer().seconds() > exitTimeDelay;
+    }
 
     /**
      * Get the position of the motor
@@ -165,34 +175,27 @@ public class PMotor extends Electronic {
      */
     @Override
     public void stopTarget(){
-        move(0);
+        halt();
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     /**
      * Reset the position of the pmotor
      */
-    public void resetPosition(){
-        motorEncoder.reset();
-    }
+    public void resetPosition(){ motorEncoder.reset(); }
 
-    public StallDetector getStallDetector(){
-        return detector;
-    }
+    public StallDetector getStallDetector(){ return detector; }
 
     public IEncoder getMotorEncoder(){ return motorEncoder; }
 
-    public MovementType getMovementType(){
-        return movementType;
-    }
+    public MovementType getMovementType(){ return movementType; }
 
     /**
      * Sets the power of the motor to 0
      * NOTE: This should only be called in a thread that has access to use the robot
      */
     @Override
-    public void halt(){ move(0); }
-
+    public void halt(){ setPowerRaw(0); }
 
     /**
      * Type of movement preformed
