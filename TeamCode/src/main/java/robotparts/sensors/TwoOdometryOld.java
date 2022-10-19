@@ -1,4 +1,4 @@
-package robotparts.sensors.odometry;
+package robotparts.sensors;
 
 import geometry.position.Vector;
 import robotparts.electronics.ElectronicType;
@@ -9,7 +9,7 @@ import static robot.RobotFramework.odometryThread;
 
 // TODO 4 NEW make proper reset method and Odometry
 // Remove dependence on tank odometry
-public class TwoOdometry extends TankOdometry {
+public class TwoOdometryOld extends TankOdometry {
 
     private volatile IEncoder horizontalEncoder;
     private volatile IEncoder verticalEncoder;
@@ -26,7 +26,7 @@ public class TwoOdometry extends TankOdometry {
     private volatile Vector localOdometryCenterOffset;
     private volatile double heading = 0;
 
-    public TwoOdometry() {
+    public TwoOdometryOld() {
         super(0.0);
         localOdometryCenterOffset = new Vector(0.0, 12.6);
     }

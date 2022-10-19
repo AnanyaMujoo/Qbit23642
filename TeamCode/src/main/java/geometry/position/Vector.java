@@ -29,6 +29,8 @@ public class Vector extends GeometryObject {
         addPoints(p);
     }
 
+    public Vector(Point end){ this(new Point(), end); }
+
     public double getX() {
         return p.getX();
     }

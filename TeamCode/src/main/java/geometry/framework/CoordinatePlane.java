@@ -20,10 +20,6 @@ public class CoordinatePlane {
     private final ArrayList<GeometryObject> objects = new ArrayList<>();
     public static final Point origin = new Point();
 
-    // TODO 4 NEW Finish all geometric classes in polygon
-
-
-
     public void add(GeometryObject... o) { Collections.addAll(objects, o); }
 
     private void toAllObjects(ParameterCodeSeg<GeometryObject> code){ Iterator.forAll(objects, code);}

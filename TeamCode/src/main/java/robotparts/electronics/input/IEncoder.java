@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import autoutil.profilers.Profiler;
@@ -16,6 +18,7 @@ import robotparts.Electronic;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.template.Iterator;
+import util.template.Precision;
 
 import static global.General.bot;
 import static global.General.fault;
@@ -41,11 +44,11 @@ public class IEncoder extends Electronic {
     private final EncoderType encoderType;
 
 
-    private volatile double position = 0; // ticks
+    private volatile double position, lastPosition, deltaPosition = 0; // ticks
     private volatile double angularVelocity = 0; // radians
     private volatile double current = 0; // amps
 
-
+    private final Profiler deltaPositionProfiler = new Profiler(() -> deltaPosition);
     private final Profiler profiler;
 
     /**
@@ -58,8 +61,6 @@ public class IEncoder extends Electronic {
         encoderType = t;
         if(encoderType.equals(EncoderType.PMOTOR)) {
             bot.addBackgroundTask(new BackgroundTask(this::updatePMotor));
-        }else if(encoderType.equals(EncoderType.NORMAL)){
-            bot.addBackgroundTask(new BackgroundTask(this::updateNormal));
         }
         profiler = new Profiler(this::getAngularVelocity);
         reset();
@@ -77,13 +78,21 @@ public class IEncoder extends Electronic {
 
     private void updatePMotor(){ position = motor.getCurrentPosition(); angularVelocity = motor.getVelocity(AngleUnit.RADIANS); current = motor.getCurrent(CurrentUnit.AMPS); profiler.update(); }
 
-    private void updateNormal(){ position = motor.getCurrentPosition(); angularVelocity = motor.getVelocity(AngleUnit.RADIANS); }
+    public void updateNormal(){
+        position = motor.getCurrentPosition();
+        angularVelocity = motor.getVelocity(AngleUnit.RADIANS);
+        deltaPosition = position - lastPosition;
+        profiler.update();
+        lastPosition = position;
+    }
 
     public double getPos() { return position; }
 
     public double getAngularVelocity(){ return angularVelocity; }
 
     public double getCurrent(){ return current; }
+
+    public ArrayList<Double> getNewDeltaPositions(){ return deltaPositionProfiler.getNewValues(); }
 
 
     /**
@@ -100,6 +109,7 @@ public class IEncoder extends Electronic {
     public void reset(){
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        position = 0; lastPosition = 0; deltaPosition = 0;
     }
 
     /**

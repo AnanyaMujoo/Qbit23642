@@ -25,6 +25,9 @@ public class Constants {
 
     public static final double ORBITAL_TICKS_PER_REV = 537.6;
 
+
+    public static final double ENCODER_TICKS_PER_REV = 8192;
+
     /**
      * Constant for converting lift height to ticks for the motor to rotate
      */

@@ -10,7 +10,7 @@ import robotparts.hardware.Outtake;
 import robotparts.sensors.Cameras;
 import robotparts.sensors.ColorSensors;
 import robotparts.sensors.GyroSensors;
-import robotparts.sensors.odometry.TwoOdometry;
+import robotparts.sensors.TwoOdometryOld;
 import robotparts.unused.DistanceSensors;
 import robotparts.unused.Leds;
 import unused.tankold.TankOdometry;
@@ -47,7 +47,7 @@ public interface RobotUser {
     ColorSensors color = new ColorSensors();
     GyroSensors gyro = new GyroSensors();
     Cameras camera = new Cameras();
-    TwoOdometry odometry = new TwoOdometry();
+    TwoOdometryOld odometry = new TwoOdometryOld();
 
     /**
      * UNUSED

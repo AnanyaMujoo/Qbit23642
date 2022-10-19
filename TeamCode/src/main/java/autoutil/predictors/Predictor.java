@@ -1,6 +1,6 @@
 package autoutil.predictors;
 
-// TODO 4 NEW Make predictors
+// TOD 5 NEW Make predictors
 public class Predictor {
     // A base class for a predictor
     // A predictor predicts the powers of the motors based on the desired target and current position

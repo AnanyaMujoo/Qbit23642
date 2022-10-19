@@ -1,8 +1,14 @@
 package robotparts.sensors;
 
+import java.util.ArrayList;
+
+import autoutil.profilers.Profiler;
+import robot.BackgroundTask;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IGyro;
+
+import static global.General.bot;
 
 
 public class GyroSensors extends RobotPart {
@@ -11,13 +17,29 @@ public class GyroSensors extends RobotPart {
      */
     private IGyro gsr, gsl;
     private double lastAngle = 0;
-    private double heading = 0;
+    private double heading, lastHeading, deltaHeading = 0;
     private double start = 0;
+    private final Profiler deltaHeadingProfiler = new Profiler(() -> deltaHeading);
 
     @Override
     public void init() {
         gsr = create("gsl", ElectronicType.IGYRO);
 //        gsl = createGyro("gsl");
+    }
+
+    public ArrayList<Double> getNewDeltaHeadings(){ return deltaHeadingProfiler.getNewValues(); }
+
+    public void updateHeading(){
+        double currentangle = -gsr.getHeading();
+        double deltaAngle = currentangle - lastAngle;
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+        heading  = heading + deltaAngle;
+        deltaHeading = heading - lastHeading;
+        lastHeading = heading;
+        lastAngle = currentangle;
     }
 
     /**

@@ -25,6 +25,8 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     private double radiusK;
     private double t = 0;
 
+    // TODO 4 NEW Create option for tracer
+
     private final Exponential radiusLogistic;
 
     /**

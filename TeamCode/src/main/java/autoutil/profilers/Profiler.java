@@ -15,6 +15,8 @@ import static global.General.fault;
 
 public class Profiler {
 
+    // TODO 4 MAKE get new delta values method
+
 
     private final ReturnCodeSeg<Double> processVariable;
     private final Integrator integrator;
@@ -22,6 +24,7 @@ public class Profiler {
     private final Timer timer = new Timer();
     private volatile ArrayList<Double> values = new ArrayList<>();
     private volatile ArrayList<Double> times = new ArrayList<>();
+    private volatile int lastAccessedIndex = 0;
 
     public Profiler(ReturnCodeSeg<Double> processVariable){
         this.processVariable = processVariable;
@@ -109,14 +112,25 @@ public class Profiler {
     }
 
 
-    public synchronized double getRunningAverage(int num){
+    public ArrayList<Double> getNewValues(){
+        ArrayList<Double> out = getLastValues(getUpdateNumber() - lastAccessedIndex);
+        lastAccessedIndex = getUpdateNumber();
+        return out;
+    }
+
+
+    private ArrayList<Double> getLastValues(int n){
+        ArrayList<Double> out = new ArrayList<>();
+        int s = values.size();
+        for (int i = s-n; i < s; i++) {
+            out.add(values.get(i));
+        }
+        return out;
+    }
+
+    public double getRunningAverage(int num){
         if(getUpdateNumber() > num){
-            ArrayList<Double> nums = new ArrayList<>();
-            int s = values.size();
-            for (int i = s-num; i < s; i++) {
-                nums.add(values.get(i));
-            }
-            return Iterator.forAllAverage(nums);
+            return Iterator.forAllAverage(getLastValues(num));
         }else{
             return Iterator.forAllAverage(values);
         }
