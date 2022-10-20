@@ -12,7 +12,6 @@ import util.condition.Magnitude;
 import util.template.Iterator;
 
 import static global.General.fault;
-
 public class Profiler {
 
     // TODO 4 MAKE get new delta values method

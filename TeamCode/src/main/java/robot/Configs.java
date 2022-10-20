@@ -10,6 +10,7 @@ public class Configs implements RobotUser{
     RobotConfig TestConfig = new RobotConfig(customTestPart);
     RobotConfig TestConfig2 = new RobotConfig(testPart2);
     RobotConfig TestConfig3 = new RobotConfig(drive, gyro, twoOdometry);
+    RobotConfig TestConfig4 = new RobotConfig(drive, gyro, threeOdometry);
 
     /**
      * Used for tank robots
@@ -31,6 +32,7 @@ public class Configs implements RobotUser{
      */
     public void setCurrentConfig(){
         setConfig(TestConfig3);
+//        setConfig(TestConfig4);
 //        setConfig(PowerPlay);
 //        setConfig(MecanumConfig);
     }
