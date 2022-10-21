@@ -29,11 +29,6 @@ public class ThreeOdometry extends TwoOdometry{
     }
 
     @Override
-    protected void updateBackground(){
-        enc1.updateNormal(); enc2.updateNormal();  enc3.updateNormal();
-    }
-
-    @Override
     protected void resetHardware() {
         enc1.reset(); enc2.reset(); enc3.reset();
     }

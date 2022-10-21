@@ -36,7 +36,7 @@ public class Timer {
      * Reset the timer by setting the start time
      */
     public void reset(){
-        startTime = gameTime.seconds();
+        startTime = gameTime == null ? 0 : gameTime.seconds();
         hasBeenReset = true;
     }
     public void set(double time){

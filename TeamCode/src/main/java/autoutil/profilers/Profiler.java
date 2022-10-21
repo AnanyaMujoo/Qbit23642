@@ -10,6 +10,7 @@ import util.codeseg.ReturnCodeSeg;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.template.Iterator;
+import util.template.Precision;
 
 import static global.General.fault;
 public class Profiler {
@@ -24,6 +25,7 @@ public class Profiler {
     private volatile ArrayList<Double> values = new ArrayList<>();
     private volatile ArrayList<Double> times = new ArrayList<>();
     private volatile int lastAccessedIndex = 0;
+    private boolean firstUpdate = true;
 
     public Profiler(ReturnCodeSeg<Double> processVariable){
         this.processVariable = processVariable;
@@ -33,10 +35,10 @@ public class Profiler {
         differentiator.defineFunction(processVariable);
         values.add(0.0);
         times.add(0.0);
-        timer.reset();
     }
 
     public void update(){
+        Precision.runOnCondition(firstUpdate, () -> {timer.reset(); firstUpdate = false;});
         values.add(processVariable.run());
         times.add(timer.seconds());
         updateIntegrator();

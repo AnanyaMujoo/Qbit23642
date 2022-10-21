@@ -15,6 +15,6 @@ public class OdometryTest extends TeleUnitTest {
     @Override
     protected void loop() {
         bot.drive.move(gph1.ry, gph1.rx, gph1.lx);
-        log.show("Odometry Position", twoOdometry.getPose());
+        log.show("Odometry Pose", twoOdometry);
     }
 }

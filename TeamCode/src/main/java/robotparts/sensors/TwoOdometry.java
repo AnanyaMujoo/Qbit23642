@@ -2,6 +2,7 @@ package robotparts.sensors;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,8 @@ import robotparts.electronics.input.IEncoder;
 import util.codeseg.ExceptionCodeSeg;
 
 import static global.General.bot;
+import static global.General.fault;
+import static global.General.log;
 import static robot.RobotFramework.odometryThread;
 
 public class TwoOdometry extends RobotPart {
@@ -28,13 +31,14 @@ public class TwoOdometry extends RobotPart {
     protected Pose enc1Pose;
     protected Pose enc2Pose;
 
+    // TODO MAKE MORE EFFICIENT BACKGROUND THREAD OR SMT?
+
     @Override
     public final void init() {
-//        createEncoders();
-//        setEncoderPoses();
-//        bot.addBackgroundTask(new BackgroundTask(this::updateBackground));
-//        odometryThread.setExecutionCode(odometryUpdateCode);
-//        reset();
+        createEncoders();
+        setEncoderPoses();
+        odometryThread.setExecutionCode(odometryUpdateCode);
+        reset();
     }
 
     protected void createEncoders(){
@@ -42,13 +46,10 @@ public class TwoOdometry extends RobotPart {
         enc2 = create("blEnc", ElectronicType.IENCODER_NORMAL);
     }
 
+    // TODO CHECK ANGLES MAYBE NOT 90?
     protected void setEncoderPoses(){
-        enc1Pose = new Pose(new Point(0,0), 90);
-        enc2Pose = new Pose(new Point(0,-12.6), 0);
-    }
-
-    protected void updateBackground(){
-        enc1.updateNormal(); enc2.updateNormal();  gyro.updateHeading();
+        enc1Pose = new Pose(new Point(0.1,1), 90);
+        enc2Pose = new Pose(new Point(-0.1,-11.6), 0);
     }
 
     protected void resetHardware(){
@@ -56,8 +57,10 @@ public class TwoOdometry extends RobotPart {
     }
 
     protected void update(){
-//        update(enc1, enc2, null, gyro);
+        update(enc1, enc2, null, gyro);
     }
+
+    // TODO FIX THIS PLEAASE NAN ISSUE AND TAKE OUT CONSTANT MATRX
 
     protected Pose updateDeltaPose(Vector3D deltaEnc, Vector headingVector, double deltaHeading){
         Vector dThetaVector = new Vector(enc1Pose.getVector().getCrossProduct(headingVector), enc2Pose.getVector().getCrossProduct(headingVector));
@@ -66,11 +69,18 @@ public class TwoOdometry extends RobotPart {
                 enc1Pose.getUnitVector().getDotProduct(Vector.xHat()), enc1Pose.getUnitVector().getDotProduct(Vector.yHat()),
                 enc2Pose.getUnitVector().getDotProduct(Vector.xHat()), enc2Pose.getUnitVector().getDotProduct(Vector.yHat())
         );
+        log.show("out", output);
+        log.show("mat", dXdYMatrix);
         Vector deltaPos = Matrix2D.solve(dXdYMatrix, output);
+        log.show("delta", deltaPos);
         return new Pose(deltaPos, deltaHeading);
     }
 
     protected final void update(@NonNull IEncoder enc1, @NonNull IEncoder enc2, @Nullable IEncoder enc3, @Nullable GyroSensors gyro){
+        enc1.updateNormal();
+        enc2.updateNormal();
+        if(enc3 != null) { enc3.updateNormal(); }
+        if(gyro != null) { gyro.updateHeading(); }
         ArrayList<Double> deltasEnc1 = enc1.getNewDeltaPositions();
         ArrayList<Double> deltasEnc2 = enc2.getNewDeltaPositions();
         ArrayList<Double> deltasEnc3 = enc3 == null ? new ArrayList<>(Collections.nCopies(deltasEnc1.size(), 0.0)) : enc3.getNewDeltaPositions();
@@ -81,7 +91,7 @@ public class TwoOdometry extends RobotPart {
     }
 
     private void updateCurrentPose(double deltaEnc1, double deltaEnc2, double deltaEnc3, double deltaHeading){
-        Pose deltaPose = updateDeltaPose(new Vector3D(deltaEnc1, deltaEnc2, deltaEnc3).getScaled(encoderWheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV), new Vector(gyro.getHeading()), deltaHeading);
+        Pose deltaPose = updateDeltaPose(new Vector3D(deltaEnc1, deltaEnc2, deltaEnc3).getScaled(encoderWheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV), new Vector(gyro.getHeading()), Math.toRadians(deltaHeading));
         synchronized (currentPose){ currentPose.add(deltaPose); }
     }
 
@@ -92,4 +102,8 @@ public class TwoOdometry extends RobotPart {
         resetHardware();
     }
 
+    @Override
+    public String toString() {
+        return String.format(Locale.US, "%f, %f, %f", currentPose.getX(), currentPose.getY(), currentPose.getAngle());
+    }
 }

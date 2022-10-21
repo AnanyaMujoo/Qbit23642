@@ -40,6 +40,7 @@ public class GyroSensors extends RobotPart {
         deltaHeading = heading - lastHeading;
         lastHeading = heading;
         lastAngle = currentangle;
+        deltaHeadingProfiler.update();
     }
 
     public double getHeading(){ return heading; }

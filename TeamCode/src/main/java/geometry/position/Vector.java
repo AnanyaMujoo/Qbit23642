@@ -71,7 +71,7 @@ public class Vector extends GeometryObject {
     public double getCrossProduct(Vector in){ return Vector3D.getCrossProduct(this, in); }
     public double getDotProduct(Vector in){ return Vector3D.getDotProduct(this, in); }
 
-    public Vector getUnitVector(){ return this.getScaled(1.0/this.getLength()); }
+    public Vector getUnitVector(){ return this.getLength() == 0.0 ? yHat() :  this.getScaled(1.0/this.getLength()); }
 
     public static Vector xHat(){ return new Vector(1,0); }
     public static Vector yHat(){ return new Vector(0,1); }
