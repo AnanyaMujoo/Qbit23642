@@ -47,9 +47,6 @@ public class IEncoder extends Electronic {
     private volatile double position, lastPosition, deltaPosition = 0; // ticks
     private volatile double angularVelocity = 0; // radians
     private volatile double current = 0; // amps
-
-    private final Profiler deltaPositionProfiler = new Profiler(() -> deltaPosition);
-
     /**
      * Constructor to create the encoder
      * @param m
@@ -81,7 +78,6 @@ public class IEncoder extends Electronic {
         angularVelocity = motor.getVelocity(AngleUnit.RADIANS);
         deltaPosition = position - lastPosition;
         lastPosition = position;
-        deltaPositionProfiler.update();
     }
 
     public double getPos() { return position; }
@@ -90,8 +86,7 @@ public class IEncoder extends Electronic {
 
     public double getCurrent(){ return current; }
 
-    // TODO REMOVE?
-    public ArrayList<Double> getNewDeltaPositions(){ return deltaPositionProfiler.getNewValues(); }
+    public double getDeltaPosition(){ return deltaPosition; }
 
 
     /**

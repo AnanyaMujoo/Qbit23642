@@ -19,15 +19,12 @@ public class GyroSensors extends RobotPart {
     private double lastAngle = 0;
     private double heading, lastHeading, deltaHeading = 0;
     private double start = 0;
-    private final Profiler deltaHeadingProfiler = new Profiler(() -> deltaHeading);
 
     @Override
     public void init() {
         gsr = create("gsl", ElectronicType.IGYRO);
 //        gsl = createGyro("gsl");
     }
-
-    public ArrayList<Double> getNewDeltaHeadings(){ return deltaHeadingProfiler.getNewValues(); }
 
     public void updateHeading(){
         double currentangle = -gsr.getHeading();
@@ -40,10 +37,11 @@ public class GyroSensors extends RobotPart {
         deltaHeading = heading - lastHeading;
         lastHeading = heading;
         lastAngle = currentangle;
-        deltaHeadingProfiler.update();
     }
 
     public double getHeading(){ return heading; }
+
+    public double getDeltaHeading() { return deltaHeading; }
 
     /**
      * Get headings in radians and degrees

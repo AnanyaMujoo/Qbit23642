@@ -6,9 +6,9 @@ import robotparts.electronics.input.IEncoder;
 import unused.tankold.TankOdometry;
 
 import static robot.RobotFramework.odometryThread;
-
-// TODO 4 NEW make proper reset method and Odometry
+// TODO 4 REMOVE
 // Remove dependence on tank odometry
+@Deprecated
 public class TwoOdometryOld extends TankOdometry {
 
     private volatile IEncoder horizontalEncoder;

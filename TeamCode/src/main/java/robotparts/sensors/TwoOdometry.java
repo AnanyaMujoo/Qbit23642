@@ -1,7 +1,5 @@
 package robotparts.sensors;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
@@ -12,14 +10,11 @@ import geometry.position.Vector;
 import global.Constants;
 import math.linearalgebra.Matrix2D;
 import math.linearalgebra.Vector3D;
-import robot.BackgroundTask;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
 import util.codeseg.ExceptionCodeSeg;
 
-import static global.General.bot;
-import static global.General.fault;
 import static global.General.log;
 import static robot.RobotFramework.odometryThread;
 
@@ -30,13 +25,14 @@ public class TwoOdometry extends RobotPart {
     private static final double encoderWheelDiameter = 3.5; //cm
     protected Pose enc1Pose;
     protected Pose enc2Pose;
-
-    // TODO MAKE MORE EFFICIENT BACKGROUND THREAD OR SMT?
+    protected Matrix2D dYdXMatrixInverted;
+    protected double enc1X, enc2X, enc1Y, enc2Y;
 
     @Override
     public final void init() {
         createEncoders();
         setEncoderPoses();
+        setConstantMatrixValues();
         odometryThread.setExecutionCode(odometryUpdateCode);
         reset();
     }
@@ -57,45 +53,42 @@ public class TwoOdometry extends RobotPart {
     }
 
     protected void update(){
-        update(enc1, enc2, null, gyro);
+        updateCurrentPose(enc1, enc2, null, gyro);
     }
 
-    // TODO FIX THIS PLEAASE NAN ISSUE AND TAKE OUT CONSTANT MATRX
+    protected void setConstantMatrixValues(){
+        enc1X = enc1Pose.getUnitVector().getDotProduct(Vector.xHat());
+        enc2X = enc2Pose.getUnitVector().getDotProduct(Vector.xHat());
+        enc1Y = enc1Pose.getUnitVector().getDotProduct(Vector.yHat());
+        enc2Y = enc2Pose.getUnitVector().getDotProduct(Vector.yHat());
+        dYdXMatrixInverted = new Matrix2D(enc1X, enc1X, enc2X, enc2Y).getInverted();
+    }
 
     protected Pose updateDeltaPose(Vector3D deltaEnc, Vector headingVector, double deltaHeading){
         Vector dThetaVector = new Vector(enc1Pose.getVector().getCrossProduct(headingVector), enc2Pose.getVector().getCrossProduct(headingVector));
         Vector output = deltaEnc.get2D().getSubtracted(dThetaVector);
-        Matrix2D dXdYMatrix = new Matrix2D(
-                enc1Pose.getUnitVector().getDotProduct(Vector.xHat()), enc1Pose.getUnitVector().getDotProduct(Vector.yHat()),
-                enc2Pose.getUnitVector().getDotProduct(Vector.xHat()), enc2Pose.getUnitVector().getDotProduct(Vector.yHat())
-        );
         log.show("out", output);
-        log.show("mat", dXdYMatrix);
-        Vector deltaPos = Matrix2D.solve(dXdYMatrix, output);
+        log.show("mat", dYdXMatrixInverted);
+        Vector deltaPos = dYdXMatrixInverted.multiply(output);
         log.show("delta", deltaPos);
         return new Pose(deltaPos, deltaHeading);
     }
 
-    protected final void update(@NonNull IEncoder enc1, @NonNull IEncoder enc2, @Nullable IEncoder enc3, @Nullable GyroSensors gyro){
-        enc1.updateNormal();
-        enc2.updateNormal();
-        if(enc3 != null) { enc3.updateNormal(); }
-        if(gyro != null) { gyro.updateHeading(); }
-        ArrayList<Double> deltasEnc1 = enc1.getNewDeltaPositions();
-        ArrayList<Double> deltasEnc2 = enc2.getNewDeltaPositions();
-        ArrayList<Double> deltasEnc3 = enc3 == null ? new ArrayList<>(Collections.nCopies(deltasEnc1.size(), 0.0)) : enc3.getNewDeltaPositions();
-        ArrayList<Double> deltasHeading = gyro == null ? new ArrayList<>(Collections.nCopies(deltasEnc1.size(), 0.0)) : gyro.getNewDeltaHeadings();
-        for (int i = 0; i < deltasEnc1.size(); i++) {
-            updateCurrentPose(deltasEnc1.get(i), deltasEnc2.get(i), deltasEnc3.get(i), deltasHeading.get(i));
-        }
-    }
-
-    private void updateCurrentPose(double deltaEnc1, double deltaEnc2, double deltaEnc3, double deltaHeading){
-        Pose deltaPose = updateDeltaPose(new Vector3D(deltaEnc1, deltaEnc2, deltaEnc3).getScaled(encoderWheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV), new Vector(gyro.getHeading()), Math.toRadians(deltaHeading));
+    protected final void updateCurrentPose(@NonNull IEncoder enc1, @NonNull IEncoder enc2, @Nullable IEncoder enc3, @Nullable GyroSensors gyro){
+        enc1.updateNormal(); enc2.updateNormal();
+        if(enc3 != null){ enc3.updateNormal(); }
+        if(gyro != null){ gyro.updateHeading(); }
+        Pose deltaPose = updateDeltaPose(
+                new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3 != null ? enc3.getDeltaPosition() : 0.0)
+                        .getScaled(encoderWheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV),
+                new Vector(getHeading()), Math.toRadians(gyro != null ? gyro.getDeltaHeading() : 0.0));
         synchronized (currentPose){ currentPose.add(deltaPose); }
     }
 
     public final Pose getPose(){ return currentPose; }
+    public final double getX(){ return currentPose.getX(); }
+    public final double getY(){ return currentPose.getY(); }
+    public final double getHeading(){ return currentPose.getAngle(); }
 
     public final void reset(){
         synchronized (currentPose) { currentPose.setX(0); currentPose.setY(0); currentPose.setAngle(0); }
