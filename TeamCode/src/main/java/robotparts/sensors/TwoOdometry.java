@@ -30,16 +30,16 @@ public class TwoOdometry extends RobotPart {
 
     @Override
     public final void init() {
-        createEncoders();
-        setEncoderPoses();
-        bot.addBackgroundTask(new BackgroundTask(this::updateBackground));
-        odometryThread.setExecutionCode(odometryUpdateCode);
-        reset();
+//        createEncoders();
+//        setEncoderPoses();
+//        bot.addBackgroundTask(new BackgroundTask(this::updateBackground));
+//        odometryThread.setExecutionCode(odometryUpdateCode);
+//        reset();
     }
 
     protected void createEncoders(){
-        enc1 = create("enc1", ElectronicType.IENCODER_NORMAL);
-        enc2 = create("enc2", ElectronicType.IENCODER_NORMAL);
+        enc1 = create("flEnc", ElectronicType.IENCODER_NORMAL);
+        enc2 = create("blEnc", ElectronicType.IENCODER_NORMAL);
     }
 
     protected void setEncoderPoses(){
@@ -56,7 +56,7 @@ public class TwoOdometry extends RobotPart {
     }
 
     protected void update(){
-        update(enc1, enc2, null, gyro);
+//        update(enc1, enc2, null, gyro);
     }
 
     protected Pose updateDeltaPose(Vector3D deltaEnc, Vector headingVector, double deltaHeading){
@@ -69,9 +69,6 @@ public class TwoOdometry extends RobotPart {
         Vector deltaPos = Matrix2D.solve(dXdYMatrix, output);
         return new Pose(deltaPos, deltaHeading);
     }
-
-
-
 
     protected final void update(@NonNull IEncoder enc1, @NonNull IEncoder enc2, @Nullable IEncoder enc3, @Nullable GyroSensors gyro){
         ArrayList<Double> deltasEnc1 = enc1.getNewDeltaPositions();
