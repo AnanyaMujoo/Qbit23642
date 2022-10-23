@@ -4,13 +4,9 @@ import java.util.ArrayList;
 
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
-import geometry.polygons.Hexagon;
-import geometry.polygons.Quadrilateral;
 import geometry.polygons.Rect;
 import geometry.polygons.Triangle;
 import geometry.position.Line;
-import geometry.position.Vector;
-import util.template.Iterator;
 
 public class Display extends Drawer {
     // TODO 4 NEW Create Display
@@ -96,10 +92,14 @@ public class Display extends Drawer {
 //        drawCircle(new Point(200, 200), 100);
     }
 
-
-
-    public void drawCoordinatePlane(CoordinatePlane coordinatePlane){
-
+    public void drawLine(Line line) {
+        g.drawLine((int) line.getStartPoint().getX(),(int) line.getStartPoint().getY(),(int) line.getEndPoint().getX(),(int) line.getEndPoint().getY());
     }
 
+    public void drawCoordinatePlane(CoordinatePlane coordinatePlane) {
+        ArrayList<Line> lines = coordinatePlane.getLines();
+        for (Line i : lines) {
+            drawLine(i);
+        }
+    }
 }
