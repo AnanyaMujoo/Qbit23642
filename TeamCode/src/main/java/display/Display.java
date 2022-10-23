@@ -2,6 +2,7 @@ package display;
 
 import java.util.ArrayList;
 
+import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
 import geometry.polygons.Hexagon;
 import geometry.polygons.Quadrilateral;
@@ -18,9 +19,20 @@ public class Display extends Drawer {
     private static final int height = 700;
 
     public static void main(String[] args) {
+
+
+
+
 //
-//        Triangle triangle = new Triangle(new Point(3,3), new Point(4,5), new Point(8,1));
-//        Rect rect = new Rect(new Point(3,3), new Point(8,8));
+        Triangle triangle = new Triangle(new Point(3,3), new Point(4,5), new Point(8,1));
+        Rect rect = new Rect(new Point(3,3), new Point(8,8));
+
+
+        CoordinatePlane coordinatePlane = new CoordinatePlane();
+
+        coordinatePlane.add(triangle);
+        coordinatePlane.add(rect);
+
 //        Rect rect2 = new Rect(new Point(3,3), 3, 3, 45);
 //        ArrayList<Line> lines = rect.getLines();
 //        Hexagon hexagon = new Hexagon(new Point(3,3), new Point(3,5));
@@ -82,6 +94,12 @@ public class Display extends Drawer {
 //        drawPose(new Pose(new Point(200,200),90, AngleType.DEGREES));
 //        drawCircularArc(new Point(100,200),40, 0,90, AngleType.DEGREES);
 //        drawCircle(new Point(200, 200), 100);
+    }
+
+
+
+    public void drawCoordinatePlane(CoordinatePlane coordinatePlane){
+
     }
 
 }

@@ -15,8 +15,8 @@ public class DisplayAuto extends Drawer{
 ////        drawLine(new Line(new Point(200,100), new Point(100,100)));
 //    }
 
-    public static void main(String[] args) {
+//    public static void main(String[] args) {
 //        drawWindow(800,800, "DisplayAuto");
 //        System.out.println(i);
-    }
+//    }
 }
