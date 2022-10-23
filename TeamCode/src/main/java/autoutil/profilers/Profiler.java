@@ -15,9 +15,6 @@ import util.template.Precision;
 import static global.General.fault;
 public class Profiler {
 
-    // TODO 4 MAKE get new delta values method
-
-
     private final ReturnCodeSeg<Double> processVariable;
     private final Integrator integrator;
     private final Differentiator differentiator;

@@ -44,8 +44,8 @@ public class TwoOdometry extends RobotPart {
 
     // TODO CHECK ANGLES MAYBE NOT 90?
     protected void setEncoderPoses(){
-        enc1Pose = new Pose(new Point(0.1,1), 90);
-        enc2Pose = new Pose(new Point(-0.1,-11.6), 0);
+        enc1Pose = new Pose(new Point(0.01,1), 90);
+        enc2Pose = new Pose(new Point(-0.01,-11.6), 0);
     }
 
     protected void resetHardware(){
@@ -66,11 +66,11 @@ public class TwoOdometry extends RobotPart {
 
     protected Pose updateDeltaPose(Vector3D deltaEnc, Vector headingVector, double deltaHeading){
         Vector dThetaVector = new Vector(enc1Pose.getVector().getCrossProduct(headingVector), enc2Pose.getVector().getCrossProduct(headingVector));
-        Vector output = deltaEnc.get2D().getSubtracted(dThetaVector);
-        log.show("out", output);
-        log.show("mat", dYdXMatrixInverted);
+        Vector output = deltaEnc.get2D().getSubtracted(dThetaVector.getScaled(deltaHeading));
+        log.show("output", output);
+//        log.show("mat", dYdXMatrixInverted);
         Vector deltaPos = dYdXMatrixInverted.multiply(output);
-        log.show("delta", deltaPos);
+//        log.show("delta", deltaPos);
         return new Pose(deltaPos, deltaHeading);
     }
 
@@ -81,7 +81,7 @@ public class TwoOdometry extends RobotPart {
         Pose deltaPose = updateDeltaPose(
                 new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3 != null ? enc3.getDeltaPosition() : 0.0)
                         .getScaled(encoderWheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV),
-                new Vector(getHeading()), Math.toRadians(gyro != null ? gyro.getDeltaHeading() : 0.0));
+                new Vector(getHeading()+90), Math.toRadians(gyro != null ? gyro.getDeltaHeading() : 0.0));
         synchronized (currentPose){ currentPose.add(deltaPose); }
     }
 
