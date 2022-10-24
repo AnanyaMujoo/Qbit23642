@@ -10,6 +10,7 @@ import geometry.polygons.Rect;
 import geometry.polygons.Triangle;
 import geometry.position.Line;
 import geometry.position.Vector;
+import math.linearalgebra.Matrix2D;
 import util.template.Iterator;
 
 public class Display extends Drawer {
@@ -24,14 +25,17 @@ public class Display extends Drawer {
 
 
 //
-        Triangle triangle = new Triangle(new Point(3,3), new Point(4,5), new Point(8,1));
-        Rect rect = new Rect(new Point(3,3), new Point(8,8));
+//        Triangle triangle = new Triangle(new Point(3,3), new Point(4,5), new Point(8,1));
+//        Rect rect = new Rect(new Point(3,3), new Point(8,8));
+//
+//
+//        CoordinatePlane coordinatePlane = new CoordinatePlane();
+//
+//        coordinatePlane.add(triangle);
+//        coordinatePlane.add(rect);
 
-
-        CoordinatePlane coordinatePlane = new CoordinatePlane();
-
-        coordinatePlane.add(triangle);
-        coordinatePlane.add(rect);
+        Matrix2D mat = new Matrix2D(1,2,3,4);
+        System.out.println(mat);
 
 //        Rect rect2 = new Rect(new Point(3,3), 3, 3, 45);
 //        ArrayList<Line> lines = rect.getLines();

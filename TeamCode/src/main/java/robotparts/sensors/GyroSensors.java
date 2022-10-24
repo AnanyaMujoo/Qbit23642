@@ -68,8 +68,7 @@ public class GyroSensors extends RobotPart {
     public double getLeftHeadingRad() { return Math.toDegrees(getRightHeadingDeg()); }
 
     public void reset(){
-        heading = 0;
-        lastAngle = 0;
+        heading = 0; lastAngle = 0; deltaHeading = 0;
         start = getRightHeadingDegRaw();
     }
 

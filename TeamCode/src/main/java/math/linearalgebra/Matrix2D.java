@@ -61,7 +61,7 @@ public class Matrix2D {
     public String toString() {
         return "Matrix2D{"
                 + matrix.get(0,0) + ", "
-                +  matrix.get(0,1) + ", "
+                +  matrix.get(0,1) + ", \n         "
                 + matrix.get(1,0) + ", "
                 + matrix.get(1,1) + '}';
     }
