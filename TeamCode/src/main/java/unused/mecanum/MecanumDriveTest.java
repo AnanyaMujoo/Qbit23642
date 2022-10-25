@@ -7,6 +7,7 @@ import static global.General.*;
 /**
  * NOTE: Uncommented
  */
+@Deprecated
 public class MecanumDriveTest extends TeleUnitTest {
 
     @Override

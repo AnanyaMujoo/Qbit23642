@@ -11,6 +11,7 @@ import static global.General.log;
 
 public class OdometryTest extends TeleUnitTest {
     // TODO 4 NEW Create OdometryTest tests Accuracy
+    // Check if resetting works now
 
 
     @Override

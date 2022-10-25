@@ -2,7 +2,7 @@ package unused.tank;
 
 import unittests.tele.TeleUnitTest;
 import static global.General.*;
-
+@Deprecated
 public class TankTurretTest extends TeleUnitTest {
     /**
      * Tests the turret

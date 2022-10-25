@@ -6,7 +6,7 @@ import static global.General.*;
 import teleutil.button.Button;
 import teleutil.button.OnPressEventHandler;
 import unittests.UnitTest;
-
+@Deprecated
 public class TankOdometryServoTest extends UnitTest {
     /**
      * Tests odometry servo (used to retract for tank)

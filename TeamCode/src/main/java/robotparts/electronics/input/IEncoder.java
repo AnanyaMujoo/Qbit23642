@@ -61,7 +61,7 @@ public class IEncoder extends Electronic {
         if(encoderType.equals(EncoderType.PMOTOR)) {
             bot.addBackgroundTask(new BackgroundTask(this::updatePMotor));
         }
-        reset();
+        bot.addOnStartTask(this::reset);
     }
 
     public void setUpdateCMotor(){

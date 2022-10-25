@@ -146,6 +146,8 @@ public interface Iterator {
         return out;
     }
 
+    static void forAllRun(ArrayList<CodeSeg> codeSegments){ forAll(codeSegments, CodeSeg::run); }
+
 
     static double forAllAverage(ArrayList<Double> list){
         final double[] sum = {0};

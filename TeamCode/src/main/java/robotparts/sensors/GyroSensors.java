@@ -24,6 +24,7 @@ public class GyroSensors extends RobotPart {
     public void init() {
         gsr = create("gsl", ElectronicType.IGYRO);
 //        gsl = createGyro("gsl");
+        bot.addOnStartTask(this::reset);
     }
 
     public void updateHeading(){
@@ -67,6 +68,7 @@ public class GyroSensors extends RobotPart {
     public double getLeftHeadingDeg() { return gsl.getHeading(); }
     public double getLeftHeadingRad() { return Math.toDegrees(getRightHeadingDeg()); }
 
+    @Override
     public void reset(){
         heading = 0; lastAngle = 0; deltaHeading = 0;
         start = getRightHeadingDegRaw();

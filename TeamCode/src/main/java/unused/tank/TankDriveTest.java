@@ -6,7 +6,7 @@ import teleutil.button.OnTurnOnEventHandler;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.*;
-
+@Deprecated
 public class TankDriveTest extends TeleUnitTest {
     /**
      * Tests the tank drive

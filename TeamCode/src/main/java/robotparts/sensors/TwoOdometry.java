@@ -15,6 +15,7 @@ import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
 import util.codeseg.ExceptionCodeSeg;
 
+import static global.General.bot;
 import static global.General.log;
 import static robot.RobotFramework.odometryThread;
 
@@ -35,7 +36,7 @@ public class TwoOdometry extends RobotPart {
         setEncoderPoses();
         setConstantObjects();
         odometryThread.setExecutionCode(odometryUpdateCode);
-        reset();
+        bot.addOnStartTask(this::reset);
     }
 
     protected void createEncoders(){
@@ -44,14 +45,13 @@ public class TwoOdometry extends RobotPart {
         enc1.invert();
     }
 
-    // TODO CHECK ANGLES MAYBE NOT 90?
     protected void setEncoderPoses(){
         enc1Pose = new Pose(new Point(0.0,1.0), 90);
         enc2Pose = new Pose(new Point(0.0,-11.6), 0);
     }
 
     protected void resetHardware(){
-        enc1.reset(); enc2.reset(); gyro.reset();
+//        enc1.reset(); enc2.reset(); gyro.reset(); // TODO CHECK
     }
 
     protected void update(){
@@ -88,6 +88,7 @@ public class TwoOdometry extends RobotPart {
     public final double getY(){ return currentPose.getY(); }
     public final double getHeading(){ return currentPose.getAngle(); }
 
+    @Override
     public final void reset(){
         currentPose = new Pose();
         resetHardware();

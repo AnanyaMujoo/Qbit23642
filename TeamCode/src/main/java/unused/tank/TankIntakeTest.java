@@ -6,7 +6,7 @@ import teleutil.button.Button;
 import teleutil.button.OnTurnOffEventHandler;
 import teleutil.button.OnTurnOnEventHandler;
 import unittests.tele.TeleUnitTest;
-
+@Deprecated
 public class TankIntakeTest extends TeleUnitTest {
     /**
      * Tests intake

@@ -2,7 +2,7 @@ package unused.tank;
 
 import unittests.tele.TeleUnitTest;
 import static global.General.*;
-
+@Deprecated
 public class TankCarouselTest extends TeleUnitTest {
     /**
      * Tests carousel
