@@ -3,7 +3,7 @@ package math.calculus;
 import geometry.framework.Point;
 import math.Operator;
 
-// TODO 4 NEW Finish math classes
+// TOD 5 NEW Finish math classes
 public class Differentiator extends Operator {
     private double derivative;
     public void differentiate(double t, double step){

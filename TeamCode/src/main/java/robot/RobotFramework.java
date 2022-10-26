@@ -48,8 +48,6 @@ public class RobotFramework {
 
     public BackgroundFunctions backHandler;
 
-    public static ArrayList<CodeSeg> onStartTasks; // TODO CHECK
-
 
     /**
      * Configs object, stores all configs
@@ -62,7 +60,6 @@ public class RobotFramework {
      */
     protected RobotFramework(){
         allRobotParts = new ArrayList<>();
-        onStartTasks = new ArrayList<>();
         TerraThread.resetAllThreads();
         configs.setCurrentConfig();
         localPlane = new CoordinatePlane();
@@ -96,8 +93,7 @@ public class RobotFramework {
      */
     public void start() {
         rfsHandler.resume();
-//        Iterator.forAll(allRobotParts, RobotPart::reset); // TODO CHECK
-        Iterator.forAllRun(onStartTasks);
+        Iterator.forAll(allRobotParts, RobotPart::reset);
     }
 
     public void update(){
@@ -131,12 +127,6 @@ public class RobotFramework {
     public void addBackgroundTask(BackgroundTask backgroundTask){
         backHandler.addBackgroundTask(backgroundTask);
     }
-
-    /**
-     * Add task to execute onStart (make sure the aggregate tasks do not take longer than ~100 ms)
-     * @param task
-     */
-    public void addOnStartTask(CodeSeg task){ onStartTasks.add(task); }
 
     /**
      * Sets the user to the new user specified

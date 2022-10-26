@@ -36,7 +36,6 @@ public class TwoOdometry extends RobotPart {
         setEncoderPoses();
         setConstantObjects();
         odometryThread.setExecutionCode(odometryUpdateCode);
-        bot.addOnStartTask(this::reset);
     }
 
     protected void createEncoders(){
@@ -47,11 +46,11 @@ public class TwoOdometry extends RobotPart {
 
     protected void setEncoderPoses(){
         enc1Pose = new Pose(new Point(0.0,1.0), 90);
-        enc2Pose = new Pose(new Point(0.0,-11.6), 0);
+        enc2Pose = new Pose(new Point(0.0,-13), 0); // -13
     }
 
     protected void resetHardware(){
-//        enc1.reset(); enc2.reset(); gyro.reset(); // TODO CHECK
+        enc1.reset(); enc2.reset();
     }
 
     protected void update(){
@@ -90,8 +89,8 @@ public class TwoOdometry extends RobotPart {
 
     @Override
     public final void reset(){
-        currentPose = new Pose();
-        resetHardware();
+        resetHardware(); currentPose = new Pose();
+        resetHardware(); currentPose = new Pose();
     }
 
     @Override

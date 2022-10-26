@@ -24,7 +24,6 @@ public class GyroSensors extends RobotPart {
     public void init() {
         gsr = create("gsl", ElectronicType.IGYRO);
 //        gsl = createGyro("gsl");
-        bot.addOnStartTask(this::reset);
     }
 
     public void updateHeading(){
