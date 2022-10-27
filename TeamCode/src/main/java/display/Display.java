@@ -1,5 +1,7 @@
 package display;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.util.ArrayList;
 
 import geometry.framework.CoordinatePlane;
@@ -20,7 +22,10 @@ public class Display extends Drawer {
     private static final int height = 700;
 
     public static void main(String[] args) {
-
+        Display display=new Display();
+        CoordinatePlane coordinatePlane1=new CoordinatePlane();
+        coordinatePlane1.add(new Rect(new Point(1,1),new Point(2,2)));
+        display.drawRect(coordinatePlane1);
 
 
 
@@ -99,11 +104,46 @@ public class Display extends Drawer {
 //        drawCircularArc(new Point(100,200),40, 0,90, AngleType.DEGREES);
 //        drawCircle(new Point(200, 200), 100);
     }
-
-
-
-    public void drawCoordinatePlane(CoordinatePlane coordinatePlane){
-
+    public void drawLine(Line line) {
+        g.drawLine((int) line.getStartPoint().getX(),(int) line.getStartPoint().getY(),(int) line.getEndPoint().getX(),(int) line.getEndPoint().getY());
     }
+
+
+    public void drawRect(CoordinatePlane coordinatePlane){
+        coordinatePlane.getLines();
+        ArrayList<Double>xPoints=new ArrayList<>();
+        ArrayList<Double>yPoints=new ArrayList<>();
+        for(Rect i:coordinatePlane.getRects()){
+            for(Point j:i.getPoints()){
+                xPoints.add(j.getX());
+                yPoints.add(j.getY());
+            }
+
+        }
+        int j=1;
+        for(int i=0;i<xPoints.size();i++){
+            g.drawLine(xPoints.get(i).intValue(),yPoints.get(i).intValue(),xPoints.get(j).intValue(),yPoints.get(j).intValue());
+            j++;
+        }
+    }
+
+    public void drawTri(CoordinatePlane coordinatePlane){
+        coordinatePlane.getLines();
+        ArrayList<Double>xPoints=new ArrayList<>();
+        ArrayList<Double>yPoints=new ArrayList<>();
+        for(Triangle i:coordinatePlane.getObjectsOfType(Triangle.class)){
+            for(Point j:i.getPoints()){
+                xPoints.add(j.getX());
+                yPoints.add(j.getY());
+            }
+
+        }
+        int j1=1;
+        for(int i=0;i<xPoints.size();i++){
+            g.drawLine(xPoints.get(i).intValue(),yPoints.get(i).intValue(),xPoints.get(j1).intValue(),yPoints.get(j1).intValue());
+            j1++;
+        }
+    }
+
 
 }
