@@ -50,7 +50,7 @@ public class TerraAutoBlueMec extends CompleteAuto {
             inEndMode = true;
             executor = new MecanumExecutorArcsPID(this);
             addExecutorFuncs(
-                setPoint(bot.odometry.getCurX(), bot.odometry.getCurY(), bot.odometry.getCurThetaRad()),
+                setPoint(bot.mecanumOdometry.getCurX(), bot.mecanumOdometry.getCurY(), bot.mecanumOdometry.getCurThetaRad()),
                 setPoint(-90, 0, -PI/2),
                 setPoint(-100, 0, -PI/2)
             );

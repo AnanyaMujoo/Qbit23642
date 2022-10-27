@@ -12,6 +12,13 @@ public class Constants {
      * Background thread update rate (note this is the highest possible)
      */
     public static final int BACKGROUND_THREAD_REFRESH_RATE = 1000; //hz
+
+    /**
+     * Odometry thread update rate
+     */
+    public static final int ODOMETRY_THREAD_REFRESH_RATE = 500; //hz
+
+
     /**
      *  Minimum  refresh rate allowed before robot is considered to be lagging
      */

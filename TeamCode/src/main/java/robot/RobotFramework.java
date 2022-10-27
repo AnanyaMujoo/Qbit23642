@@ -66,7 +66,7 @@ public class RobotFramework {
         rfsHandler = new RobotFunctions();
         backHandler = new BackgroundFunctions();
         robotFunctionsThread = new TerraThread("RobotFunctionsThread");
-        odometryThread = new TerraThread("OdometryThread");
+        odometryThread = new TerraThread("OdometryThread", Constants.ODOMETRY_THREAD_REFRESH_RATE);
         backgroundThread = new TerraThread("BackgroundThread", Constants.BACKGROUND_THREAD_REFRESH_RATE);
         independentRunner = new IndependentRunner();
         rfsHandler.init();

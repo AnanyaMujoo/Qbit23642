@@ -23,7 +23,7 @@ public class TwoOdometry extends RobotPart {
     protected IEncoder enc1, enc2;
     private final ExceptionCodeSeg<RuntimeException> odometryUpdateCode = this::update;
     private Pose currentPose = new Pose();
-    private static final double encoderWheelDiameter = 3.5; //cm
+    private static final double encoderWheelDiameter = 3.5; // 3.5 cm
     protected Pose enc1Pose;
     protected Pose enc2Pose;
     protected double enc1X, enc2X, enc1Y, enc2Y;

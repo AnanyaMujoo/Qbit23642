@@ -69,7 +69,7 @@ public class Independents implements RobotUser, AutoModuleUser {
             .addOption(Modes.IndependentMode.MANUAL, SetUpForBoth::check)
             .addOption(Modes.IndependentMode.USING, () -> {
                 bot.independentRunner.enableIndependent();
-                odometry.reset();
+                mecanumOdometry.reset();
                 MoveForBackward.check();
             });
 
