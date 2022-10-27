@@ -17,7 +17,7 @@ public class TankReactor {
     private static final double minTurnPow = 0.4;
 
     public boolean moveForward(double targetX, double targetY) {
-        double[] curPos = bot.odometry.getPose();
+        double[] curPos = bot.mecanumOdometry.getPose();
         if (abs(targetX - curPos[0]) > abs(targetY - curPos[1])) {
             return signum(targetX - curPos[0]) != signum(curPos[2]);
         } else {
@@ -27,7 +27,7 @@ public class TankReactor {
     }
 
     public double forwardPowSetpoint(double targetX, double targetY) {
-        double[] curPos = bot.odometry.getPose();
+        double[] curPos = bot.mecanumOdometry.getPose();
         return kf * sqrt(pow(curPos[1] - targetY, 2) + pow(curPos[0] - targetX, 2))
                 * (moveForward(targetX, targetY) ? 1 : -1);
     }
@@ -37,7 +37,7 @@ public class TankReactor {
     }
 
     public double turnPowWay(double targetX, double targetY, double stPos) {
-        double[] curPos = bot.odometry.getPose();
+        double[] curPos = bot.mecanumOdometry.getPose();
         double ang = atan2(targetY - curPos[1], targetX - curPos[0]);
         if (!moveForward(targetX, targetY)) {
             ang += PI;
@@ -53,7 +53,7 @@ public class TankReactor {
         while (targetH > 180) targetH -= 360;
         while (targetH < -180) targetH += 360;
 
-        double curH = bot.odometry.getPose()[2] * 180/PI;
+        double curH = bot.mecanumOdometry.getPose()[2] * 180/PI;
         if (abs(targetH - curH) > abs(targetH - curH + 360)) {
             curH -= 360;
         }

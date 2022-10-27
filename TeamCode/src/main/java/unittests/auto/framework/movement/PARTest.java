@@ -3,8 +3,6 @@ package unittests.auto.framework.movement;
 import java.util.Arrays;
 
 import autoutil.controllers.control1D.PAR;
-import autoutil.controllers.control1D.PID;
-import robotparts.hardware.Drive;
 import unittests.auto.AutoUnitTest;
 import unused.mecanumold.MecanumDrive;
 
@@ -22,7 +20,7 @@ public class PARTest extends AutoUnitTest {
 
     @Override
     protected void start() {
-        odometry.reset();
+        mecanumOdometry.reset();
         testPAR = new PAR(0.003, 0.45, 0.08);
     }
 
@@ -30,7 +28,7 @@ public class PARTest extends AutoUnitTest {
     protected void run() {
         log.show("Coefficients ", Arrays.toString(testPAR.getCoefficients()));
 
-        testPAR.setProcessVariable(() -> bot.odometry.getCurY());
+        testPAR.setProcessVariable(() -> bot.mecanumOdometry.getCurY());
         testPAR.setTarget(20);
 
         log.show("Target (20)", testPAR.getTarget());

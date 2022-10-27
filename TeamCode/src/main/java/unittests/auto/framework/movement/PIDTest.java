@@ -28,7 +28,7 @@ public class PIDTest extends AutoUnitTest {
     protected void run() {
         log.show("Coefficients ", Arrays.toString(testPID.getCoefficients()));
 
-        testPID.setProcessVariable(() -> bot.odometry.getCurY());
+        testPID.setProcessVariable(() -> bot.mecanumOdometry.getCurY());
         testPID.setTarget(20);
 
         log.show("Target (20)", testPID.getTarget());

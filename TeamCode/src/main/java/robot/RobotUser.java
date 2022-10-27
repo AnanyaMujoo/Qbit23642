@@ -56,7 +56,7 @@ public interface RobotUser {
     /**
      * UNUSED
      */
-    TwoOdometryOld odometry = new TwoOdometryOld();
+    TwoOdometryOld mecanumOdometry = new TwoOdometryOld();
     MecanumOuttake mecanumOuttake = new MecanumOuttake();
     MecanumDrive mecanumDrive = new MecanumDrive();
     MecanumIntake mecanumIntake = new MecanumIntake();

@@ -18,7 +18,7 @@ public abstract class MecanumReactor extends Reactor {
 
     @Override
     public Pose getPose() {
-        return new Pose(bot.odometry.getPose());
+        return new Pose(bot.mecanumOdometry.getPose());
     }
 
     @Override
