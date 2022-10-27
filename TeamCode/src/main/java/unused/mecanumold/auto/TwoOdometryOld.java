@@ -1,4 +1,4 @@
-package robotparts.sensors;
+package unused.mecanumold.auto;
 
 import geometry.position.Vector;
 import robotparts.electronics.ElectronicType;
@@ -6,7 +6,6 @@ import robotparts.electronics.input.IEncoder;
 import unused.tankold.TankOdometry;
 
 import static robot.RobotFramework.odometryThread;
-// TODO 4 REMOVE
 // Remove dependence on tank odometry
 @Deprecated
 public class TwoOdometryOld extends TankOdometry {

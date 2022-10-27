@@ -4,9 +4,14 @@ import java.util.ArrayList;
 
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
+import geometry.polygons.Hexagon;
+import geometry.polygons.Quadrilateral;
 import geometry.polygons.Rect;
 import geometry.polygons.Triangle;
 import geometry.position.Line;
+import geometry.position.Vector;
+import math.linearalgebra.Matrix2D;
+import util.template.Iterator;
 
 public class Display extends Drawer {
     // TODO 4 NEW Create Display
@@ -20,14 +25,17 @@ public class Display extends Drawer {
 
 
 //
-        Triangle triangle = new Triangle(new Point(3,3), new Point(4,5), new Point(8,1));
-        Rect rect = new Rect(new Point(3,3), new Point(8,8));
+//        Triangle triangle = new Triangle(new Point(3,3), new Point(4,5), new Point(8,1));
+//        Rect rect = new Rect(new Point(3,3), new Point(8,8));
+//
+//
+//        CoordinatePlane coordinatePlane = new CoordinatePlane();
+//
+//        coordinatePlane.add(triangle);
+//        coordinatePlane.add(rect);
 
-
-        CoordinatePlane coordinatePlane = new CoordinatePlane();
-
-        coordinatePlane.add(triangle);
-        coordinatePlane.add(rect);
+        Matrix2D mat = new Matrix2D(1,2,3,4);
+        System.out.println(mat);
 
 //        Rect rect2 = new Rect(new Point(3,3), 3, 3, 45);
 //        ArrayList<Line> lines = rect.getLines();
@@ -92,14 +100,10 @@ public class Display extends Drawer {
 //        drawCircle(new Point(200, 200), 100);
     }
 
-    public void drawLine(Line line) {
-        g.drawLine((int) line.getStartPoint().getX(),(int) line.getStartPoint().getY(),(int) line.getEndPoint().getX(),(int) line.getEndPoint().getY());
+
+
+    public void drawCoordinatePlane(CoordinatePlane coordinatePlane){
+
     }
 
-    public void drawCoordinatePlane(CoordinatePlane coordinatePlane) {
-        ArrayList<Line> lines = coordinatePlane.getLines();
-        for (Line i : lines) {
-            drawLine(i);
-        }
-    }
 }

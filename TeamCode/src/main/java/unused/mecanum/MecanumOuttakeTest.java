@@ -1,7 +1,7 @@
 package unused.mecanum;
 
 import unittests.tele.TeleUnitTest;
-
+@Deprecated
 public class MecanumOuttakeTest extends TeleUnitTest {
     @Override
     public void init() {

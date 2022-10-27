@@ -47,6 +47,9 @@ public class IEncoder extends Electronic {
     private volatile double position, lastPosition, deltaPosition = 0; // ticks
     private volatile double angularVelocity = 0; // radians
     private volatile double current = 0; // amps
+
+    private boolean inverted = false;
+
     /**
      * Constructor to create the encoder
      * @param m
@@ -58,7 +61,6 @@ public class IEncoder extends Electronic {
         if(encoderType.equals(EncoderType.PMOTOR)) {
             bot.addBackgroundTask(new BackgroundTask(this::updatePMotor));
         }
-        reset();
     }
 
     public void setUpdateCMotor(){
@@ -74,11 +76,14 @@ public class IEncoder extends Electronic {
     private void updatePMotor(){ position = motor.getCurrentPosition(); angularVelocity = motor.getVelocity(AngleUnit.RADIANS); current = motor.getCurrent(CurrentUnit.AMPS); }
 
     public void updateNormal(){
-        position = motor.getCurrentPosition();
+        position = !inverted ? motor.getCurrentPosition() : -motor.getCurrentPosition();
         angularVelocity = motor.getVelocity(AngleUnit.RADIANS);
         deltaPosition = position - lastPosition;
         lastPosition = position;
     }
+
+
+    public void invert(){ inverted = true; }
 
     public double getPos() { return position; }
 

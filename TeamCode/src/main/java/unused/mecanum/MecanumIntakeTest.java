@@ -3,7 +3,7 @@ package unused.mecanum;
 import static global.General.gamepad1;
 
 import unittests.tele.TeleUnitTest;
-
+@Deprecated
 public class MecanumIntakeTest extends TeleUnitTest {
     @Override
     public void init() {

@@ -5,7 +5,7 @@ import teleutil.button.Button;
 import teleutil.button.OnPressEventHandler;
 import unittests.tele.TeleUnitTest;
 import static global.General.*;
-
+@Deprecated
 public class TankLiftTest extends TeleUnitTest {
     /**
      * Tests the lift

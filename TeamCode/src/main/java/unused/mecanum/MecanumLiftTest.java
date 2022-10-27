@@ -5,7 +5,7 @@ import static global.General.gamepad2;
 import static global.General.log;
 
 import unittests.tele.TeleUnitTest;
-
+@Deprecated
 public class MecanumLiftTest extends TeleUnitTest {
     @Override
     public void init() {

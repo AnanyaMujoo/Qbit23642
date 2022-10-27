@@ -52,7 +52,7 @@ import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.template.Iterator;
 
-public class RobotPart extends StageBuilder implements RobotUser {
+public abstract class RobotPart extends StageBuilder implements RobotUser {
     /**
      * Represents a part of the robot like the drivetrain or the intake
      * When making a new part of the robot part make sure to extend this class
@@ -80,7 +80,8 @@ public class RobotPart extends StageBuilder implements RobotUser {
     /**
      * Init method (to be overwritten)
      */
-    public void init() {}
+    public abstract void init();
+    public void reset(){}
 
     /**
      * Creates electronic given name and type

@@ -38,7 +38,8 @@ public class Vector3D {
         return (in1.getX()*in2.getX()) + (in1.getY()*in2.getY());
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "Vector3D{" + getX() + ", " + getY() + ", " + getZ() + '}';
+    }
 }

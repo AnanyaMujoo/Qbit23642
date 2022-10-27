@@ -11,6 +11,7 @@ import teleutil.independent.Independent;
 import teleutil.independent.IndependentRunner;
 import util.TerraThread;
 import util.User;
+import util.codeseg.CodeSeg;
 import util.template.Iterator;
 
 import static global.General.*;
@@ -92,6 +93,7 @@ public class RobotFramework {
      */
     public void start() {
         rfsHandler.resume();
+        Iterator.forAll(allRobotParts, RobotPart::reset);
     }
 
     public void update(){
