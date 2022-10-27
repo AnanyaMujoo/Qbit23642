@@ -1,7 +1,6 @@
 package geometry.framework;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 import util.codeseg.ParameterCodeSeg;
@@ -26,5 +25,7 @@ public abstract class GeometryObject {
     public final void rotate(double angle){ rotate(anchorPoint, angle);}
     public final void scale(Point anchor, double scale){ toAllPoints(p -> p.scale(anchor, scale));}
     public final void scale(double scale){ scale(anchorPoint, scale); }
-
+    public ArrayList<Point> getPoints(){
+        return points;
+    }
 }
