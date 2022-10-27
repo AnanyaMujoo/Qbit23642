@@ -27,8 +27,4 @@ public abstract class GeometryObject {
     public final void scale(Point anchor, double scale){ toAllPoints(p -> p.scale(anchor, scale));}
     public final void scale(double scale){ scale(anchorPoint, scale); }
 
-    public ArrayList<Point> getPoints(){
-        return points;
-    }
-
 }
