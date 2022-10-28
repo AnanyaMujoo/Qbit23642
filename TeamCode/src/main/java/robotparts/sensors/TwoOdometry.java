@@ -63,7 +63,8 @@ public class TwoOdometry extends RobotPart {
         enc2X = Vector.xHat().getDotProduct(enc2Pose.getAngleUnitVector());
         enc2Y = Vector.yHat().getDotProduct(enc2Pose.getAngleUnitVector());
         dYdXMatrixInverted = new Matrix2D(enc1X, enc1Y, enc2X, enc2Y).getInverted();
-        dThetaVector = new Vector(enc1Pose.getVector().getCrossProduct(enc1Pose.getAngleUnitVector()), enc2Pose.getVector().getCrossProduct(enc2Pose.getAngleUnitVector()));
+        dThetaVector = new Vector(enc1Pose.getVector().getCrossProduct(enc1Pose.getAngleUnitVector()), enc2Pose.getVector().getCrossProduct(enc2Pose.getAngleUnitVector())*2.0);
+        // TODO FIX CHANGE THIS CONSTANT OR SMT
     }
 
     protected Pose updateDeltaPose(Vector3D deltaEnc, double deltaHeading){

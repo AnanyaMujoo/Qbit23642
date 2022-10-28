@@ -105,10 +105,10 @@ public class Display extends Drawer {
         ArrayList<Double>xPoints=new ArrayList<>();
         ArrayList<Double>yPoints=new ArrayList<>();
         for(Rect i:coordinatePlane.getRects()){
-            for(Point j:i.getPoints()){
-                xPoints.add(j.getX());
-                yPoints.add(j.getY());
-            }
+//            for(Point j:i.getPoints()){
+//                xPoints.add(j.getX());
+//                yPoints.add(j.getY());
+//            }
 
         }
         int j=1;
