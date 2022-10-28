@@ -22,7 +22,7 @@ import static robot.RobotFramework.odometryThread;
 public class TwoOdometry extends RobotPart {
     protected IEncoder enc1, enc2;
     private final ExceptionCodeSeg<RuntimeException> odometryUpdateCode = this::update;
-    private Pose currentPose = new Pose();
+    private final Pose currentPose = new Pose();
     private static final double encoderWheelDiameter = 3.5; // 3.5 cm
     protected Pose enc1Pose;
     protected Pose enc2Pose;
@@ -46,7 +46,7 @@ public class TwoOdometry extends RobotPart {
 
     protected void setEncoderPoses(){
         enc1Pose = new Pose(new Point(0.0,1.0), 90);
-        enc2Pose = new Pose(new Point(0.0,-13), 0); // -13
+        enc2Pose = new Pose(new Point(0.0,-13), 0);
     }
 
     protected void resetHardware(){
@@ -76,9 +76,14 @@ public class TwoOdometry extends RobotPart {
         enc1.updateNormal(); enc2.updateNormal();
         if(enc3 != null){ enc3.updateNormal(); }
         if(gyro != null){ gyro.updateHeading(); }
+        double deltaHeading = gyro != null ? -gyro.getDeltaHeading() : 0.0;
         Pose deltaPose = updateDeltaPose(
                 new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3 != null ? enc3.getDeltaPosition() : 0.0)
-                        .getScaled(encoderWheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV), gyro != null ? -gyro.getDeltaHeading() : 0.0);
+                        .getScaled(encoderWheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV), deltaHeading);
+        if(deltaHeading != 0.0){
+            deltaPose.setVector(Matrix2D.getIntegratedFromZeroRotationMatrix(Math.toRadians(deltaHeading))
+                    .getMultiplied(1.0 / Math.toRadians(deltaHeading)).multiply(deltaPose.getVector()));
+        }
         synchronized (currentPose){ currentPose.add(deltaPose.getOnlyPointRotated(getHeading())); }
     }
 
@@ -89,8 +94,8 @@ public class TwoOdometry extends RobotPart {
 
     @Override
     public final void reset(){
-        resetHardware(); currentPose = new Pose();
-        resetHardware(); currentPose = new Pose();
+        resetHardware(); currentPose.setZero();
+        resetHardware(); currentPose.setZero();
     }
 
     @Override

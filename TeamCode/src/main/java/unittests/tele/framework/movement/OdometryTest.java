@@ -26,6 +26,7 @@ public class OdometryTest extends TeleUnitTest {
     private boolean customMove = false;
 
     // TODO FIX DRIFT ISSUE
+    // TEST WITH NEW UPDATE CODE
 
     @Override
     protected void start() {

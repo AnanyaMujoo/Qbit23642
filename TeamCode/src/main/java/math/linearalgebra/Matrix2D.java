@@ -3,6 +3,7 @@ package math.linearalgebra;
 import org.firstinspires.ftc.robotcore.external.matrices.GeneralMatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.opencv.core.Mat;
 
 import geometry.framework.Point;
 import geometry.position.Vector;
@@ -12,8 +13,8 @@ import static java.lang.Math.sin;
 
 public class Matrix2D {
 
-    // TOD4 NEW
-    // Make linear algebra classes
+    // TOD5 NEW
+    // Make more linear algebra classes
 
     // | a b |
     // | c d |
@@ -40,6 +41,19 @@ public class Matrix2D {
         return new Point(out.get(0), out.get(1));
     }
 
+    public Matrix2D getInverted(){
+        MatrixF mat = matrix.inverted();
+        return new Matrix2D(mat.get(0,0), mat.get(0,1), mat.get(1,0), mat.get(1,1));
+    }
+
+    public Matrix2D getMultiplied(double scalar){
+        return new Matrix2D(matrix.get(0,0)*scalar, matrix.get(0,1)*scalar, matrix.get(1,0)*scalar, matrix.get(1,1)*scalar);
+    }
+
+    public static Vector solve(Matrix2D matrix, Vector out){
+        return matrix.getInverted().multiply(out);
+    }
+
     public static Matrix2D getScaleMatrix(double scale){
         return new Matrix2D(scale, 0, 0, scale);
     }
@@ -48,13 +62,17 @@ public class Matrix2D {
         return new Matrix2D(cos(angle), -sin(angle), sin(angle), cos(angle));
     }
 
-    public Matrix2D getInverted(){
-        MatrixF mat = matrix.inverted();
-        return new Matrix2D(mat.get(0,0), mat.get(0,1), mat.get(1,0), mat.get(1,1));
+    public static Matrix2D getIntegratedRotationMatrix(double angle){
+        return new Matrix2D(sin(angle), cos(angle), -cos(angle), sin(angle));
     }
 
-    public static Vector solve(Matrix2D matrix, Vector out){
-        return matrix.getInverted().multiply(out);
+    public static Matrix2D getIntegratedFromZeroRotationMatrix(double angle){
+        return getIntegratedRotationMatrix(angle).getSubtracted(getIntegratedRotationMatrix(0.0));
+    }
+
+    public Matrix2D getSubtracted(Matrix2D in){
+        matrix.subtract(in.matrix);
+        return new Matrix2D(matrix.get(0,0), matrix.get(0,1), matrix.get(1,0), matrix.get(1,1));
     }
 
     @Override
