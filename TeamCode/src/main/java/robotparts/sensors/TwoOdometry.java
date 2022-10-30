@@ -13,6 +13,7 @@ import math.linearalgebra.Vector3D;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
+import util.ExceptionCatcher;
 import util.codeseg.ExceptionCodeSeg;
 
 import static global.General.bot;
@@ -45,8 +46,8 @@ public class TwoOdometry extends RobotPart {
     }
 
     protected void setEncoderPoses(){
-        enc1Pose = new Pose(new Point(0.0,1.0), 90);
-        enc2Pose = new Pose(new Point(0.0,-13), 0);
+        enc1Pose = new Pose(new Point(0.0,3.0), 90);
+        enc2Pose = new Pose(new Point(0.0,-13.5), 0); // 13.5 cm
     }
 
     protected void resetHardware(){
@@ -63,8 +64,7 @@ public class TwoOdometry extends RobotPart {
         enc2X = Vector.xHat().getDotProduct(enc2Pose.getAngleUnitVector());
         enc2Y = Vector.yHat().getDotProduct(enc2Pose.getAngleUnitVector());
         dYdXMatrixInverted = new Matrix2D(enc1X, enc1Y, enc2X, enc2Y).getInverted();
-        dThetaVector = new Vector(enc1Pose.getVector().getCrossProduct(enc1Pose.getAngleUnitVector()), enc2Pose.getVector().getCrossProduct(enc2Pose.getAngleUnitVector())*2.0);
-        // TODO FIX CHANGE THIS CONSTANT OR SMT
+        dThetaVector = new Vector(enc1Pose.getVector().getCrossProduct(enc1Pose.getAngleUnitVector()), enc2Pose.getVector().getCrossProduct(enc2Pose.getAngleUnitVector()));
     }
 
     protected Pose updateDeltaPose(Vector3D deltaEnc, double deltaHeading){
@@ -95,8 +95,9 @@ public class TwoOdometry extends RobotPart {
 
     @Override
     public final void reset(){
-        resetHardware(); currentPose.setZero();
-        resetHardware(); currentPose.setZero();
+        resetHardware();
+        ExceptionCatcher.catchInterrupted(() -> Thread.sleep(50));
+        currentPose.setZero();
     }
 
     @Override

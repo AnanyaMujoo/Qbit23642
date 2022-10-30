@@ -31,7 +31,7 @@ public interface AutoModuleUser extends RobotUser {
     AutoModule BackwardNew = new AutoModule(
             outtake.stageLock(0.05),
             outtake.stageTurnToHorizontal(0.05),
-            lift.stageLift(1.0, 25),
+            lift.stageLift(1.0, 26),
             outtake.stageCenterTurret(0.05)
     );
 

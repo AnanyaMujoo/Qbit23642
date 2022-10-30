@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import automodules.AutoModule;
 import automodules.stage.Exit;
+import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import geometry.framework.Point;
@@ -32,6 +33,8 @@ public class OdometryTest extends TeleUnitTest {
     protected void start() {
         gph1.link(Button.RIGHT_BUMPER, moveHeading(180));
         gph1.link(Button.LEFT_BUMPER, moveHeading(0));
+        gph1.link(Button.RIGHT_TRIGGER, moveHeading(-180));
+        gph1.link(Button.LEFT_TRIGGER, moveHeading(-360));
         gph1.link(Button.Y, OnTurnOnEventHandler.class, () -> customMove = true);
         gph1.link(Button.Y, OnTurnOffEventHandler.class, () -> {twoOdometry.reset(); customMove = false;});
     }
