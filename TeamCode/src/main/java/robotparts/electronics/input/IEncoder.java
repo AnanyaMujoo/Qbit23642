@@ -49,6 +49,7 @@ public class IEncoder extends Electronic {
     private volatile double current = 0; // amps
 
     private boolean inverted = false;
+    private double wheelDiameter = 3.5; // cm
 
     /**
      * Constructor to create the encoder
@@ -78,10 +79,11 @@ public class IEncoder extends Electronic {
     public void updateNormal(){
         position = !inverted ? motor.getCurrentPosition() : -motor.getCurrentPosition();
         angularVelocity = motor.getVelocity(AngleUnit.RADIANS);
-        deltaPosition = position - lastPosition;
+        deltaPosition = (position - lastPosition)*wheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV;
         lastPosition = position;
     }
 
+    public void setWheelDiameter(double wheelDiameter){ this.wheelDiameter = wheelDiameter; }
 
     public void invert(){ inverted = true; }
 

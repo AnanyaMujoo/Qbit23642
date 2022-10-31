@@ -1,8 +1,9 @@
 package robot;
 
 import robotparts.hardware.Carousel;
-import robotparts.sensors.ThreeOdometry;
-import robotparts.sensors.TwoOdometry;
+import robotparts.sensors.odometry.ThreeOdometry;
+import robotparts.sensors.odometry.TwoOdometry;
+import robotparts.sensors.odometry.TwoOdometryOnly;
 import unittests.tele.framework.movement.AutoModuleTest;
 import unused.mecanumold.MecanumCarousel;
 import robotparts.hardware.Drive;
@@ -52,7 +53,7 @@ public interface RobotUser {
 
     TwoOdometry twoOdometry = new TwoOdometry();
     ThreeOdometry threeOdometry = new ThreeOdometry();
-
+    TwoOdometryOnly twoOdometryOnly = new TwoOdometryOnly();
     /**
      * UNUSED
      */

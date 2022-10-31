@@ -1,4 +1,4 @@
-package robotparts.sensors;
+package robotparts.sensors.odometry;
 
 import geometry.framework.Point;
 import geometry.position.Pose;
@@ -13,6 +13,8 @@ public class ThreeOdometry extends TwoOdometry{
     private Pose enc3Pose;
     private double enc3X, enc3Y = 0;
     private Vector3D dThetaVector;
+
+    // TODO MIGRATE TO ODOMETRY
 
     @Override
     protected void createEncoders() {

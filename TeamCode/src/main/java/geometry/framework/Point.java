@@ -24,6 +24,7 @@ public class Point {
     public void scale(double scale){ this.x *= scale; this.y *= scale;}
     public void scale(Point p, double scale){ applyMatrixTransformation(p, Matrix2D.getScaleMatrix(scale)); }
     public void translate(double deltaX, double deltaY) {x += deltaX; y+= deltaY;}
+    public void translate(Vector v){ translate(v.getX(), v.getY());}
     public void rotate(double angle){ set(Matrix2D.getRotationMatrix(Math.toRadians(angle)).multiply(this)); }
     public void rotate(Point p, double angle){ applyMatrixTransformation(p, Matrix2D.getRotationMatrix(Math.toRadians(angle))); }
     private void applyMatrixTransformation(Point p, Matrix2D matrix){ Point offsetPoint = matrix.multiply(getSubtracted(p)); set(p.getAdded(offsetPoint)); }

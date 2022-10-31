@@ -1,4 +1,4 @@
-package robotparts.sensors;
+package robotparts.sensors.odometry;
 
 import java.util.Locale;
 
@@ -13,6 +13,7 @@ import math.linearalgebra.Vector3D;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
+import robotparts.sensors.GyroSensors;
 import util.ExceptionCatcher;
 import util.codeseg.ExceptionCodeSeg;
 
@@ -30,6 +31,8 @@ public class TwoOdometry extends RobotPart {
     protected double enc1X, enc2X, enc1Y, enc2Y;
     private Vector dThetaVector;
     private Matrix2D dYdXMatrixInverted;
+
+    // TODO MIGRATE TO ODOMETRY
 
     @Override
     public final void init() {
@@ -69,8 +72,8 @@ public class TwoOdometry extends RobotPart {
 
     protected Pose updateDeltaPose(Vector3D deltaEnc, double deltaHeading){
         Vector output = deltaEnc.get2D().getSubtracted(dThetaVector.getScaled(Math.toRadians(deltaHeading)));
-//        log.show(deltaEnc.get2D());
-//        log.show(dThetaVector.getScaled(Math.toRadians(deltaHeading)));
+        log.show(deltaEnc.get2D());
+        log.show(dThetaVector.getScaled(Math.toRadians(deltaHeading)));
         Vector deltaPos = dYdXMatrixInverted.multiply(output);
         return new Pose(deltaPos, deltaHeading);
     }

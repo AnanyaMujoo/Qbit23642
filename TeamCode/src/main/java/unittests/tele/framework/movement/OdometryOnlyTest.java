@@ -15,12 +15,9 @@ import unittests.tele.TeleUnitTest;
 import static global.General.gph1;
 import static global.General.log;
 
-public class OdometryTest extends TeleUnitTest {
+public class OdometryOnlyTest extends TeleUnitTest {
 
     private boolean customMove = false;
-
-    // TODO FIX DRIFT ISSUE
-    // TEST WITH NEW UPDATE CODE
 
 
     @Override
@@ -30,23 +27,18 @@ public class OdometryTest extends TeleUnitTest {
         gph1.link(Button.RIGHT_TRIGGER, moveHeading(180));
         gph1.link(Button.LEFT_TRIGGER, moveHeading(270));
         gph1.link(Button.Y, OnTurnOnEventHandler.class, () -> customMove = true);
-        gph1.link(Button.Y, OnTurnOffEventHandler.class, () -> {twoOdometry.reset(); customMove = false;});
+        gph1.link(Button.Y, OnTurnOffEventHandler.class, () -> {twoOdometryOnly.reset(); customMove = false;});
     }
 
     @Override
     protected void loop() {
-//        log.show("Use left stick x to move in circle");
-//        log.show("more center separation = forward offset after 180 degree");
-//        log.show("alternate right and left bumpers for shift");
-
         Pose power = movePower(new Pose(new Point(), 0));
-
         if(customMove) {
             drive.move(gph1.ry / 2.0, gph1.rx / 2.0, gph1.lx / 2.0);
         }else {
             drive.move(power.getY() + gph1.ry / 2.0, power.getX() + gph1.rx / 2.0, gph1.lx);
         }
-        log.show("Odometry Pose", twoOdometry);
+        log.show("Odometry Pose", twoOdometryOnly);
     }
 
 
@@ -57,18 +49,18 @@ public class OdometryTest extends TeleUnitTest {
                     Pose power = movePower(new Pose(new Point(), target));
                     drive.move(power.getY(), power.getX(), power.getAngle());
                 }),
-                new Exit(() -> Math.abs(twoOdometry.getHeading()-target) < 2),
+                new Exit(() -> Math.abs(twoOdometryOnly.getHeading()-target) < 2),
                 drive.returnPart()
         ));
     }
 
 
     private Pose movePower(Pose target){
-        Pose error = target.getAdded(twoOdometry.getPose().getInverted());
+        Pose error = target.getAdded(twoOdometryOnly.getPose().getInverted());
         double xPow = getPower(error.getX(), 0.05, 0.02);
         double yPow = getPower(error.getY(), 0.05, 0.02);
         double hPow = getPower(-error.getAngle(), 0.008, 0.06); //0.008, 0.06
-        Vector powerVector = new Vector(xPow, yPow).getRotated(-twoOdometry.getHeading()).getScaled(1);
+        Vector powerVector = new Vector(xPow, yPow).getRotated(-twoOdometryOnly.getHeading()).getScaled(1);
 
         return new Pose(powerVector, hPow);
     }

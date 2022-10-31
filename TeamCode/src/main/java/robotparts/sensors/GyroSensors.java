@@ -7,6 +7,7 @@ import robot.BackgroundTask;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IGyro;
+import util.Timer;
 
 import static global.General.bot;
 
@@ -19,11 +20,14 @@ public class GyroSensors extends RobotPart {
     private double lastAngle = 0;
     private double heading, lastHeading, deltaHeading = 0;
     private double start = 0;
+    private Timer timer;
+    private double lastTime = 0;
 
     @Override
     public void init() {
         gsr = create("gsl", ElectronicType.IGYRO);
 //        gsl = createGyro("gsl");
+        timer.reset();
     }
 
     public void updateHeading(){
@@ -41,7 +45,13 @@ public class GyroSensors extends RobotPart {
 
     public double getHeading(){ return heading; }
 
-    public double getDeltaHeading() { return deltaHeading; }
+    public double getDeltaHeading() {
+        // TODO TEST
+        double deltaTime = timer.seconds()-lastTime;
+        lastTime += deltaTime;
+        return deltaTime < 1.0 ? gsr.getAngularVelocity()*deltaTime : 0.0;
+//        return deltaHeading;
+    }
 
     /**
      * Get headings in radians and degrees
