@@ -4,6 +4,7 @@ import autoutil.paths.PathSegment;
 import geometry.position.Pose;
 
 public class PAR extends Controller1D{
+    // Proportional, Approach Rate, Rest Power
 
     //Using x(t) we can calculate v(x)
     //1. First calculate v(t) which is d/dt(x(t))

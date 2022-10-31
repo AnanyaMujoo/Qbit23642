@@ -40,7 +40,6 @@ public abstract class Odometry extends RobotPart {
     protected abstract void setConstantObjects();
     protected abstract void update();
 
-
     private void internalUpdate(){ Iterator.forAll(encoders, IEncoder::updateNormal); update(); }
 
     public final Pose getPose(){ return currentPose; }

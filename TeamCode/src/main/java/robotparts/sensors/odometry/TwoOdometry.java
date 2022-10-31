@@ -21,46 +21,28 @@ import static global.General.bot;
 import static global.General.log;
 import static robot.RobotFramework.odometryThread;
 
-public class TwoOdometry extends RobotPart {
+public class TwoOdometry extends Odometry {
     protected IEncoder enc1, enc2;
-    private final ExceptionCodeSeg<RuntimeException> odometryUpdateCode = this::update;
-    private final Pose currentPose = new Pose();
-    private static final double encoderWheelDiameter = 3.5; // 3.5 cm
-    protected Pose enc1Pose;
-    protected Pose enc2Pose;
+    protected Pose enc1Pose, enc2Pose;
     protected double enc1X, enc2X, enc1Y, enc2Y;
     private Vector dThetaVector;
     private Matrix2D dYdXMatrixInverted;
 
-    // TODO MIGRATE TO ODOMETRY
-
     @Override
-    public final void init() {
-        createEncoders();
-        setEncoderPoses();
-        setConstantObjects();
-        odometryThread.setExecutionCode(odometryUpdateCode);
-    }
-
     protected void createEncoders(){
         enc1 = create("flEnc", ElectronicType.IENCODER_NORMAL);
         enc2 = create("blEnc", ElectronicType.IENCODER_NORMAL);
         enc1.invert();
+        addEncoders(enc1, enc2);
     }
 
+    @Override
     protected void setEncoderPoses(){
         enc1Pose = new Pose(new Point(0.0,3.0), 90);
-        enc2Pose = new Pose(new Point(0.0,-13.5), 0); // 13.5 cm
+        enc2Pose = new Pose(new Point(0.0,-13.5), 0);
     }
 
-    protected void resetHardware(){
-        enc1.reset(); enc2.reset();
-    }
-
-    protected void update(){
-        updateCurrentPose(enc1, enc2, null, gyro);
-    }
-
+    @Override
     protected void setConstantObjects(){
         enc1X = Vector.xHat().getDotProduct(enc1Pose.getAngleUnitVector());
         enc1Y = Vector.yHat().getDotProduct(enc1Pose.getAngleUnitVector());
@@ -69,6 +51,12 @@ public class TwoOdometry extends RobotPart {
         dYdXMatrixInverted = new Matrix2D(enc1X, enc1Y, enc2X, enc2Y).getInverted();
         dThetaVector = new Vector(enc1Pose.getVector().getCrossProduct(enc1Pose.getAngleUnitVector()), enc2Pose.getVector().getCrossProduct(enc2Pose.getAngleUnitVector()));
     }
+
+    @Override
+    protected void update(){
+        updateCurrentPose(enc1, enc2, null, gyro);
+    }
+
 
     protected Pose updateDeltaPose(Vector3D deltaEnc, double deltaHeading){
         Vector output = deltaEnc.get2D().getSubtracted(dThetaVector.getScaled(Math.toRadians(deltaHeading)));
@@ -84,8 +72,7 @@ public class TwoOdometry extends RobotPart {
         if(gyro != null){ gyro.updateHeading(); }
         double deltaHeading = gyro != null ? gyro.getDeltaHeading() : 0.0;
         Pose deltaPose = updateDeltaPose(
-                new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3 != null ? enc3.getDeltaPosition() : 0.0)
-                        .getScaled(encoderWheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV), deltaHeading);
+                new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3 != null ? enc3.getDeltaPosition() : 0.0), deltaHeading);
         if(deltaHeading != 0.0){
             deltaPose.setVector(Matrix2D.getIntegratedFromZeroRotationMatrix(Math.toRadians(deltaHeading))
                     .getMultiplied(1.0 / Math.toRadians(deltaHeading)).multiply(deltaPose.getVector()));
@@ -93,20 +80,4 @@ public class TwoOdometry extends RobotPart {
         synchronized (currentPose){ currentPose.add(deltaPose.getOnlyPointRotated(getHeading())); }
     }
 
-    public final Pose getPose(){ return currentPose; }
-    public final double getX(){ return currentPose.getX(); }
-    public final double getY(){ return currentPose.getY(); }
-    public final double getHeading(){ return currentPose.getAngle(); }
-
-    @Override
-    public final void reset(){
-        resetHardware();
-        ExceptionCatcher.catchInterrupted(() -> Thread.sleep(50));
-        currentPose.setZero();
-    }
-
-    @Override
-    public String toString() {
-        return String.format(Locale.US, "%f, %f, %f", currentPose.getX(), currentPose.getY(), currentPose.getAngle());
-    }
 }

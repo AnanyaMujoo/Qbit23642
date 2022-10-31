@@ -9,6 +9,7 @@ import elements.FieldSide;
 import unittests.UnitTester;
 import unittests.auto.framework.IteratorTest;
 import unittests.auto.framework.ThreadStopTest;
+import unittests.auto.framework.movement.DRPTest;
 import unittests.auto.framework.movement.MoveTimeTest;
 import unittests.auto.framework.movement.PARTest;
 import unittests.auto.framework.movement.PIDTest;
@@ -50,6 +51,7 @@ public class AutoUnitTester extends Auto implements UnitTester {
 
 //        Works????
 //        add(new PurePursuitTest());
+        add(new DRPTest()); // TODO TEST
 
     }
 

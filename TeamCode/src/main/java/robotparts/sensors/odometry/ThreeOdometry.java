@@ -14,12 +14,11 @@ public class ThreeOdometry extends TwoOdometry{
     private double enc3X, enc3Y = 0;
     private Vector3D dThetaVector;
 
-    // TODO MIGRATE TO ODOMETRY
-
     @Override
     protected void createEncoders() {
         super.createEncoders();
         enc3 = create("enc3", ElectronicType.IENCODER_NORMAL);
+        addEncoders(enc3);
     }
 
     @Override
@@ -29,10 +28,6 @@ public class ThreeOdometry extends TwoOdometry{
         enc3Pose = new Pose(new Point(0,0), 90);
     }
 
-    @Override
-    protected void resetHardware() {
-        enc1.reset(); enc2.reset(); enc3.reset();
-    }
 
     @Override
     protected void update() {
