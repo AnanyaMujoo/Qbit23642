@@ -27,7 +27,7 @@ public class GyroSensors extends RobotPart {
     }
 
     public void updateHeading(){
-        double currentangle = -gsr.getHeading();
+        double currentangle = gsr.getHeading();
         double deltaAngle = currentangle - lastAngle;
         if (deltaAngle < -180)
             deltaAngle += 360;

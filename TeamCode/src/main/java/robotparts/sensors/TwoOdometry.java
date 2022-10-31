@@ -69,6 +69,8 @@ public class TwoOdometry extends RobotPart {
 
     protected Pose updateDeltaPose(Vector3D deltaEnc, double deltaHeading){
         Vector output = deltaEnc.get2D().getSubtracted(dThetaVector.getScaled(Math.toRadians(deltaHeading)));
+//        log.show(deltaEnc.get2D());
+//        log.show(dThetaVector.getScaled(Math.toRadians(deltaHeading)));
         Vector deltaPos = dYdXMatrixInverted.multiply(output);
         return new Pose(deltaPos, deltaHeading);
     }
@@ -77,7 +79,7 @@ public class TwoOdometry extends RobotPart {
         enc1.updateNormal(); enc2.updateNormal();
         if(enc3 != null){ enc3.updateNormal(); }
         if(gyro != null){ gyro.updateHeading(); }
-        double deltaHeading = gyro != null ? -gyro.getDeltaHeading() : 0.0;
+        double deltaHeading = gyro != null ? gyro.getDeltaHeading() : 0.0;
         Pose deltaPose = updateDeltaPose(
                 new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3 != null ? enc3.getDeltaPosition() : 0.0)
                         .getScaled(encoderWheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV), deltaHeading);

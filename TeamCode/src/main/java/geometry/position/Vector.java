@@ -76,5 +76,5 @@ public class Vector extends GeometryObject {
     public static Vector xHat(){ return new Vector(1,0); }
     public static Vector yHat(){ return new Vector(0,1); }
 
-    public String toString() { return String.format(Locale.US,"Vector {x: %f, y: %f, length: %f, theta: %f}", getX(), getY(), getLength(), getTheta()); }
+    public String toString() { return String.format(Locale.US,"Vector {x: %f, y: %f}", getX(), getY()); }
 }
