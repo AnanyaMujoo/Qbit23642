@@ -19,9 +19,7 @@ public class OdometryTest extends TeleUnitTest {
 
     private boolean customMove = false;
 
-    // TODO FIX DRIFT ISSUE
-    // TEST WITH NEW UPDATE CODE
-
+    // TODO COMPARE ODOMETRIES
 
     @Override
     protected void start() {
@@ -35,12 +33,7 @@ public class OdometryTest extends TeleUnitTest {
 
     @Override
     protected void loop() {
-//        log.show("Use left stick x to move in circle");
-//        log.show("more center separation = forward offset after 180 degree");
-//        log.show("alternate right and left bumpers for shift");
-
         Pose power = movePower(new Pose(new Point(), 0));
-
         if(customMove) {
             drive.move(gph1.ry / 2.0, gph1.rx / 2.0, gph1.lx / 2.0);
         }else {
@@ -48,7 +41,6 @@ public class OdometryTest extends TeleUnitTest {
         }
         log.show("Odometry Pose", twoOdometry);
     }
-
 
     private AutoModule moveHeading(double target){
         return new AutoModule(new Stage(
@@ -61,7 +53,6 @@ public class OdometryTest extends TeleUnitTest {
                 drive.returnPart()
         ));
     }
-
 
     private Pose movePower(Pose target){
         Pose error = target.getAdded(twoOdometry.getPose().getInverted());

@@ -13,6 +13,7 @@ import math.linearalgebra.Matrix2D;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
+import robotparts.sensors.GyroSensors;
 import util.ExceptionCatcher;
 import util.codeseg.ExceptionCodeSeg;
 import util.template.Iterator;
@@ -23,6 +24,7 @@ public abstract class Odometry extends RobotPart {
     protected ArrayList<IEncoder> encoders = new ArrayList<>();
     protected final Pose currentPose = new Pose();
     private final ExceptionCodeSeg<RuntimeException> odometryUpdateCode = this::internalUpdate;
+    private boolean usingGyro = false;
 
     @Override
     public final void init() {
@@ -32,15 +34,20 @@ public abstract class Odometry extends RobotPart {
         odometryThread.setExecutionCode(odometryUpdateCode);
     }
 
-
     protected final void addEncoders(IEncoder... encoders){ this.encoders.addAll(Arrays.asList(encoders)); }
+    protected final void useGyro(){ usingGyro = true; }
 
     protected abstract void createEncoders();
     protected abstract void setEncoderPoses();
     protected abstract void setConstantObjects();
     protected abstract void update();
+    protected void resetObjects(){}
 
-    private void internalUpdate(){ Iterator.forAll(encoders, IEncoder::updateNormal); update(); }
+    private void internalUpdate(){
+        Iterator.forAll(encoders, IEncoder::updateNormal);
+        if(usingGyro){ gyro.update(); }
+        update();
+    }
 
     public final Pose getPose(){ return currentPose; }
     public final double getX(){ return currentPose.getX(); }
@@ -48,19 +55,24 @@ public abstract class Odometry extends RobotPart {
     public final double getHeading(){ return currentPose.getAngle(); }
 
     public final void setCurrentPose(Pose pose){
-        synchronized (currentPose) {
-            currentPose.setX(pose.getX()); currentPose.setX(pose.getY()); currentPose.setX(pose.getAngle());
-        }
+        synchronized (currentPose) { currentPose.setX(pose.getX()); currentPose.setY(pose.getY()); currentPose.setAngle(pose.getAngle()); }
     }
 
+    public final void updateCurrentPose(Vector delta, double deltaHeading){
+        synchronized (currentPose) { currentPose.add(delta); currentPose.setAngle(getHeading()+deltaHeading); }
+    }
+
+    protected final void setHeading(double heading){ currentPose.setAngle(heading); }
+
     protected Vector toGlobalFrame(Vector v){ return v.getRotated(getHeading()); }
-    protected Vector toLocalFrame(Vector v){ return v.getRotated(-getHeading()); }
 
     @Override
     public final void reset(){
+        if(usingGyro){ gyro.reset(); }
         Iterator.forAll(encoders, IEncoder::reset);
         ExceptionCatcher.catchInterrupted(() -> Thread.sleep(50));
         currentPose.setZero();
+        resetObjects();
     }
 
     @Override

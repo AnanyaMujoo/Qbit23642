@@ -19,7 +19,6 @@ public class OdometryOnlyTest extends TeleUnitTest {
 
     private boolean customMove = false;
 
-
     @Override
     protected void start() {
         gph1.link(Button.RIGHT_BUMPER, moveHeading(90));

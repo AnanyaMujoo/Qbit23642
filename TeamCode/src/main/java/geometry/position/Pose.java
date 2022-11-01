@@ -19,6 +19,7 @@ public class Pose extends GeometryObject {
     public Pose(){ this.p = new Point(); setAngle(0); }
 
     public void add(Pose in){p.translate(in.getX(), in.getY()); angle += in.getAngle(); }
+    public void add(Vector in){p.translate(in.getX(), in.getY());}
     public Pose getAdded(Pose in){return new Pose(p.getTranslated(in.getX(), in.getY()), this.getAngle()+in.getAngle());}
     public Pose getInverted(){ return new Pose(-getX(), -getY(), -getAngle()); }
 

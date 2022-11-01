@@ -12,7 +12,7 @@ public abstract class MecanumReactor extends Reactor {
     public void init() {
         movementController.setProcessVariable(() -> getPose().getX(), () -> getPose().getY());
         headingController.setProcessVariable(() -> getPose().getAngle());
-        headingController.setProcessError(() -> GyroSensors.processThetaError(headingController.getRawError()));
+        headingController.setProcessError(() -> processThetaError(headingController.getRawError()));
         nextTarget();
     }
 
@@ -49,5 +49,13 @@ public abstract class MecanumReactor extends Reactor {
 //        log.show("yPID state (Err, Int, Der)", Arrays.toString(controllers.get(1).getErrorState()));
 //        log.show("xPID state (Err, Int, Der)", Arrays.toString(controllers.get(0).getErrorState()));
 //        log.show("hPID state (Err, Int, Der)", Arrays.toString(controllers.get(2).getErrorState()));
+    }
+
+
+
+    public static double processThetaError(double error){
+        while (error < -180) { error += 360; }
+        while (error > 180) { error -= 360; }
+        return error;
     }
 }
