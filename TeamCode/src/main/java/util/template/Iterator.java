@@ -146,6 +146,17 @@ public interface Iterator {
         return out;
     }
 
+    @SuppressWarnings("unchecked")
+    static <T> ArrayList<T> forAllOfExtendedType(ArrayList<? super T> list, Class<T> type){
+        ArrayList<T> out = new ArrayList<>();
+        for(Object obj: list){
+            if(type.isInstance(obj)){
+                out.add((T) obj);
+            }
+        }
+        return out;
+    }
+
     static void forAllRun(ArrayList<CodeSeg> codeSegments){ forAll(codeSegments, CodeSeg::run); }
 
 

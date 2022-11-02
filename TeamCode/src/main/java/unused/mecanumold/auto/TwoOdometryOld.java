@@ -1,5 +1,6 @@
 package unused.mecanumold.auto;
 
+import geometry.position.Pose;
 import geometry.position.Vector;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
@@ -117,9 +118,10 @@ public class TwoOdometryOld extends TankOdometry {
     public double getCurY(){
         return positionRobotCenter.getY();
     }
-    public double getCurThetaRad(){
-        return heading;
-    }
+    public double getHeading(){ return heading; }
+
+
+    public Pose getCurrentPose(){ return new Pose(getCurX(), getCurY(), getHeading()); }
 
     @Override
     public double[] getPose(){

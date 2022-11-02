@@ -51,8 +51,9 @@ public class TwoOdometryV2 extends Odometry {
 
     @Override
     protected void update() {
-        Vector localDelta = dYdXMatrixInverted.multiply(new Vector(enc1.getDeltaPosition(), enc2.getDeltaPosition()));
-        localDelta.add(new Vector(0, Math.abs(Math.toRadians(gyro.getDeltaHeading()))*localCorrectionCoefficient));
+        double k = 2; // TODO TEST
+        Vector localDelta = dYdXMatrixInverted.multiply(new Vector(enc1.getDeltaPosition()*k, enc2.getDeltaPosition()));
+//        localDelta.add(new Vector(0, Math.abs(Math.toRadians(gyro.getDeltaHeading()))*localCorrectionCoefficient));
         odometryCenter.translate(toGlobalFrame(localDelta));
         Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter); // subtracted offset to make start position (0,0)
         setCurrentPose(new Pose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()), gyro.getHeading()));

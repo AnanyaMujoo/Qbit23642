@@ -2,19 +2,38 @@ package display;
 
 import java.util.ArrayList;
 
+import geometry.circles.Circle;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
+import geometry.polygons.Polygon;
 import geometry.polygons.Rect;
+import geometry.polygons.Triangle;
 import geometry.position.Line;
+import geometry.position.Pose;
+import geometry.position.Vector;
 import math.linearalgebra.Matrix2D;
+import util.template.Iterator;
 
 public class Display extends Drawer {
     // TODO 4 NEW Create Display
 
-    private static final int width = 700;
-    private static final int height = 700;
 
     public static void main(String[] args) {
+        drawWindow(width,height, "Display");
+    }
+
+    @Override
+    public void define() {
+        Line line = new Line(new Point(100, 100), new Point(300,300));
+        Pose pose = new Pose(new Point(150,100), 90);
+        Triangle triangle = new Triangle(new Point(300,300), new Point(400,500), new Point(600,100));
+        Rect rect = new Rect(new Point(300,300), new Point(400,400));
+        Circle circle = new Circle(new Point(200,200), 50);
+        drawPlane(new CoordinatePlane(line, pose, triangle, rect, circle));
+    }
+
+
+//    public static void main(String[] args) {
 
 
 
@@ -29,8 +48,8 @@ public class Display extends Drawer {
 //        coordinatePlane.add(triangle);
 //        coordinatePlane.add(rect);
 
-        Matrix2D mat = new Matrix2D(1,2,3,4);
-        System.out.println(mat);
+//        Matrix2D mat = new Matrix2D(1,2,3,4);
+//        System.out.println(mat);
 
 //        Rect rect2 = new Rect(new Point(3,3), 3, 3, 45);
 //        ArrayList<Line> lines = rect.getLines();
@@ -93,29 +112,6 @@ public class Display extends Drawer {
 //        drawPose(new Pose(new Point(200,200),90, AngleType.DEGREES));
 //        drawCircularArc(new Point(100,200),40, 0,90, AngleType.DEGREES);
 //        drawCircle(new Point(200, 200), 100);
-    }
-
-
-    public void drawLine(Line line) {
-        g.drawLine((int) line.getStartPoint().getX(),(int) line.getStartPoint().getY(),(int) line.getEndPoint().getX(),(int) line.getEndPoint().getY());
-    }
-
-    public void drawRect(CoordinatePlane coordinatePlane){
-        coordinatePlane.getLines();
-        ArrayList<Double>xPoints=new ArrayList<>();
-        ArrayList<Double>yPoints=new ArrayList<>();
-        for(Rect i:coordinatePlane.getRects()){
-//            for(Point j:i.getPoints()){
-//                xPoints.add(j.getX());
-//                yPoints.add(j.getY());
-//            }
-
-        }
-        int j=1;
-        for(int i=0;i<xPoints.size();i++){
-            g.drawLine(xPoints.get(i).intValue(),yPoints.get(i).intValue(),xPoints.get(j).intValue(),yPoints.get(j).intValue());
-            j++;
-        }
-    }
+//    }
 
 }

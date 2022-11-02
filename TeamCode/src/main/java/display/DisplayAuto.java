@@ -1,6 +1,10 @@
 package display;
 
 public class DisplayAuto extends Drawer{
+    @Override
+    public void define() {
+
+    }
 //    static int i = 0;
 //    @Override
 //    public void paintComponent(Graphics g) {
