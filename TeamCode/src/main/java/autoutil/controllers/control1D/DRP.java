@@ -24,7 +24,7 @@ public class DRP extends Controller1D{
 
     @Override
     protected void updateController(Pose pose, PathSegment pathSegment) {
-        precision.throttle(() -> restPower *= isWithinAccuracyRange() ? 0.98 : 1.01, 100);
+        precision.throttle(() -> restPower *= isWithinAccuracyRange() ? 0.98 : 1.02, 25);
         setRestOutput(restPower);
     }
 

@@ -1,6 +1,7 @@
 package robot;
 
 import robotparts.hardware.Carousel;
+import robotparts.sensors.odometry.Odometry;
 import robotparts.sensors.odometry.ThreeOdometry;
 import robotparts.sensors.odometry.TwoOdometry;
 import robotparts.sensors.odometry.TwoOdometryV2;
@@ -51,9 +52,9 @@ public interface RobotUser {
     GyroSensors gyro = new GyroSensors();
     Cameras camera = new Cameras();
 
-    TwoOdometry twoOdometry = new TwoOdometry();
-    TwoOdometryV2 twoOdometryV2 = new TwoOdometryV2();
-    ThreeOdometry threeOdometry = new ThreeOdometry();
+    Odometry odometry = new TwoOdometry();
+//    Odometry odometry = new TwoOdometryV2();
+//    Odometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS
     /**
      * UNUSED
      */

@@ -6,8 +6,6 @@ import elements.FieldSide;
 import teleop.Tele;
 
 import unittests.UnitTester;
-import unittests.tele.framework.movement.TwoOdometryTest;
-import unittests.unused.TwoOdometryV2Test;
 
 import static global.General.*;
 

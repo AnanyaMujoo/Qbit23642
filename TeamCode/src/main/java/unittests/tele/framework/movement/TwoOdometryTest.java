@@ -27,7 +27,8 @@ public class TwoOdometryTest extends TeleUnitTest {
         gph1.link(Button.RIGHT_TRIGGER, moveHeading(-180));
         gph1.link(Button.B, () -> bot.cancelAutoModules());
         gph1.link(Button.Y, OnTurnOnEventHandler.class, () -> customMove = true);
-        gph1.link(Button.Y, OnTurnOffEventHandler.class, () -> {twoOdometry.reset(); customMove = false;});
+        gph1.link(Button.Y, OnTurnOffEventHandler.class, () -> {
+            odometry.reset(); customMove = false;});
     }
 
     @Override
@@ -38,7 +39,7 @@ public class TwoOdometryTest extends TeleUnitTest {
         }else {
             drive.move(power.getY() + gph1.ry / 2.0, power.getX() + gph1.rx / 2.0, gph1.lx);
         }
-        log.show("Odometry Pose", twoOdometry);
+        log.show("Odometry Pose", odometry);
     }
 
     private AutoModule moveHeading(double target){
@@ -48,17 +49,17 @@ public class TwoOdometryTest extends TeleUnitTest {
                     Pose power = movePower(new Pose(new Point(), target));
                     drive.move(power.getY(), power.getX(), power.getAngle());
                 }),
-                new Exit(() -> Math.abs(twoOdometry.getHeading()-target) < 2),
+                new Exit(() -> Math.abs(odometry.getHeading()-target) < 2),
                 drive.returnPart()
         ));
     }
 
     private Pose movePower(Pose target){
-        Pose error = target.getAdded(twoOdometry.getPose().getInverted());
+        Pose error = target.getAdded(odometry.getPose().getInverted());
         double xPow = getPower(error.getX(), 0.05, 0.02);
         double yPow = getPower(error.getY(), 0.05, 0.02);
         double hPow = getPower(-error.getAngle(), 0.008, 0.06); //0.008, 0.06
-        Vector powerVector = new Vector(xPow, yPow).getRotated(-twoOdometry.getHeading()).getScaled(1);
+        Vector powerVector = new Vector(xPow, yPow).getRotated(-odometry.getHeading()).getScaled(1);
 
         return new Pose(powerVector, hPow);
     }

@@ -15,14 +15,14 @@ public class DRPTest extends AutoUnitTest {
 
     @Override
     protected void start() {
-        twoOdometryV2.reset();
-        testDRP = new DRP(0.003, 0.03);
+        odometry.reset();
+        testDRP = new DRP(0.03, 0.03);
     }
 
     @Override
     protected void run() {
 
-        testDRP.setProcessVariable(twoOdometryV2::getY);
+        testDRP.setProcessVariable(odometry::getY);
         testDRP.setTarget(20);
 
         whileActive(() -> !testDRP.isAtTarget(), () -> {
