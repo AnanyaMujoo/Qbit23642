@@ -1,21 +1,25 @@
 package robotparts.sensors.odometry;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import geometry.framework.Point;
 import geometry.position.Pose;
 import geometry.position.Vector;
 import math.linearalgebra.Matrix2D;
-import robot.RobotUser;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
-import util.ExceptionCatcher;
-import util.template.Iterator;
 
-public class TwoOdometryOnly extends Odometry {
+/**
+ * Unadvised to use this
+ */
+@Disabled
+public class TwoOdometryV2 extends Odometry {
     protected IEncoder enc1, enc2;
     protected Pose enc1Pose, enc2Pose;
     public Point odometryCenter = new Point(); // Point where perpendiculars of parallels connect
     private Matrix2D dYdXMatrixInverted;
     private final Vector odometryCenterToRobotCenter = new Vector(0.0, 12.6);
+    private static final double localCorrectionCoefficient = 1.8;
 
     @Override
     protected void createEncoders() {
@@ -48,6 +52,7 @@ public class TwoOdometryOnly extends Odometry {
     @Override
     protected void update() {
         Vector localDelta = dYdXMatrixInverted.multiply(new Vector(enc1.getDeltaPosition(), enc2.getDeltaPosition()));
+        localDelta.add(new Vector(0, Math.abs(Math.toRadians(gyro.getDeltaHeading()))*localCorrectionCoefficient));
         odometryCenter.translate(toGlobalFrame(localDelta));
         Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter); // subtracted offset to make start position (0,0)
         setCurrentPose(new Pose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()), gyro.getHeading()));

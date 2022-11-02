@@ -1,12 +1,9 @@
 package unittests.auto.framework.movement;
 
-import java.util.Arrays;
-
 import autoutil.controllers.control1D.DRP;
-import autoutil.controllers.control1D.PAR;
 import robotparts.hardware.Drive;
 import unittests.auto.AutoUnitTest;
-import unused.mecanumold.MecanumDrive;
+
 import static global.General.log;
 
 public class DRPTest extends AutoUnitTest {
@@ -18,14 +15,14 @@ public class DRPTest extends AutoUnitTest {
 
     @Override
     protected void start() {
-        twoOdometryOnly.reset();
+        twoOdometryV2.reset();
         testDRP = new DRP(0.003, 0.03);
     }
 
     @Override
     protected void run() {
 
-        testDRP.setProcessVariable(twoOdometryOnly::getY);
+        testDRP.setProcessVariable(twoOdometryV2::getY);
         testDRP.setTarget(20);
 
         whileActive(() -> !testDRP.isAtTarget(), () -> {

@@ -1,31 +1,18 @@
 package robotparts.sensors.odometry;
 
-import java.util.Locale;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import geometry.framework.Point;
 import geometry.position.Pose;
 import geometry.position.Vector;
-import global.Constants;
 import math.linearalgebra.Matrix2D;
-import math.linearalgebra.Vector3D;
-import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
-import robotparts.sensors.GyroSensors;
-import util.ExceptionCatcher;
-import util.codeseg.ExceptionCodeSeg;
-
-import static global.General.bot;
-import static global.General.log;
-import static robot.RobotFramework.odometryThread;
 
 public class TwoOdometry extends Odometry {
     protected IEncoder enc1, enc2;
     protected Pose enc1Pose, enc2Pose;
     private Vector dThetaVector;
     private Matrix2D dYdXMatrixInverted;
+    private static final double localCorrectionCoefficient = 1.8;
 
     @Override
     protected void createEncoders(){
@@ -58,13 +45,11 @@ public class TwoOdometry extends Odometry {
         double deltaHeading = Math.toRadians(gyro.getDeltaHeading());
         Vector localEncDelta = new Vector(enc1.getDeltaPosition(), enc2.getDeltaPosition()).getSubtracted(dThetaVector.getScaled(deltaHeading));
         Vector localDelta = dYdXMatrixInverted.multiply(localEncDelta);
-//        localDelta.subtract(new Vector(0, deltaHeading*0.1)); // TODO TEST
-//        localDelta.subtract(new Vector(deltaHeading*0.1, 0));
-//        if(deltaHeading != 0.0){
-//            localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(deltaHeading).getMultiplied(1.0 / Math.toRadians(deltaHeading)).multiply(localDelta);
-//        }
+        localDelta.add(new Vector(0, Math.abs(deltaHeading)*localCorrectionCoefficient));
+        if(deltaHeading != 0.0){
+            localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(deltaHeading).getMultiplied(1.0 / deltaHeading).multiply(localDelta);
+        }
         Vector globalDelta = toGlobalFrame(localDelta);
-//        globalDelta.add(new Vector(Math.signum(getHeading() % 180)*deltaHeading*0.1, 0));
         updateCurrentPose(globalDelta, Math.toDegrees(deltaHeading));
     }
 }

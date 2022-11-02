@@ -3,7 +3,7 @@ package robot;
 import robotparts.hardware.Carousel;
 import robotparts.sensors.odometry.ThreeOdometry;
 import robotparts.sensors.odometry.TwoOdometry;
-import robotparts.sensors.odometry.TwoOdometryOnly;
+import robotparts.sensors.odometry.TwoOdometryV2;
 import unittests.tele.framework.movement.AutoModuleTest;
 import unused.mecanumold.MecanumCarousel;
 import robotparts.hardware.Drive;
@@ -52,8 +52,8 @@ public interface RobotUser {
     Cameras camera = new Cameras();
 
     TwoOdometry twoOdometry = new TwoOdometry();
+    TwoOdometryV2 twoOdometryV2 = new TwoOdometryV2();
     ThreeOdometry threeOdometry = new ThreeOdometry();
-    TwoOdometryOnly twoOdometryOnly = new TwoOdometryOnly();
     /**
      * UNUSED
      */
@@ -81,7 +81,6 @@ public interface RobotUser {
      */
 
     CustomTestPart customTestPart = new CustomTestPart();
-
     AutoModuleTest.TestPart2 testPart2 = new AutoModuleTest.TestPart2();
 
 }
