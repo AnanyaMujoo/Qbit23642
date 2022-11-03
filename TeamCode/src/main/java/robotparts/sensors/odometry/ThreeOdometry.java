@@ -2,14 +2,12 @@ package robotparts.sensors.odometry;
 
 import geometry.framework.Point;
 import geometry.position.Pose;
-import geometry.position.Vector;
-import math.linearalgebra.Matrix2D;
 import math.linearalgebra.Matrix3D;
 import math.linearalgebra.Vector3D;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
 
-public class ThreeOdometry extends TwoOdometry{
+public class ThreeOdometry extends TwoOdometryV2 {
     private IEncoder enc3;
     private Pose enc3Pose;
     private Matrix3D dYdXdThetaMatrixInverted;

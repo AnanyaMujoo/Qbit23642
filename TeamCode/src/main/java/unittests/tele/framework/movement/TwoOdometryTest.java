@@ -7,6 +7,7 @@ import automodules.stage.Stage;
 import geometry.framework.Point;
 import geometry.position.Pose;
 import geometry.position.Vector;
+import robotparts.RobotPart;
 import teleutil.button.Button;
 import teleutil.button.OnTurnOffEventHandler;
 import teleutil.button.OnTurnOnEventHandler;
@@ -22,9 +23,10 @@ public class TwoOdometryTest extends TeleUnitTest {
 
     @Override
     protected void start() {
-        gph1.link(Button.RIGHT_BUMPER, moveHeading(180));
+        gph1.link(Button.RIGHT_BUMPER, moveHeading(180)); // TODO FIX PROBLEM WITH ODOMETRY IN AUTOMODULES?
         gph1.link(Button.LEFT_BUMPER, moveHeading(0));
         gph1.link(Button.RIGHT_TRIGGER, moveHeading(-180));
+        gph1.link(Button.LEFT_TRIGGER, testModule());
         gph1.link(Button.B, () -> bot.cancelAutoModules());
         gph1.link(Button.Y, OnTurnOnEventHandler.class, () -> customMove = true);
         gph1.link(Button.Y, OnTurnOffEventHandler.class, () -> {
@@ -40,6 +42,18 @@ public class TwoOdometryTest extends TeleUnitTest {
             drive.move(power.getY() + gph1.ry / 2.0, power.getX() + gph1.rx / 2.0, gph1.lx);
         }
         log.show("Odometry Pose", odometry);
+    }
+
+    private AutoModule testModule(){
+        return new AutoModule(new Stage(
+                drive.usePart(),
+                new Main(() -> {
+                    log.show("Yes sir");
+                    drive.move(gph1.ry / 2.0, gph1.rx / 2.0, gph1.lx / 2.0);
+                }),
+                RobotPart.exitTime(2),
+                drive.returnPart()
+        ));
     }
 
     private AutoModule moveHeading(double target){

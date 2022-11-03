@@ -65,7 +65,7 @@ public class RobotFramework {
         localPlane = new CoordinatePlane();
         rfsHandler = new RobotFunctions();
         backHandler = new BackgroundFunctions();
-        robotFunctionsThread = new TerraThread("RobotFunctionsThread");
+        robotFunctionsThread = new TerraThread("RobotFunctionsThread", Constants.ROBOT_FUNCTIONS_REFRESH_RATE);
         odometryThread = new TerraThread("OdometryThread", Constants.ODOMETRY_THREAD_REFRESH_RATE);
         backgroundThread = new TerraThread("BackgroundThread", Constants.BACKGROUND_THREAD_REFRESH_RATE);
         independentRunner = new IndependentRunner();

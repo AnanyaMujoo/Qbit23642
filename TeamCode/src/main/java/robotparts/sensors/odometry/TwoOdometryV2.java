@@ -16,46 +16,44 @@ import robotparts.electronics.input.IEncoder;
 public class TwoOdometryV2 extends Odometry {
     protected IEncoder enc1, enc2;
     protected Pose enc1Pose, enc2Pose;
-    public Point odometryCenter = new Point(); // Point where perpendiculars of parallels connect
+    private Vector dThetaVector;
     private Matrix2D dYdXMatrixInverted;
-    private final Vector odometryCenterToRobotCenter = new Vector(0.0, 12.6);
-    private static final double localCorrectionCoefficient = 1.8;
 
     @Override
-    protected void createEncoders() {
+    protected void createEncoders(){
         enc1 = create("flEnc", ElectronicType.IENCODER_NORMAL);
         enc2 = create("blEnc", ElectronicType.IENCODER_NORMAL);
         enc1.invert();
-        addEncoders(enc1, enc2);
-        useGyro();
+        addEncoders(enc1, enc2); useGyro();
     }
 
     @Override
-    protected void setEncoderPoses() {
+    protected void setEncoderPoses(){
         enc1Pose = new Pose(new Point(0.0,3.0), 90);
         enc2Pose = new Pose(new Point(0.0,-13.5), 0);
     }
 
     @Override
-    protected void setConstantObjects() {
+    protected void setConstantObjects(){
         dYdXMatrixInverted = new Matrix2D(
                 enc1Pose.getAngleUnitVector().getX(), enc1Pose.getAngleUnitVector().getY(),
                 enc2Pose.getAngleUnitVector().getX(), enc2Pose.getAngleUnitVector().getY()
         ).getInverted();
+        dThetaVector = new Vector(
+                enc1Pose.getVector().getCrossProduct(enc1Pose.getAngleUnitVector()),
+                enc2Pose.getVector().getCrossProduct(enc2Pose.getAngleUnitVector())
+        );
     }
 
     @Override
-    public void resetObjects(){
-        odometryCenter = new Point(0,0);
-    }
-
-    @Override
-    protected void update() {
-        double k = 2; // TODO TEST
-        Vector localDelta = dYdXMatrixInverted.multiply(new Vector(enc1.getDeltaPosition()*k, enc2.getDeltaPosition()));
-//        localDelta.add(new Vector(0, Math.abs(Math.toRadians(gyro.getDeltaHeading()))*localCorrectionCoefficient));
-        odometryCenter.translate(toGlobalFrame(localDelta));
-        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter); // subtracted offset to make start position (0,0)
-        setCurrentPose(new Pose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()), gyro.getHeading()));
+    protected void update(){
+        double deltaHeading = Math.toRadians(gyro.getDeltaHeading());
+        Vector localEncDelta = new Vector(enc1.getDeltaPosition(), enc2.getDeltaPosition()).getSubtracted(dThetaVector.getScaled(deltaHeading));
+        Vector localDelta = dYdXMatrixInverted.multiply(localEncDelta);
+        if(deltaHeading != 0.0){
+            localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(deltaHeading).getMultiplied(1.0 / deltaHeading).multiply(localDelta);
+        }
+        Vector globalDelta = toGlobalFrame(localDelta);
+        updateCurrentPose(globalDelta, Math.toDegrees(deltaHeading));
     }
 }

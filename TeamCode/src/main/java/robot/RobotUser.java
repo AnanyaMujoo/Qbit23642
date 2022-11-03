@@ -2,9 +2,7 @@ package robot;
 
 import robotparts.hardware.Carousel;
 import robotparts.sensors.odometry.Odometry;
-import robotparts.sensors.odometry.ThreeOdometry;
 import robotparts.sensors.odometry.TwoOdometry;
-import robotparts.sensors.odometry.TwoOdometryV2;
 import unittests.tele.framework.movement.AutoModuleTest;
 import unused.mecanumold.MecanumCarousel;
 import robotparts.hardware.Drive;
@@ -14,9 +12,9 @@ import robotparts.hardware.Outtake;
 import robotparts.sensors.Cameras;
 import robotparts.sensors.ColorSensors;
 import robotparts.sensors.GyroSensors;
-import unused.mecanumold.auto.TwoOdometryOld;
 import robotparts.unused.DistanceSensors;
 import robotparts.unused.Leds;
+import unused.mecanumold.auto.TwoOdometryOldMecanum;
 import unused.tankold.TankOdometry;
 import robotparts.unused.CustomTestPart;
 import robotparts.unused.TouchSensors;
@@ -53,12 +51,11 @@ public interface RobotUser {
     Cameras camera = new Cameras();
 
     Odometry odometry = new TwoOdometry();
-//    Odometry odometry = new TwoOdometryV2();
 //    Odometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS
     /**
      * UNUSED
      */
-    TwoOdometryOld mecanumOdometry = new TwoOdometryOld();
+    TwoOdometryOldMecanum mecanumOdometry = new TwoOdometryOldMecanum();
     MecanumOuttake mecanumOuttake = new MecanumOuttake();
     MecanumDrive mecanumDrive = new MecanumDrive();
     MecanumIntake mecanumIntake = new MecanumIntake();

@@ -9,7 +9,7 @@ import unused.tankold.TankOdometry;
 import static robot.RobotFramework.odometryThread;
 // Remove dependence on tank odometry
 @Deprecated
-public class TwoOdometryOld extends TankOdometry {
+public class TwoOdometryOldMecanum extends TankOdometry {
 
     private volatile IEncoder horizontalEncoder;
     private volatile IEncoder verticalEncoder;
@@ -26,7 +26,7 @@ public class TwoOdometryOld extends TankOdometry {
     private volatile Vector localOdometryCenterOffset;
     private volatile double heading = 0;
 
-    public TwoOdometryOld() {
+    public TwoOdometryOldMecanum() {
         super(0.0);
         localOdometryCenterOffset = new Vector(0.0, 12.6);
     }
@@ -100,8 +100,9 @@ public class TwoOdometryOld extends TankOdometry {
     }
 
     public void updatePosition(){
+        verticalEncoder.updateNormal(); horizontalEncoder.updateNormal(); gyro.update();
         Vector localDelta = new Vector(getLocalHorizontalDelta(), getLocalVerticalDelta());
-        Vector globalDelta = localDelta.getRotated(-heading);
+        Vector globalDelta = localDelta.getRotated(heading);
         positionOdometryCenter.add(globalDelta);
         Vector globalOdometryCenterOffset = localOdometryCenterOffset.getRotated(heading);
         positionRobotCenter = positionOdometryCenter.getAdded(globalOdometryCenterOffset.getSubtracted(localOdometryCenterOffset));
