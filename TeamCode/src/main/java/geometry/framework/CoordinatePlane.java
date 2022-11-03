@@ -35,6 +35,8 @@ public class CoordinatePlane {
     public void rotate(double angle){ rotate(origin, angle); }
     public void scale(Point anchor, double angle){ Iterator.forAll(objects, o -> o.scale(anchor,angle)); }
     public void scale(double scale){ scale(origin, scale); }
+    public void scaleX(double scale){ Iterator.forAll(objects, o -> o.scaleX(scale));}
+    public void scaleY(double scale){ Iterator.forAll(objects, o -> o.scaleY(scale));}
 
     public ArrayList<Line> getLines() { return getObjectsOfType(Line.class); }
     public ArrayList<Pose> getPoses() { return getObjectsOfType(Pose.class); }

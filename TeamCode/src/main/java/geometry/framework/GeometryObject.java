@@ -26,5 +26,7 @@ public abstract class GeometryObject {
     public final void rotate(double angle){ rotate(anchorPoint, angle);}
     public final void scale(Point anchor, double scale){ toAllPoints(p -> p.scale(anchor, scale));}
     public final void scale(double scale){ scale(anchorPoint, scale); }
+    public final void scaleX(double scale){ toAllPoints(p -> p.scaleX(scale));}
+    public final void scaleY(double scale){ toAllPoints(p -> p.scaleY(scale));}
 
 }

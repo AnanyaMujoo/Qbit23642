@@ -1,5 +1,6 @@
 package display;
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import geometry.circles.Circle;
@@ -19,17 +20,19 @@ public class Display extends Drawer {
 
 
     public static void main(String[] args) {
-        drawWindow(width,height, "Display");
+        drawWindow(new Display(), "Display");
     }
 
     @Override
     public void define() {
-        Line line = new Line(new Point(100, 100), new Point(300,300));
-        Pose pose = new Pose(new Point(150,100), 90);
-        Triangle triangle = new Triangle(new Point(300,300), new Point(400,500), new Point(600,100));
-        Rect rect = new Rect(new Point(300,300), new Point(400,400));
-        Circle circle = new Circle(new Point(200,200), 50);
-        drawPlane(new CoordinatePlane(line, pose, triangle, rect, circle));
+//        Line line = new Line(new Point(100, 100), new Point(300,300));
+//        Pose pose = new Pose(new Point(150,100), 90);
+//        Triangle triangle = new Triangle(new Point(300,300), new Point(400,500), new Point(600,100));
+//        Rect rect = new Rect(new Point(300,300), new Point(400,400));
+//        Circle circle = new Circle(new Point(200,200), 50);
+        drawField();
+        drawOnField(new CoordinatePlane(new Pose(new Point(fieldSize/2.0, fieldSize/2.0), 90)));
+//        drawPlane(new CoordinatePlane(line, pose, triangle, rect, circle));
     }
 
 

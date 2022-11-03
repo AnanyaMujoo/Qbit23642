@@ -3,16 +3,24 @@ package display;
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import geometry.circles.Circle;
 import geometry.framework.CoordinatePlane;
@@ -27,117 +35,53 @@ public abstract class Drawer extends JPanel {
     protected final int pointSize = 5;
     protected Color pointColor = Color.BLACK;
     protected final int lineWidth = 2;
-    protected Color lineColor = new Color(0, 102, 0);
+    protected Color lineColor = new Color(13, 102, 10);
     protected final int poseLength = 15;
     protected final Color poseColor = new Color(102, 0, 0);
-    protected final int arcWidth = 2;
-    protected final Color arcColor = new Color(122, 56, 3);
     protected final int circleWidth = 2;
-    protected final Color circleColor = new Color(72, 76, 3);
-
-    protected final ArrayList<Pose> poses = new ArrayList<>();
-
+    protected final Color circleColor = new Color(220, 120, 19);
 
     public static final int width = 700;
     public static final int height = 700;
 
-    // TOD4 NEW
-    // Finish this
+    public static final double fieldSize = 365.76; // cm
 
 
-//    public void drawPoint(Point p){
-//        g.setColor(pointColor);
-////        g.fillOval((int) p.x, (int) p.y, pointSize, pointSize);
-//    }
-//    public void drawLine(Line l){
-//        g.setColor(lineColor);
-//        g.setStroke(new BasicStroke(lineWidth));
-////        g.drawLine((int) l.p1.x+3, (int) l.p1.y+3, (int) l.p2.x+3, (int) l.p2.y+3);
-//    }
-//    public void drawPose(Pose p){
-////        g.setColor(poseColor);
-////        g.setStroke(new BasicStroke(lineWidth));
-////        Vector poseLine = new Vector(poseLength,p.ang, AngleType.RADIANS);
-////        double offset = 3;
-////        g.drawLine((int) (p.p.x+offset), (int) (p.p.y+offset), (int) (p.p.x + poseLine.getX()+offset), (int) (p.p.y + poseLine.getY()+offset));
-////        drawPoint(p.p);
-//    }
-
-//    public void drawCircle(Point c, double r){
-////        g.setColor(circleColor);
-////        g.setStroke(new BasicStroke(circleWidth));
-////        g.drawOval((int) c.x, (int) c.y, (int) r,(int) r);
-//    }
-//
-//    public void drawField(){
-////        final BufferedImage image;
-////        File f = new File(System.getProperty("user.dir")+ "\\TeamCode\\src\\main\\java\\display\\ff3.png");
-////        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-////        try {
-////            image = ImageIO.read(f);
-////            g.drawImage(image, 0, 0, 790, 770, null);
-////        } catch (IOException e) {
-////            e.printStackTrace();
-////        }
-////        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-//
-//    }
 
     public abstract void define();
 
-//
-//
-//    public void define(){
-//        drawField();
-//
-//        addWaypoint(0,0,0);
-//        addWaypoint(0,30,-60);
-//        addWaypoint(15,55,-135);
-//        addWaypoint(10,25,-115);
-//        addWaypoint(10,-5,-90);
-//        addWaypoint(-10,-10,-90);
-//        addWaypoint(-70,-10,-90);
-//        addWaypoint(-10,-12,-90);
-//        addWaypoint(10,-7,-90);
-//        addWaypoint(10,23,-115);
-////        addWaypoint(15,53,-135);
-////        addWaypoint(-70, 50, -90);
-//        // Just Duck
-////        addWaypoint(20,20,45);
-////        addWaypoint(50,30,90);
-////        addWaypoint(-20,65,135);
-////        addWaypoint(60,70,90);
-//
-//        // Everything
-////        addWaypoint(-50,55,-90);
-////        addWaypoint(-105,55,-135);
-////        addWaypoint(-110,25,-115);
-////        addWaypoint(-110,-5,-90);
-////        addWaypoint(-130,-10,-90);
-////        addWaypoint(-190,-10,-90);
-//    }
-//
-//    public double toPixX(double cm){
-//        return (cm*2.13);
-//    }
-//    public double toPixY(double cm){
-//        return (cm*2.09);
-//    }
-//
+    public void setColor(Color color){ g.setColor(color); }
+    public void setStroke(int width){ g.setStroke(new BasicStroke(width));}
 
-    public void drawLine(Line line) { g.drawLine((int) line.getStartPoint().getX(),(int) line.getStartPoint().getY(),(int) line.getEndPoint().getX(),(int) line.getEndPoint().getY()); }
+    public void drawField(){
+        drawImage("powerPlay.png", height-35, width-15, 0.4);
+    }
 
-    public void drawCircle(Circle circle){ g.drawOval((int) circle.getCenterX(), (int) circle.getCenterY(), (int) (2*circle.getRadius()), (int) (2*circle.getRadius())); }
+    public void drawImage(String filename, int height, int width, double transparency) {
+        final BufferedImage image;
+        File f = new File(System.getProperty("user.dir") + "\\TeamCode\\src\\main\\java\\display\\" + filename);
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) transparency));
+        try {
+            image = ImageIO.read(f);
+            g.drawImage(image, 0, 0, width, height, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+    }
+
+    public void drawLine(Line line, Color color) { setColor(color); setStroke(lineWidth); g.drawLine((int) line.getStartPoint().getX(),(int) line.getStartPoint().getY(),(int) line.getEndPoint().getX(),(int) line.getEndPoint().getY()); }
+    public void drawLine(Line line){ drawLine(line, lineColor); }
+
+    public void drawCircle(Circle circle){ setColor(circleColor); setStroke(circleWidth); g.drawOval((int) circle.getCenterX(), (int) circle.getCenterY(), (int) (2*circle.getRadius()), (int) (2*circle.getRadius())); }
 
     public void drawPolygon(Polygon polygon){
-        System.out.println("HIEHIE");
         Iterator.forAll(polygon.getLines(), this::drawLine);
     }
 
-    public void drawPoint(Point point){ g.fillOval((int) point.getX(), (int) point.getY(), (int) (4), (int) (4)); }
+    public void drawPoint(Point point){ setColor(pointColor); g.fillOval((int) point.getX(), (int) point.getY(), (int) (pointSize), (int) (pointSize)); }
 
-    public void drawPose(Pose pose){ drawPoint(pose.getPoint()); drawLine(new Line(pose.getPoint().getTranslated(2,2), pose.getAngleUnitVector().getScaled(10.0).getPoint().getTranslated(pose.getX()+2, pose.getY()+2)));}
-
+    public void drawPose(Pose pose){ drawLine(new Line(pose.getPoint().getTranslated(2,2), pose.getAngleUnitVector().getScaled(poseLength).getPoint().getTranslated(pose.getX()+2, pose.getY()+2)), poseColor); drawPoint(pose.getPoint());}
 
     public void drawPlane(CoordinatePlane coordinatePlane){
         Iterator.forAll(coordinatePlane.getLines(), this::drawLine);
@@ -146,83 +90,43 @@ public abstract class Drawer extends JPanel {
         Iterator.forAll(coordinatePlane.getCircles(), this::drawCircle);
     }
 
+    public void drawOnField(CoordinatePlane coordinatePlane){
+        coordinatePlane.rotate(180);
+        // TODO FINISH
+        coordinatePlane.scaleX((double) width/fieldSize);
+        coordinatePlane.scaleY((double) height/fieldSize);
+    }
+
+
     @Override
     public void paintComponent(Graphics g) {
         this.g = (Graphics2D) g;
         define();
-////        Point start = new Point(367-22, 154);
-//        Point start = new Point(22, 154);
-////        Point start = new Point(22, 274);
-////        Point start = new Point(367-22, 274);
-//        ArrayList<Pose> newPoses = new ArrayList<>();
-//        for (Pose p: poses){
-////            double x = toPixX(p.p.y+start.x);
-////            double y = toPixY(p.p.x+start.y);
-////            double h = p.ang + AngleType.degToRad(0);
-////            newPoses.add(new Pose(new Point(x,y),h));
-//        }
-//        for (int i = 0; i < newPoses.size()-1; i++){
-//            drawLine(new Line(newPoses.get(i).p,newPoses.get(i+1).p));
-//        }
-//        for(Pose p1: newPoses) {
-//            drawPose(p1);
-//        }
-
-//
-//
         this.g.dispose();
     }
-//
-//
-//
-    public static void drawWindow(int width, int height, String name){
+
+    private static final KeyListener keyListener = new KeyListener() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            char c = e.getKeyChar();
+            if(c == 'q'){
+                System.exit(0);
+            }
+        }
+
+        @Override
+        public void keyTyped(KeyEvent keyEvent) {}
+
+        @Override
+        public void keyReleased(KeyEvent keyEvent) {}
+    };
+
+    public static void drawWindow(Drawer drawer, String name){
         JFrame window = new JFrame(name);
-        Drawer drawer = new Display();
+        window.addKeyListener(keyListener);
         window.add(drawer);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(height, width);
+        window.setSize(width, height);
         window.setVisible(true);
     }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//    public void whatToDraw() {
-////        Triangle triangle = new Triangle(new Point(200,240), new Point(300,180), new Point(260,160));
-////        double area = triangle.area();
-////        Rect bbox = triangle.boundingbox();
-////        System.out.println(area);
-////        System.out.println(bbox.toString());
-////        Point p1 = triangle.points.get(0);
-////        Point p2 = triangle.points.get(1);
-////        Point p3 = triangle.points.get(2);
-////        drawLine(new Line(p1, p2));
-////        drawLine(new Line(p2, p3));
-////        drawLine(new Line(p1, p3));
-////        drawPoint(p1);
-////        drawPoint(p2);
-////        drawPoint(p3);
-////        Point r1 = new Point(bbox.getX1(), bbox.getY1());
-////        Point r2 = new Point(bbox.getX1(), bbox.getY2());
-////        Point r3 = new Point(bbox.getX2(), bbox.getY2());
-////        Point r4 = new Point(bbox.getX2(), bbox.getY1());
-////        pointColor = Color.RED;
-////        lineColor = Color.BLUE;
-////        drawLine(new Line(r1, r2));
-////        drawLine(new Line(r2, r3));
-////        drawLine(new Line(r3, r4));
-////        drawLine(new Line(r4, r1));
-////        drawPoint(r1);
-////        drawPoint(r2);
-////        drawPoint(r3);
-////        drawPoint(r4);
-////    }
-//    }
 }

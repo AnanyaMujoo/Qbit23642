@@ -23,6 +23,8 @@ public class Point {
     public void reflectY(){ y = -y; }
     public void scale(double scale){ this.x *= scale; this.y *= scale;}
     public void scale(Point p, double scale){ applyMatrixTransformation(p, Matrix2D.getScaleMatrix(scale)); }
+    public void scaleX(double scale){ this.x *= scale; }
+    public void scaleY(double scale){ this.y *= scale; }
     public void translate(double deltaX, double deltaY) {x += deltaX; y+= deltaY;}
     public void translate(Vector v){ translate(v.getX(), v.getY());}
     public void rotate(double angle){ set(Matrix2D.getRotationMatrix(Math.toRadians(angle)).multiply(this)); }
