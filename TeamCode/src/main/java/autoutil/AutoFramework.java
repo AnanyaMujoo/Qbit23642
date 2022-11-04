@@ -6,7 +6,9 @@ import automodules.AutoModule;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import auton.Auto;
+import autoutil.generators.AutoModuleGenerator;
 import autoutil.generators.Generator;
+import autoutil.generators.PauseGenerator;
 import autoutil.generators.PoseGenerator;
 import autoutil.reactors.Reactor;
 import autoutil.reactors.MecanumPIDReactor;
@@ -19,23 +21,21 @@ import robotparts.RobotPart;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
 import util.condition.DecisionList;
+import util.condition.Expectation;
+import util.condition.Magnitude;
 import util.template.Iterator;
 
+import static global.General.fault;
 import static global.General.log;
 
-public abstract class AutoFramework extends Auto {
+public abstract class AutoFramework extends Auto implements AutoUser {
     // TOD 5 Integrate with coordinate plane
+    protected AutoConfig config;
 
-    public abstract Reactor getSetpointReactor();
-    public abstract Reactor getWaypointReactor();
-    public abstract Generator getSetpointGenerator();
-    public abstract Generator getWaypointGenerator();
-    public abstract CaseScanner getCaseScanner();
+    public void setConfig(AutoConfig config){ this.config = config; }
 
-
-    private Pose lastPose = new Pose();
-
-    protected ArrayList<AutoSegment<? extends Reactor, ? extends Generator>> segments = new ArrayList<>();
+    protected final ArrayList<Pose> poses = new ArrayList<>();
+    protected ArrayList<AutoSegment<?, ?>> segments = new ArrayList<>();
 
     protected boolean scanning = false;
     protected CaseScanner caseScanner;
@@ -46,13 +46,9 @@ public abstract class AutoFramework extends Auto {
     public abstract void define();
 
     public void makeIndependent(){ isIndependent = true; }
-    public boolean isFlipped(){
-        return fieldSide.equals(FieldSide.RED);
-    }
+    public boolean isFlipped(){ return fieldSide.equals(FieldSide.RED); }
 
-    public void addDecision(DecisionList decisionList){
-        decisionList.check();
-    }
+    public void addDecision(DecisionList decisionList){ decisionList.check(); }
     public void addAutomodule(DecisionList decisionList){ addAutoModule(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways()))); }
     public void customSide(FieldSide sideOne, CodeSeg one, FieldSide sideTwo, CodeSeg two){ addDecision(new DecisionList(() -> fieldSide).addOption(sideOne, one).addOption(sideTwo, two)); }
     public void customCase(Case caseOne, CodeSeg one, Case caseTwo, CodeSeg two, Case caseThree, CodeSeg three){ addDecision(new DecisionList(() -> caseDetected).addOption(caseOne, one).addOption(caseTwo, two).addOption(caseThree, three)); }
@@ -60,7 +56,7 @@ public abstract class AutoFramework extends Auto {
 
     public void scan(){
         scanning = true;
-        caseScanner = getCaseScanner();
+        caseScanner = config.getCaseScanner();
         camera.setExternalScanner(caseScanner);
         camera.startExternalCamera();
         while (!isStarted()){
@@ -77,32 +73,22 @@ public abstract class AutoFramework extends Auto {
         Iterator.forAll(segments, segment -> segment.run(this));
     }
 
-    public void addPause(double time){
-        getLastSegment().getGenerator().addPause(time);
-    }
-    public void addSetpoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegment(getSetpointReactor(), getSetpointGenerator(), new Pose(x, y, h)); }
-    public void addWaypoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegment(getWaypointReactor(), getWaypointGenerator(), new Pose(x, y, h));}
-    public void addAutoModule(AutoModule autoModule){ getLastSegment().getGenerator().addAutoModule(autoModule); }
-    public void addConcurrentAutoModule(AutoModule autoModule){ getLastSegment().getGenerator().addConcurrentAutoModule(autoModule); }
+    public void addPause(double time){ addSegment(null, new PauseGenerator(time), getLastPose()); }
+    public void addSetpoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegment(config.getSetpointSegment(), new Pose(x, y, h)); }
+    public void addWaypoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegment(config.getWaypointSegment(), new Pose(x, y, h));}
+    public void addAutoModule(AutoModule autoModule){ addStationarySegment(new AutoModuleGenerator(autoModule, false)); }
+    public void addConcurrentAutoModule(AutoModule autoModule){ addStationarySegment(new AutoModuleGenerator(autoModule, true)); }
     public void addCancelAutoModules(){
-        getLastSegment().getGenerator().addCancelAutoModule();
+        addStationarySegment(new AutoModuleGenerator(true));
     }
+    public void addStationarySegment(Generator generator){ addSegment(null, generator, getLastPose()); }
 
+    private void addSegment(AutoSegment<?, ?> segment, Pose target){ addSegment(segment.getReactor(), segment.getGenerator(), target); }
     private <R extends Reactor, G extends Generator> void addSegment(R reactor, G generator, Pose target){
-        if(isFirstSegment()){
-            generator.add(lastPose, target); segments.add(new AutoSegment<>(reactor,generator));
-        }else {
-            if ((getLastSegment().getGenerator().getClass().equals(generator.getClass()))) {
-                getLastSegment().getGenerator().add(lastPose, target);
-            } else {
-                generator.add(lastPose, target); segments.add(new AutoSegment<>(reactor, generator));
-            }
-        }
-        lastPose = target;
+        fault.check("Auto Config Not Set", Expectation.EXPECTED, Magnitude.MODERATE, config == null, false);
+        generator.addSegment(getLastPose(), target); segments.add(new AutoSegment<>(reactor, generator));
+        poses.add(target);
     }
 
-    private AutoSegment<? extends Reactor, ? extends Generator> getLastSegment(){ if(isFirstSegment()){ segments.add(new AutoSegment<>(new MecanumPIDReactor(), new PoseGenerator())); } return segments.get(segments.size() - 1); }
-    public boolean isFirstSegment(){
-        return segments.isEmpty();
-    }
+    private Pose getLastPose(){ return poses.get(poses.size() - 1); }
 }

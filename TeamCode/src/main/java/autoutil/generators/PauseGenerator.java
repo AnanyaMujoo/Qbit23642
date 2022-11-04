@@ -1,7 +1,13 @@
 package autoutil.generators;
 
+import automodules.stage.Exit;
+import automodules.stage.Initial;
+import automodules.stage.Stage;
+import autoutil.reactors.Reactor;
 import geometry.position.Pose;
 import util.Timer;
+
+import static global.General.bot;
 
 public class PauseGenerator extends Generator{
 
@@ -21,7 +27,10 @@ public class PauseGenerator extends Generator{
     }
 
     @Override
-    public void add(Pose start, Pose target) {
+    public void add(Pose start, Pose target) {}
 
+    @Override
+    public Stage getStage(Reactor reactor) {
+        return new Stage(new Initial(this::startPausing), new Initial(bot::halt), new Exit(this::isDonePausing));
     }
 }

@@ -1,5 +1,6 @@
 package autoutil.controllers.control1D;
 
+import autoutil.generators.Generator;
 import geometry.position.Pose;
 
 public class PositionHolder extends Controller1D {
@@ -34,7 +35,7 @@ public class PositionHolder extends Controller1D {
     protected double setDefaultRestOutput() { return 0; }
 
     @Override
-    protected void updateController(Pose pose, PathSegment pathSegment) {
+    protected void updateController(Pose pose, Generator generator) {
         if(isUsed && Math.abs(getCurrentValue()) > velocityThreshold) {
             restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
         }

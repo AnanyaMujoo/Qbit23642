@@ -9,36 +9,10 @@ import elements.FieldSide;
 public class TerraAutoDuck extends AutoFramework {
 
 
-//
-//    @Override
-//    public Reactor getSetpointReactor() {
-//        return new MecanumPIDReactor();
-//    }
-//
-//    @Override
-//    public Reactor getWaypointReactor() {
-//        return new MecanumPurePursuitReactor();
-//    }
-//
-//    @Override
-//    public Generator getSetpointGenerator() {
-//        return new PoseGenerator();
-//    }
-//
-//    @Override
-//    public Generator getWaypointGenerator() {
-//        return new LineGenerator(lastPose);
-//    }
-//
-//    @Override
-//    public CaseScanner getCaseScanner() { return new TeamElementScanner(); }
-//
-//    @Override
-//    public void initAuto() {
-//        scan();
-//        bot.addBackgroundTask(new BackgroundTask(mecanumLift::holdPosition));
-//        mecanumOuttake.midCap();
-//    }
+    @Override
+    public void initAuto() {
+        setConfig(mecanumDefaultConfig);
+    }
 
     @Override
     public void define() {

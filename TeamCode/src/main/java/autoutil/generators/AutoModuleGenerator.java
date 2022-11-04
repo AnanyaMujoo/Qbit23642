@@ -1,7 +1,13 @@
 package autoutil.generators;
 
 import automodules.AutoModule;
+import automodules.stage.Exit;
+import automodules.stage.Initial;
+import automodules.stage.Main;
+import automodules.stage.Stage;
+import autoutil.reactors.Reactor;
 import geometry.position.Pose;
+import robotparts.RobotPart;
 
 import static global.General.bot;
 
@@ -25,7 +31,19 @@ public class AutoModuleGenerator extends Generator{
     public boolean isConcurrent(){return isConcurrent;}
 
     @Override
-    public void add(Pose start, Pose target) {
+    public void add(Pose start, Pose target) {}
 
+    @Override
+    public Stage getStage(Reactor reactor) {
+        if(!isCancel){
+            if(!isConcurrent){
+                return new Stage(new Initial(this::runAutoModule), new Initial(bot::halt), new Exit(this::isDoneWithAutoModule));
+            }else{
+                return new Stage(new Initial(this::runAutoModule), RobotPart.exitAlways());
+            }
+        }else{
+            bot.cancelAutoModules();
+            return new Stage(RobotPart.exitAlways());
+        }
     }
 }

@@ -2,7 +2,14 @@ package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import autoutil.AutoConfig;
 import autoutil.AutoFramework;
+import autoutil.AutoSegment;
+import autoutil.generators.LineGenerator;
+import autoutil.generators.PoseGenerator;
+import autoutil.reactors.MecanumPIDReactor;
+import autoutil.reactors.MecanumPurePursuitReactor;
+import autoutil.vision.TeamElementScanner;
 import elements.Case;
 import elements.FieldSide;
 import robot.BackgroundTask;
@@ -14,6 +21,7 @@ public class TerraAutoCycles extends AutoFramework {
 
     @Override
     public void initAuto() {
+        setConfig(mecanumDefaultConfig);
         scan();
         bot.addBackgroundTask(new BackgroundTask(() -> {
             mecanumLift.holdPosition();
