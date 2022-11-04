@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import geometry.position.Pose;
 
 @Deprecated
-public abstract class PathSegment extends autoutil.paths.PathSegment {
+public abstract class PathSegment {
     // A unit of a path, not just a geometric object
     // Classes that extend Path segment may contain geometric objects
     public ArrayList<Pose> points = new ArrayList<>();

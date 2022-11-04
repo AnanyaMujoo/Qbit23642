@@ -1,5 +1,6 @@
 package autoutil.controllers.control1D;
 
+import autoutil.generators.Generator;
 import geometry.position.Pose;
 
 public class BangBang extends Controller1D {
@@ -16,7 +17,7 @@ public class BangBang extends Controller1D {
     protected double setDefaultRestOutput() { return 0; }
 
     @Override
-    protected void updateController(Pose pose, PathSegment pathSegment) {}
+    protected void updateController(Pose pose, Generator generator) {}
 
     @Override
     protected double setOutput() { return 0; }

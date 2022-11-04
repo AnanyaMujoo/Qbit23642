@@ -4,13 +4,14 @@ import static global.General.bot;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import autoutil.AutoUser;
 import global.Common;
 import unittests.UnitTest;
 import util.template.Iterator;
 import util.condition.Status;
 import util.template.Precision;
 
-public class AutoUnitTest extends UnitTest implements Iterator, Common {
+public class AutoUnitTest extends UnitTest implements Iterator, Common, AutoUser {
     /**
      * Unit test based on auto
      * For init and stop see UnitTest

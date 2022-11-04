@@ -1,5 +1,6 @@
 package autoutil.controllers.control1D;
 
+import autoutil.generators.Generator;
 import geometry.position.Pose;
 import util.template.ParameterConstructor;
 
@@ -44,7 +45,7 @@ public class PID extends Controller1D implements ParameterConstructor<Double> {
     protected double setDefaultRestOutput() { return 0.05; }
 
     @Override
-    protected void updateController(Pose pose, PathSegment pathSegment){ if(abs(getError()) > maximumIntegralRange){ errorProfiler.resetIntegral(); } }
+    protected void updateController(Pose pose, Generator generator){ if(abs(getError()) > maximumIntegralRange){ errorProfiler.resetIntegral(); } }
 
     @Override
     protected double setOutput() { return (kp * getError() + (ki * errorProfiler.getIntegral()) + (kd * errorProfiler.getDerivative())); }

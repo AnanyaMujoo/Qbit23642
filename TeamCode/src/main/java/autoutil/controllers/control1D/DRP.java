@@ -1,5 +1,8 @@
 package autoutil.controllers.control1D;
 
+import com.sun.tools.javac.jvm.Gen;
+
+import autoutil.generators.Generator;
 import geometry.position.Pose;
 import util.template.Precision;
 
@@ -22,7 +25,7 @@ public class DRP extends Controller1D{
     protected double setDefaultRestOutput() { return 0.0; }
 
     @Override
-    protected void updateController(Pose pose, PathSegment pathSegment) {
+    protected void updateController(Pose pose, Generator generator) {
         precision.throttle(() -> restPower *= isWithinAccuracyRange() ? 0.98 : 1.02, 25);
         setRestOutput(restPower);
     }
