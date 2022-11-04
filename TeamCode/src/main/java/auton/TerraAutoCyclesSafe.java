@@ -1,8 +1,8 @@
-package auton.used;
+package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import auton.MecanumAuto;
+import autoutil.AutoFramework;
 import elements.Case;
 import elements.FieldSide;
 import robot.BackgroundTask;
@@ -10,7 +10,7 @@ import robot.BackgroundTask;
 import static global.General.bot;
 
 
-public class TerraAutoCyclesSafe extends MecanumAuto {
+public class TerraAutoCyclesSafe extends AutoFramework {
 
     @Override
     public void initAuto() {

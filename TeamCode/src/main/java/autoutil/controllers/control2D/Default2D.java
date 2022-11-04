@@ -1,7 +1,6 @@
 package autoutil.controllers.control2D;
 
 import autoutil.controllers.control1D.Controller1D;
-import autoutil.paths.PathSegment;
 import geometry.position.Pose;
 import geometry.position.Vector;
 

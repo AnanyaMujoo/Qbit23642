@@ -1,11 +1,10 @@
 package autoutil.controllers.control1D;
 
-import autoutil.paths.PathPose;
-import autoutil.paths.PathSegment;
-import autoutil.profilers.Profiler;
+import autoutil.generators.Generator;
+import autoutil.generators.PoseGenerator;
+import autoutil.Profiler;
 import geometry.framework.Point;
 import geometry.position.Pose;
-import global.Constants;
 import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
@@ -31,7 +30,7 @@ public abstract class Controller1D {
     protected abstract double setDefaultAccuracy();
     protected abstract double setDefaultMinimumTimeReachedTarget();
     protected abstract double setDefaultRestOutput();
-    protected abstract void updateController(Pose pose, PathSegment pathSegment);
+    protected abstract void updateController(Pose pose, Generator generator);
     protected abstract double setOutput();
     protected abstract boolean hasReachedTarget();
 
@@ -42,15 +41,15 @@ public abstract class Controller1D {
     public void setRestOutput(double restOutput){ this.restOutput = restOutput; }
     public boolean isWithinAccuracyRange(){ return (Math.abs(getError()) < accuracy); }
     public double getRestOutput(){ return !isWithinAccuracyRange() ? Math.signum(getError()) * restOutput : 0;}
-    public final void update(Pose pose, PathSegment pathSegment){
+    public final void update(Pose pose, Generator generator){
         currentValue = processVariable.run();
         processVariableProfiler.update();
         errorProfiler.update();
-        updateController(pose, pathSegment);
+        updateController(pose, generator);
         isAtTarget = precision.isInputTrueForTime(isWithinAccuracyRange()&&hasReachedTarget(), minimumTime);
         output = setOutput() + getRestOutput();
     }
-    public final void update(){ update(new Pose(new Point(0,0),0), new PathPose(0,0,0)); }
+    public final void update(){ update(new Pose(new Point(0,0),0), new PoseGenerator()); }
     protected double getCurrentValue(){
         return currentValue;
     }

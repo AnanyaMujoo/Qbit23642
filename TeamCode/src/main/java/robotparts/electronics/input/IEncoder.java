@@ -7,18 +7,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 
-import autoutil.profilers.Profiler;
 import global.Constants;
 import robot.BackgroundTask;
 import robotparts.Electronic;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.template.Iterator;
-import util.template.Precision;
 
 import static global.General.bot;
 import static global.General.fault;

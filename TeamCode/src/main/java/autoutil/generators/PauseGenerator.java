@@ -1,12 +1,14 @@
-package autoutil.paths;
+package autoutil.generators;
 
+import geometry.position.Pose;
 import util.Timer;
 
-public class PathPause extends PathSegment {
+public class PauseGenerator extends Generator{
+
     private final double time;
     private final Timer timer = new Timer();
 
-    public PathPause(double time){
+    public PauseGenerator(double time){
         this.time = time;
     }
 
@@ -16,5 +18,10 @@ public class PathPause extends PathSegment {
 
     public boolean isDonePausing(){
         return timer.seconds() > time;
+    }
+
+    @Override
+    public void add(Pose start, Pose target) {
+
     }
 }

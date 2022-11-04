@@ -1,16 +1,7 @@
 package debugging;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-
-import automodules.stage.Initial;
-import automodules.stage.Stop;
 import robotparts.electronics.input.IEncoder;
 import util.template.Precision;
-import autoutil.profilers.Profiler;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.min;

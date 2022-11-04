@@ -1,8 +1,8 @@
 package autoutil.controllers.control2D;
 
 import autoutil.controllers.control1D.PID;
-import autoutil.paths.PathLine;
-import autoutil.paths.PathSegment;
+import autoutil.generators.Generator;
+import autoutil.generators.LineGenerator;
 import geometry.position.Line;
 import geometry.framework.Point;
 import geometry.position.Pose;
@@ -15,7 +15,6 @@ import util.condition.Magnitude;
 import util.template.ParameterConstructor;
 
 import static global.General.fault;
-import static global.General.log;
 
 public class PurePursuit extends Controller2D implements ParameterConstructor<Double> {
     public double maxRadius = 15;
@@ -25,7 +24,7 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     private double radiusK;
     private double t = 0;
 
-    // TODO 4 NEW Create option for tracer
+    // TOD5 4 NEW Create option for tracer
 
     private final Exponential radiusLogistic;
 
@@ -54,23 +53,18 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     }
 
     @Override
-    public void updateController(Pose pose, PathSegment pathSegment) {
+    public void updateController(Pose pose, Generator generator) {
         Line currentLine = new Line(new Point(0,0), new Point(0,0));
-        if(pathSegment instanceof PathLine){
-            currentLine = ((PathLine) pathSegment).getLine();
+        if(generator instanceof LineGenerator){
+            currentLine = ((LineGenerator) generator).getLine();
         }else{
             fault.check("Use Line Generator for Pure Pursuit", Expectation.UNEXPECTED, Magnitude.CATASTROPHIC);
         }
         Point targetPos = getTargetPos(pose.getPoint(), currentLine);
         xController.setTarget(targetPos.getX());
         yController.setTarget(targetPos.getY());
-//        log.show("targetpos", targetPos.toString());
-//        log.show("ytarget",  yController.getTarget());
-//        log.show("yerr", yController.getError());
-        log.show("Current raduis", currentRadius);
-        log.show("Current length", currentLine.getLength());
-        xController.update(pose, pathSegment);
-        yController.update(pose, pathSegment);
+        xController.update(pose, generator);
+        yController.update(pose, generator);
         updateRadius(currentLine.getLength());
         Vector powerVector = new Vector(xController.getOutput(), yController.getOutput());
         powerVector.rotate(pose.getAngle());

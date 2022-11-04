@@ -1,12 +1,9 @@
 package teleutil.independent;
 
-import auton.MecanumAuto;
-import util.codeseg.CodeSeg;
+import autoutil.AutoFramework;
 import util.codeseg.ParameterCodeSeg;
 
-import static global.General.bot;
-
-public class Independent extends MecanumAuto {
+public class Independent extends AutoFramework {
 
     private final ParameterCodeSeg<Independent> define;
 

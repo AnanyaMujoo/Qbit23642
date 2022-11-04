@@ -130,4 +130,6 @@ public abstract class Drawer extends JPanel {
         window.setSize(width, height);
         window.setVisible(true);
     }
+
+    // TOD 5 Add resize method for width and height
 }

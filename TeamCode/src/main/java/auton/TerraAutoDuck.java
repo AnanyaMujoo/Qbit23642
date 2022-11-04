@@ -1,22 +1,44 @@
-package auton.used;
+package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import auton.MecanumAuto;
+import autoutil.AutoFramework;
 import elements.Case;
 import elements.FieldSide;
-import robot.BackgroundTask;
 
-import static global.General.bot;
+public class TerraAutoDuck extends AutoFramework {
 
-public class TerraAutoDuck extends MecanumAuto {
 
-    @Override
-    public void initAuto() {
-        scan();
-        bot.addBackgroundTask(new BackgroundTask(mecanumLift::holdPosition));
-        mecanumOuttake.midCap();
-    }
+//
+//    @Override
+//    public Reactor getSetpointReactor() {
+//        return new MecanumPIDReactor();
+//    }
+//
+//    @Override
+//    public Reactor getWaypointReactor() {
+//        return new MecanumPurePursuitReactor();
+//    }
+//
+//    @Override
+//    public Generator getSetpointGenerator() {
+//        return new PoseGenerator();
+//    }
+//
+//    @Override
+//    public Generator getWaypointGenerator() {
+//        return new LineGenerator(lastPose);
+//    }
+//
+//    @Override
+//    public CaseScanner getCaseScanner() { return new TeamElementScanner(); }
+//
+//    @Override
+//    public void initAuto() {
+//        scan();
+//        bot.addBackgroundTask(new BackgroundTask(mecanumLift::holdPosition));
+//        mecanumOuttake.midCap();
+//    }
 
     @Override
     public void define() {

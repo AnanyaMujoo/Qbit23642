@@ -1,4 +1,4 @@
-package autoutil.profilers;
+package autoutil;
 
 import java.util.ArrayList;
 

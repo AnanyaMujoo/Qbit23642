@@ -1,33 +1,34 @@
 package autoutil.generators;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import automodules.AutoModule;
-import autoutil.paths.Path;
-import autoutil.paths.PathAutoModule;
-import autoutil.paths.PathPause;
+import geometry.position.Pose;
 
 public abstract class Generator {
 
-    protected Path path = new Path();
+    private Pose start, target;
 
-    public Path getPath() {
-        return path;
-    }
+    public final void addSegment(Pose start, Pose target){ this.start = start; this.target = target; add(start, target); }
+    public abstract void add(Pose start, Pose target);
 
-    public abstract void add(double x, double y, double heading);
 
-    public void addAutoModule(AutoModule automodule){
-        path.addSegment(new PathAutoModule(automodule, false));
-    }
+    public Pose getStart(){ return start; }
+    public Pose getTarget(){ return target; }
 
-    public void addConcurrentAutoModule(AutoModule automodule){
-        path.addSegment(new PathAutoModule(automodule, true));
-    }
-
+    public void addAutoModule(AutoModule automodule){ path.addSegment(new PathAutoModule(automodule, false)); }
+    public void addConcurrentAutoModule(AutoModule automodule){ path.addSegment(new PathAutoModule(automodule, true)); }
     public void addPause(double time){
         path.addSegment(new PathPause(time));
     }
-
     public void addCancelAutoModule(){
         path.addSegment(new PathAutoModule(true));
+    }
+
+    protected ArrayList<Pose> poses = new ArrayList<>();
+
+    public ArrayList<Pose> getPoses(){
+        return poses;
     }
 }

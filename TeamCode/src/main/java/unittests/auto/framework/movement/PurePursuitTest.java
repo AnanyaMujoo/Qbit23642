@@ -1,6 +1,6 @@
 package unittests.auto.framework.movement;
 
-import autoutil.executors.MecanumExecutor;
+import autoutil.Executor;
 import autoutil.generators.LineGenerator;
 import autoutil.reactors.MecanumPurePursuitReactor;
 import unittests.auto.AutoUnitTest;
@@ -15,7 +15,7 @@ public class PurePursuitTest extends AutoUnitTest {
      */
     LineGenerator generator;
     MecanumPurePursuitReactor reactor;
-    MecanumExecutor executor;
+    Executor executor;
 
     /**
      * Run method for testing
@@ -24,7 +24,7 @@ public class PurePursuitTest extends AutoUnitTest {
     protected void run() {
         generator = new LineGenerator();
         reactor = new MecanumPurePursuitReactor();
-        executor = new MecanumExecutor(linearOpMode);
+        executor = new Executor(linearOpMode);
 
 //        generator.addAutoModule(automodules.DuckTele);
 

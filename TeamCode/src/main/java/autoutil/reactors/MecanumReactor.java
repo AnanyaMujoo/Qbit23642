@@ -1,5 +1,6 @@
 package autoutil.reactors;
 
+import autoutil.generators.Generator;
 import geometry.position.Pose;
 import robotparts.sensors.GyroSensors;
 
@@ -17,9 +18,7 @@ public abstract class MecanumReactor extends Reactor {
     }
 
     @Override
-    public Pose getPose() {
-        return new Pose(bot.mecanumOdometry.getPose());
-    }
+    public Pose getPose() { return odometry.getPose(); }
 
     @Override
     public void setTarget(Pose pose) {
@@ -34,24 +33,14 @@ public abstract class MecanumReactor extends Reactor {
     }
 
     @Override
-    public boolean isAtTarget() {
-        return movementController.isAtTarget() && headingController.isAtTarget();
-    }
+    public boolean isAtTarget() { return movementController.isAtTarget() && headingController.isAtTarget(); }
 
     @Override
-    public void moveToTarget() {
-        movementController.update(getPose(), pathSegment);
-        headingController.update(getPose(), pathSegment);
-
-        bot.mecanumDrive.move(movementController.getOutputY(), movementController.getOutputX(), headingController.getOutput());
-        log.show("Ypow", movementController.getOutputY());
-        log.show("errr", movementController.yController.getError());
-//        log.show("yPID state (Err, Int, Der)", Arrays.toString(controllers.get(1).getErrorState()));
-//        log.show("xPID state (Err, Int, Der)", Arrays.toString(controllers.get(0).getErrorState()));
-//        log.show("hPID state (Err, Int, Der)", Arrays.toString(controllers.get(2).getErrorState()));
+    public void moveToTarget(Generator generator) {
+        movementController.update(getPose(), generator);
+        headingController.update(getPose(), generator);
+        drive.move(movementController.getOutputY(), movementController.getOutputX(), headingController.getOutput());
     }
-
-
 
     public static double processThetaError(double error){
         while (error < -180) { error += 360; }

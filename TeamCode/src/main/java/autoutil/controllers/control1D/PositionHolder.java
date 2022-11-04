@@ -1,6 +1,5 @@
 package autoutil.controllers.control1D;
 
-import autoutil.paths.PathSegment;
 import geometry.position.Pose;
 
 public class PositionHolder extends Controller1D {

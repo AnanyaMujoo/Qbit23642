@@ -1,15 +1,8 @@
 package robotparts.sensors;
 
-import java.util.ArrayList;
-
-import autoutil.profilers.Profiler;
-import robot.BackgroundTask;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IGyro;
-import util.Timer;
-
-import static global.General.bot;
 
 
 public class GyroSensors extends RobotPart {

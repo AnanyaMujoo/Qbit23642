@@ -1,9 +1,8 @@
 package autoutil.controllers.control1D;
 
-import autoutil.paths.PathSegment;
 import geometry.position.Pose;
 import util.template.ParameterConstructor;
-import util.template.Precision;
+
 import static java.lang.Math.*;
 
 public class PID extends Controller1D implements ParameterConstructor<Double> {
