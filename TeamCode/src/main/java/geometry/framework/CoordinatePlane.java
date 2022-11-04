@@ -1,16 +1,12 @@
 package geometry.framework;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 import geometry.circles.Circle;
 import geometry.polygons.Polygon;
-import geometry.polygons.Rect;
 import geometry.position.Line;
 import geometry.position.Pose;
-import geometry.position.Vector;
 import util.codeseg.ParameterCodeSeg;
 import util.template.Iterator;
 
@@ -37,6 +33,7 @@ public class CoordinatePlane {
     public void scale(double scale){ scale(origin, scale); }
     public void scaleX(double scale){ Iterator.forAll(objects, o -> o.scaleX(scale));}
     public void scaleY(double scale){ Iterator.forAll(objects, o -> o.scaleY(scale));}
+    public void toPoses(ParameterCodeSeg<Pose> code){Iterator.forAll(getPoses(), code); }
 
     public ArrayList<Line> getLines() { return getObjectsOfType(Line.class); }
     public ArrayList<Pose> getPoses() { return getObjectsOfType(Pose.class); }

@@ -41,8 +41,10 @@ public abstract class Drawer extends JPanel {
     protected final int circleWidth = 2;
     protected final Color circleColor = new Color(220, 120, 19);
 
-    public static final int width = 700;
-    public static final int height = 700;
+    private static final int width = 700;
+    private static final int height = 700;
+    private static final int fieldWidth = width-15;
+    private static final int fieldHeight = height-35;
 
     public static final double fieldSize = 365.76; // cm
 
@@ -54,10 +56,10 @@ public abstract class Drawer extends JPanel {
     public void setStroke(int width){ g.setStroke(new BasicStroke(width));}
 
     public void drawField(){
-        drawImage("powerPlay.png", height-35, width-15, 0.4);
+        drawImage("powerPlay.png",  fieldWidth,fieldHeight, 0.4);
     }
 
-    public void drawImage(String filename, int height, int width, double transparency) {
+    public void drawImage(String filename, int width, int height, double transparency) {
         final BufferedImage image;
         File f = new File(System.getProperty("user.dir") + "\\TeamCode\\src\\main\\java\\display\\" + filename);
         g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) transparency));
@@ -79,9 +81,9 @@ public abstract class Drawer extends JPanel {
         Iterator.forAll(polygon.getLines(), this::drawLine);
     }
 
-    public void drawPoint(Point point){ setColor(pointColor); g.fillOval((int) point.getX(), (int) point.getY(), (int) (pointSize), (int) (pointSize)); }
+    public void drawPoint(Point point){ setColor(pointColor); g.fillOval((int) point.getX() - (pointSize/2), (int) point.getY() - (pointSize/2), (int) (pointSize), (int) (pointSize)); }
 
-    public void drawPose(Pose pose){ drawLine(new Line(pose.getPoint().getTranslated(2,2), pose.getAngleUnitVector().getScaled(poseLength).getPoint().getTranslated(pose.getX()+2, pose.getY()+2)), poseColor); drawPoint(pose.getPoint());}
+    public void drawPose(Pose pose){ drawLine(new Line(pose.getPoint(), pose.getAngleUnitVector().getScaled(poseLength).getPoint().getTranslated(pose.getX(), pose.getY())), poseColor); drawPoint(pose.getPoint());}
 
     public void drawPlane(CoordinatePlane coordinatePlane){
         Iterator.forAll(coordinatePlane.getLines(), this::drawLine);
@@ -90,11 +92,17 @@ public abstract class Drawer extends JPanel {
         Iterator.forAll(coordinatePlane.getCircles(), this::drawCircle);
     }
 
-    public void drawOnField(CoordinatePlane coordinatePlane){
-        coordinatePlane.rotate(180);
-        // TODO FINISH
-        coordinatePlane.scaleX((double) width/fieldSize);
-        coordinatePlane.scaleY((double) height/fieldSize);
+    public void drawOnField(CoordinatePlane coordinatePlane, Pose startPose){
+        coordinatePlane.toPoses(Pose::invertOrientation);
+        startPose.invertOrientation();
+        coordinatePlane.rotate(startPose.getAngle()-90);
+        coordinatePlane.toPoses(pose -> pose.rotateOrientation(90));
+        coordinatePlane.translate(startPose.getX(), startPose.getY());
+        coordinatePlane.scaleY(-1.0);
+        coordinatePlane.translate(0, fieldSize);
+        coordinatePlane.scaleX(((double) fieldWidth)/fieldSize);
+        coordinatePlane.scaleY(((double) fieldHeight)/fieldSize);
+        drawPlane(coordinatePlane);
     }
 
 
@@ -107,16 +115,9 @@ public abstract class Drawer extends JPanel {
 
     private static final KeyListener keyListener = new KeyListener() {
         @Override
-        public void keyPressed(KeyEvent e) {
-            char c = e.getKeyChar();
-            if(c == 'q'){
-                System.exit(0);
-            }
-        }
-
+        public void keyPressed(KeyEvent e) { char c = e.getKeyChar(); if(c == 'q'){ System.exit(0); }}
         @Override
         public void keyTyped(KeyEvent keyEvent) {}
-
         @Override
         public void keyReleased(KeyEvent keyEvent) {}
     };

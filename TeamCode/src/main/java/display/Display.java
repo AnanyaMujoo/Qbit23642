@@ -30,9 +30,15 @@ public class Display extends Drawer {
 //        Triangle triangle = new Triangle(new Point(300,300), new Point(400,500), new Point(600,100));
 //        Rect rect = new Rect(new Point(300,300), new Point(400,400));
 //        Circle circle = new Circle(new Point(200,200), 50);
-        drawField();
-        drawOnField(new CoordinatePlane(new Pose(new Point(fieldSize/2.0, fieldSize/2.0), 90)));
 //        drawPlane(new CoordinatePlane(line, pose, triangle, rect, circle));
+
+
+
+        CoordinatePlane plane = new CoordinatePlane(new Pose(20,50,90));
+        Pose startPose1 = new Pose(20,fieldSize/2.0,0);
+        Pose startPose2 = new Pose(fieldSize-20,fieldSize/2.0,180);
+        drawField();
+        drawOnField(plane, startPose2);
     }
 
 

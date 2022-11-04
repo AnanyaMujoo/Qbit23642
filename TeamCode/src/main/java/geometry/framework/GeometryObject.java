@@ -22,7 +22,7 @@ public abstract class GeometryObject {
     private void toAllPoints(ParameterCodeSeg<Point> code){ Iterator.forAll(points, code);}
 
     public final void translate(double deltaX, double deltaY){ toAllPoints(p -> p.translate(deltaX, deltaY)); }
-    public final void rotate(Point anchor, double angle){ toAllPoints(p -> p.rotate(anchor, angle));}
+    public void rotate(Point anchor, double angle){ toAllPoints(p -> p.rotate(anchor, angle));}
     public final void rotate(double angle){ rotate(anchorPoint, angle);}
     public final void scale(Point anchor, double scale){ toAllPoints(p -> p.scale(anchor, scale));}
     public final void scale(double scale){ scale(anchorPoint, scale); }

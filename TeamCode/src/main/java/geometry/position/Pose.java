@@ -12,11 +12,11 @@ import geometry.framework.Point;
 public class Pose extends GeometryObject {
     private final Point p;
     private double angle; // Units same as input units
-    public Pose(Point p, double angle) { this.p = p; setAngle(angle); }
-    public Pose(Vector v, double angle) { this.p = v.getPoint(); setAngle(angle); }
-    public Pose(double x, double y, double angle) { this.p = new Point(x,y); setAngle(angle); }
-    public Pose(double[] pose){this.p = new Point(pose[0], pose[1]); setAngle(pose[2]);}
-    public Pose(){ this.p = new Point(); setAngle(0); }
+    public Pose(Point p, double angle) { this.p = p; setAngle(angle); addPoints(this.p); }
+    public Pose(Vector v, double angle) { this.p = v.getPoint(); setAngle(angle); addPoints(p);}
+    public Pose(double x, double y, double angle) { this.p = new Point(x,y); setAngle(angle); addPoints(p);}
+    public Pose(double[] pose){this.p = new Point(pose[0], pose[1]); setAngle(pose[2]); addPoints(p);}
+    public Pose(){ this.p = new Point(); setAngle(0); addPoints(p);}
 
     public void add(Pose in){p.translate(in.getX(), in.getY()); angle += in.getAngle(); }
     public void add(Vector in){p.translate(in.getX(), in.getY());}
@@ -35,6 +35,12 @@ public class Pose extends GeometryObject {
     public void setVector(Vector in){ setX(in.getX()); setY(in.getY()); }
     public void setAngle(double angle){ this.angle = angle; }
     public void setZero(){ setX(0); setY(0); setAngle(0); }
+    public void invertOrientation(){ setAngle(getAngle()); }
+    public void rotateOrientation(double angle){ setAngle(getAngle() + angle);}
+
+
+    @Override
+    public void rotate(Point anchor, double angle) { super.rotate(anchor, angle); rotateOrientation(angle);}
 
     @Override
     public String toString() { return String.format(Locale.US, "Position {p: %s, angle: %f}", p.toString(), getAngle()); }
