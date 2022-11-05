@@ -9,13 +9,10 @@ import auton.Auto;
 import autoutil.generators.AutoModuleGenerator;
 import autoutil.generators.Generator;
 import autoutil.generators.PauseGenerator;
-import autoutil.generators.PoseGenerator;
 import autoutil.reactors.Reactor;
-import autoutil.reactors.MecanumPIDReactor;
 import autoutil.vision.CaseScanner;
-import elements.Case;
+import elements.CaseOld;
 import elements.FieldSide;
-import geometry.framework.Point;
 import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.codeseg.CodeSeg;
@@ -39,7 +36,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     protected boolean scanning = false;
     protected CaseScanner caseScanner;
-    protected Case caseDetected = Case.RIGHT;
+    protected CaseOld caseDetected = CaseOld.RIGHT;
 
     protected boolean isIndependent = false;
 
@@ -51,7 +48,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addDecision(DecisionList decisionList){ decisionList.check(); }
     public void addAutomodule(DecisionList decisionList){ addAutoModule(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways()))); }
     public void customSide(FieldSide sideOne, CodeSeg one, FieldSide sideTwo, CodeSeg two){ addDecision(new DecisionList(() -> fieldSide).addOption(sideOne, one).addOption(sideTwo, two)); }
-    public void customCase(Case caseOne, CodeSeg one, Case caseTwo, CodeSeg two, Case caseThree, CodeSeg three){ addDecision(new DecisionList(() -> caseDetected).addOption(caseOne, one).addOption(caseTwo, two).addOption(caseThree, three)); }
+    public void customCase(CaseOld caseOne, CodeSeg one, CaseOld caseTwo, CodeSeg two, CaseOld caseThree, CodeSeg three){ addDecision(new DecisionList(() -> caseDetected).addOption(caseOne, one).addOption(caseTwo, two).addOption(caseThree, three)); }
     public void customNumber(int num, ParameterCodeSeg<Integer> one){ for (int i = 0; i < num; i++) { one.run(i); } }
 
     public void scan(){

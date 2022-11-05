@@ -3,7 +3,7 @@ package auton;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import autoutil.AutoFramework;
-import elements.Case;
+import elements.CaseOld;
 import elements.FieldSide;
 
 public class TerraAutoDuck extends AutoFramework {
@@ -26,7 +26,7 @@ public class TerraAutoDuck extends AutoFramework {
             addSetpoint(65,15,210);
             addAutoModule(OneDuckAutoRed);
         });
-        customCase(Case.RIGHT, () -> {
+        customCase(CaseOld.RIGHT, () -> {
             addConcurrentAutoModule(AllianceLiftUp(LiftUpTopFast));
             addSetpoint(-15,40,135);
             customSide(FieldSide.BLUE, () -> {
@@ -34,11 +34,11 @@ public class TerraAutoDuck extends AutoFramework {
             }, FieldSide.RED, () -> {
                 addSetpoint(-28,55,130);
             });
-        }, Case.CENTER, () -> {
+        }, CaseOld.CENTER, () -> {
             addConcurrentAutoModule(AllianceLiftUp(LiftUpMiddleFast));
             addSetpoint(-15,40,135);
             addSetpoint(-35,60,135);
-        }, Case.LEFT, () -> {
+        }, CaseOld.LEFT, () -> {
             addConcurrentAutoModule(AllianceLiftUp(LiftUpBottomFast));
             addSetpoint(-15,40,135);
             addSetpoint(-42,67,135);

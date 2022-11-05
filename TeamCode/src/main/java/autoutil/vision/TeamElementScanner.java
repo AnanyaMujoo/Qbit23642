@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import elements.Case;
+import elements.CaseOld;
 
 public class TeamElementScanner extends CaseScanner{
 
@@ -18,7 +18,7 @@ public class TeamElementScanner extends CaseScanner{
     }
 
     @Override
-    protected Case detectCase() {
+    protected CaseOld detectCase() {
         List<Integer> averages = Arrays.asList(
                 processor.getAverage(processor.getSubmat(Cb, rects[0])),
                 processor.getAverage(processor.getSubmat(Cb, rects[1])),

@@ -1,34 +1,19 @@
 package elements;
+
 import util.condition.Decision;
 
 public enum Case implements Decision {
-    /**
-     * Which case is it?
-     */
-    LEFT(Level.BOTTOM),
-    CENTER(Level.MIDDLE),
-    RIGHT(Level.TOP);
+    FIRST("LOCATION 1"),
+    SECOND("LOCATION 2"),
+    THIRD("LOCATION 3");
 
-    private final Level level;
+    private final String value;
 
-    Case(Level l){
-        this.level = l;
+    Case(String value){
+        this.value = value;
     }
 
-    public Level getLevel(){
-        return level;
-    }
-
-    public static Case create(Level level){
-        switch (level) {
-            case BOTTOM:
-                return LEFT;
-            case MIDDLE:
-                return CENTER;
-            case TOP:
-                return RIGHT;
-            default:
-                return null;
-        }
+    public String getValue(){
+        return value;
     }
 }

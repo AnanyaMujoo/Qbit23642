@@ -2,15 +2,8 @@ package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import autoutil.AutoConfig;
 import autoutil.AutoFramework;
-import autoutil.AutoSegment;
-import autoutil.generators.LineGenerator;
-import autoutil.generators.PoseGenerator;
-import autoutil.reactors.MecanumPIDReactor;
-import autoutil.reactors.MecanumPurePursuitReactor;
-import autoutil.vision.TeamElementScanner;
-import elements.Case;
+import elements.CaseOld;
 import elements.FieldSide;
 import robot.BackgroundTask;
 
@@ -36,18 +29,18 @@ public class TerraAutoCycles extends AutoFramework {
         addWaypoint(20, 20, -60);
         customNumber(5, i -> {
             addCancelAutoModules();
-            customCase(Case.RIGHT, () -> {
+            customCase(CaseOld.RIGHT, () -> {
                 addConcurrentAutoModule(AllianceLiftUp(LiftUpTopFast));
                 if(i==0) {
                     addSetpoint(30, 47, -137);
                 }else if(i>0){
                     addSetpoint(30+i, 35+i, -140);
                 }
-            }, Case.CENTER, () -> {
+            }, CaseOld.CENTER, () -> {
                 addConcurrentAutoModule(AllianceLiftUp(LiftUpMiddleFast));
                 addPause(0.5);
                 addSetpoint(37, 54, -137);
-            }, Case.LEFT, () -> {
+            }, CaseOld.LEFT, () -> {
                 addConcurrentAutoModule(AllianceLiftUp(LiftUpBottomFast));
                 addPause(0.5);
                 addSetpoint(44, 61, -137);
@@ -67,7 +60,7 @@ public class TerraAutoCycles extends AutoFramework {
                 addWaypoint(35, 25, -115);
                 addPause(0.1);
             }
-            caseDetected = Case.RIGHT;
+            caseDetected = CaseOld.RIGHT;
         });
         addCancelAutoModules();
         addWaypoint(-45, -10, -90);

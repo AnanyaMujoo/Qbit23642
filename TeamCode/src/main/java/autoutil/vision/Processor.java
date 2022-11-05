@@ -35,10 +35,6 @@ public class Processor {
         definers.add(definer);
     }
 
-    public void createRegions(Point center, int offset, int size){
-
-    }
-
     public void toYCrCb(Mat input, Mat output) {
         Imgproc.cvtColor(input, output, Imgproc.COLOR_RGB2YCrCb);
     }

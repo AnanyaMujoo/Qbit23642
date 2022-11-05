@@ -3,7 +3,7 @@ package auton;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import autoutil.AutoFramework;
-import elements.Case;
+import elements.CaseOld;
 import elements.FieldSide;
 import robot.BackgroundTask;
 
@@ -29,15 +29,15 @@ public class TerraAutoCyclesSafe extends AutoFramework {
         addWaypoint(20, 20, -60);
         customNumber(1, i -> {
             addCancelAutoModules();
-            customCase(Case.RIGHT, () -> {
+            customCase(CaseOld.RIGHT, () -> {
                 addConcurrentAutoModule(AllianceLiftUp(LiftUpTopFast));
                 addPause(0.5);
                 addSetpoint(30, 47, -137);
-            }, Case.CENTER, () -> {
+            }, CaseOld.CENTER, () -> {
                 addConcurrentAutoModule(AllianceLiftUp(LiftUpMiddleFast));
                 addPause(0.5);
                 addSetpoint(37, 54, -137);
-            }, Case.LEFT, () -> {
+            }, CaseOld.LEFT, () -> {
                 addConcurrentAutoModule(AllianceLiftUp(LiftUpBottomFast));
                 addPause(0.5);
                 addSetpoint(44, 61, -137);
