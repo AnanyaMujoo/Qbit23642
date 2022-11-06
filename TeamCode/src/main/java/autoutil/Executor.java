@@ -30,7 +30,7 @@ public class Executor implements Iterator {
         reactor.setTarget(generator.getTarget());
         Stage stage = generator.getStage(reactor);
         stage.start();
-        whileActive(stage::shouldStop, stage::loop);
+        whileActive(() -> !stage.shouldStop(), stage::loop);
         stage.runOnStop();
     }
 

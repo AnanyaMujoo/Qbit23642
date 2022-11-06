@@ -52,10 +52,10 @@ public class TerraAutoDuck extends AutoFramework {
         });
 
     }
-
-
-    @Autonomous(name = "TerraAutoDuckBlue", group = "auto")
-    public static class TerraAutoDuckBlue extends TerraAutoDuck {{ fieldSide = FieldSide.BLUE; }}
-    @Autonomous(name = "TerraAutoDuckRed", group = "auto")
-    public static class TerraAutoDuckRed extends TerraAutoDuckBlue {{ fieldSide = FieldSide.RED; }}
+//
+//
+//    @Autonomous(name = "TerraAutoDuckBlue", group = "auto")
+//    public static class TerraAutoDuckBlue extends TerraAutoDuck {{ fieldSide = FieldSide.BLUE; }}
+//    @Autonomous(name = "TerraAutoDuckRed", group = "auto")
+//    public static class TerraAutoDuckRed extends TerraAutoDuckBlue {{ fieldSide = FieldSide.RED; }}
 }

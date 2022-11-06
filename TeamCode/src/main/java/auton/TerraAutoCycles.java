@@ -67,9 +67,9 @@ public class TerraAutoCycles extends AutoFramework {
         addSetpoint(-45, 50, -90);
     }
 
-
-    @Autonomous(name = "TerraAutoCyclesBlue", group = "auto")
-    public static class TerraAutoCyclesBlue extends TerraAutoCycles {{ fieldSide = FieldSide.BLUE; }}
-    @Autonomous(name = "TerraAutoCyclesRed", group = "auto")
-    public static class TerraAutoCyclesRed extends TerraAutoCyclesBlue {{ fieldSide = FieldSide.RED; }}
+//
+//    @Autonomous(name = "TerraAutoCyclesBlue", group = "auto")
+//    public static class TerraAutoCyclesBlue extends TerraAutoCycles {{ fieldSide = FieldSide.BLUE; }}
+//    @Autonomous(name = "TerraAutoCyclesRed", group = "auto")
+//    public static class TerraAutoCyclesRed extends TerraAutoCyclesBlue {{ fieldSide = FieldSide.RED; }}
 }

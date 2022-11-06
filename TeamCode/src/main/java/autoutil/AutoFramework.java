@@ -65,6 +65,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     @Override
     public void runAuto() {
+        poses.add(new Pose());
         define();
         if(scanning) { camera.stopExternalCamera(); }
         Iterator.forAll(segments, segment -> segment.run(this));
@@ -83,7 +84,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     private void addSegment(AutoSegment<?, ?> segment, Pose target){ addSegment(segment.getReactor(), segment.getGenerator(), target); }
     private <R extends Reactor, G extends Generator> void addSegment(R reactor, G generator, Pose target){
         fault.check("Auto Config Not Set", Expectation.EXPECTED, Magnitude.MODERATE, config == null, false);
-        generator.addSegment(getLastPose(), target); segments.add(new AutoSegment<>(reactor, generator));
+        generator.addSegment(getLastPose(), target);
+        segments.add(new AutoSegment<>(reactor, generator));
         poses.add(target);
     }
 

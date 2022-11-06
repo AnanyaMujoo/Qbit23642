@@ -25,6 +25,7 @@ public abstract class Controller2D extends Controller1D {
     public void setProcessVariable(ReturnCodeSeg<Double> processVariableX, ReturnCodeSeg<Double> processVariableY){
         xController.setProcessVariable(processVariableX);
         yController.setProcessVariable(processVariableY);
+        setProcessVariable(() -> 0.0);
     }
 
     public void reset(){

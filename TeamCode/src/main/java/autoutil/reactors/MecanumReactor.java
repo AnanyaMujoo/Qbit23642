@@ -40,7 +40,7 @@ public abstract class MecanumReactor extends Reactor {
     public void moveToTarget(PoseGenerator generator) {
         movementController.update(getPose(), generator);
         headingController.update(getPose(), generator);
-        drive.move(movementController.getOutputY(), movementController.getOutputX(), headingController.getOutput());
+        drive.move(movementController.getOutputY(), movementController.getOutputX(), -headingController.getOutput());
     }
 
     public static double processThetaError(double error){
