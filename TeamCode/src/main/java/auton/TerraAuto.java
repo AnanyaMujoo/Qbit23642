@@ -16,8 +16,11 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void define() {
         // TODO TEST
-        addSetpoint(0,20,0);
-//        addWaypoint(0,20,0);
+        addWaypoint(0,20,0);
+        addWaypoint(20,20,90);
+        addWaypoint(20,0,90);
+        addSetpoint(20,0,90);
+        addSetpoint(0,0,0);
 
 //        whileTime(() -> {
 //            log.show("Size", segments.size());

@@ -23,5 +23,5 @@ public class BangBang extends Controller1D {
     protected double setOutput() { return 0; }
 
     @Override
-    protected boolean hasReachedTarget() { return true; }
+    protected boolean hasReachedTarget() { return isWithinAccuracyRange(); }
 }

@@ -2,15 +2,16 @@ package autoutil;
 
 import autoutil.reactors.Reactor;
 import autoutil.vision.CaseScanner;
+import util.codeseg.ReturnCodeSeg;
 
 public class AutoConfig {
-    private final AutoSegment<?,?> waypointSegment, setpointSegment;
-    private final CaseScanner caseScanner;
-    public AutoConfig(AutoSegment<?,?> set, AutoSegment<?,?> way, CaseScanner scanner){
-        this.waypointSegment = way; this.setpointSegment = set; this.caseScanner = scanner;
+    private final ReturnCodeSeg<AutoSegment<?,?>> getWaypointSegment, getSetpointSegment;
+    private final ReturnCodeSeg<CaseScanner> getCaseScanner;
+    public <T extends CaseScanner> AutoConfig(ReturnCodeSeg<AutoSegment<?,?>> set, ReturnCodeSeg<AutoSegment<?,?>> way, ReturnCodeSeg<T> scanner){
+        this.getWaypointSegment = way; this.getSetpointSegment = set; this.getCaseScanner = (ReturnCodeSeg<CaseScanner>) scanner;
     }
 
-    public AutoSegment<?,?> getWaypointSegment(){ return waypointSegment; }
-    public AutoSegment<?, ?> getSetpointSegment(){ return setpointSegment; }
-    public CaseScanner getCaseScanner(){ return caseScanner; }
+    public AutoSegment<?,?> getWaypointSegment(){ return getWaypointSegment.run(); }
+    public AutoSegment<?, ?> getSetpointSegment(){ return getSetpointSegment.run(); }
+    public CaseScanner getCaseScanner(){ return getCaseScanner.run(); }
 }

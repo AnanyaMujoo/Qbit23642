@@ -13,7 +13,7 @@ public abstract class Generator {
     private Pose start, target;
 
     public final void addSegment(Pose start, Pose target){ this.start = start; this.target = target; add(start, target); }
-    protected abstract void add(Pose start, Pose target);
+    public abstract void add(Pose start, Pose target);
     public abstract Stage getStage(Reactor reactor);
 
     public Pose getStart(){ return start; }

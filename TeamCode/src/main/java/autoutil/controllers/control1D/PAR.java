@@ -36,7 +36,7 @@ public class PAR extends Controller1D{
     protected double setOutput() { return proportional * (VofS() - processVariableProfiler.getDerivative()); }
 
     @Override
-    protected boolean hasReachedTarget() { return true; }
+    protected boolean hasReachedTarget() { return isWithinAccuracyRange(); }
 
     public double[] getCoefficients(){ return new double[]{proportional, approachRate, getRestOutput()};}
 }

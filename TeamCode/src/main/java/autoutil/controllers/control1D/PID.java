@@ -51,7 +51,7 @@ public class PID extends Controller1D implements ParameterConstructor<Double> {
     protected double setOutput() { return (kp * getError() + (ki * errorProfiler.getIntegral()) + (kd * errorProfiler.getDerivative())); }
 
     @Override
-    protected boolean hasReachedTarget() { return maxDerivativeTarget(maximumDerivative); }
+    protected boolean hasReachedTarget() { return isWithinAccuracyRange()&&maxDerivativeTarget(maximumDerivative); }
 
     public double[] getCoefficients(){ return new double[]{kp, ki, kd}; }
 

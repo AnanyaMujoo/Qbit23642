@@ -11,7 +11,7 @@ public class TerraAutoDuck extends AutoFramework {
 
     @Override
     public void initAuto() {
-        setConfig(mecanumDefaultConfig);
+//        setConfig(mecanumDefaultConfig());
     }
 
     @Override

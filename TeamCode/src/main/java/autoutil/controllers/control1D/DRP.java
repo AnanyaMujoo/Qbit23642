@@ -34,5 +34,5 @@ public class DRP extends Controller1D{
     protected double setOutput() { return kp*getError(); }
 
     @Override
-    protected boolean hasReachedTarget() { return true; }
+    protected boolean hasReachedTarget() { return isWithinAccuracyRange(); }
 }

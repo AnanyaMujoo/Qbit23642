@@ -46,7 +46,7 @@ public abstract class Controller1D {
         processVariableProfiler.update();
         errorProfiler.update();
         updateController(pose, generator);
-        isAtTarget = precision.isInputTrueForTime(isWithinAccuracyRange()&&hasReachedTarget(), minimumTime);
+        isAtTarget = precision.isInputTrueForTime(hasReachedTarget(), minimumTime);
         output = setOutput() + getRestOutput();
     }
     public final void update(){ update(new Pose(new Point(0,0),0), new PoseGenerator()); }

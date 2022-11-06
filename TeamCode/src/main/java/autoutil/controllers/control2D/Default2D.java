@@ -15,7 +15,7 @@ public class Default2D extends Controller2D{
         xController.update(pose, generator);
         yController.update(pose, generator);
         Vector powerVector = new Vector(xController.getOutput(), yController.getOutput());
-        powerVector.rotate(pose.getAngle());
+        powerVector.rotate(-pose.getAngle());
         setOutputX(powerVector.getX());
         setOutputY(powerVector.getY());
     }

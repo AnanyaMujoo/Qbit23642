@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import autoutil.generators.Generator;
+import util.ExceptionCatcher;
+import util.codeseg.ReturnCodeSeg;
 import util.codeseg.ReturnParameterCodeSeg;
 import util.condition.Expectation;
 import util.condition.Magnitude;
@@ -75,4 +78,12 @@ public interface ParameterConstructor<T> {
      * Interface to override with specific types of constructors
      */
     public interface ParameterType {};
+
+
+
+    static <T> ReturnCodeSeg<T> getNewInstance(Class<T> type){
+        Object[] out = new Object[1];
+        ExceptionCatcher.catchNewInstance(() -> { T obj = type.newInstance(); out[0] = obj; });
+        return () -> (T) out[0];
+    }
 }

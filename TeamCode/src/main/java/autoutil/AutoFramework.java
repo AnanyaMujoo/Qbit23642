@@ -1,7 +1,10 @@
 package autoutil;
 
+
+
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import automodules.AutoModule;
 import automodules.stage.Main;
 import automodules.stage.Stage;
@@ -17,6 +20,7 @@ import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
+import util.codeseg.ReturnCodeSeg;
 import util.condition.DecisionList;
 import util.condition.Expectation;
 import util.condition.Magnitude;
@@ -27,9 +31,9 @@ import static global.General.log;
 
 public abstract class AutoFramework extends Auto implements AutoUser {
     // TOD 5 Integrate with coordinate plane
-    protected AutoConfig config;
+    protected ReturnCodeSeg<AutoConfig> config;
 
-    public void setConfig(AutoConfig config){ this.config = config; }
+    public void setConfig(ReturnCodeSeg<AutoConfig> config){ this.config = config; }
 
     protected final ArrayList<Pose> poses = new ArrayList<>();
     protected ArrayList<AutoSegment<?, ?>> segments = new ArrayList<>();
@@ -53,7 +57,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public void scan(){
         scanning = true;
-        caseScanner = config.getCaseScanner();
+        caseScanner = config.run().getCaseScanner();
         camera.setExternalScanner(caseScanner);
         camera.startExternalCamera();
         while (!isStarted()){
@@ -71,21 +75,21 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         Iterator.forAll(segments, segment -> segment.run(this));
     }
 
-    public void addPause(double time){ addSegment(null, new PauseGenerator(time), getLastPose()); }
-    public void addSetpoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegment(config.getSetpointSegment(), new Pose(x, y, h)); }
-    public void addWaypoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegment(config.getWaypointSegment(), new Pose(x, y, h));}
-    public void addAutoModule(AutoModule autoModule){ addStationarySegment(new AutoModuleGenerator(autoModule, false)); }
-    public void addConcurrentAutoModule(AutoModule autoModule){ addStationarySegment(new AutoModuleGenerator(autoModule, true)); }
-    public void addCancelAutoModules(){
-        addStationarySegment(new AutoModuleGenerator(true));
-    }
-    public void addStationarySegment(Generator generator){ addSegment(null, generator, getLastPose()); }
+    public void addPause(double time){ addSegment(() -> null, () -> new PauseGenerator(time), getLastPose()); }
+    public void addSetpoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegment(config.run().getSetpointSegment(), new Pose(x, y, h)); }
+    public void addWaypoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegment(config.run().getWaypointSegment(), new Pose(x, y, h));}
+    public void addAutoModule(AutoModule autoModule){ addStationarySegment(() -> new AutoModuleGenerator(autoModule, false)); }
+    public void addConcurrentAutoModule(AutoModule autoModule){ addStationarySegment(() -> new AutoModuleGenerator(autoModule, true)); }
+    public void addCancelAutoModules(){ addStationarySegment(() -> new AutoModuleGenerator(true)); }
+    public void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(() -> null, generator, getLastPose()); }
 
-    private void addSegment(AutoSegment<?, ?> segment, Pose target){ addSegment(segment.getReactor(), segment.getGenerator(), target); }
-    private <R extends Reactor, G extends Generator> void addSegment(R reactor, G generator, Pose target){
+    private void addSegment(AutoSegment<?, ?> segment, Pose target){ addSegment(segment.getReactorReference(), segment.getGeneratorReference(), target); }
+    private <R extends Reactor, G extends Generator> void addSegment(@NonNull ReturnCodeSeg<R> reactor, @NonNull ReturnCodeSeg<G> generator, Pose target){
         fault.check("Auto Config Not Set", Expectation.EXPECTED, Magnitude.MODERATE, config == null, false);
-        generator.addSegment(getLastPose(), target);
-        segments.add(new AutoSegment<>(reactor, generator));
+        AutoSegment<?,?> autoSegment = new AutoSegment<>(reactor, generator);
+        final Pose lastPose = getLastPose();
+        autoSegment.setGeneratorFunction(gen -> gen.addSegment(lastPose, target));
+        segments.add(autoSegment);
         poses.add(target);
     }
 
