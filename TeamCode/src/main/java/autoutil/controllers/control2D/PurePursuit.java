@@ -67,7 +67,7 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
         yController.update(pose, generator);
         updateRadius(currentLine.getLength());
         Vector powerVector = new Vector(xController.getOutput(), yController.getOutput());
-        powerVector.rotate(pose.getAngle());
+        powerVector.rotate(-pose.getAngle());
         setOutputX(powerVector.getX());
         setOutputY(powerVector.getY());
     }
@@ -92,7 +92,8 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
         double b = 2*((dx*currentLine.getSlopeX())+(dy*currentLine.getSlopeY()));
         double c = Math.pow(Trigonometry.pythag(dx, dy),2)-Math.pow(currentRadius,2);
         Quadratic quadratic = new Quadratic(a, b, c);
-        t = quadratic.roots()[0];
+        double[] roots = quadratic.roots();
+        t = roots[0];
         if(Double.isNaN(t)) { t = 1; }
         return t;
     }

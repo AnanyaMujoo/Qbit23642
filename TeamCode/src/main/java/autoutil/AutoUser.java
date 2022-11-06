@@ -32,10 +32,10 @@ public interface AutoUser {
 
     ReturnCodeSeg<TeamElementScanner> teamElementScanner = scanner(TeamElementScanner.class);
 
-    ReturnCodeSeg<AutoSegment<?, ?>> mecanumDefaultSetpoint = () -> new AutoSegment<>(mecanumPIDReactor, poseGenerator);
-    ReturnCodeSeg<AutoSegment<?, ?>> mecanumDefaultWayPoint = () -> new AutoSegment<>(mecanumPurePursuitReactor, lineGenerator);
+    AutoSegment<?, ?> mecanumDefaultSetpoint = new AutoSegment<>(mecanumPIDReactor, poseGenerator);
+    AutoSegment<?, ?> mecanumDefaultWayPoint = new AutoSegment<>(mecanumPurePursuitReactor, lineGenerator);
 
-    ReturnCodeSeg<AutoConfig> mecanumDefaultConfig = () -> new AutoConfig(mecanumDefaultSetpoint, mecanumDefaultWayPoint, teamElementScanner);
+    AutoConfig mecanumDefaultConfig = new AutoConfig(mecanumDefaultSetpoint, mecanumDefaultWayPoint, teamElementScanner);
 
 
     static <T extends Generator> ReturnCodeSeg<T> generator(Class<T> type){ return ParameterConstructor.getNewInstance(type); }

@@ -28,7 +28,6 @@ public class AutoModuleGenerator extends Generator{
     public boolean isDoneWithAutoModule(){
         return bot.rfsHandler.getRfsQueue().isEmpty();
     }
-    public boolean isConcurrent(){return isConcurrent;}
 
     @Override
     public void add(Pose start, Pose target) {}
