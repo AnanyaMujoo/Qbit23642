@@ -102,13 +102,13 @@ public class MecanumTerraOp extends Tele {
 
     }
 
-    /**
-     * Define the two teleops for each side
-     */
-    @TeleOp(name = "TerraOpBlueMecanum", group = "TeleOp")
-    public static class TerraOpBlue extends MecanumTerraOp {{ fieldSide = FieldSide.BLUE; }}
-    @TeleOp(name = "TerraOpRedMecanum", group = "TeleOp")
-    public static class TerraOpRed extends TerraOpBlue{{ fieldSide = FieldSide.RED; }}
+//    /**
+//     * Define the two teleops for each side
+//     */
+//    @TeleOp(name = "TerraOpBlueMecanum", group = "TeleOp")
+//    public static class TerraOpBlue extends MecanumTerraOp {{ fieldSide = FieldSide.BLUE; }}
+//    @TeleOp(name = "TerraOpRedMecanum", group = "TeleOp")
+//    public static class TerraOpRed extends TerraOpBlue{{ fieldSide = FieldSide.RED; }}
 }
 
 

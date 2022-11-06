@@ -1,10 +1,12 @@
 package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import autoutil.AutoFramework;
 
 import static global.General.log;
+
 
 @Autonomous(name = "TerraAutoTest", group = "auto")
 public class TerraAuto extends AutoFramework {
@@ -22,13 +24,5 @@ public class TerraAuto extends AutoFramework {
         addCancelAutoModules();
         addSetpoint(20,0,90);
         addSetpoint(0,0,0);
-
-//        whileTime(() -> {
-//            log.show("Size", segments.size());
-//
-//        }, 1);
-//        addWaypoint(0, 20, 0);
-//        addWaypoint(20, 20, 0);
-//        addSetpoint(20,0,0);
     }
 }

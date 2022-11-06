@@ -30,7 +30,6 @@ public class TwoOdometryTest extends TeleUnitTest {
     @Override
     protected void start() {
         gph1.link(Button.RIGHT_BUMPER, moveHeading(180));
-        // TOD 5 FIX PROBLEM WITH ODOMETRY IN AUTOMODULES?
         gph1.link(Button.LEFT_BUMPER, moveHeading(0));
         gph1.link(Button.RIGHT_TRIGGER, moveHeading(-180));
         gph1.link(Button.LEFT_TRIGGER, testModule());
@@ -59,10 +58,10 @@ public class TwoOdometryTest extends TeleUnitTest {
         return new AutoModule(new Stage(
                 usePart(),
                 new Main(() -> {
-                    log.show("Yes sir");
-                    drive.move(gph1.ry / 2.0, gph1.rx / 2.0, gph1.lx);
+                    Pose test = movePower(new Pose(new Point(), 180));
+                    powerA = new Pose(0,0,-1.0);
                 }),
-                RobotPart.exitTime(2),
+                new Exit(() -> Math.abs(odometry.getHeading()-180) < 2),
                 returnPart()
         ));
     }

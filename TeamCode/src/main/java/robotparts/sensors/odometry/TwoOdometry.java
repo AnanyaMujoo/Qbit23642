@@ -46,7 +46,10 @@ public class TwoOdometry extends Odometry {
     @Override
     protected void update() {
         Vector localDelta = dYdXMatrixInverted.multiply(new Vector(enc1.getDeltaPosition(), enc2.getDeltaPosition()));
-        odometryCenter.translate(toGlobalFrame(localDelta));
+        Vector globalOffset = toGlobalFrame(new Vector(0, Math.abs(Math.toRadians(gyro.getDeltaHeading()))*1.8));
+        globalOffset.scaleY(0); // TOD 5 FIX PROBLEM WITH TWO ODOMETRY UPDATES (WHY DO WE NEED CORRECTION)
+        Vector globalDelta = toGlobalFrame(localDelta).getAdded(globalOffset);
+        odometryCenter.translate(globalDelta);
         Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter); // subtracted offset to make start position (0,0)
         setCurrentPose(new Pose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()), gyro.getHeading()));
     }

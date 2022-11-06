@@ -43,5 +43,5 @@ public class IGyro extends Electronic {
 
     public double getHeading(){ return heading - startHeading; }
 
-    public double getDeltaHeading(){ return deltaHeading; }
+    public double getDeltaHeading(){ return Math.abs(deltaHeading) < 30 ? deltaHeading : 0.0; }
 }

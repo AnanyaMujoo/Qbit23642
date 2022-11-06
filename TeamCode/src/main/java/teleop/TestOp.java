@@ -1,5 +1,6 @@
 package teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import automodules.AutoModule;
@@ -11,6 +12,7 @@ import util.condition.OutputList;
 import static global.General.fieldSide;
 import static global.General.gph1;
 
+@Disabled
 @TeleOp(name = "TestOp", group = "TeleOp")
 public class TestOp extends Tele {
     {

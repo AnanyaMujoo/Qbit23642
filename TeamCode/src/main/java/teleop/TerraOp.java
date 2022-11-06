@@ -22,7 +22,6 @@ import static teleutil.button.Button.LEFT_BUMPER;
 import static teleutil.button.Button.RIGHT_BUMPER;
 import static teleutil.button.Button.X;
 
-
 public class TerraOp extends Tele {
 
     boolean driveOnly = false;
@@ -65,8 +64,8 @@ public class TerraOp extends Tele {
 
     @TeleOp(name = "TerraOpBlue", group = "TeleOp")
     public static class TerraOpBlue extends TerraOp {{ fieldSide = FieldSide.BLUE; }}
-    @TeleOp(name = "TerraOpRed", group = "TeleOp")
-    public static class TerraOpRed extends TerraOpBlue{{ fieldSide = FieldSide.RED; driveOnly = true; }}
+//    @TeleOp(name = "TerraOpRed", group = "TeleOp")
+//    public static class TerraOpRed extends TerraOpBlue{{ fieldSide = FieldSide.RED; driveOnly = true; }}
 
 }
 
