@@ -13,16 +13,17 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
+        scan();
     }
 
     @Override
     public void define() {
-        addWaypoint(0,20,0);
-        addWaypoint(20,20,90);
-        addConcurrentAutoModule(DuckNew);
-        addWaypoint(20,0,90);
-        addCancelAutoModules();
-        addSetpoint(20,0,90);
-        addSetpoint(0,0,0);
+//        addWaypoint(0,20,0);
+//        addWaypoint(20,20,90);
+//        addConcurrentAutoModule(DuckNew);
+//        addWaypoint(20,0,90);
+//        addCancelAutoModules();
+//        addSetpoint(20,0,90);
+//        addSetpoint(0,0,0);
     }
 }

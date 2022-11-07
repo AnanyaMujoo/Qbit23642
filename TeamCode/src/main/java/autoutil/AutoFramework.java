@@ -14,6 +14,7 @@ import autoutil.generators.Generator;
 import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
 import autoutil.vision.CaseScanner;
+import autoutil.vision.Processor;
 import elements.CaseOld;
 import elements.FieldSide;
 import geometry.position.Pose;
@@ -61,8 +62,9 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         camera.setExternalScanner(caseScanner);
         camera.startExternalCamera();
         while (!isStarted()){
-            caseDetected = caseScanner.getCase();
-            log.show("Case Detected: ", caseDetected);
+//            caseDetected = caseScanner.getCase();
+//            log.show("Case Detected: ", caseDetected);
+            log.show("n", CaseScanner.n);
             log.showTelemetry();
         }
     }

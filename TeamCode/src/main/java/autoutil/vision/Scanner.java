@@ -7,20 +7,20 @@ public abstract class Scanner extends OpenCvPipeline {
 
     protected final Processor processor = new Processor();
 
-    protected final int width = 320;
-    protected final int height = 240;
+    public static final int width = 320;
+    public static final int height = 240;
 
     protected abstract void start();
 
     @Override
     public void init(Mat firstFrame){
         start();
-        processor.defineAll(firstFrame);
+        processor.define(firstFrame);
     }
 
     @Override
     public Mat processFrame(Mat input){
-        processor.defineAll(input);
+        processor.define(input);
         return processor.getOriginal();
     }
 }
