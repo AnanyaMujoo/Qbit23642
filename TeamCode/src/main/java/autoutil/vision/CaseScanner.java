@@ -1,80 +1,65 @@
 package autoutil.vision;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
-import elements.CaseOld;
+import elements.Case;
+import util.template.Iterator;
 
-import static autoutil.vision.Processor.BLUE;
-import static autoutil.vision.Processor.GREEN;
-import static autoutil.vision.Processor.RED;
+import static global.General.log;
+import static java.lang.Math.abs;
 
-public abstract class CaseScanner extends Scanner{
-    private volatile CaseOld caseOldDetected;
 
-    protected final Mat YCrCb = new Mat();
-    protected final Mat Cb = new Mat();
+public class CaseScanner extends Scanner{
+    private volatile Case caseDetected = Case.FIRST;
+    protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
 
-    protected final CaseOld[] cases = new CaseOld[]{CaseOld.LEFT, CaseOld.CENTER, CaseOld.RIGHT};
-    protected Rect[] rects;
+    public int getCase(Mat input){
+        double cyanHue = 100; double magentaHue = 170; double yellowHue = 20;
+        Rect cyan = getContourColor(input, cyanHue,3,  CYAN);
+        Rect magenta = getContourColor(input,  170,3,  MAGENTA);
+        Rect yellow = getContourColor(input, 20,3,  YELLOW);
+        double averageCyan = getAverage(HSV, cyan).val[0];
+        double averageMagenta = getAverage(HSV, magenta).val[0];
+        double averageYellow = getAverage(HSV, yellow).val[0];
+        double scaledCyan = cyan.area()/abs(averageCyan-cyanHue);
+        double scaledMagenta = magenta.area()/abs(averageMagenta-magentaHue);
+        double scaledYellow = yellow.area()/abs(averageYellow-yellowHue);
 
-    protected abstract Rect[] defineRegions();
-    protected abstract CaseOld detectCase();
-
-    public static int n = 0;
-
-    protected Rect[] defaultRegionGenerator(Point center, int size, int offset){
-        Rect rectLeft = processor.getRectFromCenter(new Point(center.x-offset, center.y), size);
-        Rect rectCenter = processor.getRectFromCenter(center, size);
-        Rect rectRight = processor.getRectFromCenter(new Point(center.x+offset, center.y), size);
-        return new Rect[]{rectLeft, rectCenter, rectRight};
+        // TODO 4 Make easy debugging system, maybe convert to cmy space
+//
+//        double areaCyan = getContourColor(input, 100, CYAN).area(); //WORKS
+//        double areaMagenta = getContourColor(input, 170, MAGENTA).area(); //WORKS
+//        double areaYellow = getContourColor(input, 20, YELLOW).area();
+//        return Iterator.maxIndex(areaCyan, areaMagenta, areaYellow);
+        return Iterator.maxIndex(scaledCyan, scaledMagenta, scaledYellow);
     }
+
+    public void message(){
+        caseDetected = getCase();
+        log.show("Case Detected: ", caseDetected);
+    }
+
 
     @Override
-    protected void start() {
-//        rects = defineRegions();
+    public final void preProcess(Mat input) { Core.rotate(input, input, Core.ROTATE_90_COUNTERCLOCKWISE); }
 
-        processor.setDefiner(input -> {
-            double areaCyan = processor.getContourColor(input, 100, BLUE).area(); //WORKS
-            double areaYellow = processor.getContourColor(input, 20, GREEN).area();
-            double areaMagenta = processor.getContourColor(input, 170, RED).area(); //WORKS
-            n = getIndexMax(areaCyan, areaMagenta, areaYellow);
+    @Override
+    public final void postProcess(Mat input) { Core.rotate(input, input, Core.ROTATE_90_CLOCKWISE); }
 
+    @Override
+    public final void start() {}
 
+    @Override
+    public final void run(Mat input) { caseDetected = cases[getCase(input)]; }
 
-//            List<MatOfPoint> contours = processor.getContours(input);
-//            Rect maxRect = processor.getLargestContour(input);
-
-//            processor.toYCrCb(input, YCrCb);
-//            processor.toCb(YCrCb, Cb);
-//
-//            caseOldDetected = detectCase();
-//
-//            processor.drawRectangle(input, rects[0], BLUE);
-//            processor.drawRectangle(input, rects[1], BLUE);
-//            processor.drawRectangle(input, rects[2], BLUE);
-//
-//            processor.drawFilledRectangle(input, rects[Arrays.asList(cases).indexOf(caseOldDetected)], GREEN);
-        });
-    }
-
-
-    public int getIndexMax(double... arr){
-        int ind = 0;
-        double max = arr[0];
-        for (int i = 0; i < arr.length ; i++) {
-            if(arr[i] > max){max = arr[i]; ind = i;}
-        }
-        return ind;
-    }
-
-    public CaseOld getCase(){
-        return caseOldDetected;
-    }
+    public final Case getCase(){ return caseDetected; }
 }

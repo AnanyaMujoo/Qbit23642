@@ -3,9 +3,9 @@ package elements;
 import util.condition.Decision;
 
 public enum Case implements Decision {
-    FIRST("LOCATION 1"),
-    SECOND("LOCATION 2"),
-    THIRD("LOCATION 3");
+    FIRST("BLUE, LOCATION 1"),
+    SECOND("MAGENTA, LOCATION 2"),
+    THIRD("YELLOW, LOCATION 3");
 
     private final String value;
 
@@ -16,4 +16,7 @@ public enum Case implements Decision {
     public String getValue(){
         return value;
     }
+
+    @Override
+    public String toString() { return value; }
 }

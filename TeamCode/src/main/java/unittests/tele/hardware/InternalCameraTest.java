@@ -1,6 +1,6 @@
 package unittests.tele.hardware;
 
-import autoutil.vision.TeamElementScanner;
+import autoutil.vision.CaseScanner;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.log;
@@ -9,7 +9,7 @@ public class InternalCameraTest extends TeleUnitTest {
     /**
      * Scanner for team element
      */
-    TeamElementScanner teamElementScanner = new TeamElementScanner();
+    CaseScanner teamElementScanner = new CaseScanner();
 
     /**
      * Team element scanner setting and starting

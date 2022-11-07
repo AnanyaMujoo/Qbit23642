@@ -165,4 +165,16 @@ public interface Iterator {
         Iterator.forAll(list, l->sum[0]+=l);
         return (double)sum[0]/list.size();
     }
+
+
+
+    static int maxIndex(double... arr){
+        int ind = 0; double max = arr[0]; for (int i = 0; i < arr.length ; i++) { if(arr[i] > max){max = arr[i]; ind = i;} }
+        return ind;
+    }
+
+    static int minIndex(double... arr){
+        int ind = 0; double min = arr[0]; for (int i = 0; i < arr.length ; i++) { if(arr[i] < min){min = arr[i]; ind = i;} }
+        return ind;
+    }
 }

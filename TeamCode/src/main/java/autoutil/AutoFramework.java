@@ -31,7 +31,7 @@ import static global.General.fault;
 import static global.General.log;
 
 public abstract class AutoFramework extends Auto implements AutoUser {
-    // TOD 5 Integrate with coordinate plane
+    // TODO 4 Integrate with coordinate plane
     protected AutoConfig config;
 
     public void setConfig(AutoConfig config){ this.config = config; }
@@ -58,15 +58,10 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public void scan(){
         scanning = true;
-        caseScanner = config.getCaseScanner();
+        caseScanner = new CaseScanner();
         camera.setExternalScanner(caseScanner);
         camera.startExternalCamera();
-        while (!isStarted()){
-//            caseDetected = caseScanner.getCase();
-//            log.show("Case Detected: ", caseDetected);
-            log.show("n", CaseScanner.n);
-            log.showTelemetry();
-        }
+        while (!isStarted()){ caseScanner.message(); log.showTelemetry(); }
     }
 
     @Override
