@@ -1,5 +1,7 @@
 package display;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -8,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
@@ -21,13 +24,17 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import geometry.circles.Circle;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
 import geometry.polygons.Polygon;
+import geometry.polygons.Rect;
 import geometry.position.Line;
 import geometry.position.Pose;
+import util.ExceptionCatcher;
+import util.codeseg.CodeSeg;
 import util.template.Iterator;
 
 public abstract class Drawer extends JPanel {
@@ -47,6 +54,11 @@ public abstract class Drawer extends JPanel {
     private static final int fieldHeight = height-35;
 
     public static final double fieldSize = 365.76; // cm
+
+    private static boolean shouldExit = false;
+
+
+    public final Timer timer = new Timer(50, actionEvent -> repaint());
 
 
 
@@ -92,7 +104,7 @@ public abstract class Drawer extends JPanel {
         Iterator.forAll(coordinatePlane.getCircles(), this::drawCircle);
     }
 
-    public void drawOnField(CoordinatePlane coordinatePlane, Pose startPose){
+    public static void convertToField(CoordinatePlane coordinatePlane, Pose startPose){
         coordinatePlane.rotate(startPose.getAngle()-90);
         coordinatePlane.toPoses(pose -> pose.rotateOrientation(90));
         coordinatePlane.reflectPoses();
@@ -101,12 +113,12 @@ public abstract class Drawer extends JPanel {
         coordinatePlane.translate(0, fieldSize);
         coordinatePlane.scaleX(((double) fieldWidth)/fieldSize);
         coordinatePlane.scaleY(((double) fieldHeight)/fieldSize);
-        drawPlane(coordinatePlane);
     }
 
 
     @Override
     public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         this.g = (Graphics2D) g;
         define();
         this.g.dispose();
@@ -114,7 +126,7 @@ public abstract class Drawer extends JPanel {
 
     private static final KeyListener keyListener = new KeyListener() {
         @Override
-        public void keyPressed(KeyEvent e) { char c = e.getKeyChar(); if(c == 'q'){ System.exit(0); }}
+        public void keyPressed(KeyEvent e) { char c = e.getKeyChar(); if(c == 'q'){ shouldExit = true; System.exit(0); }}
         @Override
         public void keyTyped(KeyEvent keyEvent) {}
         @Override
@@ -128,6 +140,20 @@ public abstract class Drawer extends JPanel {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setSize(width, height);
         window.setVisible(true);
+        drawer.timer.start();
+        while (!shouldExit){}
+        drawer.timer.stop();
+    }
+
+    public static CoordinatePlane getRobot(Pose startPose, Pose pose){
+        CoordinatePlane robot = new CoordinatePlane();
+        robot.add(new Rect(new Point(-9,-9), new Point(9,9)));
+        robot.add(new Pose());
+        robot.scale(2); // Whyd do we need this?
+        robot.translate(pose.getX(), pose.getY());
+        robot.rotate(pose.getAngle());
+        convertToField(robot, startPose);
+        return robot;
     }
 
     // TOD 5 Add resize method for width and height

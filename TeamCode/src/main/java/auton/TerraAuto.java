@@ -4,12 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import autoutil.AutoFramework;
+import elements.FieldSide;
 
 import static global.General.log;
 
 
 @Autonomous(name = "TerraAutoTest", group = "auto")
 public class TerraAuto extends AutoFramework {
+    {
+//        fieldSide = FieldSide.RED; // TODO TEST
+    }
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
