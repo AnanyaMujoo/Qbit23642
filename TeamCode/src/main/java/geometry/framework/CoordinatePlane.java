@@ -23,6 +23,7 @@ public class CoordinatePlane {
     public CoordinatePlane(GeometryObject... o){ add(o); }
 
     public void add(GeometryObject... o) { Collections.addAll(objects, o); }
+    public void addAll(ArrayList<? extends GeometryObject> objects){ Iterator.forAll(objects, this.objects::add); }
 
     private void toAllObjects(ParameterCodeSeg<GeometryObject> code){ Iterator.forAll(objects, code);}
 
@@ -33,6 +34,9 @@ public class CoordinatePlane {
     public void scale(double scale){ scale(origin, scale); }
     public void scaleX(double scale){ Iterator.forAll(objects, o -> o.scaleX(scale));}
     public void scaleY(double scale){ Iterator.forAll(objects, o -> o.scaleY(scale));}
+    public void reflectX(){ scaleX(-1); }
+    public void reflectY(){ scaleY(-1); }
+    public void reflectPoses(){ toPoses(Pose::invertOrientation); }
     public void toPoses(ParameterCodeSeg<Pose> code){Iterator.forAll(getPoses(), code); }
 
     public ArrayList<Line> getLines() { return getObjectsOfType(Line.class); }

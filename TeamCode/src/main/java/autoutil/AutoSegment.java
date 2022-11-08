@@ -44,15 +44,12 @@ public class AutoSegment<R extends Reactor, G extends Generator> {
 
         private double time;
         private AutoModule autoModule;
-        private Pose pose;
 
-        public Type set(double time, Pose pose){ this.time = time; this.pose = pose; return this; }
-        public Type set(AutoModule autoModule, Pose pose){ this.autoModule = autoModule; this.pose = pose; return this; }
-        public Type set(Pose pose){ this.pose = pose; return this; }
+        public Type set(double time){ this.time = time; return this; }
+        public Type set(AutoModule autoModule){ this.autoModule = autoModule; return this; }
 
         public double getTime(){ return time; }
         public AutoModule getAutoModule(){ return autoModule; }
-        public Pose getPose(){ return pose; }
     }
 
 }

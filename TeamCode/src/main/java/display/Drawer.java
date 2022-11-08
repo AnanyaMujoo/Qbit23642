@@ -93,12 +93,11 @@ public abstract class Drawer extends JPanel {
     }
 
     public void drawOnField(CoordinatePlane coordinatePlane, Pose startPose){
-        coordinatePlane.toPoses(Pose::invertOrientation);
-        startPose.invertOrientation();
         coordinatePlane.rotate(startPose.getAngle()-90);
         coordinatePlane.toPoses(pose -> pose.rotateOrientation(90));
+        coordinatePlane.reflectPoses();
         coordinatePlane.translate(startPose.getX(), startPose.getY());
-        coordinatePlane.scaleY(-1.0);
+        coordinatePlane.reflectY();
         coordinatePlane.translate(0, fieldSize);
         coordinatePlane.scaleX(((double) fieldWidth)/fieldSize);
         coordinatePlane.scaleY(((double) fieldHeight)/fieldSize);

@@ -35,8 +35,9 @@ public class Pose extends GeometryObject {
     public void setVector(Vector in){ setX(in.getX()); setY(in.getY()); }
     public void setAngle(double angle){ this.angle = angle; }
     public void setZero(){ setX(0); setY(0); setAngle(0); }
-    public void invertOrientation(){ setAngle(getAngle()); }
+    public void invertOrientation(){ setAngle(-getAngle()); }
     public void rotateOrientation(double angle){ setAngle(getAngle() + angle);}
+    public Pose getCopy(){ return new Pose(getX(), getY(), getAngle()); }
 
 
     @Override

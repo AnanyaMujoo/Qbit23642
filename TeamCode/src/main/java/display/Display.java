@@ -1,5 +1,7 @@
 package display;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -19,21 +21,12 @@ import util.template.Iterator;
 
 public class Display extends Drawer {
 
-    private static final TerraAuto terraAuto = new TerraAuto();
-
     public static void main(String[] args) {
-        terraAuto.define();
-
-//        drawWindow(new Display(), "Display");
+        drawWindow(new Display(), "Display");
     }
 
     @Override
     public void define() {
-//        terraAuto.initAuto();
-        CoordinatePlane plane = new CoordinatePlane(new Pose(20,50,90));
-        Pose startPose1 = new Pose(20,fieldSize/2.0,0);
-        Pose startPose2 = new Pose(fieldSize-20,fieldSize/2.0,180);
-        drawField();
-        drawOnField(plane, startPose2);
+
     }
 }
