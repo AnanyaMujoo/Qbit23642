@@ -3,6 +3,7 @@ package auton;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import autoutil.AutoFramework;
+import elements.Case;
 import elements.CaseOld;
 import elements.FieldSide;
 import robot.BackgroundTask;
@@ -60,7 +61,7 @@ public class TerraAutoCycles extends AutoFramework {
                 addWaypoint(35, 25, -115);
                 addPause(0.1);
             }
-            caseDetected = CaseOld.RIGHT;
+            caseDetected = Case.FIRST;
         });
         addCancelAutoModules();
         addWaypoint(-45, -10, -90);

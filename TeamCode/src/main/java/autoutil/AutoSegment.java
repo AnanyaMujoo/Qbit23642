@@ -2,8 +2,10 @@ package autoutil;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import automodules.AutoModule;
 import autoutil.generators.Generator;
 import autoutil.reactors.Reactor;
+import geometry.position.Pose;
 import util.codeseg.ParameterCodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.condition.Expectation;
@@ -30,6 +32,27 @@ public class AutoSegment<R extends Reactor, G extends Generator> {
         Executor executor = new Executor(opMode, generator, getReactor.run());
 //        if(isIndependent){ executor.makeIndependent(); } // TOD 5
         executor.followPath();
+    }
+
+    public enum Type {
+        PAUSE,
+        SETPOINT,
+        WAYPOINT,
+        AUTOMODULE,
+        CONCURRENT_AUTOMODULE,
+        CANCEL_AUTOMODULE;
+
+        private double time;
+        private AutoModule autoModule;
+        private Pose pose;
+
+        public Type set(double time, Pose pose){ this.time = time; this.pose = pose; return this; }
+        public Type set(AutoModule autoModule, Pose pose){ this.autoModule = autoModule; this.pose = pose; return this; }
+        public Type set(Pose pose){ this.pose = pose; return this; }
+
+        public double getTime(){ return time; }
+        public AutoModule getAutoModule(){ return autoModule; }
+        public Pose getPose(){ return pose; }
     }
 
 }

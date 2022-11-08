@@ -32,11 +32,13 @@ import static global.General.log;
 
 public abstract class AutoFramework extends Auto implements AutoUser {
     // TODO 4 Integrate with coordinate plane
+    // TODO 4 REMOVE flipped, use coordinate plane
     protected AutoConfig config;
 
     public void setConfig(AutoConfig config){ this.config = config; }
 
     protected final ArrayList<Pose> poses = new ArrayList<>();
+    protected ArrayList<AutoSegment.Type> segmentTypes = new ArrayList<>();
     protected ArrayList<AutoSegment<?, ?>> segments = new ArrayList<>();
 
     protected boolean scanning = false;
@@ -44,6 +46,10 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected Case caseDetected = Case.FIRST;
 
     protected boolean isIndependent = false;
+
+    {
+        poses.add(new Pose());
+    }
 
     public abstract void define();
 
@@ -66,19 +72,42 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     @Override
     public void runAuto() {
-        poses.add(new Pose());
         define();
+        Iterator.forAll(segmentTypes, this::createSegment);
         if(scanning) { camera.stopExternalCamera(); }
         Iterator.forAll(segments, segment -> segment.run(this));
     }
 
-    public void addPause(double time){ addStationarySegment(() -> new PauseGenerator(time)); }
-    public void addSetpoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegment(config.getSetpointSegment(), new Pose(x, y, h)); }
-    public void addWaypoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegment(config.getWaypointSegment(), new Pose(x, y, h));}
-    public void addAutoModule(AutoModule autoModule){ addStationarySegment(() -> new AutoModuleGenerator(autoModule, false)); }
-    public void addConcurrentAutoModule(AutoModule autoModule){ addStationarySegment(() -> new AutoModuleGenerator(autoModule, true)); }
-    public void addCancelAutoModules(){ addStationarySegment(() -> new AutoModuleGenerator(true)); }
-    public void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(config.getSetpointSegment().getReactorReference(), generator, getLastPose()); }
+
+    private void addSegmentType(double time){ AutoSegment.Type.PAUSE.set(time, getLastPose()); segmentTypes.add(AutoSegment.Type.PAUSE); }
+    private void addSegmentType(AutoSegment.Type type, AutoModule autoModule){ type.set(autoModule, getLastPose()); segmentTypes.add(type); }
+    private void addSegmentType(AutoSegment.Type type, Pose pose){ type.set(pose); segmentTypes.add(type); }
+
+    public void addPause(double time){ addSegmentType(time);}
+    public void addSetpoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegmentType(AutoSegment.Type.SETPOINT, new Pose(x,y,h));}
+    public void addWaypoint(double x, double y, double h){ if(isFlipped()){ x = -x; h = -h; } addSegmentType(AutoSegment.Type.WAYPOINT, new Pose(x,y,h));}
+    public void addAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.AUTOMODULE, autoModule);}
+    public void addConcurrentAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.CONCURRENT_AUTOMODULE, autoModule);}
+    public void addCancelAutoModules(){ addSegmentType(AutoSegment.Type.CANCEL_AUTOMODULE, getLastPose()); }
+
+    public void addStationarySegment(ReturnCodeSeg<Generator> generator, Pose pose){ addSegment(config.getSetpointSegment().getReactorReference(), generator, pose); }
+
+    private void createSegment(AutoSegment.Type type){
+        switch (type){
+            case PAUSE:
+                addStationarySegment(() -> new PauseGenerator(type.getTime()), type.getPose()); break;
+            case SETPOINT:
+                addSegment(config.getSetpointSegment(), type.getPose()); break;
+            case WAYPOINT:
+                addSegment(config.getWaypointSegment(), type.getPose()); break;
+            case AUTOMODULE:
+                addStationarySegment(() -> new AutoModuleGenerator(type.getAutoModule(), false), type.getPose()); break;
+            case CONCURRENT_AUTOMODULE:
+                addStationarySegment(() -> new AutoModuleGenerator(type.getAutoModule(), true), type.getPose()); break;
+            case CANCEL_AUTOMODULE:
+                addStationarySegment(() -> new AutoModuleGenerator(true), type.getPose()); break;
+        }
+    }
 
     private void addSegment(AutoSegment<?, ?> segment, Pose target){ addSegment(segment.getReactorReference(), segment.getGeneratorReference(), target); }
     private <R extends Reactor, G extends Generator> void addSegment(@NonNull ReturnCodeSeg<R> reactor, @NonNull ReturnCodeSeg<G> generator, Pose target){

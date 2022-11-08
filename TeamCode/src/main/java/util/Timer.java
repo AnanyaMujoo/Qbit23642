@@ -40,7 +40,7 @@ public class Timer {
         hasBeenReset = true;
     }
     public void set(double time){
-        startTime = gameTime.seconds()-time;
+        startTime = gameTime == null ? 0 : gameTime.seconds() -time;
         hasBeenReset = true;
     }
     /**
