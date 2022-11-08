@@ -14,9 +14,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import util.codeseg.ParameterCodeSeg;
 import util.template.Iterator;
+
+import static global.General.gamepad1;
+import static global.General.gph1;
+import static global.General.log;
 
 public abstract class Scanner extends OpenCvPipeline {
 
@@ -41,6 +46,10 @@ public abstract class Scanner extends OpenCvPipeline {
     public abstract void run(Mat input);
     public abstract void preProcess(Mat input);
     public abstract void postProcess(Mat input);
+
+    private final Point debugCenter = center;
+    private double debugSize = 10;
+    private Scalar debugColor = new Scalar(0,0,0);
 
     @Override
     public final void init(Mat firstFrame){ start(); }
@@ -82,11 +91,29 @@ public abstract class Scanner extends OpenCvPipeline {
     public Mat getSubmat(Mat input, Rect region){ return input.submat(region); }
     public Scalar getAverage(Mat mat){ return Core.mean(mat); }
     public Scalar getAverage(Mat input, Rect region){ return getAverage(getSubmat(input, region));}
+    public Scalar getAverageSquareFromCenter(Mat input, Point center, int size){ return getAverage(input, getSquareFromCenter(center, size)); }
 
     public void drawRectangle(Mat input, Rect rect, Scalar color){ Imgproc.rectangle(input, rect, color, 2); }
+    public void drawSquareFromCenter(Mat input, Point center, int size, Scalar color){ drawRectangle(input, getSquareFromCenter(center, size), color);}
     public void drawFilledRectangle(Mat input, Rect rect, Scalar color){ Imgproc.rectangle(input, rect, color, -1); }
     public Rect getSquareFromCenter(Point center, int size){ int halfSize = size/2; return new Rect((int) center.x-halfSize, (int) center.y-halfSize, size, size); }
 
+
+    public void debug(Mat input){
+        int shift = 1; int scale = 2;
+        debugCenter.x += (gamepad1.dpad_left ? -shift : 0) + (gamepad1.dpad_right ? shift : 0);
+        debugCenter.y += (gamepad1.dpad_down ? -shift : 0) + (gamepad1.dpad_up ? shift : 0);
+        debugSize += (gamepad1.left_bumper ? -scale : 0) + (gamepad1.right_bumper ? scale : 0);
+        drawSquareFromCenter(input, debugCenter, (int) Math.abs(debugSize), GREEN);
+        getHSV(input);
+        debugColor = getAverageSquareFromCenter(HSV, debugCenter, (int) Math.abs(debugSize));
+    }
+
+    public void logDebug() {
+        log.show("Debug Center", debugCenter);
+        log.show("Debug Size", (int) Math.abs(debugSize));
+        log.show("Debug Color", debugColor);
+    }
 
 //    protected Rect[] defineRegions() {
 //        return defaultRegionGenerator(new Point(width/2.0,(height/2.0)+0.0), 60, 130);

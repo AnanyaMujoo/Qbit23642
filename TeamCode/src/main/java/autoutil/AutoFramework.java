@@ -14,7 +14,7 @@ import autoutil.generators.Generator;
 import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
 import autoutil.vision.CaseScanner;
-import autoutil.vision.Processor;
+import elements.Case;
 import elements.CaseOld;
 import elements.FieldSide;
 import geometry.position.Pose;
@@ -41,7 +41,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     protected boolean scanning = false;
     protected CaseScanner caseScanner;
-    protected CaseOld caseDetected = CaseOld.RIGHT;
+    protected Case caseDetected = Case.FIRST;
 
     protected boolean isIndependent = false;
 
@@ -61,7 +61,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         caseScanner = new CaseScanner();
         camera.setExternalScanner(caseScanner);
         camera.startExternalCamera();
-        while (!isStarted()){ caseScanner.message(); log.showTelemetry(); }
+        while (!isStarted()){ caseDetected = caseScanner.getCase(); caseScanner.message(); log.showTelemetry(); }
     }
 
     @Override
