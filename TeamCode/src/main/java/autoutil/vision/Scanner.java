@@ -22,6 +22,8 @@ import util.template.Iterator;
 import static global.General.gamepad1;
 import static global.General.gph1;
 import static global.General.log;
+import static java.lang.Math.abs;
+import static java.lang.Math.pow;
 
 public abstract class Scanner extends OpenCvPipeline {
 
@@ -62,20 +64,55 @@ public abstract class Scanner extends OpenCvPipeline {
 
     private void toYCrCb(Mat input, Mat output) { Imgproc.cvtColor(input, output, Imgproc.COLOR_RGB2YCrCb); }
     private void toCb(Mat YCrCb, Mat output){ Core.extractChannel(YCrCb, output, 2); }
-    private void getHSV(Mat input){ Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV); }
+    protected void getHSV(Mat input){ Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV); }
 
     private Rect getLargestContour(List<MatOfPoint> contours){
-        ArrayList<Rect> rects = new ArrayList<>();
-        Iterator.forAll(contours, c -> {rects.add(Imgproc.boundingRect(c)); c.release();});
-        return rects.stream().max(Comparator.comparing(Rect::area)).get();
+        Rect maxRect = new Rect();
+        for (MatOfPoint c: contours) { Rect newRect = Imgproc.boundingRect(c); if(newRect.area() > maxRect.area()){ maxRect = newRect; } c.release(); }
+        return maxRect;
     }
 
+
+    protected double getUniformity(Rect rect, double hue){
+//        Mat submat = getSubmat(HSV, rect);
+//        hue = getAverage(submat).val[0];
+//        double sum = 0;
+//        for (int i = 0; i < submat.width(); i+=5) {
+//            for (int j = 0; j < submat.height(); j+=5) {
+//                sum += Math.pow(submat.get(j, i)[0] - hue, 2);
+//            }
+//        }
+//        return Math.sqrt(25*sum/rect.area());
+        return abs(getAverage(HSV, rect).val[0] - hue);
+    }
+
+//    private Rect getMostUniformContour(List<MatOfPoint> contours, double hue){
+//        Rect maxRect = new Rect();
+//        double maxValue = 0;
+//        for (MatOfPoint c: contours) {
+//            Rect newRect = Imgproc.boundingRect(c);
+//            Mat submat = getSubmat(HSV, newRect);
+//            double sum = 0;
+//            for (int i = 0; i < submat.width(); i+=5) {
+//                for (int j = 0; j < submat.height(); j+=5) {
+//                    sum += Math.pow(submat.get(j, i)[0] - hue, 2);
+//                }
+//            }
+//            double newValue = Math.pow(newRect.area(),2)/sum; // 1 over variance
+//            if(newValue > maxValue){
+//                maxRect = newRect;
+//                maxValue  = newValue;
+//            }
+//            c.release();
+//        }
+//        return maxRect;
+//    }
+
     public Rect getContourColor(Mat input, double hue, double hueOffset, Scalar color){
-        getHSV(input);
         Core.inRange(HSV, new Scalar(hue-hueOffset,10,10), new Scalar(hue+hueOffset,255,255), Mask);
         Imgproc.blur(Mask, Mask, new Size(8, 8));
         List<MatOfPoint> out = new ArrayList<>();
-        Imgproc.findContours(Mask, out, Hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(Mask, out, Hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
         Rect maxRect = getLargestContour(out);
         drawRectangle(input, maxRect, color);
         return maxRect;
@@ -105,7 +142,6 @@ public abstract class Scanner extends OpenCvPipeline {
         debugCenter.y += (gamepad1.dpad_down ? -shift : 0) + (gamepad1.dpad_up ? shift : 0);
         debugSize += (gamepad1.left_bumper ? -scale : 0) + (gamepad1.right_bumper ? scale : 0);
         drawSquareFromCenter(input, debugCenter, (int) Math.abs(debugSize), GREEN);
-        getHSV(input);
         debugColor = getAverageSquareFromCenter(HSV, debugCenter, (int) Math.abs(debugSize));
     }
 

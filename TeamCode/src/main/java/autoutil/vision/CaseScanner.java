@@ -5,6 +5,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,25 +15,55 @@ import java.util.List;
 import elements.Case;
 import util.template.Iterator;
 
+import static global.General.cameraMonitorViewId;
 import static global.General.log;
 import static java.lang.Math.abs;
+import static java.lang.Math.pow;
 
 
 public class CaseScanner extends Scanner{
     private volatile Case caseDetected = Case.FIRST;
     protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
+    protected Scalar caseScalar = new Scalar(0,0,0);
 
     public int getCase(Mat input){
-//        double cyanHue = 100; double magentaHue = 170; double yellowHue = 20;
-//        Rect cyan = getContourColor(input, cyanHue,3,  CYAN);
-//        Rect magenta = getContourColor(input,  170,3,  MAGENTA);
-//        Rect yellow = getContourColor(input, 20,3,  YELLOW);
+        getHSV(input);
+        double cyanHue = 96; double magentaHue = 168; double yellowHue = 8;
+        Rect cyan = getContourColor(input, cyanHue,3,  CYAN);
+        Rect magenta = getContourColor(input,  magentaHue,5,  MAGENTA);
+        Rect yellow = getContourColor(input, yellowHue,3,  YELLOW);
+//
+//        Point center = new Point(magenta.x + magenta.width/2, magenta.y + magenta.height/2);
+//
+//        drawSquareFromCenter(input, center, 50, GREEN);
+//        Rect box = getSquareFromCenter(center, 50);
+//        if(0 <= box.x
+//                && 0 <= box.width
+//                && box.x + box.width <= HSV.width()
+//                && 0 <= box.y
+//                && 0 <= box.height
+//                && box.y + box.height <= HSV.height()){
+//            caseScalar = new Scalar(getAverageSquareFromCenter(HSV, center, 50).val[0] - magentaHue, 0, 0, 0);
+//        }
+//
+//        Rect cropMagenta = new Rect(magenta.x + magenta.width/4, magenta.y + magenta.y/4, magenta.width/2, magenta.height/2);
+//        drawRectangle(input, cropMagenta, RED);
+
+//        caseScalar = getAverage(HSV, cropMagenta);
+
+//
+//        caseScalar = new Scalar(getAverage(HSV, cyan).val[0], getAverage(HSV, magenta).val[0], getAverage(HSV, yellow).val[0]);
+
+//        log.show("cyanStdev", getUniformity(cyan, cyanHue));
+//        log.show("magentaStdev", getUniformity(magenta, magentaHue));
+//        log.show("yellowStdev", getUniformity(yellow, yellowHue));
+
 //        double averageCyan = getAverage(HSV, cyan).val[0];
 //        double averageMagenta = getAverage(HSV, magenta).val[0];
 //        double averageYellow = getAverage(HSV, yellow).val[0];
-//        double scaledCyan = cyan.area()/abs(averageCyan-cyanHue);
-//        double scaledMagenta = magenta.area()/abs(averageMagenta-magentaHue);
-//        double scaledYellow = yellow.area()/abs(averageYellow-yellowHue);
+//        double scaledCyan = cyan.area()/pow(abs(averageCyan-cyanHue),3);
+//        double scaledMagenta = magenta.area()/pow(abs(averageMagenta-magentaHue),3);
+//        double scaledYellow = yellow.area()/pow(abs(averageYellow-yellowHue),3);
 
         debug(input);
 
@@ -47,8 +78,9 @@ public class CaseScanner extends Scanner{
     }
 
     public void message(){
-//        caseDetected = getCase();
-//        log.show("Case Detected: ", caseDetected);
+//        log.show(caseScalar);
+        caseDetected = getCase();
+        log.show("Case Detected: ", caseDetected);
         logDebug();
     }
 

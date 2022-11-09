@@ -9,7 +9,7 @@ public class Configs implements RobotUser{
      */
     RobotConfig TestConfig = new RobotConfig(customTestPart);
     RobotConfig TestConfig2 = new RobotConfig(testPart2);
-    RobotConfig TestConfig3 = new RobotConfig(drive, gyro, odometry, carousel, camera);
+    RobotConfig TestConfig3 = new RobotConfig(drive, camera);
 
     /**
      * Used for tank robots

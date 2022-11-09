@@ -12,7 +12,7 @@ import static global.General.log;
 @Autonomous(name = "TerraAutoTest", group = "auto")
 public class TerraAuto extends AutoFramework {
     {
-//        fieldSide = FieldSide.RED; // TODO TEST
+//        fieldSide = FieldSide.RED;
     }
     @Override
     public void initAuto() {
@@ -22,12 +22,13 @@ public class TerraAuto extends AutoFramework {
 
     @Override
     public void define() {
-        addWaypoint(0,20,0);
-        addWaypoint(20,20,90);
-        addConcurrentAutoModule(DuckNew);
-        addWaypoint(20,0,90);
-        addCancelAutoModules();
-        addSetpoint(20,0,90);
-        addSetpoint(0,0,0);
+//        addSetpoint(0,20,90);
+//        addWaypoint(0,20,0);
+//        addWaypoint(20,20,90);
+//        addConcurrentAutoModule(DuckNew);
+//        addWaypoint(20,0,90);
+//        addCancelAutoModules();
+//        addSetpoint(20,0,90);
+//        addSetpoint(0,0,0);
     }
 }
