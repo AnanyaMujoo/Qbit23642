@@ -27,7 +27,6 @@ import static java.lang.Math.pow;
 
 public abstract class Scanner extends OpenCvPipeline {
 
-
     public static final int width = 320;
     public static final int height = 240;
 
@@ -39,6 +38,7 @@ public abstract class Scanner extends OpenCvPipeline {
     public static final Scalar YELLOW = new Scalar(255, 255, 0);
     public static final Scalar CYAN = new Scalar(0,255,255);
     public static final Scalar MAGENTA = new Scalar(255,0,255);
+    public static final Scalar ORANGE = new Scalar(255,165,0);
 
     private final Mat Hierarchy = new Mat();
     private final Mat Mask = new Mat();
@@ -72,41 +72,9 @@ public abstract class Scanner extends OpenCvPipeline {
         return maxRect;
     }
 
-
-    protected double getUniformity(Rect rect, double hue){
-//        Mat submat = getSubmat(HSV, rect);
-//        hue = getAverage(submat).val[0];
-//        double sum = 0;
-//        for (int i = 0; i < submat.width(); i+=5) {
-//            for (int j = 0; j < submat.height(); j+=5) {
-//                sum += Math.pow(submat.get(j, i)[0] - hue, 2);
-//            }
-//        }
-//        return Math.sqrt(25*sum/rect.area());
-        return abs(getAverage(HSV, rect).val[0] - hue);
+    protected double getUniformity(Mat input, Rect rect, double hue){
+        return 1 - (abs(getAverage(input, rect).val[0] - hue)/180);  // On a scale of 0 - 1
     }
-
-//    private Rect getMostUniformContour(List<MatOfPoint> contours, double hue){
-//        Rect maxRect = new Rect();
-//        double maxValue = 0;
-//        for (MatOfPoint c: contours) {
-//            Rect newRect = Imgproc.boundingRect(c);
-//            Mat submat = getSubmat(HSV, newRect);
-//            double sum = 0;
-//            for (int i = 0; i < submat.width(); i+=5) {
-//                for (int j = 0; j < submat.height(); j+=5) {
-//                    sum += Math.pow(submat.get(j, i)[0] - hue, 2);
-//                }
-//            }
-//            double newValue = Math.pow(newRect.area(),2)/sum; // 1 over variance
-//            if(newValue > maxValue){
-//                maxRect = newRect;
-//                maxValue  = newValue;
-//            }
-//            c.release();
-//        }
-//        return maxRect;
-//    }
 
     public Rect getContourColor(Mat input, double hue, double hueOffset, Scalar color){
         Core.inRange(HSV, new Scalar(hue-hueOffset,10,10), new Scalar(hue+hueOffset,255,255), Mask);
@@ -149,6 +117,22 @@ public abstract class Scanner extends OpenCvPipeline {
         log.show("Debug Center", debugCenter);
         log.show("Debug Size", (int) Math.abs(debugSize));
         log.show("Debug Color", debugColor);
+    }
+
+
+    public Point getCenter(Rect rect){
+        return new Point(rect.x + rect.width/2.0, rect.y + rect.height/2.0);
+    }
+
+
+    public boolean checkIfInside(Mat input, Rect region){
+        return 0 <= region.x && 0 <= region.width && region.x + region.width <= input.width()  && 0 <= region.y  && 0 <= region.height && region.y + region.height <= input.height();
+    }
+
+
+    public Rect scaleRectAroundCenter(Rect rect, double scale){
+        Point center = getCenter(rect); int width = ((int)(rect.width*scale)); int height = ((int)(rect.height*scale));
+        return new Rect((int) (center.x - width/2), (int) (center.y - height/2), width, height);
     }
 
 //    protected Rect[] defineRegions() {

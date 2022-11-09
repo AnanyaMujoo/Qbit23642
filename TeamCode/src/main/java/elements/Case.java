@@ -5,7 +5,7 @@ import util.condition.Decision;
 public enum Case implements Decision {
     FIRST("BLUE, LOCATION 1"),
     SECOND("MAGENTA, LOCATION 2"),
-    THIRD("YELLOW, LOCATION 3");
+    THIRD("ORANGE, LOCATION 3");
 
     private final String value;
 
