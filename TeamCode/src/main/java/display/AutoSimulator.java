@@ -5,6 +5,7 @@ import org.checkerframework.checker.units.qual.A;
 import java.util.ArrayList;
 
 import auton.TerraAuto;
+import auton.TerraAutoLower.*;
 import autoutil.AutoFramework;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
@@ -16,10 +17,14 @@ import util.template.Iterator;
 
 public class AutoSimulator extends Drawer{
 
-    // TODO MAKE SIMULATION
+    private static final Pose startLower = new Pose(25,fieldSize/2.0 - 92,0);
+    private static final Pose startUpper = new Pose(25,fieldSize/2.0 - 92,0);
+    private static final double maxMovingVelocity = 60; // cm per sec
+    private static final double maxTurningVelocity = 180; // deg per sec
+    private static final double speedUp = 1.0;
 
     public static void main(String[] args) {
-        setAuto(new TerraAuto(), new Pose(25,fieldSize/2.0,0));
+        setAuto(new TerraAutoLowerBlue(), startLower);
         drawWindow(new AutoSimulator(), "Auto Simulator");
     }
 
@@ -27,7 +32,7 @@ public class AutoSimulator extends Drawer{
     public void define() {
         simulateAuto();
         drawField(); drawPlane(autoPlane); drawPlane(robot);
-        currentTime += (1.0/refreshRate);
+        currentTime += (speedUp/refreshRate);
     }
 
 
@@ -69,7 +74,7 @@ public class AutoSimulator extends Drawer{
     }
 
     public static void updateRobotPose(double heading){
-        robotPose = new Pose(robotPose.getPoint(), heading+startPose.getAngle());
+        robotPose = new Pose(robotPose.getPoint(), heading);
         robot = getRobot(startPose, robotPose);
     }
 
@@ -82,29 +87,19 @@ public class AutoSimulator extends Drawer{
 
 
             double deltaHeading = targetHeading - lastHeading;
-            double maxVel = 100; double maxRot = 270;
-            double totalTime = (currentLine.getLength() / maxVel);
-            double turningTime = (Math.abs(deltaHeading) / maxRot);
+            double totalTime = (currentLine.getLength() / maxMovingVelocity);
+            double turningTime = (Math.abs(deltaHeading) / maxTurningVelocity);
 
             Point currentPoint = robotPose.getPoint();
-            double currentHeading = robotPose.getAngle()-startPose.getAngle();
+            double currentHeading = robotPose.getAngle();
 
-            if(totalTime > 0.01){
-                currentPoint = currentLine.getAt(currentTime / totalTime);
-            }
-
-            if(turningTime > 0.01){
-                currentHeading = lastHeading + (deltaHeading * currentTime / turningTime);
-            }
+            if(totalTime > 0.01){ currentPoint = currentLine.getAt(currentTime / totalTime); }
+            if(turningTime > 0.01){ currentHeading = lastHeading + (deltaHeading * currentTime / turningTime); }
 
             if(currentTime / totalTime <= 1) {
-                updateRobotPose(currentPoint, currentHeading);
+                if(currentTime / turningTime <= 1) { updateRobotPose(currentPoint, currentHeading); }else{ updateRobotPose(currentPoint, robotPose.getAngle()); }
             }else{
-                if(currentTime / turningTime <= 1) {
-                    updateRobotPose(currentHeading);
-                }else{
-                    nextSegment();
-                }
+                if(currentTime / turningTime <= 1) { updateRobotPose(currentHeading); }else{ nextSegment(); }
             }
         }
     }

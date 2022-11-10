@@ -8,6 +8,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -30,10 +31,12 @@ public class CaseScanner extends Scanner{
     protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
     protected final Case[] pastCases = new Case[10];
     { Arrays.fill(pastCases, Case.FIRST); }
+    protected final Rect view = getRectFromCenter(center, height/2,width/2);
 
-    // TODO CROP AND ZOOM
+    // TODO TEST
 
     public int getCase(Mat input){
+        Imgproc.resize(getSubmat(input, view), input, new Size(input.width(), input.height()));
         getHSV(input);
         double cyanValue = getCaseValue(input, 96, 3, CYAN);
         double magentaValue = getCaseValue(input, 168, 3, MAGENTA);

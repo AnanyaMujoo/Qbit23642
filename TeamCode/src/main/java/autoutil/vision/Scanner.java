@@ -102,7 +102,7 @@ public abstract class Scanner extends OpenCvPipeline {
     public void drawSquareFromCenter(Mat input, Point center, int size, Scalar color){ drawRectangle(input, getSquareFromCenter(center, size), color);}
     public void drawFilledRectangle(Mat input, Rect rect, Scalar color){ Imgproc.rectangle(input, rect, color, -1); }
     public Rect getSquareFromCenter(Point center, int size){ int halfSize = size/2; return new Rect((int) center.x-halfSize, (int) center.y-halfSize, size, size); }
-
+    public Rect getRectFromCenter(Point center, int width, int height){ return new Rect((int) (center.x-width/2), (int) (center.y - height/2), width, height); }
 
     public void debug(Mat input){
         int shift = 1; int scale = 2;
