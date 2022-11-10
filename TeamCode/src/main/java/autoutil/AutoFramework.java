@@ -2,6 +2,8 @@ package autoutil;
 
 
 
+import org.firstinspires.ftc.teamcode.R;
+
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -54,21 +56,29 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         poses.add(new Pose());
     }
 
+    public void preProcess(){}
+
     public abstract void define();
 
+    public void postProcess(){}
+
     public final void setup(){
+        preProcess();
         define();
         autoPlane.addAll(poses);
-        if(isFlipped()){ autoPlane.reflectX(); autoPlane.reflectPoses(); }
+        postProcess();
+        if(isFlipped()){ flip(); }
     }
 
     public void makeIndependent(){ isIndependent = true; }
     public boolean isFlipped(){ return fieldSide.equals(FieldSide.RED); }
+    public void flip(){ autoPlane.reflectX(); autoPlane.reflectPoses(); }
+    public void flipCases(){ if(caseDetected.equals(Case.FIRST)){ caseDetected = Case.THIRD; }else if(caseDetected.equals(Case.THIRD)){ caseDetected = Case.FIRST; }}
 
     public void addDecision(DecisionList decisionList){ decisionList.check(); }
     public void addAutomodule(DecisionList decisionList){ addAutoModule(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways()))); }
     public void customSide(FieldSide sideOne, CodeSeg one, FieldSide sideTwo, CodeSeg two){ addDecision(new DecisionList(() -> fieldSide).addOption(sideOne, one).addOption(sideTwo, two)); }
-    public void customCase(Case caseOne, CodeSeg one, Case caseTwo, CodeSeg two, Case caseThree, CodeSeg three){ addDecision(new DecisionList(() -> caseDetected).addOption(caseOne, one).addOption(caseTwo, two).addOption(caseThree, three)); }
+    public void customCase(CodeSeg first, CodeSeg second, CodeSeg third){ addDecision(new DecisionList(() -> caseDetected).addOption(Case.FIRST, first).addOption(Case.SECOND, second).addOption(Case.THIRD, third)); }
     public void customNumber(int num, ParameterCodeSeg<Integer> one){ for (int i = 0; i < num; i++) { one.run(i); } }
 
     public void scan(){

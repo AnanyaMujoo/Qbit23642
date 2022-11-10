@@ -24,14 +24,14 @@ public class Configs implements RobotUser{
     /**
      * Used for PowerPlay robot
      */
-    RobotConfig PowerPlay = new RobotConfig(drive, intake, carousel, gyro, odometry);
+//    RobotConfig PowerPlay = new RobotConfig(drive, intake, carousel, gyro, odometry);
+    RobotConfig PowerPlay = new RobotConfig(drive, lift);
 
     /**
      * Current Config
      */
     public void setCurrentConfig(){
-//        setConfig(PowerPlay);
-        setConfig(TestConfig3);
+        setConfig(PowerPlay);
     }
 
 }

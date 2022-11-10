@@ -11,6 +11,10 @@ import util.template.Iterator;
 public class PolyLine extends Polygon {
     boolean connected = false;
 
+    public PolyLine(Point... points){
+        addPoints(points);
+    }
+
     public PolyLine(ArrayList<Point> points){ addPoints(points); }
     public PolyLine(ArrayList<Pose> poses, boolean connected){
         Iterator.forAll(poses, pose -> addPoints(pose.getPoint()));

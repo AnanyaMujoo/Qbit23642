@@ -11,35 +11,37 @@ import util.condition.OutputList;
 
 import static global.General.fieldSide;
 import static global.General.gph1;
+import static global.General.gph2;
 
-@Disabled
+//@Disabled
 @TeleOp(name = "TestOp", group = "TeleOp")
 public class TestOp extends Tele {
-    {
-        fieldSide = FieldSide.RED;
-    }
+//    {
+//        fieldSide = FieldSide.RED;
+//    }
 
-
-
-    AutoModule DriveForward = new AutoModule(drive.moveTime(0.3, 0, 0, 1));
-    AutoModule DriveBackward = new AutoModule(drive.moveTime(-0.3, 0, 0, 1));
-    OutputList DriveField = new OutputList(() -> fieldSide)
-            .addOption(FieldSide.UNKNOWN, DriveForward)
-            .addOption(FieldSide.RED, DriveBackward);
-    AutoModule IntakeUntilFreightNew = new AutoModule(intake.intakeUntilFreight(1));
+//
+//
+//    AutoModule DriveForward = new AutoModule(drive.moveTime(0.3, 0, 0, 1));
+//    AutoModule DriveBackward = new AutoModule(drive.moveTime(-0.3, 0, 0, 1));
+//    OutputList DriveField = new OutputList(() -> fieldSide)
+//            .addOption(FieldSide.UNKNOWN, DriveForward)
+//            .addOption(FieldSide.RED, DriveBackward);
+//    AutoModule IntakeUntilFreightNew = new AutoModule(intake.intakeUntilFreight(1));
 
 
     @Override
     public void initTele() {
-        gph1.link(Button.X, drive.MoveTime(0.3,0,0,1));
-        gph1.link(Button.Y, DriveForward);
-        gph1.link(Button.B, DriveField);
-        gph1.link(Button.A, IntakeUntilFreightNew);
+//        gph1.link(Button.X, drive.MoveTime(0.3,0,0,1));
+//        gph1.link(Button.Y, DriveForward);
+//        gph1.link(Button.B, DriveField);
+//        gph1.link(Button.A, IntakeUntilFreightNew);
 
     }
 
     @Override
     public void loopTele() {
-
+        drive.move(gph1.ry, gph1.rx, gph1.lx);
+        lift.move(gph2.ry);
     }
 }

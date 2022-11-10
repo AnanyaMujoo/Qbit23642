@@ -6,7 +6,7 @@ import autoutil.AutoFramework;
 import elements.Case;
 import elements.FieldSide;
 
-public class TerraAuto extends AutoFramework {
+public class TerraAutoSimple extends AutoFramework {
 
     @Override
     public void initAuto() {
@@ -25,14 +25,6 @@ public class TerraAuto extends AutoFramework {
         addWaypoint(0, 111, 0);
         addWaypoint(0, 130, 35);
         addSetpoint(-7, 140, 55);
-        customNumber(5, i -> {
-            addWaypoint(10, 128, 75);
-            addWaypoint(40, 126, 90);
-            addSetpoint(54, 126, 90);
-            addWaypoint(40, 126, 90);
-            addWaypoint(10, 128, 75);
-            addSetpoint(-7, 140, 55);
-        });
         customCase(() -> {
             addWaypoint(-7, 128, 90);
             addWaypoint(-20, 128, 90);
@@ -58,13 +50,13 @@ public class TerraAuto extends AutoFramework {
 
     protected boolean upper = false;
 
-    @Autonomous(name = "TerraAutoLowerBlue", group = "auto")
-    public static class TerraAutoLowerBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; }}
-    @Autonomous(name = "TerraAutoLowerRed", group = "auto")
-    public static class TerraAutoLowerRed extends TerraAuto {{ fieldSide = FieldSide.RED; }}
-    @Autonomous(name = "TerraAutoUpperBlue", group = "auto")
-    public static class TerraAutoUpperBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; upper = true; }}
-    @Autonomous(name = "TerraAutoUpperRed", group = "auto")
-    public static class TerraAutoUpperRed extends TerraAuto {{ fieldSide = FieldSide.RED; upper = true; }}
+    @Autonomous(name = "TerraAutoLowerBlueSimple", group = "auto")
+    public static class TerraAutoLowerBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; }}
+    @Autonomous(name = "TerraAutoLowerRedSimple", group = "auto")
+    public static class TerraAutoLowerRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; }}
+    @Autonomous(name = "TerraAutoUpperBlueSimple", group = "auto")
+    public static class TerraAutoUpperBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; upper = true; }}
+    @Autonomous(name = "TerraAutoUpperRedSimple", group = "auto")
+    public static class TerraAutoUpperRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; upper = true; }}
 
 }

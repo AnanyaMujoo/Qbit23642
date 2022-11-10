@@ -1,30 +1,37 @@
 package display;
 
-import org.checkerframework.checker.units.qual.A;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.ArrayList;
 
-import auton.TerraAuto;
-import auton.TerraAutoLower.*;
+import auton.TerraAuto.*;
+import auton.TerraAutoSimple.*;
+import auton.TerraAutoSimple;
 import autoutil.AutoFramework;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
 import geometry.position.Line;
 import geometry.polygons.PolyLine;
 import geometry.position.Pose;
-import geometry.position.Vector;
-import util.template.Iterator;
 
 public class AutoSimulator extends Drawer{
 
     private static final Pose startLower = new Pose(25,fieldSize/2.0 - 92,0);
-    private static final Pose startUpper = new Pose(25,fieldSize/2.0 - 92,0);
-    private static final double maxMovingVelocity = 60; // cm per sec
-    private static final double maxTurningVelocity = 180; // deg per sec
+    private static final Pose startUpper = new Pose(25,fieldSize/2.0 + 92,0);
+    private static final double maxMovingVelocity = 150; // cm per sec
+    private static final double maxTurningVelocity = 340; // deg per sec
     private static final double speedUp = 1.0;
 
     public static void main(String[] args) {
-        setAuto(new TerraAutoLowerBlue(), startLower);
+//        setAuto(new TerraAutoLowerBlue(), startLower);
+//        setAuto(new TerraAutoUpperBlue(), startUpper);
+//        setAuto(new TerraAutoLowerRed(), startLower);
+//        setAuto(new TerraAutoUpperRed(), startUpper);
+
+        setAuto(new TerraAutoLowerBlueSimple(), startLower);
+//        setAuto(new TerraAutoUpperBlueSimple(), startLower);
+//        setAuto(new TerraAutoLowerRedSimple(), startLower);
+//        setAuto(new TerraAutoUpperRedSimple(), startLower);
         drawWindow(new AutoSimulator(), "Auto Simulator");
     }
 
@@ -46,6 +53,7 @@ public class AutoSimulator extends Drawer{
     private static ArrayList<Line> lines = new ArrayList<>();
     private static int segmentIndex = 0;
     public static double currentTime = 0;
+    public static ElapsedTime timer = new ElapsedTime();
 
     private static void setAuto(AutoFramework auto, Pose startPose) {
         auto.setup();
@@ -59,6 +67,7 @@ public class AutoSimulator extends Drawer{
         AutoSimulator.startPose = startPose;
 
         updateRobotPose(new Pose());
+        timer.reset();
     }
 
     public static void updateRobotPose(Pose velocity){
@@ -93,14 +102,19 @@ public class AutoSimulator extends Drawer{
             Point currentPoint = robotPose.getPoint();
             double currentHeading = robotPose.getAngle();
 
+            Pose targetPose = new Pose(currentLine.getEndPoint(), targetHeading);
+
             if(totalTime > 0.01){ currentPoint = currentLine.getAt(currentTime / totalTime); }
             if(turningTime > 0.01){ currentHeading = lastHeading + (deltaHeading * currentTime / turningTime); }
 
             if(currentTime / totalTime <= 1) {
                 if(currentTime / turningTime <= 1) { updateRobotPose(currentPoint, currentHeading); }else{ updateRobotPose(currentPoint, robotPose.getAngle()); }
             }else{
-                if(currentTime / turningTime <= 1) { updateRobotPose(currentHeading); }else{ nextSegment(); }
+                if(currentTime / turningTime <= 1) { updateRobotPose(currentHeading); }else{updateRobotPose(targetPose.getPoint(), targetPose.getAngle()); nextSegment(); }
             }
+        }else if(segmentIndex == lines.size()){
+            System.out.println("Time taken: " + timer.seconds()*speedUp);
+            segmentIndex++;
         }
     }
 

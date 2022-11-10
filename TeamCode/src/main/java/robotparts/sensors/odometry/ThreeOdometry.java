@@ -12,6 +12,8 @@ public class ThreeOdometry extends TwoOdometryV2 {
     private Pose enc3Pose;
     private Matrix3D dYdXdThetaMatrixInverted;
 
+    // TODO TEST
+
     @Override
     protected void createEncoders() {
         super.createEncoders();
@@ -39,7 +41,7 @@ public class ThreeOdometry extends TwoOdometryV2 {
         dYdXdThetaMatrixInverted = new Matrix3D(
                 enc1Pose.getAngleUnitVector().getX(), enc1Pose.getAngleUnitVector().getY(), enc1Pose.getVector().getCrossProduct(enc1Pose.getAngleUnitVector()),
                 enc2Pose.getAngleUnitVector().getX(), enc2Pose.getAngleUnitVector().getY(), enc2Pose.getVector().getCrossProduct(enc2Pose.getAngleUnitVector()),
-                enc3Pose.getAngleUnitVector().getY(), enc3Pose.getAngleUnitVector().getY(), enc3Pose.getVector().getCrossProduct(enc3Pose.getAngleUnitVector())
+                enc3Pose.getAngleUnitVector().getX(), enc3Pose.getAngleUnitVector().getY(), enc3Pose.getVector().getCrossProduct(enc3Pose.getAngleUnitVector())
         ).getInverted();
     }
 

@@ -29,7 +29,9 @@ import javax.swing.Timer;
 import geometry.circles.Circle;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
+import geometry.polygons.PolyLine;
 import geometry.polygons.Polygon;
+import geometry.polygons.Quadrilateral;
 import geometry.polygons.Rect;
 import geometry.position.Line;
 import geometry.position.Pose;
@@ -89,7 +91,7 @@ public abstract class Drawer extends JPanel {
     public void drawLine(Line line, Color color) { setColor(color); setStroke(lineWidth); g.drawLine((int) line.getStartPoint().getX(),(int) line.getStartPoint().getY(),(int) line.getEndPoint().getX(),(int) line.getEndPoint().getY()); }
     public void drawLine(Line line){ drawLine(line, lineColor); }
 
-    public void drawCircle(Circle circle){ setColor(circleColor); setStroke(circleWidth); g.drawOval((int) circle.getCenterX(), (int) circle.getCenterY(), (int) (2*circle.getRadius()), (int) (2*circle.getRadius())); }
+    public void drawCircle(Circle circle){ setColor(circleColor); setStroke(circleWidth); g.drawOval((int) (circle.getCenterX()-circle.getRadius()), (int) (circle.getCenterY() - circle.getRadius()), (int) (2*circle.getRadius()), (int) (2*circle.getRadius())); }
 
     public void drawPolygon(Polygon polygon){
         Iterator.forAll(polygon.getLines(), this::drawLine);
@@ -149,8 +151,11 @@ public abstract class Drawer extends JPanel {
 
     public static CoordinatePlane getRobot(Pose startPose, Pose pose){
         CoordinatePlane robot = new CoordinatePlane();
-        robot.add(new Rect(new Point(-22,-22), new Point(22,22)));
+        robot.add(new Rect(new Point(-18,-20), new Point(18,20)));
         robot.add(new Pose());
+        robot.add(new PolyLine(new Point(-10, -28), new Point(-5, -20), new Point(5, -20), new Point(10,-28)));
+        robot.add(new Circle(new Point(0,30), 6));
+        robot.add(new Circle(new Point(0, -30), 8));
         robot.rotate(pose.getAngle());
         robot.translate(pose.getX(), pose.getY());
         convertToField(robot, startPose);

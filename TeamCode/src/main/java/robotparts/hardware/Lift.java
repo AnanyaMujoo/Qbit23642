@@ -10,30 +10,32 @@ public class Lift extends RobotPart {
 
     public PMotor motorUp;
     public PMotor motorDown;
-
-    public double restPowUp = 0.12;
-    public double restPowDown = -0.08;
+//
+//    public double restPowUp = 0.12;
+//    public double restPowDown = -0.08;
 
     @Override
     public void init() {
         motorUp = create("lil", ElectronicType.PMOTOR_REVERSE);
-        motorDown = create("lir", ElectronicType.PMOTOR_REVERSE_FLOAT);
+        motorDown = create("lir", ElectronicType.PMOTOR_FORWARD);
         motorUp.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 0.333, 45);
         motorDown.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 0.333, 45);
-        motorUp.usePositionHolder(restPowUp);
+//        motorUp.usePositionHolder(restPowUp);
     }
 
 
     @Override
     public void move(double p) {
-        if (p != 0) {
-            motorUp.releasePosition();
-            motorUp.move(p > 0 ? p + restPowUp : 0);
-            motorDown.move(p < 0 ? p + restPowDown : 0);
-        } else {
-            motorUp.holdPosition();
-            motorDown.move(restPowDown);
-        }
+//        if (p != 0) {
+//            motorUp.releasePosition();
+//            motorUp.move(p > 0 ? p + restPowUp : 0);
+//            motorDown.move(p < 0 ? p + restPowDown : 0);
+//        } else {
+//            motorUp.holdPosition();
+//            motorDown.move(restPowDown);
+//        }
+        motorUp.move(p);
+        motorDown.move(p);
 
     }
 
