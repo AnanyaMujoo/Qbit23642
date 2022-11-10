@@ -33,6 +33,8 @@ public class Line extends GeometryObject implements Tracer {
 
     public double getLength(){ return ps.getDistanceTo(pe); }
 
+    public Vector getVector(){ return new Vector(mx, my); }
+
     public String toString() {
         return "Line {" +
                 " ps: " + ps +

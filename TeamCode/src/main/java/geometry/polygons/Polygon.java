@@ -16,10 +16,10 @@ import util.template.Iterator;
  * NOTE: Uncommented
  */
 
-public class Polygon extends GeometryObject {
+public abstract class Polygon extends GeometryObject {
 
 
-    public final ArrayList<Line> getLines(){
+    public ArrayList<Line> getLines(){
         ArrayList<Line> lines = new ArrayList<>();
         for (int i = 1; i < points.size(); i++){
             lines.add(new Line(points.get(i-1), points.get(i)));

@@ -45,4 +45,6 @@ public class CoordinatePlane {
     public ArrayList<? extends Polygon> getPolygons(){ return getObjectsOfExtendedType(Polygon.class); }
     public <T extends GeometryObject> ArrayList<T> getObjectsOfType(Class<T> type) { return Iterator.forAllOfType(objects, type); }
     public <T extends GeometryObject> ArrayList<? extends T> getObjectsOfExtendedType(Class<T> type) { return Iterator.forAllOfExtendedType(objects, type); }
+
+    public ArrayList<Pose> getCopyOfPoses(){ ArrayList<Pose> out = new ArrayList<>(); Iterator.forAll(getPoses(), pose -> out.add(pose.getCopy())); return out; }
 }

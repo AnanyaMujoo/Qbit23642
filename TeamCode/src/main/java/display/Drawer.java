@@ -57,8 +57,10 @@ public abstract class Drawer extends JPanel {
 
     private static boolean shouldExit = false;
 
+    public static final double refreshRate = 50;
 
-    public final Timer timer = new Timer(50, actionEvent -> repaint());
+
+    public final Timer timer = new Timer((int)(1000/refreshRate), actionEvent -> repaint());
 
 
 
@@ -147,11 +149,10 @@ public abstract class Drawer extends JPanel {
 
     public static CoordinatePlane getRobot(Pose startPose, Pose pose){
         CoordinatePlane robot = new CoordinatePlane();
-        robot.add(new Rect(new Point(-9,-9), new Point(9,9)));
+        robot.add(new Rect(new Point(-22,-22), new Point(22,22)));
         robot.add(new Pose());
-        robot.scale(2); // Whyd do we need this?
-        robot.translate(pose.getX(), pose.getY());
         robot.rotate(pose.getAngle());
+        robot.translate(pose.getX(), pose.getY());
         convertToField(robot, startPose);
         return robot;
     }

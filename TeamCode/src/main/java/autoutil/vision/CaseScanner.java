@@ -2,6 +2,7 @@ package autoutil.vision;
 
 import android.graphics.Color;
 
+import org.checkerframework.checker.units.qual.C;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -17,6 +18,7 @@ import java.util.List;
 import elements.Case;
 import util.template.Iterator;
 
+import static global.General.bot;
 import static global.General.cameraMonitorViewId;
 import static global.General.log;
 import static java.lang.Math.abs;
@@ -26,29 +28,35 @@ import static java.lang.Math.pow;
 public class CaseScanner extends Scanner{
     private volatile Case caseDetected = Case.FIRST;
     protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
-    protected Scalar caseScalar = new Scalar(0,0,0);
+    protected final Case[] pastCases = new Case[10];
+    { Arrays.fill(pastCases, Case.FIRST); }
 
+    // TODO CROP AND ZOOM
 
-    // TODO TEST
     public int getCase(Mat input){
         getHSV(input);
         double cyanValue = getCaseValue(input, 96, 3, CYAN);
-        double magentaValue = getCaseValue(input, 168, 5, MAGENTA);
+        double magentaValue = getCaseValue(input, 168, 3, MAGENTA);
         double orangeValue = getCaseValue(input, 8, 3, ORANGE);
-        caseScalar = new Scalar(cyanValue, magentaValue, orangeValue);
         return Iterator.maxIndex(cyanValue, magentaValue, orangeValue);
     }
 
     public double getCaseValue(Mat input, double hue, double hueOffset, Scalar color){
-        Rect rect = scaleRectAroundCenter(getContourColor(input, hue,hueOffset,  CYAN), 0.5);
+        Rect rect = scaleRectAroundCenter(getContourColor(input, hue, hueOffset,  color), 0.4);
         drawRectangle(input, rect, color);
         if(checkIfInside(HSV, rect)){ return getUniformity(HSV, rect, hue); }else{ return 0; }
     }
 
     public void message(){
-        log.show(caseScalar);
-        caseDetected = getCase();
+        caseDetected = getCaseStable(getCase());
         log.show("Case Detected: ", caseDetected);
+    }
+
+
+    private Case getCaseStable(Case currentCase){
+        boolean casesAreSame = true;
+        for (int i = 0; i < pastCases.length-1; i++) { pastCases[i] = pastCases[i+1]; if(!pastCases[i].equals(currentCase)){ casesAreSame = false; } } pastCases[0] = currentCase;
+        return casesAreSame ? currentCase : caseDetected;
     }
 
 

@@ -17,6 +17,7 @@ public abstract class GeometryObject {
     protected final ArrayList<Point> points = new ArrayList<>();
 
     protected final void addPoints(Point... points){ Collections.addAll(this.points, points); }
+    protected final void addPoints(ArrayList<Point> points){ this.points.addAll(points); }
     public final void setAnchorPoint(Point point){ this.anchorPoint = point; }
 
     private void toAllPoints(ParameterCodeSeg<Point> code){ Iterator.forAll(points, code);}
@@ -28,5 +29,7 @@ public abstract class GeometryObject {
     public final void scale(double scale){ scale(anchorPoint, scale); }
     public final void scaleX(double scale){ toAllPoints(p -> p.scaleX(scale));}
     public final void scaleY(double scale){ toAllPoints(p -> p.scaleY(scale));}
+
+    // TOD 5 Make copy methods
 
 }
