@@ -31,16 +31,15 @@ public class CaseScanner extends Scanner{
     protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
     protected final Case[] pastCases = new Case[10];
     { Arrays.fill(pastCases, Case.FIRST); }
-    protected final Rect view = getRectFromCenter(center, height/2,width/2);
-
-    // TODO TEST
 
     public int getCase(Mat input){
-        Imgproc.resize(getSubmat(input, view), input, new Size(input.width(), input.height()));
+        double zoom = 2;
+        cropAndFill(input, getRectFromCenter(new Point(input.width()/2.0, input.height()/2.0), (int) (input.width()/zoom), (int) (input.height()/zoom)));
         getHSV(input);
-        double cyanValue = getCaseValue(input, 96, 3, CYAN);
-        double magentaValue = getCaseValue(input, 168, 3, MAGENTA);
-        double orangeValue = getCaseValue(input, 8, 3, ORANGE);
+        double cyanValue = getCaseValue(input, 102, 6, CYAN);
+        double magentaValue = getCaseValue(input, 168, 6, MAGENTA);
+        double orangeValue = getCaseValue(input, 8, 6, ORANGE);
+        debug(input);
         return Iterator.maxIndex(cyanValue, magentaValue, orangeValue);
     }
 
@@ -53,6 +52,7 @@ public class CaseScanner extends Scanner{
     public void message(){
         caseDetected = getCaseStable(getCase());
         log.show("Case Detected: ", caseDetected);
+        logDebug();
     }
 
 

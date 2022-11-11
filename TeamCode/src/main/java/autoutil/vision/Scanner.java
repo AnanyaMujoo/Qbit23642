@@ -43,6 +43,7 @@ public abstract class Scanner extends OpenCvPipeline {
     private final Mat Hierarchy = new Mat();
     private final Mat Mask = new Mat();
     protected final Mat HSV = new Mat();
+    protected final Mat Crop = new Mat();
 
     public abstract void start();
     public abstract void run(Mat input);
@@ -133,6 +134,12 @@ public abstract class Scanner extends OpenCvPipeline {
     public Rect scaleRectAroundCenter(Rect rect, double scale){
         Point center = getCenter(rect); int width = ((int)(rect.width*scale)); int height = ((int)(rect.height*scale));
         return new Rect((int) (center.x - width/2), (int) (center.y - height/2), width, height);
+    }
+
+
+    public void cropAndFill(Mat input, Rect rect){
+        Imgproc.resize(getSubmat(input, rect), Crop,  new Size(input.width(), input.height()), Imgproc.INTER_CUBIC);
+        Crop.copyTo(input);
     }
 
 //    protected Rect[] defineRegions() {
