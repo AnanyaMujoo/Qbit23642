@@ -5,8 +5,8 @@ import autoutil.controllers.control1D.PID;
 
 public class MecanumPIDReactor extends MecanumReactor{
 
-    public PID xPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.04, 10.0, 0.05, 50.0, 5.0);
-    public PID yPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.04, 10.0, 0.05, 50.0, 5.0);
+    public PID xPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.02, 10.0, 0.1, 50.0, 5.0);
+    public PID yPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.02, 10.0, 0.1, 50.0, 5.0);
     public PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.007, 6.0, 0.2, 50.0, 20.0);
 
     public MecanumPIDReactor(){

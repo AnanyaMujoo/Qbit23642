@@ -14,11 +14,12 @@ public class TerraAutoTest extends AutoFramework {
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
-        scan();
+//        scan();
     }
 
     @Override
     public void define() {
+//        addSetpoint(7, -30, 55);
 //        addWaypoint(15,20,0);
 //        addWaypoint(0,40,90);
 //        addSetpoint(0,0, 180);
