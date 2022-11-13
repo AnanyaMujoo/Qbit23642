@@ -25,24 +25,24 @@ public class TerraAutoSimple extends AutoFramework {
         addWaypoint(0, 111, 0);
         addWaypoint(0, 130, 35);
         addSetpoint(-7, 140, 55);
-        customCase(() -> {
-            addWaypoint(-7, 128, 90);
-            addWaypoint(-20, 128, 90);
-            addWaypoint(-55, 130, 70);
-            addWaypoint(-60, 132, 45);
-            addSetpoint(-62, 70, 0);
-        }, () -> {
-            addWaypoint(0, 130, 35);
-            addWaypoint(0, 105, 0);
-            addSetpoint(0, 70, 0);
-        }, () -> {
-            addWaypoint(7, 128, 90);
-            addWaypoint(20, 128, 90);
-            addWaypoint(48, 124, 70);
-            addWaypoint(50, 116, 50);
-            addWaypoint(56, 95, 0);
-            addSetpoint(58, 70, 0);
-        });
+//        customCase(() -> {
+//            addWaypoint(-7, 128, 90);
+//            addWaypoint(-20, 128, 90);
+//            addWaypoint(-55, 130, 70);
+//            addWaypoint(-60, 132, 45);
+//            addSetpoint(-62, 70, 0);
+//        }, () -> {
+//            addWaypoint(0, 130, 35);
+//            addWaypoint(0, 105, 0);
+//            addSetpoint(0, 70, 0);
+//        }, () -> {
+//            addWaypoint(7, 128, 90);
+//            addWaypoint(20, 128, 90);
+//            addWaypoint(48, 124, 70);
+//            addWaypoint(50, 116, 50);
+//            addWaypoint(56, 95, 0);
+//            addSetpoint(58, 70, 0);
+//        });
     }
 
     @Override

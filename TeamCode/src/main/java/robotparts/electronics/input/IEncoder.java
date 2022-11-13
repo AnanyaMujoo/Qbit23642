@@ -45,7 +45,7 @@ public class IEncoder extends Electronic {
     private volatile double current = 0; // amps
 
     private boolean inverted = false;
-    private double wheelDiameter = 3.5; // cm
+    private double wheelDiameter = 3.55; // cm
 
     /**
      * Constructor to create the encoder

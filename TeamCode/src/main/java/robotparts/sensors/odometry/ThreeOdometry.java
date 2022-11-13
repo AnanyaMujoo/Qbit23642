@@ -29,9 +29,9 @@ public class ThreeOdometry extends TwoOdometryV2 {
 
     @Override
     protected void setEncoderPoses() {
-        enc1Pose = new Pose(new Point(-10.98,4), 90);
+        enc1Pose = new Pose(new Point(-10.83,4), 90);
         enc2Pose = new Pose(new Point(1.5,-14), 0);
-        enc3Pose = new Pose(new Point(9.98,4), 90);
+        enc3Pose = new Pose(new Point(9.84,4), 90);
     }
 
     @Override
