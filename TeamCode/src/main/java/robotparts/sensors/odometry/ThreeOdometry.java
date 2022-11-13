@@ -2,31 +2,36 @@ package robotparts.sensors.odometry;
 
 import geometry.framework.Point;
 import geometry.position.Pose;
+import geometry.position.Vector;
 import math.linearalgebra.Matrix3D;
 import math.linearalgebra.Vector3D;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
+import util.template.Precision;
+
+import static global.General.log;
 
 public class ThreeOdometry extends TwoOdometryV2 {
     private IEncoder enc3;
     private Pose enc3Pose;
     private Matrix3D dYdXdThetaMatrixInverted;
-
-    // TODO TEST
+    private Precision precision;
 
     @Override
     protected void createEncoders() {
         super.createEncoders();
-        enc3 = create("enc3", ElectronicType.IENCODER_NORMAL);
+        enc3 = create("brEnc", ElectronicType.IENCODER_NORMAL);
         addEncoders(enc3);
-//        useGyro();
+        enc1.invert();
+        enc3.invert();
+        precision = new Precision();
     }
 
     @Override
     protected void setEncoderPoses() {
-        enc1Pose = new Pose(new Point(0,0), 90);
-        enc2Pose = new Pose(new Point(0,-12.6), 0);
-        enc3Pose = new Pose(new Point(0,0), 90);
+        enc1Pose = new Pose(new Point(-10.98,4), 90);
+        enc2Pose = new Pose(new Point(1.5,-14), 0);
+        enc3Pose = new Pose(new Point(9.98,4), 90);
     }
 
     @Override
@@ -34,6 +39,7 @@ public class ThreeOdometry extends TwoOdometryV2 {
         Vector3D localEncDelta = new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3.getDeltaPosition());
         Vector3D localDelta = dYdXdThetaMatrixInverted.multiply(localEncDelta);
         updateCurrentPose(toGlobalFrame(localDelta.get2D()), Math.toDegrees(localDelta.getZ()));
+        precision.throttle(() -> setHeading(gyro.getHeading()), 1000);
     }
 
     @Override

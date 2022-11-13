@@ -6,7 +6,7 @@ import elements.FieldSide;
 import teleop.Tele;
 
 import unittests.UnitTester;
-import unittests.tele.framework.movement.TwoOdometryTest;
+import unittests.tele.framework.movement.OdometryTest;
 
 import static global.General.*;
 
@@ -52,7 +52,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
 
 //        Works as of 4.2.5
 //        add(new AutoModuleTest());
-//        add(new TwoOdometryTest());
+        add(new OdometryTest());
 //        add(new RobotFrameworkTest());
 //        add(new RobotFunctionsTest());
 //        add(new StageTest());

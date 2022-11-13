@@ -36,6 +36,7 @@ public abstract class Odometry extends RobotPart {
 
     protected final void addEncoders(IEncoder... encoders){ this.encoders.addAll(Arrays.asList(encoders)); }
     protected final void useGyro(){ usingGyro = true; }
+    protected final void unUseGyro(){ usingGyro = false; }
 
     protected abstract void createEncoders();
     protected abstract void setEncoderPoses();

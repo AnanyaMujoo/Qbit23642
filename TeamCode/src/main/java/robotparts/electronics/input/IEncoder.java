@@ -81,7 +81,7 @@ public class IEncoder extends Electronic {
 
     public void setWheelDiameter(double wheelDiameter){ this.wheelDiameter = wheelDiameter; }
 
-    public void invert(){ inverted = true; }
+    public void invert(){ inverted = !inverted; }
 
     public double getPos() { return position; }
 
