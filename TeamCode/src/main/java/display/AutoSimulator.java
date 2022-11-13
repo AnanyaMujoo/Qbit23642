@@ -16,8 +16,8 @@ import geometry.position.Pose;
 
 public class AutoSimulator extends Drawer{
 
-    private static final Pose startLower = new Pose(25,fieldSize/2.0 - 92,0);
-    private static final Pose startUpper = new Pose(25,fieldSize/2.0 + 92,0);
+    private static final Pose startLower = new Pose(25,fieldSize/2.0 - 92,180);
+    private static final Pose startUpper = new Pose(25,fieldSize/2.0 + 92,180);
     private static final double maxMovingVelocity = 150; // cm per sec
     private static final double maxTurningVelocity = 340; // deg per sec
     private static final double speedUp = 1.0;

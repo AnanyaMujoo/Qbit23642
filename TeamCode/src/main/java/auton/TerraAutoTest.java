@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import autoutil.AutoFramework;
 import elements.FieldSide;
 
+import static global.General.log;
+
 
 @Autonomous(name = "TerraAutoTest", group = "auto")
 public class TerraAutoTest extends AutoFramework {

@@ -11,11 +11,12 @@ public class TerraAutoSimple extends AutoFramework {
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
+        scan();
     }
 
     @Override
     public void preProcess() {
-        caseDetected = Case.FIRST;
+        caseDetected = Case.THIRD;
         if(!upper&&isFlipped() || upper&&!isFlipped()){ flipCases();}
     }
 
@@ -46,7 +47,10 @@ public class TerraAutoSimple extends AutoFramework {
     }
 
     @Override
-    public void postProcess() { if(upper){ flip(); } }
+    public void postProcess() {
+        autoPlane.reflectY(); autoPlane.reflectX();
+        if(upper){ flip(); }
+    }
 
     protected boolean upper = false;
 

@@ -27,10 +27,10 @@ import static java.lang.Math.pow;
 
 
 public class CaseScanner extends Scanner{
-    private volatile Case caseDetected = Case.FIRST;
+    private volatile Case caseDetected = Case.THIRD;
     protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
     protected final Case[] pastCases = new Case[10];
-    { Arrays.fill(pastCases, Case.FIRST); }
+    { Arrays.fill(pastCases, caseDetected); }
 
     public int getCase(Mat input){
         double zoom = 2;
@@ -38,8 +38,8 @@ public class CaseScanner extends Scanner{
         getHSV(input);
         double cyanValue = getCaseValue(input, 102, 6, CYAN);
         double magentaValue = getCaseValue(input, 168, 6, MAGENTA);
-        double orangeValue = getCaseValue(input, 8, 6, ORANGE);
-        debug(input);
+        double orangeValue = getCaseValue(input, 16, 6, ORANGE);
+//        debug(input);
         return Iterator.maxIndex(cyanValue, magentaValue, orangeValue);
     }
 
@@ -52,7 +52,7 @@ public class CaseScanner extends Scanner{
     public void message(){
         caseDetected = getCaseStable(getCase());
         log.show("Case Detected: ", caseDetected);
-        logDebug();
+//        logDebug();
     }
 
 
