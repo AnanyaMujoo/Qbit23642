@@ -24,49 +24,24 @@ import static teleutil.button.Button.X;
 
 public class TerraOp extends Tele {
 
-    boolean driveOnly = false;
-    boolean slowMode = true;
-    Timer timer = new Timer();
-
     @Override
     public void initTele() {
-        if(!driveOnly) {
-//            gph1.link(Button.A, IntakeNew);
-//            gph1.link(Button.B, BackwardNew);
-//            gph1.link(Button.Y, ForwardNew);
-        }
-        gph1.link(X, () -> bot.cancelAll());
-//        gph1.link(Button.RIGHT_TRIGGER, DuckNew);
-        gph1.link(RIGHT_BUMPER, () -> slowMode = true);
-        gph1.link(LEFT_BUMPER, () -> slowMode = false);
-    }
-
-    @Override
-    public void startTele() {
-        timer.reset();
+        gph1.link(Button.B, Backward);
+        gph1.link(Button.Y, Forward);
+        gph1.link(Button.X, bot::cancelAutoModules);
     }
 
     @Override
     public void loopTele() {
-        if(!slowMode) {
-            drive.move(gph1.ry, gph1.rx, gph1.lx);
-        }else{
-            drive.move(gph1.ry/2.0, gph1.rx/1.7, gph1.lx/1.5);
-        }
-        if(!driveOnly) {
-            lift.move(gph2.ry);
-        }
-        if(timer.seconds() > 45 && driveOnly){
-            fault.check("Time's Up!");
-        }
+        drive.move(gph1.ry, gph1.rx, gph1.lx);
+        lift.move(gph2.ry);
     }
 
 
     @TeleOp(name = "TerraOpBlue", group = "TeleOp")
     public static class TerraOpBlue extends TerraOp {{ fieldSide = FieldSide.BLUE; }}
-//    @TeleOp(name = "TerraOpRed", group = "TeleOp")
-//    public static class TerraOpRed extends TerraOpBlue{{ fieldSide = FieldSide.RED; driveOnly = true; }}
-
+    @TeleOp(name = "TerraOpRed", group = "TeleOp")
+    public static class TerraOpRed extends TerraOpBlue{{ fieldSide = FieldSide.RED; }}
 }
 
 

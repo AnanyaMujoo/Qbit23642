@@ -9,6 +9,7 @@ import elements.Level;
 import global.Modes;
 import robot.RobotUser;
 import robotparts.RobotPart;
+import robotparts.hardware.Lift;
 import unused.auto.AutoModuleUserOld;
 import util.condition.DecisionList;
 import util.condition.OutputList;
@@ -22,11 +23,11 @@ import static global.Modes.OuttakeMode.SHARED;
 public interface AutoModuleUser extends RobotUser{
 
     AutoModule Backward = new AutoModule(
-            lift.stageLift(0.4, 20)
+            lift.stageLift(1.0, Lift.maxPosition)
     );
 
     AutoModule Forward = new AutoModule(
-            lift.stageLift(0.4, 0)
+            lift.stageLift(0.6, 0)
     );
 
 

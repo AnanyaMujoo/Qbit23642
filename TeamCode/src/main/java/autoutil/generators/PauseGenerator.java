@@ -31,6 +31,6 @@ public class PauseGenerator extends Generator{
 
     @Override
     public Stage getStage(Reactor reactor) {
-        return new Stage(new Initial(this::startPausing), new Initial(bot::halt), new Exit(this::isDonePausing));
+        return new Stage(new Initial(this::startPausing), new Initial(bot.drive::halt), new Exit(this::isDonePausing));
     }
 }

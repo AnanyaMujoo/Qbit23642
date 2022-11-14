@@ -36,7 +36,7 @@ public class AutoModuleGenerator extends Generator{
     public Stage getStage(Reactor reactor) {
         if(!isCancel){
             if(!isConcurrent){
-                return new Stage(new Initial(this::runAutoModule), new Initial(bot::halt), new Exit(this::isDoneWithAutoModule));
+                return new Stage(new Initial(this::runAutoModule), new Initial(bot.drive::halt), new Exit(this::isDoneWithAutoModule));
             }else{
                 return new Stage(new Initial(this::runAutoModule), RobotPart.exitAlways());
             }

@@ -6,11 +6,14 @@ import autoutil.AutoFramework;
 import elements.Case;
 import elements.FieldSide;
 
+import static global.General.bot;
+
 public class TerraAutoSimple extends AutoFramework {
 
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
+        bot.addBackgroundTask(lift.holdPosition());
         scan();
     }
 
@@ -23,8 +26,11 @@ public class TerraAutoSimple extends AutoFramework {
     @Override
     public void define() {
         addWaypoint(0, 80, 0);
+        addConcurrentAutoModule(Backward);
         addWaypoint(0, 100, 35);
         addSetpoint(-6, 138, 50);
+        addPause(0.5);
+        addConcurrentAutoModule(Forward);
         customCase(() -> {
             addWaypoint(-7, 128, 90);
             addWaypoint(-20, 128, 90);

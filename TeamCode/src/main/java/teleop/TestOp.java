@@ -13,7 +13,7 @@ import static global.General.fieldSide;
 import static global.General.gph1;
 import static global.General.gph2;
 
-//@Disabled
+@Disabled
 @TeleOp(name = "TestOp", group = "TeleOp")
 public class TestOp extends Tele {
 //    {
@@ -41,7 +41,7 @@ public class TestOp extends Tele {
 
     @Override
     public void loopTele() {
-        drive.move(gph1.ry, gph1.rx, gph1.lx);
-        lift.move(gph2.ry);
+//        drive.move(gph1.ry, gph1.rx, gph1.lx);
+//        lift.move(gph2.ry);
     }
 }

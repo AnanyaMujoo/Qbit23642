@@ -85,6 +85,7 @@ public class PMotor extends Electronic {
         ticksToOutput = Precision.invert(outputToTicks);
     }
 
+    // TOD5 FIX THIS
     @Deprecated
     public void scalePIDFCoefficients(double ps, double is, double ds, double fs){ currentCoeffs = new PIDFCoefficients(defaultCoeffs.p*ps,defaultCoeffs.i*is,defaultCoeffs.d*ds,defaultCoeffs.f*fs); motor.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, currentCoeffs); }
     @Deprecated

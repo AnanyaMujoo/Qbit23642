@@ -4,7 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import autoutil.AutoFramework;
 import elements.FieldSide;
+import robot.BackgroundTask;
+import util.Timer;
 
+import static global.General.bot;
 import static global.General.log;
 
 
@@ -14,11 +17,15 @@ public class TerraAutoTest extends AutoFramework {
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
+        bot.addBackgroundTask(lift.holdPosition());
 //        scan();
+
     }
 
     @Override
     public void define() {
+        addAutoModule(Backward);
+        addPause(5);
 //        addWaypoint(6,-20, 0);
 //        addWaypoint(8,-40,0);
 //        addWaypoint(6, -20, 0);

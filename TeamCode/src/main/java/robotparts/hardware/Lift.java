@@ -1,25 +1,31 @@
 package robotparts.hardware;
 
+import automodules.stage.Main;
 import automodules.stage.Stage;
 import global.Constants;
+import robot.BackgroundTask;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
+import util.User;
 
 public class Lift extends RobotPart {
 
     public PMotor motorRight;
     public PMotor motorLeft;
 
-    public double restPowUp = 0.01;
+    public double restPowUp = 0.02;
+    public static final double maxPosition = 65; // 67
 
     @Override
     public void init() {
         motorRight = create("lil", ElectronicType.PMOTOR_REVERSE);
         motorLeft = create("lir", ElectronicType.PMOTOR_FORWARD);
-        motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 0.25, 5);
-        motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.5, 0.25, 5);
+        motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
+        motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorRight.usePositionHolder(restPowUp);
+        motorRight.setPIDCoefficients(12, 3, 0);
+        motorLeft.setPIDCoefficients(12, 3, 0);
     }
 
 
@@ -27,10 +33,16 @@ public class Lift extends RobotPart {
     public void move(double p) {
         if (p != 0) {
             motorRight.releasePosition();
-            motorRight.move(p+restPowUp);
+            motorRight.move(p + restPowUp);
+            motorLeft.move(p + restPowUp);
         } else {
-            motorRight.holdPosition();
-            motorLeft.move(0);
+            if(motorRight.getPosition() > 2) {
+                motorRight.holdPosition();
+                motorLeft.move(restPowUp);
+            }else{
+                motorRight.move(-0.05);
+                motorLeft.move(-0.05);
+            }
         }
     }
 
@@ -46,5 +58,7 @@ public class Lift extends RobotPart {
 
     public Stage stageLift(double power, double target) { return moveTarget(() -> motorRight, () -> motorLeft, power, power, target); }
 
+
+    public BackgroundTask holdPosition(){ return new BackgroundTask(() -> {checkAccess(User.AUTO); move(0);}); }
 }
 
