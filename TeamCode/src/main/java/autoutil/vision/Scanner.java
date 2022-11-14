@@ -102,6 +102,8 @@ public abstract class Scanner extends OpenCvPipeline {
         });
     }
 
+    // TOD 5 make more efficent
+
     protected double getBestRectStDev(Mat input, double hue, double hueOffset, Scalar rectColor){
         Rect bestRect = null; double bestST = 10000;
         for (int i = 0; i < rects.size(); i++) {

@@ -24,7 +24,7 @@ public class TerraAutoTest extends AutoFramework {
 
     @Override
     public void define() {
-        addAutoModule(Backward);
+        addConcurrentAutoModule(Backward);
         addPause(5);
 //        addWaypoint(6,-20, 0);
 //        addWaypoint(8,-40,0);
