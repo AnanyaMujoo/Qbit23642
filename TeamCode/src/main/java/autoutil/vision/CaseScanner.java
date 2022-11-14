@@ -1,58 +1,47 @@
 package autoutil.vision;
 
-import android.graphics.Color;
-
-import org.checkerframework.checker.units.qual.C;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import elements.Case;
+import util.Timer;
 import util.template.Iterator;
 
-import static global.General.bot;
-import static global.General.cameraMonitorViewId;
 import static global.General.log;
 import static java.lang.Math.abs;
-import static java.lang.Math.pow;
 
 
 public class CaseScanner extends Scanner{
     private volatile Case caseDetected = Case.THIRD;
     protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
     protected final Case[] pastCases = new Case[10];
+    protected boolean isStarted = false;
+//    protected final Timer timer = new Timer();
     { Arrays.fill(pastCases, caseDetected); }
 
     public int getCase(Mat input){
         double zoom = 2;
         cropAndFill(input, getRectFromCenter(new Point(input.width()/2.0, input.height()/2.0), (int) (input.width()/zoom), (int) (input.height()/zoom)));
         getHSV(input);
-        double cyanValue = getCaseValue(input, 102, 6, CYAN);
-        double magentaValue = getCaseValue(input, 168, 6, MAGENTA);
-        double orangeValue = getCaseValue(input, 16, 6, ORANGE);
-//        debug(input);
-        return Iterator.maxIndex(cyanValue, magentaValue, orangeValue);
-    }
 
-    public double getCaseValue(Mat input, double hue, double hueOffset, Scalar color){
-        Rect rect = scaleRectAroundCenter(getContourColor(input, hue, hueOffset,  color), 0.4);
-        drawRectangle(input, rect, color);
-        if(checkIfInside(HSV, rect)){ return getUniformity(HSV, rect, hue); }else{ return 0; }
+        computeRects(80, 150);
+
+        double cyanValue = getBestRectStDev(input, 102, 20, CYAN);
+        double magentaValue = getBestRectStDev(input, 168, 20, MAGENTA);
+        double orangeValue = getBestRectStDev(input, 16, 20, ORANGE);
+        return Iterator.minIndex(cyanValue, magentaValue, orangeValue);
     }
 
     public void message(){
-        caseDetected = getCaseStable(getCase());
-        log.show("Case Detected: ", caseDetected);
-//        logDebug();
+        if(isStarted) {
+            caseDetected = getCaseStable(getCase());
+            log.show("Case Detected: ", caseDetected);
+        }else{
+            log.show("Vision Starting...");
+        }
     }
 
 
@@ -70,7 +59,7 @@ public class CaseScanner extends Scanner{
     public final void postProcess(Mat input) { Core.rotate(input, input, Core.ROTATE_90_CLOCKWISE); }
 
     @Override
-    public final void start() {}
+    public final void start() { isStarted = true; } // timer.reset(); }
 
     @Override
     public final void run(Mat input) { caseDetected = cases[getCase(input)]; }

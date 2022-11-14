@@ -12,13 +12,13 @@ import static global.General.log;
 public class PositionHolderTest extends TeleUnitTest {
 
     private final Lift part = lift;
-    private final PMotor motor = part.motorUp;
+    private final PMotor motor = part.motorRight;
     private final PositionHolder positionHolder = motor.getPositionHolder();
 
     @Override
     protected void start() {
-        gph1.link(Button.B, BackwardNew);
-        gph1.link(Button.Y, ForwardNew);
+//        gph1.link(Button.B, BackwardNew);
+//        gph1.link(Button.Y, ForwardNew);
     }
 
     @Override

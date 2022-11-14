@@ -8,6 +8,7 @@ import teleutil.button.Button;
 import teleutil.button.OnNotHeldEventHandler;
 import teleutil.button.OnTurnOffEventHandler;
 import teleutil.button.OnTurnOnEventHandler;
+import unused.auto.AutoModuleUserOld;
 
 import static global.General.bot;
 import static global.General.gph1;
@@ -16,7 +17,7 @@ import static teleutil.button.Button.*;
 
 
 @Deprecated
-public class MecanumTerraOp extends Tele {
+public class MecanumTerraOp extends Tele implements AutoModuleUserOld {
 
     @Override
     public void initTele() {

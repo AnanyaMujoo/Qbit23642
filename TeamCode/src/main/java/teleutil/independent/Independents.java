@@ -4,11 +4,12 @@ package teleutil.independent;
 import automodules.AutoModuleUser;
 import global.Modes;
 import robot.RobotUser;
+import unused.auto.AutoModuleUserOld;
 import util.condition.DecisionList;
 
 import static global.General.bot;
 
-public class Independents implements RobotUser, AutoModuleUser {
+public class Independents implements RobotUser, AutoModuleUserOld {
 
     // TOD 5 NEW Independents clean up, create new
     // Why do we need Independent Runner?

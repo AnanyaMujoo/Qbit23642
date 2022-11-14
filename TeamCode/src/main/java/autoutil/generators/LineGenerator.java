@@ -8,7 +8,7 @@ public class LineGenerator extends PoseGenerator{
 
     @Override
     public void add(Pose start, Pose target) {
-        line = new Line(start.getPoint(), target.getPoint());
+        line = new Line(start.getPoint().getCopy(), target.getPoint().getCopy());
     }
 
     public Line getLine(){ return line; }

@@ -13,6 +13,7 @@ import math.trigonmetry.Trigonometry;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.template.ParameterConstructor;
+import util.template.Precision;
 
 import static global.General.fault;
 
@@ -23,8 +24,9 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     private double ky;
     private double radiusK;
     private double t = 0;
+    private boolean isStarting = true;
 
-    // TOD5 4 NEW Create option for tracer
+    // TOD5 NEW Create option for tracer
 
     private final Exponential radiusLogistic;
 
@@ -88,19 +90,19 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     public double solve(Point currentPos, Line currentLine){
         double dx = currentLine.getStartPoint().getX()-currentPos.getX();
         double dy = currentLine.getStartPoint().getY()-currentPos.getY();
-        double a = Math.pow(Trigonometry.pythag(currentLine.getSlopeX(), currentLine.getSlopeY()),2);
+        double a = Trigonometry.pythagC2(currentLine.getSlopeX(), currentLine.getSlopeY());
         double b = 2*((dx*currentLine.getSlopeX())+(dy*currentLine.getSlopeY()));
-        double c = Math.pow(Trigonometry.pythag(dx, dy),2)-Math.pow(currentRadius,2);
+        double c = Trigonometry.pythagC2(dx, dy)-Math.pow(currentRadius,2);
         Quadratic quadratic = new Quadratic(a, b, c);
         double[] roots = quadratic.roots();
         t = roots[0];
-        if(Double.isNaN(t)) { t = 1; }
+        isStarting = Precision.runOnCondition(Double.isNaN(t), () -> t = 1);
         return t;
     }
 
     @Override
     protected boolean hasReachedTarget() {
-        return t > 0.99;
+        return !isStarting && t > 0.99;
     }
 
     public enum PurePursuitParameterType implements ParameterType {

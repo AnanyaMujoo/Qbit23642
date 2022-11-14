@@ -35,4 +35,8 @@ public class Trigonometry {
     public static double pythag(double a, double b){
         return Math.sqrt(a*a + b*b);
     }
+
+    public static double pythagC2(double a, double b){
+        return (a*a) + (b*b);
+    }
 }

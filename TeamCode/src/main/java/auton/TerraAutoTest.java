@@ -19,6 +19,18 @@ public class TerraAutoTest extends AutoFramework {
 
     @Override
     public void define() {
+//        addWaypoint(6,-20, 0);
+//        addWaypoint(8,-40,0);
+//        addWaypoint(6, -20, 0);
+//        addWaypoint(7, -10, 0);
+//
+//        addWaypoint(6, -138, 50);
+//        addWaypoint(7, -128, 90);
+
+//        addWaypoint(20, -140, 90);
+//        addWaypoint(55, -130, 70);
+//        addAutoModule(Backward);
+//        addSetpoint(62, -70, 0);
 //        addSetpoint(7, -30, 55);
 //        addWaypoint(15,20,0);
 //        addWaypoint(0,40,90);

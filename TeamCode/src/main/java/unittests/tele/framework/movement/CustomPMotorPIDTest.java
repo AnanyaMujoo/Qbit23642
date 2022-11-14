@@ -23,8 +23,8 @@ public class CustomPMotorPIDTest extends TeleUnitTest {
 
     @Override
     protected void start() {
-        gph1.link(Button.B, LiftUpTopFast);
-        gph1.link(Button.Y, LiftReset);
+//        gph1.link(Button.B, LiftUpTopFast);
+//        gph1.link(Button.Y, LiftReset);
         gph1.link(Button.X, bot::cancelAutoModules);
     }
 

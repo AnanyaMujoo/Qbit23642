@@ -31,12 +31,12 @@ public class TerraOp extends Tele {
     @Override
     public void initTele() {
         if(!driveOnly) {
-            gph1.link(Button.A, IntakeNew);
-            gph1.link(Button.B, BackwardNew);
-            gph1.link(Button.Y, ForwardNew);
+//            gph1.link(Button.A, IntakeNew);
+//            gph1.link(Button.B, BackwardNew);
+//            gph1.link(Button.Y, ForwardNew);
         }
         gph1.link(X, () -> bot.cancelAll());
-        gph1.link(Button.RIGHT_TRIGGER, DuckNew);
+//        gph1.link(Button.RIGHT_TRIGGER, DuckNew);
         gph1.link(RIGHT_BUMPER, () -> slowMode = true);
         gph1.link(LEFT_BUMPER, () -> slowMode = false);
     }

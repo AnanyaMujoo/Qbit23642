@@ -11,12 +11,12 @@ public class TerraAutoSimple extends AutoFramework {
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
-//        scan();
+        scan();
     }
 
     @Override
     public void preProcess() {
-        caseDetected = Case.THIRD;
+//        caseDetected = Case.FIRST;
         if(!upper&&isFlipped() || upper&&!isFlipped()){ flipCases();}
     }
 
@@ -30,7 +30,7 @@ public class TerraAutoSimple extends AutoFramework {
             addWaypoint(-20, 128, 90);
             addWaypoint(-55, 130, 70);
             addWaypoint(-60, 132, 45);
-            addSetpoint(-62, 70, 0); // PROBLEM WITH FIRST CASE
+            addSetpoint(-62, 70, 0);
         }, () -> {
             addWaypoint(0, 130, 35);
             addWaypoint(0, 105, 0);
