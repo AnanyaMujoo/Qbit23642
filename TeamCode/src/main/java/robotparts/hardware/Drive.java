@@ -2,13 +2,20 @@ package robotparts.hardware;
 
 import automodules.AutoModule;
 import automodules.stage.Stage;
+import global.Modes;
+import math.misc.Logistic;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 
+import static global.Modes.driveModeIs;
+
 public class Drive extends RobotPart {
 
     private CMotor fr, br, fl, bl;
+    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 10.0, 5.0);
+    private final Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
+    private final Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
 
     @Override
     public void init() {
@@ -24,6 +31,12 @@ public class Drive extends RobotPart {
         br.setPower(f + s - t);
         fl.setPower(f + s + t);
         bl.setPower(f - s + t);
+    }
+
+
+    public void moveSmooth(double f, double s, double t) {
+        double scale = driveModeIs(Modes.DriveMode.SLOW) ? 0.4 : (driveModeIs(Modes.DriveMode.MEDIUM) ? 0.6 : 1.0);
+        move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*scale), movementCurveTurn.fodd(t*scale));
     }
 
     @Override

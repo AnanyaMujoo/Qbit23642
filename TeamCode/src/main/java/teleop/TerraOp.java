@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.sql.Time;
 
 import elements.FieldSide;
+import global.Modes;
 import teleutil.button.Button;
 import teleutil.button.OnNotHeldEventHandler;
 import teleutil.button.OnTurnOffEventHandler;
@@ -29,12 +30,15 @@ public class TerraOp extends Tele {
         gph1.link(Button.B, Backward);
         gph1.link(Button.Y, Forward);
         gph1.link(Button.X, bot::cancelAutoModules);
+        gph1.link(Button.RIGHT_STICK_BUTTON,  Modes.CycleDrive());
     }
 
     @Override
     public void loopTele() {
-        drive.move(gph1.ry, gph1.rx, gph1.lx);
-        lift.move(gph2.ry);
+        drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
+
+
+        log.show("DriveMode", Modes.getDriveMode());
     }
 
 
