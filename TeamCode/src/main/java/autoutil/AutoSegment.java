@@ -40,16 +40,7 @@ public class AutoSegment<R extends Reactor, G extends Generator> {
         WAYPOINT,
         AUTOMODULE,
         CONCURRENT_AUTOMODULE,
-        CANCEL_AUTOMODULE;
-
-        private double time;
-        private AutoModule autoModule;
-
-        public Type set(double time){ this.time = time; return this; }
-        public Type set(AutoModule autoModule){ this.autoModule = autoModule; return this; }
-
-        public double getTime(){ return time; }
-        public AutoModule getAutoModule(){ return autoModule; }
+        CANCEL_AUTOMODULE
     }
 
 }

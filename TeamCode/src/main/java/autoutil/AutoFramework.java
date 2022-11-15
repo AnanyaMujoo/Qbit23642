@@ -2,8 +2,6 @@ package autoutil;
 
 
 
-import org.firstinspires.ftc.teamcode.R;
-
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -17,7 +15,6 @@ import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
 import autoutil.vision.CaseScanner;
 import elements.Case;
-import elements.CaseOld;
 import elements.FieldSide;
 import geometry.framework.CoordinatePlane;
 import geometry.position.Pose;
@@ -43,6 +40,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected final ArrayList<Pose> poses = new ArrayList<>();
     protected ArrayList<AutoSegment.Type> segmentTypes = new ArrayList<>();
     protected ArrayList<AutoSegment<?, ?>> segments = new ArrayList<>();
+    protected ArrayList<Double> pauses = new ArrayList<>();
+    protected ArrayList<AutoModule> autoModules = new ArrayList<>();
 
     protected boolean scanning = false;
     protected CaseScanner caseScanner;
@@ -51,6 +50,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected boolean isIndependent = false;
 
     private int segmentIndex = 1;
+    private int pauseIndex = 0;
+    private int autoModuleIndex = 0;
 
     {
         poses.add(new Pose());
@@ -98,8 +99,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     }
 
 
-    private void addSegmentType(double time){ AutoSegment.Type.PAUSE.set(time); segmentTypes.add(AutoSegment.Type.PAUSE); addLastPose();  }
-    private void addSegmentType(AutoSegment.Type type, AutoModule autoModule){ type.set(autoModule); segmentTypes.add(type); addLastPose();  }
+    private void addSegmentType(double time){ pauses.add(time); segmentTypes.add(AutoSegment.Type.PAUSE); addLastPose();  }
+    private void addSegmentType(AutoSegment.Type type, AutoModule autoModule){ autoModules.add(autoModule); segmentTypes.add(type); addLastPose();  }
     private void addSegmentType(AutoSegment.Type type){ segmentTypes.add(type); }
 
     public void addPause(double time){ addSegmentType(time); }
@@ -115,21 +116,24 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         Iterator.forAll(segmentTypes, type -> {
             switch (type){
                 case PAUSE:
-                    addStationarySegment(() -> new PauseGenerator(type.getTime())); break;
+                    final double time = getCurrentPause(); addStationarySegment(() -> new PauseGenerator(time)); break;
                 case SETPOINT:
                     addSegment(config.getSetpointSegment()); break;
                 case WAYPOINT:
                     addSegment(config.getWaypointSegment()); break;
                 case AUTOMODULE:
-                    addStationarySegment(() -> new AutoModuleGenerator(type.getAutoModule(), false)); break;
+                    final AutoModule autoModule = getCurrentAutoModule(); addStationarySegment(() -> new AutoModuleGenerator(autoModule, false)); break;
                 case CONCURRENT_AUTOMODULE:
-                    addStationarySegment(() -> new AutoModuleGenerator(type.getAutoModule(), true)); break;
+                    final AutoModule autoModule2 = getCurrentAutoModule(); addStationarySegment(() -> new AutoModuleGenerator(autoModule2, true));  break;
                 case CANCEL_AUTOMODULE:
                     addStationarySegment(() -> new AutoModuleGenerator(true)); break;
             }
             segmentIndex++;
         });
     }
+
+    private AutoModule getCurrentAutoModule(){ AutoModule autoModule = autoModules.get(autoModuleIndex); autoModuleIndex++; return autoModule; }
+    private double getCurrentPause(){ double time = pauses.get(pauseIndex); pauseIndex++; return time; }
 
     private void addSegment(AutoSegment<?, ?> segment){ addSegment(segment.getReactorReference(), segment.getGeneratorReference()); }
     private <R extends Reactor, G extends Generator> void addSegment(@NonNull ReturnCodeSeg<R> reactor, @NonNull ReturnCodeSeg<G> generator){
