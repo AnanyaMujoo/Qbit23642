@@ -6,32 +6,34 @@ import autoutil.AutoFramework;
 import elements.Case;
 import elements.FieldSide;
 
+import static global.General.bot;
+
 public class TerraAuto extends AutoFramework {
 
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
+        bot.addBackgroundTask(lift.holdPosition());
+        scan();
     }
 
     @Override
     public void preProcess() {
-        caseDetected = Case.FIRST;
+//        caseDetected = Case.FIRST;
         if(!upper&&isFlipped() || upper&&!isFlipped()){ flipCases();}
     }
 
     @Override
     public void define() {
         addWaypoint(0, 80, 0);
-        addWaypoint(0, 111, 0);
-        addWaypoint(0, 130, 35);
-        addSetpoint(-7, 140, 55);
+        addWaypoint(0, 100, 35);
+        addSetpoint(-6, 138, 50);
+        addPause(0.5);
         customNumber(5, i -> {
-            addWaypoint(10, 128, 75);
-            addWaypoint(40, 126, 90);
-            addSetpoint(54, 126, 90);
-            addWaypoint(40, 126, 90);
-            addWaypoint(10, 128, 75);
-            addSetpoint(-7, 140, 55);
+            addWaypoint(10, 128-(2*i), 75);
+            addSetpoint(54, 124-(2*i), 90);
+            addWaypoint(30, 128-(2*i), 75);
+            addSetpoint(-6, 138-(2*i), 50);
         });
         customCase(() -> {
             addWaypoint(-7, 128, 90);
@@ -54,17 +56,21 @@ public class TerraAuto extends AutoFramework {
     }
 
     @Override
-    public void postProcess() { if(upper){ flip(); } }
+    public void postProcess() {
+        autoPlane.reflectY(); autoPlane.reflectX();
+        autoPlane.scale(0.99);
+        if(upper){ flip(); }
+    }
 
     protected boolean upper = false;
-//
-//    @Autonomous(name = "TerraAutoLowerBlue", group = "auto")
-//    public static class TerraAutoLowerBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; }}
-//    @Autonomous(name = "TerraAutoLowerRed", group = "auto")
-//    public static class TerraAutoLowerRed extends TerraAuto {{ fieldSide = FieldSide.RED; }}
-//    @Autonomous(name = "TerraAutoUpperBlue", group = "auto")
-//    public static class TerraAutoUpperBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; upper = true; }}
-//    @Autonomous(name = "TerraAutoUpperRed", group = "auto")
-//    public static class TerraAutoUpperRed extends TerraAuto {{ fieldSide = FieldSide.RED; upper = true; }}
+
+    @Autonomous(name = "TerraAutoLowerBlue", group = "auto")
+    public static class TerraAutoLowerBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; }}
+    @Autonomous(name = "TerraAutoLowerRed", group = "auto")
+    public static class TerraAutoLowerRed extends TerraAuto {{ fieldSide = FieldSide.RED; }}
+    @Autonomous(name = "TerraAutoUpperBlue", group = "auto")
+    public static class TerraAutoUpperBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; upper = true; }}
+    @Autonomous(name = "TerraAutoUpperRed", group = "auto")
+    public static class TerraAutoUpperRed extends TerraAuto {{ fieldSide = FieldSide.RED; upper = true; }}
 
 }

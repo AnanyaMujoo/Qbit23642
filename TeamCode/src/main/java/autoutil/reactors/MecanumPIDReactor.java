@@ -10,8 +10,10 @@ public class MecanumPIDReactor extends MecanumReactor{
     public PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.007, 6.0, 0.2, 50.0, 20.0);
 
     public MecanumPIDReactor(){
-        hPID.setAccuracy(2);
+        hPID.setAccuracy(3);
         hPID.setRestOutput(0.08);
+        xPID.setAccuracy(1.5);
+        yPID.setAccuracy(1.5);
         setControllers(new Default2D(xPID, yPID), hPID);
     }
 }
