@@ -1,6 +1,7 @@
 package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import autoutil.AutoFramework;
 import elements.FieldSide;
@@ -10,7 +11,7 @@ import util.Timer;
 import static global.General.bot;
 import static global.General.log;
 
-
+@Disabled
 @Autonomous(name = "TerraAutoTest", group = "auto")
 public class TerraAutoTest extends AutoFramework {
 

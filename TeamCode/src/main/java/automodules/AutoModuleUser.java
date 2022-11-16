@@ -23,10 +23,12 @@ import static global.Modes.OuttakeMode.SHARED;
 public interface AutoModuleUser extends RobotUser{
 
     AutoModule Backward = new AutoModule(
-            lift.stageLift(1.0, Lift.maxPosition)
+            lift.stageLift(1.0, Lift.maxPosition),
+            Modes.ChangeDrive(Modes.DriveMode.SLOW)
     );
 
     AutoModule Forward = new AutoModule(
+            Modes.ChangeDrive(Modes.DriveMode.MEDIUM),
             lift.stageLift(0.6, 0)
     );
 

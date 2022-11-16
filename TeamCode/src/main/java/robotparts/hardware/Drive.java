@@ -35,8 +35,7 @@ public class Drive extends RobotPart {
 
 
     public void moveSmooth(double f, double s, double t) {
-        double scale = driveModeIs(Modes.DriveMode.SLOW) ? 0.4 : (driveModeIs(Modes.DriveMode.MEDIUM) ? 0.6 : 1.0);
-        move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*scale), movementCurveTurn.fodd(t*scale));
+        double scale = Modes.getDriveMode().getScale(); move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(t*1.2*scale));
     }
 
     @Override
