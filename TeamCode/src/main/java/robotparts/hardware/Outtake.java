@@ -30,7 +30,7 @@ public class Outtake extends RobotPart {
     }
 
     public void moveStart(){ armr.setPosition("start"); arml.setPosition("start"); turn.setPosition("start"); openClaw(); }
-    public void moveEnd(){ closeClaw(); armr.setPosition("end"); arml.setPosition("end"); turn.setPosition("end"); }
+    public void moveEnd(){ closeClaw(); armr.setPosition("end"); arml.setPosition("end"); turn.setPosition("flipped"); }
     public void openClaw(){ claw.setPosition("open"); }
     public void closeClaw(){ claw.setPosition("close"); }
 

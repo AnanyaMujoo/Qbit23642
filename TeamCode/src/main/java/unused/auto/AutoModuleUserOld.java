@@ -42,7 +42,7 @@ public interface AutoModuleUserOld extends RobotUser {
     );
 
     AutoModule DuckNew = new AutoModule(
-            carousel.spinOneDuck(2,0.4,0.7)
+//            MECANUM_CAROUSEL.spinOneDuck(2,0.4,0.7)
     );
 
 

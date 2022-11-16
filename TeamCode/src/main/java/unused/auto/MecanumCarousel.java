@@ -1,12 +1,8 @@
-package robotparts.hardware;
-
-import java.sql.Time;
+package unused.auto;
 
 import automodules.AutoModule;
-import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
-import automodules.stage.Stop;
 import elements.FieldSide;
 import math.polynomial.Linear;
 import robotparts.RobotPart;
@@ -16,7 +12,7 @@ import util.Timer;
 
 import static global.General.fieldSide;
 
-public class Carousel extends RobotPart {
+public class MecanumCarousel extends RobotPart {
 
     public CMotor car;
     private final Timer timer = new Timer();

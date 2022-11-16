@@ -1,11 +1,9 @@
 package robot;
 
-import robotparts.hardware.Carousel;
+import unused.auto.MecanumCarousel;
 import robotparts.sensors.odometry.Odometry;
 import robotparts.sensors.odometry.ThreeOdometry;
-import robotparts.sensors.odometry.TwoOdometry;
 import unittests.tele.framework.movement.AutoModuleTest;
-import unused.mecanumold.MecanumCarousel;
 import robotparts.hardware.Drive;
 import robotparts.hardware.Intake;
 import robotparts.hardware.Lift;
@@ -44,7 +42,6 @@ public interface RobotUser {
     Intake intake = new Intake();
     Lift lift = new Lift();
     Outtake outtake = new Outtake();
-    Carousel carousel = new Carousel();
 
 
     ColorSensors color = new ColorSensors();
@@ -61,7 +58,7 @@ public interface RobotUser {
     MecanumDrive mecanumDrive = new MecanumDrive();
     MecanumIntake mecanumIntake = new MecanumIntake();
     MecanumLift mecanumLift = new MecanumLift();
-    MecanumCarousel mecanumCarousel = new MecanumCarousel();
+    unused.mecanumold.MecanumCarousel mecanumCarousel = new unused.mecanumold.MecanumCarousel();
 
     TankDrive tankDrive = new TankDrive();
     TankIntake tankIntake = new TankIntake();
