@@ -23,12 +23,12 @@ public class AutoSimulator extends Drawer{
     private static final double speedUp = 1.0;
 
     public static void main(String[] args) {
-        setAuto(new TerraAutoLowerBlue(), startLower);
+//        setAuto(new TerraAutoLowerBlue(), startLower);
 //        setAuto(new TerraAutoUpperBlue(), startUpper);
 //        setAuto(new TerraAutoLowerRed(), startLower);
 //        setAuto(new TerraAutoUpperRed(), startUpper);
 
-//        setAuto(new TerraAutoLowerBlueSimple(), startLower);
+        setAuto(new TerraAutoLowerBlueSimple(), startLower);
 //        setAuto(new TerraAutoUpperBlueSimple(), startLower);
 //        setAuto(new TerraAutoLowerRedSimple(), startLower);
 //        setAuto(new TerraAutoUpperRedSimple(), startLower);
@@ -114,6 +114,7 @@ public class AutoSimulator extends Drawer{
             }
         }else if(segmentIndex == lines.size()){
             System.out.println("Time taken: " + timer.seconds()*speedUp);
+            System.out.println("Estimated Robot Time: " + 2.32*(timer.seconds()*speedUp));
             segmentIndex++;
         }
     }

@@ -34,6 +34,8 @@ public class PServo extends Electronic {
         servo = s;
         direction = dir;
         servo.setDirection(direction);
+        addPosition("start", 0.0);
+        addPosition("end", 1.0);
     }
 
     /**

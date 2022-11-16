@@ -81,8 +81,8 @@ public class StageBuilder {
     protected final Stage moveCustomExit(double fp, double sp, double tp, Exit exit){ return new Stage(usePart(), main(fp, sp, tp), exit, stop(), returnPart()); }
     protected final Stage customExit(double p, Exit exit){ return new Stage(usePart(), main(p), exit, stop(), returnPart()); }
     protected final Stage customExit(double p, ReturnCodeSeg<Boolean> exit){ return new Stage(usePart(), main(p), new Exit(exit), stop(), returnPart()); }
-    protected final Stage customTime(CodeSeg m, double t){ return new Stage(usePart(), new Main(m), exitTime(t), stop(), returnPart()); }
-    protected final Stage customTime(Main m, double t){ return new Stage(usePart(), m, exitTime(t), stop(), returnPart()); }
+    protected final Stage customTime(CodeSeg m, double t){ return new Stage(usePart(), new Main(m), exitTime(t != 0 ? t : 0.01), stop(), returnPart()); }
+    protected final Stage customTime(Main m, double t){ return new Stage(usePart(), m, exitTime(t != 0 ? t : 0.01), stop(), returnPart()); }
 
     protected void setTarget(double target){}
     protected boolean exitTarget(){ return true; }

@@ -20,25 +20,25 @@ public interface AutoModuleUserOld extends RobotUser {
 
 
     AutoModule IntakeNew = new AutoModule(
-            outtake.stageDrop(0.05),
-            intake.intakeUntilFreight(1),
-            outtake.stageLock(0.05),
-            intake.moveTime(-1, 1)
+//            outtake.stageDrop(0.05),
+//            intake.intakeUntilFreight(1),
+//            outtake.stageLock(0.05),
+//            intake.moveTime(-1, 1)
     );
 
     AutoModule BackwardNew = new AutoModule(
-            outtake.stageLock(0.05),
-            outtake.stageTurnToHorizontal(0.05),
-            lift.stageLift(1.0, 26),
-            outtake.stageCenterTurret(0.05)
+//            outtake.stageLock(0.05),
+//            outtake.stageTurnToHorizontal(0.05),
+//            lift.stageLift(1.0, 26),
+//            outtake.stageCenterTurret(0.05)
     );
 
     AutoModule ForwardNew = new AutoModule(
-            outtake.stageDrop(0.15),
-            outtake.stageCenterTurret(0.25),
-            outtake.stageLock(0.05),
-            outtake.stageTurnToStart(0.05),
-            lift.stageLift(-0.5, 0)
+//            outtake.stageDrop(0.15),
+//            outtake.stageCenterTurret(0.25),
+//            outtake.stageLock(0.05),
+//            outtake.stageTurnToStart(0.05),
+//            lift.stageLift(-0.5, 0)
     );
 
     AutoModule DuckNew = new AutoModule(

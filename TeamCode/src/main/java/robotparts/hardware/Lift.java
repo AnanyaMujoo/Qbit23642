@@ -14,28 +14,15 @@ public class Lift extends RobotPart {
 
     public PMotor motorRight;
     public PMotor motorLeft;
-    public PServo testLeft, testRight;
 
     public double restPowUp = 0.02;
     public static final double maxPosition = 65; // 67
 
     @Override
     public void init() {
-        motorRight = create("lil", ElectronicType.PMOTOR_REVERSE);
-        motorLeft = create("lir", ElectronicType.PMOTOR_FORWARD);
-        testLeft = create("tl", ElectronicType.PSERVO_REVERSE);
-        testRight = create("tr", ElectronicType.PSERVO_FORWARD);
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorRight.usePositionHolder(restPowUp);
-        motorRight.setPIDCoefficients(12, 3, 0);
-        motorLeft.setPIDCoefficients(12, 3, 0);
-
-        testLeft.addPosition("start", 0.0);
-        testLeft.addPosition("end", 1.0);
-        testRight.addPosition("start", 0.0);
-        testRight.addPosition("end", 1.0);
-        moveTestStart();
     }
 
 
@@ -54,16 +41,6 @@ public class Lift extends RobotPart {
                 motorLeft.move(-0.05);
             }
         }
-    }
-
-    public void moveTestStart(){
-        testLeft.setPosition("start");
-        testRight.setPosition("start");
-    }
-
-    public void moveTestEnd(){
-        testLeft.setPosition("end");
-        testRight.setPosition("end");
     }
 
     @Override

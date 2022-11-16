@@ -20,7 +20,9 @@ import static global.General.gph2;
 import static global.General.independents;
 import static global.General.log;
 import static teleutil.button.Button.LEFT_BUMPER;
+import static teleutil.button.Button.LEFT_TRIGGER;
 import static teleutil.button.Button.RIGHT_BUMPER;
+import static teleutil.button.Button.RIGHT_TRIGGER;
 import static teleutil.button.Button.X;
 
 public class TerraOp extends Tele {
@@ -31,15 +33,15 @@ public class TerraOp extends Tele {
         gph1.link(Button.Y, Forward);
         gph1.link(Button.X, bot::cancelAutoModules);
         gph1.link(Button.RIGHT_STICK_BUTTON,  Modes.CycleDrive());
-        gph2.link(Button.A, lift::moveTestStart);
-        gph2.link(Button.B, lift::moveTestEnd);
+        gph2.link(RIGHT_BUMPER, outtake::closeClaw);
+        gph2.link(LEFT_BUMPER, outtake::openClaw);
+        gph2.link(RIGHT_TRIGGER, outtake::moveEnd);
+        gph2.link(LEFT_TRIGGER, outtake::moveStart);
     }
 
     @Override
     public void loopTele() {
         drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
-
-
         log.show("DriveMode", Modes.getDriveMode());
     }
 

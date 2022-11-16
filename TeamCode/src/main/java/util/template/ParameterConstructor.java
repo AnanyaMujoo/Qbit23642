@@ -62,8 +62,8 @@ public interface ParameterConstructor<T> {
     default void createConstructors(ParameterType inputType, T[] inputParameters, T[] defaults){
         if(constructorMap.containsKey(inputType)){
             int numberOfParameters = Objects.requireNonNull(constructorMap.get(inputType));
-            fault.check("Wrong number of parameters for constructor of type: " + inputType.toString(),
-                    Expectation.UNEXPECTED, Magnitude.MAJOR, numberOfParameters == inputParameters.length, true);
+            if(fault != null){ fault.check("Wrong number of parameters for constructor of type: " + inputType.toString(),
+                    Expectation.UNEXPECTED, Magnitude.MAJOR, numberOfParameters == inputParameters.length, true); }
             T[] inputPart = (T[]) preprocessorMap.get(inputType).run(inputParameters);
             T[] defaultPart = new ArrayList<>(Arrays.asList(defaults)).subList(numberOfParameters, defaults.length).toArray(defaults);
             List<T> combined = new ArrayList<>(Arrays.asList(inputPart));
