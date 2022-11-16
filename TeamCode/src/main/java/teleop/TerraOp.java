@@ -31,6 +31,8 @@ public class TerraOp extends Tele {
         gph1.link(Button.Y, Forward);
         gph1.link(Button.X, bot::cancelAutoModules);
         gph1.link(Button.RIGHT_STICK_BUTTON,  Modes.CycleDrive());
+        gph2.link(Button.A, lift::moveTestStart);
+        gph2.link(Button.B, lift::moveTestEnd);
     }
 
     @Override

@@ -98,7 +98,7 @@ public abstract class Scanner extends OpenCvPipeline {
         loopThroughRects(HSV, width, height, rect -> {
             rects.add(rect);
             stdevs.add(getStDev(HSV, rect));
-            hues.add(getAverageHue(HSV, rect));
+            hues.add(getAverageHue(HSV, scaleRectAroundCenter(rect, 0.4)));
         });
     }
 
