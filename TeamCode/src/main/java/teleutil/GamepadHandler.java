@@ -105,7 +105,7 @@ public class GamepadHandler {
     }
 
     public void link(Button b, OutputList outputList){
-        link(b, (AutoModule) outputList.check());
+        link(b, () -> bot.addAutoModule(outputList.check()));
     }
 
     public void link(Button b, Independent independent){

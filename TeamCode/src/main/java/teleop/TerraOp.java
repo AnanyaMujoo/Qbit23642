@@ -29,10 +29,11 @@ public class TerraOp extends Tele {
 
     @Override
     public void initTele() {
-        gph1.link(Button.B, Backward);
+        gph1.link(Button.B, BackwardAll);
         gph1.link(Button.Y, Forward);
         gph1.link(Button.X, bot::cancelAutoModules);
-        gph1.link(Button.RIGHT_STICK_BUTTON,  Modes.CycleDrive());
+        gph1.link(Button.RIGHT_STICK_BUTTON, Modes::cycleDrive);
+        gph1.link(RIGHT_BUMPER, Modes::cycleHeight);
         gph2.link(RIGHT_BUMPER, outtake::closeClaw);
         gph2.link(LEFT_BUMPER, outtake::openClaw);
         gph2.link(RIGHT_TRIGGER, outtake::moveEnd);
@@ -42,7 +43,9 @@ public class TerraOp extends Tele {
     @Override
     public void loopTele() {
         drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
+        lift.move(gph2.ry);
         log.show("DriveMode", Modes.getDriveMode());
+        log.show("HeightMode", Modes.getHeightMode());
     }
 
 
