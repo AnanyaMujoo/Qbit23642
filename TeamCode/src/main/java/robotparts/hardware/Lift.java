@@ -20,6 +20,8 @@ public class Lift extends RobotPart {
 
     @Override
     public void init() {
+        motorRight = create("lil", ElectronicType.PMOTOR_REVERSE);
+        motorLeft = create("lir", ElectronicType.PMOTOR_FORWARD);
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorRight.usePositionHolder(restPowUp);
@@ -48,13 +50,7 @@ public class Lift extends RobotPart {
         return super.moveTime(p, t);
     }
 
-    @Override
-    protected Stage moveNow(double p) {
-        return super.moveNow(p);
-    }
-
     public Stage stageLift(double power, double target) { return moveTarget(() -> motorRight, () -> motorLeft, power, power, target); }
-
 
     public BackgroundTask holdPosition(){ return new BackgroundTask(() -> {checkAccess(User.AUTO); move(0);}); }
 }

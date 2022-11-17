@@ -104,15 +104,20 @@ public abstract class Scanner extends OpenCvPipeline {
 
     // TOD 5 make more efficent
 
-    protected double getBestRectStDev(Mat input, double hue, double hueOffset, Scalar rectColor){
+    protected double getBestRectStDev(Mat input, double hueLow, double hueHigh, Scalar rectColor){
         Rect bestRect = null; double bestST = 10000;
         for (int i = 0; i < rects.size(); i++) {
             double newSt = stdevs.get(i);
-            if(newSt < bestST && abs(hue - hues.get(i)) < hueOffset){
+            double hue = hues.get(i);
+            if(newSt < bestST && hue > hueLow && hue < hueHigh){
                 bestST = newSt; bestRect = rects.get(i);
             }
         }
-        if(bestRect != null){ drawRectangle(input, bestRect, rectColor); }
+        if(bestRect != null){
+            if(getCenter(bestRect).inside(getRectFromCenter(getCenter(input), 100, 200))) {
+                drawRectangle(input, bestRect, rectColor);
+            }else{ bestST = 10000; }
+        }
         return bestST;
     }
 
@@ -174,6 +179,10 @@ public abstract class Scanner extends OpenCvPipeline {
 
     public Point getCenter(Rect rect){
         return new Point(rect.x + rect.width/2.0, rect.y + rect.height/2.0);
+    }
+
+    public Point getCenter(Mat mat){
+        return new Point(mat.width()/2.0, mat.height()/2.0);
     }
 
 

@@ -29,9 +29,11 @@ public class CaseScanner extends Scanner{
 
         computeRects(80, 150);
 
-        double cyanValue = getBestRectStDev(input, 105, 12, CYAN);
-        double magentaValue = getBestRectStDev(input, 164, 12, MAGENTA);
-        double orangeValue = getBestRectStDev(input, 13, 12, ORANGE);
+//        debug(input);
+
+        double cyanValue = getBestRectStDev(input, 90, 110, CYAN);
+        double magentaValue = getBestRectStDev(input, 130, 170, MAGENTA);
+        double orangeValue = getBestRectStDev(input, 1, 30, ORANGE);
         return Iterator.minIndex(cyanValue, magentaValue, orangeValue);
     }
 
@@ -39,6 +41,7 @@ public class CaseScanner extends Scanner{
         if(isStarted) {
             caseDetected = getCaseStable(getCase());
             log.show("Case Detected: ", caseDetected);
+//            logDebug();
         }else{
             log.show("Vision Starting...");
         }

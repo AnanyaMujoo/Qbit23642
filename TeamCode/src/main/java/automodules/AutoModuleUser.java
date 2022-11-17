@@ -23,16 +23,16 @@ import static global.Modes.OuttakeMode.SHARED;
 public interface AutoModuleUser extends RobotUser{
 
     AutoModule Backward = new AutoModule(
-            outtake.stageClose(0.3),
-            outtake.stageEnd(0),
+//            outtake.stageClose(0.3),
+//            outtake.stageEnd(0),
             lift.stageLift(1.0, Lift.maxPosition),
             Modes.ChangeDrive(Modes.DriveMode.SLOW)
     );
 
     AutoModule Forward = new AutoModule(
             Modes.ChangeDrive(Modes.DriveMode.MEDIUM),
-            outtake.stageOpen(0.3),
-            outtake.stageStart(0),
+//            outtake.stageOpen(0.3),
+//            outtake.stageStart(0),
             lift.stageLift(0.6, 0)
     );
 

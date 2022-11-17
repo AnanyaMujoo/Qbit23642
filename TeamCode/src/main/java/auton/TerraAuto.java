@@ -26,17 +26,18 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void define() {
         addWaypoint(0, 60, 0);
-        addConcurrentAutoModule(Backward);
+//        addConcurrentAutoModule(Backward);
         addWaypoint(0, 100, 35);
         addSetpoint(-6, 138, 50);
-        addConcurrentAutoModule(Forward);
+//        addConcurrentAutoModule(Forward);
         customNumber(5, i -> {
+            i=0;
             addWaypoint(14, 130-(2*i), 70);
             addSetpoint(54, 128-(2*i), 90);
-            addConcurrentAutoModule(Backward);
+//            addConcurrentAutoModule(Backward);
             addWaypoint(34, 128-(2*i), 75);
             addSetpoint(-6, 138-(2*i), 50);
-            addConcurrentAutoModule(Forward);
+//            addConcurrentAutoModule(Forward);
         });
         customCase(() -> {
             addWaypoint(-7, 128, 90);
