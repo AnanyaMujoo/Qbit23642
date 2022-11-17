@@ -38,7 +38,7 @@ public class ThreeOdometry extends TwoOdometryV2 {
     protected void update() {
         Vector3D localEncDelta = new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3.getDeltaPosition());
         Vector3D localDelta = dYdXdThetaMatrixInverted.multiply(localEncDelta);
-        Vector localOffset = new Vector(-Math.abs(Math.toRadians(gyro.getDeltaHeading()))*1.3, 0);
+        Vector localOffset = new Vector(-Math.abs(Math.toRadians(gyro.getDeltaHeading()))*1.33, 0);
         Vector globalDelta = toGlobalFrame(localDelta.get2D().getAdded(localOffset));
         updateCurrentPose(globalDelta, Math.toDegrees(localDelta.getZ()));
         precision.throttle(() -> setHeading(gyro.getHeading()), 1000);
