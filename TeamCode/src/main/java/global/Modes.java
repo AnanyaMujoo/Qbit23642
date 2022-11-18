@@ -6,6 +6,7 @@ import automodules.stage.Stage;
 import robotparts.hardware.Lift;
 import util.codeseg.CodeSeg;
 import util.condition.Decision;
+import util.template.ValueMode;
 
 import static automodules.StageBuilder.exitAlways;
 
@@ -39,6 +40,24 @@ public class Modes {
 
 
     public interface Valuable extends Decision { double getValue(); }
+
+
+//    public static class HeightMode1 extends ValueMode{
+//
+//        public void cycle(){
+//            Height.values()
+//        }
+//        public enum Height implements ModeType{
+//            HIGH(Lift.maxPosition),
+//            MEDIUM(40),
+//            LOW(20);
+//            private final double value;
+//            Height(double value){ this.value = value; }
+//            public double getValue(){ return value; }
+//        }
+//    };
+//
+//    public HeightMode1 heightMode1 = new HeightMode1();
 
 
     public enum HeightMode implements Valuable {

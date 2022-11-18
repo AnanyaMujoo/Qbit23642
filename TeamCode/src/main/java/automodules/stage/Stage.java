@@ -30,6 +30,10 @@ public class Stage {
         addDefaults();
     }
 
+    public Stage(ArrayList<StageComponent> stageComponents){
+        components.addAll(stageComponents); addDefaults();
+    }
+
     /**
      * Create a stage that is a pause
      * @param isPause
@@ -103,6 +107,19 @@ public class Stage {
     public Stage combine(StageComponent... stageComponents){
         components.addAll(Arrays.asList(stageComponents));
         return this;
+    }
+
+    /**
+     * The new stage "attaches" to the old one. NOTE: This is different than combine, because the exit condition of the new stage is still the same
+     * @param stage
+     * @return attached stage
+     */
+    public Stage attach(Stage stage){
+        final ArrayList<StageComponent> oldComponents = new ArrayList<>(this.components);
+        return new Stage(oldComponents){
+            @Override
+            public boolean shouldStop(){ return Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop); }
+        }.combine(stage);
     }
 
 }

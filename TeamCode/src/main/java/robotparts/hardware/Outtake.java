@@ -3,12 +3,14 @@ package robotparts.hardware;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import automodules.AutoModule;
+import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PServo;
 import global.Modes;
+import util.Timer;
 
 public class Outtake extends RobotPart {
 
@@ -48,8 +50,8 @@ public class Outtake extends RobotPart {
     public void flip(){ turn.setPosition("flipped"); }
     public void unFlip(){ turn.setPosition("start"); }
 
-
     public void readyEnd(){ armr.setPosition("startHalf"); arml.setPosition("startHalf"); }
+    public void readyStart(){ armr.setPosition("endHalf"); arml.setPosition("endHalf"); }
 
     public Stage stageStart(double t){ return super.customTime(this::moveStart, t); }
     public Stage stageEnd(double t){ return super.customTime(this::moveEnd, t); }
@@ -58,17 +60,25 @@ public class Outtake extends RobotPart {
     public Stage stageFlip(double t){return super.customTime(this::flip, t); }
     public Stage stageUnFlip(double t){return super.customTime(this::unFlip, t); }
 
-//    public AutoModule ModuleStart(){
-////        return new AutoModule(
-////                super.customTime()
-////        );
-//    }
 
-    public Stage readyEnd(double t){ return super.customTime(this::readyEnd, t); }
+    public Stage stageEnd(){
+        final Timer timer = new Timer();
+        return new Stage(
+                new Initial(timer::reset), new Main(() -> {
+                    double time = timer.seconds();
+                    if(time < 0.1){ closeClaw(); }else if(time < 0.2){ readyEnd(); flip(); }else if(time < 0.5){ moveEnd(); }
+                }
+        ));
+    }
 
+    public Stage stageStart(){
+        final Timer timer = new Timer();
+        return new Stage(
+                new Initial(timer::reset), new Main(() -> {
+                    double time = timer.seconds();
+                    if(time < 0.1){ openClaw(); }else if(time < 0.2){ readyStart();}else if(time < 0.3){ closeClaw(); unFlip(); }else if(time < 0.6){ moveStart(); }
+                }
+        ));
+    }
 
-    // TODO FInish
-//    public Stage ModuleEnd(){
-//        return customTime(readyEnd());
-//    }
 }

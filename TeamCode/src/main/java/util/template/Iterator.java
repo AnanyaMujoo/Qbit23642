@@ -177,4 +177,9 @@ public interface Iterator {
         int ind = 0; double min = arr[0]; for (int i = 0; i < arr.length ; i++) { if(arr[i] < min){min = arr[i]; ind = i;} }
         return ind;
     }
+
+
+    static <T> void removeCondition(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> condition){
+        for (int i = list.size() - 1; i >= 0; --i) { if (condition.run(list.get(i))) { list.remove(i); } }
+    }
 }

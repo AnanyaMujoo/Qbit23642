@@ -23,31 +23,24 @@ import static global.Modes.getHeightMode;
 
 public interface AutoModuleUser extends RobotUser{
 
-//    AutoModule Backward = new AutoModule(
-////            outtake.stageClose(0.3),
-////            outtake.stageEnd(0),
-//            lift.stageLift(1.0, getHeightMode().getValue()),
-//            Modes.ChangeDrive(Modes.DriveMode.SLOW)
-//    );
-
     AutoModule Backward = BackwardHeight(Modes.HeightMode.HIGH);
-
-    static AutoModule BackwardHeight(Modes.HeightMode mode){ return new AutoModule(
-//            outtake.ModuleEnd(),
-            lift.stageLift(1.0, mode.getValue()),
-            Modes.ChangeDrive(Modes.DriveMode.SLOW)
-    );}
 
     OutputList BackwardAll = new OutputList(Modes::getHeightMode)
             .addOption(Modes.HeightMode.LOW, BackwardHeight(Modes.HeightMode.LOW))
             .addOption(Modes.HeightMode.MEDIUM, BackwardHeight(Modes.HeightMode.MEDIUM))
             .addOption(Modes.HeightMode.HIGH, BackwardHeight(Modes.HeightMode.HIGH));
 
+
+    static AutoModule BackwardHeight(Modes.HeightMode mode){ return new AutoModule(
+            lift.stageLift(1.0, mode.getValue()).attach(outtake.stageEnd()),
+            outtake.stageEnd(0.0),
+            Modes.ChangeDrive(Modes.DriveMode.SLOW)
+    );}
+
     AutoModule Forward = new AutoModule(
             Modes.ChangeDrive(Modes.DriveMode.MEDIUM),
-//            outtake.stageOpen(0.3),
-//            outtake.stageStart(0),
-            lift.stageLift(0.6, 5)
+            lift.stageLift(0.6, 5).attach(outtake.stageStart()),
+            outtake.stageStart(0.0)
     );
 
 }

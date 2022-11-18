@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.sql.Time;
 
+import automodules.AutoModule;
 import elements.FieldSide;
 import global.Modes;
 import teleutil.button.Button;
@@ -39,8 +40,8 @@ public class TerraOp extends Tele {
 
         gph2.link(RIGHT_BUMPER, outtake::closeClaw);
         gph2.link(LEFT_BUMPER, outtake::openClaw);
-        gph2.link(RIGHT_TRIGGER, outtake::moveEnd);
-        gph2.link(LEFT_TRIGGER, outtake::moveStart);
+        gph2.link(RIGHT_TRIGGER, new AutoModule(outtake.stageEnd()));
+        gph2.link(LEFT_TRIGGER, new AutoModule(outtake.stageStart()));
 
         gph2.link(DPAD_UP, outtake::flip);
         gph2.link(DPAD_DOWN, outtake::unFlip);

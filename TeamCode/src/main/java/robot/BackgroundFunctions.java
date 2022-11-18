@@ -42,11 +42,7 @@ public class BackgroundFunctions {
 
     private void removeCompletedTasks(){
         synchronized (tasks) {
-            for (int i = tasks.size() - 1; i >= 0; --i) {
-                if (tasks.get(i).isDone()) {
-                    tasks.remove(i);
-                }
-            }
+            Iterator.removeCondition(tasks, BackgroundTask::isDone);
         }
     }
 }
