@@ -11,20 +11,21 @@ import util.Timer;
 import static global.General.bot;
 import static global.General.log;
 
-@Disabled
+//@Disabled
 @Autonomous(name = "TerraAutoTest", group = "auto")
 public class TerraAutoTest extends AutoFramework {
 
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
-        bot.addBackgroundTask(lift.holdPosition());
+//        bot.addBackgroundTask(lift.holdPosition());
 //        scan();
 
     }
 
     @Override
     public void define() {
+        addSetpoint(0,183,0);
 //        addConcurrentAutoModule(Backward);
 //        addPause(0.5);
 //        addConcurrentAutoModule(Forward);

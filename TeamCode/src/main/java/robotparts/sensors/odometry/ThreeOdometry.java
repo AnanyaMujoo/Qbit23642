@@ -29,19 +29,21 @@ public class ThreeOdometry extends TwoOdometryV2 {
 
     @Override
     protected void setEncoderPoses() {
-        enc1Pose = new Pose(new Point(-10.83,4), 90);
+        double start = -11.0; double width = 21.5;
+        enc1Pose = new Pose(new Point(start,4), 89);
         enc2Pose = new Pose(new Point(1.5,-14), 0);
-        enc3Pose = new Pose(new Point(9.84,4), 90);
+        enc3Pose = new Pose(new Point(start+width,4), 90);
     }
 
     @Override
     protected void update() {
-        Vector3D localEncDelta = new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3.getDeltaPosition());
+        Vector3D localEncDelta = new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), 1.01*enc3.getDeltaPosition());
         Vector3D localDelta = dYdXdThetaMatrixInverted.multiply(localEncDelta);
-        Vector localOffset = new Vector(-Math.abs(Math.toRadians(gyro.getDeltaHeading()))*1.33, 0);
+//        Vector localOffset = new Vector(-Math.abs(Math.toRadians(gyro.getDeltaHeading()))*1.33, 0);
+        Vector localOffset = new Vector(0,0);
         Vector globalDelta = toGlobalFrame(localDelta.get2D().getAdded(localOffset));
         updateCurrentPose(globalDelta, Math.toDegrees(localDelta.getZ()));
-        precision.throttle(() -> setHeading(gyro.getHeading()), 1000);
+//        precision.throttle(() -> setHeading(gyro.getHeading()), 100);
     }
 
     @Override

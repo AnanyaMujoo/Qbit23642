@@ -28,8 +28,9 @@ public class TerraAutoSimple extends AutoFramework {
         addWaypoint(0, 60, 0);
         addConcurrentAutoModule(Backward);
         addWaypoint(0, 100, 35);
-        addSetpoint(-6, 138, 50);
+        addSetpoint(1, 136, 50);
         addConcurrentAutoModule(Forward);
+        addPause(0.5);
         customCase(() -> {
             addWaypoint(-7, 128, 90);
             addWaypoint(-20, 128, 90);

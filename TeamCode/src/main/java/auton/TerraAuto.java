@@ -28,13 +28,14 @@ public class TerraAuto extends AutoFramework {
         addWaypoint(0, 60, 0);
 //        addConcurrentAutoModule(Backward);
         addWaypoint(0, 100, 35);
-        addSetpoint(1, 136, 50);
-//        addConcurrentAutoModule(Forward);
+        addSetpoint(-1, 134, 50);
+        addConcurrentAutoModule(Forward);
         customNumber(5, i -> {
-            addWaypoint(14, 130, 90);
-            addSetpoint(56, 128, 90);
+            addWaypoint(14, 129, 90);
+            addSetpoint(56, 127, 90);
 //            addConcurrentAutoModule(Backward);
-            addWaypoint(34, 128, 75);
+            addPause(0.5);
+            addWaypoint(34, 127, 75);
             addSetpoint(1, 136, 50);
 //            addConcurrentAutoModule(Forward);
         });

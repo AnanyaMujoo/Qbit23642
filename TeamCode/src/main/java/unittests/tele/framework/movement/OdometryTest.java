@@ -20,7 +20,7 @@ import static global.General.log;
 
 public class OdometryTest extends TeleUnitTest {
 
-    private boolean customMove = false;
+    private boolean customMove = true;
 
     @Override
     protected void start() {

@@ -20,29 +20,29 @@ public class Outtake extends RobotPart {
 
         arml.changePosition("start", 0.07);
         armr.changePosition("start", 0.07);
-//        turn = create("turn", ElectronicType.PSERVO_FORWARD);
-//        claw = create("claw", ElectronicType.PSERVO_FORWARD);
+        turn = create("turn", ElectronicType.PSERVO_FORWARD);
+        claw = create("claw", ElectronicType.PSERVO_FORWARD);
 
-//        turn.addPosition("flipped", 1.0);
-//
-//
-//        claw.addPosition("open", 0.0);
-//        claw.addPosition("close", 0.5);
+        turn.addPosition("flipped", 1.0);
+
+
+        claw.addPosition("open", 0.0);
+        claw.addPosition("close", 0.5);
 
         moveStart();
     }
 
     public void moveStart(){ armr.setPosition("start"); arml.setPosition("start");
-//        turn.setPosition("start"); openClaw();
+        turn.setPosition("start"); openClaw();
     }
     public void moveEnd(){ closeClaw(); armr.setPosition("end"); arml.setPosition("end");
-//        turn.setPosition("flipped");
+        turn.setPosition("flipped");
     }
     public void openClaw(){
-//        claw.setPosition("open");
+        claw.setPosition("open");
     }
     public void closeClaw(){
-//        claw.setPosition("close");
+        claw.setPosition("close");
     }
 
     public Stage stageStart(double t){ return super.customTime(this::moveStart, t); }
