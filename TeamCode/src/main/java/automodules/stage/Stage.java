@@ -114,11 +114,33 @@ public class Stage {
      * @param stage
      * @return attached stage
      */
+    // TOD5 Sketch
     public Stage attach(Stage stage){
         final ArrayList<StageComponent> oldComponents = new ArrayList<>(this.components);
+        int[] exitCode = {0};
         return new Stage(oldComponents){
             @Override
+            public void loop() {
+                if(exitCode[0] == 0){
+                    super.loop();
+                    if(stage.shouldStop()){ exitCode[0] = 1; }
+                }else if(exitCode[0] == 1){
+                    Iterator.forAll(oldComponents, StageComponent::loop);
+                    stage.runOnStop();
+                    exitCode[0] = 2;
+                }else{
+                    Iterator.forAll(oldComponents, StageComponent::loop);
+                }
+            }
+
+            @Override
             public boolean shouldStop(){ return Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop); }
+
+            @Override
+            public void runOnStop() {
+                super.runOnStop();
+                exitCode[0] = 0;
+            }
         }.combine(stage);
     }
 

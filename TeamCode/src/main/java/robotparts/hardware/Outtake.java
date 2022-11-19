@@ -34,29 +34,29 @@ public class Outtake extends RobotPart {
         armr.changePosition("end", 0.94);
 
         turn = create("turn", ElectronicType.PSERVO_FORWARD);
-        claw = create("claw", ElectronicType.PSERVO_FORWARD);
+        claw = create("claw", ElectronicType.PSERVO_REVERSE);
 
         turn.changePosition("start", 0.2);
         turn.addPosition("flipped", 1.0);
 
-        claw.addPosition("open", 0.75);
+        claw.addPosition("open", 0.0); // 0.0
         claw.addPosition("close", 1.0);
 
-        readyEnd();
+        readyStart();
         openClaw();
         unFlip();
     }
 
-    public void moveStart(){ armr.setPosition("start"); arml.setPosition("start"); turn.setPosition("start"); }
-    public void moveEnd(){ armr.setPosition("end"); arml.setPosition("end"); turn.setPosition("flipped"); }
+    public void moveStart(){ armr.setPosition("start"); arml.setPosition("start"); }
+    public void moveEnd(){ armr.setPosition("end"); arml.setPosition("end");  }
     public void openClaw(){ claw.setPosition("open"); }
     public void closeClaw(){ claw.setPosition("close"); }
 
     public void flip(){ turn.setPosition("flipped"); }
     public void unFlip(){ turn.setPosition("start"); }
 
-    public void readyEnd(){ armr.setPosition("startHalf"); arml.setPosition("startHalf"); }
-    public void readyStart(){ armr.setPosition("endHalf"); arml.setPosition("endHalf"); }
+    public void readyStart(){ armr.setPosition("startHalf"); arml.setPosition("startHalf"); }
+    public void readyEnd(){ armr.setPosition("endHalf"); arml.setPosition("endHalf"); }
 
     public Stage stageStart(double t){ return super.customTime(this::moveStart, t); }
     public Stage stageEnd(double t){ return super.customTime(this::moveEnd, t); }
@@ -68,14 +68,14 @@ public class Outtake extends RobotPart {
 
     public Stage stageEnd(){
         return super.customTime(time -> {
-            if(time < 0.1){ closeClaw(); }else if(time < 0.3){ readyEnd();  }else if(time < 0.5){ flip(); } else if(time < 1.0){ moveEnd(); }
-        }, 1.1);
+            if(time < 0.1){ closeClaw(); }else if(time < 0.3){ readyStart();  }else if(time < 0.5){ flip(); } else if(time < 1.4){ moveEnd(); }
+        }, 1.5);
     }
 
     public Stage stageStart(){
         return super.customTime(time -> {
-            if(time < 0.1){ openClaw(); }else if(time < 0.2){ readyStart();}else if(time < 0.6){ closeClaw(); unFlip(); }else if(time < 2.1){ moveStart(); }
-        }, 2.2);
+            if(time < 0.1){ openClaw(); }else if(time < 0.2){ readyEnd(); }else if(time < 0.6){ closeClaw(); unFlip(); }else if(time < 0.7){ moveStart(); }
+        }, 1.5);
     }
 
 }

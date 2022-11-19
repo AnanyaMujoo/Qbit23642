@@ -21,6 +21,8 @@ import static global.General.gph2;
 import static global.General.independents;
 import static global.General.log;
 import static teleutil.button.Button.DPAD_DOWN;
+import static teleutil.button.Button.DPAD_LEFT;
+import static teleutil.button.Button.DPAD_RIGHT;
 import static teleutil.button.Button.DPAD_UP;
 import static teleutil.button.Button.LEFT_BUMPER;
 import static teleutil.button.Button.LEFT_TRIGGER;
@@ -38,8 +40,8 @@ public class TerraOp extends Tele {
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes::cycleDrive);
         gph1.link(RIGHT_BUMPER, Modes::cycleHeight);
 
-//        gph2.link(RIGHT_BUMPER, outtake::closeClaw);
-//        gph2.link(LEFT_BUMPER, outtake::openClaw);
+        gph2.link(DPAD_LEFT, outtake::closeClaw);
+        gph2.link(DPAD_RIGHT, outtake::openClaw);
         gph2.link(RIGHT_BUMPER, new AutoModule(outtake.stageEnd()));
         gph2.link(LEFT_BUMPER, new AutoModule(outtake.stageStart()));
         gph2.link(RIGHT_TRIGGER, new AutoModule(outtake.stageStart(0.0)));
