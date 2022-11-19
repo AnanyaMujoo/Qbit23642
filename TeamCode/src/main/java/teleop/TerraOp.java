@@ -39,15 +39,16 @@ public class TerraOp extends Tele {
         gph1.link(Button.X, bot::cancelAutoModules);
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes::cycleDrive);
         gph1.link(RIGHT_BUMPER, Modes::cycleHeight);
+        gph1.link(RIGHT_TRIGGER, () -> lift.move(0.5));
+        gph1.link(LEFT_TRIGGER, () -> lift.move(-0.3));
 
         gph2.link(DPAD_LEFT, outtake::closeClaw);
         gph2.link(DPAD_RIGHT, outtake::openClaw);
-        gph2.link(RIGHT_BUMPER, new AutoModule(outtake.stageEnd()));
-        gph2.link(LEFT_BUMPER, new AutoModule(outtake.stageStart()));
-        gph2.link(RIGHT_TRIGGER, new AutoModule(outtake.stageStart(0.0)));
 
         gph2.link(DPAD_UP, outtake::flip);
         gph2.link(DPAD_DOWN, outtake::unFlip);
+
+        lift.move(-0.4);
     }
 
     @Override

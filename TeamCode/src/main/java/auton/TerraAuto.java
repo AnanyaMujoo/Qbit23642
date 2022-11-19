@@ -2,6 +2,7 @@ package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import automodules.AutoModule;
 import autoutil.AutoFramework;
 import elements.Case;
 import elements.FieldSide;
@@ -14,31 +15,35 @@ public class TerraAuto extends AutoFramework {
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
         bot.addBackgroundTask(lift.holdPosition());
+        outtake.closeClaw();
         scan();
     }
 
     @Override
     public void preProcess() {
-        caseDetected = Case.THIRD;
+//        caseDetected = Case.THIRD;
         if(!upper&&isFlipped() || upper&&!isFlipped()){ flipCases();}
     }
 
     @Override
     public void define() {
         addWaypoint(0, 60, 0);
-//        addConcurrentAutoModule(Backward);
+        addConcurrentAutoModule(Backward);
         addWaypoint(0, 100, 35);
-        addSetpoint(-3, 130, 50);
-//        addConcurrentAutoModule(Forward);
-        customNumber(5, i -> {
-            addWaypoint(14, 124-i, 90);
-            addSetpoint(56, 122-i, 90);
-//            addConcurrentAutoModule(Backward);
-            addPause(0.5);
-            addWaypoint(34, 122-i, 75);
-            addSetpoint(-3, 130-i, 50);
-//            addConcurrentAutoModule(Forward);
-        });
+        addSetpoint(-1, 130, 50);
+        addPause(1.0);
+        addAutoModule(new AutoModule(outtake.stageOpen(0.5)));
+        addConcurrentAutoModule(Forward);
+        addPause(3.0);
+//        customNumber(5, i -> {
+//            addWaypoint(14, 124, 90);
+//            addSetpoint(56, 122, 90);
+////            addConcurrentAutoModule(Backward);
+//            addPause(0.5);
+//            addWaypoint(34, 122, 75);
+//            addSetpoint(-3, 130, 50);
+////            addConcurrentAutoModule(Forward);
+//        });
         customCase(() -> {
             addWaypoint(-7, 124, 90);
             addWaypoint(-20, 124, 90);
@@ -48,7 +53,7 @@ public class TerraAuto extends AutoFramework {
         }, () -> {
             addWaypoint(0, 130, 35);
             addWaypoint(0, 105, 0);
-            addSetpoint(0, 70, 0);
+            addSetpoint(0, 80, 0);
         }, () -> {
             addWaypoint(7, 124, 90);
             addWaypoint(20, 124, 90);

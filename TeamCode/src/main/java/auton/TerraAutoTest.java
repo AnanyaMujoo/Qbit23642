@@ -11,7 +11,7 @@ import util.Timer;
 import static global.General.bot;
 import static global.General.log;
 
-//@Disabled
+@Disabled
 @Autonomous(name = "TerraAutoTest", group = "auto")
 public class TerraAutoTest extends AutoFramework {
 

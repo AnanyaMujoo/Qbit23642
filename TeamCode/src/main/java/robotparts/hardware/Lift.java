@@ -3,6 +3,7 @@ package robotparts.hardware;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import global.Constants;
+import global.Modes;
 import robot.BackgroundTask;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
@@ -25,6 +26,7 @@ public class Lift extends RobotPart {
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorRight.usePositionHolder(restPowUp);
+        Modes.setHeightMode(Modes.HeightMode.HIGH);
     }
 
 
@@ -35,12 +37,12 @@ public class Lift extends RobotPart {
             motorRight.move(p + restPowUp);
             motorLeft.move(p + restPowUp);
         } else {
-            if(motorRight.getPosition() > 2) {
+            if(motorRight.getPosition() > 4) {
                 motorRight.holdPosition();
                 motorLeft.move(restPowUp);
             }else{
-                motorRight.move(-0.03);
-                motorLeft.move(-0.03);
+                motorRight.move(-0.1);
+                motorLeft.move(-0.1);
             }
         }
     }

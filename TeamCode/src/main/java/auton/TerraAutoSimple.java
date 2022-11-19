@@ -59,14 +59,14 @@ public class TerraAutoSimple extends AutoFramework {
     }
 
     protected boolean upper = false;
-
-    @Autonomous(name = "TerraAutoLowerBlueSimple", group = "auto")
-    public static class TerraAutoLowerBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; }}
-    @Autonomous(name = "TerraAutoLowerRedSimple", group = "auto")
-    public static class TerraAutoLowerRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; }}
-    @Autonomous(name = "TerraAutoUpperBlueSimple", group = "auto")
-    public static class TerraAutoUpperBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; upper = true; }}
-    @Autonomous(name = "TerraAutoUpperRedSimple", group = "auto")
-    public static class TerraAutoUpperRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; upper = true; }}
+//
+//    @Autonomous(name = "TerraAutoLowerBlueSimple", group = "auto")
+//    public static class TerraAutoLowerBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; }}
+//    @Autonomous(name = "TerraAutoLowerRedSimple", group = "auto")
+//    public static class TerraAutoLowerRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; }}
+//    @Autonomous(name = "TerraAutoUpperBlueSimple", group = "auto")
+//    public static class TerraAutoUpperBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; upper = true; }}
+//    @Autonomous(name = "TerraAutoUpperRedSimple", group = "auto")
+//    public static class TerraAutoUpperRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; upper = true; }}
 
 }

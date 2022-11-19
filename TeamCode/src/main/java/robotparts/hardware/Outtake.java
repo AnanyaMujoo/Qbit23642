@@ -9,6 +9,7 @@ public class Outtake extends RobotPart {
 
     private PServo armr, arml, turn, claw;
 
+    private final double startPos = 0.14;
     private final double endPos = 0.79;
 
     @Override
@@ -16,8 +17,8 @@ public class Outtake extends RobotPart {
         armr = create("armr", ElectronicType.PSERVO_REVERSE);
         arml = create("arml", ElectronicType.PSERVO_FORWARD);
 
-        arml.changePosition("start", 0.15);
-        armr.changePosition("start", 0.15);
+        arml.changePosition("start", startPos);
+        armr.changePosition("start", startPos);
 
         arml.addPosition("startHalf", 0.45);
         armr.addPosition("startHalf", 0.45);
@@ -72,7 +73,7 @@ public class Outtake extends RobotPart {
     public Stage stageStart(){
         return super.customTime(time -> {
             if(time < 0.1){ openClaw(); }else if(time < 0.2){ readyEnd(); }else if(time < 0.5){ closeClaw(); unFlip(); }else if(time < 1.0){
-                moveContinuous(0.75, 0.15, time - 0.5, 0.5);
+                moveContinuous(0.75, startPos, time - 0.5, 0.5);
             }
         }, 1.1);
     }
