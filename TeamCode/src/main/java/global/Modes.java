@@ -62,8 +62,8 @@ public class Modes {
 
     public enum HeightMode implements Valuable {
         HIGH(Lift.maxPosition),
-        MEDIUM(40),
-        LOW(20);
+        MEDIUM(45),
+        LOW(25);
         private final double value;
         HeightMode(double value){ this.value = value; }
         public double getValue(){ return value; }

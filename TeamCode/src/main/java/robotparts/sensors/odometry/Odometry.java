@@ -31,6 +31,7 @@ public abstract class Odometry extends RobotPart {
         createEncoders();
         setEncoderPoses();
         setConstantObjects();
+        resetObjects();
         odometryThread.setExecutionCode(odometryUpdateCode);
     }
 
@@ -60,7 +61,7 @@ public abstract class Odometry extends RobotPart {
     }
 
     public final void updateCurrentPose(Vector delta, double deltaHeading){
-        synchronized (currentPose) { currentPose.add(delta); currentPose.setAngle(getHeading()+deltaHeading); }
+        currentPose.add(delta); currentPose.setAngle(getHeading()+deltaHeading);
     }
 
     protected final void setHeading(double heading){ currentPose.setAngle(heading); }

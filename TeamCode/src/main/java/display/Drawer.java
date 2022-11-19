@@ -55,7 +55,7 @@ public abstract class Drawer extends JPanel {
     private static final int fieldWidth = width-15;
     private static final int fieldHeight = height-35;
 
-    public static final double fieldSize = 365.76; // cm
+    public static final double fieldSize = 358; // cm
 
     private static boolean shouldExit = false;
 

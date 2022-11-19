@@ -1,20 +1,15 @@
 package robotparts.hardware;
 
-import com.qualcomm.robotcore.hardware.Servo;
-
-import automodules.AutoModule;
-import automodules.stage.Initial;
-import automodules.stage.Main;
 import automodules.stage.Stage;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PServo;
-import global.Modes;
-import util.Timer;
 
 public class Outtake extends RobotPart {
 
     private PServo armr, arml, turn, claw;
+
+    private final double endPos = 0.79;
 
     @Override
     public void init() {
@@ -30,8 +25,8 @@ public class Outtake extends RobotPart {
         arml.addPosition("endHalf", 0.75);
         armr.addPosition("endHalf", 0.75);
 
-        arml.changePosition("end", 0.94);
-        armr.changePosition("end", 0.94);
+        arml.changePosition("end", endPos);
+        armr.changePosition("end", endPos);
 
         turn = create("turn", ElectronicType.PSERVO_FORWARD);
         claw = create("claw", ElectronicType.PSERVO_REVERSE);
@@ -40,7 +35,7 @@ public class Outtake extends RobotPart {
         turn.addPosition("flipped", 1.0);
 
         claw.addPosition("open", 0.0); // 0.0
-        claw.addPosition("close", 1.0);
+        claw.addPosition("close", 0.32);
 
         readyStart();
         openClaw();
@@ -68,14 +63,24 @@ public class Outtake extends RobotPart {
 
     public Stage stageEnd(){
         return super.customTime(time -> {
-            if(time < 0.1){ closeClaw(); }else if(time < 0.3){ readyStart();  }else if(time < 0.5){ flip(); } else if(time < 1.4){ moveEnd(); }
-        }, 1.5);
+            if(time < 0.1){ closeClaw(); }else if(time < 0.2){ readyStart(); }else if(time < 0.5){ flip(); } else if(time < 1.0){
+                moveContinuous(0.45, endPos, time - 0.5, 0.5);
+            }
+        }, 1.1);
     }
 
     public Stage stageStart(){
         return super.customTime(time -> {
-            if(time < 0.1){ openClaw(); }else if(time < 0.2){ readyEnd(); }else if(time < 0.6){ closeClaw(); unFlip(); }else if(time < 0.7){ moveStart(); }
-        }, 1.5);
+            if(time < 0.1){ openClaw(); }else if(time < 0.2){ readyEnd(); }else if(time < 0.5){ closeClaw(); unFlip(); }else if(time < 1.0){
+                moveContinuous(0.75, 0.15, time - 0.5, 0.5);
+            }
+        }, 1.1);
+    }
+
+
+    public void moveContinuous(double start, double end, double time, double totalTime){
+        double pos = start + ((end-start) * time/totalTime);
+        armr.setPositionRaw(pos); arml.setPositionRaw(pos);
     }
 
 }

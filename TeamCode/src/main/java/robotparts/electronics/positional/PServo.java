@@ -107,4 +107,9 @@ public class PServo extends Electronic {
         return servo.getDirection();
     }
 
+
+    public void setPositionRaw(double p){
+        servo.setPosition(p);
+    }
+
 }

@@ -45,10 +45,14 @@ public class TerraOp extends Tele {
         gph2.link(RIGHT_BUMPER, new AutoModule(outtake.stageEnd()));
         gph2.link(LEFT_BUMPER, new AutoModule(outtake.stageStart()));
         gph2.link(RIGHT_TRIGGER, new AutoModule(outtake.stageStart(0.0)));
-        gph2.link(LEFT_TRIGGER, new AutoModule(outtake.stageOpen(0.0)));
 
         gph2.link(DPAD_UP, outtake::flip);
         gph2.link(DPAD_DOWN, outtake::unFlip);
+    }
+
+    @Override
+    public void startTele() {
+        outtake.moveStart();
     }
 
     @Override
