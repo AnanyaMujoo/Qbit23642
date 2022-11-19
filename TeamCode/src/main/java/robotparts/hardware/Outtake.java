@@ -68,8 +68,8 @@ public class Outtake extends RobotPart {
 
     public Stage stageEnd(){
         return super.customTime(time -> {
-            if(time < 1.0){ closeClaw(); }else if(time < 2.0){ readyEnd(); flip(); }else if(time < 3.0){ moveEnd(); }
-        }, 4.0);
+            if(time < 0.1){ closeClaw(); }else if(time < 0.3){ readyEnd();  }else if(time < 0.5){ flip(); } else if(time < 1.0){ moveEnd(); }
+        }, 1.1);
     }
 
     public Stage stageStart(){
