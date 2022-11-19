@@ -29,7 +29,7 @@ public class CaseScanner extends Scanner{
 
         computeRects(80, 150);
 
-//        debug(input);
+        debug(input);
 
         double cyanValue = getBestRectStDev(input, 90, 110, CYAN);
         double magentaValue = getBestRectStDev(input, 130, 170, MAGENTA);
@@ -41,7 +41,7 @@ public class CaseScanner extends Scanner{
         if(isStarted) {
             caseDetected = getCaseStable(getCase());
             log.show("Case Detected: ", caseDetected);
-//            logDebug();
+            logDebug();
         }else{
             log.show("Vision Starting...");
         }

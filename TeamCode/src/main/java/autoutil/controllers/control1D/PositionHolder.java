@@ -16,7 +16,7 @@ public class PositionHolder extends Controller1D {
     }
 
     public PositionHolder(double restPower){
-        this.restPower = restPower; this.deltaPowerUp = 0.0015; this.deltaPowerDown = -0.0015; this.velocityThreshold = Math.toRadians(10);
+        this.restPower = restPower; this.deltaPowerUp = 0.003; this.deltaPowerDown = -0.003; this.velocityThreshold = Math.toRadians(10);
     }
 
     public void deactivate(){ isUsed = false; }

@@ -50,7 +50,7 @@ public abstract class Scanner extends OpenCvPipeline {
 
     private final ArrayList<Rect> rects = new ArrayList<>();
     private final ArrayList<Double> stdevs = new ArrayList<>();
-    private final ArrayList<Double> hues = new ArrayList<>();
+    private final ArrayList<Scalar> values = new ArrayList<>();
 
     @Override
     public final void init(Mat firstFrame){ start(); }
@@ -94,11 +94,11 @@ public abstract class Scanner extends OpenCvPipeline {
     protected void computeRects(int width, int height){
         rects.clear();
         stdevs.clear();
-        hues.clear();
+        values.clear();
         loopThroughRects(HSV, width, height, rect -> {
             rects.add(rect);
             stdevs.add(getStDev(HSV, rect));
-            hues.add(getAverageHue(HSV, scaleRectAroundCenter(rect, 0.4)));
+            values.add(getAverage(HSV, scaleRectAroundCenter(rect, 0.4)));
         });
     }
 
@@ -108,13 +108,14 @@ public abstract class Scanner extends OpenCvPipeline {
         Rect bestRect = null; double bestST = 10000;
         for (int i = 0; i < rects.size(); i++) {
             double newSt = stdevs.get(i);
-            double hue = hues.get(i);
-            if(newSt < bestST && hue > hueLow && hue < hueHigh){
+            double hue = values.get(i).val[0];
+            double sat = values.get(i).val[1];
+            if(newSt < bestST && hue > hueLow && hue < hueHigh && sat > 60){
                 bestST = newSt; bestRect = rects.get(i);
             }
         }
         if(bestRect != null){
-            if(getCenter(bestRect).inside(getRectFromCenter(getCenter(input), 100, 200))) {
+            if(getCenter(bestRect).inside(getRectFromCenter(getCenter(input), 200, 200))) {
                 drawRectangle(input, bestRect, rectColor);
             }else{ bestST = 10000; }
         }
@@ -132,7 +133,7 @@ public abstract class Scanner extends OpenCvPipeline {
     }
 
     public Rect getContourColor(Mat input, double hue, double hueOffset, Scalar color){
-        Core.inRange(HSV, new Scalar(hue-hueOffset,10,10), new Scalar(hue+hueOffset,255,255), Mask);
+        Core.inRange(HSV, new Scalar(hue-hueOffset, 60, 10), new Scalar(hue+hueOffset, 255, 255), Mask);
         Imgproc.blur(Mask, Mask, new Size(8, 8));
         List<MatOfPoint> out = new ArrayList<>();
         Imgproc.findContours(Mask, out, Hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
