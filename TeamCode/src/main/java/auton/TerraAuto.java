@@ -6,6 +6,7 @@ import automodules.AutoModule;
 import autoutil.AutoFramework;
 import elements.Case;
 import elements.FieldSide;
+import util.condition.DecisionList;
 
 import static global.General.bot;
 
@@ -30,7 +31,11 @@ public class TerraAuto extends AutoFramework {
         addWaypoint(0, 60, 0);
         addConcurrentAutoModule(Backward);
         addWaypoint(0, 100, 35);
-        addSetpoint(-1, 130, 50);
+        customBoolean(!upper&&isFlipped() || upper&&!isFlipped(), () -> {
+            addSetpoint(1, 128, 50);
+        }, () -> {
+            addSetpoint(-1, 130, 50);
+        });
         addPause(1.0);
         addAutoModule(new AutoModule(outtake.stageOpen(0.5)));
         addConcurrentAutoModule(Forward);

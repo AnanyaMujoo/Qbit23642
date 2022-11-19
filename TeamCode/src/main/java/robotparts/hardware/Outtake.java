@@ -54,6 +54,9 @@ public class Outtake extends RobotPart {
     public void readyStart(){ armr.setPosition("startHalf"); arml.setPosition("startHalf"); }
     public void readyEnd(){ armr.setPosition("endHalf"); arml.setPosition("endHalf"); }
 
+
+    public Stage stageReadyStart(double t){return super.customTime(this::readyStart, t);}
+
     public Stage stageStart(double t){ return super.customTime(this::moveStart, t); }
     public Stage stageEnd(double t){ return super.customTime(this::moveEnd, t); }
     public Stage stageOpen(double t){ return super.customTime(this::openClaw, t); }
@@ -64,18 +67,18 @@ public class Outtake extends RobotPart {
 
     public Stage stageEnd(){
         return super.customTime(time -> {
-            if(time < 0.1){ closeClaw(); }else if(time < 0.2){ readyStart(); }else if(time < 0.5){ flip(); } else if(time < 1.0){
-                moveContinuous(0.45, endPos, time - 0.5, 0.5);
+            if(time < 0.1){ closeClaw(); readyStart(); }else if(time < 0.4){ flip(); } else if(time < 0.9){
+                moveContinuous(0.45, endPos, time - 0.4, 0.5);
             }
-        }, 1.1);
+        }, 1.0);
     }
 
     public Stage stageStart(){
         return super.customTime(time -> {
-            if(time < 0.1){ openClaw(); }else if(time < 0.2){ readyEnd(); }else if(time < 0.5){ closeClaw(); unFlip(); }else if(time < 1.0){
-                moveContinuous(0.75, startPos, time - 0.5, 0.5);
+            if(time < 0.1){ openClaw();  readyEnd(); }else if(time < 0.4){ closeClaw(); unFlip(); }else if(time < 0.9){
+                moveContinuous(0.75, startPos, time - 0.4, 0.5);
             }
-        }, 1.1);
+        }, 1.0);
     }
 
 

@@ -81,6 +81,9 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void customSide(FieldSide sideOne, CodeSeg one, FieldSide sideTwo, CodeSeg two){ addDecision(new DecisionList(() -> fieldSide).addOption(sideOne, one).addOption(sideTwo, two)); }
     public void customCase(CodeSeg first, CodeSeg second, CodeSeg third){ addDecision(new DecisionList(() -> caseDetected).addOption(Case.FIRST, first).addOption(Case.SECOND, second).addOption(Case.THIRD, third)); }
     public void customNumber(int num, ParameterCodeSeg<Integer> one){ for (int i = 0; i < num; i++) { one.run(i); } }
+    public void customBoolean(boolean bool, CodeSeg one, CodeSeg two){
+        if(bool){ one.run(); }else{ two.run(); }
+    }
 
     public void scan(){
         scanning = true;
