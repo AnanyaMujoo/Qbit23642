@@ -21,14 +21,17 @@ public class Outtake extends RobotPart {
         armr = create("armr", ElectronicType.PSERVO_REVERSE);
         arml = create("arml", ElectronicType.PSERVO_FORWARD);
 
-        arml.changePosition("start", 0.18);
-        armr.changePosition("start", 0.18);
+        arml.changePosition("start", 0.15);
+        armr.changePosition("start", 0.15);
 
-        arml.addPosition("startHalf", 0.3);
-        armr.addPosition("startHalf", 0.3);
+        arml.addPosition("startHalf", 0.45);
+        armr.addPosition("startHalf", 0.45);
 
         arml.addPosition("endHalf", 0.75);
         armr.addPosition("endHalf", 0.75);
+
+        arml.changePosition("end", 0.94);
+        armr.changePosition("end", 0.94);
 
         turn = create("turn", ElectronicType.PSERVO_FORWARD);
         claw = create("claw", ElectronicType.PSERVO_FORWARD);
@@ -36,10 +39,12 @@ public class Outtake extends RobotPart {
         turn.changePosition("start", 0.2);
         turn.addPosition("flipped", 1.0);
 
-        claw.addPosition("open", 0.7);
+        claw.addPosition("open", 0.75);
         claw.addPosition("close", 1.0);
 
-        moveStart();
+        readyEnd();
+        openClaw();
+        unFlip();
     }
 
     public void moveStart(){ armr.setPosition("start"); arml.setPosition("start"); turn.setPosition("start"); }
@@ -62,23 +67,15 @@ public class Outtake extends RobotPart {
 
 
     public Stage stageEnd(){
-        final Timer timer = new Timer();
-        return new Stage(
-                new Initial(timer::reset), new Main(() -> {
-                    double time = timer.seconds();
-                    if(time < 0.1){ closeClaw(); }else if(time < 0.2){ readyEnd(); flip(); }else if(time < 0.5){ moveEnd(); }
-                }
-        ));
+        return super.customTime(time -> {
+            if(time < 1.0){ closeClaw(); }else if(time < 2.0){ readyEnd(); flip(); }else if(time < 3.0){ moveEnd(); }
+        }, 4.0);
     }
 
     public Stage stageStart(){
-        final Timer timer = new Timer();
-        return new Stage(
-                new Initial(timer::reset), new Main(() -> {
-                    double time = timer.seconds();
-                    if(time < 0.1){ openClaw(); }else if(time < 0.2){ readyStart();}else if(time < 0.3){ closeClaw(); unFlip(); }else if(time < 0.6){ moveStart(); }
-                }
-        ));
+        return super.customTime(time -> {
+            if(time < 0.1){ openClaw(); }else if(time < 0.2){ readyStart();}else if(time < 0.6){ closeClaw(); unFlip(); }else if(time < 2.1){ moveStart(); }
+        }, 2.2);
     }
 
 }

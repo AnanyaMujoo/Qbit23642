@@ -6,7 +6,9 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robotparts.electronics.positional.PMotor;
+import util.Timer;
 import util.codeseg.CodeSeg;
+import util.codeseg.ParameterCodeSeg;
 import util.codeseg.ReturnCodeSeg;
 
 import static global.General.bot;
@@ -90,4 +92,6 @@ public class StageBuilder {
 
     protected final Stage moveTarget(ReturnCodeSeg<PMotor> motor, double power, double target){ return new Stage(usePart(), new Initial(() -> { motor.run().releasePosition(); motor.run().setTarget(target); }), new Main(() -> motor.run().setPowerRaw(power)), new Exit(() -> motor.run().exitTarget()), new Stop(() -> motor.run().stopTarget()), returnPart()); }
     protected final Stage moveTarget(ReturnCodeSeg<PMotor> motor1, ReturnCodeSeg<PMotor> motor2, double power1, double power2, double target){return moveTarget(motor1, power1, target).combine(moveTarget(motor2, power2, target));}
+
+    protected final Stage customTime(ParameterCodeSeg<Double> code, double totalTime){ final Timer timer = new Timer(); return new Stage(usePart(),  new Initial(timer::reset), new Main(() -> {double time = timer.seconds(); code.run(time);}),  exitTime(totalTime), returnPart());}
 }
