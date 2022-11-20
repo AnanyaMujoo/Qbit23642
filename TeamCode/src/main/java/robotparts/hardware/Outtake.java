@@ -29,11 +29,11 @@ public class Outtake extends RobotPart {
         arml.changePosition("end", endPos);
         armr.changePosition("end", endPos);
 
-        turn = create("turn", ElectronicType.PSERVO_FORWARD);
+        turn = create("turn", ElectronicType.PSERVO_REVERSE);
         claw = create("claw", ElectronicType.PSERVO_REVERSE);
 
-        turn.changePosition("start", 0.2);
-        turn.addPosition("flipped", 1.0);
+        turn.changePosition("start", 0.0);
+        turn.addPosition("flipped", 0.7);
 
         claw.addPosition("open", 0.0); // 0.0
         claw.addPosition("close", 0.32);
@@ -67,7 +67,10 @@ public class Outtake extends RobotPart {
 
     public Stage stageEnd(){
         return super.customTime(time -> {
-            if(time < 0.1){ closeClaw(); readyStart(); }else if(time < 0.4){ flip(); } else if(time < 0.9){
+            if(time < 0.1){ closeClaw(); readyStart(); }else if(time < 0.4){
+                flip();
+//                flipContinuous(0.2, 1.0, time, 0.25);
+            } else if(time < 0.9){
                 moveContinuous(0.45, endPos, time - 0.4, 0.5);
             }
         }, 1.0);
@@ -75,7 +78,10 @@ public class Outtake extends RobotPart {
 
     public Stage stageStart(){
         return super.customTime(time -> {
-            if(time < 0.1){ openClaw();  readyEnd(); }else if(time < 0.4){ closeClaw(); unFlip(); }else if(time < 0.9){
+            if(time < 0.1){ openClaw();  readyEnd(); }else if(time < 0.4){ closeClaw();
+//                flipContinuous(1.0, 0.0, time, 0.25);
+                unFlip();
+            }else if(time < 0.9){
                 moveContinuous(0.75, startPos, time - 0.4, 0.5);
             }
         }, 1.0);
@@ -85,6 +91,11 @@ public class Outtake extends RobotPart {
     public void moveContinuous(double start, double end, double time, double totalTime){
         double pos = start + ((end-start) * time/totalTime);
         armr.setPositionRaw(pos); arml.setPositionRaw(pos);
+    }
+
+    public void flipContinuous(double start, double end, double time, double totalTime){
+        double pos = start + ((end-start) * time/totalTime);
+        turn.setPositionRaw(pos);
     }
 
 }

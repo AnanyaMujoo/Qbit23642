@@ -29,14 +29,22 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void define() {
         addWaypoint(0, 60, 0);
-        addConcurrentAutoModule(Backward);
         addWaypoint(0, 100, 35);
-        customBoolean(!upper&&isFlipped() || upper&&!isFlipped(), () -> {
-            addSetpoint(1, 128, 50);
-        }, () -> {
-            addSetpoint(-1, 130, 50);
+        customSide(FieldSide.BLUE, () -> {
+            customBoolean(upper, () -> {
+                addSetpoint(1, 128, 50);
+            }, () -> {
+                addSetpoint(-1, 130, 50);
+            });
+        }, FieldSide.RED, () -> {
+            customBoolean(!upper, () -> {
+                addSetpoint(-1, 130, 50);
+            }, () -> {
+                addSetpoint(3, 128, 50);
+            });
         });
-        addPause(1.0);
+        addConcurrentAutoModule(Backward);
+        addPause(3.0);
         addAutoModule(new AutoModule(outtake.stageOpen(0.5)));
         addConcurrentAutoModule(Forward);
         addPause(3.0);

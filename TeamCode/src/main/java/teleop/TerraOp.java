@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.sql.Time;
 
 import automodules.AutoModule;
+import debugging.Fault;
 import elements.FieldSide;
 import global.Modes;
 import teleutil.button.Button;
@@ -20,6 +21,7 @@ import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.independents;
 import static global.General.log;
+import static teleutil.button.Button.A;
 import static teleutil.button.Button.DPAD_DOWN;
 import static teleutil.button.Button.DPAD_LEFT;
 import static teleutil.button.Button.DPAD_RIGHT;
@@ -38,9 +40,16 @@ public class TerraOp extends Tele {
         gph1.link(Button.Y, Forward);
         gph1.link(Button.X, bot::cancelAutoModules);
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes::cycleDrive);
-        gph1.link(RIGHT_BUMPER, Modes::cycleHeight);
+//        gph1.link(RIGHT_BUMPER, Modes::cycleHeight);
         gph1.link(RIGHT_TRIGGER, () -> lift.move(0.5));
         gph1.link(LEFT_TRIGGER, () -> lift.move(-0.3));
+
+        gph1.link(DPAD_UP, () -> Modes.setHeightMode(Modes.HeightMode.HIGH));
+        gph1.link(DPAD_RIGHT, () ->  Modes.setHeightMode(Modes.HeightMode.MEDIUM));
+        gph1.link(DPAD_LEFT, () ->  Modes.setHeightMode(Modes.HeightMode.MEDIUM));
+        gph1.link(DPAD_DOWN, () -> Modes.setHeightMode(Modes.HeightMode.LOW));
+        gph1.link(Button.A, OnTurnOnEventHandler.class, () -> Modes.setDriveMode(Modes.DriveMode.FAST));
+        gph1.link(Button.A, OnTurnOffEventHandler.class, () -> Modes.setDriveMode(Modes.DriveMode.MEDIUM));
 
         gph2.link(DPAD_LEFT, outtake::closeClaw);
         gph2.link(DPAD_RIGHT, outtake::openClaw);
