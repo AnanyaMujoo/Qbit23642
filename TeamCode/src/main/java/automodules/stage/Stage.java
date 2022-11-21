@@ -114,7 +114,8 @@ public class Stage {
      * @param stage
      * @return attached stage
      */
-    // TOD5 Sketch
+
+    // TODO CLEAN Make less sketch
     public Stage attach(Stage stage){
         final ArrayList<StageComponent> oldComponents = new ArrayList<>(this.components);
         int[] exitCode = {0};

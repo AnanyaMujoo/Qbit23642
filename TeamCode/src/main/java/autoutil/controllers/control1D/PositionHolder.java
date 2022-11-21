@@ -11,6 +11,8 @@ public class PositionHolder extends Controller1D {
     private final double deltaPowerDown;
     private volatile boolean isUsed = false;
 
+    // TODO 4 NEW Integrate with actual motor encoder position (target, and adjust target)
+
     public PositionHolder(double restPower, double deltaPowerUp, double deltaPowerDown,  double velocityThreshold){
         this.restPower = restPower; this.deltaPowerUp = deltaPowerUp; this.deltaPowerDown = deltaPowerDown; this.velocityThreshold = velocityThreshold;
     }

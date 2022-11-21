@@ -60,6 +60,7 @@ public class Modes {
 //
 //    public HeightMode1 heightMode1 = new HeightMode1();
 
+    // TODO CLEAN Modes and values
 
     public enum HeightMode implements Valuable {
         HIGH(Lift.maxPosition-1.5),

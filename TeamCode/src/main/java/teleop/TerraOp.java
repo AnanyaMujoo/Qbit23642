@@ -58,6 +58,8 @@ public class TerraOp extends Tele {
         gph2.link(DPAD_DOWN, outtake::unFlip);
 
         lift.move(-0.4);
+
+        // TODO 4 Get ready for v5.0
     }
 
     @Override

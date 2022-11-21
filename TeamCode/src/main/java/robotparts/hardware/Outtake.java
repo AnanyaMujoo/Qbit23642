@@ -98,4 +98,6 @@ public class Outtake extends RobotPart {
         turn.setPositionRaw(pos);
     }
 
+    // TODO CLEAN outtake/stage code
+
 }

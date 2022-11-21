@@ -22,6 +22,8 @@ public class CaseScanner extends Scanner{
 //    protected final Timer timer = new Timer();
     { Arrays.fill(pastCases, caseDetected); }
 
+    // TODO Clean vision
+
     public int getCase(Mat input){
         double zoom = 2;
         cropAndFill(input, getRectFromCenter(new Point(input.width()/2.0, input.height()/2.0), (int) (input.width()/zoom), (int) (input.height()/zoom)));
@@ -35,6 +37,7 @@ public class CaseScanner extends Scanner{
         double magentaValue = getBestRectStDev(input, 130, 170, MAGENTA);
         double orangeValue = getBestRectStDev(input, 1, 30, ORANGE);
         return Iterator.minIndex(cyanValue, magentaValue, orangeValue);
+        // TODO 4 NEW Program more vision for pole
     }
 
     public void message(){
