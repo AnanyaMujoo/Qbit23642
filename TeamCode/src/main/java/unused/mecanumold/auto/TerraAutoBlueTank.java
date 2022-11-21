@@ -2,6 +2,7 @@ package unused.mecanumold.auto;
 
 import automodules.AutoModule;
 import auton.Auto;
+import elements.FieldPlacement;
 import unused.tankold.TankExecutor;
 import elements.FieldSide;
 import robotparts.RobotPart;
@@ -24,7 +25,7 @@ public class TerraAutoBlueTank extends Auto {
 
     @Override
     public void initAuto() {
-        activate(FieldSide.BLUE);
+        activate(FieldSide.BLUE, FieldPlacement.UNKNOWN);
     }
 
     @Override

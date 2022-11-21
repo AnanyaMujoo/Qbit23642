@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import automodules.AutoModule;
 import auton.Auto;
+import elements.FieldPlacement;
 import unused.mecanumold.oldauto.Executor;
 import elements.FieldSide;
 import util.codeseg.CodeSeg;
@@ -149,7 +150,7 @@ public abstract class CompleteAuto extends Auto {
         defineExecutorAndAddPoints();
 //        executor.complete();
         onInit();
-        activate(getSide());
+        activate(getSide(), FieldPlacement.UNKNOWN);
     }
 
     /**

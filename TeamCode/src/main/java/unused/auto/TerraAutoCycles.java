@@ -1,11 +1,6 @@
 package unused.auto;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import autoutil.AutoFramework;
-import elements.Case;
-import elements.CaseOld;
-import elements.FieldSide;
 import robot.BackgroundTask;
 
 import static global.General.bot;

@@ -15,6 +15,7 @@ import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
 import autoutil.vision.CaseScanner;
 import elements.Case;
+import elements.FieldPlacement;
 import elements.FieldSide;
 import geometry.framework.CoordinatePlane;
 import geometry.position.Pose;
@@ -53,9 +54,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     private int pauseIndex = 0;
     private int autoModuleIndex = 0;
 
-    {
-        poses.add(new Pose());
-    }
+    { poses.add(new Pose()); }
 
     public void preProcess(){}
 
@@ -72,20 +71,17 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     }
 
     public void makeIndependent(){ isIndependent = true; }
-    public boolean isFlipped(){ return fieldSide.equals(FieldSide.RED); }
+    public boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }
     public void flip(){ autoPlane.reflectX(); autoPlane.reflectPoses(); }
     public void flipCases(){ if(caseDetected.equals(Case.FIRST)){ caseDetected = Case.THIRD; }else if(caseDetected.equals(Case.THIRD)){ caseDetected = Case.FIRST; }}
 
     public void addDecision(DecisionList decisionList){ decisionList.check(); }
     public void addAutomodule(DecisionList decisionList){ addAutoModule(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways()))); }
-    public void customSide(FieldSide sideOne, CodeSeg one, FieldSide sideTwo, CodeSeg two){ addDecision(new DecisionList(() -> fieldSide).addOption(sideOne, one).addOption(sideTwo, two)); }
+    public void customSide(CodeSeg one, CodeSeg two){ addDecision(new DecisionList(() -> fieldSide).addOption(FieldSide.BLUE, one).addOption(FieldSide.RED, two)); }
+    public void customPlacement(CodeSeg one, CodeSeg two){ addDecision(new DecisionList(() -> fieldPlacement).addOption(FieldPlacement.LOWER, one).addOption(FieldPlacement.UPPER, two)); }
+    public void customSidePlacement(CodeSeg one, CodeSeg two, CodeSeg three, CodeSeg four){customSide(() -> customPlacement(one, two), () -> customPlacement(three, four));}
     public void customCase(CodeSeg first, CodeSeg second, CodeSeg third){ addDecision(new DecisionList(() -> caseDetected).addOption(Case.FIRST, first).addOption(Case.SECOND, second).addOption(Case.THIRD, third)); }
     public void customNumber(int num, ParameterCodeSeg<Integer> one){ for (int i = 0; i < num; i++) { one.run(i); } }
-
-    // TODO CLEAN (Custom boolean, upper, etc.)
-    public void customBoolean(boolean bool, CodeSeg one, CodeSeg two){
-        if(bool){ one.run(); }else{ two.run(); }
-    }
 
     public void scan(){
         scanning = true;
@@ -154,4 +150,5 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public ArrayList<Pose> getPoses(){ return poses; }
     public ArrayList<AutoSegment.Type> getSegmentTypes(){ return segmentTypes; }
     public CoordinatePlane getAutoPlane(){ return autoPlane; }
+
 }

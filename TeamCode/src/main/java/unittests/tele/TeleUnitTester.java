@@ -2,6 +2,7 @@ package unittests.tele;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import elements.FieldPlacement;
 import elements.FieldSide;
 import teleop.Tele;
 
@@ -67,7 +68,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
     @Override
     public void initTele() {
         readyTestsAndSelector(testingMode);
-        activate(FieldSide.UNKNOWN);
+        activate(FieldSide.UNKNOWN, FieldPlacement.UNKNOWN);
     }
 
     /**

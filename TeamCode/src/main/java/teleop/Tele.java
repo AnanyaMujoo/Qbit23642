@@ -52,7 +52,7 @@ public abstract class Tele extends OpMode implements Common, RobotUser, AutoModu
     @Override
     public final void init() {
         reference(this);
-        activate(fieldSide);
+        activate(fieldSide, fieldPlacement);
         initTele();
     }
 

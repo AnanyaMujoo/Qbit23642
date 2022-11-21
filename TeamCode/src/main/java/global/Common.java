@@ -3,6 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import debugging.Synchroniser;
+import elements.FieldPlacement;
 import elements.FieldSide;
 import robot.TerraBot;
 import robotparts.sensors.Cameras;
@@ -75,8 +76,9 @@ public interface Common{
      * Also shows telemetry to display that the robot is ready
      * @param side
      */
-    default void activate(FieldSide side){
+    default void activate(FieldSide side, FieldPlacement placement){
         fieldSide = side;
+        fieldPlacement = placement;
         sync.logReady();
     }
 

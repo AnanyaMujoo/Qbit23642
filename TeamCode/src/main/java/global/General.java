@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import debugging.Synchroniser;
+import elements.FieldPlacement;
 import elements.FieldSide;
 import robot.TerraBot;
 import teleutil.independent.Independents;
@@ -65,6 +66,9 @@ public class General {
      * FieldSide object to represent which side of the field we are on (red or blue)
      */
     public static FieldSide fieldSide;
+
+
+    public static FieldPlacement fieldPlacement;
     /**
      * AutoModules (executes series of steps to make driving easier)
      */

@@ -3,6 +3,7 @@ package auton;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import automodules.AutoModuleUser;
+import elements.FieldPlacement;
 import elements.FieldSide;
 import global.Common;
 import robot.RobotUser;
@@ -17,6 +18,7 @@ public abstract class Auto extends LinearOpMode implements Common, Iterator, Rob
      */
 
     protected FieldSide fieldSide = FieldSide.UNKNOWN;
+    protected FieldPlacement fieldPlacement = FieldPlacement.UNKNOWN;
 
     /**
      * Init method runs when the user clicks the init button to run a auton
@@ -40,7 +42,7 @@ public abstract class Auto extends LinearOpMode implements Common, Iterator, Rob
     @Override
     public final void runOpMode() throws InterruptedException {
         reference(this);
-        activate(FieldSide.UNKNOWN);
+        activate(FieldSide.UNKNOWN, FieldPlacement.UNKNOWN);
         initAuto();
         waitForStart();
         ready();

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import static global.General.log;
 
 import auton.Auto;
+import elements.FieldPlacement;
 import elements.FieldSide;
 import unittests.UnitTester;
 import unittests.auto.framework.IteratorTest;
@@ -62,7 +63,7 @@ public class AutoUnitTester extends Auto implements UnitTester {
     public void initAuto() {
         AutoUnitTest.linearOpMode = this;
         readyTestsAndSelector(testingMode);
-        activate(FieldSide.UNKNOWN);
+        activate(FieldSide.UNKNOWN, FieldPlacement.UNKNOWN);
         log.showTelemetry();
     }
 

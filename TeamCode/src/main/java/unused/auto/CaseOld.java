@@ -1,4 +1,5 @@
-package elements;
+package unused.auto;
+import elements.Level;
 import util.condition.Decision;
 
 public enum CaseOld implements Decision {

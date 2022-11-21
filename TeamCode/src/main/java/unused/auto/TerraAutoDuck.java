@@ -1,10 +1,6 @@
 package unused.auto;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import autoutil.AutoFramework;
-import elements.CaseOld;
-import elements.FieldSide;
 
 public class TerraAutoDuck extends AutoFramework {
 
