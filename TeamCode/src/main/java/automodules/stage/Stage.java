@@ -110,39 +110,31 @@ public class Stage {
     }
 
     /**
-     * The new stage "attaches" to the old one. NOTE: This is different than combine, because the exit condition of the new stage is still the same
+     * The new stage "attaches" to the old one. NOTE: This is different than combine, because the exit condition of the new stage overlaps
+     * [ --- old stage --- ]
+     * [ ------ new stage ------ ]
+     * OR
+     *  [ ------ old stage ------ ]
+     *  [ --- new stage --- ]
      * @param stage
      * @return attached stage
      */
-
-    // TODO CLEAN Make less sketch
     public Stage attach(Stage stage){
         final ArrayList<StageComponent> oldComponents = new ArrayList<>(this.components);
-        int[] exitCode = {0};
+        final ArrayList<StageComponent> newComponents = new ArrayList<>(stage.components);
+        final int[] exitCode = {0};
         return new Stage(oldComponents){
             @Override
-            public void loop() {
-                if(exitCode[0] == 0){
-                    super.loop();
-                    if(stage.shouldStop()){ exitCode[0] = 1; }
-                }else if(exitCode[0] == 1){
-                    Iterator.forAll(oldComponents, StageComponent::loop);
-                    stage.runOnStop();
-                    exitCode[0] = 2;
-                }else{
-                    Iterator.forAll(oldComponents, StageComponent::loop);
-                }
-            }
-
-            @Override
-            public boolean shouldStop(){ return Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop); }
-
-            @Override
-            public void runOnStop() {
-                super.runOnStop();
-                exitCode[0] = 0;
-            }
-        }.combine(stage);
+            public void loop() { switch (exitCode[0]){
+                case 0: Iterator.forAll(oldComponents, StageComponent::loop); Iterator.forAll(newComponents, StageComponent::loop);
+                    if(Iterator.forAllConditionOR(newComponents, StageComponent::shouldStop)){ exitCode[0] = 1; } if(Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop)){ exitCode[0] = 3; } break;
+                case 1: Iterator.forAll(newComponents, StageComponent::runOnStop); exitCode[0] = 2; break;
+                case 2: Iterator.forAll(oldComponents, StageComponent::loop); if(Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop)){ exitCode[0] = 5; } break;
+                case 3: Iterator.forAll(oldComponents, StageComponent::runOnStop); exitCode[0] = 4; break;
+                case 4: Iterator.forAll(newComponents, StageComponent::loop); if(Iterator.forAllConditionOR(newComponents, StageComponent::shouldStop)){ exitCode[0] = 5; } break;
+            }}
+            @Override public boolean shouldStop(){ return exitCode[0] == 5; }
+            @Override public void runOnStop() { super.runOnStop(); exitCode[0] = 0; }
+        };
     }
-
 }
