@@ -1,5 +1,9 @@
 package automodules;
 
+import org.checkerframework.checker.units.qual.A;
+
+import java.util.ArrayList;
+
 import automodules.stage.Exit;
 import automodules.stage.Initial;
 import automodules.stage.Main;
@@ -10,6 +14,7 @@ import util.Timer;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
 import util.codeseg.ReturnCodeSeg;
+import util.template.Iterator;
 
 import static global.General.bot;
 
@@ -93,5 +98,25 @@ public class StageBuilder {
     protected final Stage moveTarget(ReturnCodeSeg<PMotor> motor, double power, double target){ return new Stage(usePart(), new Initial(() -> { motor.run().releasePosition(); motor.run().setTarget(target); }), new Main(() -> motor.run().setPowerRaw(power)), new Exit(() -> motor.run().exitTarget()), new Stop(() -> motor.run().stopTarget()), returnPart()); }
     protected final Stage moveTarget(ReturnCodeSeg<PMotor> motor1, ReturnCodeSeg<PMotor> motor2, double power1, double power2, double target){return moveTarget(motor1, power1, target).combine(moveTarget(motor2, power2, target));}
 
-    protected final Stage customTime(ParameterCodeSeg<Double> code, double totalTime){ final Timer timer = new Timer(); return new Stage(usePart(),  new Initial(timer::reset), new Main(() -> {double time = timer.seconds(); code.run(time);}),  exitTime(totalTime), returnPart());}
+    protected final Stage customTime(ParameterCodeSeg<Double> code, Exit exit){ final Timer timer = new Timer(); return new Stage(usePart(),  new Initial(timer::reset), new Main(() -> {double time = timer.seconds(); code.run(time);}), exit, returnPart());}
+    protected final Stage customTime(StageBuilderTime stageBuilderTime){ return stageBuilderTime.getStage(); }
+
+    protected static class StageBuilderTime {
+        private final ArrayList<Double> times = new ArrayList<>();
+        private final ArrayList<CodeSeg> subStages = new ArrayList<>();
+        private final StageBuilder stageBuilder;
+        private int subStageNumber;
+
+        public StageBuilderTime(StageBuilder stageBuilder){ times.clear(); subStages.clear(); times.add(0.0); this.stageBuilder = stageBuilder; subStageNumber = 0; }
+
+        public StageBuilderTime addSubStage(double time, CodeSeg code){ times.add(time + times.get(times.size()-1)); subStages.add(code); return this; }
+
+        public Stage getStage(){
+            return stageBuilder.customTime(time -> {
+                if(subStageNumber < subStages.size()){ subStages.get(subStageNumber).run(); }
+                if(time >= times.get(subStageNumber+1)){ subStageNumber++; }
+                }, new Exit(() -> subStageNumber >= subStages.size())
+            );
+        }
+    }
 }

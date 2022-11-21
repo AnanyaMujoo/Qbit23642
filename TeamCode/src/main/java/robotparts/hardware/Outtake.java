@@ -9,16 +9,13 @@ public class Outtake extends RobotPart {
 
     private PServo armr, arml, turn, claw;
 
-    private final double startPos = 0.14;
-    private final double endPos = 0.79;
-
     @Override
     public void init() {
         armr = create("armr", ElectronicType.PSERVO_REVERSE);
         arml = create("arml", ElectronicType.PSERVO_FORWARD);
 
-        arml.changePosition("start", startPos);
-        armr.changePosition("start", startPos);
+        arml.changePosition("start", 0.14);
+        armr.changePosition("start", 0.14);
 
         arml.addPosition("startHalf", 0.45);
         armr.addPosition("startHalf", 0.45);
@@ -26,8 +23,8 @@ public class Outtake extends RobotPart {
         arml.addPosition("endHalf", 0.75);
         armr.addPosition("endHalf", 0.75);
 
-        arml.changePosition("end", endPos);
-        armr.changePosition("end", endPos);
+        arml.changePosition("end", 0.79);
+        armr.changePosition("end", 0.79);
 
         turn = create("turn", ElectronicType.PSERVO_REVERSE);
         claw = create("claw", ElectronicType.PSERVO_REVERSE);
@@ -64,40 +61,26 @@ public class Outtake extends RobotPart {
     public Stage stageFlip(double t){return super.customTime(this::flip, t); }
     public Stage stageUnFlip(double t){return super.customTime(this::unFlip, t); }
 
+    public void setArmTarget(String name){ armr.setContinuousTarget(name); arml.setContinuousTarget(name); }
+    public void moveArmContinuous(double time){ armr.moveContinuous(time); arml.moveContinuous(time); }
+
+
+    // TODO TEST
 
     public Stage stageEnd(){
-        return super.customTime(time -> {
-            if(time < 0.1){ closeClaw(); readyStart(); }else if(time < 0.4){
-                flip();
-//                flipContinuous(0.2, 1.0, time, 0.25);
-            } else if(time < 0.9){
-                moveContinuous(0.45, endPos, time - 0.4, 0.5);
-            }
-        }, 1.0);
+        return super.customTime(new StageBuilderTime(this)
+                .addSubStage(0.1, () -> {closeClaw(); readyStart();})
+                .addSubStage(0.3, () -> {flip(); setArmTarget("end");})
+                .addSubStage(0.5, () -> moveArmContinuous(0.5))
+        );
     }
 
-    public Stage stageStart(){
-        return super.customTime(time -> {
-            if(time < 0.1){ openClaw();  readyEnd(); }else if(time < 0.4){ closeClaw();
-//                flipContinuous(1.0, 0.0, time, 0.25);
-                unFlip();
-            }else if(time < 0.9){
-                moveContinuous(0.75, startPos, time - 0.4, 0.5);
-            }
-        }, 1.0);
+    public Stage stageStart() {
+        return super.customTime(new StageBuilderTime(this)
+                .addSubStage(0.1, () -> {openClaw();readyEnd();})
+                .addSubStage(0.3, () -> {closeClaw(); unFlip(); setArmTarget("start"); })
+                .addSubStage(0.5, () -> moveArmContinuous(0.5))
+        );
     }
-
-
-    public void moveContinuous(double start, double end, double time, double totalTime){
-        double pos = start + ((end-start) * time/totalTime);
-        armr.setPositionRaw(pos); arml.setPositionRaw(pos);
-    }
-
-    public void flipContinuous(double start, double end, double time, double totalTime){
-        double pos = start + ((end-start) * time/totalTime);
-        turn.setPositionRaw(pos);
-    }
-
-    // TODO CLEAN outtake/stage code
 
 }

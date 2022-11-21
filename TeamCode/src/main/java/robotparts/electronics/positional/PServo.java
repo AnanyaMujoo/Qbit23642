@@ -1,15 +1,12 @@
 package robotparts.electronics.positional;
 
-import android.os.Build;
-
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.Servo.*;
 
-import java.util.Objects;
 import java.util.TreeMap;
 
-import androidx.annotation.RequiresApi;
 import robotparts.Electronic;
+import util.Timer;
 
 public class PServo extends Electronic {
     /**
@@ -19,6 +16,9 @@ public class PServo extends Electronic {
     public final Direction direction;
     private double lower = 0;
     private double upper = 1;
+    private final Timer timer = new Timer();
+    private double contTarget = 0;
+    private double contStart = 0;
 
     /**
      * Map of all of the preset positions and values
@@ -36,6 +36,7 @@ public class PServo extends Electronic {
         servo.setDirection(direction);
         addPosition("start", 0.0);
         addPosition("end", 1.0);
+        timer.reset();
     }
 
     /**
@@ -108,8 +109,8 @@ public class PServo extends Electronic {
     }
 
 
-    public void setPositionRaw(double p){
-        servo.setPosition(p);
-    }
+    public void setContinuousTarget(String name){ contTarget = positions.get(name); contStart = servo.getPosition(); timer.reset(); }
+
+    public void moveContinuous(double time){ servo.setPosition(contStart + ((contTarget-contStart) * timer.seconds()/time)); }
 
 }
