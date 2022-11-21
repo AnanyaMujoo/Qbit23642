@@ -28,6 +28,7 @@ public class Lift extends RobotPart {
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorRight.usePositionHolder(restPowUp);
+        motorLeft.usePositionHolder(restPowUp);
         Modes.heightMode.set(HIGH);
     }
 
@@ -36,12 +37,13 @@ public class Lift extends RobotPart {
     public void move(double p) {
         if (p != 0) {
             motorRight.releasePosition();
+            motorLeft.releasePosition();
             motorRight.move(p + restPowUp);
             motorLeft.move(p + restPowUp);
         } else {
             if(motorRight.getPosition() > 4) {
                 motorRight.holdPosition();
-                motorLeft.move(restPowUp);
+                motorLeft.holdPosition();
             }else{
                 motorRight.move(-0.1);
                 motorLeft.move(-0.1);

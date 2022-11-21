@@ -9,9 +9,9 @@ public class PositionHolder extends Controller1D {
     private double restPower;
     private final double deltaPowerUp;
     private final double deltaPowerDown;
-    private volatile boolean isUsed = false;
+    private volatile boolean isUsed, isTargeting = false;
 
-    // TODO 4 NEW Integrate with actual motor encoder position (target, and adjust target)
+    // TODO TEST
 
     public PositionHolder(double restPower, double deltaPowerUp, double deltaPowerDown,  double velocityThreshold){
         this.restPower = restPower; this.deltaPowerUp = deltaPowerUp; this.deltaPowerDown = deltaPowerDown; this.velocityThreshold = velocityThreshold;
@@ -21,14 +21,17 @@ public class PositionHolder extends Controller1D {
         this.restPower = restPower; this.deltaPowerUp = 0.003; this.deltaPowerDown = -0.003; this.velocityThreshold = Math.toRadians(10);
     }
 
-    public void deactivate(){ isUsed = false; }
+    public void deactivate(){ isUsed = false; isTargeting = false; }
     public void activate(){ isUsed = true; }
+
+    @Override
+    public void setTarget(double target){ super.setTarget(target); isTargeting = true;}
 
     @Override
     public void setRestOutput(double restOutput) { this.restPower = restOutput; }
 
     @Override
-    protected double setDefaultAccuracy() { return 0; }
+    protected double setDefaultAccuracy() { return 0.5; }
 
     @Override
     protected double setDefaultMinimumTimeReachedTarget() { return 1; }
@@ -38,8 +41,12 @@ public class PositionHolder extends Controller1D {
 
     @Override
     protected void updateController(Pose pose, Generator generator) {
-        if(isUsed && Math.abs(getCurrentValue()) > velocityThreshold) {
-            restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
+        if(isUsed) {
+            if(!isWithinAccuracyRange() && isTargeting){
+                restPower += getError() > 0 ? deltaPowerUp : deltaPowerDown;
+            }else if(Math.abs(getCurrentValue()) > velocityThreshold) {
+                restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
+            }
         }
     }
 
