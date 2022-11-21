@@ -19,14 +19,10 @@ public class CaseScanner extends Scanner{
     protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
     protected final Case[] pastCases = new Case[10];
     protected boolean isStarted = false;
-//    protected final Timer timer = new Timer();
     { Arrays.fill(pastCases, caseDetected); }
 
-    // TODO Clean vision
-
     public int getCase(Mat input){
-        double zoom = 2;
-        cropAndFill(input, getRectFromCenter(new Point(input.width()/2.0, input.height()/2.0), (int) (input.width()/zoom), (int) (input.height()/zoom)));
+        cropAndFill(input, getZoomedRect(input, 2));
         getHSV(input);
 
         computeRects(80, 150);

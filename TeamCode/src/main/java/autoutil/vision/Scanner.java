@@ -102,8 +102,7 @@ public abstract class Scanner extends OpenCvPipeline {
         });
     }
 
-    // TOD 5 make more efficent
-
+    // TOD 5 make more efficient / clean
     protected double getBestRectStDev(Mat input, double hueLow, double hueHigh, Scalar rectColor){
         Rect bestRect = null; double bestST = 10000;
         for (int i = 0; i < rects.size(); i++) {
@@ -196,6 +195,8 @@ public abstract class Scanner extends OpenCvPipeline {
         Point center = getCenter(rect); int width = ((int)(rect.width*scale)); int height = ((int)(rect.height*scale));
         return new Rect((int) (center.x - width/2), (int) (center.y - height/2), width, height);
     }
+
+    public Rect getZoomedRect(Mat input, double zoom){ return getRectFromCenter(new Point(input.width()/2.0, input.height()/2.0), (int) (input.width()/zoom), (int) (input.height()/zoom)); }
 
 
     public void cropAndFill(Mat input, Rect rect){
