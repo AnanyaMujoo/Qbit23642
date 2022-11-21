@@ -13,7 +13,7 @@ public class IndependentRunner {
 
     public synchronized void addIndependent(Independent independent){
         isIndependentRunning = true;
-        bot.mecanumDrive.setDriveMode(Modes.DriveMode.FAST);
+        bot.mecanumDrive.setDriveMode(null);
         bot.mecanumDrive.switchUser(User.BACK);
         RobotFramework.backgroundThread.setExecutionCode(() -> {
             bot.mecanumDrive.checkAccess(User.BACK);

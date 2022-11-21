@@ -11,6 +11,8 @@ import robotparts.electronics.positional.PMotor;
 import robotparts.electronics.positional.PServo;
 import util.User;
 
+import static global.Modes.HeightMode.Height.HIGH;
+
 public class Lift extends RobotPart {
 
     public PMotor motorRight;
@@ -26,7 +28,7 @@ public class Lift extends RobotPart {
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorRight.usePositionHolder(restPowUp);
-        Modes.setHeightMode(Modes.HeightMode.HIGH);
+        Modes.heightMode.set(HIGH);
     }
 
 

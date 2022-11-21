@@ -1,5 +1,7 @@
 package teleop;
 
+import android.icu.text.CaseMap;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -21,6 +23,9 @@ import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.independents;
 import static global.General.log;
+import static global.Modes.DriveMode.Drive.FAST;
+import static global.Modes.DriveMode.Drive.MEDIUM;
+import static global.Modes.HeightMode.Height.*;
 import static teleutil.button.Button.A;
 import static teleutil.button.Button.DPAD_DOWN;
 import static teleutil.button.Button.DPAD_LEFT;
@@ -39,17 +44,17 @@ public class TerraOp extends Tele {
         gph1.link(Button.B, BackwardAll);
         gph1.link(Button.Y, Forward);
         gph1.link(Button.X, bot::cancelAutoModules);
-        gph1.link(Button.RIGHT_STICK_BUTTON, Modes::cycleDrive);
-//        gph1.link(RIGHT_BUMPER, Modes::cycleHeight);
+        gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
+
         gph1.link(RIGHT_TRIGGER, () -> lift.move(0.5));
         gph1.link(LEFT_TRIGGER, () -> lift.move(-0.3));
 
-        gph1.link(DPAD_UP, () -> Modes.setHeightMode(Modes.HeightMode.HIGH));
-        gph1.link(DPAD_RIGHT, () ->  Modes.setHeightMode(Modes.HeightMode.MEDIUM));
-        gph1.link(DPAD_LEFT, () ->  Modes.setHeightMode(Modes.HeightMode.MEDIUM));
-        gph1.link(DPAD_DOWN, () -> Modes.setHeightMode(Modes.HeightMode.LOW));
-        gph1.link(Button.A, OnTurnOnEventHandler.class, () -> Modes.setDriveMode(Modes.DriveMode.FAST));
-        gph1.link(Button.A, OnTurnOffEventHandler.class, () -> Modes.setDriveMode(Modes.DriveMode.MEDIUM));
+        gph1.link(DPAD_UP, () -> Modes.heightMode.set(HIGH));
+        gph1.link(DPAD_RIGHT, () ->  Modes.heightMode.set(MIDDLE));
+        gph1.link(DPAD_LEFT, () ->  Modes.heightMode.set(MIDDLE));
+        gph1.link(DPAD_DOWN, () -> Modes.heightMode.set(LOW));
+        gph1.link(Button.A, OnTurnOnEventHandler.class, () -> Modes.driveMode.set(FAST));
+        gph1.link(Button.A, OnTurnOffEventHandler.class, () -> Modes.driveMode.set(MEDIUM));
 
         gph2.link(DPAD_LEFT, outtake::closeClaw);
         gph2.link(DPAD_RIGHT, outtake::openClaw);
@@ -59,7 +64,7 @@ public class TerraOp extends Tele {
 
         lift.move(-0.4);
 
-        // TODO 4 Get ready for v5.0
+        // TOD 5 Get ready for v5.0
     }
 
     @Override
@@ -73,8 +78,8 @@ public class TerraOp extends Tele {
 
         lift.move(gph2.ry);
 
-        log.show("DriveMode", Modes.getDriveMode());
-        log.show("HeightMode", Modes.getHeightMode());
+        log.show("DriveMode", Modes.driveMode.get());
+        log.show("HeightMode", Modes.heightMode.get());
     }
 
 

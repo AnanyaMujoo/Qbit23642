@@ -16,38 +16,39 @@ import util.condition.OutputList;
 
 import static global.General.bot;
 import static global.General.fieldSide;
+import static global.Modes.DriveMode.Drive.MEDIUM;
+import static global.Modes.DriveMode.Drive.SLOW;
+import static global.Modes.HeightMode.Height.*;
 import static global.Modes.OuttakeMode.ALLIANCE;
 import static global.Modes.OuttakeMode.SHARED;
-import static global.Modes.getHeightMode;
+
 
 
 public interface AutoModuleUser extends RobotUser{
 
-    AutoModule Backward = BackwardHeight(Modes.HeightMode.HIGH);
+    AutoModule Backward = BackwardHeight(HIGH);
 
-    OutputList BackwardAll = new OutputList(Modes::getHeightMode)
-            .addOption(Modes.HeightMode.LOW, BackwardHeight(Modes.HeightMode.LOW))
-            .addOption(Modes.HeightMode.MEDIUM, BackwardHeight(Modes.HeightMode.MEDIUM))
-            .addOption(Modes.HeightMode.HIGH, BackwardHeight(Modes.HeightMode.HIGH));
+    OutputList BackwardAll = new OutputList(Modes.heightMode::get)
+            .addOption(LOW, BackwardHeight(LOW))
+            .addOption(MIDDLE, BackwardHeight(MIDDLE))
+            .addOption(HIGH, BackwardHeight(HIGH));
 
 
-    static AutoModule BackwardHeight(Modes.HeightMode mode){ return new AutoModule(
-            Modes.ChangeDrive(Modes.DriveMode.MEDIUM),
+    static AutoModule BackwardHeight(Modes.HeightMode.Height height){ return new AutoModule(
+            Modes.driveMode.ChangeMode(MEDIUM),
             outtake.stageClose(0.3),
-//            lift.stageLift(1.0, 20),
-//            outtake.stageReadyStart(0.6),
-            outtake.stageEnd().attach(lift.stageLift(1.0, mode.getValue())),
+            outtake.stageEnd().attach(lift.stageLift(1.0, height.getValue())),
             outtake.stageEnd(0.0),
-            Modes.ChangeDrive(Modes.DriveMode.SLOW)
+            Modes.driveMode.ChangeMode(SLOW)
     );}
 
     AutoModule Forward = new AutoModule(
-            Modes.ChangeDrive(Modes.DriveMode.MEDIUM),
+            Modes.driveMode.ChangeMode(MEDIUM),
             outtake.stageOpen(0.2),
             outtake.stageStart().attach(lift.stageLift(0.6, 0)),
             outtake.stageStart(0.0),
             outtake.stageOpen(0.0),
-            Modes.ChangeDrive(Modes.DriveMode.SLOW)
+            Modes.driveMode.ChangeMode(SLOW)
     );
 
 }

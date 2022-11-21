@@ -105,8 +105,8 @@ public interface AutoModuleUserOld extends RobotUser {
 
     AutoModule IntakeUntilFreight = new AutoModule(mecanumIntake.intakeUntilFreight());
 
-    default AutoModule AllianceLiftUp(AutoModule liftUp){return new AutoModule().add(OuttakeLockFast, OuttakeHorizontalFast, liftUp, OuttakeAlliance, changeDrive(Modes.DriveMode.SLOW));}
-    static AutoModule AllianceLiftUp2(AutoModule liftUp){return new AutoModule().add(OuttakeLockFast, OuttakeHorizontalFast, liftUp, OuttakeAlliance, changeDrive2(Modes.DriveMode.SLOW));}
+    default AutoModule AllianceLiftUp(AutoModule liftUp){return new AutoModule().add(OuttakeLockFast, OuttakeHorizontalFast, liftUp, OuttakeAlliance, changeDrive(null));}
+    static AutoModule AllianceLiftUp2(AutoModule liftUp){return new AutoModule().add(OuttakeLockFast, OuttakeHorizontalFast, liftUp, OuttakeAlliance, changeDrive2(null));}
 
 
     DecisionList SetUpForAllianceShippingHub = new DecisionList(mecanumLift::getLevelMode)
@@ -115,11 +115,11 @@ public interface AutoModuleUserOld extends RobotUser {
             .addOption(Level.BOTTOM, () -> bot.addAutoModule(AllianceLiftUp2(LiftUpBottomFast)));
 
 
-    AutoModule SetUpForSharedShippingHubRight = new AutoModule().add(OuttakeLockFast, OuttakeHorizontal, LiftUpShared, OuttakeSharedRight, changeDrive2(Modes.DriveMode.SLOW));
+    AutoModule SetUpForSharedShippingHubRight = new AutoModule().add(OuttakeLockFast, OuttakeHorizontal, LiftUpShared, OuttakeSharedRight, changeDrive2(null));
 
-    AutoModule SetUpForSharedShippingHubLeft = new AutoModule().add(OuttakeLockFast,OuttakeHorizontal, LiftUpShared, OuttakeSharedLeft, changeDrive2(Modes.DriveMode.SLOW));
+    AutoModule SetUpForSharedShippingHubLeft = new AutoModule().add(OuttakeLockFast,OuttakeHorizontal, LiftUpShared, OuttakeSharedLeft, changeDrive2(null));
 
-    AutoModule SetUpForSharedShippingHubCenter = new AutoModule().add(OuttakeLockFast, OuttakeHorizontal, LiftUpShared, changeDrive2(Modes.DriveMode.SLOW));
+    AutoModule SetUpForSharedShippingHubCenter = new AutoModule().add(OuttakeLockFast, OuttakeHorizontal, LiftUpShared, changeDrive2(null));
 
 
 
@@ -138,10 +138,10 @@ public interface AutoModuleUserOld extends RobotUser {
             .addOption(SHARED, SetUpForSharedShippingHubAll::check);
 
 
-    AutoModule ResetLiftAndOuttake = new AutoModule().add(changeDrive2(Modes.DriveMode.FAST), OuttakeReset, LiftReset);
+    AutoModule ResetLiftAndOuttake = new AutoModule().add(changeDrive2(null), OuttakeReset, LiftReset);
 
 
-    AutoModule IntakeCombined = new AutoModule().add(changeDrive2(Modes.DriveMode.MEDIUM), OuttakeDropFast, IntakeUntilFreight, IntakeOutAndLock);
+    AutoModule IntakeCombined = new AutoModule().add(changeDrive2(null), OuttakeDropFast, IntakeUntilFreight, IntakeOutAndLock);
 
 
 

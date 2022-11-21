@@ -8,8 +8,8 @@ import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 
-import static global.Modes.driveModeIs;
-import static global.Modes.setDriveMode;
+import static global.Modes.DriveMode.Drive.MEDIUM;
+import static global.Modes.DriveMode.Drive.SLOW;
 
 public class Drive extends RobotPart {
 
@@ -24,7 +24,7 @@ public class Drive extends RobotPart {
         br = create("br", ElectronicType.CMOTOR_REVERSE);
         fl = create("fl", ElectronicType.CMOTOR_FORWARD);
         bl = create("bl", ElectronicType.CMOTOR_FORWARD);
-        setDriveMode(Modes.DriveMode.MEDIUM);
+        Modes.driveMode.set(MEDIUM);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class Drive extends RobotPart {
 
 
     public void moveSmooth(double f, double s, double t) {
-        double scale = Modes.getDriveMode().getScale(); move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(t*1.2*scale * (driveModeIs(Modes.DriveMode.SLOW) ? 1.2 : 1.0)));
+        double scale = Modes.driveMode.get().getValue(); move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(t*1.2*scale * (Modes.driveMode.modeIs(SLOW) ? 1.2 : 1.0)));
     }
 
     @Override

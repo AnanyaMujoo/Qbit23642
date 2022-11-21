@@ -10,6 +10,11 @@ import util.condition.Decision;
 import util.template.ValueMode;
 
 import static automodules.StageBuilder.exitAlways;
+import static global.Modes.DriveMode.Drive.FAST;
+import static global.Modes.DriveMode.Drive.MEDIUM;
+import static global.Modes.DriveMode.Drive.SLOW;
+import static global.Modes.HeightMode.Height.LOW;
+import static global.Modes.HeightMode.Height.MIDDLE;
 
 
 public class Modes {
@@ -37,59 +42,22 @@ public class Modes {
         USING
     }
 
-    // TOD 5 Make this better
 
+    public static class HeightMode extends ValueMode{ public enum Height implements ModeType{
+        HIGH{@Override public double getValue() {return Lift.maxPosition;}},
+        MIDDLE {@Override public double getValue() {return 40;}},
+        LOW {@Override public double getValue() {return 20;}};
+    }}
 
-    public interface Valuable extends Decision { double getValue(); }
+    public static class DriveMode extends ValueMode{ public enum Drive implements ModeType{
+        FAST{@Override public double getValue(){return 1.0;}},
+        MEDIUM{@Override public double getValue(){return 0.6;}},
+        SLOW{@Override public double getValue(){return 0.3;}};
+    }}
 
+    public static final HeightMode heightMode = new HeightMode();
+    public static final DriveMode driveMode = new DriveMode().enableCycling(SLOW, MEDIUM, FAST);
 
-//    public static class HeightMode1 extends ValueMode{
-//
-//        public void cycle(){
-//            Height.values()
-//        }
-//        public enum Height implements ModeType{
-//            HIGH(Lift.maxPosition),
-//            MEDIUM(40),
-//            LOW(20);
-//            private final double value;
-//            Height(double value){ this.value = value; }
-//            public double getValue(){ return value; }
-//        }
-//    };
-//
-//    public HeightMode1 heightMode1 = new HeightMode1();
+    // TODO TEST
 
-    // TODO CLEAN Modes and values
-
-    public enum HeightMode implements Valuable {
-        HIGH(Lift.maxPosition-1.5),
-        MEDIUM(43),
-        LOW(23);
-        private final double value;
-        HeightMode(double value){ this.value = value; }
-        public double getValue(){ return value; }
-    }
-
-    private static HeightMode heightMode = HeightMode.HIGH;
-    public static void cycleHeight() { switch (heightMode) { case HIGH:  heightMode = HeightMode.LOW; break;  case MEDIUM: heightMode = HeightMode.HIGH; break;  case LOW:  heightMode = HeightMode.MEDIUM; break; } }
-    public static boolean heightModeIs(HeightMode heightMode1){ return heightMode.equals(heightMode1); }
-    public static HeightMode getHeightMode(){ return heightMode; }
-    public static void setHeightMode(HeightMode heightMode1){ heightMode = heightMode1; }
-    public static Stage ChangeHeight(HeightMode mode){return new Stage(new Main(() -> heightMode = mode), exitAlways()); }
-
-    public enum DriveMode implements Decision {
-        FAST(1.0),
-        MEDIUM(0.6),
-        SLOW(0.3);
-        private final double scale;
-        DriveMode(double scale){ this.scale = scale; }
-        public double getScale(){ return scale; }
-    }
-    private static DriveMode driveMode = DriveMode.MEDIUM;
-    public static void cycleDrive() { switch (driveMode) { case FAST:  driveMode = DriveMode.SLOW; break;  case MEDIUM:  driveMode = DriveMode.FAST; break;  case SLOW:  driveMode = DriveMode.MEDIUM; break; } }
-    public static boolean driveModeIs(DriveMode driveMode1){ return driveMode.equals(driveMode1); }
-    public static DriveMode getDriveMode(){ return driveMode; }
-    public static void setDriveMode(DriveMode driveMode1){ driveMode = driveMode1; }
-    public static Stage ChangeDrive(DriveMode mode){return new Stage(new Main(() -> driveMode = mode), exitAlways()); }
 }

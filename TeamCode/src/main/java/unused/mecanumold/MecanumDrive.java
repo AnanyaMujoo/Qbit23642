@@ -29,7 +29,7 @@ import static global.General.bot;
 public class MecanumDrive extends RobotPart {
     private Executor executor;
     private CMotor fr, br, fl, bl;
-    private DriveMode driveMode = DriveMode.FAST;
+    private DriveMode driveMode = null;
     private IndependentMode independentMode = IndependentMode.MANUAL;
 
     @Override
@@ -74,11 +74,11 @@ public class MecanumDrive extends RobotPart {
             Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
             Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
             double scale = 1;
-            if (driveMode.equals(DriveMode.MEDIUM)) {
-                scale = 0.75;
-            } else if (driveMode.equals(DriveMode.SLOW)) {
-                scale = 0.5;
-            }
+//            if (driveMode.equals(DriveMode.MEDIUM)) {
+//                scale = 0.75;
+//            } else if (driveMode.equals(DriveMode.SLOW)) {
+//                scale = 0.5;
+//            }
             move(
                     movementCurveForward.fodd(f * scale),
                     movementCurveStrafe.fodd(s * scale),
@@ -171,14 +171,14 @@ public class MecanumDrive extends RobotPart {
     }
 
     private DriveMode nextDrive() {
-        switch (driveMode) {
-            case FAST:
-                return DriveMode.SLOW;
-            case MEDIUM:
-                return DriveMode.FAST;
-            case SLOW:
-                return DriveMode.MEDIUM;
-        }
+//        switch (driveMode) {
+////            case FAST:
+////                return DriveMode.SLOW;
+////            case MEDIUM:
+////                return DriveMode.FAST;
+////            case SLOW:
+////                return DriveMode.MEDIUM;
+//        }
         return null;
     }
 
