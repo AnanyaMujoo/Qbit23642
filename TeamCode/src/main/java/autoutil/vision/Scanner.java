@@ -34,10 +34,15 @@ public abstract class Scanner extends OpenCvPipeline {
     public static final Scalar MAGENTA = new Scalar(255,0,255);
     public static final Scalar ORANGE = new Scalar(255,165,0);
 
-    private final Mat Hierarchy = new Mat();
-    private final Mat Mask = new Mat();
+    protected final Mat Hierarchy = new Mat();
+    protected final Mat Mask = new Mat();
     protected final Mat HSV = new Mat();
     protected final Mat Crop = new Mat();
+    protected final Mat Thresh = new Mat();
+    protected final Mat ScaledMask = new Mat();
+    protected final Mat ScaledThresh = new Mat();
+    protected final Mat Output = new Mat();
+    protected final Mat Edges = new Mat();
 
     public abstract void start();
     public abstract void run(Mat input);
