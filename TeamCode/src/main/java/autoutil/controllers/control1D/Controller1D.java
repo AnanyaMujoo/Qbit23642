@@ -27,12 +27,16 @@ public abstract class Controller1D {
     private double minimumTime = setDefaultMinimumTimeReachedTarget();
     private double accuracy = setDefaultAccuracy();
 
+    private double scale = 1.0;
+
     protected abstract double setDefaultAccuracy();
     protected abstract double setDefaultMinimumTimeReachedTarget();
     protected abstract double setDefaultRestOutput();
     protected abstract void updateController(Pose pose, Generator generator);
     protected abstract double setOutput();
     protected abstract boolean hasReachedTarget();
+
+    public void scale(double scale){ this.scale = scale; }
 
     public void setAccuracy(double accuracy){
         this.accuracy = accuracy;
@@ -47,7 +51,7 @@ public abstract class Controller1D {
         errorProfiler.update();
         updateController(pose, generator);
         isAtTarget = precision.isInputTrueForTime(hasReachedTarget(), minimumTime);
-        output = setOutput() + getRestOutput();
+        output = (scale*setOutput()) + getRestOutput();
     }
     public final void update(){ update(new Pose(new Point(0,0),0), new PoseGenerator()); }
     protected double getCurrentValue(){

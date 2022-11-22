@@ -19,10 +19,10 @@ public class ThreeOdometry extends TwoOdometryV2 {
     private Pose enc3Pose;
     private Matrix3D dYdXdThetaMatrixInverted;
     private Precision precision;
-
-    private double deltaEnc1 = 0;
-    private double deltaEnc2 = 0;
-    private double deltaEnc3 = 0;
+//
+//    private double deltaEnc1 = 0;
+//    private double deltaEnc2 = 0;
+//    private double deltaEnc3 = 0;
 
     @Override
     protected void createEncoders() {
@@ -63,6 +63,7 @@ public class ThreeOdometry extends TwoOdometryV2 {
 
         Vector3D localEncDelta = new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3.getDeltaPosition());
         Vector3D localDelta = dYdXdThetaMatrixInverted.multiply(localEncDelta);
+        updateCurrentPose(toGlobalFrame(localDelta.get2D()), Math.toDegrees(localDelta.getZ()));
 
 
 ////        Vector localOffset = new Vector(-Math.abs(Math.toRadians(gyro.getDeltaHeading()))*1.33, 0);
@@ -70,8 +71,8 @@ public class ThreeOdometry extends TwoOdometryV2 {
 //
 //        Vector localDelta2D = localDelta.get2D();
 //        localDelta2D.scaleY(1.0155);
-        Vector globalDelta = toGlobalFrame(localDelta.get2D());
-        updateCurrentPose(globalDelta, Math.toDegrees(localDelta.getZ()));
+//        Vector globalDelta = toGlobalFrame(localDelta.get2D());
+//        updateCurrentPose(globalDelta, Math.toDegrees(localDelta.getZ()));
 //        precision.throttle(() -> setHeading(gyro.getHeading()), 100);
 
         // TODO 4 FIX Make reliable and accurate
@@ -85,11 +86,18 @@ public class ThreeOdometry extends TwoOdometryV2 {
 //                enc3Pose.getAngleUnitVector().getX(), enc3Pose.getAngleUnitVector().getY(), enc3Pose.getVector().getCrossProduct(enc3Pose.getAngleUnitVector())
 //        ).getInverted();
 
+
         dYdXdThetaMatrixInverted = new Matrix3D(
-                0, 1, -11.5,
-               1, 0, 12.5,
-                0, 1, 10.3
+                0, 1, enc1Pose.getVector().getCrossProduct(enc1Pose.getAngleUnitVector()),
+                1, 0, enc2Pose.getVector().getCrossProduct(enc2Pose.getAngleUnitVector()),
+                0, 1, enc3Pose.getVector().getCrossProduct(enc3Pose.getAngleUnitVector())
         ).getInverted();
+//
+//        dYdXdThetaMatrixInverted = new Matrix3D(
+//                0, 1, -11.5,
+//               1, 0, 12.5,
+//                0, 1, 10.3
+//        ).getInverted();
 
         // 0 1 -11.5
         // 1 0 12.5
@@ -104,8 +112,8 @@ public class ThreeOdometry extends TwoOdometryV2 {
     @Override
     protected void resetObjects() {
         super.resetObjects();
-        deltaEnc1 = 0;
-        deltaEnc2 = 0;
-        deltaEnc3 = 0;
+//        deltaEnc1 = 0;
+//        deltaEnc2 = 0;
+//        deltaEnc3 = 0;
     }
 }

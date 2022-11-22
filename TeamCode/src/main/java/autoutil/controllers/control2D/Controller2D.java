@@ -50,6 +50,8 @@ public abstract class Controller2D extends Controller1D {
         return yOutput;
     }
 
+    @Override
+    public void scale(double scale) { xController.scale(scale); yController.scale(scale); }
 
     @Override
     protected double setDefaultMinimumTimeReachedTarget() { return 0; }

@@ -22,6 +22,12 @@ public abstract class Reactor implements RobotUser {
     public abstract boolean isAtTarget();
     public abstract void moveToTarget(PoseGenerator generator);
 
+
+    public final void scale(double scale) {
+        movementController.scale(scale);
+        headingController.scale(scale);
+    }
+
     public final Main mainTarget(PoseGenerator generator){return new Main(() -> moveToTarget(generator)); }
     public final Exit exitTarget(){ return new Exit(this::isAtTarget); }
     public final Stop stopTarget(){ return new Stop(this::nextTarget); }

@@ -2,7 +2,12 @@ package autoutil;
 
 
 
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import automodules.AutoModule;
@@ -43,6 +48,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected ArrayList<AutoSegment<?, ?>> segments = new ArrayList<>();
     protected ArrayList<Double> pauses = new ArrayList<>();
     protected ArrayList<AutoModule> autoModules = new ArrayList<>();
+    protected ArrayList<Double> movementScales = new ArrayList<>();
 
     protected boolean scanning = false;
     protected CaseScanner caseScanner;
@@ -54,7 +60,9 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     private int pauseIndex = 0;
     private int autoModuleIndex = 0;
 
-    { poses.add(new Pose()); }
+    {
+        poses.add(new Pose()); movementScales.addAll(Collections.nCopies(100,1.0));
+    }
 
     public void preProcess(){}
 
@@ -69,8 +77,6 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         postProcess();
         if(isFlipped()){ flip(); }
     }
-
-    // TODO 4 NEW Create way to set custom coefficents/boost
 
     public void makeIndependent(){ isIndependent = true; }
     public boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }
@@ -113,7 +119,12 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addConcurrentAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.CONCURRENT_AUTOMODULE, autoModule);}
     public void addCancelAutoModules(){ addSegmentType(AutoSegment.Type.CANCEL_AUTOMODULE); addLastPose(); }
 
-    public void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(config.getSetpointSegment().getReactorReference(), generator); }
+    private void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(config.getSetpointSegment().getReactorReference(), generator); }
+
+    public void addScale(double scale){ movementScales.set(poses.size()-1, scale); }
+
+    public void addScaledSetpoint(double scale, double x, double y, double h){ addScale(scale); addSetpoint(x, y, h);}
+    public void addScaledWaypoint(double scale, double x, double y, double h){ addScale(scale); addWaypoint(x, y, h);}
 
     private void createSegments(){
         Iterator.forAll(segmentTypes, type -> {
@@ -144,6 +155,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         AutoSegment<?,?> autoSegment = new AutoSegment<>(reactor, generator);
         final Pose lastPose = poses.get(segmentIndex-1); final Pose currentPose = poses.get(segmentIndex);
         autoSegment.setGeneratorFunction(gen -> gen.addSegment(lastPose, currentPose));
+        final double scale = movementScales.get(segmentIndex-1);
+        if(scale != 1.0){ autoSegment.setReactorFunction(rea -> rea.scale(scale)); }
         segments.add(autoSegment);
     }
 
