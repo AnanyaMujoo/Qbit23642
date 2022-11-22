@@ -34,6 +34,8 @@ public class CaseScanner extends Scanner{
         double orangeValue = getBestRectStDev(input, 1, 30, ORANGE);
         return Iterator.minIndex(cyanValue, magentaValue, orangeValue);
         // TODO 4 NEW Program more vision for pole
+        // https://www.youtube.com/watch?v=rQjcZt6V9ac
+        // make sure to release mats
     }
 
     public void message(){
