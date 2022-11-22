@@ -19,6 +19,9 @@ public class ICamera extends Electronic {
         this.orientation = rotation;
     }
 
+    public void startStreaming(){ camera.startStreaming(width, height, orientation); }
+    public void stopStreaming(){ camera.stopStreaming(); }
+
     public void setScanner(Scanner scanner){
         camera.setPipeline(scanner);
     }

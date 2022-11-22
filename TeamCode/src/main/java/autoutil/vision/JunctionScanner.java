@@ -11,11 +11,13 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.template.Iterator;
+
 public class JunctionScanner extends Scanner {
 
     @Override
     public void run(Mat input) {
-        cropAndFill(input, getZoomedRect(input, 1.5));
+//        cropAndFill(input, getZoomedRect(input, 1.5));
         getHSV(input);
 
         Scalar lowHSV = new Scalar(20, 70, 80);
@@ -48,6 +50,8 @@ public class JunctionScanner extends Scanner {
         for (int i = 0; i < contours.size(); i++) {
             contoursPoly[i] = new MatOfPoint2f();
             Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 5, true);
+            rects[i] = Imgproc.minAreaRect(contoursPoly[i]);
+            drawRotatedRect(input, rects[i], RED);
         }
 
 

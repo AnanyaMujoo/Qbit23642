@@ -5,6 +5,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
+import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -160,6 +161,7 @@ public abstract class Scanner extends OpenCvPipeline {
     public Scalar getAverage(Mat input, Rect region){ return getAverage(getSubmat(input, region));}
     public Scalar getAverageSquareFromCenter(Mat input, Point center, int size){ return getAverage(input, getSquareFromCenter(center, size)); }
 
+    public void drawRotatedRect(Mat input, RotatedRect rect, Scalar color){ Point[] vertices = new Point[4]; rect.points(vertices); for (int j = 0; j < 4; j++){ Imgproc.line(input, vertices[j], vertices[(j+1)%4], color, 2); } }
     public void drawRectangle(Mat input, Rect rect, Scalar color){ Imgproc.rectangle(input, rect, color, 2); }
     public void drawSquareFromCenter(Mat input, Point center, int size, Scalar color){ drawRectangle(input, getSquareFromCenter(center, size), color);}
     public void drawFilledRectangle(Mat input, Rect rect, Scalar color){ Imgproc.rectangle(input, rect, color, -1); }

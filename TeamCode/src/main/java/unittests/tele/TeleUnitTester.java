@@ -2,12 +2,14 @@ package unittests.tele;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import autoutil.vision.JunctionScanner;
 import elements.FieldPlacement;
 import elements.FieldSide;
 import teleop.Tele;
 
 import unittests.UnitTester;
 import unittests.tele.framework.movement.OdometryTest;
+import unittests.tele.sensor.JunctionScannerTest;
 
 import static global.General.*;
 
@@ -53,13 +55,16 @@ public class TeleUnitTester extends Tele implements UnitTester{
 
 //        Works as of 4.2.5
 //        add(new AutoModuleTest());
-        add(new OdometryTest());
+//        add(new OdometryTest());
 //        add(new RobotFrameworkTest());
 //        add(new RobotFunctionsTest());
 //        add(new StageTest());
 //        add(new StallDetectorTest());
 //        add(new CustomPMotorPIDTest());
 //        add(new PositionHolderTest());
+
+
+        add(new JunctionScannerTest());
     }
 
     /**

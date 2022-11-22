@@ -15,10 +15,14 @@ public class Cameras extends RobotPart {
 
     @Override
     public void init() {
-        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL);
-//        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL_DISPLAY);
+//        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL);
+        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL_DISPLAY);
 //        icam = createInternalCamera(OpenCvCameraRotation.UPRIGHT, false);
     }
+
+    public void showExternalCamera(){ ecam.startStreaming(); }
+
+    public void hideExternalCamera(){ ecam.stopStreaming(); }
 
     public void startExternalCamera(){ ecam.start(); }
 
