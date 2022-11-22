@@ -20,7 +20,7 @@ public class JunctionScannerTest extends TeleUnitTest {
 
     @Override
     protected void loop() {
-
+        junctionScanner.message();
     }
 
     @Override

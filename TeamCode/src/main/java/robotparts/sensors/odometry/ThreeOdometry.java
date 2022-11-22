@@ -74,8 +74,8 @@ public class ThreeOdometry extends TwoOdometryV2 {
 //        Vector globalDelta = toGlobalFrame(localDelta.get2D());
 //        updateCurrentPose(globalDelta, Math.toDegrees(localDelta.getZ()));
 //        precision.throttle(() -> setHeading(gyro.getHeading()), 100);
-
-        // TODO 4 FIX Make reliable and accurate
+//
+//         TOD 4 FIX Make reliable and accurate
     }
 
     @Override

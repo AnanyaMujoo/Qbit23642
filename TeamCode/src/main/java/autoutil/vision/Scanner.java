@@ -49,6 +49,7 @@ public abstract class Scanner extends OpenCvPipeline {
     public abstract void run(Mat input);
     public abstract void preProcess(Mat input);
     public abstract void postProcess(Mat input);
+    public abstract void message();
 
     private final Point debugCenter = center;
     private double debugSize = 10;

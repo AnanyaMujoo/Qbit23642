@@ -9,11 +9,18 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import util.template.Iterator;
 
+import static global.General.log;
+
 public class JunctionScanner extends Scanner {
+
+    private RotatedRect maxRect = new RotatedRect();
+    private double distanceToJunction, angleToJunction = 0;
+    private final double cameraFov = 45;
+    private final double realJunctionWidth = 2.672; // cm
 
     @Override
     public void run(Mat input) {
@@ -51,13 +58,56 @@ public class JunctionScanner extends Scanner {
             contoursPoly[i] = new MatOfPoint2f();
             Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 5, true);
             rects[i] = Imgproc.minAreaRect(contoursPoly[i]);
-            drawRotatedRect(input, rects[i], RED);
+            drawRotatedRect(input, rects[i], ORANGE);
         }
+        ArrayList<RotatedRect> rectsList = new ArrayList<>(Arrays.asList(rects));
+        maxRect = Iterator.forAllCompareMax(rectsList, rect -> rect.boundingRect().area());
+
+        drawRotatedRect(input, maxRect, RED);
+
+        double junctionCenterX = maxRect.center.x;
+        double screenCenterX = input.width()/2.0;
+        double junctionCenterOffset = junctionCenterX-screenCenterX;
+        double screenWidth = input.width();
+
+
+        double screenJunctionWidth = maxRect.size.width;
+        distanceToJunction = realJunctionWidth/distanceRatio(screenJunctionWidth, screenWidth);
+
+        double realJunctionOffset = distanceToJunction*distanceRatio(junctionCenterOffset, screenWidth);
+        angleToJunction = Math.toDegrees(Math.atan2(realJunctionOffset, distanceToJunction));
+
+
+
+
+        // 2 tan (angular size / 2) = w / d
+
+        // TODO TEST
+
+
+
+
 
 
 
 
     }
+
+    private double distanceRatio(double sizeOnScreen, double screenWidth){ return 2*Math.tan(Math.toRadians(cameraFov*(sizeOnScreen/screenWidth))/2.0); }
+
+
+    @Override
+    public void message() {
+        log.show("Angle: ", maxRect.angle);
+        log.show("Width:", maxRect.size.width);
+        log.show("Height:", maxRect.size.height);
+        log.show("Camera FOV: ", cameraFov);
+        log.show("Junction Width: ", realJunctionWidth);
+        log.show("DistanceToJunction: ", distanceToJunction);
+        log.show("AngleToJunction: ", angleToJunction);
+    }
+
+
 
 
     @Override
@@ -68,4 +118,5 @@ public class JunctionScanner extends Scanner {
 
     @Override
     public final void postProcess(Mat input) { Core.rotate(input, input, Core.ROTATE_90_CLOCKWISE); }
+
 }
