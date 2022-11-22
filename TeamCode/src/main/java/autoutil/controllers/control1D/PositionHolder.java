@@ -10,22 +10,19 @@ public class PositionHolder extends Controller1D {
     private final double deltaPowerUp;
     private final double deltaPowerDown;
     private volatile boolean isUsed, isTargeting = false;
-
-    // TODO TEST
+    private double currentPosition = 0;
 
     public PositionHolder(double restPower, double deltaPowerUp, double deltaPowerDown,  double velocityThreshold){
         this.restPower = restPower; this.deltaPowerUp = deltaPowerUp; this.deltaPowerDown = deltaPowerDown; this.velocityThreshold = velocityThreshold;
     }
 
     public PositionHolder(double restPower){
-        this.restPower = restPower; this.deltaPowerUp = 0.003; this.deltaPowerDown = -0.003; this.velocityThreshold = Math.toRadians(10);
+        this.restPower = restPower; this.deltaPowerUp = 0.007; this.deltaPowerDown = -0.007; this.velocityThreshold = Math.toRadians(10);
     }
 
     public void deactivate(){ isUsed = false; isTargeting = false; }
-    public void activate(){ isUsed = true; }
-
-    @Override
-    public void setTarget(double target){ super.setTarget(target); isTargeting = true;}
+    public void activate(){ isUsed = true; isTargeting = false; }
+    public void activate(double currentPosition){ isUsed = true; isTargeting = true; this.currentPosition = currentPosition; }
 
     @Override
     public void setRestOutput(double restOutput) { this.restPower = restOutput; }
@@ -43,7 +40,8 @@ public class PositionHolder extends Controller1D {
     protected void updateController(Pose pose, Generator generator) {
         if(isUsed) {
             if(!isWithinAccuracyRange() && isTargeting){
-                restPower += getError() > 0 ? deltaPowerUp : deltaPowerDown;
+                double error = (getTarget()-currentPosition);
+                restPower += error > 0 ? deltaPowerUp : deltaPowerDown;
             }else if(Math.abs(getCurrentValue()) > velocityThreshold) {
                 restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
             }

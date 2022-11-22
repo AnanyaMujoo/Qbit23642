@@ -31,7 +31,6 @@ public class TerraAuto extends AutoFramework {
     public void define() {
         addWaypoint(0, 60, 0);
         addWaypoint(0, 100, 35);
-        // TODO TEST
         customSidePlacement(() -> {
             addSetpoint(1, 128, 50);
         }, () -> {

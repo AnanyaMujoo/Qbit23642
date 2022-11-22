@@ -70,6 +70,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         if(isFlipped()){ flip(); }
     }
 
+    // TODO 4 NEW Create way to set custom coefficents/boost
+
     public void makeIndependent(){ isIndependent = true; }
     public boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }
     public void flip(){ autoPlane.reflectX(); autoPlane.reflectPoses(); }

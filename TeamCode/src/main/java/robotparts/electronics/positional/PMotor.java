@@ -67,6 +67,8 @@ public class PMotor extends Electronic {
 
     public void holdPosition(){ positionHolder.activate(); move(0); }
 
+    public void holdPositionExact(){ positionHolder.activate(getPosition()); move(0); }
+
     public void releasePosition(){ positionHolder.deactivate(); }
 
     public PositionHolder getPositionHolder(){ return positionHolder; }
@@ -162,7 +164,7 @@ public class PMotor extends Electronic {
 
     /**
      * Get the position of the motor
-     * @return ticks
+     * @return output
      */
     public double getPosition(){ return ticksToOutput.run(motorEncoder.getPos()); }
 

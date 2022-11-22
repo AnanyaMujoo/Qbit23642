@@ -126,8 +126,7 @@ public class Stage {
         return new Stage(oldComponents){
             @Override
             public void loop() { switch (exitCode[0]){
-                case 0: Iterator.forAll(oldComponents, StageComponent::loop); Iterator.forAll(newComponents, StageComponent::loop);
-                    if(Iterator.forAllConditionOR(newComponents, StageComponent::shouldStop)){ exitCode[0] = 1; } if(Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop)){ exitCode[0] = 3; } break;
+                case 0: Iterator.forAll(oldComponents, StageComponent::loop); Iterator.forAll(newComponents, StageComponent::loop); if(Iterator.forAllConditionOR(newComponents, StageComponent::shouldStop)){ exitCode[0] = 1; } if(Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop)){ exitCode[0] = 3; } break;
                 case 1: Iterator.forAll(newComponents, StageComponent::runOnStop); exitCode[0] = 2; break;
                 case 2: Iterator.forAll(oldComponents, StageComponent::loop); if(Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop)){ exitCode[0] = 5; } break;
                 case 3: Iterator.forAll(oldComponents, StageComponent::runOnStop); exitCode[0] = 4; break;
@@ -135,6 +134,6 @@ public class Stage {
             }}
             @Override public boolean shouldStop(){ return exitCode[0] == 5; }
             @Override public void runOnStop() { super.runOnStop(); exitCode[0] = 0; }
-        };
+        }.combine(stage);
     }
 }

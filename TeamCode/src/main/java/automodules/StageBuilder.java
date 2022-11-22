@@ -116,7 +116,7 @@ public class StageBuilder {
                 if(subStageNumber < subStages.size()){ subStages.get(subStageNumber).run(); }
                 if(time >= times.get(subStageNumber+1)){ subStageNumber++; }
                 }, new Exit(() -> subStageNumber >= subStages.size())
-            );
+            ).combine(new Stop(() -> subStageNumber = 0));
         }
     }
 }

@@ -19,7 +19,7 @@ public class Lift extends RobotPart {
     public PMotor motorLeft;
 
     public double restPowUp = 0.12;
-    public static final double maxPosition = 68;
+    public static final double maxPosition = 66;
 
     @Override
     public void init() {
@@ -41,9 +41,9 @@ public class Lift extends RobotPart {
             motorRight.move(p + restPowUp);
             motorLeft.move(p + restPowUp);
         } else {
-            if(motorRight.getPosition() > 4) {
-                motorRight.holdPosition();
-                motorLeft.holdPosition();
+            if(motorRight.getPosition() > 6) {
+                motorRight.holdPositionExact();
+                motorLeft.holdPositionExact();
             }else{
                 motorRight.move(-0.1);
                 motorLeft.move(-0.1);

@@ -12,6 +12,7 @@ import debugging.Fault;
 import elements.FieldSide;
 import global.Modes;
 import teleutil.button.Button;
+import teleutil.button.ButtonEventHandler;
 import teleutil.button.OnNotHeldEventHandler;
 import teleutil.button.OnTurnOffEventHandler;
 import teleutil.button.OnTurnOnEventHandler;
@@ -46,8 +47,8 @@ public class TerraOp extends Tele {
         gph1.link(Button.X, bot::cancelAutoModules);
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
 
-        gph1.link(RIGHT_TRIGGER, () -> lift.move(0.5));
-        gph1.link(LEFT_TRIGGER, () -> lift.move(-0.3));
+        gph1.link(RIGHT_TRIGGER, ButtonEventHandler.class, () -> lift.move(0.3));
+        gph1.link(LEFT_TRIGGER, ButtonEventHandler.class, () -> lift.move(-0.1));
 
         gph1.link(DPAD_UP, () -> Modes.heightMode.set(HIGH));
         gph1.link(DPAD_RIGHT, () ->  Modes.heightMode.set(MIDDLE));
@@ -62,9 +63,7 @@ public class TerraOp extends Tele {
         gph2.link(DPAD_UP, outtake::flip);
         gph2.link(DPAD_DOWN, outtake::unFlip);
 
-        lift.move(-0.4);
-
-        // TOD 5 Get ready for v5.0
+        lift.move(-0.3);
     }
 
     @Override

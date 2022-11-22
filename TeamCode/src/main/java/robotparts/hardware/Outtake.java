@@ -64,9 +64,6 @@ public class Outtake extends RobotPart {
     public void setArmTarget(String name){ armr.setContinuousTarget(name); arml.setContinuousTarget(name); }
     public void moveArmContinuous(double time){ armr.moveContinuous(time); arml.moveContinuous(time); }
 
-
-    // TODO TEST
-
     public Stage stageEnd(){
         return super.customTime(new StageBuilderTime(this)
                 .addSubStage(0.1, () -> {closeClaw(); readyStart();})
