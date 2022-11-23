@@ -151,11 +151,11 @@ public abstract class Drawer extends JPanel {
 
     public static CoordinatePlane getRobot(Pose startPose, Pose pose){
         CoordinatePlane robot = new CoordinatePlane();
-        robot.add(new Rect(new Point(-18,-20), new Point(18,20)));
+        robot.add(new Rect(new Point(-16,-20), new Point(16,20)));
         robot.add(new Pose());
-        robot.add(new PolyLine(new Point(-10, -28), new Point(-5, -20), new Point(5, -20), new Point(10,-28)));
-        robot.add(new Circle(new Point(0,33), 6));
-        robot.add(new Circle(new Point(0, -30), 8));
+        robot.add(new PolyLine(new Point(-8, -28), new Point(-3, -23), new Point(3, -23), new Point(8,-28)));
+        robot.add(new Circle(new Point(0,44), 6));
+        robot.add(new Circle(new Point(0, -27), 8));
         robot.reflectY(); robot.reflectX();
         robot.rotate(pose.getAngle());
         robot.translate(pose.getX(), pose.getY());

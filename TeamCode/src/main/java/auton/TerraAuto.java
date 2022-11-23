@@ -31,47 +31,43 @@ public class TerraAuto extends AutoFramework {
     public void define() {
         addWaypoint(0, 60, 0);
         addWaypoint(0, 100, 35);
-        customSidePlacement(() -> {
-            addSetpoint(1, 128, 50);
-        }, () -> {
-            addSetpoint(-1, 130, 50);
-        }, () -> {
-            addSetpoint(3, 128, 50);
-        }, () -> {
-            addSetpoint(-1, 130, 50);
+        addScaledSetpoint(1.0, 4, 130, 50);
+//        addConcurrentAutoModule(Backward);
+//        addPause(3.0);
+//        addAutoModule(new AutoModule(outtake.stageOpen(0.5)));
+//        addConcurrentAutoModule(Forward);
+//        addPause(3.0);
+
+        customNumber(5, i -> {
+            addWaypoint(20, 123, 90); // fix drift
+            addSetpoint(56, 123, 90);
+//            addWaypoint(20, 127, 90);
+//            addSetpoint(56, 127, 90);
+//            addConcurrentAutoModule(Backward);
+            addPause(0.5);
+//            addWaypoint(34, 127, 75); // fix drift
+            addWaypoint(34, 123, 75);
+            addScaledSetpoint(1.0, 4, 130, 50);
+//            addConcurrentAutoModule(Forward);
         });
-        addConcurrentAutoModule(Backward);
-        addPause(3.0);
-        addAutoModule(new AutoModule(outtake.stageOpen(0.5)));
-        addConcurrentAutoModule(Forward);
-        addPause(3.0);
-//        customNumber(5, i -> {
-//            addWaypoint(14, 124, 90);
-//            addSetpoint(56, 122, 90);
-////            addConcurrentAutoModule(Backward);
-//            addPause(0.5);
-//            addWaypoint(34, 122, 75);
-//            addSetpoint(-3, 130, 50);
-////            addConcurrentAutoModule(Forward);
+//        customCase(() -> {
+//            addWaypoint(-7, 124, 90);
+//            addWaypoint(-20, 124, 90);
+//            addWaypoint(-55, 126, 70);
+//            addWaypoint(-60, 128, 45);
+//            addSetpoint(-62, 70, 0);
+//        }, () -> {
+//            addWaypoint(0, 130, 35);
+//            addWaypoint(0, 105, 0);
+//            addSetpoint(0, 80, 0);
+//        }, () -> {
+//            addWaypoint(7, 124, 90);
+//            addWaypoint(20, 124, 90);
+//            addWaypoint(48, 122, 70);
+//            addWaypoint(50, 114, 50);
+//            addWaypoint(56, 95, 0);
+//            addSetpoint(58, 70, 0);
 //        });
-        customCase(() -> {
-            addWaypoint(-7, 124, 90);
-            addWaypoint(-20, 124, 90);
-            addWaypoint(-55, 126, 70);
-            addWaypoint(-60, 128, 45);
-            addSetpoint(-62, 70, 0);
-        }, () -> {
-            addWaypoint(0, 130, 35);
-            addWaypoint(0, 105, 0);
-            addSetpoint(0, 80, 0);
-        }, () -> {
-            addWaypoint(7, 124, 90);
-            addWaypoint(20, 124, 90);
-            addWaypoint(48, 122, 70);
-            addWaypoint(50, 114, 50);
-            addWaypoint(56, 95, 0);
-            addSetpoint(58, 70, 0);
-        });
     }
 
     @Override

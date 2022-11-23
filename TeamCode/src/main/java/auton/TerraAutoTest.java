@@ -25,13 +25,14 @@ public class TerraAutoTest extends AutoFramework {
 
     @Override
     public void define() {
-
-        addScaledSetpoint(0.1, 0, 20, 0);
-        addSetpoint(0,0,0);
-        addScaledSetpoint(1.0, 0, 20, 0);
-        addSetpoint(0,0,0);
-        addScaledWaypoint(1.5, 0, 30, 0);
-        addScaledWaypoint(0.5, 0, 0,0);
+        addSetpoint(0, -80,0);
+//
+//        addScaledSetpoint(0.1, 0, 20, 0);
+//        addSetpoint(0,0,0);
+//        addScaledSetpoint(1.0, 0, 20, 0);
+//        addSetpoint(0,0,0);
+//        addScaledWaypoint(1.5, 0, 30, 0);
+//        addScaledWaypoint(0.5, 0, 0,0);
 //        addConcurrentAutoModule(Backward);
 //        addPause(0.5);
 //        addConcurrentAutoModule(Forward);

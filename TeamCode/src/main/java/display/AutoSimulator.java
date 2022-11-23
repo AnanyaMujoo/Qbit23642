@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import auton.TerraAuto.*;
 import auton.TerraAutoSimple.*;
 import auton.TerraAutoSimple;
+import auton.TerraAutoTest;
 import autoutil.AutoFramework;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
@@ -16,17 +17,18 @@ import geometry.position.Pose;
 
 public class AutoSimulator extends Drawer{
 
-    private static final Pose startLower = new Pose(30,fieldSize/2.0 - 92,180);
-    private static final Pose startUpper = new Pose(30,fieldSize/2.0 + 92,180);
+    private static final Pose startLower = new Pose(20,fieldSize/2.0 - 89,180);
+    private static final Pose startUpper = new Pose(20,fieldSize/2.0 + 89,180);
     private static final double maxMovingVelocity = 150; // cm per sec
     private static final double maxTurningVelocity = 340; // deg per sec
     private static final double speedUp = 1.0;
 
     public static void main(String[] args) {
-//        setAuto(new TerraAutoLowerBlue(), startLower);
+        setAuto(new TerraAutoLowerBlue(), startLower);
 //        setAuto(new TerraAutoUpperBlue(), startUpper);
 //        setAuto(new TerraAutoLowerRed(), startLower);
-        setAuto(new TerraAutoUpperRed(), startUpper);
+//        setAuto(new TerraAutoUpperRed(), startUpper);
+//        setAuto(new TerraAutoTest(), startLower);
 
 //        setAuto(new TerraAutoLowerBlueSimple(), startLower);
 //        setAuto(new TerraAutoUpperBlueSimple(), startLower);
@@ -69,6 +71,8 @@ public class AutoSimulator extends Drawer{
         updateRobotPose(new Pose());
         timer.reset();
     }
+
+    // TODO Add shifting capapblites, make development easier
 
     public static void updateRobotPose(Pose velocity){
         velocity.scale(1.0/refreshRate); velocity.scaleOrientation(1.0/refreshRate);
