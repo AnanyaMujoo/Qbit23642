@@ -96,7 +96,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         caseScanner = new CaseScanner();
         camera.setExternalScanner(caseScanner);
         camera.startExternalCamera();
-        while (!isStarted()){ caseDetected = caseScanner.getCase(); caseScanner.message(); log.showTelemetry(); }
+        while (!isStarted()){ caseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
     }
 
     @Override

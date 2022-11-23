@@ -18,7 +18,6 @@ public class CaseScanner extends Scanner{
     private volatile Case caseDetected = Case.THIRD;
     protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
     protected final Case[] pastCases = new Case[10];
-    protected boolean isStarted = false;
     { Arrays.fill(pastCases, caseDetected); }
 
     public int getCase(Mat input){
@@ -36,14 +35,9 @@ public class CaseScanner extends Scanner{
     }
 
     @Override
-    public void message(){
-        if(isStarted) {
-            caseDetected = getCaseStable(getCase());
-            log.show("Case Detected: ", caseDetected);
-//            logDebug();
-        }else{
-            log.show("Vision Starting...");
-        }
+    protected void message(){
+        caseDetected = getCaseStable(getCase());
+        log.show("Case Detected: ", caseDetected);
     }
 
 
@@ -59,9 +53,6 @@ public class CaseScanner extends Scanner{
 
     @Override
     public final void postProcess(Mat input) { Core.rotate(input, input, Core.ROTATE_90_CLOCKWISE); }
-
-    @Override
-    public final void start() { isStarted = true; } // timer.reset(); }
 
     @Override
     public final void run(Mat input) { caseDetected = cases[getCase(input)]; }

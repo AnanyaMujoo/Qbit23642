@@ -67,16 +67,20 @@ public class Outtake extends RobotPart {
     public Stage stageEnd(){
         return super.customTime(new StageBuilderTime(this)
                 .addSubStage(0.1, () -> {closeClaw(); readyStart();})
-                .addSubStage(0.3, () -> {flip(); setArmTarget("end");})
-                .addSubStage(0.5, () -> moveArmContinuous(0.5))
+                .addSubStage(0.3, () -> {flip(); })
+                        //setArmTarget("end");
+                        .addSubStage(0.5, () -> moveEnd())
+//                .addSubStage(0.5, () -> moveArmContinuous(0.5))
         );
     }
 
     public Stage stageStart() {
         return super.customTime(new StageBuilderTime(this)
                 .addSubStage(0.1, () -> {openClaw();readyEnd();})
-                .addSubStage(0.3, () -> {closeClaw(); unFlip(); setArmTarget("start"); })
-                .addSubStage(0.5, () -> moveArmContinuous(0.5))
+                .addSubStage(0.3, () -> {closeClaw(); unFlip();  })
+                //setArmTarget("start");
+//                .addSubStage(0.5, () -> moveArmContinuous(0.5))
+                .addSubStage(0.5, () -> moveStart())
         );
     }
 

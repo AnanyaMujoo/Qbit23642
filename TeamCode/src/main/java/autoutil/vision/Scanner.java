@@ -45,11 +45,15 @@ public abstract class Scanner extends OpenCvPipeline {
     protected final Mat Output = new Mat();
     protected final Mat Edges = new Mat();
 
-    public abstract void start();
+    protected boolean isStarted = false;
+
+    public final void start() { isStarted = true; }
     public abstract void run(Mat input);
     public abstract void preProcess(Mat input);
     public abstract void postProcess(Mat input);
-    public abstract void message();
+    protected abstract void message();
+
+    public final void log(){ if(isStarted) { message(); }else{ log.show("Vision Starting..."); } }
 
     private final Point debugCenter = center;
     private double debugSize = 10;
