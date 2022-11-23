@@ -11,7 +11,7 @@ import util.Timer;
 import static global.General.bot;
 import static global.General.log;
 
-@Disabled
+//@Disabled
 @Autonomous(name = "TerraAutoTest", group = "auto")
 public class TerraAutoTest extends AutoFramework {
 
@@ -26,13 +26,12 @@ public class TerraAutoTest extends AutoFramework {
     @Override
     public void define() {
 
-        // TODO TEST
-        addScaledSetpoint(1.5, 0, 20, 0);
+        addScaledSetpoint(0.1, 0, 20, 0);
         addSetpoint(0,0,0);
-        addScaledSetpoint(0.5, 0, 20, 0);
+        addScaledSetpoint(1.0, 0, 20, 0);
         addSetpoint(0,0,0);
         addScaledWaypoint(1.5, 0, 30, 0);
-        addScaledWaypoint(0.5, 0, -30,0);
+        addScaledWaypoint(0.5, 0, 0,0);
 //        addConcurrentAutoModule(Backward);
 //        addPause(0.5);
 //        addConcurrentAutoModule(Forward);

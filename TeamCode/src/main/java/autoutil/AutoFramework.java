@@ -156,7 +156,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         final Pose lastPose = poses.get(segmentIndex-1); final Pose currentPose = poses.get(segmentIndex);
         autoSegment.setGeneratorFunction(gen -> gen.addSegment(lastPose, currentPose));
         final double scale = movementScales.get(segmentIndex-1);
-        if(scale != 1.0){ autoSegment.setReactorFunction(rea -> rea.scale(scale)); }
+        autoSegment.setReactorFunction(rea -> rea.scale(scale));
         segments.add(autoSegment);
     }
 

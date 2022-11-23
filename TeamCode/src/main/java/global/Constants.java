@@ -11,7 +11,7 @@ public class Constants {
     /**
      * Robot functions thread refresh rate
      */
-    public static final int ROBOT_FUNCTIONS_REFRESH_RATE = 100;
+    public static final int ROBOT_FUNCTIONS_REFRESH_RATE = 300;
 
     /**
      * Background thread update rate (note this is the highest possible)

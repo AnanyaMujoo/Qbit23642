@@ -18,7 +18,7 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common, AutoUser
      * @link UnitTest
      */
 
-    // TOD 5 Make this work with autoframework
+    // TODO 4 NEW Make this work with autoframework
 
     /**
      * Static linear opmode
