@@ -2,6 +2,8 @@ package robotparts.sensors.odometry;
 
 import geometry.framework.Point;
 import geometry.position.Pose;
+import geometry.position.Vector;
+import math.linearalgebra.Matrix2D;
 import math.linearalgebra.Matrix3D;
 import math.linearalgebra.Vector3D;
 import robotparts.electronics.ElectronicType;
@@ -10,9 +12,10 @@ import util.template.Precision;
 
 public class ThreeOdometry extends TwoOdometry {
     private IEncoder enc3;
-    private Pose enc3Pose;
-    private Matrix3D dYdXdThetaMatrixInverted;
-//    private Precision precision;
+    public final double width = 21.5;
+    public final double angle = Math.toRadians(1.2);
+    public final Point odometryCenter = new Point();
+    private final Vector odometryCenterToRobotCenter = new Vector(11.5, 13.5);
 
     @Override
     protected void createEncoders() {
@@ -20,31 +23,34 @@ public class ThreeOdometry extends TwoOdometry {
         enc3 = create("brEnc", ElectronicType.IENCODER_NORMAL);
         addEncoders(enc3);
         enc3.invert();
-//        precision = new Precision();
-    }
 
-    @Override
-    protected void setEncoderPoses() {
-        double startX = -10.8; double width = 21.34; double startY = -13.6; double height = 18.6;
-        enc1Pose = new Pose(new Point(startX,startY+height), 90);
-        enc2Pose = new Pose(new Point(-0.5,startY), 0.0);
-        enc3Pose = new Pose(new Point(startX+width,startY+height), 90);
     }
 
     @Override
     protected void update() {
-        Vector3D localEncDelta = new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3.getDeltaPosition());
-        Vector3D localDelta = dYdXdThetaMatrixInverted.multiply(localEncDelta);
-        updateCurrentPose(toGlobalFrame(localDelta.get2D()), Math.toDegrees(localDelta.getZ()));
-//        precision.throttle(() -> setHeading(gyro.getHeading()), 300);
+//        Vector3D localEncDelta = new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3.getDeltaPosition());
+
+
+        double dx = enc2.getDeltaPosition();
+        double dy = enc1.getDeltaPosition();
+        double dh = (1.01*enc3.getDeltaPosition() + (dx*Math.sin(angle)) - (dy*Math.cos(angle)))/width;
+
+
+//
+//        double dx = localEncDelta.getY();
+//        double d3 = (localEncDelta.getZ() + dx*Math.sin(Math.toRadians(angle)))/Math.cos(Math.toRadians(angle));
+//        double dy = scale*(localEncDelta.getX()+d3)/2.0;
+//        double dh = (d3-localEncDelta.getX())/width;
+
+        Vector localDelta = new Vector(dx, dy);
+//
+//        if(dh != 0.0){ localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(dh).getMultiplied(1.0 / dh).multiply(localDelta); }
+
+        odometryCenter.translate(toGlobalFrame(localDelta));
+        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter);
+        setCurrentPose(new Pose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()), getHeading() + Math.toDegrees(dh)));
     }
 
     @Override
-    protected void setConstantObjects() {
-        dYdXdThetaMatrixInverted = new Matrix3D(
-                enc1Pose.getAngleUnitVector().getX(), enc1Pose.getAngleUnitVector().getY(), enc1Pose.getVector().getCrossProduct(enc1Pose.getAngleUnitVector()),
-                enc2Pose.getAngleUnitVector().getX(), enc2Pose.getAngleUnitVector().getY(), enc2Pose.getVector().getCrossProduct(enc2Pose.getAngleUnitVector()),
-                enc3Pose.getAngleUnitVector().getX(), enc3Pose.getAngleUnitVector().getY(), enc3Pose.getVector().getCrossProduct(enc3Pose.getAngleUnitVector())
-        ).getInverted();
-    }
+    protected void resetObjects() { odometryCenter.set(new Point()); }
 }

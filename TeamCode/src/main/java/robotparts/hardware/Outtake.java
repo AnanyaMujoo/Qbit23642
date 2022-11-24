@@ -14,8 +14,8 @@ public class Outtake extends RobotPart {
         armr = create("armr", ElectronicType.PSERVO_REVERSE);
         arml = create("arml", ElectronicType.PSERVO_FORWARD);
 
-        arml.changePosition("start", 0.14);
-        armr.changePosition("start", 0.14);
+        arml.changePosition("start", 0.17);
+        armr.changePosition("start", 0.17);
 
         arml.addPosition("startHalf", 0.45);
         armr.addPosition("startHalf", 0.45);
@@ -23,8 +23,8 @@ public class Outtake extends RobotPart {
         arml.addPosition("endHalf", 0.75);
         armr.addPosition("endHalf", 0.75);
 
-        arml.changePosition("end", 0.79);
-        armr.changePosition("end", 0.79);
+        arml.changePosition("end", 0.82);
+        armr.changePosition("end", 0.82);
 
         turn = create("turn", ElectronicType.PSERVO_REVERSE);
         claw = create("claw", ElectronicType.PSERVO_REVERSE);

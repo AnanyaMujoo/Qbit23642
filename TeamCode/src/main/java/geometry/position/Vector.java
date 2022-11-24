@@ -54,11 +54,11 @@ public class Vector extends GeometryObject {
     }
     public Vector getCopy(ParameterCodeSeg<Vector> operation){ Vector copy = getCopy(); operation.run(copy); return copy; }
 
-    public void add(Vector v2){ translate(v2.getPoint().getX(), v2.getPoint().getY() ); }
-    public void subtract(Vector v2){ translate(-v2.getPoint().getX(), -v2.getPoint().getY() ); }
-    public void invert(){ scale(-1); }
-    public void reflectX(){ p.reflectX(); }
-    public void reflectY(){ p.reflectY(); }
+    public void add(Vector v2){ translate(v2.getPoint().getX(), v2.getPoint().getY() ); setTheta(); }
+    public void subtract(Vector v2){ translate(-v2.getPoint().getX(), -v2.getPoint().getY() ); setTheta(); }
+    public void invert(){ scale(-1); setTheta(); }
+    public void reflectX(){ p.reflectX(); setTheta();}
+    public void reflectY(){ p.reflectY(); setTheta(); }
 
     public Vector getAdded(Vector v2){ return getCopy(v -> v.add(v2)); }
     public Vector getSubtracted(Vector v2){ return getCopy(v -> v.subtract(v2)); }

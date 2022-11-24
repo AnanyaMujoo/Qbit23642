@@ -1,19 +1,12 @@
 package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import autoutil.AutoFramework;
-import elements.FieldSide;
-import robot.BackgroundTask;
-import util.Timer;
-
-import static global.General.bot;
-import static global.General.log;
 
 //@Disabled
-@Autonomous(name = "TerraAutoTest", group = "auto")
-public class TerraAutoTest extends AutoFramework {
+@Autonomous(name = "TerraAutoTest2", group = "auto")
+public class TerraAutoTest2 extends AutoFramework {
 
     @Override
     public void initAuto() {
@@ -26,7 +19,7 @@ public class TerraAutoTest extends AutoFramework {
     @Override
     public void define() {
 
-        addSetpoint(0, 100, 0);
+        addSetpoint(100, 0, 0);
 
 
 //        addSetpoint(0, 0,-90);
