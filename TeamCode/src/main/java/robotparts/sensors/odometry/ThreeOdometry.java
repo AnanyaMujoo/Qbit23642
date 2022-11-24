@@ -12,10 +12,10 @@ import util.template.Precision;
 
 public class ThreeOdometry extends TwoOdometry {
     private IEncoder enc3;
-    public final double width = 21.5;
-    public final double angle = Math.toRadians(1.2);
+    public final double width = 21.7;
+    public final double angle = Math.toRadians(1.5);
     public final Point odometryCenter = new Point();
-    private final Vector odometryCenterToRobotCenter = new Vector(11.5, 13.5);
+    private final Vector odometryCenterToRobotCenter = new Vector(11.5, 13.0);
 
     @Override
     protected void createEncoders() {
@@ -28,23 +28,15 @@ public class ThreeOdometry extends TwoOdometry {
 
     @Override
     protected void update() {
-//        Vector3D localEncDelta = new Vector3D(enc1.getDeltaPosition(), enc2.getDeltaPosition(), enc3.getDeltaPosition());
 
 
         double dx = enc2.getDeltaPosition();
         double dy = enc1.getDeltaPosition();
-        double dh = (1.01*enc3.getDeltaPosition() + (dx*Math.sin(angle)) - (dy*Math.cos(angle)))/width;
-
-
-//
-//        double dx = localEncDelta.getY();
-//        double d3 = (localEncDelta.getZ() + dx*Math.sin(Math.toRadians(angle)))/Math.cos(Math.toRadians(angle));
-//        double dy = scale*(localEncDelta.getX()+d3)/2.0;
-//        double dh = (d3-localEncDelta.getX())/width;
+        double dh = (1.015*enc3.getDeltaPosition() + (dx*Math.sin(angle)) - (dy*Math.cos(angle)))/width;
 
         Vector localDelta = new Vector(dx, dy);
-//
-//        if(dh != 0.0){ localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(dh).getMultiplied(1.0 / dh).multiply(localDelta); }
+
+        if(dh != 0.0){ localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(dh).getMultiplied(1.0 / dh).multiply(localDelta); }
 
         odometryCenter.translate(toGlobalFrame(localDelta));
         Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter);
