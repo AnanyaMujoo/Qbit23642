@@ -23,7 +23,6 @@ public class ThreeOdometry extends TwoOdometry {
         enc3 = create("brEnc", ElectronicType.IENCODER_NORMAL);
         addEncoders(enc3);
         enc3.invert();
-
     }
 
     @Override
@@ -35,6 +34,8 @@ public class ThreeOdometry extends TwoOdometry {
         double dh = (1.015*enc3.getDeltaPosition() + (dx*Math.sin(angle)) - (dy*Math.cos(angle)))/width;
 
         Vector localDelta = new Vector(dx, dy);
+        localDelta.scale(1.01);
+        dh *= 1.035;
 
         if(dh != 0.0){ localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(dh).getMultiplied(1.0 / dh).multiply(localDelta); }
 

@@ -39,14 +39,11 @@ public class TerraAuto extends AutoFramework {
 //        addPause(3.0);
 
         customNumber(5, i -> {
-            addWaypoint(20, 123, 90); // fix drift
-            addSetpoint(56, 123, 90);
-//            addWaypoint(20, 127, 90);
-//            addSetpoint(56, 127, 90);
+            addWaypoint(20, 126, 90);
+            addSetpoint(56, 126, 90);
 //            addConcurrentAutoModule(Backward);
             addPause(0.5);
-//            addWaypoint(34, 127, 75); // fix drift
-            addWaypoint(34, 123, 75);
+            addWaypoint(34, 126, 75);
             addScaledSetpoint(1.0, 4, 130, 50);
 //            addConcurrentAutoModule(Forward);
         });
@@ -71,7 +68,9 @@ public class TerraAuto extends AutoFramework {
     }
 
     @Override
-    public void postProcess() { autoPlane.reflectY(); autoPlane.reflectX(); }
+    public void postProcess() {
+        autoPlane.reflectY(); autoPlane.reflectX();
+    }
 
     @Autonomous(name = "TerraAutoLowerBlue", group = "auto")
     public static class TerraAutoLowerBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; }}
