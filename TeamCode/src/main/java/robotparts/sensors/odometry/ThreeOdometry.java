@@ -13,7 +13,7 @@ import util.template.Precision;
 public class ThreeOdometry extends TwoOdometry {
     private IEncoder enc3;
     public final double width = 21.7;
-    public final double angle = Math.toRadians(1.5);
+    public final double angle = Math.toRadians(1.2);
     public final Point odometryCenter = new Point();
     private final Vector odometryCenterToRobotCenter = new Vector(11.5, 13.0);
 
@@ -31,14 +31,14 @@ public class ThreeOdometry extends TwoOdometry {
 
         double dx = enc2.getDeltaPosition();
         double dy = enc1.getDeltaPosition();
-        double dh = (1.015*enc3.getDeltaPosition() + (dx*Math.sin(angle)) - (dy*Math.cos(angle)))/width;
+        double dh = (1.01*enc3.getDeltaPosition() + (dx*Math.sin(angle)) - (dy*Math.cos(angle)))/(Math.cos(angle)*width);
 
         Vector localDelta = new Vector(dx, dy);
         localDelta.scale(1.01);
-        dh *= 1.035;
 
-        if(dh != 0.0){ localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(dh).getMultiplied(1.0 / dh).multiply(localDelta); }
+//        if(dh != 0.0){ localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(dh).getMultiplied(1.0 / dh).multiply(localDelta); }
 
+//        odometryCenter.translate(localDelta);
         odometryCenter.translate(toGlobalFrame(localDelta));
         Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter);
         setCurrentPose(new Pose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()), getHeading() + Math.toDegrees(dh)));
