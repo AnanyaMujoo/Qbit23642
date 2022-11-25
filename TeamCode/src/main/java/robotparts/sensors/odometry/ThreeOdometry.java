@@ -12,9 +12,9 @@ import util.template.Precision;
 
 public class ThreeOdometry extends TwoOdometry {
     private IEncoder enc3;
-    public final double width = 21.7;
-    public final double angle = Math.toRadians(1.2);
-    public final double angle2 = Math.toRadians(1);
+    public final double width = 20.6;
+    public final double angle = Math.toRadians(5);
+    public final double angle2 = Math.toRadians(0.5);
     public final Point odometryCenter = new Point();
     private final Vector odometryCenterToRobotCenter = new Vector(11.5, 13.0);
 
@@ -32,11 +32,8 @@ public class ThreeOdometry extends TwoOdometry {
 
         double dy = enc1.getDeltaPosition();
         double dx = (enc2.getDeltaPosition() - Math.sin(angle2)*dy)/Math.cos(angle2);
+        double dh = (enc3.getDeltaPosition() - (dx*Math.sin(angle)) - (dy*Math.cos(angle)))/(Math.cos(angle)*width);
 
-
-
-
-        double dh = (1.01*enc3.getDeltaPosition() + (dx*Math.sin(angle)) - (dy*Math.cos(angle)))/(Math.cos(angle)*width);
 
         Vector localDelta = new Vector(dx, dy);
         localDelta.scaleY(1.015);
