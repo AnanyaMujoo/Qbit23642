@@ -14,6 +14,7 @@ public class ThreeOdometry extends TwoOdometry {
     private IEncoder enc3;
     public final double width = 21.7;
     public final double angle = Math.toRadians(1.2);
+    public final double angle2 = Math.toRadians(1);
     public final Point odometryCenter = new Point();
     private final Vector odometryCenterToRobotCenter = new Vector(11.5, 13.0);
 
@@ -29,12 +30,17 @@ public class ThreeOdometry extends TwoOdometry {
     protected void update() {
 
 
-        double dx = enc2.getDeltaPosition();
         double dy = enc1.getDeltaPosition();
+        double dx = (enc2.getDeltaPosition() - Math.sin(angle2)*dy)/Math.cos(angle2);
+
+
+
+
         double dh = (1.01*enc3.getDeltaPosition() + (dx*Math.sin(angle)) - (dy*Math.cos(angle)))/(Math.cos(angle)*width);
 
         Vector localDelta = new Vector(dx, dy);
-        localDelta.scale(1.01);
+        localDelta.scaleY(1.015);
+        localDelta.scaleX(1.005);
 
 //        if(dh != 0.0){ localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(dh).getMultiplied(1.0 / dh).multiply(localDelta); }
 
