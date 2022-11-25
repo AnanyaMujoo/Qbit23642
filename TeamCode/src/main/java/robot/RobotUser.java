@@ -49,7 +49,7 @@ public interface RobotUser {
     Cameras camera = new Cameras();
 
 //    Odometry odometry = new TwoOdometry();
-    Odometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS
+    ThreeOdometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS
     /**
      * UNUSED
      */
