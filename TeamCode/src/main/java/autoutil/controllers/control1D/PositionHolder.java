@@ -7,6 +7,7 @@ public class PositionHolder extends Controller1D {
 
     private final double velocityThreshold;
     private double restPower;
+    private double extraRestPower;
     private final double deltaPowerUp;
     private final double deltaPowerDown;
     private volatile boolean isUsed, isTargeting = false;
@@ -41,7 +42,7 @@ public class PositionHolder extends Controller1D {
         if(isUsed) {
             if(!isWithinAccuracyRange() && isTargeting){
                 double error = (getTarget()-currentPosition);
-                restPower += error > 0 ? deltaPowerUp : deltaPowerDown;
+                extraRestPower = 0.03*error;
             }else if(Math.abs(getCurrentValue()) > velocityThreshold) {
                 restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
             }
@@ -49,7 +50,7 @@ public class PositionHolder extends Controller1D {
     }
 
     @Override
-    protected double setOutput() { return isUsed ? restPower : 0; }
+    protected double setOutput() { return isUsed ? restPower+extraRestPower : 0; }
 
     @Override
     protected boolean hasReachedTarget() { return false; }

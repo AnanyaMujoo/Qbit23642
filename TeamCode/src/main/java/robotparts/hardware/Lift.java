@@ -18,7 +18,7 @@ public class Lift extends RobotPart {
     public PMotor motorRight;
     public PMotor motorLeft;
 
-    public double restPowUp = 0.12;
+    public double restPowUp = 0.1;
     public static final double maxPosition = 66;
 
     @Override

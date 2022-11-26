@@ -27,6 +27,8 @@ import static global.Modes.OuttakeMode.SHARED;
 public interface AutoModuleUser extends RobotUser{
 
     AutoModule Backward = BackwardHeight(HIGH);
+    AutoModule DropAuto = DropAuto(0.5);
+    AutoModule GrabAuto = GrabAuto(0.5);
 
     OutputList BackwardAll = new OutputList(Modes.heightMode::get)
             .addOption(LOW, BackwardHeight(LOW))
@@ -50,5 +52,22 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageOpen(0.0),
             Modes.driveMode.ChangeMode(SLOW)
     );
+
+
+    default AutoModule ForwardAuto(int i){return new AutoModule(
+            outtake.stageStart().attach(lift.stageLift(0.6, Math.max(18.0 - (i*3.6), 0))),
+            outtake.stageStart(0.0), outtake.stageOpen(0.0)
+    );}
+
+
+    AutoModule BackwardAuto = new AutoModule(
+            outtake.stageEnd().attach(lift.stageLift(0.8, HIGH.getValue()-1)),
+            outtake.stageEnd(0.0)
+    );
+
+    static AutoModule DropAuto(double time){ return new AutoModule(outtake.stageOpen(time)); }
+    static AutoModule GrabAuto(double time){ return new AutoModule(outtake.stageClose(time),  outtake.stageReadyStart(0.0), lift.stageLift(0.8, 35)); }
+
+
 
 }

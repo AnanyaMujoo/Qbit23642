@@ -3,6 +3,7 @@ package auton;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import automodules.AutoModule;
+import automodules.AutoModuleUser;
 import autoutil.AutoFramework;
 import elements.Case;
 import elements.FieldPlacement;
@@ -29,40 +30,42 @@ public class TerraAuto extends AutoFramework {
 
     @Override
     public void define() {
-        addWaypoint(0, 60, 0);
-        addConcurrentAutoModule(Backward);
-        addWaypoint(0, 100, 35);
-        addScaledSetpoint(1.0, 4, 128.5, 50);
-//        addAutoModule(new AutoModule(outtake.stageOpen(0.3)));
-//        addConcurrentAutoModule(Forward);
-
-//        customNumber(5, i -> {
-//            addWaypoint(20, 124.5, 90);
-//            addSetpoint(56, 124.5, 90);
-////            addConcurrentAutoModule(Backward);
-//            addPause(0.5);
-//            addWaypoint(34, 124.5, 75);
-//            addScaledSetpoint(1.0, 4, 128.5, 50);
-////            addConcurrentAutoModule(Forward);
-//        });
-//        customCase(() -> {
-//            addWaypoint(-7, 124, 90);
-//            addWaypoint(-20, 124, 90);
-//            addWaypoint(-55, 126, 70);
-//            addWaypoint(-60, 128, 45);
-//            addSetpoint(-62, 70, 0);
-//        }, () -> {
-//            addWaypoint(0, 130, 35);
-//            addWaypoint(0, 105, 0);
-//            addSetpoint(0, 80, 0);
-//        }, () -> {
-//            addWaypoint(7, 124, 90);
-//            addWaypoint(20, 124, 90);
-//            addWaypoint(48, 122, 70);
-//            addWaypoint(50, 114, 50);
-//            addWaypoint(56, 95, 0);
-//            addSetpoint(58, 70, 0);
-//        });
+        addWaypoint(0, 40, 0);
+        addConcurrentAutoModule(BackwardAuto);
+        addScaledWaypoint(0.5, 0, 120, 20);
+        addScaledSetpoint(1.05, 1.0, 130, 50);
+        addAutoModule(DropAuto);
+        addConcurrentAutoModule(ForwardAuto(0));
+        customNumber(5, i -> {
+            addWaypoint(20, 124.5, 90);
+            addScaledWaypoint(0.4, 55, 124.5, 90);
+            addScaledSetpoint(1.1, 59, 124.5, 90);
+            addAutoModule(GrabAuto);
+            addConcurrentAutoModule(Backward);
+            addWaypoint(34, 124.5, 75);
+            addScaledSetpoint(1.05, 1.0, 130, 50);
+            addPause(5.0);
+            addAutoModule(DropAuto);
+            addConcurrentAutoModule(ForwardAuto(i+1));
+        });
+        customCase(() -> {
+            addWaypoint(-7, 124, 90);
+            addWaypoint(-20, 124, 90);
+            addWaypoint(-55, 126, 70);
+            addWaypoint(-60, 128, 45);
+            addSetpoint(-62, 70, 0);
+        }, () -> {
+            addWaypoint(0, 130, 35);
+            addWaypoint(0, 105, 0);
+            addSetpoint(0, 80, 0);
+        }, () -> {
+            addWaypoint(7, 124, 90);
+            addWaypoint(20, 124, 90);
+            addWaypoint(48, 122, 70);
+            addWaypoint(50, 114, 50);
+            addWaypoint(56, 95, 0);
+            addSetpoint(58, 70, 0);
+        });
     }
 
     @Override
