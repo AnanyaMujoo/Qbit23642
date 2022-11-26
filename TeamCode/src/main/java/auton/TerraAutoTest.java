@@ -26,7 +26,7 @@ public class TerraAutoTest extends AutoFramework {
     @Override
     public void define() {
 
-        addScaledSetpoint(0.3, 0, 300, 0);
+        addScaledSetpoint(0.3, 0, 200, 0);
 
 
 //        addSetpoint(0, 0,-90);

@@ -60,8 +60,14 @@ public abstract class Odometry extends RobotPart {
         synchronized (currentPose) { currentPose.setX(pose.getX()); currentPose.setY(pose.getY()); currentPose.setAngle(pose.getAngle()); }
     }
 
+    public final void setCurrentPose(Point current){
+        currentPose.setX(current.getX()); currentPose.setY(current.getY());
+    }
+
+    public final void updateCurrentPose(Vector delta){ currentPose.add(delta); }
+
     public final void updateCurrentPose(Vector delta, double deltaHeading){
-        currentPose.add(delta); currentPose.setAngle(getHeading()+deltaHeading);
+        updateCurrentPose(delta); currentPose.setAngle(getHeading()+deltaHeading);
     }
 
     protected final void setHeading(double heading){ currentPose.setAngle(heading); }

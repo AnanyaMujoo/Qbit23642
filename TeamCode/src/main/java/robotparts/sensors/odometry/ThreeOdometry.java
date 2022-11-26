@@ -10,13 +10,18 @@ import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
 import util.template.Precision;
 
+import static java.lang.Math.*;
+
 public class ThreeOdometry extends TwoOdometry {
     private IEncoder enc3;
-    public final double width = 20.6;
-    public double angle2 = Math.toRadians(0.5);
-    public double angle3 = Math.toRadians(2);
-    public final double scale2 = 1.0;
-    public final double scale3 = 1.0;
+    public final double width = 22.8507;
+    public double angle1 = -1.2;
+    public double angle2 = toRadians(0.5329);
+    public double angle3 = toRadians(5.7319);
+    public double angle4 = toRadians(2);
+    public final double scale1 = 0.9925;
+    public final double scale2 = 1.0115*scale1;
+    public final double scale3 = 1.0055*scale1;
     public int mode = 0;
     public final Point odometryCenter = new Point();
     private final Vector odometryCenterToRobotCenter = new Vector(11.5, 13.0);
@@ -32,32 +37,49 @@ public class ThreeOdometry extends TwoOdometry {
     @Override
     protected void update() {
 
-        double dy;
-        if(mode == 0) {
-            dy = enc1.getDeltaPosition();
-        }else if(mode == 1){
-            dy = enc2.getDeltaPosition();
-        }else{
-            dy = enc3.getDeltaPosition();
-        }
-
-        double dx = 0;
-        double dh = 0;
-
-
+        double dy, dx, dh = 0;
 //
-//        double dx = ((scale2*enc2.getDeltaPosition()) - Math.sin(angle2)*dy)/Math.cos(angle2);
-//        double dh = ((scale3*enc3.getDeltaPosition()) - (dx*Math.sin(angle3)) - (dy*Math.cos(angle3)))/(Math.cos(angle3)*width);
-//
-//
+//        if(mode == 0) {
+//            dy = enc1.getDeltaPosition()*scale1;
+//        }else if(mode == 1){
+//            dy = enc2.getDeltaPosition()*scale2;
+//        }else if(mode == 2){
+//            dy = enc3.getDeltaPosition()*scale3;
+//        }else if(mode == 3) {
+//            dy = enc1.getDeltaPosition();
+//            dx = ((scale2 * enc2.getDeltaPosition()) - sin(angle2)*dy)/cos(angle2);
+//            dh = ((scale3 * enc3.getDeltaPosition()) + (dx * sin(angle3)) - (dy * cos(angle3))) / (cos(angle3) * width);
+//        }
+
+
+        dx = scale2*enc2.getDeltaPosition();
+        dy = (enc1.getDeltaPosition() - dx*sin(angle4));
+//        dx = ((scale2 * enc2.getDeltaPosition()) - sin(angle2)*dy)/cos(angle2);
+//        dh = ((scale3 * enc3.getDeltaPosition()) + (dx * sin(angle3)) - (dy * cos(angle3))) / (cos(angle3) * width);
+//        dh = Math.toDegrees(dh);
+//        localDelta.rotate(angle1);
+
         Vector localDelta = new Vector(dx, dy);
-
-//        if(dh != 0.0){ localDelta = Matrix2D.getIntegratedFromZeroRotationMatrix(dh).getMultiplied(1.0 / dh).multiply(localDelta); }
-
-        odometryCenter.translate(localDelta);
-//        odometryCenter.translate(toGlobalFrame(localDelta));
+        setHeading(gyro.getHeading());
+        odometryCenter.translate(toGlobalFrame(localDelta));
         Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter);
-        setCurrentPose(new Pose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()), getHeading() + Math.toDegrees(dh)));
+        setCurrentPose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()));
+
+//        updateCurrentPose(toGlobalFrame(localDelta));
+
+//        if(mode == 0){
+//            updateCurrentPose(localDelta);
+//        }else{
+//
+////            localDelta = new Vector(localDelta.getTheta()+getHeading()).getScaled(localDelta.getLength());
+////            updateCurrentPose(localDelta);
+//        }
+
+//        odometryCenter.translate(localDelta);
+//        odometryCenter.translate(toGlobalFrame(localDelta));
+//        setCurrentPose(new Pose(odometryCenter.ge));
+//        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter);
+//        setCurrentPose(new Pose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()), getHeading() + Math.toDegrees(dh)));
     }
 
     @Override

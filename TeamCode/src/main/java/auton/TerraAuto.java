@@ -30,23 +30,21 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void define() {
         addWaypoint(0, 60, 0);
+        addConcurrentAutoModule(Backward);
         addWaypoint(0, 100, 35);
-        addScaledSetpoint(1.0, 4, 130, 50);
-//        addConcurrentAutoModule(Backward);
-//        addPause(3.0);
-//        addAutoModule(new AutoModule(outtake.stageOpen(0.5)));
+        addScaledSetpoint(1.0, 4, 128.5, 50);
+//        addAutoModule(new AutoModule(outtake.stageOpen(0.3)));
 //        addConcurrentAutoModule(Forward);
-//        addPause(3.0);
 
-        customNumber(5, i -> {
-            addWaypoint(20, 126, 90);
-            addSetpoint(56, 126, 90);
-//            addConcurrentAutoModule(Backward);
-            addPause(0.5);
-            addWaypoint(34, 126, 75);
-            addScaledSetpoint(1.0, 4, 130, 50);
-//            addConcurrentAutoModule(Forward);
-        });
+//        customNumber(5, i -> {
+//            addWaypoint(20, 124.5, 90);
+//            addSetpoint(56, 124.5, 90);
+////            addConcurrentAutoModule(Backward);
+//            addPause(0.5);
+//            addWaypoint(34, 124.5, 75);
+//            addScaledSetpoint(1.0, 4, 128.5, 50);
+////            addConcurrentAutoModule(Forward);
+//        });
 //        customCase(() -> {
 //            addWaypoint(-7, 124, 90);
 //            addWaypoint(-20, 124, 90);
