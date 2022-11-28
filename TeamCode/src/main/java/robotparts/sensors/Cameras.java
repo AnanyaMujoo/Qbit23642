@@ -15,8 +15,8 @@ public class Cameras extends RobotPart {
 
     @Override
     public void init() {
-        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL);
-//        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL_DISPLAY);
+//        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL);
+        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL_DISPLAY);
 
         // TODO 4 FIX Make way to turn display on later
 //        icam = createInternalCamera(OpenCvCameraRotation.UPRIGHT, false);
@@ -26,7 +26,7 @@ public class Cameras extends RobotPart {
 
     public void hideExternalCamera(){ ecam.stopStreaming(); }
 
-    public void startExternalCamera(){ ecam.start(); }
+    public void startExternalCamera(){ ecam.start(false, 1); }
 
     public void setExternalScanner(Scanner scanner){ecam.setScanner(scanner);}
 
@@ -35,7 +35,7 @@ public class Cameras extends RobotPart {
     public double getExternalFPS(){ return ecam.getFramesPerSecond(); }
 
     public void startInternalCamera(){
-        icam.start();
+        icam.start(false, 1);
     }
 
     public void setInternalScanner(Scanner scanner){icam.setScanner(scanner);}

@@ -62,6 +62,8 @@ public class PMotor extends Electronic {
         motorEncoder.reset();
     }
 
+    // TOD 5 Make way for custom PID and custom rest pow function (feedforward)
+
 
     public void usePositionHolder(double restPower){ positionHolder.setRestOutput(restPower); }
 
