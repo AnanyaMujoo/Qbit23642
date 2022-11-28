@@ -12,6 +12,7 @@ import unittests.auto.framework.IteratorTest;
 import unittests.auto.framework.ThreadStopTest;
 import unittests.auto.framework.movement.DRPTest;
 import unittests.auto.framework.movement.MoveTimeTest;
+import unittests.auto.framework.movement.OdometryTest;
 import unittests.auto.framework.movement.PARTest;
 import unittests.auto.framework.movement.PIDTest;
 import unittests.auto.framework.movement.PurePursuitTest;
@@ -30,7 +31,8 @@ public class AutoUnitTester extends Auto implements UnitTester {
      * Type of testing mode
      * @link TestType
      */
-    TestingMode testingMode = TestingMode.CONTROL;
+//    TestingMode testingMode = TestingMode.CONTROL;
+    TestingMode testingMode = TestingMode.SELECTION;
 
     @Override
     public void createUnitTests(){
@@ -53,6 +55,11 @@ public class AutoUnitTester extends Auto implements UnitTester {
 //        Works????
 //        add(new PurePursuitTest());
 //        add(new DRPTest());
+
+
+        add(new OdometryTest.ForwardTest());
+        add(new OdometryTest.StrafeTest());
+        add(new OdometryTest.TurnTest());
 
     }
 

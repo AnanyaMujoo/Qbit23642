@@ -16,8 +16,6 @@ public class Cameras extends RobotPart {
     public void init() {
 //        cam = create("ecam", ElectronicType.ICAMERA_EXTERNAL);
         cam = create("ecam", ElectronicType.ICAMERA_EXTERNAL_DISPLAY);
-
-        // TODO 4 FIX Make way to turn display on later
 //        cam = createInternalCamera(OpenCvCameraRotation.UPRIGHT, false);
     }
 

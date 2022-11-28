@@ -1,6 +1,7 @@
 package unittests.auto.framework.movement;
 
 import autoutil.AutoConfig;
+import autoutil.AutoFramework;
 import autoutil.AutoSegment;
 import autoutil.Executor;
 import autoutil.generators.LineGenerator;
@@ -13,20 +14,18 @@ public class PurePursuitTest extends AutoUnitTest {
      * Test pure pursuit
      */
 
-    /**
-     * Run method for testing
-     */
     @Override
-    protected void run() {
+    protected void start() {
+        setAuto(new AutoFramework() {
+            @Override
+            public void define() {
+                setConfig(mecanumDefaultConfig);
+            }
 
-//        generator.addAutoModule(automodules.DuckTele);
-
-//        AutoSegment<?,?> setSegment = mecanumDefaultSetpoint.run();
-//        setSegment.setGeneratorFunction(gen -);
-//        setSegment.getGenerator().add(new Pose(), new Pose(0,40,0));
-//        setSegment.run(linearOpMode);
-//        AutoSegment<?,?> waySegment = mecanumDefaultSetpoint.run();
-//        waySegment.getGenerator().add(new Pose(), new Pose(0,40,0));
-//        waySegment.run(linearOpMode);
+            @Override
+            public void initAuto() {
+                addWaypoint(0, 40, 0);
+            }
+        });
     }
 }

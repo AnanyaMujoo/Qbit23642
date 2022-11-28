@@ -4,6 +4,7 @@ import static global.General.bot;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import autoutil.AutoFramework;
 import autoutil.AutoUser;
 import global.Common;
 import unittests.UnitTest;
@@ -18,12 +19,15 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common, AutoUser
      * @link UnitTest
      */
 
-    // TODO 4 NEW Make this work with autoframework
+    // TODO TEST
 
     /**
      * Static linear opmode
      */
     public static LinearOpMode linearOpMode;
+    private AutoFramework autoFramework;
+
+    protected void setAuto(AutoFramework auto){ autoFramework = auto; }
 
     /**
      * Start method runs once
@@ -34,7 +38,7 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common, AutoUser
      * Run runs once after start
      * NOTE: This is equivalent to loop in TeleUnitTest except it runs once
      */
-    protected void run(){}
+    protected void run(){ if(autoFramework != null){ autoFramework.initAuto(); autoFramework.runAuto(); autoFramework.stopAuto(); } }
 
     /**
      * Test runs the test
