@@ -5,9 +5,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.ArrayList;
 
 import auton.TerraAuto.*;
-import auton.TerraAutoSimple.*;
-import auton.TerraAutoSimple;
-import auton.TerraAutoTest;
 import autoutil.AutoFramework;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;

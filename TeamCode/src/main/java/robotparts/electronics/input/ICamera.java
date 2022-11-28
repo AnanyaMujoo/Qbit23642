@@ -22,13 +22,7 @@ public class ICamera extends Electronic {
 
     public void pause(){ camera.pauseViewport(); }
     public void resume(){ camera.resumeViewport(); }
-
-    public void startStreaming(){ camera.startStreaming(width, height, orientation); }
-    public void stopStreaming(){ camera.stopStreaming(); }
-
-    public void setScanner(Scanner scanner){
-        camera.setPipeline(scanner);
-    }
+    public void setScanner(Scanner scanner){ camera.setPipeline(scanner); }
 
     public void start(boolean flash, int zoom){
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
@@ -37,7 +31,7 @@ public class ICamera extends Electronic {
                 camera.startStreaming(width, height, orientation);
                 if(flash) { camera.setFlashlightEnabled(true);}
                 if(zoom != 1){ camera.setZoom(zoom);}
-                camera.pauseViewport();
+                pause();
             }
             @Override
             public void onError(int errorCode) {}

@@ -17,8 +17,8 @@ public class ExternalCameraTest extends TeleUnitTest {
      */
     @Override
     public void start() {
-        camera.setExternalScanner(teamElementScanner);
-        camera.startExternalCamera();
+//        camera.setExternalScanner(teamElementScanner);
+//        camera.startExternalCamera();
     }
 
     /**
@@ -26,7 +26,7 @@ public class ExternalCameraTest extends TeleUnitTest {
      */
     @Override
     protected void loop() {
-        log.show("External Camera FPS", camera.getInternalFPS());
+//        log.show("External Camera FPS", camera.getInternalFPS());
         log.show("Detected Case", teamElementScanner.getCase());
     }
 
@@ -35,6 +35,6 @@ public class ExternalCameraTest extends TeleUnitTest {
      */
     @Override
     public void stop() {
-        camera.stopExternalCamera();
+//        camera.stopExternalCamera();
     }
 }

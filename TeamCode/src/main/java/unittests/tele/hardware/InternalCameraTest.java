@@ -16,8 +16,8 @@ public class InternalCameraTest extends TeleUnitTest {
      */
     @Override
     public void start() {
-        camera.setInternalScanner(teamElementScanner);
-        camera.startInternalCamera();
+//        camera.setInternalScanner(teamElementScanner);
+//        camera.startInternalCamera();
     }
 
     /**
@@ -25,7 +25,7 @@ public class InternalCameraTest extends TeleUnitTest {
      */
     @Override
     protected void loop() {
-        log.show("Internal Camera FPS", camera.getInternalFPS());
+//        log.show("Internal Camera FPS", camera.getInternalFPS());
         log.show("Detected Case", teamElementScanner.getCase());
     }
 
@@ -34,6 +34,6 @@ public class InternalCameraTest extends TeleUnitTest {
      */
     @Override
     public void stop() {
-        camera.stopInternalCamera();
+//        camera.stopInternalCamera();
     }
 }

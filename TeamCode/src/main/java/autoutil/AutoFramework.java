@@ -91,11 +91,12 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void customCase(CodeSeg first, CodeSeg second, CodeSeg third){ addDecision(new DecisionList(() -> caseDetected).addOption(Case.FIRST, first).addOption(Case.SECOND, second).addOption(Case.THIRD, third)); }
     public void customNumber(int num, ParameterCodeSeg<Integer> one){ for (int i = 0; i < num; i++) { one.run(i); } }
 
-    public void scan(){
+    public void scan(boolean view){
         scanning = true;
         caseScanner = new CaseScanner();
-        camera.setExternalScanner(caseScanner);
-        camera.startExternalCamera();
+        camera.setScanner(caseScanner);
+        camera.start();
+        if(view){ camera.resume(); }
         while (!isStarted()){ caseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
     }
 
@@ -103,7 +104,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void runAuto() {
         setup();
         createSegments();
-        if(scanning) { camera.stopExternalCamera(); }
+        if(scanning) { camera.halt(); }
         Iterator.forAll(segments, segment -> segment.run(this));
     }
 

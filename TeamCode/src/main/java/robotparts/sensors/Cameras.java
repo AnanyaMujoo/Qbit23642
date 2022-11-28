@@ -10,49 +10,29 @@ import robotparts.electronics.input.ICamera;
 import static global.General.hardwareMap;
 
 public class Cameras extends RobotPart {
-    private ICamera ecam;
-    private ICamera icam;
+    private ICamera cam;
 
     @Override
     public void init() {
-//        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL);
-        ecam = create("ecam", ElectronicType.ICAMERA_EXTERNAL_DISPLAY);
+//        cam = create("ecam", ElectronicType.ICAMERA_EXTERNAL);
+        cam = create("ecam", ElectronicType.ICAMERA_EXTERNAL_DISPLAY);
 
         // TODO 4 FIX Make way to turn display on later
-//        icam = createInternalCamera(OpenCvCameraRotation.UPRIGHT, false);
+//        cam = createInternalCamera(OpenCvCameraRotation.UPRIGHT, false);
     }
 
-    public void showExternalCamera(){ ecam.startStreaming(); }
-
-    public void hideExternalCamera(){ ecam.stopStreaming(); }
-
-    public void startExternalCamera(){ ecam.start(false, 1); }
-
-    public void setExternalScanner(Scanner scanner){ecam.setScanner(scanner);}
-
-    public void stopExternalCamera(){ ecam.halt(); }
-
-    public double getExternalFPS(){ return ecam.getFramesPerSecond(); }
-
-    public void startInternalCamera(){
-        icam.start(false, 1);
-    }
-
-    public void setInternalScanner(Scanner scanner){icam.setScanner(scanner);}
-
-    public void stopInternalCamera(){ icam.halt(); }
-
-    public double getInternalFPS(){
-        return icam.getFramesPerSecond();
-    }
-
+    public void start(){ cam.start(false, 1); }
+    public void pause(){ cam.pause(); }
+    public void resume(){ cam.resume(); }
+    public void setScanner(Scanner scanner){ cam.setScanner(scanner);}
+    @Override
+    public void halt(){ cam.halt(); }
+    public double getFPS(){ return cam.getFramesPerSecond(); }
 
     /**
      * Used to get the monitor view Id (To view what the camera is seeing)
      * @return monitor id
      */
-    public static int getCameraMonitorViewId(){
-        return hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-    }
+    public static int getCameraMonitorViewId(){ return hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName()); }
 
 }

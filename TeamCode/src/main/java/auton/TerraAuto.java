@@ -19,7 +19,7 @@ public class TerraAuto extends AutoFramework {
         setConfig(mecanumDefaultConfig);
         bot.addBackgroundTask(lift.holdPosition());
         outtake.closeClaw();
-        scan();
+        scan(false);
     }
 
     @Override

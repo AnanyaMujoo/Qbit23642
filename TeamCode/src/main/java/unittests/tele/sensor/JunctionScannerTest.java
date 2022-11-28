@@ -14,10 +14,10 @@ public class JunctionScannerTest extends TeleUnitTest {
 
     @Override
     public void init() {
-        camera.setExternalScanner(junctionScanner);
-        camera.startExternalCamera();
-        gph1.link(Button.B, camera::showExternalCamera);
-        gph1.link(Button.A, camera::hideExternalCamera);
+        camera.setScanner(junctionScanner);
+        camera.start();
+        gph1.link(Button.RIGHT_BUMPER, camera::resume);
+        gph1.link(Button.LEFT_BUMPER, camera::pause);
     }
 
     @Override
@@ -29,13 +29,13 @@ public class JunctionScannerTest extends TeleUnitTest {
         double dpow = derr/30;
         double hpow = herr/90;
 
-        Vector pow = new Vector(0, Math.abs(derr) < 40 ? dpow : 0);
-        pow.rotate(-herr);
-        drive.move(pow.getY(), pow.getX(), Math.abs(herr) < 45 ? hpow : 0);
+//        Vector pow = new Vector(0, Math.abs(derr) < 40 ? dpow : 0);
+//        pow.rotate(-herr);
+//        drive.move(pow.getY(), pow.getX(), Math.abs(herr) < 45 ? hpow : 0);
     }
 
     @Override
     public void stop() {
-        camera.stopExternalCamera();
+        camera.halt();
     }
 }
