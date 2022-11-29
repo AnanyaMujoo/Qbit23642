@@ -17,6 +17,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.Key;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -37,6 +38,7 @@ import geometry.position.Line;
 import geometry.position.Pose;
 import util.ExceptionCatcher;
 import util.codeseg.CodeSeg;
+import util.codeseg.ParameterCodeSeg;
 import util.template.Iterator;
 
 public abstract class Drawer extends JPanel {
@@ -57,7 +59,9 @@ public abstract class Drawer extends JPanel {
 
     public static final double fieldSize = 358; // cm
 
-    private static boolean shouldExit = false;
+    public static boolean shouldExit = false;
+    public static int step = 0;
+    public static boolean lastStep = false;
 
     public static final double refreshRate = 50;
 
@@ -128,9 +132,13 @@ public abstract class Drawer extends JPanel {
         this.g.dispose();
     }
 
+    protected static ParameterCodeSeg<KeyEvent> listener;
+
     private static final KeyListener keyListener = new KeyListener() {
         @Override
-        public void keyPressed(KeyEvent e) { char c = e.getKeyChar(); if(c == 'q'){ shouldExit = true; System.exit(0); }}
+        public void keyPressed(KeyEvent e) {
+            listener.run(e);
+        }
         @Override
         public void keyTyped(KeyEvent keyEvent) {}
         @Override

@@ -1,6 +1,7 @@
 package geometry.position;
 
 import java.util.Locale;
+import java.util.Objects;
 
 import geometry.framework.GeometryObject;
 import geometry.framework.Point;
@@ -40,6 +41,18 @@ public class Pose extends GeometryObject {
     public void scaleOrientation(double scale){setAngle(getAngle()*scale);}
     public Pose getCopy(){ return new Pose(getX(), getY(), getAngle()); }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pose pose = (Pose) o;
+        return Double.compare(pose.angle, angle) == 0 && Objects.equals(p, pose.p);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(p, angle);
+    }
 
     @Override
     public void rotate(Point anchor, double angle) { super.rotate(anchor, angle); rotateOrientation(angle);}

@@ -1,5 +1,7 @@
 package geometry.framework;
 
+import java.util.Objects;
+
 import geometry.position.Vector;
 import math.linearalgebra.Matrix2D;
 import util.codeseg.ParameterCodeSeg;
@@ -42,6 +44,20 @@ public class Point {
         return new Point(getX(), getY());
     }
     public Point getCopy(ParameterCodeSeg<Point> operation){ Point copy = getCopy(); operation.run(copy); return copy; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Point point = (Point) o;
+        return Double.compare(point.x, x) == 0 && Double.compare(point.y, y) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+
     public String toString() { return "Point {x:" + x + ", y:" + y + "}"; }
 }
 
