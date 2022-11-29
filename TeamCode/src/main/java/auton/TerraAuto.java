@@ -33,7 +33,7 @@ public class TerraAuto extends AutoFramework {
         addWaypoint(0, 40, 0);
         addConcurrentAutoModule(BackwardAuto);
         addScaledWaypoint(0.5, 0, 120, 20);
-        addScaledSetpoint(1.05, 1.0, 130, 50);
+        addScaledSetpoint(1.05, 1.0, 130, 50); // 4.0, 128.0, 50.0
         addAutoModule(DropAuto);
         addConcurrentAutoModule(ForwardAuto(0));
         customNumber(5, i -> {

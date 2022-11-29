@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import auton.TerraAuto.*;
 import autoutil.AutoFramework;
@@ -12,6 +13,7 @@ import geometry.framework.Point;
 import geometry.position.Line;
 import geometry.polygons.PolyLine;
 import geometry.position.Pose;
+import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
 
 public class AutoSimulator extends Drawer{
@@ -164,7 +166,14 @@ public class AutoSimulator extends Drawer{
         listener = e -> {
             char c = e.getKeyChar();
             if(c == 'q'){ shouldExit = true; System.exit(0); }
-            if(c == 'e'){ editingMode = !editingMode; }
+            if(c == 'e'){
+                editingMode = !editingMode;
+                if(editingMode){
+                    System.out.printf(Locale.US, "Editing Pose %d, %s %n", step, robotPose.toString());
+                }else{
+                    System.out.printf(Locale.US, "Saved Pose %d, New %s Code %.1f, %.1f, %.1f %n", step, robotPose.toString(), -robotPose.getX(), -robotPose.getY(), robotPose.getAngle());
+                }
+            }
             double v = !e.isShiftDown() ? 3.0 : 0.5;
             if(e.getKeyCode() == KeyEvent.VK_RIGHT){
                 if(step < 99 && !editingMode) {step++; lastStep = true; }else {
@@ -197,11 +206,5 @@ public class AutoSimulator extends Drawer{
             }
         };
     }
-
-
-
-
-
-
 
 }

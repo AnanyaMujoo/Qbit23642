@@ -58,5 +58,5 @@ public class Pose extends GeometryObject {
     public void rotate(Point anchor, double angle) { super.rotate(anchor, angle); rotateOrientation(angle);}
 
     @Override
-    public String toString() { return String.format(Locale.US, "Position {p: %s, angle: %f}", p.toString(), getAngle()); }
+    public String toString() { return String.format(Locale.US, "Pose {p: %s, angle: %.3f}", p.toString(), getAngle()); }
 }
