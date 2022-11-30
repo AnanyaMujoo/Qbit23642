@@ -43,7 +43,9 @@ public class AutoSimulator extends Drawer{
     @Override
     public void define() {
         simulateAuto();
-        drawField(); drawPlane(autoPlane); drawPlane(robot);
+        drawField();
+        drawPlane(autoPlane);
+        drawPlane(robot);
         currentTime += (speedUp/refreshRate);
     }
 
@@ -142,7 +144,7 @@ public class AutoSimulator extends Drawer{
         }else{
             if(step < poses.size()) {
                 if(!editingMode){
-                    Pose targetPose = poses.get(step);
+                    Pose targetPose = poses.get(step).getCopy();
                     updateRobotPose(targetPose.getPoint(), targetPose.getAngle());
                 }else{
                     updateRobotPose(robotPose.getPoint(), robotPose.getAngle());
@@ -170,8 +172,8 @@ public class AutoSimulator extends Drawer{
                     System.out.printf(Locale.US, "Editing Pose %d, %s %n", step, robotPose.toString());
                 }else{
                     System.out.printf(Locale.US, "Saved Pose %d, New %s Code %.1f, %.1f, %.1f %n", step, robotPose.toString(), -robotPose.getX(), -robotPose.getY(), robotPose.getAngle());
+                    autoPlane.remove(convertToField(poses.get(step).getCopy(), startPose));
                     poses.set(step, robotPose);
-                    autoPlane.remove(autoPlane.getPoses().get(step+1));
                     autoPlane.add(convertToField(robotPose.getCopy(), startPose));
                 }
             }
