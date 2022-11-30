@@ -5,13 +5,13 @@ import robot.BackgroundTask;
 
 import static global.General.bot;
 
-
+@Deprecated
 public class TerraAutoCyclesSafe extends AutoFramework {
 
     @Override
     public void initAuto() {
 //        setConfig(mecanumDefaultConfig());
-        scan(false);
+//        scan(false);
         bot.addBackgroundTask(new BackgroundTask(() -> {
             mecanumLift.holdPosition();
             mecanumIntake.move(-0.8);

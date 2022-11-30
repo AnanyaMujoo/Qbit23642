@@ -12,6 +12,8 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import geometry.position.Pose;
+import geometry.position.Vector;
 import util.template.Iterator;
 
 import static global.General.log;
@@ -106,6 +108,12 @@ public class JunctionScanner extends Scanner {
 
 
 
+    }
+
+    public Pose getPose(){
+        Vector distanceVector = new Vector(0, distanceToJunction);
+        distanceVector.rotate(angleToJunction);
+        return new Pose(distanceVector.getX(), distanceVector.getY(), angleToJunction);
     }
 
     private double distanceRatio(double sizeOnScreen, double screenWidth){ return 2*Math.tan(Math.toRadians(cameraFov*(sizeOnScreen/screenWidth))/2.0); }

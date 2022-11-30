@@ -44,7 +44,8 @@ public class AutoSegment<R extends Reactor, G extends Generator> {
         WAYPOINT,
         AUTOMODULE,
         CONCURRENT_AUTOMODULE,
-        CANCEL_AUTOMODULE
+        CANCEL_AUTOMODULE,
+        CUSTOM
     }
 
 }

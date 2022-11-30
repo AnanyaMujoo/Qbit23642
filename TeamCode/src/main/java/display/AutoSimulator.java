@@ -78,8 +78,6 @@ public class AutoSimulator extends Drawer{
         timer.reset();
     }
 
-    // TODO TEST FIX BUG
-
     public static void updateRobotPose(Pose velocity){
         velocity.scale(1.0/refreshRate); velocity.scaleOrientation(1.0/refreshRate);
         robotPose.translate(velocity.getX(), velocity.getY());

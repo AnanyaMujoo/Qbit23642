@@ -4,7 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import automodules.AutoModule;
 import automodules.AutoModuleUser;
+import automodules.stage.Main;
+import automodules.stage.Stage;
 import autoutil.AutoFramework;
+import autoutil.reactors.MecanumJunctionReactor;
+import autoutil.vision.JunctionScanner;
 import elements.Case;
 import elements.FieldPlacement;
 import elements.FieldSide;
@@ -20,6 +24,7 @@ public class TerraAuto extends AutoFramework {
         bot.addBackgroundTask(lift.holdPosition());
         outtake.closeClaw();
         scan(false);
+        setScannerAfterInit(MecanumJunctionReactor.junctionScanner);
     }
 
     @Override
@@ -27,6 +32,8 @@ public class TerraAuto extends AutoFramework {
 //        caseDetected = Case.THIRD;
         if(isFlipped()){ flipCases(); }
     }
+
+    // TODO TEST
 
     @Override
     public void define() {
@@ -66,6 +73,9 @@ public class TerraAuto extends AutoFramework {
             addWaypoint(56, 95, 0);
             addSetpoint(58, 70, 0);
         });
+
+
+//        addCustomSegment(mecanumJunctionSetpoint, 1.0, 130, 50);
     }
 
     @Override

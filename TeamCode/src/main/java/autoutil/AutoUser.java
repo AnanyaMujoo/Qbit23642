@@ -3,6 +3,7 @@ package autoutil;
 import autoutil.generators.Generator;
 import autoutil.generators.LineGenerator;
 import autoutil.generators.PoseGenerator;
+import autoutil.reactors.MecanumJunctionReactor;
 import autoutil.reactors.MecanumPIDReactor;
 import autoutil.reactors.MecanumPurePursuitReactor;
 import autoutil.reactors.Reactor;
@@ -18,8 +19,10 @@ public interface AutoUser {
 
     ReturnCodeSeg<MecanumPIDReactor> mecanumPIDReactor = reactor(MecanumPIDReactor.class);
     ReturnCodeSeg<MecanumPurePursuitReactor> mecanumPurePursuitReactor = reactor(MecanumPurePursuitReactor.class);
+    ReturnCodeSeg<MecanumJunctionReactor> mecanumJunctionReactor = reactor(MecanumJunctionReactor.class);
 
     AutoSegment<?, ?> mecanumDefaultSetpoint = new AutoSegment<>(mecanumPIDReactor, poseGenerator);
+    AutoSegment<?, ?> mecanumJunctionSetpoint = new AutoSegment<>(mecanumJunctionReactor, poseGenerator);
     AutoSegment<?, ?> mecanumDefaultWayPoint = new AutoSegment<>(mecanumPurePursuitReactor, lineGenerator);
 
     AutoConfig mecanumDefaultConfig = new AutoConfig(mecanumDefaultSetpoint, mecanumDefaultWayPoint);

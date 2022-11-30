@@ -11,7 +11,7 @@ public class TerraAutoCycles extends AutoFramework {
     @Override
     public void initAuto() {
 //        setConfig(mecanumDefaultConfig());
-        scan(false);
+//        scan(false);
         bot.addBackgroundTask(new BackgroundTask(() -> {
             mecanumLift.holdPosition();
             mecanumIntake.move(-0.8);

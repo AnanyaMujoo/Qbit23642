@@ -4,6 +4,8 @@ package autoutil;
 
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
+import org.firstinspires.ftc.teamcode.R;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -19,6 +21,7 @@ import autoutil.generators.Generator;
 import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
 import autoutil.vision.CaseScanner;
+import autoutil.vision.Scanner;
 import elements.Case;
 import elements.FieldPlacement;
 import elements.FieldSide;
@@ -49,16 +52,20 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected ArrayList<Double> pauses = new ArrayList<>();
     protected ArrayList<AutoModule> autoModules = new ArrayList<>();
     protected ArrayList<Double> movementScales = new ArrayList<>();
+    // TODO CHECK
+    protected ArrayList<AutoSegment<?,?>> customSegments = new ArrayList<>();
 
     protected boolean scanning = false;
+    protected boolean haltCameraAfterInit = true;
     protected CaseScanner caseScanner;
+    protected Scanner scannerAfterInit;
     protected Case caseDetected = Case.FIRST;
 
     protected boolean isIndependent = false;
 
     private int segmentIndex = 1;
-    private int pauseIndex = 0;
-    private int autoModuleIndex = 0;
+    private int pauseIndex, autoModuleIndex, customSegmentIndex = 0;
+
 
     {
         poses.add(new Pose()); movementScales.addAll(Collections.nCopies(100,1.0));
@@ -91,6 +98,11 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void customCase(CodeSeg first, CodeSeg second, CodeSeg third){ addDecision(new DecisionList(() -> caseDetected).addOption(Case.FIRST, first).addOption(Case.SECOND, second).addOption(Case.THIRD, third)); }
     public void customNumber(int num, ParameterCodeSeg<Integer> one){ for (int i = 0; i < num; i++) { one.run(i); } }
 
+    public void setScannerAfterInit(Scanner scanner){
+        haltCameraAfterInit = false;
+        scannerAfterInit = scanner;
+    }
+
     public void scan(boolean view){
         scanning = true;
         caseScanner = new CaseScanner();
@@ -104,7 +116,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void runAuto() {
         setup();
         createSegments();
-        if(scanning) { camera.halt(); }
+        if(scanning) { if(haltCameraAfterInit) { camera.halt(); }else{ camera.setScanner(scannerAfterInit); } }
         Iterator.forAll(segments, segment -> segment.run(this));
     }
 
@@ -119,6 +131,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.AUTOMODULE, autoModule); }
     public void addConcurrentAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.CONCURRENT_AUTOMODULE, autoModule);}
     public void addCancelAutoModules(){ addSegmentType(AutoSegment.Type.CANCEL_AUTOMODULE); addLastPose(); }
+    public void addCustomSegment(AutoSegment<?,?> segment, double x, double y, double h){ segmentTypes.add(AutoSegment.Type.CUSTOM); poses.add(new Pose(x, y, h)); }
 
     private void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(config.getSetpointSegment().getReactorReference(), generator); }
 
@@ -142,6 +155,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
                     final AutoModule autoModule2 = getCurrentAutoModule(); addStationarySegment(() -> new AutoModuleGenerator(autoModule2, true));  break;
                 case CANCEL_AUTOMODULE:
                     addStationarySegment(() -> new AutoModuleGenerator(true)); break;
+                case CUSTOM:
+                    addSegment(getCurrentCustomSegment()); break;
             }
             segmentIndex++;
         });
@@ -149,6 +164,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     private AutoModule getCurrentAutoModule(){ AutoModule autoModule = autoModules.get(autoModuleIndex); autoModuleIndex++; return autoModule; }
     private double getCurrentPause(){ double time = pauses.get(pauseIndex); pauseIndex++; return time; }
+    private AutoSegment<?,?> getCurrentCustomSegment(){AutoSegment<?,?> segment = customSegments.get(customSegmentIndex); customSegmentIndex++; return segment; }
 
     private void addSegment(AutoSegment<?, ?> segment){ addSegment(segment.getReactorReference(), segment.getGeneratorReference()); }
     private <R extends Reactor, G extends Generator> void addSegment(@NonNull ReturnCodeSeg<R> reactor, @NonNull ReturnCodeSeg<G> generator){
@@ -167,4 +183,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public ArrayList<AutoSegment.Type> getSegmentTypes(){ return segmentTypes; }
     public CoordinatePlane getAutoPlane(){ return autoPlane; }
 
+    @Override
+    public void stopAuto() {
+        if(scanning && !haltCameraAfterInit){ camera.halt(); }
+    }
 }
