@@ -46,7 +46,7 @@ public class Pose extends GeometryObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Pose pose = (Pose) o;
-        return Double.compare(pose.angle, angle) == 0 && Objects.equals(p, pose.p);
+        return Math.abs(pose.angle-angle) < 0.0001 && pose.p.equals(p);
     }
 
     @Override

@@ -47,4 +47,18 @@ public class CoordinatePlane {
     public <T extends GeometryObject> ArrayList<? extends T> getObjectsOfExtendedType(Class<T> type) { return Iterator.forAllOfExtendedType(objects, type); }
 
     public ArrayList<Pose> getCopyOfPoses(){ ArrayList<Pose> out = new ArrayList<>(); Iterator.forAll(getPoses(), pose -> out.add(pose.getCopy())); return out; }
+
+    public void remove(GeometryObject o){ objects.remove(o); }
+
+    public ArrayList<GeometryObject> getAll(){ return objects; }
+
+    public void removeRedundantObjects(){
+        for (int i = 0; i < objects.size()-1; i++) {
+            if(objects.get(i).equals(objects.get(i+1))){
+                objects.remove(i);
+                i--;
+            }
+        }
+    }
+
 }

@@ -29,6 +29,7 @@ import javax.swing.Timer;
 
 import geometry.circles.Circle;
 import geometry.framework.CoordinatePlane;
+import geometry.framework.GeometryObject;
 import geometry.framework.Point;
 import geometry.polygons.PolyLine;
 import geometry.polygons.Polygon;
@@ -121,6 +122,12 @@ public abstract class Drawer extends JPanel {
         coordinatePlane.translate(0, fieldSize);
         coordinatePlane.scaleX(((double) fieldWidth)/fieldSize);
         coordinatePlane.scaleY(((double) fieldHeight)/fieldSize);
+    }
+
+    public static GeometryObject convertToField(GeometryObject object, Pose startPose){
+        CoordinatePlane coordinatePlane = new CoordinatePlane(object);
+        convertToField(coordinatePlane, startPose);
+        return coordinatePlane.getAll().get(0);
     }
 
 

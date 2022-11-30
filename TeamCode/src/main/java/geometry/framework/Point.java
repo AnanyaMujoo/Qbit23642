@@ -50,7 +50,7 @@ public class Point {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Point point = (Point) o;
-        return Double.compare(point.x, x) == 0 && Double.compare(point.y, y) == 0;
+        return Math.abs(point.x - x) < 0.0001 && Math.abs(point.y - y) < 0.0001;
     }
 
     @Override

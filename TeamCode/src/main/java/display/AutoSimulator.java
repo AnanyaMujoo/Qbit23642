@@ -15,6 +15,7 @@ import geometry.polygons.PolyLine;
 import geometry.position.Pose;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
+import util.template.Iterator;
 
 public class AutoSimulator extends Drawer{
 
@@ -63,6 +64,7 @@ public class AutoSimulator extends Drawer{
         auto.setup();
         if(auto.isFlipped()){ startPose.scaleX(-1); startPose.translate(fieldSize, 0); startPose.rotateOrientation(180);}
         autoPlane = auto.getAutoPlane();
+        autoPlane.removeRedundantObjects();
 
         poses = autoPlane.getCopyOfPoses();
         PolyLine path = new PolyLine(poses, false); lines = path.getLines();
@@ -74,7 +76,7 @@ public class AutoSimulator extends Drawer{
         timer.reset();
     }
 
-    // TODO TEST
+    // TODO TEST FIX BUG
 
     public static void updateRobotPose(Pose velocity){
         velocity.scale(1.0/refreshRate); velocity.scaleOrientation(1.0/refreshRate);
@@ -141,9 +143,6 @@ public class AutoSimulator extends Drawer{
             if(step < poses.size()) {
                 if(!editingMode){
                     Pose targetPose = poses.get(step);
-                    if (step + 1 < poses.size() && targetPose.equals(poses.get(step + 1))) {
-                        step += lastStep ? 1 : -1;
-                    }
                     updateRobotPose(targetPose.getPoint(), targetPose.getAngle());
                 }else{
                     updateRobotPose(robotPose.getPoint(), robotPose.getAngle());
@@ -151,7 +150,6 @@ public class AutoSimulator extends Drawer{
             }else{
                 step = poses.size()-1;
             }
-
         }
     }
 
@@ -172,11 +170,15 @@ public class AutoSimulator extends Drawer{
                     System.out.printf(Locale.US, "Editing Pose %d, %s %n", step, robotPose.toString());
                 }else{
                     System.out.printf(Locale.US, "Saved Pose %d, New %s Code %.1f, %.1f, %.1f %n", step, robotPose.toString(), -robotPose.getX(), -robotPose.getY(), robotPose.getAngle());
+                    poses.set(step, robotPose);
+                    autoPlane.remove(autoPlane.getPoses().get(step+1));
+                    autoPlane.add(convertToField(robotPose.getCopy(), startPose));
                 }
             }
+            if(c == 'p'){ System.out.printf(Locale.US, " Pose %d, %s %n", step, robotPose.toString()); }
             double v = !e.isShiftDown() ? 3.0 : 0.5;
             if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-                if(step < 99 && !editingMode) {step++; lastStep = true; }else {
+                if(!editingMode) {if(step < 99){step++; lastStep = true; }}else {
                     if(!e.isAltDown()) {
                         robotPose.add(new Pose(0, -v, 0));
                     }else{
@@ -184,7 +186,7 @@ public class AutoSimulator extends Drawer{
                     }
                 }
             }else if(e.getKeyCode() == KeyEvent.VK_LEFT){
-                if(step > 0 && !editingMode){step--; lastStep = false; }else {
+                if(!editingMode){if(step > 0){step--; lastStep = false; }}else {
                     if(!e.isAltDown()) {
                         robotPose.add(new Pose(0, v, 0));
                     }else{
