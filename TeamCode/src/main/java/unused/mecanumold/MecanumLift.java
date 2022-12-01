@@ -48,7 +48,7 @@ public class MecanumLift extends TwoLift {
     public void init() {
         super.init();
 
-        positionHolder = new PositionHolder(0.0, 0.007,0.003, 0.1);
+//        positionHolder = new PositionHolder(0.0, 0.007,0.003, 0.1);
         positionHolder.setProcessVariable(this::getPositionUp);
 
 

@@ -2,31 +2,31 @@ package autoutil.controllers.control1D;
 
 import autoutil.generators.Generator;
 import geometry.position.Pose;
+import math.trigonmetry.Trig;
+import util.codeseg.ReturnCodeSeg;
 
 public class PositionHolder extends Controller1D {
 
-    private final double velocityThreshold;
-    private double restPower;
-    private double extraRestPower;
-    private final double deltaPowerUp;
-    private final double deltaPowerDown;
+    private double restPower, extraRestPower, pCoefficient = 0;
+    public final double deltaPowerUp = 0.007;
+    public final double deltaPowerDown = -0.007;
+    public final double velocityThreshold = Trig.rad(10);
     private volatile boolean isUsed, isTargeting = false;
     private double currentPosition = 0;
+    private ReturnCodeSeg<Double> restPowerFunction = () -> restPower;
 
-    public PositionHolder(double restPower, double deltaPowerUp, double deltaPowerDown,  double velocityThreshold){
-        this.restPower = restPower; this.deltaPowerUp = deltaPowerUp; this.deltaPowerDown = deltaPowerDown; this.velocityThreshold = velocityThreshold;
-    }
 
-    public PositionHolder(double restPower){
-        this.restPower = restPower; this.deltaPowerUp = 0.007; this.deltaPowerDown = -0.007; this.velocityThreshold = Math.toRadians(10);
-    }
 
     public void deactivate(){ isUsed = false; isTargeting = false; }
     public void activate(){ isUsed = true; isTargeting = false; }
+
     public void activate(double currentPosition){ isUsed = true; isTargeting = true; this.currentPosition = currentPosition; }
 
     @Override
     public void setRestOutput(double restOutput) { this.restPower = restOutput; }
+
+    public void setRestPowerFunction(ReturnCodeSeg<Double> restPowerFunction){ this.restPowerFunction = restPowerFunction; }
+    public void setPCoefficient(double coefficient){ pCoefficient = coefficient; }
 
     @Override
     protected double setDefaultAccuracy() { return 0.5; }
@@ -42,7 +42,7 @@ public class PositionHolder extends Controller1D {
         if(isUsed) {
             if(!isWithinAccuracyRange() && isTargeting){
                 double error = (getTarget()-currentPosition);
-                extraRestPower = 0.03*error;
+                extraRestPower = pCoefficient*error;
             }else if(Math.abs(getCurrentValue()) > velocityThreshold) {
                 restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
             }
@@ -50,7 +50,7 @@ public class PositionHolder extends Controller1D {
     }
 
     @Override
-    protected double setOutput() { return isUsed ? restPower+extraRestPower : 0; }
+    protected double setOutput() { return isUsed ? restPowerFunction.run()+extraRestPower : 0; }
 
     @Override
     protected boolean hasReachedTarget() { return false; }

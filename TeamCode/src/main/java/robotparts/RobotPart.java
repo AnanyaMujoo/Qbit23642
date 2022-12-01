@@ -27,6 +27,7 @@ import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
+import robot.BackgroundTask;
 import robot.RobotFramework;
 import robot.RobotUser;
 import robotparts.electronics.ElectronicType;
@@ -256,4 +257,8 @@ public abstract class RobotPart extends StageBuilder implements RobotUser {
      * @return
      */
     public Initial usePartForBackgroundTask(){return new Initial(() -> switchUser(User.BACK));}
+
+
+    @Override
+    protected void maintain() { bot.addBackgroundTask(new BackgroundTask(() -> {checkAccess(User.AUTO); move(0);}));}
 }

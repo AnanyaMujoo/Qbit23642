@@ -9,6 +9,7 @@ import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
+import robot.BackgroundTask;
 import robotparts.electronics.positional.PMotor;
 import util.Timer;
 import util.codeseg.CodeSeg;
@@ -68,6 +69,12 @@ public class StageBuilder {
      * @return stop
      */
     public Stop returnPart(){return new Stop(() -> {});}
+
+
+    /**
+     * Maintain the current state of the part (for positional parts, hold position)
+     */
+    protected void maintain(){}
 
 
     /**

@@ -9,7 +9,7 @@ import geometry.position.Pose;
 import geometry.position.Vector;
 import math.misc.Exponential;
 import math.polynomial.Quadratic;
-import math.trigonmetry.Trigonometry;
+import math.trigonmetry.Trig;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.template.ParameterConstructor;
@@ -90,9 +90,9 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     public double solve(Point currentPos, Line currentLine){
         double dx = currentLine.getStartPoint().getX()-currentPos.getX();
         double dy = currentLine.getStartPoint().getY()-currentPos.getY();
-        double a = Trigonometry.pythagC2(currentLine.getSlopeX(), currentLine.getSlopeY());
+        double a = Trig.pythagC2(currentLine.getSlopeX(), currentLine.getSlopeY());
         double b = 2*((dx*currentLine.getSlopeX())+(dy*currentLine.getSlopeY()));
-        double c = Trigonometry.pythagC2(dx, dy)-Math.pow(currentRadius,2);
+        double c = Trig.pythagC2(dx, dy)-Math.pow(currentRadius,2);
         Quadratic quadratic = new Quadratic(a, b, c);
         double[] roots = quadratic.roots();
         t = roots[0];

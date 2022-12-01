@@ -13,7 +13,7 @@ public class TerraAutoSimple extends AutoFramework {
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
-        bot.addBackgroundTask(lift.holdPosition());
+        lift.maintain();
         scan(false);
     }
 

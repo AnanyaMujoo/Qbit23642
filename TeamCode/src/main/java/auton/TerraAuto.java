@@ -21,7 +21,7 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
-        bot.addBackgroundTask(lift.holdPosition());
+        lift.maintain();
         outtake.closeClaw();
         scan(false);
         setScannerAfterInit(MecanumJunctionReactor.junctionScanner);

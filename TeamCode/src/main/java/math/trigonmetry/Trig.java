@@ -1,6 +1,6 @@
 package math.trigonmetry;
 
-public class Trigonometry {
+public class Trig {
     // TOD4 NEW
     // Add classes here for trig related stuffs
 
@@ -39,4 +39,8 @@ public class Trigonometry {
     public static double pythagC2(double a, double b){
         return (a*a) + (b*b);
     }
+
+    public static double cos(double a){ return Math.cos(Math.toRadians(a)); }
+    public static double sin(double a){ return Math.sin(Math.toRadians(a)); }
+    public static double rad(double d){ return Math.toRadians(d); }
 }

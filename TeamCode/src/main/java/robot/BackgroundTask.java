@@ -16,6 +16,8 @@ public class BackgroundTask {
     private final Exit exit;
     private boolean hasBeenStarted = false;
 
+    public BackgroundTask(){ this(() -> {});}
+
     public BackgroundTask(CodeSeg task){
         this.task = task;
         exit = new Exit(() -> false);

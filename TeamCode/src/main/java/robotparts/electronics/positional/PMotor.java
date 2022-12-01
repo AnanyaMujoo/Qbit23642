@@ -9,6 +9,7 @@ import autoutil.controllers.control1D.PositionHolder;
 import debugging.StallDetector;
 import robotparts.Electronic;
 import robotparts.electronics.input.IEncoder;
+import util.codeseg.ReturnCodeSeg;
 import util.codeseg.ReturnParameterCodeSeg;
 import util.condition.Expectation;
 import util.condition.Magnitude;
@@ -29,12 +30,13 @@ public class PMotor extends Electronic {
     private final IEncoder motorEncoder;
     private final StallDetector detector;
     private final PIDFCoefficients defaultCoeffs;
-    private final PositionHolder positionHolder = new PositionHolder(0);
+    private final PositionHolder positionHolder = new PositionHolder();
     private MovementType movementType = MovementType.ROTATIONAL;
     private ReturnParameterCodeSeg<Double, Double> outputToTicks = input -> input;
     private ReturnParameterCodeSeg<Double, Double> ticksToOutput = input -> input;
     private PIDFCoefficients currentCoeffs;
-    private final double exitTimeDelay = 0.1;
+    private static final double exitTimeDelay = 0.1;
+    private boolean holdingExact = false;
 
     /**
      * Constructor to create a pmotor
@@ -60,12 +62,15 @@ public class PMotor extends Electronic {
         motor.setPower(0);
 
         motorEncoder.reset();
+        holdingExact = false;
     }
 
     // TOD 5 Make way for custom PID and custom rest pow function (feedforward)
 
 
-    public void usePositionHolder(double restPower){ positionHolder.setRestOutput(restPower); }
+    public void usePositionHolder(double restPower){ positionHolder.setRestOutput(restPower); resetPosition(); }
+    public void usePositionHolder(double restPower, double pCoefficient){ positionHolder.setPCoefficient(pCoefficient); usePositionHolder(restPower); }
+    public void usePositionHolder(ReturnCodeSeg<Double> restPowerFunction, double pCoefficient){ positionHolder.setRestPowerFunction(restPowerFunction); positionHolder.setPCoefficient(pCoefficient); resetPosition();}
 
     public void holdPosition(){ positionHolder.activate(); move(0); }
 
@@ -183,6 +188,7 @@ public class PMotor extends Electronic {
     public void stopTarget(){
         halt();
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        holdingExact = true;
     }
 
     /**
@@ -195,6 +201,16 @@ public class PMotor extends Electronic {
     public IEncoder getMotorEncoder(){ return motorEncoder; }
 
     public MovementType getMovementType(){ return movementType; }
+
+    public void moveWithPositionHolder(double p, double cutOffPosition, double backPower) {
+        if (p != 0) {
+            releasePosition(); move(p); holdingExact = false;
+        } else if (getPosition() > cutOffPosition) {
+            if (holdingExact) { holdPositionExact(); } else { holdPosition(); }
+        } else {
+            move(-backPower);
+        }
+    }
 
     /**
      * Sets the power of the motor to 0
