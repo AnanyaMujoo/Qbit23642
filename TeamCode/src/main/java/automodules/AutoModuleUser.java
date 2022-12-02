@@ -10,6 +10,7 @@ import global.Modes;
 import robot.RobotUser;
 import robotparts.RobotPart;
 import robotparts.hardware.Lift;
+import teleutil.independent.Independent;
 import unused.auto.AutoModuleUserOld;
 import util.condition.DecisionList;
 import util.condition.OutputList;
@@ -68,6 +69,11 @@ public interface AutoModuleUser extends RobotUser{
     static AutoModule DropAuto(double time){ return new AutoModule(outtake.stageOpen(time)); }
     static AutoModule GrabAuto(double time){ return new AutoModule(outtake.stageClose(time),  outtake.stageReadyStart(0.0), lift.stageLift(0.8, 35)); }
 
+
+    Independent MoveForward = new Independent() { @Override public void define() {
+        addWaypoint(0,30,0);
+        addSetpoint(0, 40, 0);
+    }};
 
 
 }

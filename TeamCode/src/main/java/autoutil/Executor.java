@@ -19,7 +19,6 @@ public class Executor implements Iterator {
     protected final Reactor reactor;
     protected final Generator generator;
     protected ReturnCodeSeg<Boolean> whileOpModeIsActive;
-    protected boolean isIndependent = false;
 
     public Executor(LinearOpMode opMode, Generator generator, Reactor reactor){
         whileOpModeIsActive = opMode::opModeIsActive; this.generator = generator; this.reactor = reactor;
@@ -34,14 +33,14 @@ public class Executor implements Iterator {
         stage.runOnStop();
     }
 
-    public void makeIndependent(){ isIndependent = true; }
-
+    // TODO FIX
     @Override
     public boolean condition() {
-        if(isIndependent){
-            return !bot.independentRunner.disabled;
-        }else{
-            return whileOpModeIsActive.run();
-        }
+//        if(isIndependent){
+//            return !bot.independentRunner.disabled;
+//        }else{
+//            return whileOpModeIsActive.run();
+//        }
+        return false;
     }
 }

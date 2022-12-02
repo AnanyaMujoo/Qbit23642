@@ -61,8 +61,6 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected Scanner scannerAfterInit;
     protected Case caseDetected = Case.FIRST;
 
-    protected boolean isIndependent = false;
-
     private int segmentIndex = 1;
     private int pauseIndex, autoModuleIndex, customSegmentIndex = 0;
 
@@ -85,7 +83,6 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         if(isFlipped()){ flip(); }
     }
 
-    public void makeIndependent(){ isIndependent = true; }
     public boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }
     public void flip(){ autoPlane.reflectX(); autoPlane.reflectPoses(); }
     public void flipCases(){ if(caseDetected.equals(Case.FIRST)){ caseDetected = Case.THIRD; }else if(caseDetected.equals(Case.THIRD)){ caseDetected = Case.FIRST; }}

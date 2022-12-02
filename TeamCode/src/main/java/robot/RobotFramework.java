@@ -8,7 +8,7 @@ import global.Constants;
 import robotparts.RobotPart;
 import robotparts.electronics.input.IEncoder;
 import teleutil.independent.Independent;
-import teleutil.independent.IndependentRunner;
+import teleutil.independent.IndependentFunctions;
 import util.TerraThread;
 import util.User;
 import util.codeseg.CodeSeg;
@@ -40,14 +40,23 @@ public class RobotFramework {
      */
     public static TerraThread backgroundThread;
     /**
+     * Independent thread
+     */
+    public static TerraThread independentThread;
+    /**
      * rfsHandler is used for running rfs code. Stages can be added to the queue
      */
     public RobotFunctions rfsHandler;
 
-    public IndependentRunner independentRunner;
-
+    /**
+     * Background functions handler
+     */
     public BackgroundFunctions backHandler;
 
+    /**
+     * Independent Handler
+     */
+    public IndependentFunctions indHandler;
 
     /**
      * Configs object, stores all configs
@@ -65,12 +74,14 @@ public class RobotFramework {
         localPlane = new CoordinatePlane();
         rfsHandler = new RobotFunctions();
         backHandler = new BackgroundFunctions();
+        indHandler = new IndependentFunctions();
         robotFunctionsThread = new TerraThread("RobotFunctionsThread", Constants.ROBOT_FUNCTIONS_REFRESH_RATE);
         odometryThread = new TerraThread("OdometryThread", Constants.ODOMETRY_THREAD_REFRESH_RATE);
         backgroundThread = new TerraThread("BackgroundThread", Constants.BACKGROUND_THREAD_REFRESH_RATE);
-        independentRunner = new IndependentRunner();
+        independentThread = new TerraThread("IndependentThread", Constants.INDEPENDENT_THREAD_REFRESH_RATE);
         rfsHandler.init();
         backHandler.init();
+        indHandler.init();
     }
 
     /**
@@ -82,9 +93,7 @@ public class RobotFramework {
         setUser(mainUser);
         IEncoder.setEncoderReadingAuto();
         Iterator.forAll(allRobotParts, RobotPart::init);
-        robotFunctionsThread.start();
-        odometryThread.start();
-        backgroundThread.start();
+        TerraThread.startAllThreads();
         gameTime.reset();
     }
 
@@ -155,6 +164,11 @@ public class RobotFramework {
         backHandler.emptyTaskList();
     }
 
+    public void cancelIndependents(){
+        setUserMainAndHalt();
+        indHandler.stopCurrentIndependent();
+    }
+
     /**
      * Set the user to main and halt all of the robot parts that aren't the main user
      */
@@ -179,18 +193,7 @@ public class RobotFramework {
     public void pauseAutoModules() { rfsHandler.pauseNow(); }
 
 
-    public void addIndependent(Independent independent){
-        independentRunner.addIndependent(independent);
-    }
+    public void addIndependent(Independent independent){ indHandler.runIndependent(independent); }
 
-    public void cancelIndependents(){
-        independentRunner.disableIndependent();
-        independentRunner.cancelIndependent();
-    }
-
-    public void cancelAll(){
-        cancelAutoModules();
-        cancelIndependents();
-        cancelBackgroundTasks();
-    }
+    public void cancelAll(){ cancelAutoModules(); cancelIndependents(); cancelBackgroundTasks(); }
 }

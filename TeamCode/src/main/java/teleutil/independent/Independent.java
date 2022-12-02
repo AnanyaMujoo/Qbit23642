@@ -3,21 +3,14 @@ package teleutil.independent;
 import autoutil.AutoFramework;
 import util.codeseg.ParameterCodeSeg;
 
-public class Independent extends AutoFramework {
-
-    private final ParameterCodeSeg<Independent> define;
-
-    public Independent(ParameterCodeSeg<Independent> define){
-        this.define = define;
-    }
+public abstract class Independent extends AutoFramework {
+    private boolean shouldExit = false;
 
     @Override
-    public void initAuto() {
-        makeIndependent();
-    }
+    public final void initAuto() { setConfig(mecanumDefaultConfig); shouldExit = false; }
 
     @Override
-    public void define() {
-        define.run(this);
-    }
+    public boolean condition() { return super.condition() && !shouldExit; }
+
+    public void exit(){ shouldExit = true; }
 }

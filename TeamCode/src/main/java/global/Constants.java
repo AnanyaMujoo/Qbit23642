@@ -23,6 +23,11 @@ public class Constants {
      */
     public static final int ODOMETRY_THREAD_REFRESH_RATE = 500; //hz
 
+    /**
+     * Independent thread update rate
+     */
+    public static final int INDEPENDENT_THREAD_REFRESH_RATE = 300; //hz
+
 
     /**
      *  Minimum  refresh rate allowed before robot is considered to be lagging

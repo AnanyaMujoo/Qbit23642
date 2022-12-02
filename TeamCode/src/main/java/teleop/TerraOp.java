@@ -22,7 +22,6 @@ import static global.General.bot;
 import static global.General.fault;
 import static global.General.gph1;
 import static global.General.gph2;
-import static global.General.independents;
 import static global.General.log;
 import static global.Modes.DriveMode.Drive.FAST;
 import static global.Modes.DriveMode.Drive.MEDIUM;
@@ -62,6 +61,9 @@ public class TerraOp extends Tele {
 
         gph2.link(DPAD_UP, outtake::flip);
         gph2.link(DPAD_DOWN, outtake::unFlip);
+
+        // TODO TEST
+        gph2.link(RIGHT_BUMPER, MoveForward);
 
         lift.move(-0.15);
     }

@@ -18,6 +18,7 @@ public enum User {
     AUTO,
     ROFU,
     BACK,
+    INDP,
     NONE;
 
     /**

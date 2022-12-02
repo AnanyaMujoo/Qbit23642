@@ -12,6 +12,8 @@ import static robot.RobotFramework.backgroundThread;
 
 public class BackgroundFunctions {
 
+    // TOD 5 Make a functions class which robot functions, background functions and indpendent functions all extend
+
     public final ArrayList<BackgroundTask> tasks;
     public final ArrayList<BackgroundTask> taskBuffer;
 

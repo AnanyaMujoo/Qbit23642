@@ -177,4 +177,11 @@ public class TerraThread extends Thread{
     public static void stopUpdatingAllThreads(){
         Iterator.forAll(allTerraThreads, TerraThread::stopUpdating);
     }
+
+    /**
+     * Start all threads
+     */
+    public static void startAllThreads(){
+        Iterator.forAll(allTerraThreads, TerraThread::start);
+    }
 }

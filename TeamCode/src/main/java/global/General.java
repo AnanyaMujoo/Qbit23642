@@ -10,7 +10,6 @@ import debugging.Synchroniser;
 import elements.FieldPlacement;
 import elements.FieldSide;
 import robot.TerraBot;
-import teleutil.independent.Independents;
 import teleutil.GamepadHandler;
 import debugging.Fault;
 import debugging.Logger;
@@ -69,10 +68,6 @@ public class General {
 
 
     public static FieldPlacement fieldPlacement;
-    /**
-     * AutoModules (executes series of steps to make driving easier)
-     */
-    public static Independents independents;
     /**
      * The main user
      * NOTE: This should either be TELE or AUTO

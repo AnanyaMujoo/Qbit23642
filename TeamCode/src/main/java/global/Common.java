@@ -7,7 +7,6 @@ import elements.FieldPlacement;
 import elements.FieldSide;
 import robot.TerraBot;
 import robotparts.sensors.Cameras;
-import teleutil.independent.Independents;
 import teleutil.GamepadHandler;
 import debugging.Fault;
 import debugging.Logger;
@@ -61,10 +60,6 @@ public interface Common{
          * Create the robot, and then the modules, stages, and automodules
          */
         bot = new TerraBot();
-        /**
-         * Create the automodules
-         */
-        independents = new Independents();
         /**
          * Initialize the robot
          */

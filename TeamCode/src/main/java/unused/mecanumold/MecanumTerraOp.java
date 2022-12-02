@@ -35,9 +35,9 @@ public class MecanumTerraOp extends Tele implements AutoModuleUserOld {
         gph1.link(Button.LEFT_STICK_BUTTON,  () -> mecanumIntake.moveRaw(-1));
 
         gph1.link(Button.A, IntakeCombined);
-
-        gph1.link(Button.B, independents.Backward);
-        gph1.link(Button.Y, independents.Forward);
+//
+//        gph1.link(Button.B, independents.Backward);
+//        gph1.link(Button.Y, independents.Forward);
 
         gph1.link(Button.DPAD_RIGHT, mecanumOuttake::collectCap);
         gph1.link(Button.DPAD_DOWN, mecanumOuttake::readyCap);
