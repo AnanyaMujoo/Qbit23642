@@ -20,6 +20,10 @@ public class Vector extends GeometryObject {
     private final Point p;
     private double theta; // Always in radians (effectively final)
 
+    public Vector(){
+        this(0,0);
+    }
+
     public Vector(double x, double y){
         p = new Point(x, y); setTheta();
         addPoints(p);

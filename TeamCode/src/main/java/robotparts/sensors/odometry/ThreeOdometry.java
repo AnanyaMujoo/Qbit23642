@@ -15,16 +15,12 @@ import static java.lang.Math.*;
 public class ThreeOdometry extends TwoOdometry {
     private IEncoder enc3;
     public final double width = 22.8507;
-    public double angle1 = -1.2;
-    public double angle2 = toRadians(0.5329);
-    public double angle3 = toRadians(5.7319);
-    public double angle4 = toRadians(2);
-    public final double scale1 = 0.9925;
-    public final double scale2 = 1.0115*scale1;
-    public final double scale3 = 1.0055*scale1;
+    public double angleLeft = toRadians(0);
+    public double angleRight = toRadians(0); //2
+    public final double scaleCenter = 1.004;
     public int mode = 0;
     public final Point odometryCenter = new Point();
-    private final Vector odometryCenterToRobotCenter = new Vector(11.5, 13.0);
+    private final Vector leftOdometryCenterToRobotCenter = new Vector(11.5, 13.0);
 
     @Override
     protected void createEncoders() {
@@ -37,49 +33,27 @@ public class ThreeOdometry extends TwoOdometry {
     @Override
     protected void update() {
 
-        double dy, dx, dh = 0;
+        double dyl = 0, dyr = 0, dx = 0, dh = 0;
+
+        if(mode == 0) {
+            dyl = (enc1.getDeltaPosition() - dx*sin(angleLeft));
+        }else if(mode == 1){
+            dyl = enc2.getDeltaPosition()*scaleCenter;
+        }else if(mode == 2){
+            dyl = (enc3.getDeltaPosition() - dx*sin(angleRight));
+        }
 //
-//        if(mode == 0) {
-//            dy = enc1.getDeltaPosition()*scale1;
-//        }else if(mode == 1){
-//            dy = enc2.getDeltaPosition()*scale2;
-//        }else if(mode == 2){
-//            dy = enc3.getDeltaPosition()*scale3;
-//        }else if(mode == 3) {
-//            dy = enc1.getDeltaPosition();
-//            dx = ((scale2 * enc2.getDeltaPosition()) - sin(angle2)*dy)/cos(angle2);
-//            dh = ((scale3 * enc3.getDeltaPosition()) + (dx * sin(angle3)) - (dy * cos(angle3))) / (cos(angle3) * width);
-//        }
+//        dx = scaleCenter*enc2.getDeltaPosition();
+//        dyl = (enc1.getDeltaPosition() - dx*sin(angleLeft));
+//        dyr = (enc3.getDeltaPosition() - dx*sin(angleRight));
+//        dh = (dyr-dyl)/width;
 
-
-        dx = scale2*enc2.getDeltaPosition();
-        dy = (enc1.getDeltaPosition() - dx*sin(angle4));
-//        dx = ((scale2 * enc2.getDeltaPosition()) - sin(angle2)*dy)/cos(angle2);
-//        dh = ((scale3 * enc3.getDeltaPosition()) + (dx * sin(angle3)) - (dy * cos(angle3))) / (cos(angle3) * width);
-//        dh = Math.toDegrees(dh);
-//        localDelta.rotate(angle1);
-
-        Vector localDelta = new Vector(dx, dy);
-        setHeading(gyro.getHeading());
+        Vector localDelta = new Vector(dx, dyl);
+//        setHeading(gyro.getHeading());
+//        updateCurrentHeading(dh);
         odometryCenter.translate(toGlobalFrame(localDelta));
-        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter);
+        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(leftOdometryCenterToRobotCenter).getSubtracted(leftOdometryCenterToRobotCenter);
         setCurrentPose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()));
-
-//        updateCurrentPose(toGlobalFrame(localDelta));
-
-//        if(mode == 0){
-//            updateCurrentPose(localDelta);
-//        }else{
-//
-////            localDelta = new Vector(localDelta.getTheta()+getHeading()).getScaled(localDelta.getLength());
-////            updateCurrentPose(localDelta);
-//        }
-
-//        odometryCenter.translate(localDelta);
-//        odometryCenter.translate(toGlobalFrame(localDelta));
-//        setCurrentPose(new Pose(odometryCenter.ge));
-//        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(odometryCenterToRobotCenter).getSubtracted(odometryCenterToRobotCenter);
-//        setCurrentPose(new Pose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()), getHeading() + Math.toDegrees(dh)));
     }
 
     @Override
