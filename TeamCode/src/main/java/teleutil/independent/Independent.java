@@ -4,7 +4,7 @@ import autoutil.AutoFramework;
 import util.codeseg.ParameterCodeSeg;
 
 public abstract class Independent extends AutoFramework {
-    private boolean shouldExit = false;
+    private volatile boolean shouldExit = false;
 
     @Override
     public final void initAuto() { setConfig(mecanumDefaultConfig); shouldExit = false; }
@@ -13,4 +13,7 @@ public abstract class Independent extends AutoFramework {
     public boolean condition() { return super.condition() && !shouldExit; }
 
     public void exit(){ shouldExit = true; }
+
+    @Override
+    public final void reset(){ super.reset(); shouldExit = false; }
 }

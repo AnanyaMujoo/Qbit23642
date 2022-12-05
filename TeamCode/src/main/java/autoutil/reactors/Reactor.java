@@ -28,6 +28,11 @@ public abstract class Reactor implements RobotUser {
         headingController.scale(scale);
     }
 
+    public final void scaleAccuracy(double scale){
+        movementController.scaleAccuracy(scale);
+        headingController.scaleAccuracy(scale);
+    }
+
     public final Main mainTarget(PoseGenerator generator){return new Main(() -> moveToTarget(generator)); }
     public final Exit exitTarget(){ return new Exit(this::isAtTarget); }
     public final Stop stopTarget(){ return new Stop(this::nextTarget); }

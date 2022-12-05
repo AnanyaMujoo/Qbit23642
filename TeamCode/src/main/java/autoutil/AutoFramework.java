@@ -44,14 +44,15 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public void setConfig(AutoConfig config){ this.config = config; }
 
-    protected final CoordinatePlane autoPlane = new CoordinatePlane();
+    protected CoordinatePlane autoPlane = new CoordinatePlane();
 
-    protected final ArrayList<Pose> poses = new ArrayList<>();
+    protected ArrayList<Pose> poses = new ArrayList<>();
     protected ArrayList<AutoSegment.Type> segmentTypes = new ArrayList<>();
     protected ArrayList<AutoSegment<?, ?>> segments = new ArrayList<>();
     protected ArrayList<Double> pauses = new ArrayList<>();
     protected ArrayList<AutoModule> autoModules = new ArrayList<>();
     protected ArrayList<Double> movementScales = new ArrayList<>();
+    protected ArrayList<Double> accuracyScales = new ArrayList<>();
     // TODO CHECK
     protected ArrayList<AutoSegment<?,?>> customSegments = new ArrayList<>();
 
@@ -66,7 +67,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
 
     {
-        poses.add(new Pose()); movementScales.addAll(Collections.nCopies(100,1.0));
+        poses.add(new Pose()); movementScales.addAll(Collections.nCopies(100,1.0)); accuracyScales.addAll(Collections.nCopies(100,1.0));
     }
 
     public void preProcess(){}
@@ -133,9 +134,13 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     private void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(config.getSetpointSegment().getReactorReference(), generator); }
 
     public void addScale(double scale){ movementScales.set(poses.size()-1, scale); }
+    public void addAccuracy(double scale){ accuracyScales.set(poses.size()-1, scale); }
 
     public void addScaledSetpoint(double scale, double x, double y, double h){ addScale(scale); addSetpoint(x, y, h);}
     public void addScaledWaypoint(double scale, double x, double y, double h){ addScale(scale); addWaypoint(x, y, h);}
+
+    public void addAccuracySetpoint(double acc, double x, double y, double h){ addAccuracy(acc); addSetpoint(x, y, h);}
+    public void addAccuracyScaledSetpoint(double acc, double scale, double x, double y, double h){ addAccuracy(acc); addScaledSetpoint(scale, x, y, h);}
 
     private void createSegments(){
         Iterator.forAll(segmentTypes, type -> {
@@ -170,7 +175,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         final Pose lastPose = poses.get(segmentIndex-1); final Pose currentPose = poses.get(segmentIndex);
         autoSegment.setGeneratorFunction(gen -> gen.addSegment(lastPose, currentPose));
         final double scale = movementScales.get(segmentIndex-1);
-        autoSegment.setReactorFunction(rea -> rea.scale(scale));
+        final double accuracy = accuracyScales.get(segmentIndex-1);
+        autoSegment.setReactorFunction(rea -> {rea.scale(scale); rea.scaleAccuracy(accuracy);});
         segments.add(autoSegment);
     }
 
@@ -183,5 +189,29 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     @Override
     public void stopAuto() {
         if(scanning && !haltCameraAfterInit){ camera.halt(); }
+    }
+
+    public void reset(){
+        config = null;
+        autoPlane = new CoordinatePlane();
+        poses = new ArrayList<>();
+        segmentTypes = new ArrayList<>();
+        segments = new ArrayList<>();
+        pauses = new ArrayList<>();
+        autoModules = new ArrayList<>();
+        movementScales = new ArrayList<>();
+        accuracyScales = new ArrayList<>();
+        customSegments = new ArrayList<>();
+        scanning = false;
+        haltCameraAfterInit = true;
+        caseScanner = null;
+        scannerAfterInit = null;
+        caseDetected = Case.FIRST;
+        segmentIndex = 1;
+        pauseIndex = 0;
+        autoModuleIndex = 0;
+        customSegmentIndex = 0;
+        poses.add(new Pose()); movementScales.addAll(Collections.nCopies(100,1.0)); accuracyScales.addAll(Collections.nCopies(100,1.0));
+
     }
 }

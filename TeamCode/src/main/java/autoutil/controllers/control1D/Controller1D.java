@@ -28,6 +28,7 @@ public abstract class Controller1D {
     private double accuracy = setDefaultAccuracy();
 
     private double scale = 1.0;
+    private double accuracyScale = 1.0;
 
     protected abstract double setDefaultAccuracy();
     protected abstract double setDefaultMinimumTimeReachedTarget();
@@ -37,13 +38,14 @@ public abstract class Controller1D {
     protected abstract boolean hasReachedTarget();
 
     public void scale(double scale){ this.scale = scale; }
+    public void scaleAccuracy(double scale){ this.accuracyScale = scale; }
 
     public void setAccuracy(double accuracy){
         this.accuracy = accuracy;
     }
     public void setMinimumTime(double minimumTime){ this.minimumTime = minimumTime; }
     public void setRestOutput(double restOutput){ this.restOutput = restOutput; }
-    public boolean isWithinAccuracyRange(){ return (Math.abs(getError()) < accuracy); }
+    public boolean isWithinAccuracyRange(){ return (Math.abs(getError()) < accuracy*accuracyScale); }
     public double getRestOutput(){ return !isWithinAccuracyRange() ? Math.signum(getError()) * restOutput : 0;}
     public final void update(Pose pose, Generator generator){
         currentValue = processVariable.run();

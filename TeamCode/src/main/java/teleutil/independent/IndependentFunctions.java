@@ -26,7 +26,7 @@ public class IndependentFunctions {
         });
     }
 
-    public void runIndependent(Independent independent){ currentIndependent = independent; isIndependentRunning = true; }
+    public void runIndependent(Independent independent){ currentIndependent = independent; currentIndependent.reset(); isIndependentRunning = true; }
     public void stopCurrentIndependent(){ isIndependentRunning = false; if(currentIndependent != null){ currentIndependent.exit();} }
 
 }

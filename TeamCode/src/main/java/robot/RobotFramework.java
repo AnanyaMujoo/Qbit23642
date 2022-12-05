@@ -169,6 +169,11 @@ public class RobotFramework {
         indHandler.stopCurrentIndependent();
     }
 
+    public void cancel(){
+        cancelAutoModules();
+        cancelIndependents();
+    }
+
     /**
      * Set the user to main and halt all of the robot parts that aren't the main user
      */

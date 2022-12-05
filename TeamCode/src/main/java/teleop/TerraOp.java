@@ -43,7 +43,7 @@ public class TerraOp extends Tele {
     public void initTele() {
         gph1.link(Button.B, BackwardAll);
         gph1.link(Button.Y, Forward);
-        gph1.link(Button.X, bot::cancelAutoModules);
+        gph1.link(Button.X, bot::cancel);
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
 
         gph1.link(RIGHT_TRIGGER, ButtonEventHandler.class, () -> lift.move(0.3));
@@ -62,8 +62,8 @@ public class TerraOp extends Tele {
         gph2.link(DPAD_UP, outtake::flip);
         gph2.link(DPAD_DOWN, outtake::unFlip);
 
-        // TODO TEST
-        gph2.link(RIGHT_BUMPER, MoveForward);
+        gph1.link(LEFT_BUMPER, MoveForward);
+        gph1.link(RIGHT_BUMPER, odometry::reset);
 
         lift.move(-0.15);
     }

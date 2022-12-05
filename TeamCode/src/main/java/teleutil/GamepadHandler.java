@@ -109,7 +109,7 @@ public class GamepadHandler {
     }
 
     public void link(Button b, Independent independent){
-        link(b, OnPressEventHandler.class, () -> bot.addIndependent(independent));
+        link(b, () -> bot.addIndependent(independent));
     }
 
 

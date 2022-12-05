@@ -4,6 +4,7 @@ import org.checkerframework.checker.units.qual.A;
 
 import automodules.stage.Main;
 import automodules.stage.Stage;
+import autoutil.AutoSegment;
 import elements.FieldSide;
 import elements.Level;
 import global.Modes;
@@ -71,8 +72,10 @@ public interface AutoModuleUser extends RobotUser{
 
 
     Independent MoveForward = new Independent() { @Override public void define() {
-        addWaypoint(0,30,0);
-        addSetpoint(0, 40, 0);
+//        addSetpoint(0, 0, 0);
+        addConcurrentAutoModule(Backward);
+//        addWaypoint(0,0,0);
+        addAccuracySetpoint(2.0, 0,0,0);
     }};
 
 
