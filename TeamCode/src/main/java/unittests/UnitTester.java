@@ -77,7 +77,7 @@ public interface UnitTester {
         /**
          * Display the testing mode
          */
-        log.show("Testing Mode: " + testingMode.toString());
+        log.show("Testing Mode: " + testingMode);
     }
 
     /**

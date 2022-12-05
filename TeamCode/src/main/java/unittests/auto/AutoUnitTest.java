@@ -19,8 +19,6 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common, AutoUser
      * @link UnitTest
      */
 
-    // TODO TEST
-
     /**
      * Static linear opmode
      */
@@ -51,6 +49,9 @@ public class AutoUnitTest extends UnitTest implements Iterator, Common, AutoUser
             run();
             status = Status.ACTIVE;
             bot.halt();
+            if(autoFramework != null){
+                odometry.reset();
+            }
         }
     }
 

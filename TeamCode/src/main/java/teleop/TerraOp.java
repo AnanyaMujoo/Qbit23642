@@ -81,8 +81,6 @@ public class TerraOp extends Tele {
 
         log.show("DriveMode", Modes.driveMode.get());
         log.show("HeightMode", Modes.heightMode.get());
-        log.show("PositionLeft", lift.motorLeft.getPosition());
-        log.show("PositionRight", lift.motorRight.getPosition());
     }
 
 

@@ -28,12 +28,12 @@ public class AutoSegment<R extends Reactor, G extends Generator> {
     public void setGeneratorFunction(ParameterCodeSeg<Generator> generatorFunction){ this.generatorFunction = generatorFunction; }
     public void setReactorFunction(ParameterCodeSeg<Reactor> reactorFunction){ this.reactorFunction = reactorFunction; }
 
-    public void run(LinearOpMode opMode){
+    public void run(AutoFramework auto){
         Generator generator = getGenerator.run();
         generatorFunction.run(generator);
         Reactor reactor = getReactor.run();
         reactorFunction.run(reactor);
-        Executor executor = new Executor(opMode, generator, reactor);
+        Executor executor = new Executor(auto, generator, reactor);
 //        if(isIndependent){ executor.makeIndependent(); } // TOD 5
         executor.followPath();
     }

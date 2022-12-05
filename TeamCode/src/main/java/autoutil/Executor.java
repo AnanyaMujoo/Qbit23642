@@ -18,10 +18,10 @@ public class Executor implements Iterator {
 
     protected final Reactor reactor;
     protected final Generator generator;
-    protected ReturnCodeSeg<Boolean> whileOpModeIsActive;
+    protected final AutoFramework auto;
 
-    public Executor(LinearOpMode opMode, Generator generator, Reactor reactor){
-        whileOpModeIsActive = opMode::opModeIsActive; this.generator = generator; this.reactor = reactor;
+    public Executor(AutoFramework auto, Generator generator, Reactor reactor){
+        this.auto = auto; this.generator = generator; this.reactor = reactor;
     }
 
     public final void followPath() {
@@ -33,14 +33,6 @@ public class Executor implements Iterator {
         stage.runOnStop();
     }
 
-    // TODO FIX
     @Override
-    public boolean condition() {
-//        if(isIndependent){
-//            return !bot.independentRunner.disabled;
-//        }else{
-//            return whileOpModeIsActive.run();
-//        }
-        return false;
-    }
+    public boolean condition() { return auto.condition(); }
 }

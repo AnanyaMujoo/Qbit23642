@@ -92,11 +92,12 @@ public class Logger {
                 num = "0" + num;
             }
             if(i != currentIndex) {
-                telemetry.addData("Item" + num, "    " + values.get(i));
+                telemetry.addData("Item " + num, "    " + values.get(i));
             }else{
-                telemetry.addData("Item" + num, "--> " + values.get(i));
+                telemetry.addData("Item " + num, "--> " + values.get(i));
             }
         }
+        updateOnShow();
     }
 
     /**
