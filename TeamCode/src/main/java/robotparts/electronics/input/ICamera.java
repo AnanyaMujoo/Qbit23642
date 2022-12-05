@@ -8,13 +8,13 @@ import autoutil.vision.Scanner;
 import robotparts.Electronic;
 
 public class ICamera extends Electronic {
-    private final OpenCvInternalCamera camera;
+    private final OpenCvCamera camera;
     private final CameraType cameraType;
     private final OpenCvCameraRotation orientation;
     private final int width = 320;
     private final int height = 240;
 
-    public ICamera(OpenCvInternalCamera cam, CameraType t, OpenCvCameraRotation rotation){
+    public ICamera(OpenCvCamera cam, CameraType t, OpenCvCameraRotation rotation){
         this.camera =  cam;
         this.cameraType = t;
         this.orientation = rotation;
@@ -24,13 +24,11 @@ public class ICamera extends Electronic {
     public void resume(){ camera.resumeViewport(); }
     public void setScanner(Scanner scanner){ camera.setPipeline(scanner); }
 
-    public void start(boolean flash, int zoom){
+    public void start(){
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
             @Override
             public void onOpened() {
                 camera.startStreaming(width, height, orientation);
-                if(flash) { camera.setFlashlightEnabled(true);}
-                if(zoom != 1){ camera.setZoom(zoom);}
                 pause();
             }
             @Override

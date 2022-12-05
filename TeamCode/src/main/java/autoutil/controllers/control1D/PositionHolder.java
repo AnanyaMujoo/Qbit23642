@@ -40,10 +40,10 @@ public class PositionHolder extends Controller1D {
     @Override
     protected void updateController(Pose pose, Generator generator) {
         if(isUsed) {
-            if(!isWithinAccuracyRange() && isTargeting){
+            if(isTargeting){
                 double error = (getTarget()-currentPosition);
                 extraRestPower = pCoefficient*error;
-            }else if(Math.abs(getCurrentValue()) > velocityThreshold) {
+            }else if(!isWithinAccuracyRange() && Math.abs(getCurrentValue()) > velocityThreshold) {
                 restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
             }
         }

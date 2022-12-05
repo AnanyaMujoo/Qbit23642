@@ -208,7 +208,8 @@ public class PMotor extends Electronic {
         } else if (getPosition() > cutOffPosition) {
             if (holdingExact) { holdPositionExact(); } else { holdPosition(); }
         } else {
-            move(-backPower);
+            releasePosition();
+            move(-Math.abs(backPower));
         }
     }
 
