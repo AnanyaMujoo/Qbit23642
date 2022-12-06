@@ -145,8 +145,10 @@ public class PMotor extends Electronic {
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motor.setTargetPosition(outputToTicks.run(distance).intValue());
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        positionHolder.setTarget(distance);
+        setPositionHolderTarget(distance);
     }
+
+    public final void setPositionHolderTarget(double target){ positionHolder.setTarget(target); }
 
     /**
      * Get the target position

@@ -4,6 +4,7 @@ import geometry.framework.GeometryObject;
 import geometry.framework.Point;
 import geometry.framework.Tracer;
 import geometry.position.Pose;
+import geometry.position.Vector;
 import global.Constants;
 
 import static java.lang.Math.*;
@@ -32,4 +33,6 @@ public class Circle extends GeometryObject implements Tracer {
     public Point getAt(double t) {
         return center.getRotated(t/360.0);
     }
+
+    public Point getClosestTo(Point p){ return new Vector(center, p).getUnitVector().getScaled(r).getPoint().getAdded(center); }
 }

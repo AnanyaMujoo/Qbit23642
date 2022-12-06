@@ -27,6 +27,8 @@ public class JunctionScanner extends Scanner {
 
     @Override
     public void run(Mat input) {
+
+        // TODO FIX
 //        cropAndFill(input, getZoomedRect(input, 1.5));
         getHSV(input);
 

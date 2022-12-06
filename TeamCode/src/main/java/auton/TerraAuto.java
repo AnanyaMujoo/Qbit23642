@@ -30,7 +30,7 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void preProcess() {
 //        caseDetected = Case.THIRD;
-        if(isFlipped()){ flipCases(); }
+        if(isFlipped()){ flipCases(); MecanumJunctionReactor.flip(); }
     }
 
     // TODO TEST

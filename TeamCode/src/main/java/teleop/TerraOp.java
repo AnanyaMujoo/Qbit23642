@@ -49,10 +49,10 @@ public class TerraOp extends Tele {
         gph1.link(RIGHT_TRIGGER, ButtonEventHandler.class, () -> lift.move(0.3));
         gph1.link(LEFT_TRIGGER, ButtonEventHandler.class, () -> lift.move(-0.1));
 
-        gph1.link(DPAD_UP, () -> Modes.heightMode.set(HIGH));
-        gph1.link(DPAD_RIGHT, () ->  Modes.heightMode.set(MIDDLE));
-        gph1.link(DPAD_LEFT, () ->  Modes.heightMode.set(MIDDLE));
-        gph1.link(DPAD_DOWN, () -> Modes.heightMode.set(LOW));
+        gph1.link(DPAD_UP, () -> lift.setHolderTarget(HIGH));
+        gph1.link(DPAD_RIGHT, () ->  lift.setHolderTarget(MIDDLE));
+        gph1.link(DPAD_LEFT, () ->  lift.setHolderTarget(MIDDLE));
+        gph1.link(DPAD_DOWN, () -> lift.setHolderTarget(LOW));
         gph1.link(Button.A, OnTurnOnEventHandler.class, () -> Modes.driveMode.set(FAST));
         gph1.link(Button.A, OnTurnOffEventHandler.class, () -> Modes.driveMode.set(MEDIUM));
 

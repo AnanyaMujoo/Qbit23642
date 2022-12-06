@@ -31,6 +31,8 @@ public class Line extends GeometryObject implements Tracer {
     public double getSlopeX(){ return mx; }
     public double getSlopeY() {return my; }
 
+    public Point getMidpoint(){return getAt(0.5); }
+
     public double getLength(){ return ps.getDistanceTo(pe); }
 
     public Vector getVector(){ return new Vector(mx, my); }

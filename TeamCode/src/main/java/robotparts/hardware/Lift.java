@@ -38,6 +38,11 @@ public class Lift extends RobotPart {
         motorLeft.moveWithPositionHolder(p, 6, 0.1);
     }
 
+    public void setHolderTarget(Modes.HeightMode.Height height){
+        Modes.heightMode.set(height);
+        motorRight.setPositionHolderTarget(height.getValue()); motorLeft.setPositionHolderTarget(height.getValue());
+    }
+
     @Override
     protected Stage moveTime(double p, double t) {
         return super.moveTime(p, t);
