@@ -5,15 +5,15 @@ import unittests.auto.AutoUnitTest;
 
 
 public class OdometryTest {
-    private static final double distance = 100;
-    private static final double power = 0.3;
+    private static final double distance = 200;
+    private static final double power = 0.5;
     public static class ForwardTest extends AutoUnitTest { @Override protected void start() { setAuto(new AutoFramework() { @Override public void initAuto() { setConfig(mecanumDefaultConfig); } @Override  public void define() {
-        addScaledSetpoint(power, 0, distance, 0);
+        addAccuracyScaledSetpoint(0.1, power, 0, distance, 0);
     }});}}
     public static class StrafeTest extends AutoUnitTest { @Override protected void start() { setAuto(new AutoFramework() { @Override public void initAuto() { setConfig(mecanumDefaultConfig); } @Override  public void define() {
-        addScaledSetpoint(power, distance, 0, 0);
+        addAccuracyScaledSetpoint(0.1, power, distance, 0, 0);
     }});}}
     public static class TurnTest extends AutoUnitTest { @Override protected void start() { setAuto(new AutoFramework() { @Override public void initAuto() { setConfig(mecanumDefaultConfig); } @Override  public void define() {
-        addScaledSetpoint(power, 0, 0, 180);
+        addAccuracyScaledSetpoint(0.1, power, 0, 0, 180);
     }});}}
 }
