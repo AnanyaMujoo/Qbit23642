@@ -47,44 +47,46 @@ public class JunctionScanner extends Scanner {
 
         Core.inRange(ScaledMask, strictLowHSV, strictHighHSV, ScaledThresh);
 
-//        Core.bitwise_and(HSV, HSV, Output, ScaledThresh);
-//
-        Imgproc.blur(ScaledThresh, ScaledThresh, new Size(2, 2));
+        Core.bitwise_and(HSV, HSV, Output, ScaledThresh);
+
+        Imgproc.blur(Output, Output, new Size(3, 3));
+
+        Output.copyTo(input);
+
+        Imgproc.Canny(Output, Output, 100, 200);
+
+//        Output.copyTo(input);
 
 //
-//        ScaledThresh.copyTo(input);
+//        ArrayList<MatOfPoint> contours = new ArrayList<>();
+//        Imgproc.findContours(Output, contours, Hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+//        MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
+//        RotatedRect[] rects = new RotatedRect[contours.size()];
+//        for (int i = 0; i < contours.size(); i++) {
+//            contoursPoly[i] = new MatOfPoint2f();
+//            Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 5, true);
+//            rects[i] = Imgproc.minAreaRect(contoursPoly[i]);
+//            drawRotatedRect(input, rects[i], ORANGE);
+//        }
 //
-//        Imgproc.Canny(Output, Edges, 100, 200);
-
-        ArrayList<MatOfPoint> contours = new ArrayList<>();
-        Imgproc.findContours(ScaledThresh, contours, Hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-        MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
-        RotatedRect[] rects = new RotatedRect[contours.size()];
-        for (int i = 0; i < contours.size(); i++) {
-            contoursPoly[i] = new MatOfPoint2f();
-            Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 5, true);
-            rects[i] = Imgproc.minAreaRect(contoursPoly[i]);
-            drawRotatedRect(input, rects[i], ORANGE);
-        }
-
-        ArrayList<RotatedRect> rectsList = new ArrayList<>(Arrays.asList(rects));
-        if(rectsList.size() > 0) {
-            maxRect = Iterator.forAllCompareMax(rectsList, rect -> rect.boundingRect().area());
-            drawRotatedRect(input, maxRect, RED);
-        }
-
-        double junctionCenterX = maxRect.center.x;
-        double screenCenterX = input.width()/2.0;
-        double junctionCenterOffset = junctionCenterX-screenCenterX;
-        double screenWidth = input.width();
-
-
-        double screenJunctionWidth = Math.min(maxRect.size.height, maxRect.size.width);
-        distanceToJunction = realJunctionWidth/distanceRatio(screenJunctionWidth, screenWidth);
-
-        double realJunctionOffset = distanceToJunction*distanceRatio(junctionCenterOffset, screenWidth);
-        angleToJunction = Math.toDegrees(Math.atan2(realJunctionOffset, distanceToJunction));
-
+//        ArrayList<RotatedRect> rectsList = new ArrayList<>(Arrays.asList(rects));
+//        if(rectsList.size() > 0) {
+//            maxRect = Iterator.forAllCompareMax(rectsList, rect -> rect.boundingRect().area());
+//            drawRotatedRect(input, maxRect, RED);
+//        }
+//
+//        double junctionCenterX = maxRect.center.x;
+//        double screenCenterX = input.width()/2.0;
+//        double junctionCenterOffset = junctionCenterX-screenCenterX;
+//        double screenWidth = input.width();
+//
+//
+//        double screenJunctionWidth = Math.min(maxRect.size.height, maxRect.size.width);
+//        distanceToJunction = realJunctionWidth/distanceRatio(screenJunctionWidth, screenWidth);
+//
+//        double realJunctionOffset = distanceToJunction*distanceRatio(junctionCenterOffset, screenWidth);
+//        angleToJunction = Math.toDegrees(Math.atan2(realJunctionOffset, distanceToJunction));
+//
 
 
 
@@ -100,7 +102,6 @@ public class JunctionScanner extends Scanner {
         ScaledMask.release();
         ScaledThresh.release();
         Output.release();
-        Edges.release();
         Hierarchy.release();
 
 

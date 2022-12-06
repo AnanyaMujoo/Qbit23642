@@ -21,6 +21,7 @@ import autoutil.generators.Generator;
 import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
 import autoutil.vision.CaseScanner;
+import autoutil.vision.JunctionScanner;
 import autoutil.vision.Scanner;
 import elements.Case;
 import elements.FieldPlacement;
@@ -103,8 +104,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public void scan(boolean view){
         scanning = true;
-        caseScanner = new CaseScanner();
-        camera.setScanner(caseScanner);
+//        caseScanner = new CaseScanner(); // TODO TEST
+        camera.setScanner(new JunctionScanner());
         camera.start();
         if(view){ camera.resume(); }
         while (!isStarted()){ caseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
