@@ -19,8 +19,8 @@ import util.template.Iterator;
 
 public class AutoSimulator extends Drawer{
 
-    private static final Pose startLower = new Pose(22.5,fieldSize/2.0 - 89,180);
-    private static final Pose startUpper = new Pose(22.5,fieldSize/2.0 + 89,180);
+    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - 89,180);
+    private static final Pose startUpper = new Pose(20.5,fieldSize/2.0 + 89,180);
     private static final double maxMovingVelocity = 150; // cm per sec
     private static final double maxTurningVelocity = 340; // deg per sec
     private static final double speedUp = 1.0;

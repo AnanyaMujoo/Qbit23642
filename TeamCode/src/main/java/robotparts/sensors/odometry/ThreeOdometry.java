@@ -55,7 +55,9 @@ public class ThreeOdometry extends TwoOdometry {
         dh = toDegrees(((scaleRight*dyr)-dyl)/width);
 
         Vector localDelta = new Vector(dx, dyl);
-        localDelta = localDelta.getRotated(0.5);
+        localDelta = localDelta.getRotated(0.3);
+        localDelta.scaleY(1.029);
+        localDelta.scaleX(1.009);
 //        setHeading(gyro.getHeading());
 //
         updateCurrentHeading(dh);

@@ -8,6 +8,8 @@ import geometry.position.Pose;
 import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
+import static java.lang.Math.abs;
+
 public abstract class Controller1D {
 
     private final Precision precision = new Precision();
@@ -45,7 +47,7 @@ public abstract class Controller1D {
     }
     public void setMinimumTime(double minimumTime){ this.minimumTime = minimumTime; }
     public void setRestOutput(double restOutput){ this.restOutput = restOutput; }
-    public boolean isWithinAccuracyRange(){ return (Math.abs(getError()) < accuracy*accuracyScale); }
+    public boolean isWithinAccuracyRange(){ return (abs(getError()) < accuracy*accuracyScale); }
     public double getRestOutput(){ return !isWithinAccuracyRange() ? Math.signum(getError()) * restOutput : 0;}
     public final void update(Pose pose, Generator generator){
         currentValue = processVariable.run();
@@ -68,7 +70,7 @@ public abstract class Controller1D {
     public double getError(){ return processError.run(); }
     public void setProcessVariable(ReturnCodeSeg<Double> processVariable){ this.processVariable = processVariable; }
     public void setProcessError(ReturnCodeSeg<Double> processError){ this.processError = processError; }
-    public boolean maxDerivativeTarget(double maxDerivative){ return (processVariableProfiler.getDerivative() < maxDerivative); }
+    public boolean maxDerivativeTarget(double maxDerivative){ return (abs(processVariableProfiler.getDerivative()) < maxDerivative); }
     public boolean isAtTarget(){ return isAtTarget; }
     public void reset(){ targetValue = 0; errorProfiler.reset(); processVariableProfiler.reset(); isAtTarget = false; }
     public double[] getErrorState(){ return new double[]{getError(), errorProfiler.getIntegral(), errorProfiler.getDerivative()}; }

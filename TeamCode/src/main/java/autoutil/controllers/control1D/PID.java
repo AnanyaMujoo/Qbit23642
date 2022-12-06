@@ -48,7 +48,11 @@ public class PID extends Controller1D implements ParameterConstructor<Double> {
     protected void updateController(Pose pose, Generator generator){ if(abs(getError()) > maximumIntegralRange){ errorProfiler.resetIntegral(); } }
 
     @Override
-    protected double setOutput() { return (kp * getError() + (ki * errorProfiler.getIntegral()) + (kd * errorProfiler.getDerivative())); }
+    protected double setOutput() {
+        double der = (kd * errorProfiler.getDerivative());
+        if(abs(der) > 0.2){ der = signum(der)*0.2; }
+        return (kp * getError() + (ki * errorProfiler.getIntegral()) + der);
+    }
 
     @Override
     protected boolean hasReachedTarget() { return isWithinAccuracyRange()&&maxDerivativeTarget(maximumDerivative); }

@@ -37,25 +37,24 @@ public class TerraAuto extends AutoFramework {
 
     @Override
     public void define() {
-        addSetpoint(0,200,0);
-//        addWaypoint(0, 40, 0);
-//        addConcurrentAutoModule(BackwardAuto);
-//        addScaledWaypoint(0.5, 0, 120, 20);
-//        addScaledSetpoint(1.05, 1.0, 130, 50); // 4.0, 128.0, 50.0
-//        addAutoModule(DropAuto);
-//        addConcurrentAutoModule(ForwardAuto(0));
-//        customNumber(5, i -> {
-//            addWaypoint(20, 124.5, 90);
-//            addScaledWaypoint(0.4, 55, 124.5, 90);
-//            addScaledSetpoint(1.1, 59, 124.5, 90);
-//            addAutoModule(GrabAuto);
-//            addConcurrentAutoModule(Backward);
-//            addWaypoint(34, 124.5, 75);
-//            addScaledSetpoint(1.05, 1.0, 130, 50);
-//            addPause(5.0);
-//            addAutoModule(DropAuto);
-//            addConcurrentAutoModule(ForwardAuto(i+1));
-//        });
+        addWaypoint(0, 40, 0);
+        addConcurrentAutoModule(BackwardAuto);
+        addScaledWaypoint(0.5, 0, 120, 20);
+        addScaledSetpoint(1.0, 1.0, 133, 50);
+        addAutoModule(DropAuto);
+        addConcurrentAutoModule(ForwardAuto(0));
+        customNumber(5, i -> {
+            addWaypoint(20, 128, 90);
+            addScaledWaypoint(0.5, 46, 128, 90);
+            addScaledSetpoint(1.0, 60, 128, 90); // Problem with position (test all sides)
+            addAutoModule(GrabAuto);
+            addConcurrentAutoModule(Backward);
+            addWaypoint(34, 128, 75);
+            addScaledSetpoint(1.0, 1.0, 133, 50);
+            addPause(5.0);
+            addAutoModule(DropAuto);
+            addConcurrentAutoModule(ForwardAuto(i+1));
+        });
 //        customCase(() -> {
 //            addWaypoint(-7, 124, 90);
 //            addWaypoint(-20, 124, 90);
