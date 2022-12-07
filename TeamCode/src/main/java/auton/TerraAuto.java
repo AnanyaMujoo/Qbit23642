@@ -39,40 +39,39 @@ public class TerraAuto extends AutoFramework {
     public void define() {
         addWaypoint(0, 40, 0);
         addConcurrentAutoModule(BackwardAuto);
-        addScaledWaypoint(0.5, 0, 120, 20);
+        addScaledWaypoint(0.8, 0, 116, 20);
         addScaledSetpoint(1.0, 1.0, 133, 50);
         addAutoModule(DropAuto);
         addConcurrentAutoModule(ForwardAuto(0));
         customNumber(5, i -> {
-            addWaypoint(20, 128, 90);
-            addScaledWaypoint(0.5, 46, 128, 90);
-            addScaledSetpoint(1.0, 60, 128, 90); // Problem with position (test all sides)
+            addWaypoint(20, 127, 90);
+            addScaledWaypoint(0.8, 26, 127, 90);
+            addScaledSetpoint(1.0, 58, 127, 90);
             addAutoModule(GrabAuto);
             addConcurrentAutoModule(Backward);
-            addWaypoint(34, 128, 75);
+            addWaypoint(34, 127, 75);
             addScaledSetpoint(1.0, 1.0, 133, 50);
-            addPause(5.0);
             addAutoModule(DropAuto);
             addConcurrentAutoModule(ForwardAuto(i+1));
         });
-//        customCase(() -> {
-//            addWaypoint(-7, 124, 90);
-//            addWaypoint(-20, 124, 90);
-//            addWaypoint(-55, 126, 70);
-//            addWaypoint(-60, 128, 45);
-//            addSetpoint(-62, 70, 0);
-//        }, () -> {
-//            addWaypoint(0, 130, 35);
-//            addWaypoint(0, 105, 0);
-//            addSetpoint(0, 80, 0);
-//        }, () -> {
-//            addWaypoint(7, 124, 90);
-//            addWaypoint(20, 124, 90);
-//            addWaypoint(48, 122, 70);
-//            addWaypoint(50, 114, 50);
-//            addWaypoint(56, 95, 0);
-//            addSetpoint(58, 70, 0);
-//        });
+        customCase(() -> {
+            addWaypoint(-7, 124, 90);
+            addWaypoint(-20, 124, 90);
+            addWaypoint(-55, 126, 70);
+            addWaypoint(-60, 128, 45);
+            addSetpoint(-62, 70, 0);
+        }, () -> {
+            addWaypoint(0, 130, 35);
+            addWaypoint(0, 105, 0);
+            addSetpoint(0, 80, 0);
+        }, () -> {
+            addWaypoint(7, 124, 90);
+            addWaypoint(20, 124, 90);
+            addWaypoint(48, 122, 70);
+            addWaypoint(50, 114, 50);
+            addWaypoint(56, 95, 0);
+            addSetpoint(58, 70, 0);
+        });
 
 
 //        addCustomSegment(mecanumJunctionSetpoint, 1.0, 130, 50);

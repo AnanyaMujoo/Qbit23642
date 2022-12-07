@@ -41,30 +41,30 @@ public interface AutoModuleUser extends RobotUser{
     static AutoModule BackwardHeight(Modes.HeightMode.Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(MEDIUM),
             outtake.stageClose(0.3),
-            outtake.stageEnd().attach(lift.stageLift(1.0, height.getValue())),
             outtake.stageEnd(0.0),
+            lift.stageLift(1.0, height.getValue()),
             Modes.driveMode.ChangeMode(SLOW)
     );}
 
     AutoModule Forward = new AutoModule(
             Modes.driveMode.ChangeMode(MEDIUM),
             outtake.stageOpen(0.2),
-            outtake.stageStart().attach(lift.stageLift(0.6, 0)),
             outtake.stageStart(0.0),
-            outtake.stageOpen(0.0),
+            lift.stageLift(0.7, 0),
             Modes.driveMode.ChangeMode(SLOW)
     );
 
 
     default AutoModule ForwardAuto(int i){return new AutoModule(
-            outtake.stageStart().attach(lift.stageLift(0.6, Math.max(18.0 - (i*3.6), 0))),
+            outtake.stageStart(0.0),
+            lift.stageLift(0.7, Math.max(18.0 - (i*3.6), 0)),
             outtake.stageStart(0.0), outtake.stageOpen(0.0)
     );}
 
 
     AutoModule BackwardAuto = new AutoModule(
-            outtake.stageEnd().attach(lift.stageLift(0.8, HIGH.getValue()-1)),
-            outtake.stageEnd(0.0)
+            outtake.stageEnd(0.0),
+            lift.stageLift(0.9, HIGH.getValue()-1)
     );
 
     static AutoModule DropAuto(double time){ return new AutoModule(outtake.stageOpen(time)); }
