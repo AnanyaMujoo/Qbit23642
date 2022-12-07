@@ -19,7 +19,7 @@ public class Profiler {
     private final Integrator integrator;
     private final Differentiator differentiator;
     private final Timer timer = new Timer();
-    private volatile ArrayList<Double> values = new ArrayList<>();
+    private final ArrayList<Double> values = new ArrayList<>();
     private volatile ArrayList<Double> times = new ArrayList<>();
     private volatile int lastAccessedIndex = 0;
     private boolean firstUpdate = true;
@@ -59,7 +59,7 @@ public class Profiler {
 
     public void reset(){
         integrator.reset();
-        values = new ArrayList<>();
+        values.clear();
         times = new ArrayList<>();
         values.add(0.0);
         times.add(0.0);
@@ -119,18 +119,22 @@ public class Profiler {
 
     private ArrayList<Double> getLastValues(int n){
         ArrayList<Double> out = new ArrayList<>();
-        int s = values.size();
-        for (int i = s-n; i < s; i++) {
-            out.add(values.get(i));
+        synchronized (values) {
+            int s = values.size();
+            for (int i = s - n; i < s; i++) {
+                out.add(values.get(i));
+            }
         }
         return out;
     }
 
     public double getRunningAverage(int num){
-        if(getUpdateNumber() > num){
-            return Iterator.forAllAverage(getLastValues(num));
-        }else{
-            return Iterator.forAllAverage(values);
+        synchronized (values) {
+            if (getUpdateNumber() > num) {
+                return Iterator.forAllAverage(getLastValues(num));
+            } else {
+                return Iterator.forAllAverage(values);
+            }
         }
     }
 

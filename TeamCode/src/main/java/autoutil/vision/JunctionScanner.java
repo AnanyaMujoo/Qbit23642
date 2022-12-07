@@ -19,6 +19,7 @@ import geometry.position.Vector;
 import util.template.Iterator;
 
 import static global.General.log;
+import static global.General.sync;
 
 public class JunctionScanner extends Scanner {
 
@@ -38,8 +39,6 @@ public class JunctionScanner extends Scanner {
 
     @Override
     public void run(Mat input) {
-
-        // TODO FIX
 //        cropAndFill(input, getZoomedRect(input, 1.5));
         getHSV(input);
 
@@ -88,7 +87,7 @@ public class JunctionScanner extends Scanner {
         MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
         RotatedRect[] rects = new RotatedRect[contours.size()];
         ArrayList<RotatedRect> rectsList = new ArrayList<>();
-        double minAspect = 1.4;
+        double minAspect = 1.4; // TODO CHECK
         for (int i = 0; i < contours.size(); i++) {
             contoursPoly[i] = new MatOfPoint2f();
             Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 5, true);
@@ -157,8 +156,10 @@ public class JunctionScanner extends Scanner {
     }
 
     public Pose getPose(){
-        double distance = distanceProfiler.getRunningAverage(5);
-        double angle = angleProfiler.getRunningAverage(5);
+//        double distance = distanceProfiler.getRunningAverage(2);
+//        double angle = angleProfiler.getRunningAverage(2); // TODO CHECK
+        double distance = distanceToJunction;
+        double angle = angleToJunction;
         Vector distanceVector = new Vector(0, distance);
         distanceVector.rotate(angle);
         return new Pose(distanceVector.getX(), distanceVector.getY(), angle);

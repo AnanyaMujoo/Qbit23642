@@ -54,7 +54,6 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected ArrayList<AutoModule> autoModules = new ArrayList<>();
     protected ArrayList<Double> movementScales = new ArrayList<>();
     protected ArrayList<Double> accuracyScales = new ArrayList<>();
-    // TODO CHECK
     protected ArrayList<AutoSegment<?,?>> customSegments = new ArrayList<>();
 
     protected boolean scanning = false;
@@ -104,8 +103,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public void scan(boolean view){
         scanning = true;
-//        caseScanner = new CaseScanner(); // TODO TEST
-        camera.setScanner(new JunctionScanner());
+        caseScanner = new CaseScanner();
+        camera.setScanner(new CaseScanner());
         camera.start(view);
         while (!isStarted()){ caseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
     }
@@ -129,7 +128,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.AUTOMODULE, autoModule); }
     public void addConcurrentAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.CONCURRENT_AUTOMODULE, autoModule);}
     public void addCancelAutoModules(){ addSegmentType(AutoSegment.Type.CANCEL_AUTOMODULE); addLastPose(); }
-    public void addCustomSegment(AutoSegment<?,?> segment, double x, double y, double h){ segmentTypes.add(AutoSegment.Type.CUSTOM); poses.add(new Pose(x, y, h)); }
+    public void addCustomSegment(AutoSegment<?,?> segment, double x, double y, double h){ customSegments.add(segment); segmentTypes.add(AutoSegment.Type.CUSTOM); poses.add(new Pose(x, y, h)); }
 
     private void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(config.getSetpointSegment().getReactorReference(), generator); }
 

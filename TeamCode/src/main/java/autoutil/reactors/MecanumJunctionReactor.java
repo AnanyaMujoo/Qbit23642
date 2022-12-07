@@ -11,14 +11,19 @@ import geometry.position.Pose;
 import geometry.position.Vector;
 import util.template.Precision;
 
+import static global.General.log;
+
 public class MecanumJunctionReactor extends MecanumPIDReactor{
 
     public static final JunctionScanner junctionScanner = new JunctionScanner();
-    private static final Pose junctionTargetPose = new Pose(0, 20, 0);
+    private static final Pose junctionTargetPose = new Pose(0, 25, 0);
     private static Point junctionLocation;
-    private Pose startOdometryPose;
-    private Pose startJunctionPose;
+    private Pose startOdometryPose = new Pose(0,0,0);
+    private Pose startJunctionPose = junctionTargetPose.getAdded(new Pose(0,5,0));
     private Precision precision;
+
+    // TODO REST METHOD
+
     {
         junctionLocation = new Point(30.5, -122);
     }
@@ -33,8 +38,8 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
         Pose junctionPose = junctionScanner.getPose();
         Pose odometryPose = super.getPose();
 
+        // TODO GET ANGLE SOMEHOW?
 
-        // TODO TEST
 //
 //        Circle detectionCircle = new Circle(junctionLocation, junctionPose.getPoint().getDistanceToOrigin());
 //        Point closestPoint = detectionCircle.getClosestTo(odometryPose.getPoint());
@@ -47,25 +52,46 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
 
 
 
+
+//        if(junctionPose.getPoint().getDistanceTo(junctionTargetPose.getPoint()) < 10){
 //
-//        if(junctionPose.getPoint().getDistanceTo(junctionTargetPose.getPoint()) < 5 && startOdometryPose == null){
+//        }
+
+        if(junctionPose.getPoint().getDistanceTo(junctionTargetPose.getPoint()) < 5){
+            startOdometryPose = odometryPose;
+            startJunctionPose = junctionPose;
+        }
+
+//        precision.throttle(() -> {
+//            startOdometryPose = odometryPose;
+//            startJunctionPose = junctionPose;
+//        }, 500);
+//        startOdometryPose = new Pose(0,0,0);
+//        if(startJunctionPose == null) {
+//            startJunctionPose = junctionPose;
+//        }else {
+//            precision.throttle(() -> startJunctionPose = junctionPose, 1000);
+//        }
+//        startJunctionPose = new Pose(0,30,0);
+
+//        if(startOdometryPose == null) {
 //            startOdometryPose = odometryPose;
 //            startJunctionPose = junctionPose;
 //        }
-//
-//        Vector displacement = new Vector(startOdometryPose.getPoint(), odometryPose.getPoint());
-//        double headingDisplacement = odometryPose.getAngle() - startOdometryPose.getAngle();
-//
-//        Vector startPoint = new Vector(startJunctionPose.getPoint());
-//
-//        double currentHeading = startJunctionPose.getAngle() + headingDisplacement;
-//
-//        Vector currentPoint = startPoint.getAdded(displacement.getRotated(startJunctionPose.getAngle() - startOdometryPose.getAngle()));
-//
-//        return new Pose(currentPoint.getX(), currentPoint.getY(), currentHeading);
+        Vector displacement = new Vector(startOdometryPose.getPoint(), odometryPose.getPoint());
+        double headingDisplacement = odometryPose.getAngle() - startOdometryPose.getAngle();
+
+        Vector startPoint = new Vector(startJunctionPose.getPoint());
+
+        double currentHeading = startJunctionPose.getAngle() + headingDisplacement;
+
+        Vector currentPoint = startPoint.getAdded(displacement.getRotated(startJunctionPose.getAngle() - startOdometryPose.getAngle()));
+
+        return new Pose(currentPoint.getX(), currentPoint.getY(), currentHeading);
 
 
-        return junctionPose;
+
+//        return junctionPose;
     }
 
     @Override

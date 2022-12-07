@@ -23,8 +23,8 @@ public class TerraAuto extends AutoFramework {
         setConfig(mecanumDefaultConfig);
         lift.maintain();
         outtake.closeClaw();
-//        scan(false);
-//        setScannerAfterInit(MecanumJunctionReactor.junctionScanner); // TODO TEST
+        scan(false);
+        setScannerAfterInit(MecanumJunctionReactor.junctionScanner);
     }
 
     @Override
@@ -32,8 +32,6 @@ public class TerraAuto extends AutoFramework {
 //        caseDetected = Case.THIRD;
         if(isFlipped()){ flipCases(); MecanumJunctionReactor.flip(); }
     }
-
-    // TODO TEST
 
     @Override
     public void define() {
@@ -74,7 +72,8 @@ public class TerraAuto extends AutoFramework {
 //        });
 
 
-//        addCustomSegment(mecanumJunctionSetpoint, 1.0, 130, 50);
+        addScale(0.5);
+        addCustomSegment(mecanumJunctionSetpoint, 1.0, 130, 50);
     }
 
     @Override
