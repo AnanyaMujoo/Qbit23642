@@ -71,8 +71,6 @@ public class TerraAuto extends AutoFramework {
 //            addSetpoint(58, 70, 0);
 //        });
 
-
-        addScale(0.5);
         addCustomSegment(mecanumJunctionSetpoint, 1.0, 130, 50);
     }
 
