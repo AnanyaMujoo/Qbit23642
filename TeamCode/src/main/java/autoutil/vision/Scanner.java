@@ -47,7 +47,7 @@ public abstract class Scanner extends OpenCvPipeline {
 
     protected boolean isStarted = false;
 
-    public final void start() { isStarted = true; }
+    public void start() { isStarted = true; }
     public abstract void run(Mat input);
     public abstract void preProcess(Mat input);
     public abstract void postProcess(Mat input);

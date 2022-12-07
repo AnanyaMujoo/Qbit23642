@@ -19,7 +19,7 @@ public class Cameras extends RobotPart {
 //        cam = createInternalCamera(OpenCvCameraRotation.UPRIGHT, false);
     }
 
-    public void start(){ cam.start(); }
+    public void start(boolean view){ cam.start(view); }
     public void pause(){ cam.pause(); }
     public void resume(){ cam.resume(); }
     public void setScanner(Scanner scanner){ cam.setScanner(scanner);}

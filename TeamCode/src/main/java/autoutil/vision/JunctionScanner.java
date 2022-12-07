@@ -4,6 +4,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Rect;
 import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -12,6 +13,7 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import autoutil.Profiler;
 import geometry.position.Pose;
 import geometry.position.Vector;
 import util.template.Iterator;
@@ -24,6 +26,15 @@ public class JunctionScanner extends Scanner {
     public double distanceToJunction, angleToJunction = 0;
     private final double cameraFov = 47;
     private final double realJunctionWidth = 2.672; // cm
+    private final Profiler distanceProfiler = new Profiler(() -> distanceToJunction);
+    private final Profiler angleProfiler = new Profiler(() -> angleToJunction);
+
+    @Override
+    public void start() {
+        super.start();
+        distanceProfiler.reset();
+        angleProfiler.reset();
+    }
 
     @Override
     public void run(Mat input) {
@@ -32,61 +43,100 @@ public class JunctionScanner extends Scanner {
 //        cropAndFill(input, getZoomedRect(input, 1.5));
         getHSV(input);
 
-        Scalar lowHSV = new Scalar(18, 50, 50);
-        Scalar highHSV = new Scalar(32, 255, 255);
+        Scalar lowHSV = new Scalar(16, 150, 50);
+        Scalar highHSV = new Scalar(35, 255, 255);
 
         Core.inRange(HSV, lowHSV, highHSV, Thresh);
+
         Core.bitwise_and(HSV, HSV, Mask, Thresh);
 
-        Scalar average = Core.mean(Mask, Thresh);
+        Imgproc.blur(Mask, Mask, new Size(3, 3));
 
-        Mask.convertTo(ScaledMask, -1, 150/average.val[1], 0);
+//        Mask.copyTo(input);
 
-        Scalar strictLowHSV = new Scalar(0, 80, 80);
-        Scalar strictHighHSV = new Scalar(255, 255, 255);
+        Imgproc.Canny(Mask, Edges, 200, 350);
 
-        Core.inRange(ScaledMask, strictLowHSV, strictHighHSV, ScaledThresh);
+//        Edges.copyTo(input);
 
-        Core.bitwise_and(HSV, HSV, Output, ScaledThresh);
 
-        Imgproc.blur(Output, Output, new Size(3, 3));
-
-        Output.copyTo(input);
-
-        Imgproc.Canny(Output, Output, 100, 200);
-
+//
+//
+//        Scalar average = Core.mean(Mask, Thresh);
+//
+//        Mask.convertTo(ScaledMask, -1, 150/average.val[1], 0);
+//
+//        Scalar strictLowHSV = new Scalar(0, 0, 0);
+////        Scalar strictLowHSV = new Scalar(0, 80, 80);
+//        Scalar strictHighHSV = new Scalar(255, 255, 255);
+//
+//        Core.inRange(ScaledMask, strictLowHSV, strictHighHSV, ScaledThresh);
+//
+//        Core.bitwise_and(HSV, HSV, Output, ScaledThresh);
+//
+//        Imgproc.blur(Output, Output, new Size(2, 2));
+//
 //        Output.copyTo(input);
+//
+//        Imgproc.Canny(Output, Edges, 100, 200);
 
-//
-//        ArrayList<MatOfPoint> contours = new ArrayList<>();
-//        Imgproc.findContours(Output, contours, Hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-//        MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
-//        RotatedRect[] rects = new RotatedRect[contours.size()];
-//        for (int i = 0; i < contours.size(); i++) {
-//            contoursPoly[i] = new MatOfPoint2f();
-//            Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 5, true);
-//            rects[i] = Imgproc.minAreaRect(contoursPoly[i]);
-//            drawRotatedRect(input, rects[i], ORANGE);
-//        }
-//
-//        ArrayList<RotatedRect> rectsList = new ArrayList<>(Arrays.asList(rects));
-//        if(rectsList.size() > 0) {
-//            maxRect = Iterator.forAllCompareMax(rectsList, rect -> rect.boundingRect().area());
+//        Edges.copyTo(input);
+
+
+        ArrayList<MatOfPoint> contours = new ArrayList<>();
+        Imgproc.findContours(Edges, contours, Hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
+
+        MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
+        RotatedRect[] rects = new RotatedRect[contours.size()];
+        ArrayList<RotatedRect> rectsList = new ArrayList<>();
+        double minAspect = 1.4;
+        for (int i = 0; i < contours.size(); i++) {
+            contoursPoly[i] = new MatOfPoint2f();
+            Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 5, true);
+            rects[i] = Imgproc.minAreaRect(contoursPoly[i]);
+            double width = Math.min(rects[i].size.height, rects[i].size.width);
+            double height = Math.max(rects[i].size.height, rects[i].size.width);
+            double aspect = height/width;
+            if(aspect > minAspect) {
+//                drawRotatedRect(input, rects[i], ORANGE);
+                rectsList.add(rects[i]);
+            }
+        }
+
+        if(rectsList.size() > 0) {
+            maxRect = Iterator.forAllCompareMax(rectsList, rect -> rect.boundingRect().area());
+//            drawRectangle(input, scaleRectAroundCenter(maxRect.boundingRect(), 1.4), BLUE);
 //            drawRotatedRect(input, maxRect, RED);
-//        }
-//
-//        double junctionCenterX = maxRect.center.x;
-//        double screenCenterX = input.width()/2.0;
-//        double junctionCenterOffset = junctionCenterX-screenCenterX;
-//        double screenWidth = input.width();
-//
-//
-//        double screenJunctionWidth = Math.min(maxRect.size.height, maxRect.size.width);
-//        distanceToJunction = realJunctionWidth/distanceRatio(screenJunctionWidth, screenWidth);
-//
-//        double realJunctionOffset = distanceToJunction*distanceRatio(junctionCenterOffset, screenWidth);
-//        angleToJunction = Math.toDegrees(Math.atan2(realJunctionOffset, distanceToJunction));
-//
+        }
+
+
+        double junctionCenterX = maxRect.center.x;
+        double screenCenterX = input.width()/2.0;
+        double junctionCenterOffset = junctionCenterX-screenCenterX;
+        double screenWidth = input.width();
+
+
+        double screenJunctionWidth = Math.min(maxRect.size.height, maxRect.size.width);
+        distanceToJunction = realJunctionWidth/distanceRatio(screenJunctionWidth, screenWidth);
+
+        double realJunctionOffset = distanceToJunction*distanceRatio(junctionCenterOffset, screenWidth);
+        angleToJunction = Math.toDegrees(Math.atan2(realJunctionOffset, distanceToJunction));
+
+        distanceProfiler.update();
+        angleProfiler.update();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -102,21 +152,16 @@ public class JunctionScanner extends Scanner {
         ScaledMask.release();
         ScaledThresh.release();
         Output.release();
+        Edges.release();
         Hierarchy.release();
-
-
-
-
-
-
-
-
     }
 
     public Pose getPose(){
-        Vector distanceVector = new Vector(0, distanceToJunction);
-        distanceVector.rotate(angleToJunction);
-        return new Pose(distanceVector.getX(), distanceVector.getY(), angleToJunction);
+        double distance = distanceProfiler.getRunningAverage(5);
+        double angle = angleProfiler.getRunningAverage(5);
+        Vector distanceVector = new Vector(0, distance);
+        distanceVector.rotate(angle);
+        return new Pose(distanceVector.getX(), distanceVector.getY(), angle);
     }
 
     private double distanceRatio(double sizeOnScreen, double screenWidth){ return 2*Math.tan(Math.toRadians(cameraFov*(sizeOnScreen/screenWidth))/2.0); }
@@ -124,13 +169,14 @@ public class JunctionScanner extends Scanner {
 
     @Override
     public void message() {
-        log.show("Angle: ", maxRect.angle);
-        log.show("Width:", maxRect.size.width);
-        log.show("Height:", maxRect.size.height);
-        log.show("Camera FOV: ", cameraFov);
-        log.show("Junction Width: ", realJunctionWidth);
-        log.show("DistanceToJunction: ", distanceToJunction);
-        log.show("AngleToJunction: ", angleToJunction);
+        log.show("Pose", getPose());
+//        log.show("Angle: ", maxRect.angle);
+//        log.show("Width:", maxRect.size.width);
+//        log.show("Height:", maxRect.size.height);
+//        log.show("Camera FOV: ", cameraFov);
+//        log.show("Junction Width: ", realJunctionWidth);
+//        log.show("DistanceToJunction: ", distanceToJunction);
+//        log.show("AngleToJunction: ", angleToJunction);
     }
 
     @Override

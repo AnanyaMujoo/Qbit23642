@@ -35,7 +35,7 @@ public class Outtake extends RobotPart {
         claw.addPosition("open", 0.0); // 0.0
         claw.addPosition("close", 0.32);
 
-        readyStart();
+//        readyStart();
         openClaw();
         unFlip();
     }

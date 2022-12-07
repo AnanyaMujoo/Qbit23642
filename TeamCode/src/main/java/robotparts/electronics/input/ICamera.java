@@ -24,12 +24,14 @@ public class ICamera extends Electronic {
     public void resume(){ camera.resumeViewport(); }
     public void setScanner(Scanner scanner){ camera.setPipeline(scanner); }
 
-    public void start(){
+    public void start(boolean view){
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
             @Override
             public void onOpened() {
                 camera.startStreaming(width, height, orientation);
-                pause();
+                if(!view) {
+                    pause();
+                }
             }
             @Override
             public void onError(int errorCode) {}
