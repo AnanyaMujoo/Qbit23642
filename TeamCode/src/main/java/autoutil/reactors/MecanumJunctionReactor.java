@@ -20,26 +20,29 @@ import static global.General.log;
 public class MecanumJunctionReactor extends MecanumReactor{
 
     public static final JunctionScanner junctionScanner = new JunctionScanner();
-    private static final Pose junctionTargetPose = new Pose(0, 25, 0);
+    private static final Pose junctionTargetPose = new Pose(0, 18, 0);
     private static Point junctionLocation;
     private Pose startOdometryPose = new Pose(0,0,0);
     private Pose startJunctionPose = junctionTargetPose.getAdded(new Pose(0,5,0));
     private Precision precision;
+    private Pose lastJunctionPose = startJunctionPose;
 
-    public final PID xPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.015, 1000.0, 0.11, 20.0, 5.0);
-    public final PID yPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.015, 1000.0, 0.13, 20.0, 5.0);
-    public final PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.005, 1000.0, 0.09, 20.0, 5.0);
+    public final PID xPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.007, 1000.0, 0.02, 20.0, 5.0);
+    public final PID yPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.01, 1000.0, 0.02, 20.0, 5.0);
+    public final PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.007, 1000.0, 0.02, 20.0, 5.0);
 
     private static boolean autoMode = false;
 
     public MecanumJunctionReactor(){
-        hPID.setAccuracy(2.0);
+        hPID.setAccuracy(1.0);
         xPID.setAccuracy(1.0);
         yPID.setAccuracy(1.0);
 
-        hPID.setRestOutput(0.065);
-        xPID.setRestOutput(0.095);
-        yPID.setRestOutput(0.065);
+        hPID.setRestOutput(0.05);
+        xPID.setRestOutput(0.07);
+        yPID.setRestOutput(0.06);
+
+
         setControllers(new Default2D(xPID, yPID), hPID);
     }
 
@@ -53,6 +56,7 @@ public class MecanumJunctionReactor extends MecanumReactor{
         junctionLocation = new Point(30.5, -122);
         startOdometryPose = new Pose(0,0,0);
         startJunctionPose = junctionTargetPose.getAdded(new Pose(0,5,0));
+        lastJunctionPose = startJunctionPose;
         JunctionScanner.resume();
     }
 
@@ -78,8 +82,11 @@ public class MecanumJunctionReactor extends MecanumReactor{
         }else{
             if (!precision.isInputTrueForTime(junctionPose.getPoint().getDistanceTo(junctionTargetPose.getPoint()) > 15, 0.6)) {
 
-                startOdometryPose = odometryPose;
-                startJunctionPose = junctionPose;
+                if(junctionPose.getPoint().getDistanceTo(junctionTargetPose.getPoint()) < 15 && junctionPose.getPoint().getDistanceTo(lastJunctionPose.getPoint()) < 4){
+                    startOdometryPose = odometryPose;
+                    lastJunctionPose = startJunctionPose;
+                    startJunctionPose = junctionPose;
+                }
 
                 Vector displacement = new Vector(startOdometryPose.getPoint(), odometryPose.getPoint());
                 double headingDisplacement = odometryPose.getAngle() - startOdometryPose.getAngle();

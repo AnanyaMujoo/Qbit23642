@@ -21,8 +21,8 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
-        lift.maintain();
-        outtake.closeClaw();
+//        lift.maintain();
+//        outtake.closeClaw();
         scan(false);
         setScannerAfterInit(MecanumJunctionReactor.junctionScanner);
     }
@@ -70,7 +70,6 @@ public class TerraAuto extends AutoFramework {
 //            addWaypoint(56, 95, 0);
 //            addSetpoint(58, 70, 0);
 //        });
-
         addCustomSegment(mecanumJunctionSetpoint, 1.0, 130, 50);
     }
 

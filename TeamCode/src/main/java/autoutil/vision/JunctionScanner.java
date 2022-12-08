@@ -92,7 +92,7 @@ public class JunctionScanner extends Scanner {
             MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
             RotatedRect[] rects = new RotatedRect[contours.size()];
             ArrayList<RotatedRect> rectsList = new ArrayList<>();
-            double minAspect = 1.3;
+            double minAspect = 1.1;
             for (int i = 0; i < contours.size(); i++) {
                 contoursPoly[i] = new MatOfPoint2f();
                 Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 5, true);
@@ -100,10 +100,11 @@ public class JunctionScanner extends Scanner {
                 double width = Math.min(rects[i].size.height, rects[i].size.width);
                 double height = Math.max(rects[i].size.height, rects[i].size.width);
                 double aspect = height / width;
-                if (aspect > minAspect) {
-//                drawRotatedRect(input, rects[i], ORANGE);
-                    rectsList.add(rects[i]);
-                }
+//                if (aspect > minAspect) {
+////                drawRotatedRect(input, rects[i], ORANGE);
+//                    rectsList.add(rects[i]);
+//                }
+                rectsList.add(rects[i]);
             }
 
             if (rectsList.size() > 0) {
@@ -144,15 +145,16 @@ public class JunctionScanner extends Scanner {
     }
 
     public Pose getPose(){
-        int n = 3;
+
+//        int n = 3;
         double distance = distanceToJunction;
-        if(distanceProfiler.areLastValuesNearby(n, 2)){
-            distance = distanceProfiler.getRunningAverage(n);
-        }
+//        if(distanceProfiler.areLastValuesNearby(n, 5)){
+//            distance = distanceProfiler.getRunningAverage(n);
+//        }
         double angle = angleToJunction;
-        if(angleProfiler.areLastValuesNearby(n, 5)){
-            angle = angleProfiler.getRunningAverage(n);
-        }
+//        if(angleProfiler.areLastValuesNearby(n, 8)){
+//            angle = angleProfiler.getRunningAverage(n);
+//        }
         Vector distanceVector = new Vector(0, distance);
         distanceVector.rotate(angle);
         return new Pose(distanceVector.getX(), distanceVector.getY(), angle);
