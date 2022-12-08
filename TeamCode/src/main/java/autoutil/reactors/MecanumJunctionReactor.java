@@ -10,6 +10,7 @@ import geometry.framework.Point;
 import geometry.position.Line;
 import geometry.position.Pose;
 import geometry.position.Vector;
+import util.Timer;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 import util.template.Precision;
@@ -32,6 +33,8 @@ public class MecanumJunctionReactor extends MecanumReactor{
     public final PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.007, 1000.0, 0.02, 20.0, 5.0);
 
     private static boolean autoMode = false;
+    private static boolean waiting = true;
+    private static final Timer timer = new Timer();
 
     public MecanumJunctionReactor(){
         hPID.setAccuracy(1.0);
@@ -57,12 +60,13 @@ public class MecanumJunctionReactor extends MecanumReactor{
         startOdometryPose = new Pose(0,0,0);
         startJunctionPose = junctionTargetPose.getAdded(new Pose(0,5,0));
         lastJunctionPose = startJunctionPose;
+        waiting = true;
+        timer.reset();
         JunctionScanner.resume();
     }
 
     @Override
     public Pose getPose() {
-        // TODO TEST
 
         Pose junctionPose = junctionScanner.getPose();
         Pose odometryPose = super.getPose();
@@ -80,13 +84,16 @@ public class MecanumJunctionReactor extends MecanumReactor{
             }
 
         }else{
-            if (!precision.isInputTrueForTime(junctionPose.getPoint().getDistanceTo(junctionTargetPose.getPoint()) > 15, 0.6)) {
 
-                if(junctionPose.getPoint().getDistanceTo(junctionTargetPose.getPoint()) < 15 && junctionPose.getPoint().getDistanceTo(lastJunctionPose.getPoint()) < 4){
-                    startOdometryPose = odometryPose;
-                    lastJunctionPose = startJunctionPose;
-                    startJunctionPose = junctionPose;
-                }
+            double maxDisFromTarget = 15;
+            double maxDisVariation = 2;
+            double minTime = 1;
+            int n = 10;
+            if(precision.isInputTrueForTime(junctionPose.getDistanceTo(junctionTargetPose) < maxDisFromTarget && junctionScanner.distanceProfiler.areLastValuesNearby(n, maxDisVariation), minTime)){
+                startOdometryPose = odometryPose;
+                startJunctionPose = junctionScanner.getAveragePose(n);
+                waiting = false;
+            }else if(!waiting){
 
                 Vector displacement = new Vector(startOdometryPose.getPoint(), odometryPose.getPoint());
                 double headingDisplacement = odometryPose.getAngle() - startOdometryPose.getAngle();
@@ -97,13 +104,43 @@ public class MecanumJunctionReactor extends MecanumReactor{
 
                 Vector currentPoint = startPoint.getAdded(displacement.getRotated(startJunctionPose.getAngle() - startOdometryPose.getAngle()));
 
-//        return new Pose(currentPoint.getX(), currentPoint.getY(), currentHeading);
                 return new Pose(0, currentPoint.getY(), currentHeading);
-            } else {
-                fault.warn("Exiting, farther than 15 cm from target", Expectation.EXPECTED, Magnitude.MINOR);
+            }else if(timer.seconds() > 10){
+                fault.warn("Exiting, took longer than 10s to lock target", Expectation.EXPECTED, Magnitude.MINOR);
+                waiting = false;
             }
+
+
+
+//
+//            if (!precision.isInputTrueForTime(junctionPose.getPoint().getDistanceTo(junctionTargetPose.getPoint()) > maxDisFromTarget, 0.6)) {
+//
+//                if(junctionPose.getPoint().getDistanceTo(junctionTargetPose.getPoint()) < 15 && junctionPose.getPoint().getDistanceTo(lastJunctionPose.getPoint()) < 4){
+//                    startOdometryPose = odometryPose;
+//                    lastJunctionPose = startJunctionPose;
+//                    startJunctionPose = junctionPose;
+//                }
+//
+//                Vector displacement = new Vector(startOdometryPose.getPoint(), odometryPose.getPoint());
+//                double headingDisplacement = odometryPose.getAngle() - startOdometryPose.getAngle();
+//
+//                Vector startPoint = new Vector(startJunctionPose.getPoint());
+//
+//                double currentHeading = startJunctionPose.getAngle() + headingDisplacement;
+//
+//                Vector currentPoint = startPoint.getAdded(displacement.getRotated(startJunctionPose.getAngle() - startOdometryPose.getAngle()));
+//
+//                return new Pose(0, currentPoint.getY(), currentHeading);
+//            } else {
+//                fault.warn("Exiting, farther than 15 cm from target", Expectation.EXPECTED, Magnitude.MINOR);
+//            }
         }
         return junctionTargetPose;
+    }
+
+    @Override
+    public boolean isAtTarget() {
+        return super.isAtTarget() && !waiting;
     }
 
     @Override

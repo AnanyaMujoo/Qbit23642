@@ -41,6 +41,8 @@ public class Pose extends GeometryObject {
     public void scaleOrientation(double scale){setAngle(getAngle()*scale);}
     public Pose getCopy(){ return new Pose(getX(), getY(), getAngle()); }
 
+    public double getDistanceTo(Pose p){ return getPoint().getDistanceTo(p.getPoint()); }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

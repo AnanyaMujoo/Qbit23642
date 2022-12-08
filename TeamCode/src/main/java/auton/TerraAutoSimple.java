@@ -26,7 +26,7 @@ public class TerraAutoSimple extends AutoFramework {
     @Override
     public void define() {
         addWaypoint(0, 60, 0);
-        addConcurrentAutoModule(Backward);
+        addConcurrentAutoModule(BackwardAuto);
         addWaypoint(0, 100, 35);
         addSetpoint(1, 136, 50);
         addConcurrentAutoModule(Forward);

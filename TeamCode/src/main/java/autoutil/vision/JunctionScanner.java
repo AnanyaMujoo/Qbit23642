@@ -27,8 +27,8 @@ public class JunctionScanner extends Scanner {
     public double distanceToJunction, angleToJunction = 0;
     private final double cameraFov = 47;
     private final double realJunctionWidth = 2.672; // cm
-    private final Profiler distanceProfiler = new Profiler(() -> distanceToJunction);
-    private final Profiler angleProfiler = new Profiler(() -> angleToJunction);
+    public final Profiler distanceProfiler = new Profiler(() -> distanceToJunction);
+    public final Profiler angleProfiler = new Profiler(() -> angleToJunction);
     private static boolean pausing = true;
 
     public static void pause(){ pausing = true; }
@@ -44,7 +44,6 @@ public class JunctionScanner extends Scanner {
     @Override
     public void run(Mat input) {
         if(!pausing) {
-//        cropAndFill(input, getZoomedRect(input, 1.5));
             getHSV(input);
 
             Scalar lowHSV = new Scalar(16, 150, 50);
@@ -63,47 +62,17 @@ public class JunctionScanner extends Scanner {
 //        Edges.copyTo(input);
 
 
-//
-//
-//        Scalar average = Core.mean(Mask, Thresh);
-//
-//        Mask.convertTo(ScaledMask, -1, 150/average.val[1], 0);
-//
-//        Scalar strictLowHSV = new Scalar(0, 0, 0);
-////        Scalar strictLowHSV = new Scalar(0, 80, 80);
-//        Scalar strictHighHSV = new Scalar(255, 255, 255);
-//
-//        Core.inRange(ScaledMask, strictLowHSV, strictHighHSV, ScaledThresh);
-//
-//        Core.bitwise_and(HSV, HSV, Output, ScaledThresh);
-//
-//        Imgproc.blur(Output, Output, new Size(2, 2));
-//
-//        Output.copyTo(input);
-//
-//        Imgproc.Canny(Output, Edges, 100, 200);
-
-//        Edges.copyTo(input);
-
-
             ArrayList<MatOfPoint> contours = new ArrayList<>();
             Imgproc.findContours(Edges, contours, Hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_NONE);
 
             MatOfPoint2f[] contoursPoly = new MatOfPoint2f[contours.size()];
             RotatedRect[] rects = new RotatedRect[contours.size()];
             ArrayList<RotatedRect> rectsList = new ArrayList<>();
-            double minAspect = 1.1;
             for (int i = 0; i < contours.size(); i++) {
                 contoursPoly[i] = new MatOfPoint2f();
                 Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 5, true);
                 rects[i] = Imgproc.minAreaRect(contoursPoly[i]);
-                double width = Math.min(rects[i].size.height, rects[i].size.width);
-                double height = Math.max(rects[i].size.height, rects[i].size.width);
-                double aspect = height / width;
-//                if (aspect > minAspect) {
-////                drawRotatedRect(input, rects[i], ORANGE);
-//                    rectsList.add(rects[i]);
-//                }
+//                drawRotatedRect(input, rects[i], ORANGE);
                 rectsList.add(rects[i]);
             }
 
@@ -130,9 +99,6 @@ public class JunctionScanner extends Scanner {
             angleProfiler.update();
 
 
-            // 2 tan (angular size / 2) = w / d
-
-
             HSV.release();
             Mask.release();
             Thresh.release();
@@ -145,21 +111,23 @@ public class JunctionScanner extends Scanner {
     }
 
     public Pose getPose(){
-
-//        int n = 3;
         double distance = distanceToJunction;
-//        if(distanceProfiler.areLastValuesNearby(n, 5)){
-//            distance = distanceProfiler.getRunningAverage(n);
-//        }
         double angle = angleToJunction;
-//        if(angleProfiler.areLastValuesNearby(n, 8)){
-//            angle = angleProfiler.getRunningAverage(n);
-//        }
         Vector distanceVector = new Vector(0, distance);
         distanceVector.rotate(angle);
         return new Pose(distanceVector.getX(), distanceVector.getY(), angle);
     }
 
+    public Pose getAveragePose(int n){
+        double distance = distanceProfiler.getRunningAverage(n);
+        double angle = angleProfiler.getRunningAverage(n);
+        Vector distanceVector = new Vector(0, distance);
+        distanceVector.rotate(angle);
+        return new Pose(distanceVector.getX(), distanceVector.getY(), angle);
+    }
+
+
+    // 2 tan (angular size / 2) = w / d
     private double distanceRatio(double sizeOnScreen, double screenWidth){ return 2*Math.tan(Math.toRadians(cameraFov*(sizeOnScreen/screenWidth))/2.0); }
 
 

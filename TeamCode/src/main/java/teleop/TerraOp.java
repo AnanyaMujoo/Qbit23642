@@ -46,8 +46,11 @@ public class TerraOp extends Tele {
         gph1.link(Button.X, bot::cancel);
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
 
-        gph1.link(RIGHT_TRIGGER, ButtonEventHandler.class, () -> lift.move(0.3));
-        gph1.link(LEFT_TRIGGER, ButtonEventHandler.class, () -> lift.move(-0.1));
+        gph1.link(LEFT_BUMPER, MoveForward);
+        gph1.link(RIGHT_BUMPER, odometry::reset);
+
+        gph1.link(RIGHT_TRIGGER, ButtonEventHandler.class, () -> lift.adjustHolderTarget(2.0));
+        gph1.link(LEFT_TRIGGER, ButtonEventHandler.class, () -> lift.adjustHolderTarget(-2.0));
 
         gph1.link(DPAD_UP, () -> lift.setHolderTarget(HIGH));
         gph1.link(DPAD_RIGHT, () ->  lift.setHolderTarget(MIDDLE));
@@ -61,9 +64,6 @@ public class TerraOp extends Tele {
 
         gph2.link(DPAD_UP, outtake::flip);
         gph2.link(DPAD_DOWN, outtake::unFlip);
-
-        gph1.link(LEFT_BUMPER, MoveForward);
-        gph1.link(RIGHT_BUMPER, odometry::reset);
 
         lift.move(-0.15);
     }

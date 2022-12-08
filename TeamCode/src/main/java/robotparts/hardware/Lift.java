@@ -40,7 +40,15 @@ public class Lift extends RobotPart {
 
     public void setHolderTarget(Modes.HeightMode.Height height){
         Modes.heightMode.set(height);
-        motorRight.setPositionHolderTarget(height.getValue()); motorLeft.setPositionHolderTarget(height.getValue());
+        setHolderTarget(height.getValue());
+    }
+
+    public void setHolderTarget(double height){
+        motorRight.setPositionHolderTarget(height); motorLeft.setPositionHolderTarget(height);
+    }
+
+    public void adjustHolderTarget(double delta){
+        motorRight.setPositionHolderTarget(motorRight.getPositionHolder().getTarget()+delta); motorLeft.setPositionHolderTarget(motorRight.getPositionHolder().getTarget()+delta);
     }
 
     @Override
