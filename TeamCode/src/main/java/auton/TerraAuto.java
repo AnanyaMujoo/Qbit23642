@@ -30,14 +30,17 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void preProcess() {
 //        caseDetected = Case.THIRD;
-//        MecanumJunctionReactor.setToAuto();
-        if(isFlipped()){ flipCases(); MecanumJunctionReactor.flip(); }
+        if(isFlipped()){ flipCases(); }
+        MecanumJunctionReactor.setFlipped(isFlipped());
     }
 
     public void place(int i){
-        addScaledSetpoint(1.0, 1.0, 133, 50);
-//        addAccuracyScaledSetpoint(2.0, 1.0, 1.0, 133, 50);
-//        addCustomSegment(mecanumJunctionSetpoint, 1.0, 133, 50);
+        if(i == 0) {
+            addAccuracyScaledSetpoint(2.0, 1.0, 1.0, 133, 50);
+            addCustomSegment(mecanumJunctionSetpoint, 1.0, 133, 50);
+        }else{
+            addScaledSetpoint(1.0, 1.0, 133, 50);
+        }
         addAutoModule(DropAuto);
         addConcurrentAutoModule(ForwardAuto(i));
     }
@@ -50,36 +53,35 @@ public class TerraAuto extends AutoFramework {
 
     @Override
     public void define() {
-//        addWaypoint(0, 40, 0);
-//        addConcurrentAutoModule(BackwardAuto);
-//        addScaledWaypoint(0.8, 0, 116, 20);
-//        place(0);
-//        customNumber(5, i -> {
-//            addWaypoint(20, 127, 90);
-//            addScaledWaypoint(0.8, 26, 127, 90);
-//            pick();
-//            addWaypoint(34, 127, 75);
-//            place(i+1);
-//        });
-//        customCase(() -> {
-//            addWaypoint(-7, 124, 90);
-//            addWaypoint(-20, 124, 90);
-//            addWaypoint(-55, 126, 70);
-//            addWaypoint(-60, 128, 45);
-//            addSetpoint(-62, 70, 0);
-//        }, () -> {
-//            addWaypoint(0, 130, 35);
-//            addWaypoint(0, 105, 0);
-//            addSetpoint(0, 80, 0);
-//        }, () -> {
-//            addWaypoint(7, 124, 90);
-//            addWaypoint(20, 124, 90);
-//            addWaypoint(48, 122, 70);
-//            addWaypoint(50, 114, 50);
-//            addWaypoint(56, 95, 0);
-//            addSetpoint(58, 70, 0);
-//        });
-        addCustomSegment(mecanumJunctionSetpoint, 1.0, 130, 50);
+        addWaypoint(0, 40, 0);
+        addConcurrentAutoModule(BackwardAuto);
+        addScaledWaypoint(0.8, 0, 116, 20);
+        place(0);
+        customNumber(5, i -> {
+            addWaypoint(20, 127, 90);
+            addScaledWaypoint(0.8, 26, 127, 90);
+            pick();
+            addWaypoint(34, 127, 75);
+            place(i+1);
+        });
+        customCase(() -> {
+            addWaypoint(-7, 124, 90);
+            addWaypoint(-20, 124, 90);
+            addWaypoint(-55, 126, 70);
+            addWaypoint(-60, 128, 45);
+            addSetpoint(-62, 70, 0);
+        }, () -> {
+            addWaypoint(0, 130, 35);
+            addWaypoint(0, 105, 0);
+            addSetpoint(0, 80, 0);
+        }, () -> {
+            addWaypoint(7, 124, 90);
+            addWaypoint(20, 124, 90);
+            addWaypoint(48, 122, 70);
+            addWaypoint(50, 114, 50);
+            addWaypoint(56, 95, 0);
+            addSetpoint(58, 70, 0);
+        });
     }
 
 

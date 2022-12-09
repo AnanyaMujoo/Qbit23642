@@ -22,27 +22,24 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
 
     public static final JunctionScanner junctionScanner = new JunctionScanner();
     private static final Pose junctionTargetPose = new Pose(0, 18, 0);
+    private static final double cameraToRobotCenter = 19.5;
     private static Point junctionLocation;
     private Pose startOdometryPose = new Pose(0,0,0);
     private Pose startJunctionPose = junctionTargetPose.getAdded(new Pose(0,5,0));
-    private Precision precision;
-    private Pose lastJunctionPose = startJunctionPose;
 
-    private static boolean autoMode = false;
+    private static boolean flipped = false;
     private static boolean waiting = true;
     private static final Timer timer = new Timer();
 
-    public static void setToAuto(){ autoMode = true; }
-    public static void flip(){ junctionLocation.reflectX(); junctionLocation.reflectY();}
+    public static void setFlipped(boolean flipped){
+        junctionLocation = new Point(flipped ? -30.5 : 30.5, -158); MecanumJunctionReactor.flipped = flipped;
+    }
 
     @Override
     public void init() {
         super.init();
-        precision = new Precision();
-        junctionLocation = new Point(30.5, -122);
         startOdometryPose = new Pose(0,0,0);
         startJunctionPose = junctionTargetPose.getAdded(new Pose(0,5,0));
-        lastJunctionPose = startJunctionPose;
         waiting = true;
         timer.reset();
         JunctionScanner.resume();
@@ -54,41 +51,35 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
         Pose junctionPose = junctionScanner.getPose();
         Pose odometryPose = super.getPose();
 
-        if(autoMode) {
 
-//            Circle detectionCircle = new Circle(junctionLocation, junctionPose.getPoint().getDistanceToOrigin());
-//            Point closestPoint = detectionCircle.getClosestTo(odometryPose.getPoint());
-//            Line errorLine = new Line(closestPoint, odometryPose.getPoint());
-//            if(precision.isInputTrueForTime(errorLine.getLength() < 3.0, 0.6)) {
-//                Point adjustedPoint = errorLine.getMidpoint();
-//                double currentAngle = errorLine.getVector().getTheta();
-//                Pose currentPose = new Pose(adjustedPoint, currentAngle);
-//                odometry.setCurrentPose(currentPose);
-//            }
+        double maxDisFromTarget = 15;
+        double maxDisVariation = 2;
+        double maxAngleVariation = 3;
+        int n = 5;
+        if(junctionPose.getDistanceTo(junctionTargetPose) < maxDisFromTarget
+                && junctionScanner.distanceProfiler.areLastValuesNearby(n, maxDisVariation)
+                && junctionScanner.angleProfiler.areLastValuesNearby(n, maxAngleVariation) && waiting){
 
-        }else{
+            startOdometryPose = odometryPose.getCopy();
+            startJunctionPose = junctionScanner.getAveragePose(n).getCopy();
 
-            double maxDisFromTarget = 15;
-            double maxDisVariation = 2;
-            double maxAngleVariation = 3;
-            int n = 5;
-            if(junctionPose.getDistanceTo(junctionTargetPose) < maxDisFromTarget
-                    && junctionScanner.distanceProfiler.areLastValuesNearby(n, maxDisVariation)
-                    && junctionScanner.angleProfiler.areLastValuesNearby(n, maxAngleVariation) && waiting){
-                startOdometryPose = odometryPose.getCopy();
-                startJunctionPose = junctionScanner.getAveragePose(n).getCopy();
-                waiting = false;
-            }else if(!waiting){
-                Vector odoDisplacement = new Vector(startOdometryPose.getPoint(), odometryPose.getPoint());
-                double headingDisplacement = odometryPose.getAngle() - startOdometryPose.getAngle();
-                double currentHeading = startJunctionPose.getAngle() + headingDisplacement;
-                Vector currentPosition = new Vector(startJunctionPose.getPoint()).getAdded(odoDisplacement);
-                return new Pose(currentPosition.getX(), currentPosition.getY(), currentHeading);
-            }else if(timer.seconds() > 5){
-                fault.warn("Exiting, took longer than 10s to lock target", Expectation.EXPECTED, Magnitude.MINOR);
-                waiting = false;
+            Circle detectionCircle = new Circle(junctionLocation, startJunctionPose.getPoint().getDistanceToOrigin() + cameraToRobotCenter);
+            Point closestPoint = detectionCircle.getClosestTo(startOdometryPose.getPoint());
+            Line errorLine = new Line(closestPoint, startOdometryPose.getPoint());
+            if(errorLine.getLength() < 5) {
+                Pose robotPose = new Pose(errorLine.getMidpoint(),(flipped ? -180 : 180)-errorLine.getVector().getTheta());
+                odometry.setCurrentPose(robotPose);
             }
-
+            waiting = false;
+        }else if(!waiting){
+            Vector odoDisplacement = new Vector(startOdometryPose.getPoint(), odometryPose.getPoint());
+            double headingDisplacement = odometryPose.getAngle() - startOdometryPose.getAngle();
+            double currentHeading = startJunctionPose.getAngle() + headingDisplacement;
+            Vector currentPosition = new Vector(startJunctionPose.getPoint()).getAdded(odoDisplacement);
+            return new Pose(currentPosition.getX(), currentPosition.getY(), currentHeading);
+        }else if(timer.seconds() > 5){
+            fault.warn("Exiting, took longer than 10s to lock target", Expectation.EXPECTED, Magnitude.MINOR);
+            waiting = false;
         }
         return junctionTargetPose;
     }
