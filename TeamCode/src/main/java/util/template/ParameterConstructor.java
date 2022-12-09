@@ -82,8 +82,10 @@ public interface ParameterConstructor<T> {
 
 
     static <T> ReturnCodeSeg<T> getNewInstance(Class<T> type){
-        Object[] out = new Object[1];
-        ExceptionCatcher.catchNewInstance(() -> { T obj = type.newInstance(); out[0] = obj; });
-        return () -> (T) out[0];
+        return () -> {
+            Object[] out = new Object[1];
+            ExceptionCatcher.catchNewInstance(() -> { T obj = type.newInstance(); out[0] = obj; });
+            return (T) out[0];
+        };
     }
 }

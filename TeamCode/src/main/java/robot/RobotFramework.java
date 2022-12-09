@@ -9,9 +9,9 @@ import robotparts.RobotPart;
 import robotparts.electronics.input.IEncoder;
 import teleutil.independent.Independent;
 import teleutil.independent.IndependentFunctions;
+import teleutil.independent.Machine;
 import util.TerraThread;
 import util.User;
-import util.codeseg.CodeSeg;
 import util.template.Iterator;
 
 import static global.General.*;
@@ -58,6 +58,8 @@ public class RobotFramework {
      */
     public IndependentFunctions indHandler;
 
+    public Machine machine;
+
     /**
      * Configs object, stores all configs
      */
@@ -75,6 +77,7 @@ public class RobotFramework {
         rfsHandler = new RobotFunctions();
         backHandler = new BackgroundFunctions();
         indHandler = new IndependentFunctions();
+        machine = new Machine();
         robotFunctionsThread = new TerraThread("RobotFunctionsThread", Constants.ROBOT_FUNCTIONS_REFRESH_RATE);
         odometryThread = new TerraThread("OdometryThread", Constants.ODOMETRY_THREAD_REFRESH_RATE);
         backgroundThread = new TerraThread("BackgroundThread", Constants.BACKGROUND_THREAD_REFRESH_RATE);
@@ -108,6 +111,7 @@ public class RobotFramework {
     public void update(){
         checkAccess(mainUser);
         TerraThread.checkAllThreadsForExceptions();
+        machine.update();
     }
     /**
      * the stop method stops updating threads, and halts the robot
@@ -169,9 +173,10 @@ public class RobotFramework {
         indHandler.stopCurrentIndependent();
     }
 
-    public void cancel(){
+    public void cancelFunctions(){
         cancelAutoModules();
         cancelIndependents();
+        cancelMachine();
     }
 
     /**
@@ -200,5 +205,9 @@ public class RobotFramework {
 
     public void addIndependent(Independent independent){ indHandler.runIndependent(independent); }
 
-    public void cancelAll(){ cancelAutoModules(); cancelIndependents(); cancelBackgroundTasks(); }
+    public void addMachine(Machine machine){ this.machine = machine; this.machine.activate(); }
+
+    public void cancelMachine(){ machine.cancel(); }
+
+    public void cancelAll(){ cancelFunctions(); cancelBackgroundTasks();  }
 }

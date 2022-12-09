@@ -25,8 +25,8 @@ public class JunctionScanner extends Scanner {
 
     private RotatedRect maxRect = new RotatedRect();
     public double distanceToJunction = 0, angleToJunction = 0;
-    private final double cameraFov = 47;
-    private final double realJunctionWidth = 2.672; // cm
+    private static final double cameraFov = 47;
+    private static final double realJunctionWidth = 2.672; // cm
     public final Profiler distanceProfiler = new Profiler(() -> distanceToJunction);
     public final Profiler angleProfiler = new Profiler(() -> angleToJunction);
     private static boolean pausing = true;
@@ -82,14 +82,13 @@ public class JunctionScanner extends Scanner {
                 contoursPoly[i] = new MatOfPoint2f();
                 Imgproc.approxPolyDP(new MatOfPoint2f(contours.get(i).toArray()), contoursPoly[i], 5, true);
                 rects[i] = Imgproc.minAreaRect(contoursPoly[i]);
-//                drawRotatedRect(input, rects[i], ORANGE);
+//                drawRotatedRect(input, rects[i], GREEN);
                 rectsList.add(rects[i]);
             }
 
             if (rectsList.size() > 0) {
                 maxRect = Iterator.forAllCompareMax(rectsList, rect -> rect.boundingRect().area());
 //                drawRectangle(input, scaleRectAroundCenter(maxRect.boundingRect(), 1.4), BLUE);
-//            drawRotatedRect(input, maxRect, RED);
             }
 
 

@@ -12,6 +12,7 @@ import robot.RobotUser;
 import robotparts.RobotPart;
 import robotparts.hardware.Lift;
 import teleutil.independent.Independent;
+import teleutil.independent.Machine;
 import unused.auto.AutoModuleUserOld;
 import util.condition.DecisionList;
 import util.condition.OutputList;
@@ -83,8 +84,13 @@ public interface AutoModuleUser extends RobotUser{
     Independent Cycle = new Independent() { @Override public void define() {
         addWaypoint(15, 15, -45);
         addWaypoint(25, 20, -55);
-        addSetpoint(45, 45, -60); // TODO FINISH
+        addSetpoint(45, 45, -60);
     }};
+
+    Machine ScanAndCycle = new Machine()
+            .addIndependent(MoveToJunction)
+            .addInstruction(odometry::reset)
+            .addIndependent(1, Cycle);
 
 
 }

@@ -99,8 +99,5 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
     public void setTarget(Pose target) { super.setTarget(junctionTargetPose); }
 
     @Override
-    public void nextTarget() {
-        super.nextTarget();
-        JunctionScanner.pause();
-    }
+    public void nextTarget() { super.nextTarget(); JunctionScanner.pause(); }
 }

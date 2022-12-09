@@ -24,7 +24,8 @@ public class TerraAuto extends AutoFramework {
 //        lift.maintain();
 //        outtake.closeClaw();
         scan(false);
-        setScannerAfterInit(MecanumJunctionReactor.junctionScanner); // TODO SIMULATOR FIX AND TURN MORE
+        MecanumJunctionReactor.setFlipped(isFlipped());
+        setScannerAfterInit(MecanumJunctionReactor.junctionScanner);
         // TODO SAVE GYRO ANGLE
     }
 
@@ -32,7 +33,6 @@ public class TerraAuto extends AutoFramework {
     public void preProcess() {
 //        caseDetected = Case.THIRD;
         if(isFlipped()){ flipCases(); }
-        MecanumJunctionReactor.setFlipped(isFlipped());
     }
 
     public void place(int i){
@@ -59,8 +59,7 @@ public class TerraAuto extends AutoFramework {
         addScaledWaypoint(0.8, 0, 116, 20);
         place(0);
         customNumber(5, i -> {
-            addWaypoint(20, 127, 90);
-            addScaledWaypoint(0.8, 26, 127, 90);
+            addWaypoint(30, 127, 90);
             pick();
             addWaypoint(34, 127, 75);
             place(i+1);

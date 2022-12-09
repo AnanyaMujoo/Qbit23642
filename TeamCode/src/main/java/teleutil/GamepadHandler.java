@@ -7,12 +7,15 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import javax.crypto.Mac;
+
 import automodules.AutoModule;
 import teleutil.button.Button;
 import teleutil.button.ButtonEventHandler;
 import teleutil.button.ButtonHandler;
 import teleutil.button.OnPressEventHandler;
 import teleutil.independent.Independent;
+import teleutil.independent.Machine;
 import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.condition.DecisionList;
@@ -111,6 +114,10 @@ public class GamepadHandler {
 
     public void link(Button b, Independent independent){
         link(b, () -> bot.addIndependent(independent));
+    }
+
+    public void link(Button b, Machine machine){
+        link(b, () -> bot.addMachine(machine));
     }
 
 
