@@ -34,6 +34,8 @@ public class JunctionScanner extends Scanner {
     public static void pause(){ pausing = true; }
     public static void resume(){ pausing = false; }
 
+    // TODO MODE FOR CONES
+
 
     public void reset(){
         maxRect = new RotatedRect();

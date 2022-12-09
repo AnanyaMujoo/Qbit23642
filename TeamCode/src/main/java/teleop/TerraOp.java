@@ -109,6 +109,8 @@ public class TerraOp extends Tele {
             autoMode = false; count = 0;
         }
 
+        // TODO CLEAN
+
         drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
 
         lift.move(gph2.ry);

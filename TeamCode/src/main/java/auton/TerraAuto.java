@@ -25,6 +25,7 @@ public class TerraAuto extends AutoFramework {
 //        outtake.closeClaw();
         scan(false);
         setScannerAfterInit(MecanumJunctionReactor.junctionScanner); // TODO SIMULATOR FIX AND TURN MORE
+        // TODO SAVE GYRO ANGLE
     }
 
     @Override
