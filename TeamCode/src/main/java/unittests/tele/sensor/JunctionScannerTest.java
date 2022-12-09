@@ -16,6 +16,7 @@ public class JunctionScannerTest extends TeleUnitTest {
     public void init() {
         camera.setScanner(junctionScanner);
         camera.start(true);
+        JunctionScanner.resume();
         gph1.link(Button.RIGHT_BUMPER, camera::resume);
         gph1.link(Button.LEFT_BUMPER, camera::pause);
     }

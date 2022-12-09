@@ -25,7 +25,7 @@ public class Drive extends RobotPart {
         fl = create("fl", ElectronicType.CMOTOR_FORWARD);
         bl = create("bl", ElectronicType.CMOTOR_FORWARD);
         Modes.driveMode.set(MEDIUM);
-        throw new RuntimeException();
+//        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
     @Override

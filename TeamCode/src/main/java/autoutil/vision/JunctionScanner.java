@@ -78,7 +78,7 @@ public class JunctionScanner extends Scanner {
 
             if (rectsList.size() > 0) {
                 maxRect = Iterator.forAllCompareMax(rectsList, rect -> rect.boundingRect().area());
-//            drawRectangle(input, scaleRectAroundCenter(maxRect.boundingRect(), 1.4), BLUE);
+//                drawRectangle(input, scaleRectAroundCenter(maxRect.boundingRect(), 1.4), BLUE);
 //            drawRotatedRect(input, maxRect, RED);
             }
 
