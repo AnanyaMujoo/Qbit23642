@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import java.sql.Time;
 
 import automodules.AutoModule;
+import automodules.AutoModuleUser;
+import autoutil.vision.JunctionScanner;
 import debugging.Fault;
 import elements.FieldSide;
 import global.Modes;
@@ -18,6 +20,7 @@ import teleutil.button.OnTurnOffEventHandler;
 import teleutil.button.OnTurnOnEventHandler;
 import util.Timer;
 
+import static autoutil.reactors.MecanumJunctionReactor.junctionScanner;
 import static global.General.bot;
 import static global.General.fault;
 import static global.General.gph1;
@@ -39,14 +42,20 @@ import static teleutil.button.Button.X;
 
 public class TerraOp extends Tele {
 
+    private int count = 0;
+    private boolean autoMode = false;
+
+    private static final int num = 1;
+
     @Override
     public void initTele() {
         gph1.link(Button.B, BackwardAll);
         gph1.link(Button.Y, Forward);
         gph1.link(Button.X, bot::cancel);
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
+        gph1.link(Button.BACK, () -> {count = 0; autoMode = true;});
 
-        gph1.link(LEFT_BUMPER, MoveForward);
+        gph1.link(LEFT_BUMPER, MoveToPosition);
         gph1.link(RIGHT_BUMPER, odometry::reset);
 
         gph1.link(RIGHT_TRIGGER, ButtonEventHandler.class, () -> lift.adjustHolderTarget(2.0));
@@ -65,7 +74,12 @@ public class TerraOp extends Tele {
         gph2.link(DPAD_UP, outtake::flip);
         gph2.link(DPAD_DOWN, outtake::unFlip);
 
-        lift.move(-0.15);
+        lift.move(-0.12);
+        camera.setScanner(junctionScanner);
+        camera.start(false);
+
+        count = 0;
+        autoMode = false;
     }
 
     @Override
@@ -75,6 +89,26 @@ public class TerraOp extends Tele {
 
     @Override
     public void loopTele() {
+
+
+        if(count < (num+1)*2) {
+            if (autoMode) {
+                if(count == 0){
+                    bot.addIndependent(MoveToJunction);
+                    count++;
+                } else if (count % 2 == 0) {
+                    if(count == 2){ odometry.reset(); }
+                    bot.cancel();
+                    bot.addIndependent(Cycle);
+                    count++;
+                } else if (!bot.indHandler.isIndependentRunning()) {
+                    count++;
+                }
+            }
+        }else{
+            autoMode = false; count = 0;
+        }
+
         drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
 
         lift.move(gph2.ry);

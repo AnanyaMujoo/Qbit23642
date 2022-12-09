@@ -26,7 +26,7 @@ public class Constants {
     /**
      * Independent thread update rate
      */
-    public static final int INDEPENDENT_THREAD_REFRESH_RATE = 300; //hz
+    public static final int INDEPENDENT_THREAD_REFRESH_RATE = 1000; //hz
 
 
     /**

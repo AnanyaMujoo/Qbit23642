@@ -23,5 +23,6 @@ public enum Button {
     LEFT_STICK_Y,
     RIGHT_STICK_Y,
     LEFT_TRIGGER,
-    RIGHT_TRIGGER
+    RIGHT_TRIGGER,
+    BACK
 }

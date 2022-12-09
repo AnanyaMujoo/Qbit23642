@@ -72,11 +72,18 @@ public interface AutoModuleUser extends RobotUser{
     );
 
 
-    Independent MoveForward = new Independent() { @Override public void define() {
-//        addSetpoint(0, 0, 0);
-        addConcurrentAutoModule(BackwardHeight(HIGH));
-//        addWaypoint(0,0,0);
+    Independent MoveToPosition = new Independent() { @Override public void define() {
         addAccuracySetpoint(1.0, 0,0,0);
+    }};
+
+    Independent MoveToJunction = new Independent() { @Override public void define() {
+        addCustomSegment(mecanumJunctionSetpoint, 0.0, 0.0, 0.0);
+    }};
+
+    Independent Cycle = new Independent() { @Override public void define() {
+        addWaypoint(15, 15, -45);
+        addWaypoint(25, 20, -55);
+        addSetpoint(45, 45, -60); // TODO FINISH
     }};
 
 

@@ -24,7 +24,7 @@ import static global.General.sync;
 public class JunctionScanner extends Scanner {
 
     private RotatedRect maxRect = new RotatedRect();
-    public double distanceToJunction, angleToJunction = 0;
+    public double distanceToJunction = 0, angleToJunction = 0;
     private final double cameraFov = 47;
     private final double realJunctionWidth = 2.672; // cm
     public final Profiler distanceProfiler = new Profiler(() -> distanceToJunction);
@@ -33,6 +33,14 @@ public class JunctionScanner extends Scanner {
 
     public static void pause(){ pausing = true; }
     public static void resume(){ pausing = false; }
+
+
+    public void reset(){
+        maxRect = new RotatedRect();
+        distanceToJunction = 0; angleToJunction = 0;
+        distanceProfiler.reset();
+        angleProfiler.reset();
+    }
 
     @Override
     public void start() {
@@ -46,7 +54,7 @@ public class JunctionScanner extends Scanner {
         if(!pausing) {
             getHSV(input);
 
-            Scalar lowHSV = new Scalar(16, 150, 50);
+            Scalar lowHSV = new Scalar(16, 170, 50);
             Scalar highHSV = new Scalar(35, 255, 255);
 
             Core.inRange(HSV, lowHSV, highHSV, Thresh);

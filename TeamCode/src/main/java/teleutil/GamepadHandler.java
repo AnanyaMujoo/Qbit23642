@@ -49,6 +49,7 @@ public class GamepadHandler {
         put(Button.RIGHT_TRIGGER, () -> gamepad.right_trigger > 0.5);
         put(Button.LEFT_STICK_BUTTON, () -> gamepad.left_stick_button);
         put(Button.RIGHT_STICK_BUTTON, () -> gamepad.right_stick_button);
+        put(Button.BACK, () -> gamepad.back);
     }};
     /**
      * Map from buttons to gamepad values

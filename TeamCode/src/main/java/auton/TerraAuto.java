@@ -24,7 +24,7 @@ public class TerraAuto extends AutoFramework {
 //        lift.maintain();
 //        outtake.closeClaw();
         scan(false);
-        setScannerAfterInit(MecanumJunctionReactor.junctionScanner);
+        setScannerAfterInit(MecanumJunctionReactor.junctionScanner); // TODO SIMULATOR FIX AND TURN MORE
     }
 
     @Override
