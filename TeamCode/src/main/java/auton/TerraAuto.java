@@ -25,10 +25,10 @@ public class TerraAuto extends AutoFramework {
         bot.savePose(new Pose());
 //        lift.maintain();
 //        outtake.closeClaw();
+//        outtake.readyStart();
         scan(false);
         MecanumJunctionReactor.setFlipped(isFlipped());
         setScannerAfterInit(MecanumJunctionReactor.junctionScanner);
-        // TODO SAVE GYRO ANGLE
     }
 
     @Override

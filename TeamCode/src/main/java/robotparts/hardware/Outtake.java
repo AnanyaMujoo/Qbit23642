@@ -1,6 +1,8 @@
 package robotparts.hardware;
 
+import automodules.stage.Main;
 import automodules.stage.Stage;
+import automodules.stage.Stop;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PServo;
@@ -14,34 +16,36 @@ public class Outtake extends RobotPart {
         armr = create("armr", ElectronicType.PSERVO_REVERSE);
         arml = create("arml", ElectronicType.PSERVO_FORWARD);
 
-        arml.changePosition("start", 0.0);
-        armr.changePosition("start", 0.0);
+        arml.changePosition("start", 0.02);
+        armr.changePosition("start", 0.02);
 
         arml.addPosition("startHalf", 0.25);
         armr.addPosition("startHalf", 0.25);
 
+        armr.addPosition("middle", 0.4);
+        arml.addPosition("middle", 0.4);
+
         arml.addPosition("endHalf", 0.56);
         armr.addPosition("endHalf", 0.56);
 
-        arml.changePosition("end", 0.76);
-        armr.changePosition("end", 0.76);
+        arml.changePosition("end", 0.73);
+        armr.changePosition("end", 0.73);
 
         turn = create("turn", ElectronicType.PSERVO_REVERSE);
         claw = create("claw", ElectronicType.PSERVO_REVERSE);
 
-        turn.changePosition("start", 0.02);
-        turn.addPosition("flipped", 0.74);
+        turn.changePosition("start", 0.05);
+        turn.addPosition("flipped", 0.77);
 
-        claw.addPosition("open", 0.0); // 0.0
-        claw.addPosition("close", 0.32);
+        claw.addPosition("open", 0.0);
+        claw.addPosition("close", 0.35);
 
-//        readyStart();
         openClaw();
         unFlip();
     }
 
-    public void moveStart(){ armr.setPosition("start"); arml.setPosition("start"); }
-    public void moveEnd(){ armr.setPosition("end"); arml.setPosition("end");  }
+    public void moveStart(){ armr.setPosition("start"); arml.setPosition("start"); unFlip(); }
+    public void moveEnd(){ armr.setPosition("end"); arml.setPosition("end"); flip(); }
     public void openClaw(){ claw.setPosition("open"); }
     public void closeClaw(){ claw.setPosition("close"); }
 
@@ -58,8 +62,10 @@ public class Outtake extends RobotPart {
     public Stage stageEnd(double t){ return super.customTime(this::moveEnd, t); }
     public Stage stageOpen(double t){ return super.customTime(this::openClaw, t); }
     public Stage stageClose(double t){ return super.customTime(this::closeClaw, t); }
-    public Stage stageFlip(double t){return super.customTime(this::flip, t); }
-    public Stage stageUnFlip(double t){return super.customTime(this::unFlip, t); }
+
+    public Stage stageEndAfter(double t){ return new Stage(usePart(), new Main(()-> {}), exitTime(t), new Stop(this::moveEnd), returnPart()); }
+
+    public Stage stageMiddle(double t){ return super.customTime(() -> {armr.setPosition("middle"); arml.setPosition("middle");}, t);}
 
 
 

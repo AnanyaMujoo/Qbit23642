@@ -39,8 +39,8 @@ public class TerraOp extends Tele {
         gph1.link(LEFT_BUMPER, MoveToPosition);
         gph1.link(RIGHT_BUMPER, odometry::reset);
 
-        gph1.link(RIGHT_TRIGGER, ButtonEventHandler.class, () -> lift.adjustHolderTarget(2.0));
-        gph1.link(LEFT_TRIGGER, ButtonEventHandler.class, () -> lift.adjustHolderTarget(-2.0));
+        gph1.link(RIGHT_TRIGGER, () -> lift.adjustHolderTarget(2.0));
+        gph1.link(LEFT_TRIGGER,  () -> lift.adjustHolderTarget(-2.0));
 
         gph1.link(DPAD_UP, () -> lift.setHolderTarget(HIGH));
         gph1.link(DPAD_RIGHT, () ->  lift.setHolderTarget(MIDDLE));
@@ -56,9 +56,9 @@ public class TerraOp extends Tele {
         gph2.link(DPAD_DOWN, outtake::unFlip);
 
         lift.move(-0.12);
-        bot.loadPose();
-        camera.setScanner(junctionScanner);
-        camera.start(false);
+//        bot.loadPose(); // TODO TEST
+//        camera.setScanner(junctionScanner);
+//        camera.start(false);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class TerraOp extends Tele {
         log.show("HeightMode", Modes.heightMode.get());
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());
-        log.show("Pose", odometry.getPose());
+//        log.show("Pose", odometry.getPose());
     }
 
 

@@ -18,7 +18,7 @@ public class Lift extends RobotPart {
     public PMotor motorRight;
     public PMotor motorLeft;
 
-    public static final double maxPosition = 63;
+    public static final double maxPosition = 64;
 
     @Override
     public void init() {
@@ -26,8 +26,8 @@ public class Lift extends RobotPart {
         motorLeft = create("lir", ElectronicType.PMOTOR_REVERSE);
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
-        motorRight.usePositionHolder(0.05, 0.05);
-        motorLeft.usePositionHolder(0.05, 0.05);
+        motorRight.usePositionHolder(0.1, 0.1);
+        motorLeft.usePositionHolder(0.1, 0.1);
         Modes.heightMode.set(HIGH);
     }
 

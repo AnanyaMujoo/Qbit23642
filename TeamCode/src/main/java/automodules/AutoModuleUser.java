@@ -58,9 +58,12 @@ public interface AutoModuleUser extends RobotUser{
 
     static AutoModule BackwardHeight(Modes.HeightMode.Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(MEDIUM),
-            outtake.stageClose(0.3),
+            outtake.stageClose(0.2),
             outtake.stageEnd(0.0),
-            lift.stageLift(0.4, height.getValue()),
+//            outtake.stageMiddle(0.2),
+            lift.stageLift(1.0, height.getValue()),
+//            outtake.stageEnd(0.2),
+//            lift.stageLift(1.0, height.getValue()).attach(outtake.stageEndAfter(0.5)),
             Modes.driveMode.ChangeMode(SLOW)
     );}
 
@@ -68,7 +71,7 @@ public interface AutoModuleUser extends RobotUser{
             Modes.driveMode.ChangeMode(MEDIUM),
             outtake.stageOpen(0.2),
             outtake.stageStart(0.0),
-            lift.stageLift(0.4, 0),
+            lift.stageLift(0.6, 0),
             Modes.driveMode.ChangeMode(SLOW)
     );
 
