@@ -43,8 +43,9 @@ public class PositionHolder extends Controller1D {
             if(isTargeting){
                 double error = (getTarget()-currentPosition);
                 extraRestPower = pCoefficient*error;
-            }else if(!isWithinAccuracyRange() && Math.abs(getCurrentValue()) > velocityThreshold) {
-                restPower += getCurrentValue() > 0 ? deltaPowerDown : deltaPowerUp;
+            }else{
+//                if(!isWithinAccuracyRange() && Math.abs(getCurrentValue()) > velocityThreshold)
+                extraRestPower = 0;
             }
         }
     }
