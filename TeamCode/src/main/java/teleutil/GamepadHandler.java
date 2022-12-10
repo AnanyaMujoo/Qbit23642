@@ -38,8 +38,8 @@ public class GamepadHandler {
      * Map from buttons to gamepad buttons
      */
     public final TreeMap<Button, ReturnCodeSeg<Boolean>> pressedMap = new TreeMap<Button, ReturnCodeSeg<Boolean>>() {{
-        put(Button.A, () -> gamepad.a);
-        put(Button.B, () -> gamepad.b);
+        put(Button.A, () -> gamepad.a && !gamepad.start);
+        put(Button.B, () -> gamepad.b && !gamepad.start);
         put(Button.X, () -> gamepad.x);
         put(Button.Y, () -> gamepad.y);
         put(Button.RIGHT_BUMPER, () -> gamepad.right_bumper);

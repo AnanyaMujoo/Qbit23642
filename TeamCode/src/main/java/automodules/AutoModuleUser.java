@@ -60,7 +60,7 @@ public interface AutoModuleUser extends RobotUser{
             Modes.driveMode.ChangeMode(MEDIUM),
             outtake.stageClose(0.3),
             outtake.stageEnd(0.0),
-            lift.stageLift(1.0, height.getValue()),
+            lift.stageLift(0.4, height.getValue()),
             Modes.driveMode.ChangeMode(SLOW)
     );}
 
@@ -68,7 +68,7 @@ public interface AutoModuleUser extends RobotUser{
             Modes.driveMode.ChangeMode(MEDIUM),
             outtake.stageOpen(0.2),
             outtake.stageStart(0.0),
-            lift.stageLift(0.7, 0),
+            lift.stageLift(0.4, 0),
             Modes.driveMode.ChangeMode(SLOW)
     );
 
@@ -82,9 +82,11 @@ public interface AutoModuleUser extends RobotUser{
     }};
 
     Independent Cycle = new Independent() { @Override public void define() {
-        addWaypoint(15, 15, -45);
-        addWaypoint(25, 20, -55);
-        addSetpoint(45, 45, -60); // TODO FINISH
+        addWaypoint(0.01,0.01,0.01);
+        addWaypoint(8.5, 26.5, -35.0 );
+        addSetpoint(23.5, 44.5, -62.0 );
+        addWaypoint(8.5, 26.5, -35.0 );
+        addSetpoint(0.01, 0.01, 0.01);
     }};
 
     Machine ScanAndCycle = new Machine()
