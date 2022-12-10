@@ -12,6 +12,7 @@ import autoutil.vision.JunctionScanner;
 import elements.Case;
 import elements.FieldPlacement;
 import elements.FieldSide;
+import geometry.position.Pose;
 import util.condition.DecisionList;
 
 import static global.General.bot;
@@ -21,6 +22,7 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
+        bot.savePose(new Pose());
 //        lift.maintain();
 //        outtake.closeClaw();
         scan(false);
@@ -88,6 +90,12 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void postProcess() {
         autoPlane.reflectY(); autoPlane.reflectX();
+    }
+
+    @Override
+    public void stopAuto() {
+        bot.savePose(odometry.getPose());
+        super.stopAuto();
     }
 
     @Autonomous(name = "TerraAutoLowerBlue", group = "auto")

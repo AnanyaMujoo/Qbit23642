@@ -56,6 +56,7 @@ public class TerraOp extends Tele {
         gph2.link(DPAD_DOWN, outtake::unFlip);
 
         lift.move(-0.12);
+        bot.loadPose();
         camera.setScanner(junctionScanner);
         camera.start(false);
     }
@@ -76,6 +77,7 @@ public class TerraOp extends Tele {
         log.show("HeightMode", Modes.heightMode.get());
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());
+        log.show("Pose", odometry.getPose());
     }
 
 

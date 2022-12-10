@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import automodules.AutoModule;
 import geometry.framework.CoordinatePlane;
+import geometry.position.Pose;
 import global.Constants;
 import robotparts.RobotPart;
 import robotparts.electronics.input.IEncoder;
@@ -15,6 +16,8 @@ import util.User;
 import util.template.Iterator;
 
 import static global.General.*;
+import static robot.RobotUser.gyro;
+import static robot.RobotUser.odometry;
 
 public class RobotFramework {
     /**
@@ -210,4 +213,12 @@ public class RobotFramework {
     public void cancelMachine(){ machine.cancel(); }
 
     public void cancelAll(){ cancelFunctions(); cancelBackgroundTasks();  }
+
+    public void savePose(Pose pose){
+        storage.addItem("XPos", pose.getX()); storage.addItem("YPos", pose.getY()); storage.addItem("Heading", pose.getAngle()); storage.saveItems();
+    }
+
+    public void loadPose(){
+        Pose savedPose = new Pose((double) storage.getItem("XPos").getValue(), (double) storage.getItem("YPos").getValue(), (double) storage.getItem("Heading").getValue()); odometry.setCurrentPose(savedPose); gyro.setHeading(savedPose.getAngle());
+    }
 }

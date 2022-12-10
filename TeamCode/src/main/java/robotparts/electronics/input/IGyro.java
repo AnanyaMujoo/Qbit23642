@@ -39,6 +39,10 @@ public class IGyro extends Electronic {
         lastHeading = heading;
     }
 
+    public void setHeading(double heading){
+        updateHeading(); startHeading = heading;
+    }
+
     public void reset(){ updateHeading(); startHeading = heading; }
 
     public double getHeading(){ return heading - startHeading; }
