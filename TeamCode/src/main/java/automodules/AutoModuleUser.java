@@ -85,17 +85,20 @@ public interface AutoModuleUser extends RobotUser{
     }};
 
     Independent Cycle = new Independent() { @Override public void define() {
-        addWaypoint(0.01,0.01,0.01);
-        addWaypoint(8.5, 26.5, -35.0 );
-        addSetpoint(23.5, 44.5, -62.0 );
-        addWaypoint(8.5, 26.5, -35.0 );
-        addSetpoint(0.01, 0.01, 0.01);
+        addWaypoint(0,20,0);
+//        addWaypoint(0.01,0.01,0.01);
+//        addWaypoint(8.5, 26.5, -35.0 );
+//        addSetpoint(23.5, 44.5, -62.0 );
+//        addWaypoint(8.5, 26.5, -35.0 );
+//        addSetpoint(0.01, 0.01, 0.01);
     }};
 
     Machine ScanAndCycle = new Machine()
-            .addIndependent(MoveToJunction)
-            .addInstruction(odometry::reset)
-            .addIndependent(1, Cycle);
+//            .addIndependent(MoveToJunction)
+//            .addInstruction(odometry::reset)
+            .addIndependent(Cycle)
+//            .addIndependent(1, Cycle)
+    ;
 
 
 }

@@ -17,8 +17,8 @@ import static robot.RobotFramework.robotFunctionsThread;
 
 public class Machine {
 
-    private int stageNumber = 0;
-    private boolean running = false;
+    public int stageNumber = 0;
+    public boolean running = false;
     private final ArrayList<Stage> stages = new ArrayList<>();
 
     public Machine addInstruction(Stage stage){ stages.add(stage); return this; }
@@ -41,6 +41,7 @@ public class Machine {
                 stage.loop();
                 if (stage.shouldStop()) {
                     stage.runOnStop();
+                    stageNumber++;
                 }
             } else {
                 cancel();
