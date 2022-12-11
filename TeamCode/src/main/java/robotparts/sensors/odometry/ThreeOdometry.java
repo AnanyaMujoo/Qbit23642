@@ -28,7 +28,7 @@ public class ThreeOdometry extends TwoOdometry {
     @Override
     protected void createEncoders() {
         super.createEncoders();
-        enc3 = create("brEnc", ElectronicType.IENCODER_NORMAL);
+        enc3 = create("frEnc", ElectronicType.IENCODER_NORMAL);
         addEncoders(enc3);
         enc3.invert();
         precision = new Precision();

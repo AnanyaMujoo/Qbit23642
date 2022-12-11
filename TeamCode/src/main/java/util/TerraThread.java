@@ -1,5 +1,7 @@
 package util;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 
 import global.Constants;
@@ -112,6 +114,7 @@ public class TerraThread extends Thread{
             try {
                 updateCode.run();
             } catch (RuntimeException r){
+                r.printStackTrace();
                 wasExceptionThrown = true;
                 stopUpdating();
             }

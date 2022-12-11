@@ -1,7 +1,6 @@
 package teleutil.independent;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 import automodules.stage.Exit;
 import automodules.stage.Initial;
@@ -9,27 +8,24 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import robotparts.RobotPart;
 import util.codeseg.CodeSeg;
-import util.condition.Status;
-import util.template.Iterator;
 
 import static global.General.bot;
-import static robot.RobotFramework.robotFunctionsThread;
 
 public class Machine {
 
     public int stageNumber = 0;
-    public boolean running = false;
-    private final ArrayList<Stage> stages = new ArrayList<>();
+    public volatile boolean running = false;
+    public final ArrayList<Stage> stages = new ArrayList<>();
 
     public Machine addInstruction(Stage stage){ stages.add(stage); return this; }
     public Machine addIndependent(Independent independent){
         return addInstruction(new Stage(
-            new Initial(() -> {bot.cancelFunctions(); bot.addIndependent(independent);}),
+            new Initial(() -> {bot.cancelIndependents(); bot.addIndependent(independent);}),
             new Exit(() -> !bot.indHandler.isIndependentRunning())
         ));
     }
     public Machine addIndependent(int n, Independent independent){ for (int i = 0; i < n; i++) { addIndependent(independent); } return this; }
-    public Machine addInstruction(CodeSeg code){ return addInstruction(new Stage(new Main(code), RobotPart.exitAlways())); }
+    public Machine addInstruction(CodeSeg code, double time){ return addInstruction(new Stage(new Main(code), RobotPart.exitTime(time))); }
 
     public void update(){
         if (running) {
@@ -49,11 +45,7 @@ public class Machine {
         }
     }
 
-    public void activate(){
-        running = true; stageNumber = 0;
-    }
+    public void activate(){ running = true; }
 
-    public void cancel(){
-        running = false;
-    }
+    public void cancel(){ running = false; stageNumber = 0; }
 }

@@ -39,7 +39,8 @@ public class AutoSimulator extends Drawer{
 //        setAuto(new TerraAutoLowerRedSimple(), startLower);
 //        setAuto(new TerraAutoUpperRedSimple(), startLower);
 
-        setAuto(AutoModuleUser.Cycle, new Pose(20.5+66.5, fieldSize/2.0 - 23, 215));
+        setAuto(AutoModuleUser.Cycle1st, new Pose(20.5+66.5, fieldSize/2.0 - 23, 215));
+//        setAuto(AutoModuleUser.Cycle, new Pose(20.5+66.5, fieldSize/2.0 - 23, 215));
 
         drawWindow(new AutoSimulator(), "Auto Simulator");
     }

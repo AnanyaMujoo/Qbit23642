@@ -137,9 +137,11 @@ public class Profiler {
     }
 
     public boolean areLastValuesNearby(int n, double maxDistance){
-        ArrayList<Double> last = getLastValues(n);
-        double first = last.get(0);
-        return Iterator.forAllConditionAND(last, l -> Math.abs(first-l) < maxDistance);
+        synchronized (values) {
+            ArrayList<Double> last = (ArrayList<Double>) getLastValues(n).clone();
+            double first = last.get(0);
+            return Iterator.forAllConditionAND(last, l -> Math.abs(first - l) < maxDistance);
+        }
     }
 
 }

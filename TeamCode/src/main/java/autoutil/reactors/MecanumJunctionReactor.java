@@ -22,7 +22,7 @@ import static global.General.log;
 public class MecanumJunctionReactor extends MecanumPIDReactor{
 
     public static final JunctionScanner junctionScanner = new JunctionScanner();
-    private static final Pose junctionTargetPose = new Pose(0, 18, 0);
+    private static final Pose junctionTargetPose = new Pose(0, 21, 0);
     private static final double cameraToRobotCenter = 19.5;
     private static Point junctionLocation = new Point();
     private Pose startOdometryPose = new Pose();

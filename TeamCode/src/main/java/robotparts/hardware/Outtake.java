@@ -1,5 +1,8 @@
 package robotparts.hardware;
 
+import automodules.StageBuilder;
+import automodules.stage.Exit;
+import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
@@ -62,10 +65,13 @@ public class Outtake extends RobotPart {
     public Stage stageEnd(double t){ return super.customTime(this::moveEnd, t); }
     public Stage stageOpen(double t){ return super.customTime(this::openClaw, t); }
     public Stage stageClose(double t){ return super.customTime(this::closeClaw, t); }
+    public Stage stageFlip(double t){ return super.customTime(this::flip, t); }
 
     public Stage stageEndAfter(double t){ return new Stage(usePart(), new Main(()-> {}), exitTime(t), new Stop(this::moveEnd), returnPart()); }
 
     public Stage stageMiddle(double t){ return super.customTime(() -> {armr.setPosition("middle"); arml.setPosition("middle");}, t);}
+
+    public Stage stageEndContinuous(double t){ return new Stage(usePart(), new Initial(() -> {arml.setContinuousTarget("end"); armr.setContinuousTarget("end");}), new Main(() -> {arml.moveContinuous(t); armr.moveContinuous(t);}), RobotPart.exitTime(t), returnPart());}
 
 
 

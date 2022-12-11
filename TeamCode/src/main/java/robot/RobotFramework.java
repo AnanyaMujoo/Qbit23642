@@ -176,7 +176,7 @@ public class RobotFramework {
         indHandler.stopCurrentIndependent();
     }
 
-    public void cancelFunctions(){
+    public void cancelMovements(){
         cancelAutoModules();
         cancelIndependents();
         cancelMachine();
@@ -210,9 +210,9 @@ public class RobotFramework {
 
     public void addMachine(Machine machine){ this.machine = machine; this.machine.activate(); }
 
-    public void cancelMachine(){ machine.cancel(); }
+    public void cancelMachine(){ this.machine.cancel(); }
 
-    public void cancelAll(){ cancelFunctions(); cancelBackgroundTasks();  }
+    public void cancelAll(){ cancelMovements(); cancelBackgroundTasks();  }
 
     public void savePose(Pose pose){
         storage.addItem("XPos", pose.getX()); storage.addItem("YPos", pose.getY()); storage.addItem("Heading", pose.getAngle()); storage.saveItems();
