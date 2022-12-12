@@ -47,8 +47,6 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
         JunctionScanner.resume();
     }
 
-    // TODO ADJUST POWER WITH BATTERY LEVEL
-
     @Override
     public Pose getPose() {
 

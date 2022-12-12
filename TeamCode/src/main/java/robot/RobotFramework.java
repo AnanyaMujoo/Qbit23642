@@ -1,5 +1,7 @@
 package robot;
 
+import com.qualcomm.robotcore.hardware.VoltageSensor;
+
 import java.util.ArrayList;
 
 import automodules.AutoModule;
@@ -213,6 +215,11 @@ public class RobotFramework {
     public void cancelMachine(){ this.machine.cancel(); }
 
     public void cancelAll(){ cancelMovements(); cancelBackgroundTasks();  }
+
+
+    public static double getBatteryVoltage() {
+        double result = Constants.DEFAULT_VOLTAGE+10; for (VoltageSensor sensor : hardwareMap.voltageSensor) { double voltage = sensor.getVoltage(); if (voltage > 0) {result = Math.min(result, voltage); } } return result;
+    }
 
     public void savePose(Pose pose){
         storage.addItem("XPos", pose.getX()); storage.addItem("YPos", pose.getY()); storage.addItem("Heading", pose.getAngle()); storage.saveItems();

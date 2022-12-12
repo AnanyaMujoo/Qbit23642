@@ -18,6 +18,7 @@ import util.template.Precision;
 import static global.General.bot;
 import static global.General.fault;
 import static global.General.log;
+import static global.General.voltageScale;
 import static java.lang.Math.*;
 
 public class PMotor extends Electronic {
@@ -121,7 +122,7 @@ public class PMotor extends Electronic {
         if(access.isAllowed()){
             if(!detector.isStalling()){
                 positionHolder.update();
-                motor.setPower(positionHolder.getOutput() + p);
+                motor.setPower((positionHolder.getOutput() + p)*voltageScale);
             }else{
                 motor.setPower(0);
                 fault.warn("Motor is stalling, stopped all AutoModules", Expectation.EXPECTED, Magnitude.CRITICAL);
@@ -134,7 +135,7 @@ public class PMotor extends Electronic {
      * Sets the power of motor without access checking, stall detection, or restPower
      * @param power
      */
-    public void setPowerRaw(double power){ motor.setPower(power); }
+    public void setPowerRaw(double power){ motor.setPower(power*voltageScale); }
 
     /**
      * Set the position to move to

@@ -66,4 +66,6 @@ public class Constants {
     public static final double RED_TURRET_TARGET_TELE_2 = -BLUE_TURRET_TARGET_TELE_2;
     public static final double BLUE_TURRET_TARGET_AUTO = 85;
     public static final double RED_TURRET_TARGET_AUTO = -BLUE_TURRET_TARGET_AUTO;
+
+    public static final double DEFAULT_VOLTAGE = 13.5;
 }

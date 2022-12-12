@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import automodules.AutoModuleUser;
 import elements.FieldSide;
+import global.Constants;
 import global.Modes;
 import teleutil.button.Button;
 import teleutil.button.OnTurnOffEventHandler;
@@ -14,6 +15,7 @@ import static global.General.bot;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
+import static global.General.voltageScale;
 import static global.Modes.DriveMode.Drive.FAST;
 import static global.Modes.DriveMode.Drive.MEDIUM;
 import static global.Modes.HeightMode.Height.*;
@@ -79,6 +81,8 @@ public class TerraOp extends Tele {
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());
 //        log.show("Pose", odometry.getPose());
+        log.show("Voltage", Constants.DEFAULT_VOLTAGE/voltageScale); // TODO TEST
+        log.show("Voltage Scale", voltageScale);
     }
 
 

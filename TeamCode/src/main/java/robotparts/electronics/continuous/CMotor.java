@@ -13,6 +13,7 @@ import static global.General.bot;
 import static global.General.fault;
 import static global.General.hardwareMap;
 import static global.General.log;
+import static global.General.voltageScale;
 
 public class CMotor extends Electronic {
     /**
@@ -45,7 +46,6 @@ public class CMotor extends Electronic {
         zeroPowerBehavior = zpb;
         motorEncoder = new IEncoder(motor, IEncoder.EncoderType.CMOTOR);
         detector = new StallDetector(motorEncoder, 10, 10);
-        // test hardwareMap.voltageSensor.get("n").getVoltage(); TODO THIS
 
         motor.setDirection(direction);
         motor.setZeroPowerBehavior(zeroPowerBehavior);
@@ -66,7 +66,7 @@ public class CMotor extends Electronic {
     public void setPower(double p){
         if(access.isAllowed()){
             if(!detector.isStalling()){
-                motor.setPower(p);
+                motor.setPower(p*voltageScale);
             }else{
                 motor.setPower(0);
                 fault.warn("Motor is stalling, stopped all AutoModules", Expectation.EXPECTED, Magnitude.CRITICAL);

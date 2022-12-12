@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import debugging.Synchroniser;
 import elements.FieldPlacement;
 import elements.FieldSide;
+import robot.RobotFramework;
 import robot.TerraBot;
 import robotparts.sensors.Cameras;
 import teleutil.GamepadHandler;
@@ -52,6 +53,10 @@ public interface Common{
          * Set the view ID
          */
         cameraMonitorViewId = Cameras.getCameraMonitorViewId();
+        /**
+         * Set the voltage
+         */
+        voltageScale = Constants.DEFAULT_VOLTAGE/RobotFramework.getBatteryVoltage();
         /**
          * Create the storage
          */

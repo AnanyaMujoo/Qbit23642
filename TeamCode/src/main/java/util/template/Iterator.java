@@ -173,8 +173,17 @@ public interface Iterator {
         return list.get(maxIndex(values));
     }
 
+    static <T> T forAllCompareMin(ArrayList<T> list, ReturnParameterCodeSeg<T, Double> code){
+        ArrayList<Double> values = new ArrayList<>();
+        Iterator.forAll(list, o -> values.add(code.run(o)));
+        return list.get(minIndex(values));
+    }
 
-    static int maxIndex(double... arr){ int ind = 0; double max = arr[0]; for (int i = 0; i < arr.length ; i++) { if(arr[i] > max){max = arr[i]; ind = i;} } return ind; }
+
+
+
+
+    static int minIndex(ArrayList<Double> arr){ int ind = 0; double min = arr.get(0); for (int i = 0; i < arr.size() ; i++) { if(arr.get(i) < min){min = arr.get(i); ind = i;} } return ind; }
 
     static int maxIndex(ArrayList<Double> arr){ int ind = 0; double max = arr.get(0); for (int i = 0; i < arr.size() ; i++) { if(arr.get(i) > max){max = arr.get(i); ind = i;} } return ind; }
 

@@ -77,4 +77,8 @@ public class General {
      * Camera Monitor View ID, used for camera viewing
      */
     public static int cameraMonitorViewId;
+    /**
+     * Voltage that the robot started at (used to adjust values)
+     */
+    public static double voltageScale;
 }
