@@ -16,6 +16,7 @@ import geometry.position.Pose;
 import util.condition.DecisionList;
 
 import static global.General.bot;
+import static global.Modes.HeightMode.Height.HIGH;
 
 public class TerraAuto extends AutoFramework {
 
@@ -23,47 +24,54 @@ public class TerraAuto extends AutoFramework {
     public void initAuto() {
         setConfig(mecanumDefaultConfig);
         bot.savePose(new Pose());
-//        lift.maintain();
-//        outtake.closeClaw();
+        lift.maintain();
         outtake.readyStart();
+        outtake.closeClaw();
         scan(false);
         MecanumJunctionReactor.setFlipped(isFlipped());
         setScannerAfterInit(MecanumJunctionReactor.junctionScanner);
+        JunctionScanner.resume();
     }
 
     @Override
     public void preProcess() {
-//        caseDetected = Case.THIRD;
+        caseDetected = Case.THIRD;
         if(isFlipped()){ flipCases(); }
     }
 
     public void place(int i){
         if(i == 0) {
-            addAccuracyScaledSetpoint(2.0, 1.0, 1.0, 133, 50);
-            addCustomSegment(mecanumJunctionSetpoint, 1.0, 133, 50);
+            addConcurrentAutoModule(new AutoModule(outtake.stageMiddle(0.0), outtake.stageFlip(0.0), lift.stageLift(0.9, HIGH.getValue()-2)));
+            addAccuracyScaledSetpoint(3.0, 1.0, 1.5, 130.5, 56);
+            addCustomSegment(mecanumJunctionSetpoint, 1.5, 130.5, 56);
+            addAccuracyScaledSetpoint(1.0, 1.1,1.5, 130.5, 56);
+            addAutoModule(new AutoModule(outtake.stageEnd(0.3)));
         }else{
-            addScaledSetpoint(1.0, 1.0, 133, 50);
+            addScaledSetpoint(1.1, 1.5, 133, 53);
         }
         addAutoModule(DropAuto);
         addConcurrentAutoModule(ForwardAuto(i));
+        addPause(0.5);
     }
 
-    public void pick(){
-        addScaledSetpoint(1.0, 58, 127, 90);
-        addAutoModule(GrabAuto);
-        addConcurrentAutoModule(BackwardAuto);
+    public void pick(int i){
+        addAccuracyScaledSetpoint(2.0, 0.7, 62-(i/3.0), 129, 90);
+        addConcurrentAutoModule(GrabAuto);
+        addPause(0.5);
     }
+
+    // TODO CREATE SMART SWITCH (IF NOT ENOUGH TIME LEFT SWITCH TO PARK)
 
     @Override
     public void define() {
         addWaypoint(0, 40, 0);
-        addConcurrentAutoModule(BackwardAuto);
         addScaledWaypoint(0.8, 0, 116, 20);
         place(0);
         customNumber(5, i -> {
-            addWaypoint(30, 127, 90);
-            pick();
-            addWaypoint(34, 127, 75);
+            addScaledWaypoint(0.65, 30, 129, 90);
+            pick(i+1);
+            addScaledWaypoint(0.6, 14, 129, 75);
+            addConcurrentAutoModule(BackwardAuto);
             place(i+1);
         });
         customCase(() -> {
@@ -94,7 +102,7 @@ public class TerraAuto extends AutoFramework {
 
     @Override
     public void stopAuto() {
-        bot.savePose(odometry.getPose());
+//        bot.savePose(odometry.getPose());
         super.stopAuto();
     }
 

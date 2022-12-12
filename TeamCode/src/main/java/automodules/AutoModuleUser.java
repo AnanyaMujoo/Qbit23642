@@ -30,18 +30,17 @@ import static global.Modes.OuttakeMode.SHARED;
 public interface AutoModuleUser extends RobotUser{
 
     AutoModule DropAuto = new AutoModule(outtake.stageOpen(0.2));
-    AutoModule GrabAuto = new AutoModule(outtake.stageClose(0.3),  outtake.stageReadyStart(0.1), lift.stageLift(1.0, 35));
+    AutoModule GrabAuto = new AutoModule(outtake.stageClose(0.2),  outtake.stageReadyStart(0.0), lift.stageLift(1.2, 45).attach(outtake.stageFlipAfter(0.2)));
 
     default AutoModule ForwardAuto(int i){return new AutoModule(
             outtake.stageStart(0.0),
-            lift.stageLift(0.6, Math.max(18.0 - (i*3.6), 0)),
-            outtake.stageStart(0.0), outtake.stageOpen(0.0)
+            lift.stageLift(0.6, Math.max(17.0 - (i*17.0/5.0), 0))
     );}
 
 
     AutoModule BackwardAuto = new AutoModule(
             outtake.stageEnd(0.0),
-            lift.stageLift(0.9, HIGH.getValue())
+            lift.stageLift(0.8, HIGH.getValue()-2)
     );
 
 
