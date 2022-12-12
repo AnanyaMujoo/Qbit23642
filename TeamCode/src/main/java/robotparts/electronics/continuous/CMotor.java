@@ -11,6 +11,7 @@ import util.condition.Magnitude;
 
 import static global.General.bot;
 import static global.General.fault;
+import static global.General.hardwareMap;
 import static global.General.log;
 
 public class CMotor extends Electronic {
@@ -44,6 +45,7 @@ public class CMotor extends Electronic {
         zeroPowerBehavior = zpb;
         motorEncoder = new IEncoder(motor, IEncoder.EncoderType.CMOTOR);
         detector = new StallDetector(motorEncoder, 10, 10);
+        // test hardwareMap.voltageSensor.get("n").getVoltage(); TODO THIS
 
         motor.setDirection(direction);
         motor.setZeroPowerBehavior(zeroPowerBehavior);

@@ -47,6 +47,8 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
         JunctionScanner.resume();
     }
 
+    // TODO ADJUST POWER WITH BATTERY LEVEL
+
     @Override
     public Pose getPose() {
 
@@ -55,8 +57,8 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
 
 
         double maxDisFromTarget = 15;
-        double maxDisVariation = 3;
-        double maxAngleVariation = 5;
+        double maxDisVariation = 2;
+        double maxAngleVariation = 3; // EXPERIMENT
         int n = 3;
         if(junctionPose.getDistanceTo(junctionTargetPose) < maxDisFromTarget
                 && junctionScanner.distanceProfiler.areLastValuesNearby(n, maxDisVariation)
