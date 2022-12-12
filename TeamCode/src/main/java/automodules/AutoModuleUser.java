@@ -113,12 +113,12 @@ public interface AutoModuleUser extends RobotUser{
         }
     };
 
-    Independent Cycle = new Independent() { @Override public void define() {
-        addWaypoint(0.01,0.01,0.01);
+
+    static Independent Cycle(int i){return new Independent() { @Override public void define() {
         addPause(0.1);
         addScaledWaypoint(0.6, 9.5, 24.5, -52.0);
         addScaledSetpoint(1.0, 20.5, 38.5, -52.0);
-        addAutoModule(new AutoModule(outtake.stageClose(0.2)));
+        addAutoModule(CloseAuto);
         addScaledWaypoint(0.8, 9.5, 24.5, -35.0);
         addConcurrentAutoModule(BackwardAuto);
         addAccuracyScaledSetpoint(1.0,1.0, 0.01, 0.01, 2);
@@ -126,14 +126,53 @@ public interface AutoModuleUser extends RobotUser{
         addAutoModule(DropAuto);
         addConcurrentAutoModule(ForwardAuto);
         addPause(0.4);
-    }};
+    }};}
 
     Machine ScanAndCycle = new Machine()
             .addIndependent(MoveToJunction)
             .addInstruction(odometry::reset, 0.1)
             .addIndependent(Cycle1st)
-            .addIndependent(9, Cycle)
+            .addIndependent(9, AutoModuleUser::Cycle)
     ;
 
+
+    AutoModule CloseAuto2 = new AutoModule(outtake.stageClose(0.2), outtake.stageEnd(0.0));
+    AutoModule CloseAuto = new AutoModule(outtake.stageClose(0.2));
+    AutoModule ForwardAuto2 = new AutoModule( outtake.stageStart(0.0),  lift.stageLift(0.9, 0));
+
+
+    Independent CycleTwo1 = new Independent() {
+        @Override
+        public void define() {
+            addWaypoint(0.0, 0.01, 0.0);
+            addAccuracyScaledSetpoint(1.5, 1.2, 0, 10, 0);
+            addAutoModule(CloseAuto2);
+            addScaledWaypoint(0.6, 0, -5, 0);
+            addConcurrentAutoModule(BackwardAuto);
+            addSetpoint(0, -9.5,0);
+            addPause(0.4);
+            addAutoModule(DropAuto);
+            addConcurrentAutoModule(ForwardAuto2);
+            addPause(0.3);
+        }
+    };
+
+    Independent CycleTwo2 = new Independent() {
+        @Override
+        public void define() {
+            addWaypoint(0.0,-11.5,0.0);
+            addAccuracyScaledSetpoint(1.5, 1.5, 0, 10, 0);
+            addAutoModule(CloseAuto2);
+            addScaledWaypoint(0.8, 0, -5, 0);
+            addConcurrentAutoModule(BackwardAuto);
+            addAccuracySetpoint(0.8, 0, -9.5,0);
+            addPause(0.2);
+            addAutoModule(DropAuto);
+            addConcurrentAutoModule(ForwardAuto2);
+            addPause(0.3);
+        }
+    };
+
+    Machine CycleTwo = new Machine().addInstruction(odometry::reset, 0.1).addIndependent(CycleTwo1).addIndependent(9, AutoModuleUser.CycleTwo2);
 
 }

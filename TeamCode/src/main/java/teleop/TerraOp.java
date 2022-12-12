@@ -2,6 +2,7 @@ package teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import automodules.AutoModuleUser;
 import elements.FieldSide;
 import global.Modes;
 import teleutil.button.Button;
@@ -33,8 +34,8 @@ public class TerraOp extends Tele {
         gph1.link(Button.Y, Forward);
         gph1.link(Button.X, bot::cancelMovements);
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
-        gph1.link(Button.BACK, ScanAndCycle);
-//        gph1.link(Button.BACK, AutoModuleUser.Cycle); // TODO PROBLEM
+//        gph1.link(Button.BACK, ScanAndCycle);
+        gph1.link(Button.BACK, CycleTwo);
 
         gph1.link(LEFT_BUMPER, MoveToPosition);
         gph1.link(RIGHT_BUMPER, odometry::reset);
