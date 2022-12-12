@@ -1,6 +1,7 @@
 package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import automodules.AutoModule;
 import automodules.AutoModuleUser;
@@ -13,6 +14,7 @@ import elements.Case;
 import elements.FieldPlacement;
 import elements.FieldSide;
 import geometry.position.Pose;
+import util.Timer;
 import util.condition.DecisionList;
 
 import static global.General.bot;
@@ -40,6 +42,7 @@ public class TerraAuto extends AutoFramework {
     }
 
     public void place(int i){
+        addConcurrentAutoModule(BackwardAuto);
         if(i == 0) {
             addConcurrentAutoModule(new AutoModule(outtake.stageMiddle(0.0), outtake.stageFlip(0.0), lift.stageLift(0.9, HIGH.getValue()-2)));
             addAccuracyScaledSetpoint(3.0, 1.0, 1.5, 130.5, 56);
@@ -55,6 +58,7 @@ public class TerraAuto extends AutoFramework {
     }
 
     public void pick(int i){
+        addBreakpoint(() -> timer.seconds() > 20);
         addAccuracyScaledSetpoint(2.0, 0.7, 62-(i/3.0), 129, 90);
         addConcurrentAutoModule(GrabAuto);
         addPause(0.5);
@@ -71,9 +75,9 @@ public class TerraAuto extends AutoFramework {
             addScaledWaypoint(0.65, 30, 129, 90);
             pick(i+1);
             addScaledWaypoint(0.6, 14, 129, 75);
-            addConcurrentAutoModule(BackwardAuto);
             place(i+1);
         });
+        addBreakpointReturn();
         customCase(() -> {
             addWaypoint(-7, 124, 90);
             addWaypoint(-20, 124, 90);

@@ -10,7 +10,9 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robot.BackgroundTask;
+import robotparts.RobotPart;
 import robotparts.electronics.positional.PMotor;
+import robotparts.electronics.positional.PServo;
 import util.Timer;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
@@ -97,6 +99,8 @@ public class StageBuilder {
     protected final Stage customExit(double p, ReturnCodeSeg<Boolean> exit){ return new Stage(usePart(), main(p), new Exit(exit), stop(), returnPart()); }
     protected final Stage customTime(CodeSeg m, double t){ return new Stage(usePart(), new Main(m), exitTime(t != 0 ? t : 0.01), stop(), returnPart()); }
     protected final Stage customTime(Main m, double t){ return new Stage(usePart(), m, exitTime(t != 0 ? t : 0.01), stop(), returnPart()); }
+    protected final Stage customTimeAfter(CodeSeg m, double t){ return new Stage(usePart(), new Main(()-> {}), exitTime(t != 0 ? t : 0.01), new Stop(m), returnPart()); }
+    protected final Stage customContinuousTime(ReturnCodeSeg<PServo> servo1, ReturnCodeSeg<PServo> servo2, String target, double t){ return new Stage(usePart(), new Initial(() -> {servo1.run().setContinuousTarget(target); servo2.run().setContinuousTarget(target);}), new Main(() -> {servo1.run().moveContinuous(t); servo2.run().moveContinuous(t);}), RobotPart.exitTime(t), returnPart());}
 
     protected void setTarget(double target){}
     protected boolean exitTarget(){ return true; }

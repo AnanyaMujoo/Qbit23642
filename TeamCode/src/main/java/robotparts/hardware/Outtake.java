@@ -25,11 +25,11 @@ public class Outtake extends RobotPart {
         arml.addPosition("startHalf", 0.28);
         armr.addPosition("startHalf", 0.28);
 
-        armr.addPosition("middle", 0.65);
-        arml.addPosition("middle", 0.65);
+        armr.addPosition("middle", 0.4);
+        arml.addPosition("middle", 0.4);
 
-        arml.addPosition("endHalf", 0.56);
-        armr.addPosition("endHalf", 0.56);
+        arml.addPosition("endHalf", 0.65);
+        armr.addPosition("endHalf", 0.65);
 
         arml.changePosition("end", 0.73);
         armr.changePosition("end", 0.73);
@@ -58,30 +58,22 @@ public class Outtake extends RobotPart {
     public void readyStart(){ armr.setPosition("startHalf"); arml.setPosition("startHalf"); }
     public void readyEnd(){ armr.setPosition("endHalf"); arml.setPosition("endHalf"); }
 
-    // TODO CREATE CUSTOM TIME AFTER
-
-
     public Stage stageReadyStart(double t){return super.customTime(this::readyStart, t);}
-
     public Stage stageStart(double t){ return super.customTime(this::moveStart, t); }
     public Stage stageEnd(double t){ return super.customTime(this::moveEnd, t); }
     public Stage stageOpen(double t){ return super.customTime(this::openClaw, t); }
     public Stage stageClose(double t){ return super.customTime(this::closeClaw, t); }
     public Stage stageFlip(double t){ return super.customTime(this::flip, t); }
 
-    public Stage stageFlipAfter(double t){ return new Stage(usePart(), new Main(()-> {}), exitTime(t), new Stop(this::flip), returnPart());}
-
-    public Stage stageEndAfter(double t){ return new Stage(usePart(), new Main(()-> {}), exitTime(t), new Stop(this::moveEnd), returnPart()); }
+    public Stage stageFlipAfter(double t){ return super.customTimeAfter(this::flip, t); }
+    public Stage stageEndAfter(double t){ return super.customTimeAfter(this::moveEnd, t); }
 
     public Stage stageMiddle(double t){ return super.customTime(() -> {armr.setPosition("middle"); arml.setPosition("middle");}, t);}
+    public Stage stageReadyEnd(double t){ return super.customTime(this::readyEnd, t); }
 
-    public Stage stageEndContinuous(double t){ return new Stage(usePart(), new Initial(() -> {arml.setContinuousTarget("end"); armr.setContinuousTarget("end");}), new Main(() -> {arml.moveContinuous(t); armr.moveContinuous(t);}), RobotPart.exitTime(t), returnPart());}
+    public Stage stageEndContinuous(double t){ return super.customContinuousTime(() -> armr, () -> arml, "end", t); }
 
 
-
-
-//    public void setArmTarget(String name){ armr.setContinuousTarget(name); arml.setContinuousTarget(name); }
-//    public void moveArmContinuous(double time){ armr.moveContinuous(time); arml.moveContinuous(time); }
 
 
 //

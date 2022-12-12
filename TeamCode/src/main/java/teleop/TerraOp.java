@@ -32,14 +32,13 @@ public class TerraOp extends Tele {
 
     @Override
     public void initTele() {
-        gph1.link(Button.B, BackwardAll);
-        gph1.link(Button.Y, Forward);
+        gph1.link(Button.B, BackwardAllTele);
+        gph1.link(Button.Y, ForwardTele);
         gph1.link(Button.X, bot::cancelMovements);
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
-//        gph1.link(Button.BACK, ScanAndCycle);
-        gph1.link(Button.BACK, CycleTwo);
+        gph1.link(Button.BACK, CycleMachine);
 
-        gph1.link(LEFT_BUMPER, MoveToPosition);
+        gph1.link(LEFT_BUMPER, MoveToZero);
         gph1.link(RIGHT_BUMPER, odometry::reset);
 
         gph1.link(RIGHT_TRIGGER, () -> lift.adjustHolderTarget(2.0));

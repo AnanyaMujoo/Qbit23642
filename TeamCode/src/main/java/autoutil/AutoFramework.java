@@ -17,6 +17,7 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import auton.Auto;
 import autoutil.generators.AutoModuleGenerator;
+import autoutil.generators.BreakpointGenerator;
 import autoutil.generators.Generator;
 import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
@@ -29,12 +30,15 @@ import elements.FieldSide;
 import geometry.framework.CoordinatePlane;
 import geometry.position.Pose;
 import robotparts.RobotPart;
+import util.Timer;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
 import util.codeseg.ReturnCodeSeg;
+import util.condition.Decision;
 import util.condition.DecisionList;
 import util.condition.Expectation;
 import util.condition.Magnitude;
+import util.condition.OutputList;
 import util.template.Iterator;
 
 import static global.General.fault;
@@ -55,6 +59,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected ArrayList<Double> movementScales = new ArrayList<>();
     protected ArrayList<Double> accuracyScales = new ArrayList<>();
     protected ArrayList<AutoSegment<?,?>> customSegments = new ArrayList<>();
+    protected ArrayList<CodeSeg> breakpoints = new ArrayList<>();
 
     protected boolean scanning = false;
     protected boolean haltCameraAfterInit = true;
@@ -63,7 +68,9 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected Case caseDetected = Case.FIRST;
 
     private int segmentIndex = 1;
-    private int pauseIndex, autoModuleIndex, customSegmentIndex = 0;
+    private int pauseIndex, autoModuleIndex, customSegmentIndex, breakpointIndex = 0;
+
+    protected Timer timer = new Timer();
 
 
     {
@@ -114,6 +121,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         setup();
         createSegments();
         if(scanning) { if(haltCameraAfterInit) { camera.halt(); }else{ camera.setScanner(scannerAfterInit); } }
+        timer.reset();
         Iterator.forAll(segments, segment -> segment.run(this));
     }
 
@@ -141,6 +149,16 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addAccuracySetpoint(double acc, double x, double y, double h){ addAccuracy(acc); addSetpoint(x, y, h);}
     public void addAccuracyScaledSetpoint(double acc, double scale, double x, double y, double h){ addAccuracy(acc); addScaledSetpoint(scale, x, y, h);}
 
+    public void addCustomCode(CodeSeg seg){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(seg); }
+    public void addSynchronisedDecision(DecisionList decisionList){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(decisionList::check); }
+    public void addBreakpoint(ReturnCodeSeg<Boolean> exit){ addCustomCode(() -> {
+        if(exit.run()){
+            Iterator.forAll(segments, AutoSegment::skip);
+        }
+    });}
+    public void addBreakpointReturn(){ addCustomCode(() -> Iterator.forAll(segments, AutoSegment::reset));}
+    // TODO TEST
+
     private void createSegments(){
         Iterator.forAll(segmentTypes, type -> {
             switch (type){
@@ -158,6 +176,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
                     addStationarySegment(() -> new AutoModuleGenerator(true)); break;
                 case CUSTOM:
                     addSegment(getCurrentCustomSegment()); break;
+                case BREAKPOINT:
+                    addStationarySegment(() -> new BreakpointGenerator(getCurrentBreakpoint())); break;
             }
             segmentIndex++;
         });
@@ -166,6 +186,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     private AutoModule getCurrentAutoModule(){ AutoModule autoModule = autoModules.get(autoModuleIndex); autoModuleIndex++; return autoModule; }
     private double getCurrentPause(){ double time = pauses.get(pauseIndex); pauseIndex++; return time; }
     private AutoSegment<?,?> getCurrentCustomSegment(){AutoSegment<?,?> segment = customSegments.get(customSegmentIndex); customSegmentIndex++; return segment; }
+    private CodeSeg getCurrentBreakpoint(){ CodeSeg breakpoint = breakpoints.get(breakpointIndex); breakpointIndex++; return breakpoint; }
 
     private void addSegment(AutoSegment<?, ?> segment){ addSegment(segment.getReactorReference(), segment.getGeneratorReference()); }
     private <R extends Reactor, G extends Generator> void addSegment(@NonNull ReturnCodeSeg<R> reactor, @NonNull ReturnCodeSeg<G> generator){
@@ -201,6 +222,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         movementScales = new ArrayList<>();
         accuracyScales = new ArrayList<>();
         customSegments = new ArrayList<>();
+        breakpoints = new ArrayList<>();
         scanning = false;
         haltCameraAfterInit = true;
         caseScanner = null;
@@ -210,7 +232,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         pauseIndex = 0;
         autoModuleIndex = 0;
         customSegmentIndex = 0;
+        breakpointIndex = 0;
         poses.add(new Pose()); movementScales.addAll(Collections.nCopies(100,1.0)); accuracyScales.addAll(Collections.nCopies(100,1.0));
-
     }
 }

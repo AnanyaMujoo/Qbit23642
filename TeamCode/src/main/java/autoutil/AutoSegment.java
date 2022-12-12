@@ -3,6 +3,7 @@ package autoutil;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import automodules.AutoModule;
+import autoutil.generators.BreakpointGenerator;
 import autoutil.generators.Generator;
 import autoutil.reactors.Reactor;
 import geometry.position.Pose;
@@ -19,6 +20,7 @@ public class AutoSegment<R extends Reactor, G extends Generator> {
     private final ReturnCodeSeg<G> getGenerator;
     private ParameterCodeSeg<Reactor> reactorFunction = rea -> {};
     private ParameterCodeSeg<Generator> generatorFunction = gen -> {};
+    private boolean skip = false;
 
     public AutoSegment(ReturnCodeSeg<R> r, ReturnCodeSeg<G> g){getReactor = r; getGenerator = g; }
 
@@ -28,14 +30,18 @@ public class AutoSegment<R extends Reactor, G extends Generator> {
     public void setGeneratorFunction(ParameterCodeSeg<Generator> generatorFunction){ this.generatorFunction = generatorFunction; }
     public void setReactorFunction(ParameterCodeSeg<Reactor> reactorFunction){ this.reactorFunction = reactorFunction; }
 
+    public void skip(){ if(!(getGenerator.run() instanceof BreakpointGenerator)) {skip = true; }}
+    public void reset(){ skip = false; }
+
     public void run(AutoFramework auto){
-        Generator generator = getGenerator.run();
-        generatorFunction.run(generator);
-        Reactor reactor = getReactor.run();
-        reactorFunction.run(reactor);
-        Executor executor = new Executor(auto, generator, reactor);
-//        if(isIndependent){ executor.makeIndependent(); } // TOD 5
-        executor.followPath();
+        if(!skip) {
+            Generator generator = getGenerator.run();
+            generatorFunction.run(generator);
+            Reactor reactor = getReactor.run();
+            reactorFunction.run(reactor);
+            Executor executor = new Executor(auto, generator, reactor);
+            executor.followPath();
+        }
     }
 
     public enum Type {
@@ -45,7 +51,8 @@ public class AutoSegment<R extends Reactor, G extends Generator> {
         AUTOMODULE,
         CONCURRENT_AUTOMODULE,
         CANCEL_AUTOMODULE,
-        CUSTOM
+        CUSTOM,
+        BREAKPOINT
     }
 
 }
