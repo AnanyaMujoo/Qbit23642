@@ -149,15 +149,14 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addAccuracySetpoint(double acc, double x, double y, double h){ addAccuracy(acc); addSetpoint(x, y, h);}
     public void addAccuracyScaledSetpoint(double acc, double scale, double x, double y, double h){ addAccuracy(acc); addScaledSetpoint(scale, x, y, h);}
 
-    public void addCustomCode(CodeSeg seg){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(seg); }
-    public void addSynchronisedDecision(DecisionList decisionList){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(decisionList::check); }
+    public void addCustomCode(CodeSeg seg){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(seg); addLastPose(); }
+    public void addSynchronisedDecision(DecisionList decisionList){ addCustomCode(decisionList::check); }
     public void addBreakpoint(ReturnCodeSeg<Boolean> exit){ addCustomCode(() -> {
         if(exit.run()){
             Iterator.forAll(segments, AutoSegment::skip);
         }
     });}
     public void addBreakpointReturn(){ addCustomCode(() -> Iterator.forAll(segments, AutoSegment::reset));}
-    // TODO TEST
 
     private void createSegments(){
         Iterator.forAll(segmentTypes, type -> {
@@ -177,7 +176,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
                 case CUSTOM:
                     addSegment(getCurrentCustomSegment()); break;
                 case BREAKPOINT:
-                    addStationarySegment(() -> new BreakpointGenerator(getCurrentBreakpoint())); break;
+                    final CodeSeg code = getCurrentBreakpoint(); addStationarySegment(() -> new BreakpointGenerator(code)); break;
             }
             segmentIndex++;
         });

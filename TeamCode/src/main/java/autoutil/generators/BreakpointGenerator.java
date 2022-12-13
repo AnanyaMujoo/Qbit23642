@@ -20,8 +20,6 @@ public class BreakpointGenerator extends Generator{
     public void add(Pose start, Pose target) {}
 
     @Override
-    public Stage getStage(Reactor reactor) {
-        return new Stage(new Main(code), RobotPart.exitAlways());
-    }
+    public Stage getStage(Reactor reactor) { return new Stage(new Initial(code), RobotPart.exitAlways()); }
 
 }

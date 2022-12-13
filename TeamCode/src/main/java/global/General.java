@@ -78,7 +78,7 @@ public class General {
      */
     public static int cameraMonitorViewId;
     /**
-     * Voltage that the robot started at (used to adjust values)
+     * Inversely proportional to the voltage that the robot started at (used to adjust values)
      */
     public static double voltageScale;
 }

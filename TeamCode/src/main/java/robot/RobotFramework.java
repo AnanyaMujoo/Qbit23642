@@ -218,7 +218,11 @@ public class RobotFramework {
 
 
     public static double getBatteryVoltage() {
-        double result = Constants.DEFAULT_VOLTAGE+10; for (VoltageSensor sensor : hardwareMap.voltageSensor) { double voltage = sensor.getVoltage(); if (voltage > 0) {result = Math.min(result, voltage); } } return result;
+        double result = Constants.DEFAULT_VOLTAGE+10; for (VoltageSensor sensor : hardwareMap.voltageSensor) { double voltage = sensor.getVoltage(); if (voltage > 0) {result = Math.min(result, voltage); } } return Math.min(Math.max(result, 12.0), 15.0);
+    }
+
+    public double getVoltage(){
+        return Constants.DEFAULT_VOLTAGE/voltageScale;
     }
 
     public void savePose(Pose pose){

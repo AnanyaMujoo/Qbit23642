@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import autoutil.AutoFramework;
 import elements.FieldSide;
 
+import static global.General.bot;
+
 public class TerraAutoSimple extends AutoFramework {
 
     @Override
@@ -19,7 +21,7 @@ public class TerraAutoSimple extends AutoFramework {
         addSetpoint(0, -10, 0);
         addSetpoint(0,-20,0);
         addBreakpointReturn();
-        addSetpoint(0,0,0);
+        addSetpoint(0,30,0);
 
 //        addConcurrentAutoModule(BackwardAuto);
 //        addWaypoint(0, 100, 35);
@@ -46,6 +48,11 @@ public class TerraAutoSimple extends AutoFramework {
 //        });
     }
 
+    @Override
+    public void stopAuto() {
+        bot.savePose(odometry.getPose());
+        super.stopAuto();
+    }
 
     @Autonomous(name = "TerraAutoLowerBlueSimple", group = "auto")
     public static class TerraAutoLowerBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; }}

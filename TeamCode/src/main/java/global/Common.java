@@ -54,7 +54,7 @@ public interface Common{
          */
         cameraMonitorViewId = Cameras.getCameraMonitorViewId();
         /**
-         * Set the voltage
+         * Set the voltage scale
          */
         voltageScale = Constants.DEFAULT_VOLTAGE/RobotFramework.getBatteryVoltage();
         /**

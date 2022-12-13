@@ -63,9 +63,6 @@ public class TerraAuto extends AutoFramework {
         addConcurrentAutoModule(GrabAuto);
         addPause(0.5);
     }
-
-    // TODO CREATE SMART SWITCH (IF NOT ENOUGH TIME LEFT SWITCH TO PARK)
-
     @Override
     public void define() {
         addWaypoint(0, 40, 0);

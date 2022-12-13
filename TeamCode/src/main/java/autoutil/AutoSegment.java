@@ -30,7 +30,7 @@ public class AutoSegment<R extends Reactor, G extends Generator> {
     public void setGeneratorFunction(ParameterCodeSeg<Generator> generatorFunction){ this.generatorFunction = generatorFunction; }
     public void setReactorFunction(ParameterCodeSeg<Reactor> reactorFunction){ this.reactorFunction = reactorFunction; }
 
-    public void skip(){ if(!(getGenerator.run() instanceof BreakpointGenerator)) {skip = true; }}
+    public void skip(){ if(!(getGenerator.run() instanceof BreakpointGenerator)) { skip = true; } }
     public void reset(){ skip = false; }
 
     public void run(AutoFramework auto){
