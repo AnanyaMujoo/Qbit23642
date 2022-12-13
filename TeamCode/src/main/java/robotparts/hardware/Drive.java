@@ -14,7 +14,7 @@ import static global.Modes.DriveMode.Drive.SLOW;
 public class Drive extends RobotPart {
 
     private CMotor fr, br, fl, bl;
-    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 10.0, 5.0);
+    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 60.0, 2.0);
     private final Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
     private final Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
 
@@ -29,7 +29,7 @@ public class Drive extends RobotPart {
     }
 
     @Override
-    public void move(double f, double s, double t) {
+    public void move(double f, double s, double t) { // TODO ANTI TIP?
         fr.setPower(f - s - t);
         br.setPower(f + s - t);
         fl.setPower(f + s + t);

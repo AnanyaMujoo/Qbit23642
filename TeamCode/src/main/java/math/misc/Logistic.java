@@ -15,6 +15,13 @@ public class Logistic extends Function implements ParameterConstructor<Double> {
      * It looks like an elongated S shaped curve
      */
 
+    /**
+     * Equation to copy paste
+     * \frac{1+be^{-k}}{1+be^{-kx}}
+     * or
+     * https://www.desmos.com/calculator/2mvgkmzyxb
+     */
+
 
     /**
      *

@@ -157,4 +157,12 @@ public interface AutoModuleUser extends RobotUser{
 //            .addIndependent(9, AutoModuleUser::CycleAround)
 //    ;
 
+
+    // TODO MAKE MOVE TO CYCLE START POSITION
+    // TODO MAKE FOR STACKED CONES
+    // TODO MAKE MEDIUM JUNCTION
+    // TODO MAKE CIRCUIT MACHINE
+    // TODO MAKE PARK MACHINE
+
+
 }

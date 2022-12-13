@@ -58,8 +58,8 @@ public abstract class Tele extends OpMode implements Common, RobotUser, AutoModu
 
     @Override
     public final void start(){
-        startTele();
         ready();
+        startTele();
     }
 
     @Override

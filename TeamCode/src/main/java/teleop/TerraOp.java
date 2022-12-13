@@ -58,7 +58,6 @@ public class TerraOp extends Tele {
         gph2.link(DPAD_DOWN, outtake::unFlip);
 
         lift.move(-0.12);
-        bot.loadPose(); // TODO TEST FAied
         camera.setScanner(junctionScanner);
         camera.start(false);
     }
@@ -66,12 +65,13 @@ public class TerraOp extends Tele {
     @Override
     public void startTele() {
         outtake.moveStart();
+        bot.loadPose(); // TODO TEST
     }
 
     @Override
     public void loopTele() {
 
-        drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
+        drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx); // TODO TEST
 
         lift.move(gph2.ry);
 

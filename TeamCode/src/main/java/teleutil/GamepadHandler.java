@@ -120,6 +120,8 @@ public class GamepadHandler {
         link(b, () -> bot.addMachine(machine));
     }
 
+    // TODO MAKE MACHINE/INDEPENDENT MODES
+
 
 
     /**
