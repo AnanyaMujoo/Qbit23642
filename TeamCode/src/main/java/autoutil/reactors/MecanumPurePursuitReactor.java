@@ -2,6 +2,7 @@ package autoutil.reactors;
 
 import autoutil.controllers.control1D.PID;
 import autoutil.controllers.control2D.PurePursuit;
+import autoutil.generators.PoseGenerator;
 
 public class MecanumPurePursuitReactor extends MecanumReactor {
 
@@ -16,4 +17,12 @@ public class MecanumPurePursuitReactor extends MecanumReactor {
 
     @Override
     public boolean isAtTarget() { return movementController.isAtTarget(); }
+
+    @Override
+    public void moveToTarget(PoseGenerator generator) {
+        movementController.update(getPose(), generator);
+        headingController.update(getPose(), generator);
+        double antiTippingPower = gyro.getPitch()*0.2;
+        drive.move(movementController.getOutputY() + antiTippingPower, movementController.getOutputX(), -headingController.getOutput());
+    }
 }

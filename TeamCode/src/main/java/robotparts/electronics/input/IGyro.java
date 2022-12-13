@@ -1,7 +1,5 @@
 package robotparts.electronics.input;
 
-import static global.General.hardwareMap;
-
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -18,6 +16,7 @@ public class IGyro extends Electronic {
 
     private final BNO055IMU gyro;
     private double heading, lastHeading, deltaHeading, startHeading = 0;
+    private double pitch, startPitch = 0;
 
     public IGyro(BNO055IMU gyro){
         this.gyro = gyro;
@@ -28,7 +27,7 @@ public class IGyro extends Electronic {
         this.gyro.initialize(parameters);
     }
 
-    public void updateHeading(){
+    public void update(){
         double currentHeading = (gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
         deltaHeading = currentHeading - lastHeading;
         if (deltaHeading < -180)
@@ -37,15 +36,16 @@ public class IGyro extends Electronic {
             deltaHeading -= 360;
         heading += deltaHeading;
         lastHeading = heading;
+
+        pitch = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle; // TODO CHECK
     }
 
-    public void setHeading(double heading){
-        updateHeading(); startHeading = heading;
-    }
+    public void setHeading(double heading){ update(); startHeading = heading; }
 
-    public void reset(){ updateHeading(); startHeading = heading; }
+    public void reset(){ update(); startHeading = heading; startPitch = pitch; }
 
     public double getHeading(){ return heading - startHeading; }
+    public double getPitch(){ return pitch - startPitch; }
 
     public double getDeltaHeading(){ return Math.abs(deltaHeading) < 30 ? deltaHeading : 0.0; }
 }

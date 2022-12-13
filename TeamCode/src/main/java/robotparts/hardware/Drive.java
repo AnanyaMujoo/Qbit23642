@@ -29,7 +29,7 @@ public class Drive extends RobotPart {
     }
 
     @Override
-    public void move(double f, double s, double t) { // TODO ANTI TIP?
+    public void move(double f, double s, double t) {
         fr.setPower(f - s - t);
         br.setPower(f + s - t);
         fl.setPower(f + s + t);
@@ -38,7 +38,8 @@ public class Drive extends RobotPart {
 
 
     public void moveSmooth(double f, double s, double t) {
-        double scale = Modes.driveMode.get().getValue(); move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(t*1.2*scale));
+        double antiTippingPower = gyro.getPitch()*0.2;// TODO TEST
+        double scale = Modes.driveMode.get().getValue(); move(movementCurveForward.fodd(f*scale) + antiTippingPower, movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(t*1.2*scale));
     }
 
     @Override

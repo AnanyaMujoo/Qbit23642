@@ -42,6 +42,10 @@ public class Modes {
         USING
     }
 
+    public enum GamepadMode implements Decision {
+        NORMAL,
+        AUTOMATED
+    }
 
     public static class HeightMode extends ValueMode{ public enum Height implements ModeType{
         HIGH{@Override public double getValue() {return Lift.maxPosition-1;}},

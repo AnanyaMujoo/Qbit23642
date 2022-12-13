@@ -18,6 +18,7 @@ import static global.General.log;
 import static global.General.voltageScale;
 import static global.Modes.DriveMode.Drive.FAST;
 import static global.Modes.DriveMode.Drive.MEDIUM;
+import static global.Modes.GamepadMode.AUTOMATED;
 import static global.Modes.HeightMode.Height.*;
 import static teleutil.button.Button.DPAD_DOWN;
 import static teleutil.button.Button.DPAD_LEFT;
@@ -38,8 +39,8 @@ public class TerraOp extends Tele {
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
         gph1.link(Button.BACK, CycleMachine);
 
-        gph1.link(LEFT_BUMPER, MoveToZero);
-        gph1.link(RIGHT_BUMPER, odometry::reset);
+        gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED); // TODO TEST
+        gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
 
         gph1.link(RIGHT_TRIGGER, () -> lift.adjustHolderTarget(2.0));
         gph1.link(LEFT_TRIGGER,  () -> lift.adjustHolderTarget(-2.0));
@@ -81,6 +82,8 @@ public class TerraOp extends Tele {
 //        log.show("Left", lift.motorLeft.getPosition());
         log.show("Pose", odometry.getPose());
 //        log.show("Voltage", bot.getVoltage());
+        log.show("Pitch", gyro.getPitch()); // TODO TEST
+        log.show("GamepadMode", gamepad1.back ? AUTOMATED : Modes.GamepadMode.NORMAL);
     }
 
 

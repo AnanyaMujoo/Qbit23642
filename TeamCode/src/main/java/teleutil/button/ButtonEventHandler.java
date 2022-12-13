@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import teleutil.GamepadHandler;
 import util.codeseg.CodeSeg;
+import util.codeseg.ReturnCodeSeg;
 
 
 public class ButtonEventHandler {
@@ -26,6 +27,8 @@ public class ButtonEventHandler {
      */
     protected GamepadHandler gph;
 
+    protected ReturnCodeSeg<Boolean> extraCondition = () -> true;
+
     /**
      * Was the button held?
      */
@@ -45,6 +48,8 @@ public class ButtonEventHandler {
 
     protected boolean eventOccurred() { return pressed(); }
 
+    public ButtonEventHandler setExtraCondition(ReturnCodeSeg<Boolean> condition){ extraCondition = condition; return this; }
+
     /**
      * When the event occurs run the code
      */
@@ -58,7 +63,7 @@ public class ButtonEventHandler {
      * Is the button pressed?
      * @return isPressed
      */
-    protected boolean pressed() { return Objects.requireNonNull(gph.pressedMap.get(button)).run(); }
+    protected boolean pressed() { return Objects.requireNonNull(gph.pressedMap.get(button)).run() && extraCondition.run(); }
 
     /**
      * Get the value of the button (only if trigger or similar)

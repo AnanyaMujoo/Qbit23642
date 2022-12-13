@@ -2,6 +2,7 @@ package autoutil.reactors;
 
 import autoutil.controllers.control2D.Default2D;
 import autoutil.controllers.control1D.PID;
+import autoutil.generators.PoseGenerator;
 
 public class MecanumPIDReactor extends MecanumReactor{
 //
@@ -22,5 +23,13 @@ public class MecanumPIDReactor extends MecanumReactor{
         xPID.setRestOutput(0.095);
         yPID.setRestOutput(0.065);
         setControllers(new Default2D(xPID, yPID), hPID);
+    }
+
+    @Override
+    public void moveToTarget(PoseGenerator generator) {
+        movementController.update(getPose(), generator);
+        headingController.update(getPose(), generator);
+        double antiTippingPower = gyro.getPitch()*0.2;
+        drive.move(movementController.getOutputY() + antiTippingPower, movementController.getOutputX(), -headingController.getOutput());
     }
 }

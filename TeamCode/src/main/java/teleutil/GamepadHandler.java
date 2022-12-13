@@ -10,6 +10,7 @@ import java.util.TreeMap;
 import javax.crypto.Mac;
 
 import automodules.AutoModule;
+import global.Modes;
 import teleutil.button.Button;
 import teleutil.button.ButtonEventHandler;
 import teleutil.button.ButtonHandler;
@@ -83,45 +84,31 @@ public class GamepadHandler {
         defineAllButtons();
     }
 
-    /**
-     * Default link method, uses on press handler
-     */
+
+
+
     public void link(Button b, CodeSeg codeSeg){
         link(b, OnPressEventHandler.class, codeSeg);
     }
-
-    /**
-     * Link method used to link a button to a button handler to run some code
-     * @param b
-     * @param type
-     * @param codeSeg
-     */
-    public void link(Button b, Class<? extends ButtonEventHandler> type, CodeSeg codeSeg) {
-        Objects.requireNonNull(handlerMap.get(b)).addEvent(type, codeSeg);
-    }
-
-    public void link(Button b, AutoModule list) {
-        link(b, OnPressEventHandler.class, () -> bot.addAutoModule(list));
-    }
-
-    public void link(Button b, DecisionList decisionList){
-        link(b, OnPressEventHandler.class, decisionList::check);
-    }
-
-    public void link(Button b, OutputList outputList){
-        link(b, () -> bot.addAutoModule(outputList.check()));
-    }
-
-    public void link(Button b, Independent independent){
-        link(b, () -> bot.addIndependent(independent));
-    }
-
+    public void link(Button b, Class<? extends ButtonEventHandler> type, CodeSeg codeSeg) { Objects.requireNonNull(handlerMap.get(b)).addEvent(type, codeSeg); }
+    public void link(Button b, AutoModule list) { link(b, () -> bot.addAutoModule(list)); }
+    public void link(Button b, DecisionList decisionList){ link(b,  decisionList::check); }
+    public void link(Button b, OutputList outputList){ link(b, () -> bot.addAutoModule(outputList.check())); }
+    public void link(Button b, Independent independent){ link(b, () -> bot.addIndependent(independent)); }
     public void link(Button b, Machine machine){
         link(b, () -> bot.addMachine(machine));
     }
-
-    // TODO MAKE MACHINE/INDEPENDENT MODES
-
+    public void link(Button b, AutoModule list, Modes.GamepadMode mode) { link(b, () -> bot.addAutoModule(list), mode); }
+    public void link(Button b, DecisionList decisionList, Modes.GamepadMode mode){  link(b, decisionList::check, mode); }
+    public void link(Button b, OutputList outputList, Modes.GamepadMode mode){ link(b, () -> bot.addAutoModule(outputList.check()), mode); }
+    public void link(Button b, Independent independent, Modes.GamepadMode mode){ link(b, () -> bot.addIndependent(independent), mode); }
+    public void link(Button b, Machine machine, Modes.GamepadMode mode){ link(b, () -> bot.addMachine(machine), mode);}
+    public void link(Button b, CodeSeg codeSeg, Modes.GamepadMode mode) {
+        switch (mode){
+            case NORMAL: link(b, codeSeg); break;
+            case AUTOMATED: Objects.requireNonNull(handlerMap.get(b)).addEvent(OnPressEventHandler.class, codeSeg, () -> gamepad.back); break;
+        }
+    }
 
 
     /**
