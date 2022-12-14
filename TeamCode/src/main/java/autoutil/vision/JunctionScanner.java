@@ -104,8 +104,8 @@ public class JunctionScanner extends Scanner {
             double realJunctionOffset = distanceToJunction * distanceRatio(junctionCenterOffset, screenWidth);
             angleToJunction = Math.toDegrees(Math.atan2(realJunctionOffset, distanceToJunction));
 
-            distanceProfiler.update();
-            angleProfiler.update();
+            distanceProfiler.updateValuesOnly();
+            angleProfiler.updateValuesOnly();
 
 
             HSV.release();

@@ -42,6 +42,12 @@ public class Profiler {
         updateDifferentiator();
     }
 
+    public void updateValuesOnly(){
+        Precision.runOnCondition(firstUpdate, () -> {timer.reset(); firstUpdate = false;});
+        values.add(processVariable.run());
+        times.add(timer.seconds());
+    }
+
     private void updateIntegrator(){
         if(getUpdateNumber() == 1){
             integrator.integrate(getPreviousProcess(1), getCurrentProcess());

@@ -45,18 +45,18 @@ public interface AutoModuleUser extends RobotUser{
     );
 
     AutoModule DropAuto = new AutoModule(
-            outtake.stageOpen(0.1)
+            outtake.stageOpen(0.15)
     );
 
     AutoModule GrabAuto = new AutoModule(
             outtake.stageClose(0.2),
-            outtake.stageReadyStart(0.0),
-            lift.stageLift(1.2, 50),
-            outtake.stageMiddle(0.0)
+            outtake.stageReadyStart(0.3).attach(drive.moveTime(-0.2, 0, 0, 0.2)),
+            outtake.stageMiddle(0.0),
+            lift.stageLift(0.8, HIGH.getValue()-3)
     );
     default AutoModule ForwardAuto(int i){return new AutoModule(
             outtake.stageStart(0.0),
-            lift.stageLift(0.6, Math.max(14.5 - (i*13.5/5.0), 0))
+            lift.stageLift(0.5, Math.max(14.0 - (i*14.0/5.0), 0))
     );}
     AutoModule BackwardAutoFirst = new AutoModule(
             outtake.stageReadyEnd(0.0),
@@ -64,9 +64,8 @@ public interface AutoModuleUser extends RobotUser{
     );
 
     AutoModule BackwardAuto = new AutoModule(
-            RobotPart.pause(0.2),
-            outtake.stageEnd(0.0),
-            lift.stageLift(0.8, HIGH.getValue()-3)
+            RobotPart.pause(0.1),
+            outtake.stageEnd(0.0)
     );
 
 

@@ -37,7 +37,6 @@ public class TerraAuto extends AutoFramework {
 
     @Override
     public void preProcess() {
-        caseDetected = Case.THIRD;
         if(isFlipped()){ flipCases(); }
     }
 
@@ -46,20 +45,20 @@ public class TerraAuto extends AutoFramework {
             addConcurrentAutoModule(BackwardAutoFirst);
             addAccuracyScaledSetpoint(3.0,1.05,  1.5, 130.5, 51);
             addCustomSegment(mecanumJunctionSetpoint, 1.5, 130.5, 51);
-            addAccuracyScaledSetpoint(1.0, 1.05,1.5, 130.5, 51);
+            addAccuracyScaledSetpoint(1.0, 1.05,1.2, 130.2, 51);
             addAutoModule(DropAutoFirst);
         }else{
             addConcurrentAutoModule(BackwardAuto);
-            addAccuracyScaledSetpoint(1.0, 1.05, 0.5, 133.5, 51);
+            addAccuracyScaledSetpoint(1.0, 0.9, 0.7, 132.8 + (i/3.0), 51);
             addCancelAutoModules();
             addAutoModule(DropAuto);
         }
         addConcurrentAutoModule(ForwardAuto(i));
     }
 
-    public void pick(){
+    public void pick(int i){
         addBreakpoint(() -> timer.seconds() > 25);
-        addAccuracyScaledSetpoint(2.0, 0.7, 61, 127, 90);
+        addAccuracyScaledSetpoint(2.0, 0.7, 61, 125+(i/3.0), 90);
         addConcurrentAutoModule(GrabAuto);
         addPause(0.5);
     }
@@ -70,30 +69,30 @@ public class TerraAuto extends AutoFramework {
         addScaledWaypoint(1.0, 0, 120, 30);
         place(0);
         customNumber(5, i -> {
-            addScaledWaypoint(0.6, 30, 129, 90);
-            pick();
+            addScaledWaypoint(0.4, 30, 129, 90);
+            pick(i);
             addScaledWaypoint(0.6, 30, 129, 75);
-            addScaledWaypoint(0.4, 5, 129, 50);
+            addScaledWaypoint(0.35, 3, 133.5, 50);
             place(i+1);
         });
         addBreakpointReturn();
         customCase(() -> {
             addWaypoint(-7, 124, 90);
-            addWaypoint(-20, 124, 90);
-            addWaypoint(-55, 126, 70);
-            addWaypoint(-60, 128, 45);
-            addSetpoint(-62, 70, 0);
+            addScaledWaypoint(0.8, -10, 124, 90);
+            addScaledWaypoint(0.8, -45, 122, 60);
+            addScaledWaypoint(0.8, -50, 123, 25);
+            addScaledSetpoint(0.9, -62, 80, 0);
         }, () -> {
             addWaypoint(0, 130, 35);
             addWaypoint(0, 105, 0);
-            addSetpoint(0, 80, 0);
+            addScaledSetpoint(0.9, 0, 80, 0);
         }, () -> {
-            addWaypoint(7, 124, 90);
-            addWaypoint(20, 124, 90);
+            addWaypoint(7, 128, 90);
+            addWaypoint(20, 128, 90);
             addWaypoint(48, 122, 70);
             addWaypoint(50, 114, 50);
             addWaypoint(56, 95, 0);
-            addSetpoint(58, 70, 0);
+            addScaledSetpoint(0.9, 58, 80, 0);
         });
     }
 

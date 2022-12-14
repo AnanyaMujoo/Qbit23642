@@ -71,6 +71,7 @@ public class Outtake extends RobotPart {
 
     public Stage stageMiddle(double t){ return super.customTime(() -> {armr.setPosition("middle"); arml.setPosition("middle"); flip();}, t);}
     public Stage stageReadyEnd(double t){ return super.customTime(this::readyEnd, t); }
+    public Stage stageReadyEndAfter(double t){ return super.customTimeAfter(this::readyEnd, t); }
 
     public Stage stageEndContinuous(double t){ return super.customContinuousTime(() -> armr, () -> arml, "end", t); }
 

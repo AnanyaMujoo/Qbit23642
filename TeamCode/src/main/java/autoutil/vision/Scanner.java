@@ -125,7 +125,9 @@ public abstract class Scanner extends OpenCvPipeline {
             }
         }
         if(bestRect != null){
-            if(getCenter(bestRect).inside(getRectFromCenter(getCenter(input), 100, 200))) {
+            Point center = getCenter(input);
+            Point pictureCenter = new Point(center.x+10, center.y+30);
+            if(getCenter(bestRect).inside(getRectFromCenter(pictureCenter, 100, 150))) {
                 drawRectangle(input, bestRect, rectColor);
             }else{ bestST = 10000; }
         }

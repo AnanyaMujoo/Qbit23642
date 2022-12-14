@@ -1,8 +1,11 @@
 package autoutil.vision;
 
+import android.graphics.Color;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 
 import java.util.Arrays;
 
@@ -26,16 +29,23 @@ public class CaseScanner extends Scanner{
 
         computeRects(80, 150);
 
-//        debug(input);
+
+        debug(input);
+
+
+        Point center = getCenter(input);
+        Point pictureCenter = new Point(center.x+10, center.y+30);
+        drawRectangle(input, getRectFromCenter(pictureCenter, 100, 150), GREEN);
 
         double cyanValue = getBestRectStDev(input, 90, 110, CYAN);
-        double magentaValue = getBestRectStDev(input, 130, 170, MAGENTA);
+        double magentaValue = getBestRectStDev(input, 140, 180, MAGENTA);
         double orangeValue = getBestRectStDev(input, 1, 30, ORANGE);
         return Iterator.minIndex(cyanValue, magentaValue, orangeValue);
     }
 
     @Override
     protected void message(){
+//        logDebug();
         caseDetected = getCaseStable(getCase());
         log.show("Case Detected: ", caseDetected);
     }
