@@ -42,7 +42,8 @@ public class AutoSimulator extends Drawer{
 //        setAuto(AutoModuleUser.Cycle1st, new Pose(20.5+66.5, fieldSize/2.0 - 23, 215));
 //        setAuto(AutoModuleUser.Cycle, new Pose(20.5+66.5, fieldSize/2.0 - 23, 215));
 //        setAuto(AutoModuleUser.CycleTwo1, new Pose(20.5 + 47.5, fieldSize/2.0, 180));
-//        setAuto(AutoModuleUser.Cycle, new Pose(20.5 + 47.5, fieldSize/2.0, 180));
+//        setAuto(AutoModuleUser.CycleFirst, new Pose(20.5 + 47.5, fieldSize/2.0, 180));
+        setAuto(AutoModuleUser.MoveToCycleStart, startLower);
 
         drawWindow(new AutoSimulator(), "Auto Simulator");
     }

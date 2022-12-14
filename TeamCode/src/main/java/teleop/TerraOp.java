@@ -33,31 +33,59 @@ public class TerraOp extends Tele {
 
     @Override
     public void initTele() {
+
+        /**
+         * Gamepad 1 Normal
+         */
         gph1.link(Button.B, BackwardAllTele);
         gph1.link(Button.Y, ForwardTele);
         gph1.link(Button.X, bot::cancelMovements);
+        gph1.link(Button.A, () -> Modes.driveMode.set(FAST), () -> Modes.driveMode.set(MEDIUM));
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
-        gph1.link(Button.BACK, CycleMachine);
-
-        gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED); // TODO TEST
-        gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
-
-        gph1.link(RIGHT_TRIGGER, () -> lift.adjustHolderTarget(2.0));
-        gph1.link(LEFT_TRIGGER,  () -> lift.adjustHolderTarget(-2.0));
 
         gph1.link(DPAD_UP, () -> lift.setHolderTarget(HIGH));
         gph1.link(DPAD_RIGHT, () ->  lift.setHolderTarget(MIDDLE));
         gph1.link(DPAD_LEFT, () ->  lift.setHolderTarget(MIDDLE));
         gph1.link(DPAD_DOWN, () -> lift.setHolderTarget(LOW));
-        gph1.link(Button.A, OnTurnOnEventHandler.class, () -> Modes.driveMode.set(FAST));
-        gph1.link(Button.A, OnTurnOffEventHandler.class, () -> Modes.driveMode.set(MEDIUM));
+        gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.0));
+        gph1.link(LEFT_BUMPER,  () -> lift.adjustHolderTarget(-2.0));
+        // TODO TEST
+        gph1.link(RIGHT_TRIGGER, () -> {if(lift.stackedMode > 0){lift.stackedMode--;} bot.addAutoModule(ForwardAuto(lift.stackedMode));});
+        gph1.link(LEFT_TRIGGER, () -> {if(lift.stackedMode < 5){lift.stackedMode++;}});
 
+        /**
+         * Gamepad 1 Automated
+         */
+        // TODO TEST
+        gph1.link(Button.B, Cycle, AUTOMATED);
+        gph1.link(Button.X, CycleAround, AUTOMATED);
+        gph1.link(Button.Y, CycleMedium, AUTOMATED);
+        gph1.link(Button.A, MoveToCycleStart);
+
+        gph1.link(DPAD_UP, CycleMachine, AUTOMATED);
+        gph1.link(DPAD_RIGHT, CycleMediumMachine, AUTOMATED);
+        gph1.link(DPAD_LEFT, CycleAroundMachine, AUTOMATED);
+        gph1.link(DPAD_DOWN, CircuitMachine, AUTOMATED);
+
+        gph1.link(RIGHT_TRIGGER, ParkClose, AUTOMATED);
+        gph1.link(LEFT_TRIGGER, ParkFar, AUTOMATED);
+
+        gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
+        gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);
+
+
+        /**
+         * Gamepad 2 Manual
+         */
         gph2.link(DPAD_LEFT, outtake::closeClaw);
         gph2.link(DPAD_RIGHT, outtake::openClaw);
-
         gph2.link(DPAD_UP, outtake::flip);
         gph2.link(DPAD_DOWN, outtake::unFlip);
 
+
+        /**
+         * Start code
+         */
         lift.move(-0.12);
         camera.setScanner(junctionScanner);
         camera.start(false);
@@ -78,12 +106,13 @@ public class TerraOp extends Tele {
 
         log.show("DriveMode", Modes.driveMode.get());
         log.show("HeightMode", Modes.heightMode.get());
+        log.show("GamepadMode", gamepad1.back ? AUTOMATED : Modes.GamepadMode.NORMAL);
+        log.show("StackedMode", lift.stackedMode);
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());
-        log.show("Pose", odometry.getPose());
+        log.show("Pose", odometry.getPose()); // TODO TEST
 //        log.show("Voltage", bot.getVoltage());
 //        log.show("Pitch", gyro.getPitch());
-        log.show("GamepadMode", gamepad1.back ? AUTOMATED : Modes.GamepadMode.NORMAL);
     }
 
 

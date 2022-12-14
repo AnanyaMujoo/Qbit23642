@@ -19,6 +19,7 @@ public class Lift extends RobotPart {
     public PMotor motorLeft;
 
     public static final double maxPosition = 61;
+    public int stackedMode = 5;
 
     @Override
     public void init() {
@@ -29,6 +30,7 @@ public class Lift extends RobotPart {
         motorRight.usePositionHolder(0.1, 0.1);
         motorLeft.usePositionHolder(0.1, 0.1);
         Modes.heightMode.set(HIGH);
+        stackedMode = 5;
     }
 
 

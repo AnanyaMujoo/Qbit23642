@@ -15,6 +15,7 @@ import teleutil.button.Button;
 import teleutil.button.ButtonEventHandler;
 import teleutil.button.ButtonHandler;
 import teleutil.button.OnPressEventHandler;
+import teleutil.button.OnTurnOnEventHandler;
 import teleutil.independent.Independent;
 import teleutil.independent.Machine;
 import util.codeseg.CodeSeg;
@@ -108,6 +109,10 @@ public class GamepadHandler {
             case NORMAL: link(b, codeSeg); break;
             case AUTOMATED: Objects.requireNonNull(handlerMap.get(b)).addEvent(OnPressEventHandler.class, codeSeg, () -> gamepad.back); break;
         }
+    }
+    public void link(Button b, CodeSeg onOn, CodeSeg onOff){
+        link(b, OnTurnOnEventHandler.class, onOn);
+        link(b, OnTurnOnEventHandler.class, onOff);
     }
 
 
