@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
+import autoutil.Profiler;
 import robotparts.Electronic;
 
 /**
@@ -17,6 +18,7 @@ public class IGyro extends Electronic {
     private final BNO055IMU gyro;
     private double heading, lastHeading, deltaHeading, startHeading = 0;
     private double pitch, startPitch = 0;
+    private Profiler pitchProfiler = new Profiler(() -> pitch);
 
     public IGyro(BNO055IMU gyro){
         this.gyro = gyro;
@@ -37,7 +39,8 @@ public class IGyro extends Electronic {
         heading += deltaHeading;
         lastHeading = heading;
 
-        pitch = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle; // TODO CHECK
+        pitch = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
+        pitchProfiler.update();
     }
 
     public void setHeading(double heading){ update(); startHeading = heading; }
@@ -46,6 +49,7 @@ public class IGyro extends Electronic {
 
     public double getHeading(){ return heading - startHeading; }
     public double getPitch(){ return pitch - startPitch; }
+    public double getPitchDerivative(){ return pitchProfiler.getDerivative(); }
 
     public double getDeltaHeading(){ return Math.abs(deltaHeading) < 30 ? deltaHeading : 0.0; }
 }

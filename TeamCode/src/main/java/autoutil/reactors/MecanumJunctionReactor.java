@@ -22,7 +22,7 @@ import static global.General.log;
 public class MecanumJunctionReactor extends MecanumPIDReactor{
 
     public static final JunctionScanner junctionScanner = new JunctionScanner();
-    private static final Pose junctionTargetPose = new Pose(0, 23, 0);
+    private static final Pose junctionTargetPose = new Pose(0, 22, 0);
     private static final double cameraToRobotCenter = 19.5;
     private static Point junctionLocation = new Point();
     private Pose startOdometryPose = new Pose();
@@ -57,7 +57,7 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
         double maxDisFromTarget = 15;
         double maxDisVariation = 2;
         double maxAngleVariation = 3; // EXPERIMENT
-        int n = 3;
+        int n = 5;
         if(junctionPose.getDistanceTo(junctionTargetPose) < maxDisFromTarget
                 && junctionScanner.distanceProfiler.areLastValuesNearby(n, maxDisVariation)
                 && junctionScanner.angleProfiler.areLastValuesNearby(n, maxAngleVariation) && waiting){
@@ -70,7 +70,9 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
                 Point closestPoint = detectionCircle.getClosestTo(startOdometryPose.getPoint());
                 Line errorLine = new Line(closestPoint, startOdometryPose.getPoint());
                 if (errorLine.getLength() < 7) {
-                    Pose robotPose = new Pose(errorLine.getMidpoint(), (flipped ? -180 : 180) - errorLine.getVector().getTheta());
+                    double angle = (flipped ? -180 : 180) - errorLine.getVector().getTheta();
+//                    Pose robotPose = new Pose(errorLine.getMidpoint(), (angle+startOdometryPose.getAngle())/2);
+                    Pose robotPose = new Pose(closestPoint, angle);
                     odometry.setCurrentPose(robotPose);
                     exit = true;
                 }
@@ -83,7 +85,7 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
             double currentHeading = startJunctionPose.getAngle() + headingDisplacement;
             Vector currentPosition = new Vector(startJunctionPose.getPoint()).getAdded(odoDisplacement);
             return new Pose(currentPosition.getX(), currentPosition.getY(), currentHeading);
-        }else if(timer.seconds() > 5){
+        }else if(timer.seconds() > 3){
             fault.warn("Exiting, took longer than 10s to lock target", Expectation.EXPECTED, Magnitude.MINOR);
             waiting = false;
             exit = true;
@@ -93,12 +95,19 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
 
     @Override
     public boolean isAtTarget() {
-        return (super.isAtTarget() && !waiting) || exit;
+        return exit;
+//        return (super.isAtTarget() && !waiting) || exit;
     }
 
     @Override
     public void setTarget(Pose target) { super.setTarget(junctionTargetPose); }
 
+
     @Override
     public void nextTarget() { super.nextTarget(); JunctionScanner.pause(); }
+
+    @Override
+    public void moveToTarget(PoseGenerator generator) {
+        getPose();
+    }
 }

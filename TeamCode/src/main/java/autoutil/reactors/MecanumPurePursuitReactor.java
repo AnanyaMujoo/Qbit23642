@@ -22,7 +22,6 @@ public class MecanumPurePursuitReactor extends MecanumReactor {
     public void moveToTarget(PoseGenerator generator) {
         movementController.update(getPose(), generator);
         headingController.update(getPose(), generator);
-        double antiTippingPower = gyro.getPitch()*0.2;
-        drive.move(movementController.getOutputY() + antiTippingPower, movementController.getOutputX(), -headingController.getOutput());
+        drive.move(movementController.getOutputY() + drive.getAntiTippingPower(), movementController.getOutputX(), -headingController.getOutput());
     }
 }

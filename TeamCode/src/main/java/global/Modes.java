@@ -48,7 +48,7 @@ public class Modes {
     }
 
     public static class HeightMode extends ValueMode{ public enum Height implements ModeType{
-        HIGH{@Override public double getValue() {return Lift.maxPosition-1;}},
+        HIGH{@Override public double getValue() {return Lift.maxPosition-3;}},
         MIDDLE {@Override public double getValue() {return 40;}},
         LOW {@Override public double getValue() {return 19;}};
     }}

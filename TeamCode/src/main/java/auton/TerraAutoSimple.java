@@ -16,12 +16,13 @@ public class TerraAutoSimple extends AutoFramework {
 
     @Override
     public void define() {
-        addSetpoint(0,10,0);
-        addBreakpoint(() -> true);
-        addSetpoint(0, -10, 0);
-        addSetpoint(0,-20,0);
-        addBreakpointReturn();
-        addSetpoint(0,30,0);
+//        addCustomSegment(mecanumJunctionSetpoint, 0, 0, 0);
+//        addSetpoint(0,10,0);
+//        addBreakpoint(() -> true);
+//        addSetpoint(0, -10, 0);
+//        addSetpoint(0,-20,0);
+//        addBreakpointReturn();
+//        addSetpoint(0,30,0);
 
 //        addConcurrentAutoModule(BackwardAuto);
 //        addWaypoint(0, 100, 35);

@@ -37,9 +37,19 @@ public class Drive extends RobotPart {
     }
 
 
+    public double getAntiTippingPower(){
+        double pitch = gyro.getPitch();
+        double pitchDerivative = Math.abs(gyro.getPitchDerivative());
+        if(pitch > -1){
+            return 0;
+        }else{
+            return pitch*0.15/(pitchDerivative > 0.7 ? Math.pow(Math.abs(pitchDerivative), 0.5) : 1.0);
+        }
+    }
+
+
     public void moveSmooth(double f, double s, double t) {
-        double antiTippingPower = gyro.getPitch()*0.2;// TODO TEST
-        double scale = Modes.driveMode.get().getValue(); move(movementCurveForward.fodd(f*scale) + antiTippingPower, movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(t*1.2*scale));
+        double scale = Modes.driveMode.get().getValue(); move(movementCurveForward.fodd(f*scale) + getAntiTippingPower(), movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(t*1.2*scale));
     }
 
     @Override

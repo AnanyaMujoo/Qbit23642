@@ -10,14 +10,14 @@ public class MecanumPIDReactor extends MecanumReactor{
 //    public PID yPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.025, 0.5, 0.08, 20.0, 5.0);
 //    public PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.008, 1.0, 0.06, 20.0, 5.0);
 
-    public PID xPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.023, 1000.0, 0.2, 30.0, 5.0);
-    public PID yPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.025, 1000.0, 0.25, 30.0, 5.0);
-    public PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.009, 1000.0, 0.1, 30.0, 5.0);
+    public PID xPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.023, 1000.0, 0.2, 60.0, 5.0);
+    public PID yPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.025, 1000.0, 0.25, 60.0, 5.0);
+    public PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.009, 1000.0, 0.1, 60.0, 5.0);
 
     public MecanumPIDReactor(){
-        hPID.setAccuracy(0.25*4);
-        xPID.setAccuracy(0.25*4);
-        yPID.setAccuracy(0.25*4);
+        hPID.setAccuracy(1.0);
+        xPID.setAccuracy(1.0);
+        yPID.setAccuracy(1.0);
 
         hPID.setRestOutput(0.065);
         xPID.setRestOutput(0.095);
@@ -29,7 +29,6 @@ public class MecanumPIDReactor extends MecanumReactor{
     public void moveToTarget(PoseGenerator generator) {
         movementController.update(getPose(), generator);
         headingController.update(getPose(), generator);
-        double antiTippingPower = gyro.getPitch()*0.2;
-        drive.move(movementController.getOutputY() + antiTippingPower, movementController.getOutputX(), -headingController.getOutput());
+        drive.move(movementController.getOutputY() + drive.getAntiTippingPower(), movementController.getOutputX(), -headingController.getOutput());
     }
 }
