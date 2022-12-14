@@ -55,8 +55,8 @@ public abstract class Drawer extends JPanel {
 
     private static final int width = 700;
     private static final int height = 700;
-    private static final int fieldWidth = width-15;
-    private static final int fieldHeight = height-35;
+    public static final int fieldWidth = width-15;
+    public static final int fieldHeight = height-35;
 
     public static final double fieldSize = 358; // cm
 
@@ -96,7 +96,7 @@ public abstract class Drawer extends JPanel {
     public void drawLine(Line line, Color color) { setColor(color); setStroke(lineWidth); g.drawLine((int) line.getStartPoint().getX(),(int) line.getStartPoint().getY(),(int) line.getEndPoint().getX(),(int) line.getEndPoint().getY()); }
     public void drawLine(Line line){ drawLine(line, lineColor); }
 
-    public void drawCircle(Circle circle){ setColor(circleColor); setStroke(circleWidth); g.drawOval((int) (circle.getCenterX()-circle.getRadius()), (int) (circle.getCenterY() - circle.getRadius()), (int) (2*circle.getRadius()), (int) (2*circle.getRadius())); }
+    public void drawCircle(Circle circle){ setColor(circleColor); setStroke(circleWidth); g.drawOval((int) (circle.getCenterX()-circle.getRadius()), (int) (circle.getCenterY() - circle.getRadius()), (int) (2.0*circle.getRadius()), (int) (2.0*circle.getRadius())); }
 
     public void drawPolygon(Polygon polygon){
         Iterator.forAll(polygon.getLines(), this::drawLine);

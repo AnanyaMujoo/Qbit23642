@@ -66,16 +66,26 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
             startJunctionPose = junctionScanner.getAveragePose(n).getCopy();
 
             if(auto) {
-                Circle detectionCircle = new Circle(junctionLocation, startJunctionPose.getPoint().getDistanceToOrigin() + cameraToRobotCenter);
-                Point closestPoint = detectionCircle.getClosestTo(startOdometryPose.getPoint());
-                Line errorLine = new Line(closestPoint, startOdometryPose.getPoint());
-                if (errorLine.getLength() < 7) {
-                    double angle = (flipped ? -180 : 180) - errorLine.getVector().getTheta();
-//                    Pose robotPose = new Pose(errorLine.getMidpoint(), (angle+startOdometryPose.getAngle())/2);
-                    Pose robotPose = new Pose(closestPoint, angle);
+
+
+                Circle detectionCircle = new Circle(junctionLocation.getCopy(), startJunctionPose.getPoint().getCopy().getDistanceToOrigin() + cameraToRobotCenter);
+                Point closestPoint = detectionCircle.getClosestTo(startOdometryPose.getPoint()).getCopy();
+                Line error = new Line(closestPoint.getCopy(), startOdometryPose.getPoint().getCopy());
+                Line detection = new Line(junctionLocation.getCopy(), closestPoint.getCopy());
+
+                // TODO TEST
+                if(error.getLength() < 5){
+                    Point position = closestPoint.getCopy();
+                    double angle = (flipped ? -1 : 1) * (detection.getVector().getRotated(-90).getTheta()+startJunctionPose.getAngle());
+                    Pose robotPose = new Pose(position, angle);
                     odometry.setCurrentPose(robotPose);
-                    exit = true;
                 }
+                exit = true;
+
+//                if (errorLine.getLength() < 7) {
+//                    double angle = (flipped ? -180 : 180) - errorLine.getVector().getTheta() + startJunctionPose.getAngle();
+//                    Pose robotPose = new Pose(errorLine.getMidpoint(), (angle+startOdometryPose.getAngle())/2);
+//                }
             }
 
             waiting = false;

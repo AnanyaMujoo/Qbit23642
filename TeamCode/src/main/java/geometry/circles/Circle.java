@@ -16,7 +16,9 @@ import static java.lang.Math.*;
 public class Circle extends GeometryObject implements Tracer {
 
     protected final Point center;
-    protected final double r;
+    protected double r;
+
+    // TOD 5 Fix circle scaling (maybe have endpoint or something)
 
     public Circle(Point center, double r) {
         this.center = center;
@@ -35,4 +37,9 @@ public class Circle extends GeometryObject implements Tracer {
     }
 
     public Point getClosestTo(Point p){ return new Vector(center, p).getUnitVector().getScaled(r).getPoint().getAdded(center); }
+
+    public Circle getScaledRadius(double scale){
+        return new Circle(this.center.getCopy(), r*scale);
+    }
+
 }
