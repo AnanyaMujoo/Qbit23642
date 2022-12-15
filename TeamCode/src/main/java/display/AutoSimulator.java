@@ -22,6 +22,11 @@ public class AutoSimulator extends Drawer{
 
     private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - 89,180);
     private static final Pose startUpper = new Pose(20.5,fieldSize/2.0 + 89,180);
+    private static final Pose startMedium = new Pose(20.5 + 47.5 + 15.5, fieldSize/2.0 - 42.5, 180-24.0);
+    private static final Pose startCycleAround = new Pose(20.5 + 66.5, fieldSize/2.0 - 23, 215);
+    private static final Pose startCycleFirst = new Pose(20.5 + 47.5, fieldSize/2.0, 180);
+    private static final Pose startCycle = new Pose(20.5 + 47.5 + 11.5, fieldSize/2.0, 180);
+
     private static final double maxMovingVelocity = 150; // cm per sec
     private static final double maxTurningVelocity = 340; // deg per sec
     private static final double speedUp = 1.0;
@@ -39,11 +44,12 @@ public class AutoSimulator extends Drawer{
 //        setAuto(new TerraAutoLowerRedSimple(), startLower);
 //        setAuto(new TerraAutoUpperRedSimple(), startLower);
 
-//        setAuto(AutoModuleUser.Cycle1st, new Pose(20.5+66.5, fieldSize/2.0 - 23, 215));
-//        setAuto(AutoModuleUser.Cycle, new Pose(20.5+66.5, fieldSize/2.0 - 23, 215));
-//        setAuto(AutoModuleUser.CycleTwo1, new Pose(20.5 + 47.5, fieldSize/2.0, 180));
-//        setAuto(AutoModuleUser.CycleFirst, new Pose(20.5 + 47.5, fieldSize/2.0, 180));
-        setAuto(AutoModuleUser.MoveToCycleStart, startLower);
+//        setAuto(AutoModuleUser.MoveToCycleStart, startLower);
+//        setAuto(AutoModuleUser.CycleFirst, startCycleFirst);
+//        setAuto(AutoModuleUser.Cycle, startCycle);
+//        setAuto(AutoModuleUser.CycleMediumFirst, startCycle);
+//        setAuto(AutoModuleUser.CycleMedium, startMedium);
+//        setAuto(AutoModuleUser.CycleAround, startCycleAround);
 
         drawWindow(new AutoSimulator(), "Auto Simulator");
     }

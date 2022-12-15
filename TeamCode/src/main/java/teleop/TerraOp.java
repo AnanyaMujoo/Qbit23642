@@ -55,18 +55,13 @@ public class TerraOp extends Tele {
         /**
          * Gamepad 1 Automated
          */
-        gph1.link(Button.B, Cycle, AUTOMATED);
-        gph1.link(Button.X, CycleAround, AUTOMATED);
-        gph1.link(Button.Y, CycleMedium, AUTOMATED);
         gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
+        gph1.link(RIGHT_TRIGGER, CycleMachine, AUTOMATED);
+        gph1.link(LEFT_TRIGGER, CycleMediumMachine, AUTOMATED);
 
-        gph1.link(DPAD_UP, CycleMachine, AUTOMATED);
-        gph1.link(DPAD_RIGHT, CycleMediumMachine, AUTOMATED);
-        gph1.link(DPAD_LEFT, CycleAroundMachine, AUTOMATED);
-        gph1.link(DPAD_DOWN, CircuitMachine, AUTOMATED);
-
-        gph1.link(RIGHT_TRIGGER, ParkClose, AUTOMATED);
-        gph1.link(LEFT_TRIGGER, ParkFar, AUTOMATED);
+        gph1.link(Button.B, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(Cycle);}, AUTOMATED);
+        gph1.link(Button.X, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(CycleAround);}, AUTOMATED);
+        gph1.link(Button.Y, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(CycleMedium);}, AUTOMATED);
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
         gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);
@@ -75,10 +70,10 @@ public class TerraOp extends Tele {
         /**
          * Gamepad 2 Manual
          */
-        gph2.link(DPAD_LEFT, outtake::closeClaw);
-        gph2.link(DPAD_RIGHT, outtake::openClaw);
-        gph2.link(DPAD_UP, outtake::flip);
-        gph2.link(DPAD_DOWN, outtake::unFlip);
+        gph2.link(RIGHT_BUMPER, outtake::closeClaw);
+        gph2.link(LEFT_BUMPER, outtake::openClaw);
+        gph2.link(RIGHT_TRIGGER, outtake::flip);
+        gph2.link(LEFT_TRIGGER, outtake::unFlip);
 
 
         /**

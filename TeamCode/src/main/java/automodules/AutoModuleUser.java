@@ -70,7 +70,6 @@ public interface AutoModuleUser extends RobotUser{
      * Misc
      */
     Independent MoveToZero = new Independent() { @Override public void define() {addSetpoint(0.0, 0.01, 0.0); }};
-    // TODO TEST
     Independent MoveToCycleStart = new Independent() {
         @Override
         public void define() {
@@ -81,168 +80,127 @@ public interface AutoModuleUser extends RobotUser{
     };
 
 
-
+    // TODO TEST FOR UPPER
 
     /**
      * Cycle
      */
-
-    AutoModule CloseAutoCycle = new AutoModule(outtake.stageClose(0.2), outtake.stageEnd(0.0));
-    AutoModule ForwardAutoCycle = new AutoModule( outtake.stageStart(0.0),  lift.stageLift(0.9, 0));
     Independent CycleFirst = new Independent() {
         @Override
         public void define() {
             addWaypoint(0.0, 0.01, 0.0);
-            addAccuracyScaledSetpoint(1.5, 1.2, 0, 10, 0);
-            addAutoModule(CloseAutoCycle);
-            addScaledWaypoint(0.6, 0, -5, 0);
-            addConcurrentAutoModule(BackwardAuto);
-            addSetpoint(0, -9.5,0);
-            addPause(0.4);
-            addAutoModule(DropAuto);
-            addConcurrentAutoModule(ForwardAutoCycle);
-            addPause(0.3);
+            addAccuracySetpoint(0.5, 0, -11.5,0);
         }
     };
     Independent Cycle = new Independent() {
         @Override
         public void define() {
-            addWaypoint(0.0,-11.5,0.0);
-            addAccuracyScaledSetpoint(1.5, 1.5, 0, 10, 0);
-            addAutoModule(CloseAutoCycle);
-            addScaledWaypoint(0.8, 0, -5, 0);
-            addConcurrentAutoModule(BackwardAuto);
-            addAccuracySetpoint(0.8, 0, -9.5,0);
-            addPause(0.2);
-            addAutoModule(DropAuto);
-            addConcurrentAutoModule(ForwardAutoCycle);
+            addWaypoint(0,0.01,0);
+            addScaledWaypoint(0.6, 0,11.5, 0);
+            addAccuracyScaledSetpoint(1.5, 1.5, 0, 21.4, 0);
+            addConcurrentAutoModule(BackwardHeightTele(HIGH));
+            addPause(0.3);
+            addScaledWaypoint(0.6, 0, 5, 0);
+            addAccuracySetpoint(0.8, 0, 0.01,0);
+            addConcurrentAutoModule(ForwardTele);
             addPause(0.3);
         }
     };
-    Machine CycleMachine = new Machine().addInstruction(odometry::reset, 0.1).addIndependent(CycleFirst).addIndependent(9, AutoModuleUser.Cycle);
+    Machine CycleMachine = new Machine()
+            .addInstruction(odometry::reset, 0.01)
+            .addIndependent(CycleFirst)
+            .addInstruction(odometry::reset, 0.01)
+            .addIndependent(10, AutoModuleUser.Cycle);
 
 
     /**
      * Cycle Medium
      */
-    // TODO MAKE MEDIUM JUNCTION
-    AutoModule CloseMediumCycle = new AutoModule(outtake.stageClose(0.2), outtake.stageEnd(0.0));
-    AutoModule ForwardMediumCycle = new AutoModule( outtake.stageStart(0.0),  lift.stageLift(0.9, 0));
     Independent CycleMediumFirst = new Independent() {
         @Override
         public void define() {
-            addWaypoint(0.0, 0.01, 0.0);
-            addAccuracyScaledSetpoint(1.5, 1.2, 0, 10, 0);
-            addAutoModule(CloseAutoCycle);
-            addScaledWaypoint(0.6, 0, -5, 0);
-            addConcurrentAutoModule(BackwardAuto);
-            addSetpoint(0, -9.5,0);
-            addPause(0.4);
-            addAutoModule(DropAuto);
-            addConcurrentAutoModule(ForwardAutoCycle);
-            addPause(0.3);
+            addWaypoint(0,0,0);
+            addScaledWaypoint(0.8, 0.0, -10, 0.0);
+            addScaledWaypoint(0.6, -18.0, -9.5, -12.0);
+            addScaledWaypoint(0.6, -29.0, -8.5, -24.0);
+            addAccuracySetpoint(0.5, -42.5, -4.0, -24.0);
         }
     };
     Independent CycleMedium = new Independent() {
         @Override
         public void define() {
-            addWaypoint(0.0,-11.5,0.0);
-            addAccuracyScaledSetpoint(1.5, 1.5, 0, 10, 0);
-            addAutoModule(CloseAutoCycle);
-            addScaledWaypoint(0.8, 0, -5, 0);
-            addConcurrentAutoModule(BackwardAuto);
-            addAccuracySetpoint(0.8, 0, -9.5,0);
-            addPause(0.2);
-            addAutoModule(DropAuto);
-            addConcurrentAutoModule(ForwardAutoCycle);
-            addPause(0.3);
+            addWaypoint(0,0,0);
+            addScaledWaypoint(0.8, 0.0, 36.0, 0.0);
+            addSetpoint(0.5, 45.0, -3.0);
+            addScaledWaypoint(0.8, 0.0, 12.0, 0.0);
+            addSetpoint(0,0,0);
         }
     };
-    Machine CycleMediumMachine = new Machine().addInstruction(odometry::reset, 0.1).addIndependent(CycleFirst).addIndependent(9, AutoModuleUser.Cycle);
+    Machine CycleMediumMachine = new Machine()
+            .addInstruction(odometry::reset, 0.01)
+            .addIndependent(CycleMediumFirst)
+            .addInstruction(odometry::reset, 0.01)
+            .addIndependent(6, CycleMedium);
 
 
 
-
-
-    /**
-     * Cycle Around
-     */
-
-
-    AutoModule ForwardAutoCycleAround = new AutoModule(outtake.stageStart(0.0), lift.stageLift(0.4, 0));
-    AutoModule CloseAutoCycleAround = new AutoModule(outtake.stageClose(0.2));
-    Independent MoveToJunction = new Independent() { @Override public void define() { addCustomSegment(mecanumJunctionSetpoint, 0.0, 0.0, 0.0); }};
-    Independent CycleAroundFirst = new Independent() {
-        @Override
-        public void define() {
-            addWaypoint(0.01,0.01,0.01);
-            addScaledSetpoint(1.0, 11.5, 32.5, -52.0);
-            addPause(0.5);
-            addScaledSetpoint(1.0, 20.5, 38.5, -52.0);
-            addAutoModule(new AutoModule(outtake.stageClose(0.2)));
-            addScaledWaypoint(0.8, 9.5, 24.5, -35.0);
-            addConcurrentAutoModule(BackwardAuto);
-            addAccuracyScaledSetpoint(1.0,1.0, 0.01, 0.01, 2);
-            addPause(0.2);
-            addAutoModule(DropAuto);
-            addConcurrentAutoModule(ForwardAutoCycleAround);
-            addPause(0.4);
-        }
-    };
     Independent CycleAround = new Independent() { @Override public void define() {
         addPause(0.1);
-        addScaledWaypoint(0.6, 9.5, 24.5, -52.0);
-        addScaledSetpoint(1.0, 20.5, 38.5, -52.0);
-        addAutoModule(CloseAutoCycleAround);
-        addScaledWaypoint(0.8, 9.5, 24.5, -35.0);
-        addConcurrentAutoModule(BackwardAuto);
+        addScaledWaypoint(0.5, 9.5, 24.5, -35.0);
+        addScaledSetpoint(1.0, 23.5, 41.0, -58.0);
+        addAutoModule(BackwardHeightTele(HIGH));
+        addPause(0.3);
+        addScaledWaypoint(0.5, 9.5, 24.5, -35.0);
         addAccuracyScaledSetpoint(1.0,1.0, 0.01, 0.01, 2);
-        addPause(0.2);
-        addAutoModule(DropAuto);
-        addConcurrentAutoModule(ForwardAutoCycleAround);
-        addPause(0.4);
+        addConcurrentAutoModule(ForwardTele);
+        addPause(0.3);
     }};
-    Machine CycleAroundMachine = new Machine()
-            .addIndependent(MoveToJunction)
-            .addInstruction(odometry::reset, 0.1)
-            .addIndependent(CycleAroundFirst)
-            .addIndependent(9, CycleAround)
-    ;
 
-
-    // TODO MAKE CIRCUIT
-    Machine CircuitMachine = new Machine()
-            .addIndependent(new Independent() {
-                @Override
-                public void define() {
-
-                }
-            }).addIndependent(new Independent() {
-                @Override
-                public void define() {
-
-                }
-            })
-    ;
-
-
-
-
-
-    // TODO MAKE PARK
-    Independent ParkClose = new Independent() {
-        @Override
-        public void define() {
-
-        }
-    };
-
-    Independent ParkFar = new Independent() {
-        @Override
-        public void define() {
-
-        }
-    };
+//
+//    /**
+//     * Cycle Around
+//     */
+//
+//
+//    AutoModule ForwardAutoCycleAround = new AutoModule(outtake.stageStart(0.0), lift.stageLift(0.4, 0));
+//    AutoModule CloseAutoCycleAround = new AutoModule(outtake.stageClose(0.2));
+//    Independent MoveToJunction = new Independent() { @Override public void define() { addCustomSegment(mecanumJunctionSetpoint, 0.0, 0.0, 0.0); }};
+//    Independent CycleAroundFirst = new Independent() {
+//        @Override
+//        public void define() {
+//            addWaypoint(0.01,0.01,0.01);
+//            addScaledSetpoint(1.0, 11.5, 32.5, -52.0);
+//            addPause(0.5);
+//            addScaledSetpoint(1.0, 20.5, 38.5, -52.0);
+//            addAutoModule(new AutoModule(outtake.stageClose(0.2)));
+//            addScaledWaypoint(0.8, 9.5, 24.5, -35.0);
+//            addConcurrentAutoModule(BackwardAuto);
+//            addAccuracyScaledSetpoint(1.0,1.0, 0.01, 0.01, 2);
+//            addPause(0.2);
+//            addAutoModule(DropAuto);
+//            addConcurrentAutoModule(ForwardAutoCycleAround);
+//            addPause(0.4);
+//        }
+//    };
+//    Independent CycleAround = new Independent() { @Override public void define() {
+//        addPause(0.1);
+//        addScaledWaypoint(0.6, 9.5, 24.5, -52.0);
+//        addScaledSetpoint(1.0, 20.5, 38.5, -52.0);
+//        addAutoModule(CloseAutoCycleAround);
+//        addScaledWaypoint(0.8, 9.5, 24.5, -35.0);
+//        addConcurrentAutoModule(BackwardAuto);
+//        addAccuracyScaledSetpoint(1.0,1.0, 0.01, 0.01, 2);
+//        addPause(0.2);
+//        addAutoModule(DropAuto);
+//        addConcurrentAutoModule(ForwardAutoCycleAround);
+//        addPause(0.4);
+//    }};
+//    Machine CycleAroundMachine = new Machine()
+//            .addIndependent(MoveToJunction)
+//            .addInstruction(odometry::reset, 0.1)
+//            .addIndependent(CycleAroundFirst)
+//            .addIndependent(9, CycleAround)
+//    ;
 
 
 }
