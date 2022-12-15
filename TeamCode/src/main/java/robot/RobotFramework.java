@@ -229,7 +229,11 @@ public class RobotFramework {
         storage.addItem("XPos", pose.getX()); storage.addItem("YPos", pose.getY()); storage.addItem("Heading", pose.getAngle()); storage.saveItems();
     }
 
+    public Pose getSavedPose(){
+        return new Pose((double) storage.getItem("XPos").getValue(), (double) storage.getItem("YPos").getValue(), (double) storage.getItem("Heading").getValue());
+    }
+
     public void loadPose(){
-        Pose savedPose = new Pose((double) storage.getItem("XPos").getValue(), (double) storage.getItem("YPos").getValue(), (double) storage.getItem("Heading").getValue()); odometry.setCurrentPose(savedPose); gyro.setHeading(savedPose.getAngle());
+        odometry.setCurrentPose(getSavedPose());;
     }
 }

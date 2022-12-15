@@ -21,7 +21,7 @@ import util.template.Iterator;
 import static robot.RobotFramework.odometryThread;
 
 public abstract class Odometry extends RobotPart {
-    protected ArrayList<IEncoder> encoders = new ArrayList<>();
+    protected final ArrayList<IEncoder> encoders = new ArrayList<>();
     protected final Pose currentPose = new Pose();
     private final ExceptionCodeSeg<RuntimeException> odometryUpdateCode = this::internalUpdate;
     private boolean usingGyro = false;
@@ -56,8 +56,20 @@ public abstract class Odometry extends RobotPart {
     public final double getY(){ return currentPose.getY(); }
     public final double getHeading(){ return currentPose.getAngle(); }
 
-    public final void setCurrentPose(Pose pose){
-        synchronized (currentPose) { currentPose.setX(pose.getX()); currentPose.setY(pose.getY()); currentPose.setAngle(pose.getAngle()); }
+    public void setCurrentPose(Pose pose){
+        synchronized (currentPose){
+            if (usingGyro) {
+                synchronized (gyro) {
+                    gyro.setHeading(pose.getAngle());
+                }
+            }
+            currentPose.setX(pose.getX());
+            currentPose.setY(pose.getY());
+            currentPose.setAngle(pose.getAngle());
+            synchronized (encoders) {
+                Iterator.forAll(encoders, IEncoder::updateNormal);
+            }
+        }
     }
 
     public final void setCurrentPose(Point current){
@@ -80,7 +92,7 @@ public abstract class Odometry extends RobotPart {
     public final void reset(){
         if(usingGyro){ gyro.reset(); }
         Iterator.forAll(encoders, IEncoder::reset);
-        ExceptionCatcher.catchInterrupted(() -> Thread.sleep(50));
+        ExceptionCatcher.catchInterrupted(() -> Thread.sleep(10));
         currentPose.setZero();
         resetObjects();
     }

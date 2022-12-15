@@ -43,7 +43,7 @@ public class IGyro extends Electronic {
         pitchProfiler.update();
     }
 
-    public void setHeading(double heading){ update(); startHeading = heading; }
+    public void setHeading(double heading){ update(); startHeading = this.heading-heading; }
 
     public void reset(){ update(); startHeading = heading; startPitch = pitch; }
 

@@ -94,7 +94,7 @@ public class TerraOp extends Tele {
     @Override
     public void startTele() {
         outtake.moveStart();
-        bot.loadPose(); // TODO TEST
+        bot.loadPose();
     }
 
     @Override
@@ -108,9 +108,11 @@ public class TerraOp extends Tele {
         log.show("HeightMode", Modes.heightMode.get());
         log.show("GamepadMode", gamepad1.back ? AUTOMATED : Modes.GamepadMode.NORMAL);
         log.show("StackedMode", lift.stackedMode);
+
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());
-        log.show("Pose", odometry.getPose()); // TODO TEST
+//        log.show("Pose", odometry.getPose());
+//        log.show("SavedPose", bot.getSavedPose());
 //        log.show("Voltage", bot.getVoltage());
 //        log.show("Pitch", gyro.getPitch());
     }

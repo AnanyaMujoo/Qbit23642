@@ -1,6 +1,8 @@
 package teleutil;
 
 import static global.General.bot;
+import static global.General.gamepad1;
+import static global.General.gamepad2;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -40,8 +42,8 @@ public class GamepadHandler {
      * Map from buttons to gamepad buttons
      */
     public final TreeMap<Button, ReturnCodeSeg<Boolean>> pressedMap = new TreeMap<Button, ReturnCodeSeg<Boolean>>() {{
-        put(Button.A, () -> gamepad.a && !gamepad.start);
-        put(Button.B, () -> gamepad.b && !gamepad.start);
+        put(Button.A, () -> !gamepad2.start && !gamepad1.start && gamepad.a);
+        put(Button.B, () -> !gamepad2.start && !gamepad1.start && gamepad.b);
         put(Button.X, () -> gamepad.x);
         put(Button.Y, () -> gamepad.y);
         put(Button.RIGHT_BUMPER, () -> gamepad.right_bumper);

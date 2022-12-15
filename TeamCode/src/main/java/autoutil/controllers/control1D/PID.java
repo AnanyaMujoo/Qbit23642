@@ -50,7 +50,7 @@ public class PID extends Controller1D implements ParameterConstructor<Double> {
     @Override
     protected double setOutput() {
         double der = (kd * errorProfiler.getDerivative());
-        if(abs(der) > 0.2){ der = signum(der)*0.2; }
+        if(abs(der) > 0.3){ der = signum(der)*0.3; }
         return (kp * getError() + (ki * errorProfiler.getIntegral()) + der);
     }
 
