@@ -24,7 +24,7 @@ public class Drive extends RobotPart {
         br = create("br", ElectronicType.CMOTOR_REVERSE);
         fl = create("fl", ElectronicType.CMOTOR_FORWARD);
         bl = create("bl", ElectronicType.CMOTOR_FORWARD);
-        Modes.driveMode.set(MEDIUM);
+        Modes.driveMode.set(SLOW);
 //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
@@ -40,7 +40,7 @@ public class Drive extends RobotPart {
     public double getAntiTippingPower(){
         double pitch = gyro.getPitch();
         double pitchDerivative = Math.abs(gyro.getPitchDerivative());
-        if(pitch > -1){
+        if(pitch > -1.5){
             return 0;
         }else{
             return pitch*0.15/(pitchDerivative > 0.7 ? Math.pow(Math.abs(pitchDerivative), 0.5) : 1.0);

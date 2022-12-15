@@ -16,7 +16,9 @@ public class TerraAutoSimple extends AutoFramework {
 
     @Override
     public void define() {
-        addSetpoint(0,30,90);
+        addSetpoint(0, 30,0);
+        addSetpoint(30, 30, 0);
+        addSetpoint(30,30,90);
 //        addCustomSegment(mecanumJunctionSetpoint, 0, 0, 0);
 //        addSetpoint(0,10,0);
 //        addBreakpoint(() -> true);

@@ -40,27 +40,25 @@ public class TerraOp extends Tele {
         gph1.link(Button.B, BackwardAllTele);
         gph1.link(Button.Y, ForwardTele);
         gph1.link(Button.X, bot::cancelMovements);
-        gph1.link(Button.A, () -> Modes.driveMode.set(FAST), () -> Modes.driveMode.set(MEDIUM));
+        gph1.link(Button.A, () -> Modes.driveMode.set(MEDIUM));
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
 
         gph1.link(DPAD_UP, () -> lift.setHolderTarget(HIGH));
         gph1.link(DPAD_RIGHT, () ->  lift.setHolderTarget(MIDDLE));
         gph1.link(DPAD_LEFT, () ->  lift.setHolderTarget(MIDDLE));
         gph1.link(DPAD_DOWN, () -> lift.setHolderTarget(LOW));
-        gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.0));
-        gph1.link(LEFT_BUMPER,  () -> lift.adjustHolderTarget(-2.0));
-        // TODO TEST
-        gph1.link(RIGHT_TRIGGER, () -> {if(lift.stackedMode > 0){lift.stackedMode--;} bot.addAutoModule(ForwardAuto(lift.stackedMode));});
-        gph1.link(LEFT_TRIGGER, () -> {if(lift.stackedMode < 5){lift.stackedMode++;}});
+        gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
+        gph1.link(LEFT_BUMPER,  () -> lift.adjustHolderTarget(-2.5));
+        gph1.link(RIGHT_TRIGGER, () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ bot.addAutoModule(ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}});
+        gph1.link(LEFT_TRIGGER, () -> {bot.cancelAutoModules();  if(lift.stackedMode > 0){ bot.addAutoModule(ForwardStackTele(lift.stackedMode)); lift.stackedMode--;}});
 
         /**
          * Gamepad 1 Automated
          */
-        // TODO TEST
         gph1.link(Button.B, Cycle, AUTOMATED);
         gph1.link(Button.X, CycleAround, AUTOMATED);
         gph1.link(Button.Y, CycleMedium, AUTOMATED);
-        gph1.link(Button.A, MoveToCycleStart);
+        gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
 
         gph1.link(DPAD_UP, CycleMachine, AUTOMATED);
         gph1.link(DPAD_RIGHT, CycleMediumMachine, AUTOMATED);
@@ -107,7 +105,7 @@ public class TerraOp extends Tele {
         log.show("DriveMode", Modes.driveMode.get());
         log.show("HeightMode", Modes.heightMode.get());
         log.show("GamepadMode", gamepad1.back ? AUTOMATED : Modes.GamepadMode.NORMAL);
-        log.show("StackedMode", lift.stackedMode);
+        log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
 
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());

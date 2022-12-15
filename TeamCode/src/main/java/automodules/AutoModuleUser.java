@@ -18,7 +18,6 @@ public interface AutoModuleUser extends RobotUser{
     /**
      * Tele
      */
-
     OutputList BackwardAllTele = new OutputList(Modes.heightMode::get)
             .addOption(LOW, BackwardHeightTele(LOW))
             .addOption(MIDDLE, BackwardHeightTele(MIDDLE))
@@ -26,17 +25,19 @@ public interface AutoModuleUser extends RobotUser{
     static AutoModule BackwardHeightTele(Modes.HeightMode.Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             outtake.stageClose(0.2),
-            outtake.stageFlip(0.0),
-            outtake.stageReadyEnd(0.5),
-            lift.stageLift(1.0, height.getValue()),
-            outtake.stageEnd(0.2)
+            lift.stageLift(1.0, height.getValue()-8).attach(outtake.stageReadyEndAfter(0.1))
     );}
     AutoModule ForwardTele = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             outtake.stageOpen(0.2),
             outtake.stageStart(0.0),
-            lift.stageLift(0.6, 0)
+            lift.stageLift(0.55, 0)
     );
+    default AutoModule ForwardStackTele(int i){return new AutoModule(
+            outtake.stageOpen(0.0),
+            outtake.stageStart(0.0),
+            lift.stageLift(0.7, Math.max(14.0 - (i*14.0/4.0), 0))
+    );}
 
     /**
      * Auto
