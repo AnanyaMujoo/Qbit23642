@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import java.util.ArrayList;
 
 import automodules.AutoModule;
+import elements.FieldPlacement;
+import elements.FieldSide;
 import geometry.framework.CoordinatePlane;
 import geometry.position.Pose;
 import global.Constants;
@@ -225,15 +227,10 @@ public class RobotFramework {
         return Constants.DEFAULT_VOLTAGE/voltageScale;
     }
 
-    public void savePose(Pose pose){
-        storage.addItem("XPos", pose.getX()); storage.addItem("YPos", pose.getY()); storage.addItem("Heading", pose.getAngle()); storage.saveItems();
-    }
+    public void savePose(Pose pose){ storage.addItem("XPos", pose.getX()); storage.addItem("YPos", pose.getY()); storage.addItem("Heading", pose.getAngle()); storage.saveItems(); }
+    public Pose getSavedPose(){ return new Pose((double) storage.getItem("XPos").getValue(), (double) storage.getItem("YPos").getValue(), (double) storage.getItem("Heading").getValue()); }
+    public void loadPose(){ odometry.setCurrentPose(getSavedPose());; }
+    public void saveLocationOnField(){ storage.addItem("FieldSide", fieldSide); storage.addItem("FieldPlacement", fieldPlacement); storage.saveItems(); }
+    public void loadLocationOnField(){ fieldSide = (FieldSide) storage.getItem("FieldSide").getValue(); fieldPlacement = (FieldPlacement) storage.getItem("FieldPlacement").getValue(); }
 
-    public Pose getSavedPose(){
-        return new Pose((double) storage.getItem("XPos").getValue(), (double) storage.getItem("YPos").getValue(), (double) storage.getItem("Heading").getValue());
-    }
-
-    public void loadPose(){
-        odometry.setCurrentPose(getSavedPose());;
-    }
 }

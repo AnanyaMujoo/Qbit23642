@@ -85,6 +85,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public final void setup(){
         preProcess();
+        if(isFlipped()){ flipCases(); }
         define();
         autoPlane.addAll(poses);
         postProcess();

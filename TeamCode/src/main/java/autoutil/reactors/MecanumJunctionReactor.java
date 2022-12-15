@@ -76,16 +76,11 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
                 // TODO TEST
                 if(error.getLength() < 5){
                     Point position = closestPoint.getCopy();
-                    double angle = (flipped ? -1 : 1) * (detection.getVector().getRotated(-90).getTheta()+startJunctionPose.getAngle());
+                    double angle = (flipped ? -1 : 1) * (detection.getVector().getRotated(flipped ? 90 : -90).getTheta()+startJunctionPose.getAngle());
                     Pose robotPose = new Pose(position, angle);
                     odometry.setCurrentPose(robotPose);
                 }
                 exit = true;
-
-//                if (errorLine.getLength() < 7) {
-//                    double angle = (flipped ? -180 : 180) - errorLine.getVector().getTheta() + startJunctionPose.getAngle();
-//                    Pose robotPose = new Pose(errorLine.getMidpoint(), (angle+startOdometryPose.getAngle())/2);
-//                }
             }
 
             waiting = false;

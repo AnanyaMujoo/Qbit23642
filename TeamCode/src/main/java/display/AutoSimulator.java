@@ -49,7 +49,7 @@ public class AutoSimulator extends Drawer{
 //        setAuto(AutoModuleUser.Cycle, startCycle);
 //        setAuto(AutoModuleUser.CycleMediumFirst, startCycle);
 //        setAuto(AutoModuleUser.CycleMedium, startMedium);
-//        setAuto(AutoModuleUser.CycleAround, startCycleAround);
+        setAuto(AutoModuleUser.CycleAround, startCycleAround);
 
         drawWindow(new AutoSimulator(), "Auto Simulator");
     }

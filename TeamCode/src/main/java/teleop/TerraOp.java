@@ -12,6 +12,7 @@ import teleutil.button.OnTurnOnEventHandler;
 
 import static autoutil.reactors.MecanumJunctionReactor.junctionScanner;
 import static global.General.bot;
+import static global.General.fieldSide;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
@@ -29,6 +30,7 @@ import static teleutil.button.Button.LEFT_TRIGGER;
 import static teleutil.button.Button.RIGHT_BUMPER;
 import static teleutil.button.Button.RIGHT_TRIGGER;
 
+@TeleOp(name = "TerraOp", group = "TeleOp")
 public class TerraOp extends Tele {
 
     @Override
@@ -82,6 +84,7 @@ public class TerraOp extends Tele {
         lift.move(-0.12);
         camera.setScanner(junctionScanner);
         camera.start(false);
+        bot.loadLocationOnField();
     }
 
     @Override
@@ -109,12 +112,6 @@ public class TerraOp extends Tele {
 //        log.show("Voltage", bot.getVoltage());
 //        log.show("Pitch", gyro.getPitch());
     }
-
-
-    @TeleOp(name = "TerraOpBlue", group = "TeleOp")
-    public static class TerraOpBlue extends TerraOp {{ fieldSide = FieldSide.BLUE; }}
-    @TeleOp(name = "TerraOpRed", group = "TeleOp")
-    public static class TerraOpRed extends TerraOpBlue{{ fieldSide = FieldSide.RED; }}
 }
 
 

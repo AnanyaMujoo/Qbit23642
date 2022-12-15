@@ -65,8 +65,9 @@ public class General {
      * FieldSide object to represent which side of the field we are on (red or blue)
      */
     public static FieldSide fieldSide;
-
-
+    /**
+     * FieldPlacement object to represent which location of the field we are on (upper [closer to audience] or lower)
+     */
     public static FieldPlacement fieldPlacement;
     /**
      * The main user

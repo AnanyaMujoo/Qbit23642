@@ -74,11 +74,8 @@ public interface Common{
     /**
      * Activate sets the field side and thus should only be used in teleop or auton
      * Also shows telemetry to display that the robot is ready
-     * @param side
      */
-    default void activate(FieldSide side, FieldPlacement placement){
-        fieldSide = side;
-        fieldPlacement = placement;
+    default void activate(){
         sync.logReady();
     }
 

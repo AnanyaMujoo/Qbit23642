@@ -20,9 +20,6 @@ public abstract class Tele extends OpMode implements Common, RobotUser, AutoModu
      */
 
 
-    protected FieldSide fieldSide = FieldSide.UNKNOWN;
-
-
     /**
      * Init method runs when the user clicks the init button to run a teleop
      */
@@ -52,7 +49,7 @@ public abstract class Tele extends OpMode implements Common, RobotUser, AutoModu
     @Override
     public final void init() {
         reference(this);
-        activate(fieldSide, fieldPlacement);
+        activate();
         initTele();
     }
 

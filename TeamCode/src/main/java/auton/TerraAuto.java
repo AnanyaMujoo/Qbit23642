@@ -38,7 +38,6 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void preProcess() {
 //        caseDetected = Case.THIRD;
-        if(isFlipped()){ flipCases(); }
     }
 
     public void place(int i){
@@ -105,7 +104,8 @@ public class TerraAuto extends AutoFramework {
 
     @Override
     public void stopAuto() {
-//        bot.savePose(odometry.getPose());
+        bot.savePose(odometry.getPose());
+        bot.saveLocationOnField();
         super.stopAuto();
     }
 
