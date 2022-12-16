@@ -34,9 +34,11 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(0.4, 0)
     );
     default AutoModule ForwardStackTele(int i){return new AutoModule(
+            lift.changeCutoff(2),
             outtake.stageOpen(0.0),
             outtake.stageStart(0.0),
-            lift.stageLift(0.7, Math.max(14.0 - (i*14.0/4.0), 0))
+            lift.stageLift(0.7, Math.max(14.0 - (i*14.0/4.0), 0)),
+            lift.changeCutoff(6)
     );}
 
     /**
@@ -75,7 +77,7 @@ public interface AutoModuleUser extends RobotUser{
         public void define() {
             addScaledWaypoint(0.8, 65,-71,0);
             addScaledWaypoint(0.4, 93,-72, 0);
-            addScaledWaypoint(0.35,  89, -47.5, 0);
+            addScaledWaypoint(0.35,  89, -59, 0);
         }
     };
 
@@ -84,42 +86,28 @@ public interface AutoModuleUser extends RobotUser{
 
     AutoModule BackwardCycle = new AutoModule(
             outtake.stageClose(0.2),
-            outtake.stageMiddle(0.2),
-            lift.stageLift(1.0, HIGH.getValue()-8)
-    );
-    AutoModule BackwardCycle2 = new AutoModule(
-            outtake.stageReadyEnd(0.3)
+            outtake.stageMiddle(0.0),
+            lift.stageLift(1.0, HIGH.getValue()-10).attach(outtake.stageReadyEndAfter(0.2))
     );
 
     /**
      * Cycle
      */
-    Independent CycleFirst = new Independent() {
-        @Override
-        public void define() {
-            addWaypoint(0.0, 0.01, 0.0);
-            addAccuracySetpoint(0.5, 0, -11.5,0);
-            addAutoModule(new AutoModule(outtake.stageStart(0.0)));
-        }
-    };
     Independent Cycle = new Independent() {
         @Override
         public void define() {
             addWaypoint(0,0.01,0);
-            addScaledWaypoint(0.6, 0,11.5, 0);
-            addAccuracySetpoint(1.5, 0, 21.4, 0);
+            addScaledWaypoint(0.38, 0,27, 0);
             addConcurrentAutoModule(BackwardCycle);
-            addPause(0.3);
-            addScaledWaypoint(0.45, 0, 3, 0);
-            addConcurrentAutoModule(BackwardCycle2);
-            addAccuracySetpoint(0.65, 0, 0.01,0);
+            addPause(0.2);
+            addScaledWaypoint(0.4, 0, 3, 0);
+            addAccuracyScaledSetpoint(1.0, 0.9,0, 0.01,0);
+            addCancelAutoModules();
             addConcurrentAutoModule(ForwardTele);
             addPause(0.4);
         }
     };
     Machine CycleMachine = new Machine()
-            .addInstruction(odometry::reset, 0.01)
-            .addIndependent(CycleFirst)
             .addInstruction(odometry::reset, 0.01)
             .addIndependent(10, AutoModuleUser.Cycle);
 

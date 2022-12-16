@@ -20,6 +20,7 @@ public class Lift extends RobotPart {
 
     public static final double maxPosition = 61;
     public int stackedMode = 0;
+    public volatile double cutoffPosition = 6;
 
     @Override
     public void init() {
@@ -34,10 +35,15 @@ public class Lift extends RobotPart {
     }
 
 
+    public Stage changeCutoff(double cutoffPosition){
+        return customTime(() -> this.cutoffPosition = cutoffPosition, 0.0);
+    }
+
+
     @Override
     public void move(double p) {
-        motorRight.moveWithPositionHolder(p, 2, 0.05);
-        motorLeft.moveWithPositionHolder(p, 2, 0.05);
+        motorRight.moveWithPositionHolder(p, cutoffPosition, 0.08);
+        motorLeft.moveWithPositionHolder(p, cutoffPosition, 0.08);
     }
 
     public void setHolderTarget(Modes.HeightMode.Height height){
