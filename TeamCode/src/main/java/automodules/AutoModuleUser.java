@@ -9,6 +9,7 @@ import teleutil.independent.Independent;
 import teleutil.independent.Machine;
 import util.condition.OutputList;
 
+import static global.Modes.DriveMode.Drive.MEDIUM;
 import static global.Modes.DriveMode.Drive.SLOW;
 import static global.Modes.HeightMode.Height.*;
 
@@ -29,7 +30,7 @@ public interface AutoModuleUser extends RobotUser{
     );}
     AutoModule ForwardTele = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
-            outtake.stageOpen(0.2),
+            outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
             lift.stageLift(0.4, 0)
     );
@@ -81,9 +82,6 @@ public interface AutoModuleUser extends RobotUser{
         }
     };
 
-
-    // TODO TEST FOR UPPER
-
     AutoModule BackwardCycle = new AutoModule(
             outtake.stageClose(0.2),
             outtake.stageMiddle(0.0),
@@ -108,52 +106,80 @@ public interface AutoModuleUser extends RobotUser{
         }
     };
     Machine CycleMachine = new Machine()
-            .addInstruction(odometry::reset, 0.01)
-            .addIndependent(10, AutoModuleUser.Cycle);
+            .addInstruction(odometry::reset, 0.05)
+            .addIndependent(12, AutoModuleUser.Cycle);
 
+
+    AutoModule BackwardCycleMedium = new AutoModule(
+            outtake.stageClose(0.2),
+            outtake.stageMiddle(0.0),
+            lift.stageLift(1.0, MIDDLE.getValue()+1).attach(outtake.stageEndAfter(0.6))
+    );
 
     /**
      * Cycle Medium
      */
-    Independent CycleMediumFirst = new Independent() {
-        @Override
-        public void define() {
-            addWaypoint(0,0,0);
-            addScaledWaypoint(0.8, 0.0, -10, 0.0);
-            addScaledWaypoint(0.6, -18.0, -9.5, -12.0);
-            addScaledWaypoint(0.6, -29.0, -8.5, -24.0);
-            addAccuracySetpoint(0.5, -42.5, -4.0, -24.0);
-        }
-    };
     Independent CycleMedium = new Independent() {
         @Override
         public void define() {
-            addWaypoint(0,0,0);
-            addScaledWaypoint(0.8, 0.0, 36.0, 0.0);
-            addSetpoint(0.5, 45.0, -3.0);
-            addScaledWaypoint(0.8, 0.0, 12.0, 0.0);
-            addSetpoint(0,0,0);
+            addScaledWaypoint(0.5, 0.0, 30.0, 0.0);
+            addScaledWaypoint(0.3, 0.0, 50, 0.0);
+            addConcurrentAutoModule(BackwardCycleMedium);
+            addPause(0.2);
+            addScaledWaypoint(0.6, 0.0, 19.0, 0.0);
+            addAccuracyScaledSetpoint(0.7, 1.1,0, 0.01,0);
+            addCancelAutoModules();
+            addConcurrentAutoModule(ForwardTele);
+            addPause(0.4);
         }
     };
     Machine CycleMediumMachine = new Machine()
-            .addInstruction(odometry::reset, 0.01)
-            .addIndependent(CycleMediumFirst)
-            .addInstruction(odometry::reset, 0.01)
-            .addIndependent(6, CycleMedium);
+            .addInstruction(odometry::reset, 0.05)
+            .addIndependent(8, CycleMedium)
+    ;
 
 
 
-    Independent CycleAround = new Independent() { @Override public void define() {
-        addPause(0.1);
-        addScaledWaypoint(0.5, 9.5, 24.5, -35.0);
-        addScaledSetpoint(1.0, 23.5, 41.0, -58.0);
-        addAutoModule(BackwardHeightTele(HIGH));
-        addPause(0.3);
-        addScaledWaypoint(0.5, 9.5, 24.5, -35.0);
-        addAccuracyScaledSetpoint(1.0,1.0, 0.01, 0.01, 2);
-        addConcurrentAutoModule(ForwardTele);
-        addPause(0.3);
-    }};
+
+
+
+
+
+
+
+
+    //        gph1.link(Button.X, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(CycleAround);}, AUTOMATED)
+
+
+
+//
+//    Independent CycleAround = new Independent() { @Override public void define() {
+//        addPause(0.1);
+//        addScaledWaypoint(0.5, 9.5, 24.5, -35.0);
+//        addScaledSetpoint(1.0, 23.5, 41.0, -58.0);
+//        addAutoModule(BackwardHeightTele(HIGH));
+//        addPause(0.3);
+//        addScaledWaypoint(0.5, 9.5, 24.5, -35.0);
+//        addAccuracyScaledSetpoint(1.0,1.0, 0.01, 0.01, 2);
+//        addConcurrentAutoModule(ForwardTele);
+//        addPause(0.3);
+//    }}
+
+//    Independent CycleMediumFirst = new Independent() {
+//        @Override
+//        public void define() {
+//            addScaledWaypoint(0.6, 0.0, -6, 24.0);
+//            addScaledWaypoint(1.0, 18.0, -6, 24.0);
+//            addScaledWaypoint(1.0, 29.0, -8.5, 24.0);
+//            addAccuracySetpoint(0.3, 42, -6.0, 26.0);
+//        }
+//    };
+
+//      .addInstruction(odometry::reset, 0.05)
+//            .addIndependent(CycleMediumFirst)
+
+
+
 
 //
 //    /**
