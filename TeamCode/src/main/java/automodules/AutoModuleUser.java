@@ -22,15 +22,16 @@ public interface AutoModuleUser extends RobotUser{
     /**
      * Tele
      */
-    OutputList BackwardTele = new OutputList(Modes.heightMode::get)
-            .addOption(LOW, BackwardHeightTele(LOW))
-            .addOption(MIDDLE, BackwardHeightTele(MIDDLE))
-            .addOption(HIGH, BackwardHeightTele(HIGH));
     AutoModule BackwardCircuitPick = new AutoModule(
             Modes.driveMode.ChangeMode(MEDIUM),
             outtake.stageClose(0.2),
             outtake.stageReadyStart(0.4),
             Modes.ChangeGameplayMode(Modes.GameplayMode.CIRCUIT_PLACE)
+    );
+    AutoModule BackwardCycleGround = new AutoModule(
+            Modes.driveMode.ChangeMode(SLOW),
+            outtake.stageClose(0.2),
+            lift.stageLift(0.8, GROUND.getValue())
     );
     AutoModule BackwardCircuitGround = new AutoModule(
             outtake.stageStart(0.3),
@@ -40,7 +41,7 @@ public interface AutoModuleUser extends RobotUser{
     );
     OutputList BackwardCircuitPlace = new OutputList(Modes.heightMode::get)
             .addOption(LOW, BackwardCircuitPlace(LOW))
-            .addOption(MIDDLE, BackwardCircuitPlace(LOW))
+            .addOption(MIDDLE, BackwardCircuitPlace(MIDDLE))
             .addOption(HIGH, BackwardCircuitPlace(HIGH))
             .addOption(GROUND, BackwardCircuitGround);
     static AutoModule BackwardCircuitPlace(Modes.HeightMode.Height height){ return new AutoModule(
@@ -49,15 +50,21 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0, height.getValue()).attach(outtake.stageReadyEndAfter(0.1)),
             Modes.ChangeGameplayMode(Modes.GameplayMode.CIRCUIT_PICK)
     );}
-    OutputList BackwardAllTele = new OutputList(() -> Modes.gameplayMode)
-            .addOption(Modes.GameplayMode.CYCLE, BackwardTele::check)
-            .addOption(Modes.GameplayMode.CIRCUIT_PICK, BackwardCircuitPick)
-            .addOption(Modes.GameplayMode.CIRCUIT_PLACE, BackwardCircuitPlace::check);
     static AutoModule BackwardHeightTele(Modes.HeightMode.Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             outtake.stageClose(0.2),
             lift.stageLift(1.0, height.getValue()).attach(outtake.stageReadyEndAfter(0.1))
     );}
+    OutputList BackwardTele = new OutputList(Modes.heightMode::get)
+            .addOption(HIGH, BackwardHeightTele(HIGH))
+             .addOption(MIDDLE, BackwardHeightTele(MIDDLE))
+            .addOption(LOW, BackwardHeightTele(LOW))
+            .addOption(GROUND, BackwardCycleGround);
+    OutputList BackwardAllTele = new OutputList(() -> Modes.gameplayMode)
+            .addOption(Modes.GameplayMode.CYCLE, BackwardTele::check)
+            .addOption(Modes.GameplayMode.CIRCUIT_PICK, BackwardCircuitPick)
+            .addOption(Modes.GameplayMode.CIRCUIT_PLACE, BackwardCircuitPlace::check);
+
 
 
 
@@ -113,7 +120,7 @@ public interface AutoModuleUser extends RobotUser{
         public void define() {
             addScaledWaypoint(0.8, 65,-71,0);
             addScaledWaypoint(0.4, 93,-72, 0);
-            addScaledWaypoint(0.35,  89, -59, 0);
+            addScaledWaypoint(0.35,  89.0, -62.0, 0.0 );
         }
     };
 

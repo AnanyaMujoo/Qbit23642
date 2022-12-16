@@ -59,7 +59,7 @@ public class Modes {
         HIGH{@Override public double getValue() {return Lift.maxPosition-11;}},
         MIDDLE {@Override public double getValue() {return 22;}},
         LOW {@Override public double getValue() {return 11;}},
-        GROUND {@Override public double getValue(){ return 0; }};
+        GROUND {@Override public double getValue(){ return 3; }};
     }}
 
     public static class DriveMode extends ValueMode{ public enum Drive implements ModeType{
