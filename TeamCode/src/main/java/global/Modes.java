@@ -47,10 +47,19 @@ public class Modes {
         AUTOMATED
     }
 
+    public enum GameplayMode implements Decision {
+        CYCLE,
+        CIRCUIT_PICK,
+        CIRCUIT_PLACE
+    }
+
+    public static Stage ChangeGameplayMode(GameplayMode mode){ return new Stage(new Main(() -> gameplayMode = mode), exitAlways()); }
+
     public static class HeightMode extends ValueMode{ public enum Height implements ModeType{
-        HIGH{@Override public double getValue() {return Lift.maxPosition-3;}},
-        MIDDLE {@Override public double getValue() {return 30;}},
-        LOW {@Override public double getValue() {return 19;}};
+        HIGH{@Override public double getValue() {return Lift.maxPosition-11;}},
+        MIDDLE {@Override public double getValue() {return 22;}},
+        LOW {@Override public double getValue() {return 11;}},
+        GROUND {@Override public double getValue(){ return 0; }};
     }}
 
     public static class DriveMode extends ValueMode{ public enum Drive implements ModeType{
@@ -61,5 +70,6 @@ public class Modes {
 
     public static final HeightMode heightMode = new HeightMode();
     public static final DriveMode driveMode = new DriveMode().enableCycling(SLOW, MEDIUM, FAST);
+    public static GameplayMode gameplayMode = GameplayMode.CYCLE;
 
 }

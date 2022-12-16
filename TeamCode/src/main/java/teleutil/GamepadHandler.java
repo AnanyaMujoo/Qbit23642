@@ -25,6 +25,7 @@ import util.codeseg.ReturnCodeSeg;
 import util.condition.DecisionList;
 import util.condition.OutputList;
 import util.template.Iterator;
+import util.template.Precision;
 
 public class GamepadHandler {
     /**
@@ -33,11 +34,14 @@ public class GamepadHandler {
      * Ex: gph1.link(Button.A, OnPressEventHandler.class, <code to run>)
      */
 
+    private Precision precision;
 
     /**
      * Private gamepad object depending on which gamepad handler this is
      */
     private Gamepad gamepad;
+
+    private boolean isBackPressed = false;
     /**
      * Map from buttons to gamepad buttons
      */
@@ -84,6 +88,7 @@ public class GamepadHandler {
      */
     public GamepadHandler(Gamepad gp) {
         gamepad = gp;
+        precision = new Precision();
         defineAllButtons();
     }
 
@@ -102,8 +107,8 @@ public class GamepadHandler {
     public void link(Button b, Machine machine, Modes.GamepadMode mode){ link(b, () -> bot.addMachine(machine), mode);}
     public void link(Button b, CodeSeg codeSeg, Modes.GamepadMode mode) {
         switch (mode){
-            case NORMAL: Objects.requireNonNull(handlerMap.get(b)).addEvent(OnPressEventHandler.class, codeSeg, () -> !gamepad.back); break;
-            case AUTOMATED: Objects.requireNonNull(handlerMap.get(b)).addEvent(OnPressEventHandler.class, codeSeg, () -> gamepad.back); break;
+            case NORMAL: Objects.requireNonNull(handlerMap.get(b)).addEvent(OnPressEventHandler.class, codeSeg, () -> !isBackPressed); break; // TODO CHECK
+            case AUTOMATED: Objects.requireNonNull(handlerMap.get(b)).addEvent(OnPressEventHandler.class, codeSeg, () -> isBackPressed); break;
         }
     }
     public void link(Button b, CodeSeg onOn, CodeSeg onOff){
@@ -136,11 +141,14 @@ public class GamepadHandler {
         lt = gamepad.left_trigger;
     }
 
+    public boolean isBackPressed(){ return isBackPressed; }
+
     /**
      * Run using the handlerMap
      */
     public void run() {
         updateValues();
+        isBackPressed = precision.outputTrueForTime(gamepad.back, 0.5); // TODO CHECK
         Iterator.forAll(handlerMap.values(), ButtonHandler::run);
     }
 

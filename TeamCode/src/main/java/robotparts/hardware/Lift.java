@@ -21,6 +21,7 @@ public class Lift extends RobotPart {
     public static final double maxPosition = 61;
     public int stackedMode = 0;
     public volatile double cutoffPosition = 6;
+    public boolean circuitMode = false;
 
     @Override
     public void init() {
@@ -32,6 +33,7 @@ public class Lift extends RobotPart {
         motorLeft.usePositionHolder(0.1, 0.1);
         Modes.heightMode.set(HIGH);
         stackedMode = 0;
+        circuitMode = false;
     }
 
 

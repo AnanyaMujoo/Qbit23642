@@ -1,7 +1,10 @@
 package automodules;
 
+import android.view.Display;
+
 import org.omg.CORBA.INITIALIZE;
 
+import auton.Auto;
 import global.Modes;
 import robot.RobotUser;
 import robotparts.RobotPart;
@@ -19,15 +22,47 @@ public interface AutoModuleUser extends RobotUser{
     /**
      * Tele
      */
-    OutputList BackwardAllTele = new OutputList(Modes.heightMode::get)
+    OutputList BackwardTele = new OutputList(Modes.heightMode::get)
             .addOption(LOW, BackwardHeightTele(LOW))
             .addOption(MIDDLE, BackwardHeightTele(MIDDLE))
             .addOption(HIGH, BackwardHeightTele(HIGH));
+    AutoModule BackwardCircuitPick = new AutoModule(
+            Modes.driveMode.ChangeMode(MEDIUM),
+            outtake.stageClose(0.2),
+            outtake.stageReadyStart(0.4),
+            Modes.ChangeGameplayMode(Modes.GameplayMode.CIRCUIT_PLACE)
+    );
+    AutoModule BackwardCircuitGround = new AutoModule(
+            outtake.stageStart(0.3),
+            RobotPart.pause(0.5),
+            outtake.stageOpen(0.2),
+            Modes.ChangeGameplayMode(Modes.GameplayMode.CIRCUIT_PICK)
+    );
+    OutputList BackwardCircuitPlace = new OutputList(Modes.heightMode::get)
+            .addOption(LOW, BackwardCircuitPlace(LOW))
+            .addOption(MIDDLE, BackwardCircuitPlace(LOW))
+            .addOption(HIGH, BackwardCircuitPlace(HIGH))
+            .addOption(GROUND, BackwardCircuitGround);
+    static AutoModule BackwardCircuitPlace(Modes.HeightMode.Height height){ return new AutoModule(
+            Modes.driveMode.ChangeMode(SLOW),
+            outtake.stageFlip(0.0),
+            lift.stageLift(1.0, height.getValue()).attach(outtake.stageReadyEndAfter(0.1)),
+            Modes.ChangeGameplayMode(Modes.GameplayMode.CIRCUIT_PICK)
+    );}
+    OutputList BackwardAllTele = new OutputList(() -> Modes.gameplayMode)
+            .addOption(Modes.GameplayMode.CYCLE, BackwardTele::check)
+            .addOption(Modes.GameplayMode.CIRCUIT_PICK, BackwardCircuitPick)
+            .addOption(Modes.GameplayMode.CIRCUIT_PLACE, BackwardCircuitPlace::check);
     static AutoModule BackwardHeightTele(Modes.HeightMode.Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             outtake.stageClose(0.2),
-            lift.stageLift(1.0, height.getValue()-8).attach(outtake.stageReadyEndAfter(0.1))
+            lift.stageLift(1.0, height.getValue()).attach(outtake.stageReadyEndAfter(0.1))
     );}
+
+
+
+
+
     AutoModule ForwardTele = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             outtake.stageOpen(0.25),
@@ -52,7 +87,7 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageClose(0.2),
             outtake.stageReadyStart(0.3).attach(drive.moveTime(-0.2, 0, 0, 0.2)),
             outtake.stageMiddle(0.0),
-            lift.stageLift(0.8, HIGH.getValue()-3)
+            lift.stageLift(0.8, HIGH.getValue()+5)
     );
     default AutoModule ForwardAuto(int i){return new AutoModule(
             outtake.stageStart(0.0),
@@ -60,7 +95,7 @@ public interface AutoModuleUser extends RobotUser{
     );}
     AutoModule BackwardAutoFirst = new AutoModule(
             outtake.stageReadyEnd(0.0),
-            lift.stageLift(0.8, HIGH.getValue()-1)
+            lift.stageLift(0.8, HIGH.getValue()+7)
     );
     AutoModule BackwardAuto = new AutoModule(
             RobotPart.pause(0.1),
@@ -85,7 +120,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardCycle = new AutoModule(
             outtake.stageClose(0.2),
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, HIGH.getValue()-10).attach(outtake.stageReadyEndAfter(0.2))
+            lift.stageLift(1.0, HIGH.getValue()-2).attach(outtake.stageReadyEndAfter(0.2))
     );
 
     /**
@@ -113,7 +148,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardCycleMedium = new AutoModule(
             outtake.stageClose(0.2),
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, MIDDLE.getValue()+1).attach(outtake.stageEndAfter(0.6))
+            lift.stageLift(1.0, MIDDLE.getValue()+9).attach(outtake.stageEndAfter(0.6))
     );
 
     /**

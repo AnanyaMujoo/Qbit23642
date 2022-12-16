@@ -18,7 +18,7 @@ public class OutputList {
     /**
      * Map from decisions to outputs
      */
-    private final HashMap<Decision, Object> outputs = new HashMap<>();
+    private final HashMap<Decision, ReturnCodeSeg<Object>> outputs = new HashMap<>();
 
     /**
      * Condition to check
@@ -39,6 +39,11 @@ public class OutputList {
      * @return outputList
      */
     public OutputList addOption(Decision decision, Object obj){
+        outputs.put(decision, () -> obj);
+        return this;
+    }
+
+    public OutputList addOption(Decision decision, ReturnCodeSeg<Object> obj){
         outputs.put(decision, obj);
         return this;
     }
@@ -47,7 +52,7 @@ public class OutputList {
         Decision currentDecision = condition.run();
         T o = null;
         if(outputs.containsKey(currentDecision)){
-            o = (T) outputs.get(currentDecision);
+            o = (T) outputs.get(currentDecision).run();
         }else{
             fault.check("No option " + currentDecision.toString() + " found", Expectation.SURPRISING, Magnitude.CRITICAL);
         }

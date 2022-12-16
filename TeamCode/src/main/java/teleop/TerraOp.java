@@ -46,9 +46,9 @@ public class TerraOp extends Tele {
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
 
         gph1.link(DPAD_UP, () -> lift.setHolderTarget(HIGH));
-        gph1.link(DPAD_RIGHT, () ->  lift.setHolderTarget(MIDDLE));
         gph1.link(DPAD_LEFT, () ->  lift.setHolderTarget(MIDDLE));
-        gph1.link(DPAD_DOWN, () -> lift.setHolderTarget(LOW));
+        gph1.link(DPAD_RIGHT, () ->  lift.setHolderTarget(LOW));
+        gph1.link(DPAD_DOWN, () -> lift.setHolderTarget(GROUND));
         gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
         gph1.link(LEFT_BUMPER,  () -> lift.adjustHolderTarget(-2.5));
         gph1.link(RIGHT_TRIGGER, () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ bot.addAutoModule(ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}});
@@ -63,10 +63,7 @@ public class TerraOp extends Tele {
 
         gph1.link(Button.B, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(Cycle);}, AUTOMATED);
         gph1.link(Button.Y, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(CycleMedium);}, AUTOMATED);
-
-
-        // TODO TEST FOR UPPER
-        // TODO MAKE CIRCUIT MODE, LIFTS ARM UP WHEN B, SECOND B DOES NORMAL B CHANGE LIFT HEIGHT TO ONLY HIGH AND LOW AND GROUND
+        gph1.link(Button.X, () -> {lift.circuitMode = true; Modes.gameplayMode = Modes.GameplayMode.CIRCUIT_PICK;}, () -> {lift.circuitMode = false; Modes.gameplayMode = Modes.GameplayMode.CYCLE;});
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
         gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);
@@ -85,8 +82,6 @@ public class TerraOp extends Tele {
          * Start code
          */
         lift.move(-0.12);
-//        camera.setScanner(junctionScanner);
-//        camera.start(false);
         bot.loadLocationOnField();
     }
 
@@ -106,8 +101,9 @@ public class TerraOp extends Tele {
 
         log.show("DriveMode", Modes.driveMode.get());
         log.show("HeightMode", Modes.heightMode.get());
-        log.show("GamepadMode", gamepad1.back ? AUTOMATED : Modes.GamepadMode.NORMAL);
+        log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : Modes.GamepadMode.NORMAL);
         log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
+        log.show("GameplayMode", Modes.gameplayMode);
 
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());

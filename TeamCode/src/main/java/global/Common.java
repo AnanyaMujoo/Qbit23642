@@ -30,6 +30,10 @@ public interface Common{
         gamepad1 = thisOpMode.gamepad1;
         gamepad2 = thisOpMode.gamepad2;
         /**
+         * Create the gameTime
+         */
+        gameTime = new ElapsedTime();
+        /**
          * Create the gamepadhanlders from the gamepads
          */
         gph1 = new GamepadHandler(gamepad1);
@@ -40,10 +44,6 @@ public interface Common{
         fault = new Fault();
         sync = new Synchroniser();
         log = new Logger();
-        /**
-         * Create the gameTime
-         */
-        gameTime = new ElapsedTime();
         /**
          * Get the main user
          * NOTE: the user is automatically set from the type of opMode
