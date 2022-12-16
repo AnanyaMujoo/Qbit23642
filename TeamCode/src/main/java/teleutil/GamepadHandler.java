@@ -88,19 +88,13 @@ public class GamepadHandler {
     }
 
 
-
-
-    public void link(Button b, CodeSeg codeSeg){
-        link(b, OnPressEventHandler.class, codeSeg);
-    }
+    public void link(Button b, CodeSeg code){ link(b, code, Modes.GamepadMode.NORMAL); }
     public void link(Button b, Class<? extends ButtonEventHandler> type, CodeSeg codeSeg) { Objects.requireNonNull(handlerMap.get(b)).addEvent(type, codeSeg); }
-    public void link(Button b, AutoModule list) { link(b, () -> bot.addAutoModule(list)); }
-    public void link(Button b, DecisionList decisionList){ link(b,  decisionList::check); }
-    public void link(Button b, OutputList outputList){ link(b, () -> bot.addAutoModule(outputList.check())); }
-    public void link(Button b, Independent independent){ link(b, () -> bot.addIndependent(independent)); }
-    public void link(Button b, Machine machine){
-        link(b, () -> bot.addMachine(machine));
-    }
+    public void link(Button b, AutoModule list) { link(b, () -> bot.addAutoModule(list), Modes.GamepadMode.NORMAL); }
+    public void link(Button b, DecisionList decisionList){ link(b,  decisionList::check, Modes.GamepadMode.NORMAL); }
+    public void link(Button b, OutputList outputList){ link(b, () -> bot.addAutoModule(outputList.check()), Modes.GamepadMode.NORMAL); }
+    public void link(Button b, Independent independent){ link(b, () -> bot.addIndependent(independent), Modes.GamepadMode.NORMAL); }
+    public void link(Button b, Machine machine){ link(b, () -> bot.addMachine(machine), Modes.GamepadMode.NORMAL); }
     public void link(Button b, AutoModule list, Modes.GamepadMode mode) { link(b, () -> bot.addAutoModule(list), mode); }
     public void link(Button b, DecisionList decisionList, Modes.GamepadMode mode){  link(b, decisionList::check, mode); }
     public void link(Button b, OutputList outputList, Modes.GamepadMode mode){ link(b, () -> bot.addAutoModule(outputList.check()), mode); }
@@ -108,7 +102,7 @@ public class GamepadHandler {
     public void link(Button b, Machine machine, Modes.GamepadMode mode){ link(b, () -> bot.addMachine(machine), mode);}
     public void link(Button b, CodeSeg codeSeg, Modes.GamepadMode mode) {
         switch (mode){
-            case NORMAL: link(b, codeSeg); break;
+            case NORMAL: Objects.requireNonNull(handlerMap.get(b)).addEvent(OnPressEventHandler.class, codeSeg, () -> !gamepad.back); break;
             case AUTOMATED: Objects.requireNonNull(handlerMap.get(b)).addEvent(OnPressEventHandler.class, codeSeg, () -> gamepad.back); break;
         }
     }

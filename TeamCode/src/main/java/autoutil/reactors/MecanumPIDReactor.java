@@ -14,17 +14,17 @@ public class MecanumPIDReactor extends MecanumReactor{
 
     public MecanumPIDReactor(){
 
-        PID yPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.015, 10000.0, 0.05, 60.0, 5.0);
-        PID xPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.02, 10000.0, 0.05, 60.0, 5.0);
+        PID yPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.016, 10000.0, 0.05, 60.0, 5.0);
+        PID xPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.021, 10000.0, 0.05, 60.0, 5.0);
         PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.009, 10000.0, 0.025, 60.0, 5.0);
 
         yPID.setAccuracy(1.0);
         xPID.setAccuracy(1.0);
         hPID.setAccuracy(1.0);
 
-        yPID.setRestOutput(0.06);
-        xPID.setRestOutput(0.09);
-        hPID.setRestOutput(0.06);
+        yPID.setRestOutput(0.065);
+        xPID.setRestOutput(0.095);
+        hPID.setRestOutput(0.065);
         setControllers(new Default2D(xPID, yPID), hPID);
     }
 

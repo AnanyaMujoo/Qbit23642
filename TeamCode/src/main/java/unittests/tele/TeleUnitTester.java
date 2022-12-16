@@ -73,7 +73,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
     @Override
     public void initTele() {
         readyTestsAndSelector(testingMode);
-        activate(FieldSide.UNKNOWN, FieldPlacement.UNKNOWN);
+        activate();
     }
 
     /**

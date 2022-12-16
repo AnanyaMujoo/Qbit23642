@@ -70,7 +70,7 @@ public class AutoUnitTester extends Auto implements UnitTester {
     public void initAuto() {
         AutoUnitTest.linearOpMode = this;
         readyTestsAndSelector(testingMode);
-        activate(FieldSide.UNKNOWN, FieldPlacement.UNKNOWN);
+        activate();
         log.showTelemetry();
     }
 

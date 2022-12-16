@@ -55,8 +55,8 @@ public class Modes {
 
     public static class DriveMode extends ValueMode{ public enum Drive implements ModeType{
         FAST{@Override public double getValue(){return 1.0;}},
-        MEDIUM{@Override public double getValue(){return 0.6;}},
-        SLOW{@Override public double getValue(){return 0.3;}};
+        MEDIUM{@Override public double getValue(){return 0.75;}},
+        SLOW{@Override public double getValue(){return 0.35;}};
     }}
 
     public static final HeightMode heightMode = new HeightMode();

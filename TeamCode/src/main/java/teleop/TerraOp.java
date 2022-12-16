@@ -65,6 +65,8 @@ public class TerraOp extends Tele {
         gph1.link(Button.X, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(CycleAround);}, AUTOMATED);
         gph1.link(Button.Y, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(CycleMedium);}, AUTOMATED);
 
+        // TODO MAKE CIRCUIT MODE, LIFTS ARM UP WHEN B, SECOND B DOES NORMAL B
+
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
         gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);
 
@@ -89,7 +91,8 @@ public class TerraOp extends Tele {
 
     @Override
     public void startTele() {
-        outtake.moveStart();
+        outtake.readyStart();
+        outtake.unFlip();
         bot.loadPose();
     }
 

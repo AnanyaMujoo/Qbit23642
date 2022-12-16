@@ -18,6 +18,8 @@ import util.Timer;
 import util.condition.DecisionList;
 
 import static global.General.bot;
+import static global.General.fieldPlacement;
+import static global.General.fieldSide;
 import static global.Modes.HeightMode.Height.HIGH;
 
 public class TerraAuto extends AutoFramework {
@@ -67,32 +69,32 @@ public class TerraAuto extends AutoFramework {
         addWaypoint(0, 40, 0);
         addScaledWaypoint(1.0, 0, 130, 0);
         addScaledWaypoint(1.0, 0, 120, 30);
-        place(0);
-        customNumber(5, i -> {
-            addScaledWaypoint(0.4, 30, 129, 90);
-            pick(i);
-            addScaledWaypoint(0.6, 30, 129, 75);
-            addScaledWaypoint(0.35, 3, 133.5, 50);
-            place(i+1);
-        });
-        addBreakpointReturn();
+//        place(0);
+//        customNumber(5, i -> {
+//            addScaledWaypoint(0.4, 30, 129, 90);
+//            pick(i);
+//            addScaledWaypoint(0.6, 30, 129, 75);
+//            addScaledWaypoint(0.35, 3, 133.5, 50);
+//            place(i+1);
+//        });
+//        addBreakpointReturn();
         customCase(() -> {
             addWaypoint(-7, 124, 90);
             addScaledWaypoint(0.8, -10, 124, 90);
             addScaledWaypoint(0.8, -45, 122, 60);
             addScaledWaypoint(0.8, -50, 123, 25);
-            addScaledSetpoint(0.9, -62, 80, 0);
+            addScaledSetpoint(0.9, -62, 75, 0);
         }, () -> {
             addWaypoint(0, 130, 35);
             addWaypoint(0, 105, 0);
-            addScaledSetpoint(0.9, 0, 80, 0);
+            addScaledSetpoint(0.9, 0, 75, 0);
         }, () -> {
             addWaypoint(7, 128, 90);
             addScaledWaypoint(0.8, 16, 128, 90);
-            addScaledWaypoint(0.8, 34, 122, 58);
-            addScaledWaypoint(0.8, 46, 111, 32);
+            addScaledWaypoint(0.8, 39, 122, 58);
+            addScaledWaypoint(0.8, 51, 111, 32);
             addScaledWaypoint(0.8, 56, 95, 0);
-            addScaledSetpoint(0.9, 58, 80, 0);
+            addScaledSetpoint(0.9, 58, 75, 0);
         });
     }
 

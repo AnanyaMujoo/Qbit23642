@@ -17,9 +17,6 @@ public abstract class Auto extends LinearOpMode implements Common, Iterator, Rob
      * this will generate by default if you use @Override
      */
 
-    protected FieldSide fieldSide = FieldSide.UNKNOWN;
-    protected FieldPlacement fieldPlacement = FieldPlacement.UNKNOWN;
-
     /**
      * Init method runs when the user clicks the init button to run a auton
      */
@@ -42,7 +39,7 @@ public abstract class Auto extends LinearOpMode implements Common, Iterator, Rob
     @Override
     public final void runOpMode() throws InterruptedException {
         reference(this);
-        activate(FieldSide.UNKNOWN, FieldPlacement.UNKNOWN);
+        activate();
         initAuto();
         waitForStart();
         ready();

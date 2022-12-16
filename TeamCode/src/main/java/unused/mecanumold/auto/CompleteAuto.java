@@ -150,7 +150,7 @@ public abstract class CompleteAuto extends Auto {
         defineExecutorAndAddPoints();
 //        executor.complete();
         onInit();
-        activate(getSide(), FieldPlacement.UNKNOWN);
+        activate();
     }
 
     /**

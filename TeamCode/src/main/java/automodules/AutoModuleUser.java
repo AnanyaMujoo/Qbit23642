@@ -31,7 +31,7 @@ public interface AutoModuleUser extends RobotUser{
             Modes.driveMode.ChangeMode(SLOW),
             outtake.stageOpen(0.2),
             outtake.stageStart(0.0),
-            lift.stageLift(0.55, 0)
+            lift.stageLift(0.4, 0)
     );
     default AutoModule ForwardStackTele(int i){return new AutoModule(
             outtake.stageOpen(0.0),
@@ -82,6 +82,15 @@ public interface AutoModuleUser extends RobotUser{
 
     // TODO TEST FOR UPPER
 
+    AutoModule BackwardCycle = new AutoModule(
+            outtake.stageClose(0.2),
+            outtake.stageMiddle(0.2),
+            lift.stageLift(1.0, HIGH.getValue()-8)
+    );
+    AutoModule BackwardCycle2 = new AutoModule(
+            outtake.stageReadyEnd(0.3)
+    );
+
     /**
      * Cycle
      */
@@ -90,6 +99,7 @@ public interface AutoModuleUser extends RobotUser{
         public void define() {
             addWaypoint(0.0, 0.01, 0.0);
             addAccuracySetpoint(0.5, 0, -11.5,0);
+            addAutoModule(new AutoModule(outtake.stageStart(0.0)));
         }
     };
     Independent Cycle = new Independent() {
@@ -97,13 +107,14 @@ public interface AutoModuleUser extends RobotUser{
         public void define() {
             addWaypoint(0,0.01,0);
             addScaledWaypoint(0.6, 0,11.5, 0);
-            addAccuracyScaledSetpoint(1.5, 1.5, 0, 21.4, 0);
-            addConcurrentAutoModule(BackwardHeightTele(HIGH));
+            addAccuracySetpoint(1.5, 0, 21.4, 0);
+            addConcurrentAutoModule(BackwardCycle);
             addPause(0.3);
-            addScaledWaypoint(0.6, 0, 5, 0);
-            addAccuracySetpoint(0.8, 0, 0.01,0);
+            addScaledWaypoint(0.45, 0, 3, 0);
+            addConcurrentAutoModule(BackwardCycle2);
+            addAccuracySetpoint(0.65, 0, 0.01,0);
             addConcurrentAutoModule(ForwardTele);
-            addPause(0.3);
+            addPause(0.4);
         }
     };
     Machine CycleMachine = new Machine()

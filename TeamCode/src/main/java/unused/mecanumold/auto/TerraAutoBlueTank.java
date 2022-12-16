@@ -25,7 +25,7 @@ public class TerraAutoBlueTank extends Auto {
 
     @Override
     public void initAuto() {
-        activate(FieldSide.BLUE, FieldPlacement.UNKNOWN);
+        activate();
     }
 
     @Override

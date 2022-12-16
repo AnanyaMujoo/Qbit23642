@@ -42,6 +42,8 @@ import util.condition.OutputList;
 import util.template.Iterator;
 
 import static global.General.fault;
+import static global.General.fieldPlacement;
+import static global.General.fieldSide;
 import static global.General.log;
 
 public abstract class AutoFramework extends Auto implements AutoUser {

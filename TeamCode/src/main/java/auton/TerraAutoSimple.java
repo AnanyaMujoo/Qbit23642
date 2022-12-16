@@ -3,9 +3,12 @@ package auton;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import autoutil.AutoFramework;
+import elements.FieldPlacement;
 import elements.FieldSide;
 
 import static global.General.bot;
+import static global.General.fieldPlacement;
+import static global.General.fieldSide;
 
 public class TerraAutoSimple extends AutoFramework {
 
@@ -55,11 +58,12 @@ public class TerraAutoSimple extends AutoFramework {
     @Override
     public void stopAuto() {
         bot.savePose(odometry.getPose());
+        bot.saveLocationOnField();
         super.stopAuto();
     }
 
     @Autonomous(name = "TerraAutoLowerBlueSimple", group = "auto")
-    public static class TerraAutoLowerBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; }}
+    public static class TerraAutoLowerBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; }}
 //    @Autonomous(name = "TerraAutoLowerRedSimple", group = "auto")
 //    public static class TerraAutoLowerRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; }}
 //    @Autonomous(name = "TerraAutoUpperBlueSimple", group = "auto")
