@@ -9,6 +9,7 @@ import global.Modes;
 import teleutil.button.Button;
 import teleutil.button.OnTurnOffEventHandler;
 import teleutil.button.OnTurnOnEventHandler;
+import util.User;
 
 import static autoutil.reactors.MecanumJunctionReactor.junctionScanner;
 import static global.General.bot;
@@ -40,7 +41,7 @@ public class TerraOp extends Tele {
          * Gamepad 1 Normal
          */
         gph1.link(Button.B, BackwardAllTele);
-        gph1.link(Button.Y, ForwardTele);
+        gph1.link(Button.Y, () -> {if(lift.circuitMode) { Modes.gameplayMode = Modes.GameplayMode.CIRCUIT_PICK;} bot.addAutoModule(ForwardAll.check());});
         gph1.link(Button.X, bot::cancelMovements);
         gph1.link(Button.A, () -> Modes.driveMode.set(MEDIUM));
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
@@ -58,12 +59,10 @@ public class TerraOp extends Tele {
          * Gamepad 1 Automated
          */
         gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
-        gph1.link(RIGHT_TRIGGER, CycleMachine, AUTOMATED);
-        gph1.link(LEFT_TRIGGER, CycleMediumMachine, AUTOMATED);
-
-        gph1.link(Button.B, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(Cycle);}, AUTOMATED);
-        gph1.link(Button.Y, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(CycleMedium);}, AUTOMATED);
-        gph1.link(Button.X, () -> {lift.circuitMode = true; Modes.gameplayMode = Modes.GameplayMode.CIRCUIT_PICK;}, () -> {lift.circuitMode = false; Modes.gameplayMode = Modes.GameplayMode.CYCLE;});
+        gph1.link(Button.B, CycleMachine, AUTOMATED);
+        gph1.link(Button.Y, CycleMediumMachine, AUTOMATED);
+        gph1.link(Button.X, () -> {lift.circuitMode = true; Modes.gameplayMode = Modes.GameplayMode.CIRCUIT_PICK;}, () -> {lift.circuitMode = false; Modes.gameplayMode = Modes.GameplayMode.CYCLE;}, AUTOMATED);
+        gph1.link(RIGHT_TRIGGER, UprightCone, AUTOMATED);
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
         gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);

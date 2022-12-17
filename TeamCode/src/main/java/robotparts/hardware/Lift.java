@@ -12,6 +12,7 @@ import robotparts.electronics.positional.PServo;
 import util.User;
 
 import static global.Modes.HeightMode.Height.HIGH;
+import static global.Modes.gameplayMode;
 
 public class Lift extends RobotPart {
 
@@ -29,23 +30,24 @@ public class Lift extends RobotPart {
         motorLeft = create("lir", ElectronicType.PMOTOR_REVERSE);
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
-        motorRight.usePositionHolder(0.1, 0.1);
-        motorLeft.usePositionHolder(0.1, 0.1);
+        motorRight.usePositionHolder(0.15, 0.2);
+        motorLeft.usePositionHolder(0.15, 0.2);
         Modes.heightMode.set(HIGH);
         stackedMode = 0;
         circuitMode = false;
+        gameplayMode = Modes.GameplayMode.CYCLE;
     }
 
 
     public Stage changeCutoff(double cutoffPosition){
-        return customTime(() -> this.cutoffPosition = cutoffPosition, 0.0);
+        return customTime(() -> this.cutoffPosition = cutoffPosition, 0.01);
     }
 
 
     @Override
     public void move(double p) {
-        motorRight.moveWithPositionHolder(p, cutoffPosition, 0.08);
-        motorLeft.moveWithPositionHolder(p, cutoffPosition, 0.08);
+        motorRight.moveWithPositionHolder(p, cutoffPosition, 0.15);
+        motorLeft.moveWithPositionHolder(p, cutoffPosition, 0.15);
     }
 
     public void setHolderTarget(Modes.HeightMode.Height height){

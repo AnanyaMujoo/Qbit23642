@@ -56,10 +56,10 @@ public class Modes {
     public static Stage ChangeGameplayMode(GameplayMode mode){ return new Stage(new Main(() -> gameplayMode = mode), exitAlways()); }
 
     public static class HeightMode extends ValueMode{ public enum Height implements ModeType{
-        HIGH{@Override public double getValue() {return Lift.maxPosition-11;}},
-        MIDDLE {@Override public double getValue() {return 22;}},
-        LOW {@Override public double getValue() {return 11;}},
-        GROUND {@Override public double getValue(){ return 3; }};
+        HIGH{@Override public double getValue() {return Lift.maxPosition-9;}},
+        MIDDLE {@Override public double getValue() {return 28;}},
+        LOW {@Override public double getValue() {return 9;}},
+        GROUND {@Override public double getValue(){ return 9; }};
     }}
 
     public static class DriveMode extends ValueMode{ public enum Drive implements ModeType{

@@ -17,6 +17,11 @@ public class Drive extends RobotPart {
     private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 60.0, 2.0);
     private final Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
     private final Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
+//
+//    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 1000.0, 6.0);
+//    private final Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 1000.0, 6.0);
+//    private final Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 1000.0, 6.0);
+
 
     @Override
     public void init() {
@@ -49,7 +54,8 @@ public class Drive extends RobotPart {
 
 
     public void moveSmooth(double f, double s, double t) {
-        double scale = Modes.driveMode.get().getValue(); move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(t*1.2*scale));
+        double scale = Modes.driveMode.get().getValue(); move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(
+                Modes.driveMode.modeIs(MEDIUM) ? 0.7*t*scale : t*1.2*scale));
     }
 
     @Override

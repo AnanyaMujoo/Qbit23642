@@ -17,6 +17,7 @@ import teleutil.button.Button;
 import teleutil.button.ButtonEventHandler;
 import teleutil.button.ButtonHandler;
 import teleutil.button.OnPressEventHandler;
+import teleutil.button.OnTurnOffEventHandler;
 import teleutil.button.OnTurnOnEventHandler;
 import teleutil.independent.Independent;
 import teleutil.independent.Machine;
@@ -105,16 +106,19 @@ public class GamepadHandler {
     public void link(Button b, OutputList outputList, Modes.GamepadMode mode){ link(b, () -> bot.addAutoModule(outputList.check()), mode); }
     public void link(Button b, Independent independent, Modes.GamepadMode mode){ link(b, () -> bot.addIndependent(independent), mode); }
     public void link(Button b, Machine machine, Modes.GamepadMode mode){ link(b, () -> bot.addMachine(machine), mode);}
-    public void link(Button b, CodeSeg codeSeg, Modes.GamepadMode mode) {
+    public void link(Button b, CodeSeg codeSeg, Modes.GamepadMode mode) { link(b, OnPressEventHandler.class, codeSeg, mode); }
+    public void link(Button b, Class<? extends ButtonEventHandler> type, CodeSeg codeSeg, Modes.GamepadMode mode){
         switch (mode){
-            case NORMAL: Objects.requireNonNull(handlerMap.get(b)).addEvent(OnPressEventHandler.class, codeSeg, () -> !isBackPressed); break; // TODO CHECK
-            case AUTOMATED: Objects.requireNonNull(handlerMap.get(b)).addEvent(OnPressEventHandler.class, codeSeg, () -> isBackPressed); break;
+            case NORMAL: Objects.requireNonNull(handlerMap.get(b)).addEvent(type, codeSeg, () -> !isBackPressed); break;
+            case AUTOMATED: Objects.requireNonNull(handlerMap.get(b)).addEvent(type, codeSeg, () -> isBackPressed); break;
         }
     }
-    public void link(Button b, CodeSeg onOn, CodeSeg onOff){
-        link(b, OnTurnOnEventHandler.class, onOn);
-        link(b, OnTurnOnEventHandler.class, onOff);
+    public void link(Button b, CodeSeg onOn, CodeSeg onOff, Modes.GamepadMode mode){
+        link(b, OnTurnOnEventHandler.class, onOn, mode);
+        link(b, OnTurnOffEventHandler.class, onOff, mode);
     }
+
+    public void link(Button b, CodeSeg onOn, CodeSeg onOff){ link(b, onOn, onOff, Modes.GamepadMode.NORMAL); }
 
 
     /**
@@ -148,7 +152,7 @@ public class GamepadHandler {
      */
     public void run() {
         updateValues();
-        isBackPressed = precision.outputTrueForTime(gamepad.back, 0.5); // TODO CHECK
+        isBackPressed = precision.outputTrueForTime(gamepad.back, 0.3);
         Iterator.forAll(handlerMap.values(), ButtonHandler::run);
     }
 
