@@ -2,12 +2,15 @@ package robotparts.hardware;
 
 import automodules.AutoModule;
 import automodules.stage.Stage;
+import autoutil.AutoFramework;
+import elements.FieldSide;
 import global.Modes;
 import math.misc.Logistic;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 
+import static global.General.fieldSide;
 import static global.Modes.DriveMode.Drive.MEDIUM;
 import static global.Modes.DriveMode.Drive.SLOW;
 

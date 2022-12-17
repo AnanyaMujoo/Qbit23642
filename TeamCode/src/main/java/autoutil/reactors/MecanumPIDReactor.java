@@ -1,8 +1,14 @@
 package autoutil.reactors;
 
+import autoutil.AutoFramework;
 import autoutil.controllers.control2D.Default2D;
 import autoutil.controllers.control1D.PID;
 import autoutil.generators.PoseGenerator;
+import elements.FieldPlacement;
+import elements.FieldSide;
+
+import static global.General.fieldPlacement;
+import static global.General.fieldSide;
 
 public class MecanumPIDReactor extends MecanumReactor{
 
@@ -25,6 +31,13 @@ public class MecanumPIDReactor extends MecanumReactor{
         yPID.setRestOutput(0.065);
         xPID.setRestOutput(0.095);
         hPID.setRestOutput(0.065);
+
+        if(AutoFramework.isFlipped()){
+//            hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.009, 0.3, 0.08, 60.0, 5.0);
+            yPID.setRestOutput(0.07);
+            xPID.setRestOutput(0.14);
+            hPID.setRestOutput(0.07);
+        }
         setControllers(new Default2D(xPID, yPID), hPID);
     }
 

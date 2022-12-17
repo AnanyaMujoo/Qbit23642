@@ -45,13 +45,25 @@ public class TerraAuto extends AutoFramework {
     public void place(int i){
         if(i == 0) {
             addConcurrentAutoModule(BackwardAutoFirst);
-            addAccuracyScaledSetpoint(3.0,1.05,  1.5, 130.5, 51);
-            addCustomSegment(mecanumJunctionSetpoint, 1.5, 130.5, 51);
-            addAccuracyScaledSetpoint(1.0, 1.05,1.2, 130.2, 51);
+            customFlipped(() -> {
+                double x = 5.5; double y = 129;
+                addAccuracyScaledSetpoint(3.0,1.05,  x, y, 50);
+                addCustomSegment(mecanumJunctionSetpoint, x, y, 50);
+                addAccuracyScaledSetpoint(1.0, 1.05,x, y, 50);
+            }, () -> {
+                double x = -1.0; double y = 132;
+                addAccuracyScaledSetpoint(3.0,1.2,  -1, 129, 50);
+                addCustomSegment(mecanumJunctionSetpoint, x, y, 50);
+                addAccuracyScaledSetpoint(1.0, 1.2, x, y, 50);
+            });
             addAutoModule(DropAutoFirst);
         }else{
             addConcurrentAutoModule(BackwardAuto);
-            addAccuracyScaledSetpoint(1.0, 0.9, 0.7, 132.8 + (i/3.0), 51);
+            customFlipped(() -> {
+                addAccuracyScaledSetpoint(1.0, 1.2,4.5-(i/5.0), 130+(i/4.0), 50);
+            }, () -> {
+                addAccuracyScaledSetpoint(1.0, 1.2,-1.0-(i/4.0), 130-(i/4.0), 50);
+            });
             addCancelAutoModules();
             addAutoModule(DropAuto);
         }
@@ -59,25 +71,41 @@ public class TerraAuto extends AutoFramework {
     }
 
     public void pick(int i){
-        addBreakpoint(() -> timer.seconds() > 25);
-        addAccuracyScaledSetpoint(2.0, 0.7, 61, 125+(i/3.0), 90);
+        addBreakpoint(() -> timer.seconds() > 24.5);
+        customFlipped(() -> {
+            addAccuracyScaledSetpoint(2.0, 0.7, 61-(i/5.0), 125, 87);
+        }, () -> {
+            addAccuracyScaledSetpoint(2.0, 0.7, 57-(i/4.0), 126, 87);
+        });
         addConcurrentAutoModule(GrabAuto);
         addPause(0.5);
     }
     @Override
     public void define() {
         addWaypoint(0, 40, 0);
-        addScaledWaypoint(1.0, 0, 130, 0);
-        addScaledWaypoint(1.0, 0, 120, 30);
-//        place(0);
-//        customNumber(5, i -> {
-//            addScaledWaypoint(0.4, 30, 129, 90);
-//            pick(i);
-//            addScaledWaypoint(0.6, 30, 129, 75);
-//            addScaledWaypoint(0.35, 3, 133.5, 50);
-//            place(i+1);
-//        });
-//        addBreakpointReturn();
+        customFlipped(() -> {
+            addScaledWaypoint(1.0, 0, 128, 0);
+        }, () -> {
+            addScaledWaypoint(1.0, 0, 125, 0);
+        });
+        addScaledWaypoint(1.0, 0, 120, 20);
+        place(0);
+        customNumber(5, i -> {
+            customFlipped(() -> {
+                addScaledWaypoint(0.4, 30, 125, 87);
+                pick(i+1);
+                addScaledWaypoint(0.6, 30, 128, 75);
+                addScaledWaypoint(0.35, 3, 128.5, 50);
+                place(i+1);
+            }, () -> {
+                addScaledWaypoint(0.5, 30, 125, 87);
+                pick(i+1);
+                addScaledWaypoint(0.7, 30, 128, 75);
+                addScaledWaypoint(0.4, 3, 128.5, 50);
+                place(i+1);
+            });
+        });
+        addBreakpointReturn();
         customCase(() -> {
             addWaypoint(-7, 124, 90);
             addScaledWaypoint(0.8, -10, 124, 90);

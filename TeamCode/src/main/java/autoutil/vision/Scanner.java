@@ -14,8 +14,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
+import autoutil.AutoFramework;
+import elements.FieldSide;
 import util.codeseg.ParameterCodeSeg;
 
+import static global.General.fieldSide;
 import static global.General.gamepad1;
 import static global.General.log;
 import static java.lang.Math.abs;
@@ -126,7 +129,7 @@ public abstract class Scanner extends OpenCvPipeline {
         }
         if(bestRect != null){
             Point center = getCenter(input);
-            Point pictureCenter = new Point(center.x+10, center.y+30);
+            Point pictureCenter = new Point(center.x + (AutoFramework.isFlipped() ? -40 : 10), center.y+30);
             if(getCenter(bestRect).inside(getRectFromCenter(pictureCenter, 100, 150))) {
                 drawRectangle(input, bestRect, rectColor);
             }else{ bestST = 10000; }

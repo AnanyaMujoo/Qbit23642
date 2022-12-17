@@ -22,8 +22,8 @@ import static global.General.log;
 public class MecanumJunctionReactor extends MecanumPIDReactor{
 
     public static final JunctionScanner junctionScanner = new JunctionScanner();
-    private static final Pose junctionTargetPose = new Pose(0, 22, 0);
-    private static final double cameraToRobotCenter = 19.5;
+    private static final Pose junctionTargetPose = new Pose(0, 23, 0);
+    private static double cameraToRobotCenter = 19.5;
     private static Point junctionLocation = new Point();
     private Pose startOdometryPose = new Pose();
     private Pose startJunctionPose = junctionTargetPose.getAdded(new Pose(0,5,0));
@@ -34,7 +34,7 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
     private static boolean exit = false;
     private static final Timer timer = new Timer();
 
-    public static void setFlipped(boolean flipped){ auto = true; junctionLocation = new Point(flipped ? -30.5 : 30.5, -158); MecanumJunctionReactor.flipped = flipped; }
+    public static void setFlipped(boolean flipped){ auto = true; junctionLocation = new Point(flipped ? -30.0 : 30.0, -158); MecanumJunctionReactor.flipped = flipped; }
 
     @Override
     public void init() {
@@ -53,10 +53,13 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
         Pose junctionPose = junctionScanner.getPose();
         Pose odometryPose = super.getPose();
 
+        if(flipped){
+            cameraToRobotCenter = 16.5;
+        }
 
         double maxDisFromTarget = 15;
         double maxDisVariation = 2;
-        double maxAngleVariation = 3; // EXPERIMENT
+        double maxAngleVariation = 3;
         int n = 5;
         if(junctionPose.getDistanceTo(junctionTargetPose) < maxDisFromTarget
                 && junctionScanner.distanceProfiler.areLastValuesNearby(n, maxDisVariation)
@@ -67,17 +70,20 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
 
             if(auto) {
 
-
                 Circle detectionCircle = new Circle(junctionLocation.getCopy(), startJunctionPose.getPoint().getCopy().getDistanceToOrigin() + cameraToRobotCenter);
                 Point closestPoint = detectionCircle.getClosestTo(startOdometryPose.getPoint()).getCopy();
                 Line error = new Line(closestPoint.getCopy(), startOdometryPose.getPoint().getCopy());
                 Line detection = new Line(junctionLocation.getCopy(), closestPoint.getCopy());
 
-                // TODO TEST
                 if(error.getLength() < 5){
-                    Point position = closestPoint.getCopy();
-                    double angle = (flipped ? -1 : 1) * (detection.getVector().getRotated(flipped ? 90 : -90).getTheta()+startJunctionPose.getAngle());
-                    Pose robotPose = new Pose(position, angle);
+                    Point position = error.getMidpoint();
+//                    log.record("Odometry Start", startOdometryPose);
+//                    log.record("Detection" , detection);
+//                    log.record("Flipped", flipped);
+//                    log.record("StartAngle", startJunctionPose.getAngle());
+                    double angle = (detection.getVector().getRotated(-90).getTheta()+startJunctionPose.getAngle());
+//                    log.record("angle", angle);
+                    Pose robotPose = new Pose(position, (angle + startOdometryPose.getAngle())/2.0);
                     odometry.setCurrentPose(robotPose);
                 }
                 exit = true;
@@ -114,5 +120,6 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
     @Override
     public void moveToTarget(PoseGenerator generator) {
         getPose();
+        drive.halt();
     }
 }

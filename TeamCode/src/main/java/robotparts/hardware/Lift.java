@@ -30,8 +30,8 @@ public class Lift extends RobotPart {
         motorLeft = create("lir", ElectronicType.PMOTOR_REVERSE);
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
-        motorRight.usePositionHolder(0.15, 0.2);
-        motorLeft.usePositionHolder(0.15, 0.2);
+        motorRight.usePositionHolder(0.18, 0.18);
+        motorLeft.usePositionHolder(0.18, 0.18);
         Modes.heightMode.set(HIGH);
         stackedMode = 0;
         circuitMode = false;
