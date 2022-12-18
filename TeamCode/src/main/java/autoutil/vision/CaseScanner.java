@@ -39,8 +39,8 @@ public class CaseScanner extends Scanner{
 
         double cyanValue = getBestRectStDev(input, 90, 110, CYAN);
         double magentaValue = getBestRectStDev(input, 140, 180, MAGENTA);
-        double orangeValue = getBestRectStDev(input, 1, 30, ORANGE);
-        return Iterator.minIndex(cyanValue, magentaValue, orangeValue);
+        double orangeValue = getBestRectStDev(input, 1, 60, ORANGE);
+        return Iterator.minIndex(cyanValue*1.5, magentaValue*1.2, orangeValue);
     }
 
     @Override

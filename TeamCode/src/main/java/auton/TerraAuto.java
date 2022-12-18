@@ -51,18 +51,18 @@ public class TerraAuto extends AutoFramework {
                 addCustomSegment(mecanumJunctionSetpoint, x, y, 50);
                 addAccuracyScaledSetpoint(1.0, 1.05,x, y, 50);
             }, () -> {
-                double x = -1.0; double y = 132;
-                addAccuracyScaledSetpoint(3.0,1.2,  -1, 129, 50);
+                double x = 5.5; double y = 129;
+                addAccuracyScaledSetpoint(3.0,1.05,  x, y, 50);
                 addCustomSegment(mecanumJunctionSetpoint, x, y, 50);
-                addAccuracyScaledSetpoint(1.0, 1.2, x, y, 50);
+                addAccuracyScaledSetpoint(1.0, 1.05,x, y, 50);
             });
             addAutoModule(DropAutoFirst);
         }else{
             addConcurrentAutoModule(BackwardAuto);
             customFlipped(() -> {
-                addAccuracyScaledSetpoint(1.0, 1.2,4.5-(i/5.0), 130+(i/4.0), 50);
+                addAccuracyScaledSetpoint(1.0, 1.2,4.0, 130.5 + (i/3.0), 50);
             }, () -> {
-                addAccuracyScaledSetpoint(1.0, 1.2,-1.0-(i/4.0), 130-(i/4.0), 50);
+                addAccuracyScaledSetpoint(1.0, 1.2,3.5-(i/5.0), 131+(i/4.0), 50);
             });
             addCancelAutoModules();
             addAutoModule(DropAuto);
@@ -73,9 +73,9 @@ public class TerraAuto extends AutoFramework {
     public void pick(int i){
         addBreakpoint(() -> timer.seconds() > 24.5);
         customFlipped(() -> {
-            addAccuracyScaledSetpoint(2.0, 0.7, 61-(i/5.0), 125, 87);
+            addAccuracyScaledSetpoint(2.0, 0.7, 61, 125 + (i/3.0), 87);
         }, () -> {
-            addAccuracyScaledSetpoint(2.0, 0.7, 57-(i/4.0), 126, 87);
+            addAccuracyScaledSetpoint(2.0, 0.7, 61-(i/5.0), 125, 87);
         });
         addConcurrentAutoModule(GrabAuto);
         addPause(0.5);
@@ -90,7 +90,7 @@ public class TerraAuto extends AutoFramework {
         });
         addScaledWaypoint(1.0, 0, 120, 20);
         place(0);
-        customNumber(5, i -> {
+        customNumber(4, i -> {
             customFlipped(() -> {
                 addScaledWaypoint(0.4, 30, 125, 87);
                 pick(i+1);
@@ -98,10 +98,10 @@ public class TerraAuto extends AutoFramework {
                 addScaledWaypoint(0.35, 3, 128.5, 50);
                 place(i+1);
             }, () -> {
-                addScaledWaypoint(0.5, 30, 125, 87);
+                addScaledWaypoint(0.4, 30, 125, 87);
                 pick(i+1);
-                addScaledWaypoint(0.7, 30, 128, 75);
-                addScaledWaypoint(0.4, 3, 128.5, 50);
+                addScaledWaypoint(0.6, 30, 128, 75);
+                addScaledWaypoint(0.35, 3, 128.5, 50);
                 place(i+1);
             });
         });

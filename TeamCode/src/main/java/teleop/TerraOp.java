@@ -66,6 +66,7 @@ public class TerraOp extends Tele {
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
         gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);
+        gph1.link(DPAD_UP, ResetLift, AUTOMATED);
 
 
         /**

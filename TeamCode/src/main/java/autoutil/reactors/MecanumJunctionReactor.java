@@ -53,8 +53,9 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
         Pose junctionPose = junctionScanner.getPose();
         Pose odometryPose = super.getPose();
 
+//        cameraToRobotCenter = 20.5;
         if(flipped){
-            cameraToRobotCenter = 16.5;
+            cameraToRobotCenter = 20.5;
         }
 
         double maxDisFromTarget = 15;

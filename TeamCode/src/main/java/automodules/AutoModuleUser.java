@@ -187,7 +187,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule ForwardMedium = new AutoModule(
             outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
-            RobotPart.pause(0.1),
+//            RobotPart.pause(0.1),
             lift.changeCutoff(6.0),
             lift.stageLift(0.4, 0)
     );
@@ -201,11 +201,11 @@ public interface AutoModuleUser extends RobotUser{
             addScaledWaypoint(0.5, 0.0, 30.0, 0.0);
             addScaledWaypoint(0.3, 0.0, 50, 0.0);
             addConcurrentAutoModule(BackwardCycleMedium);
-            addPause(0.2);
+            addPause(0.3);
             addScaledWaypoint(0.4, 0.0, 19.0, 0.0);
             addAccuracyScaledSetpoint(0.7, 1.1,0, 3,0);
             addCancelAutoModules();
-            addConcurrentAutoModule(ForwardTele);
+            addConcurrentAutoModule(ForwardMedium);
             addPause(0.5);
         }
     };
@@ -213,6 +213,12 @@ public interface AutoModuleUser extends RobotUser{
             .addInstruction(odometry::reset, 0.3)
             .addIndependent(8, CycleMedium)
     ;
+
+
+    AutoModule ResetLift = new AutoModule(
+            lift.moveTime(-0.3, 0.5),
+            lift.resetLift()
+    );
 
 
 

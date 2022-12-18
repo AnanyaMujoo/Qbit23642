@@ -64,7 +64,7 @@ public class Lift extends RobotPart {
     }
 
     @Override
-    protected Stage moveTime(double p, double t) {
+    public Stage moveTime(double p, double t) {
         return super.moveTime(p, t);
     }
 
@@ -72,5 +72,10 @@ public class Lift extends RobotPart {
 
     @Override
     public void maintain() { super.maintain(); }
+
+
+    public Stage resetLift(){
+        return new Stage(usePart(), new Main(() -> {motorRight.resetPosition(); motorLeft.resetPosition();}), exitTime(0.1), stop(), returnPart());
+    }
 }
 
