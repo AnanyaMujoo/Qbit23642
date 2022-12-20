@@ -160,7 +160,6 @@ public interface Iterator {
 
     static void forAllRun(ArrayList<CodeSeg> codeSegments){ forAll(codeSegments, CodeSeg::run); }
 
-
     static double forAllAverage(ArrayList<Double> list){
         final double[] sum = {0};
         Iterator.forAll(list, l->sum[0]+=l);
@@ -179,21 +178,11 @@ public interface Iterator {
         return list.get(minIndex(values));
     }
 
-
-
-
-
     static int minIndex(ArrayList<Double> arr){ int ind = 0; double min = arr.get(0); for (int i = 0; i < arr.size() ; i++) { if(arr.get(i) < min){min = arr.get(i); ind = i;} } return ind; }
 
     static int maxIndex(ArrayList<Double> arr){ int ind = 0; double max = arr.get(0); for (int i = 0; i < arr.size() ; i++) { if(arr.get(i) > max){max = arr.get(i); ind = i;} } return ind; }
 
-    static int minIndex(double... arr){
-        int ind = 0; double min = arr[0]; for (int i = 0; i < arr.length ; i++) { if(arr[i] < min){min = arr[i]; ind = i;} }
-        return ind;
-    }
+    static int minIndex(double... arr){ int ind = 0; double min = arr[0]; for (int i = 0; i < arr.length ; i++) { if(arr[i] < min){min = arr[i]; ind = i;} } return ind; }
 
-
-    static <T> void removeCondition(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> condition){
-        for (int i = list.size() - 1; i >= 0; --i) { if (condition.run(list.get(i))) { list.remove(i); } }
-    }
+    static <T> void removeCondition(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> condition){ for (int i = list.size() - 1; i >= 0; --i) { if (condition.run(list.get(i))) { list.remove(i); } } }
 }

@@ -12,8 +12,7 @@ import util.condition.DecisionList;
 
 import static global.General.bot;
 import static global.General.fieldSide;
-import static global.Modes.OuttakeMode.ALLIANCE;
-import static global.Modes.OuttakeMode.SHARED;
+
 
 public interface AutoModuleUserOld extends RobotUser {
 
@@ -70,8 +69,8 @@ public interface AutoModuleUserOld extends RobotUser {
 
     AutoModule LiftReset = new AutoModule(mecanumLift.liftEncoderDown(-0.5, 0));
 
-    default AutoModule changeDrive(Modes.DriveMode driveMode){return mecanumDrive.mainChangeDrive(driveMode);}
-    static AutoModule changeDrive2(Modes.DriveMode driveMode){return mecanumDrive.mainChangeDrive(driveMode);}
+//    default AutoModule changeDrive(Modes.DriveMode driveMode){return mecanumDrive.mainChangeDrive(driveMode);}
+//    static AutoModule changeDrive2(Modes.DriveMode driveMode){return mecanumDrive.mainChangeDrive(driveMode);}
 
 
     AutoModule OuttakeHorizontal = new AutoModule(mecanumOuttake.stageTurnToHorizontal(0.15));
@@ -105,43 +104,43 @@ public interface AutoModuleUserOld extends RobotUser {
 
     AutoModule IntakeUntilFreight = new AutoModule(mecanumIntake.intakeUntilFreight());
 
-    default AutoModule AllianceLiftUp(AutoModule liftUp){return new AutoModule().add(OuttakeLockFast, OuttakeHorizontalFast, liftUp, OuttakeAlliance, changeDrive(null));}
-    static AutoModule AllianceLiftUp2(AutoModule liftUp){return new AutoModule().add(OuttakeLockFast, OuttakeHorizontalFast, liftUp, OuttakeAlliance, changeDrive2(null));}
+//    default AutoModule AllianceLiftUp(AutoModule liftUp){return new AutoModule().add(OuttakeLockFast, OuttakeHorizontalFast, liftUp, OuttakeAlliance, changeDrive(null));}
+//    static AutoModule AllianceLiftUp2(AutoModule liftUp){return new AutoModule().add(OuttakeLockFast, OuttakeHorizontalFast, liftUp, OuttakeAlliance, changeDrive2(null));}
+//
+//
+//    DecisionList SetUpForAllianceShippingHub = new DecisionList(mecanumLift::getLevelMode)
+//            .addOption(Level.TOP, () -> bot.addAutoModule(AllianceLiftUp2(LiftUpTopFast)))
+//            .addOption(Level.MIDDLE, () -> bot.addAutoModule(AllianceLiftUp2(LiftUpMiddleFast)))
+//            .addOption(Level.BOTTOM, () -> bot.addAutoModule(AllianceLiftUp2(LiftUpBottomFast)));
+//
+//
+//    AutoModule SetUpForSharedShippingHubRight = new AutoModule().add(OuttakeLockFast, OuttakeHorizontal, LiftUpShared, OuttakeSharedRight, changeDrive2(null));
+//
+//    AutoModule SetUpForSharedShippingHubLeft = new AutoModule().add(OuttakeLockFast,OuttakeHorizontal, LiftUpShared, OuttakeSharedLeft, changeDrive2(null));
+//
+//    AutoModule SetUpForSharedShippingHubCenter = new AutoModule().add(OuttakeLockFast, OuttakeHorizontal, LiftUpShared, changeDrive2(null));
+//
+//
+//
+//    DecisionList SetUpForSharedShippingHubBoth = new DecisionList(() -> fieldSide)
+//            .addOption(FieldSide.BLUE, () -> bot.addAutoModule(SetUpForSharedShippingHubLeft))
+//            .addOption(FieldSide.RED, () -> bot.addAutoModule(SetUpForSharedShippingHubRight));
+//
+//
+//    DecisionList SetUpForSharedShippingHubAll = new DecisionList(mecanumOuttake::getSharedMode)
+//            .addOption(Modes.SharedMode.NORMAL, SetUpForSharedShippingHubBoth::check)
+//            .addOption(Modes.SharedMode.CENTER, () -> bot.addAutoModule(SetUpForSharedShippingHubCenter));
+//
+//
+//    DecisionList SetUpForBoth = new DecisionList(mecanumOuttake::getOuttakeMode)
+//            .addOption(ALLIANCE, SetUpForAllianceShippingHub::check)
+//            .addOption(SHARED, SetUpForSharedShippingHubAll::check);
 
 
-    DecisionList SetUpForAllianceShippingHub = new DecisionList(mecanumLift::getLevelMode)
-            .addOption(Level.TOP, () -> bot.addAutoModule(AllianceLiftUp2(LiftUpTopFast)))
-            .addOption(Level.MIDDLE, () -> bot.addAutoModule(AllianceLiftUp2(LiftUpMiddleFast)))
-            .addOption(Level.BOTTOM, () -> bot.addAutoModule(AllianceLiftUp2(LiftUpBottomFast)));
-
-
-    AutoModule SetUpForSharedShippingHubRight = new AutoModule().add(OuttakeLockFast, OuttakeHorizontal, LiftUpShared, OuttakeSharedRight, changeDrive2(null));
-
-    AutoModule SetUpForSharedShippingHubLeft = new AutoModule().add(OuttakeLockFast,OuttakeHorizontal, LiftUpShared, OuttakeSharedLeft, changeDrive2(null));
-
-    AutoModule SetUpForSharedShippingHubCenter = new AutoModule().add(OuttakeLockFast, OuttakeHorizontal, LiftUpShared, changeDrive2(null));
-
-
-
-    DecisionList SetUpForSharedShippingHubBoth = new DecisionList(() -> fieldSide)
-            .addOption(FieldSide.BLUE, () -> bot.addAutoModule(SetUpForSharedShippingHubLeft))
-            .addOption(FieldSide.RED, () -> bot.addAutoModule(SetUpForSharedShippingHubRight));
-
-
-    DecisionList SetUpForSharedShippingHubAll = new DecisionList(mecanumOuttake::getSharedMode)
-            .addOption(Modes.SharedMode.NORMAL, SetUpForSharedShippingHubBoth::check)
-            .addOption(Modes.SharedMode.CENTER, () -> bot.addAutoModule(SetUpForSharedShippingHubCenter));
-
-
-    DecisionList SetUpForBoth = new DecisionList(mecanumOuttake::getOuttakeMode)
-            .addOption(ALLIANCE, SetUpForAllianceShippingHub::check)
-            .addOption(SHARED, SetUpForSharedShippingHubAll::check);
-
-
-    AutoModule ResetLiftAndOuttake = new AutoModule().add(changeDrive2(null), OuttakeReset, LiftReset);
-
-
-    AutoModule IntakeCombined = new AutoModule().add(changeDrive2(null), OuttakeDropFast, IntakeUntilFreight, IntakeOutAndLock);
+//    AutoModule ResetLiftAndOuttake = new AutoModule().add(changeDrive2(null), OuttakeReset, LiftReset);
+//
+//
+//    AutoModule IntakeCombined = new AutoModule().add(changeDrive2(null), OuttakeDropFast, IntakeUntilFreight, IntakeOutAndLock);
 
 
 

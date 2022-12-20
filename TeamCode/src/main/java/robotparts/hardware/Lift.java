@@ -11,8 +11,8 @@ import robotparts.electronics.positional.PMotor;
 import robotparts.electronics.positional.PServo;
 import util.User;
 
-import static global.Modes.HeightMode.Height.HIGH;
 import static global.Modes.gameplayMode;
+import static global.Modes.heightMode;
 
 public class Lift extends RobotPart {
 
@@ -32,10 +32,10 @@ public class Lift extends RobotPart {
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorRight.usePositionHolder(0.18, 0.18);
         motorLeft.usePositionHolder(0.18, 0.18);
-        Modes.heightMode.set(HIGH);
+        heightMode.set(Modes.Height.HIGH);
         stackedMode = 0;
         circuitMode = false;
-        gameplayMode = Modes.GameplayMode.CYCLE;
+        gameplayMode.set(Modes.GameplayMode.CYCLE);
     }
 
 
@@ -50,9 +50,9 @@ public class Lift extends RobotPart {
         motorLeft.moveWithPositionHolder(p, cutoffPosition, 0.15);
     }
 
-    public void setHolderTarget(Modes.HeightMode.Height height){
+    public void setHolderTarget(Modes.Height height){
         Modes.heightMode.set(height);
-        setHolderTarget(height.getValue());
+        setHolderTarget(heightMode.getValue());
     }
 
     public void setHolderTarget(double height){

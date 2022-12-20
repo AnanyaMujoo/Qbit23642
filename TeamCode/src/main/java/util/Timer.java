@@ -53,7 +53,10 @@ public class Timer {
         return gameTime.seconds()-startTime;
     }
 
-
+    /**
+     * Initial to reset the timer
+     * @return reset initial
+     */
     public Initial initialReset(){
         return new Initial(this::reset);
     }

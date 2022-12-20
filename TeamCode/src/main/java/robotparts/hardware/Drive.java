@@ -11,8 +11,6 @@ import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 
 import static global.General.fieldSide;
-import static global.Modes.DriveMode.Drive.MEDIUM;
-import static global.Modes.DriveMode.Drive.SLOW;
 
 public class Drive extends RobotPart {
 
@@ -32,7 +30,7 @@ public class Drive extends RobotPart {
         br = create("br", ElectronicType.CMOTOR_REVERSE);
         fl = create("fl", ElectronicType.CMOTOR_FORWARD);
         bl = create("bl", ElectronicType.CMOTOR_FORWARD);
-        Modes.driveMode.set(SLOW);
+        Modes.driveMode.set(Modes.Drive.SLOW);
 //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
@@ -57,8 +55,8 @@ public class Drive extends RobotPart {
 
 
     public void moveSmooth(double f, double s, double t) {
-        double scale = Modes.driveMode.get().getValue(); move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(
-                Modes.driveMode.modeIs(MEDIUM) ? 0.7*t*scale : t*1.2*scale));
+        double scale = Modes.driveMode.getValue(); move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(
+                Modes.driveMode.modeIs(Modes.Drive.MEDIUM) ? 0.7*t*scale : t*1.2*scale));
     }
 
     @Override

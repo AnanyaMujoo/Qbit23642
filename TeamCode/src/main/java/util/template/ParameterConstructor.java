@@ -79,8 +79,12 @@ public interface ParameterConstructor<T> {
      */
     public interface ParameterType {};
 
-
-
+    /**
+     * Static method to create new instance of class with default constructor
+     * @param type
+     * @param <T>
+     * @return new instance
+     */
     static <T> ReturnCodeSeg<T> getNewInstance(Class<T> type){
         return () -> {
             Object[] out = new Object[1];

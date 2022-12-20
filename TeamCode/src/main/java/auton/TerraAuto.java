@@ -20,7 +20,6 @@ import util.condition.DecisionList;
 import static global.General.bot;
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
-import static global.Modes.HeightMode.Height.HIGH;
 
 public class TerraAuto extends AutoFramework {
 

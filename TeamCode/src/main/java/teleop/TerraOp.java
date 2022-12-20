@@ -18,10 +18,11 @@ import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
 import static global.General.voltageScale;
-import static global.Modes.DriveMode.Drive.FAST;
-import static global.Modes.DriveMode.Drive.MEDIUM;
 import static global.Modes.GamepadMode.AUTOMATED;
-import static global.Modes.HeightMode.Height.*;
+import static global.Modes.Height.GROUND;
+import static global.Modes.Height.HIGH;
+import static global.Modes.Height.LOW;
+import static global.Modes.Height.MIDDLE;
 import static teleutil.button.Button.DPAD_DOWN;
 import static teleutil.button.Button.DPAD_LEFT;
 import static teleutil.button.Button.DPAD_RIGHT;
@@ -41,9 +42,9 @@ public class TerraOp extends Tele {
          * Gamepad 1 Normal
          */
         gph1.link(Button.B, BackwardAllTele);
-        gph1.link(Button.Y, () -> {if(lift.circuitMode) { Modes.gameplayMode = Modes.GameplayMode.CIRCUIT_PICK;} bot.addAutoModule(ForwardAll.check());});
+        gph1.link(Button.Y, () -> {if(lift.circuitMode) { Modes.gameplayMode.set(Modes.GameplayMode.CIRCUIT_PICK);} bot.addAutoModule(ForwardAll.check());});
         gph1.link(Button.X, bot::cancelMovements);
-        gph1.link(Button.A, () -> Modes.driveMode.set(MEDIUM));
+        gph1.link(Button.A, () -> Modes.driveMode.set(Modes.Drive.MEDIUM));
         gph1.link(Button.RIGHT_STICK_BUTTON, Modes.driveMode::cycleUp);
 
         gph1.link(DPAD_UP, () -> lift.setHolderTarget(HIGH));
@@ -61,7 +62,7 @@ public class TerraOp extends Tele {
         gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
         gph1.link(Button.B, CycleMachine, AUTOMATED);
         gph1.link(Button.Y, CycleMediumMachine, AUTOMATED);
-        gph1.link(Button.X, () -> {lift.circuitMode = true; Modes.gameplayMode = Modes.GameplayMode.CIRCUIT_PICK;}, () -> {lift.circuitMode = false; Modes.gameplayMode = Modes.GameplayMode.CYCLE;}, AUTOMATED);
+        gph1.link(Button.X, () -> {lift.circuitMode = true; Modes.gameplayMode.set(Modes.GameplayMode.CIRCUIT_PICK);}, () -> {lift.circuitMode = false; Modes.gameplayMode.set(Modes.GameplayMode.CYCLE);}, AUTOMATED);
         gph1.link(RIGHT_TRIGGER, UprightCone, AUTOMATED);
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);

@@ -43,6 +43,12 @@ public class OutputList {
         return this;
     }
 
+    /**
+     * Add a return codeseg to output for dynamic outputs
+     * @param decision
+     * @param obj
+     * @return
+     */
     public OutputList addOption(Decision decision, ReturnCodeSeg<Object> obj){
         outputs.put(decision, obj);
         return this;

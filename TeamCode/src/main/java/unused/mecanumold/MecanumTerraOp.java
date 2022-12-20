@@ -29,12 +29,12 @@ public class MecanumTerraOp extends Tele implements AutoModuleUserOld {
 
         gph1.link(Button.LEFT_TRIGGER, OneDuck);
         gph1.link(Button.RIGHT_TRIGGER, mecanumLift::cycleLevelUp);
-        gph1.link(Button.RIGHT_BUMPER, mecanumOuttake::cycleOuttakeMode);
-        gph1.link(Button.LEFT_BUMPER, mecanumOuttake::cycleSharedMode);
-        gph1.link(Button.RIGHT_STICK_BUTTON,  mecanumDrive::cycleDriveUp);
-        gph1.link(Button.LEFT_STICK_BUTTON,  () -> mecanumIntake.moveRaw(-1));
-
-        gph1.link(Button.A, IntakeCombined);
+//        gph1.link(Button.RIGHT_BUMPER, mecanumOuttake::cycleOuttakeMode);
+//        gph1.link(Button.LEFT_BUMPER, mecanumOuttake::cycleSharedMode);
+//        gph1.link(Button.RIGHT_STICK_BUTTON,  mecanumDrive::cycleDriveUp);
+//        gph1.link(Button.LEFT_STICK_BUTTON,  () -> mecanumIntake.moveRaw(-1));
+//
+//        gph1.link(Button.A, IntakeCombined);
 //
 //        gph1.link(Button.B, independents.Backward);
 //        gph1.link(Button.Y, independents.Forward);
@@ -78,11 +78,11 @@ public class MecanumTerraOp extends Tele implements AutoModuleUserOld {
             mecanumLift.move(-gamepad2.right_stick_y);
         }
 
-        log.show("OuttakeMode", mecanumOuttake.getOuttakeMode());
-        log.show("SharedMode", mecanumOuttake.getSharedMode());
-        log.show("DriveMode", mecanumDrive.getDriveMode());
-        log.show("LevelMode", mecanumLift.getLevelMode());
-        log.show("IndependentMode", mecanumDrive.getIndependentMode());
+//        log.show("OuttakeMode", mecanumOuttake.getOuttakeMode());
+//        log.show("SharedMode", mecanumOuttake.getSharedMode());
+//        log.show("DriveMode", mecanumDrive.getDriveMode());
+//        log.show("LevelMode", mecanumLift.getLevelMode());
+//        log.show("IndependentMode", mecanumDrive.getIndependentMode());
 
 
 

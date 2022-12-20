@@ -12,12 +12,16 @@ import teleutil.independent.Independent;
 import teleutil.independent.Machine;
 import util.condition.OutputList;
 
-import static global.Modes.DriveMode.Drive.MEDIUM;
-import static global.Modes.DriveMode.Drive.SLOW;
+import static global.Modes.Drive.MEDIUM;
+import static global.Modes.Drive.SLOW;
 import static global.Modes.GameplayMode.CIRCUIT_PICK;
 import static global.Modes.GameplayMode.CIRCUIT_PLACE;
 import static global.Modes.GameplayMode.CYCLE;
-import static global.Modes.HeightMode.Height.*;
+import static global.Modes.*;
+import static global.Modes.Height.GROUND;
+import static global.Modes.Height.HIGH;
+import static global.Modes.Height.LOW;
+import static global.Modes.Height.MIDDLE;
 
 
 public interface AutoModuleUser extends RobotUser{
@@ -26,30 +30,30 @@ public interface AutoModuleUser extends RobotUser{
      * Tele
      */
     AutoModule BackwardCircuitPick = new AutoModule(
-            Modes.driveMode.ChangeMode(MEDIUM),
+            driveMode.ChangeMode(MEDIUM),
             outtake.stageClose(0.2),
             outtake.stageReadyStart(0.4),
-            Modes.ChangeGameplayMode(CIRCUIT_PLACE)
+            gameplayMode.ChangeMode(CIRCUIT_PLACE)
     );
     AutoModule BackwardCircuitGroundPick = new AutoModule(
             Modes.driveMode.ChangeMode(MEDIUM),
             lift.changeCutoff(2.0),
             outtake.stageClose(0.2),
             outtake.stageReadyStart(0.0),
-            lift.stageLift(1.0, GROUND.getValue()),
-            Modes.ChangeGameplayMode(CIRCUIT_PLACE)
+            lift.stageLift(1.0, heightMode.getValue(GROUND)),
+            gameplayMode.ChangeMode(CIRCUIT_PLACE)
     );
     AutoModule UprightCone = new AutoModule(
-            Modes.driveMode.ChangeMode(SLOW),
+            driveMode.ChangeMode(SLOW),
             lift.stageLift(1.0, 12)
     );
     AutoModule BackwardCycleGroundPick = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             lift.changeCutoff(2.0),
             outtake.stageClose(0.2),
-            lift.stageLift(1.0, GROUND.getValue())
+            lift.stageLift(1.0, heightMode.getValue(GROUND))
     );
-    OutputList BackwardCircuitPickAll = new OutputList(Modes.heightMode::get)
+    OutputList BackwardCircuitPickAll = new OutputList(heightMode::get)
             .addOption(HIGH, BackwardCircuitPick)
             .addOption(MIDDLE, BackwardCircuitPick)
             .addOption(LOW, BackwardCircuitPick)
@@ -57,30 +61,30 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardCircuitGroundPlace = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             outtake.stageStart(0.6),
-            Modes.ChangeGameplayMode(CIRCUIT_PICK)
+            gameplayMode.ChangeMode(CIRCUIT_PICK)
     );
-    OutputList BackwardCircuitPlace = new OutputList(Modes.heightMode::get)
+    OutputList BackwardCircuitPlace = new OutputList(heightMode::get)
             .addOption(LOW, BackwardCircuitPlace(LOW))
             .addOption(MIDDLE, BackwardCircuitPlace(MIDDLE))
             .addOption(HIGH, BackwardCircuitPlace(HIGH))
             .addOption(GROUND, BackwardCircuitGroundPlace);
-    static AutoModule BackwardCircuitPlace(Modes.HeightMode.Height height){ return new AutoModule(
+    static AutoModule BackwardCircuitPlace(Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             outtake.stageFlip(0.0),
-            lift.stageLift(1.0, height.getValue()).attach(outtake.stageReadyEndAfter(0.1)),
-            Modes.ChangeGameplayMode(CIRCUIT_PICK)
+            lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.1)),
+            gameplayMode.ChangeMode(CIRCUIT_PICK)
     );}
-    static AutoModule BackwardHeightTele(Modes.HeightMode.Height height){ return new AutoModule(
+    static AutoModule BackwardHeightTele(Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             outtake.stageClose(0.2),
-            lift.stageLift(1.0, height.getValue()).attach(outtake.stageReadyEndAfter(0.1))
+            lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.1))
     );}
-    OutputList BackwardTele = new OutputList(Modes.heightMode::get)
+    OutputList BackwardTele = new OutputList(heightMode::get)
             .addOption(HIGH, BackwardHeightTele(HIGH))
              .addOption(MIDDLE, BackwardHeightTele(MIDDLE))
             .addOption(LOW, BackwardHeightTele(LOW))
             .addOption(GROUND, BackwardCycleGroundPick);
-    OutputList BackwardAllTele = new OutputList(() -> Modes.gameplayMode)
+    OutputList BackwardAllTele = new OutputList(gameplayMode::get)
             .addOption(CYCLE, BackwardTele::check)
             .addOption(CIRCUIT_PICK, BackwardCircuitPickAll::check)
             .addOption(CIRCUIT_PLACE, BackwardCircuitPlace::check);
@@ -99,7 +103,7 @@ public interface AutoModuleUser extends RobotUser{
             lift.changeCutoff(6.0),
             lift.stageLift(0.4, 0)
     );
-    OutputList ForwardAll = new OutputList(() -> Modes.gameplayMode)
+    OutputList ForwardAll = new OutputList(gameplayMode::get)
             .addOption(CYCLE, ForwardTele)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele);
@@ -121,7 +125,7 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageClose(0.2),
             outtake.stageReadyStart(0.3).attach(drive.moveTime(-0.2, 0, 0, 0.2)),
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, HIGH.getValue()+5)
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+5)
     );
     default AutoModule ForwardAuto(int i){return new AutoModule(
             outtake.stageStart(0.0),
@@ -129,7 +133,7 @@ public interface AutoModuleUser extends RobotUser{
     );}
     AutoModule BackwardAutoFirst = new AutoModule(
             outtake.stageReadyEnd(0.0),
-            lift.stageLift(1.0, HIGH.getValue()+7)
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+7)
     );
     AutoModule BackwardAuto = new AutoModule(
             RobotPart.pause(0.1),
@@ -154,7 +158,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardCycle = new AutoModule(
             outtake.stageClose(0.2),
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, HIGH.getValue()-2).attach(outtake.stageReadyEndAfter(0.25))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-2).attach(outtake.stageReadyEndAfter(0.25))
     );
 
     /**
@@ -181,7 +185,7 @@ public interface AutoModuleUser extends RobotUser{
 
     AutoModule BackwardCycleMedium = new AutoModule(
             outtake.stageClose(0.2),
-            lift.stageLift(1.0, MIDDLE.getValue()+9).attach(outtake.stageEndAfter(0.4))
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+9).attach(outtake.stageEndAfter(0.4))
     );
 
     AutoModule ForwardMedium = new AutoModule(

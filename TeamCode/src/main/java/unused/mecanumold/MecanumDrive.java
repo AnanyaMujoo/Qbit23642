@@ -9,8 +9,6 @@ import automodules.stage.Stop;
 import unused.mecanumold.oldauto.Executor;
 import unused.mecanumold.oldauto.MecanumExecutorArcsPID;
 import geometry.position.Pose;
-import global.Modes.DriveMode;
-import global.Modes.IndependentMode;
 import math.misc.Logistic;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
@@ -29,8 +27,8 @@ import static global.General.bot;
 public class MecanumDrive extends RobotPart {
     private Executor executor;
     private CMotor fr, br, fl, bl;
-    private DriveMode driveMode = null;
-    private IndependentMode independentMode = IndependentMode.MANUAL;
+//    private DriveMode driveMode = null;
+//    private IndependentMode independentMode = IndependentMode.MANUAL;
 
     @Override
     public void init() {
@@ -156,21 +154,21 @@ public class MecanumDrive extends RobotPart {
         );
     }
 
-    public AutoModule mainChangeDrive(DriveMode driveMode) {
-        return new AutoModule(new Stage(
-                usePart(),
-                mainCycleDrive(driveMode),
-                exitAlways(),
-                returnPart()
-        ));
-    }
+//    public AutoModule mainChangeDrive(DriveMode driveMode) {
+//        return new AutoModule(new Stage(
+//                usePart(),
+//                mainCycleDrive(driveMode),
+//                exitAlways(),
+//                returnPart()
+//        ));
+//    }
 
-
-    public Main mainCycleDrive(DriveMode drive) {
-        return new Main(() -> driveMode = drive);
-    }
-
-    private DriveMode nextDrive() {
+//
+//    public Main mainCycleDrive(DriveMode drive) {
+//        return new Main(() -> driveMode = drive);
+//    }
+//
+//    private DriveMode nextDrive() {
 //        switch (driveMode) {
 ////            case FAST:
 ////                return DriveMode.SLOW;
@@ -179,42 +177,42 @@ public class MecanumDrive extends RobotPart {
 ////            case SLOW:
 ////                return DriveMode.MEDIUM;
 //        }
-        return null;
-    }
+//        return null;
+//    }
 
     // TOD4
     // Make cycle class or smt for enums
-
-    public void cycleDriveUp() {
-        driveMode = nextDrive();
-    }
-
-    public void cycleDriveDown() {
-        cycleDriveUp();
-        cycleDriveUp();
-    }
-
-    public DriveMode getDriveMode() {
-        return driveMode;
-    }
-
-    public void setDriveMode(DriveMode driveMode) {
-        this.driveMode = driveMode;
-    }
-
-    public IndependentMode getIndependentMode() {
-        return independentMode;
-    }
-
-    public void setIndependentMode(IndependentMode independentMode) {
-        this.independentMode = independentMode;
-    }
-
-    public void cycleIndependentMode(){
-        if(independentMode.equals(IndependentMode.USING)){
-            setIndependentMode(IndependentMode.MANUAL);
-        }else{
-            setIndependentMode(IndependentMode.USING);
-        }
-    }
+//
+//    public void cycleDriveUp() {
+//        driveMode = nextDrive();
+//    }
+//
+//    public void cycleDriveDown() {
+//        cycleDriveUp();
+//        cycleDriveUp();
+//    }
+//
+//    public DriveMode getDriveMode() {
+//        return driveMode;
+//    }
+//
+//    public void setDriveMode(DriveMode driveMode) {
+//        this.driveMode = driveMode;
+//    }
+//
+//    public IndependentMode getIndependentMode() {
+//        return independentMode;
+//    }
+//
+//    public void setIndependentMode(IndependentMode independentMode) {
+//        this.independentMode = independentMode;
+//    }
+//
+//    public void cycleIndependentMode(){
+//        if(independentMode.equals(IndependentMode.USING)){
+//            setIndependentMode(IndependentMode.MANUAL);
+//        }else{
+//            setIndependentMode(IndependentMode.USING);
+//        }
+//    }
 }

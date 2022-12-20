@@ -1,20 +1,7 @@
 package global;
 
-import automodules.AutoModule;
-import automodules.stage.Main;
-import automodules.stage.Stage;
-import robotparts.hardware.Drive;
 import robotparts.hardware.Lift;
-import util.codeseg.CodeSeg;
-import util.condition.Decision;
-import util.template.ValueMode;
-
-import static automodules.StageBuilder.exitAlways;
-import static global.Modes.DriveMode.Drive.FAST;
-import static global.Modes.DriveMode.Drive.MEDIUM;
-import static global.Modes.DriveMode.Drive.SLOW;
-import static global.Modes.HeightMode.Height.LOW;
-import static global.Modes.HeightMode.Height.MIDDLE;
+import util.template.Mode;
 
 
 public class Modes {
@@ -27,49 +14,22 @@ public class Modes {
      * List of mode types
      */
 
-    public enum OuttakeMode implements Decision {
-        SHARED,
-        ALLIANCE
-    }
+    public enum GamepadMode implements Mode.ModeType { NORMAL, AUTOMATED }
 
-    public enum SharedMode implements Decision {
-        NORMAL,
-        CENTER
-    }
+    public enum GameplayMode implements Mode.ModeType { CYCLE,  CIRCUIT_PICK,  CIRCUIT_PLACE }
+    public static final Mode gameplayMode = new Mode(GameplayMode.class);
 
-    public enum IndependentMode implements Decision {
-        MANUAL,
-        USING
-    }
+    public enum Height implements Mode.ModeType {HIGH, MIDDLE, LOW, GROUND}
+    public static final Mode heightMode = new Mode(Height.class)
+            .set(Height.HIGH, Lift.maxPosition-9)
+            .set(Height.MIDDLE, 28)
+            .set(Height.LOW, 9)
+            .set(Height.GROUND, 9);
 
-    public enum GamepadMode implements Decision {
-        NORMAL,
-        AUTOMATED
-    }
-
-    public enum GameplayMode implements Decision {
-        CYCLE,
-        CIRCUIT_PICK,
-        CIRCUIT_PLACE
-    }
-
-    public static Stage ChangeGameplayMode(GameplayMode mode){ return new Stage(new Main(() -> gameplayMode = mode), exitAlways()); }
-
-    public static class HeightMode extends ValueMode{ public enum Height implements ModeType{
-        HIGH{@Override public double getValue() {return Lift.maxPosition-9;}},
-        MIDDLE {@Override public double getValue() {return 28;}},
-        LOW {@Override public double getValue() {return 9;}},
-        GROUND {@Override public double getValue(){ return 9; }};
-    }}
-
-    public static class DriveMode extends ValueMode{ public enum Drive implements ModeType{
-        FAST{@Override public double getValue(){return 1.0;}},
-        MEDIUM{@Override public double getValue(){return 0.75;}},
-        SLOW{@Override public double getValue(){return 0.35;}};
-    }}
-
-    public static final HeightMode heightMode = new HeightMode();
-    public static final DriveMode driveMode = new DriveMode().enableCycling(SLOW, MEDIUM, FAST);
-    public static GameplayMode gameplayMode = GameplayMode.CYCLE;
+    public enum Drive implements Mode.ModeType{ FAST, MEDIUM, SLOW }
+    public static final Mode driveMode = new Mode(Drive.class)
+            .set(Drive.FAST, 1.0)
+            .set(Drive.MEDIUM, 0.75)
+            .set(Drive.SLOW, 0.35);
 
 }

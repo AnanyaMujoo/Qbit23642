@@ -26,7 +26,7 @@ public class DRP extends Controller1D{
 
     @Override
     protected void updateController(Pose pose, Generator generator) {
-        precision.throttle(() -> restPower *= isWithinAccuracyRange() ? 0.98 : 1.02, 25);
+        precision.throttle(() -> {restPower *= isWithinAccuracyRange() ? 0.98 : 1.02;}, 25);
         setRestOutput(restPower);
     }
 
