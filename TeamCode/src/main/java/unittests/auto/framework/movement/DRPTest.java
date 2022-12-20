@@ -11,9 +11,6 @@ public class DRPTest extends AutoUnitTest {
     private DRP testDRP;
 
     @Override
-    protected Drive getTestPart() { return drive; }
-
-    @Override
     protected void start() {
         odometry.reset();
         testDRP = new DRP(0.03, 0.03);
@@ -28,12 +25,12 @@ public class DRPTest extends AutoUnitTest {
         whileActive(() -> !testDRP.isAtTarget(), () -> {
             testDRP.update();
             log.show("Error, Output", "\n"+ testDRP.getError()+", \n"+ testDRP.getOutput());
-            getTestPart().move(testDRP.getOutput(),0, 0);
+            drive.move(testDRP.getOutput(),0, 0);
         });
 
         testDRP.reset();
 
-        getTestPart().move(0,0, 0);
+        drive.move(0,0, 0);
 
         log.show("Done with movement");
 

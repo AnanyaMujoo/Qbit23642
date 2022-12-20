@@ -1,7 +1,6 @@
 package unittests.tele.framework.movement;
 import automodules.stage.Stage;
 import robotparts.RobotPart;
-import unused.mecanumold.MecanumDrive;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.bot;
@@ -13,11 +12,6 @@ public class StageTest extends TeleUnitTest {
      */
 
     @Override
-    protected MecanumDrive getTestPart() {
-        return mecanumDrive;
-    }
-
-    @Override
     protected void start() {
         /**
          * The robot should go backward (1s) then forward (1s) then backward (1s)
@@ -26,13 +20,7 @@ public class StageTest extends TeleUnitTest {
         bot.rfsHandler.addToQueue(new Stage(
                 RobotPart.exitTime(1)
         ));
-        bot.rfsHandler.addToQueue(new Stage(
-                getTestPart().usePart(),
-                getTestPart().mainMove(0.3, 0.0, 0.0),
-                RobotPart.exitTime(1),
-                getTestPart().stopMove(),
-                getTestPart().returnPart()
-        ));
+        bot.rfsHandler.addToQueue(drive.moveTime(0.3, 0,0, 1.0));
     }
 
     /**
@@ -41,11 +29,11 @@ public class StageTest extends TeleUnitTest {
      */
     @Override
     protected void loop() {
-        getTestPart().move(-0.3, 0, 0);
+        drive.move(-0.3, 0, 0);
     }
 
     @Override
     public void stop() {
-        getTestPart().move(0,0, 0);
+        drive.halt();
     }
 }

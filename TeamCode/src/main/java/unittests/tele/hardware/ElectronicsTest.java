@@ -29,10 +29,10 @@ public class ElectronicsTest extends TeleUnitTest {
         /**
          * Get the electronics
          */
-        in = bot.tankIntake.getElectronicsOfType(CMotor.class).get("in");
-        cr = bot.tankCarousel.getElectronicsOfType(CServo.class).get("cr");
-        li = bot.tankLift.getElectronicsOfType(PMotor.class).get("li");
-        lo = bot.tankOuttake.getElectronicsOfType(PServo.class).get("lo");
+//        in = bot.tankIntake.getElectronicsOfType(CMotor.class).get("in");
+//        cr = bot.tankCarousel.getElectronicsOfType(CServo.class).get("cr");
+//        li = bot.tankLift.getElectronicsOfType(PMotor.class).get("li");
+//        lo = bot.tankOuttake.getElectronicsOfType(PServo.class).get("lo");
         /**
          * Link the gamepad handler
          */

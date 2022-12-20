@@ -5,7 +5,6 @@ import robotparts.hardware.Lift;
 import teleutil.button.Button;
 import teleutil.button.OnPressEventHandler;
 import unittests.tele.TeleUnitTest;
-import unused.mecanumold.MecanumLift;
 
 import static global.General.bot;
 import static global.General.gph1;
@@ -13,8 +12,8 @@ import static global.General.log;
 
 public class CustomPMotorPIDTest extends TeleUnitTest {
 
-    private final MecanumLift part = mecanumLift;
-    private final PMotor motor = part.motorUp;
+
+    private final PMotor motor = lift.motorRight;
 
     @Override
     public void init() {
@@ -26,11 +25,11 @@ public class CustomPMotorPIDTest extends TeleUnitTest {
 //        gph1.link(Button.B, LiftUpTopFast);
 //        gph1.link(Button.Y, LiftReset);
         gph1.link(Button.X, bot::cancelAutoModules);
+        lift.maintain();
     }
 
     @Override
     protected void loop() {
-        mecanumLift.holdPosition();
         log.show("Default Coeffs", motor.getDefaultPIDFCoefficients().toString());
         log.show("Current Coeffs", motor.getCurrentPIDFCoefficients().toString());
     }

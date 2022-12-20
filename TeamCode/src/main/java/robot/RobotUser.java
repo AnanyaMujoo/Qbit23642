@@ -13,20 +13,8 @@ import robotparts.sensors.ColorSensors;
 import robotparts.sensors.GyroSensors;
 import robotparts.unused.DistanceSensors;
 import robotparts.unused.Leds;
-import unused.mecanumold.auto.TwoOdometryOldMecanum;
-import unused.tankold.TankOdometry;
 import robotparts.unused.CustomTestPart;
 import robotparts.unused.TouchSensors;
-import unused.mecanumold.MecanumDrive;
-import unused.mecanumold.MecanumIntake;
-import unused.mecanumold.MecanumLift;
-import unused.mecanumold.MecanumOuttake;
-import unused.tankold.TankCarousel;
-import unused.tankold.TankDrive;
-import unused.tankold.TankIntake;
-import unused.tankold.TankLift;
-import unused.tankold.TankOuttake;
-import unused.tankold.TankTurret;
 
 public interface RobotUser {
     /**
@@ -53,20 +41,6 @@ public interface RobotUser {
     /**
      * UNUSED
      */
-    TwoOdometryOldMecanum mecanumOdometry = new TwoOdometryOldMecanum();
-    MecanumOuttake mecanumOuttake = new MecanumOuttake();
-    MecanumDrive mecanumDrive = new MecanumDrive();
-    MecanumIntake mecanumIntake = new MecanumIntake();
-    MecanumLift mecanumLift = new MecanumLift();
-    unused.mecanumold.MecanumCarousel mecanumCarousel = new unused.mecanumold.MecanumCarousel();
-
-    TankDrive tankDrive = new TankDrive();
-    TankIntake tankIntake = new TankIntake();
-    TankTurret tankTurret = new TankTurret();
-    TankLift tankLift = new TankLift();
-    TankOuttake tankOuttake = new TankOuttake();
-    TankCarousel tankCarousel = new TankCarousel();
-    TankOdometry tankOdometry = new TankOdometry();
 
     TouchSensors touchSensors = new TouchSensors();
     DistanceSensors distanceSensors = new DistanceSensors();

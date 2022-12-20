@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 import autoutil.controllers.control1D.PAR;
 import unittests.auto.AutoUnitTest;
-import unused.mecanumold.MecanumDrive;
-
 import static global.General.bot;
 import static global.General.log;
 
@@ -13,14 +11,10 @@ public class PARTest extends AutoUnitTest {
 
     private PAR testPAR;
 
-    @Override
-    protected MecanumDrive getTestPart() {
-        return mecanumDrive;
-    }
 
     @Override
     protected void start() {
-        mecanumOdometry.reset();
+        odometry.reset();
         testPAR = new PAR(0.003, 0.45, 0.08);
     }
 
@@ -28,7 +22,7 @@ public class PARTest extends AutoUnitTest {
     protected void run() {
         log.show("Coefficients ", Arrays.toString(testPAR.getCoefficients()));
 
-        testPAR.setProcessVariable(() -> bot.mecanumOdometry.getCurY());
+        testPAR.setProcessVariable(odometry::getY);
         testPAR.setTarget(20);
 
         log.show("Target (20)", testPAR.getTarget());
@@ -36,11 +30,11 @@ public class PARTest extends AutoUnitTest {
         whileActive(() -> !testPAR.isAtTarget(), () -> {
             testPAR.update();
             log.show("Error, Output", "\n"+ testPAR.getError()+", \n"+ testPAR.getOutput());
-            getTestPart().move(testPAR.getOutput(),0, 0);
+            drive.move(testPAR.getOutput(),0, 0);
         });
 
         testPAR.reset();
-        getTestPart().move(0,0, 0);
+        drive.move(0,0, 0);
 
         log.show("Done with movement");
 

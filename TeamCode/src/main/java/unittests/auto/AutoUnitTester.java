@@ -41,25 +41,26 @@ public class AutoUnitTester extends Auto implements UnitTester {
          */
 
 //        Works as of 4.2.5
-//        add(new IteratorTest());
-//        add(new ThreadStopTest());
+        // TODO TEST
+        add(new IteratorTest());
+        add(new ThreadStopTest());
 
         /**
          * Framework (needs hardware, in movement package)
          */
+//        TOD 5 Test
 //        Works as of 4.3.11
 //        add(new MoveTimeTest());
 //        add(new PIDTest());
 //        add(new PARTest());
 
-//        Works????
 //        add(new PurePursuitTest());
 //        add(new DRPTest());
 //
 //
-        add(new OdometryTest.ForwardTest());
-        add(new OdometryTest.StrafeTest());
-        add(new OdometryTest.TurnTest());
+//        add(new OdometryTest.ForwardTest());
+//        add(new OdometryTest.StrafeTest());
+//        add(new OdometryTest.TurnTest());
 
     }
 

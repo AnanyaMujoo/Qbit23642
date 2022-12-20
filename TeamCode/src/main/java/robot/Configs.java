@@ -12,16 +12,6 @@ public class Configs implements RobotUser{
     RobotConfig TestConfig3 = new RobotConfig(drive, camera);
 
     /**
-     * Used for tank robots
-     */
-    RobotConfig TankConfig = new RobotConfig(tankDrive, tankIntake, tankTurret, tankLift, tankOuttake, tankCarousel, color, gyro, mecanumOdometry, camera);
-
-    /**
-     * Used for mecanum robots
-     */
-    RobotConfig MecanumConfig = new RobotConfig(mecanumDrive, gyro, mecanumOdometry, camera, mecanumCarousel, mecanumIntake, mecanumLift, mecanumOuttake, color);
-
-    /**
      * Used for PowerPlay robot
      */
     RobotConfig PowerPlay = new RobotConfig(drive, lift, outtake, gyro, odometry, camera);

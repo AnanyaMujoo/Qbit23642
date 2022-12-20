@@ -2,7 +2,6 @@ package unittests.tele.framework.movement;
 
 import debugging.StallDetector;
 import robotparts.electronics.continuous.CMotor;
-import unused.auto.MecanumCarousel;
 import teleutil.button.Button;
 import unittests.tele.TeleUnitTest;
 

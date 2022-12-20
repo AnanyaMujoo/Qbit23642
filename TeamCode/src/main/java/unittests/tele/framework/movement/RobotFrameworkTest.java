@@ -11,11 +11,6 @@ public class RobotFrameworkTest extends TeleUnitTest {
      * Class that tests robotframework by running methods
      */
 
-    @Override
-    protected RobotPart getTestPart() {
-        return mecanumIntake;
-    }
-
     /**
      * Test robot framework (not directly but through Terrabot)
      * NOTE: Since allrobotparts is a static arraylist all of the parts terrabot should be here
@@ -29,6 +24,6 @@ public class RobotFrameworkTest extends TeleUnitTest {
         /**
          * Should be TELE
          */
-        log.show("Test part current user", getTestPart().getUser());
+        log.show("Test part current user", drive.getUser());
     }
 }

@@ -79,8 +79,10 @@ public class GamepadHandler {
      */
     public TreeMap<Button, ButtonHandler> handlerMap = new TreeMap<>();
 
-
-
+    /**
+     *  Values of triggers, joysticks
+     *  ry = right stick y, rx = right stick x, ly = left stick y, lx = left stick x, rt = right trigger, lt = left trigger
+     */
     public double ry, rx, ly, lx, rt, lt;
 
     /**
@@ -93,7 +95,9 @@ public class GamepadHandler {
         defineAllButtons();
     }
 
-
+    /**
+     * Link methods to connect button to action
+     */
     public void link(Button b, CodeSeg code){ link(b, code, Modes.GamepadMode.NORMAL); }
     public void link(Button b, Class<? extends ButtonEventHandler> type, CodeSeg codeSeg) { Objects.requireNonNull(handlerMap.get(b)).addEvent(type, codeSeg); }
     public void link(Button b, AutoModule list) { link(b, () -> bot.addAutoModule(list), Modes.GamepadMode.NORMAL); }
@@ -107,18 +111,26 @@ public class GamepadHandler {
     public void link(Button b, Independent independent, Modes.GamepadMode mode){ link(b, () -> bot.addIndependent(independent), mode); }
     public void link(Button b, Machine machine, Modes.GamepadMode mode){ link(b, () -> bot.addMachine(machine), mode);}
     public void link(Button b, CodeSeg codeSeg, Modes.GamepadMode mode) { link(b, OnPressEventHandler.class, codeSeg, mode); }
+
+    /**
+     * Link toggle
+     */
+    public void link(Button b, CodeSeg onOn, CodeSeg onOff, Modes.GamepadMode mode){ link(b, OnTurnOnEventHandler.class, onOn, mode); link(b, OnTurnOffEventHandler.class, onOff, mode); }
+    public void link(Button b, CodeSeg onOn, CodeSeg onOff){ link(b, onOn, onOff, Modes.GamepadMode.NORMAL); }
+
+    /**
+     * Main link method, parameters for type of event handler, codeseg, and mode
+     * @param b
+     * @param type
+     * @param codeSeg
+     * @param mode
+     */
     public void link(Button b, Class<? extends ButtonEventHandler> type, CodeSeg codeSeg, Modes.GamepadMode mode){
         switch (mode){
             case NORMAL: Objects.requireNonNull(handlerMap.get(b)).addEvent(type, codeSeg, () -> !isBackPressed); break;
             case AUTOMATED: Objects.requireNonNull(handlerMap.get(b)).addEvent(type, codeSeg, () -> isBackPressed); break;
         }
     }
-    public void link(Button b, CodeSeg onOn, CodeSeg onOff, Modes.GamepadMode mode){
-        link(b, OnTurnOnEventHandler.class, onOn, mode);
-        link(b, OnTurnOffEventHandler.class, onOff, mode);
-    }
-
-    public void link(Button b, CodeSeg onOn, CodeSeg onOff){ link(b, onOn, onOff, Modes.GamepadMode.NORMAL); }
 
 
     /**
@@ -136,6 +148,9 @@ public class GamepadHandler {
         Iterator.forAll(Button.values(), b -> handlerMap.put(b, new ButtonHandler(b, this)));
     }
 
+    /**
+     * Update values on the controller NOTE: y values are positive when joystick is moved forward
+     */
     private void updateValues(){
         ry = -gamepad.right_stick_y;
         rx = gamepad.right_stick_x;
@@ -145,6 +160,10 @@ public class GamepadHandler {
         lt = gamepad.left_trigger;
     }
 
+    /**
+     * Is the back button pressed
+     * @return isBackPressed
+     */
     public boolean isBackPressed(){ return isBackPressed; }
 
     /**

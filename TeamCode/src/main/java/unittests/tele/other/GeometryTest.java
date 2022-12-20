@@ -1,6 +1,5 @@
-package unittests.tele.framework;
+package unittests.tele.other;
 
-import display.Display;
 import display.Drawer;
 import geometry.circles.Circle;
 import geometry.framework.CoordinatePlane;
@@ -9,7 +8,6 @@ import geometry.polygons.Rect;
 import geometry.polygons.Triangle;
 import geometry.position.Line;
 import geometry.position.Pose;
-import unittests.tele.TeleUnitTest;
 
 public class GeometryTest extends Drawer {
 
