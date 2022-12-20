@@ -72,7 +72,7 @@ public abstract class Controller1D {
     public void setProcessError(ReturnCodeSeg<Double> processError){ this.processError = processError; }
     public boolean maxDerivativeTarget(double maxDerivative){ return (abs(processVariableProfiler.getDerivative()) < maxDerivative); }
     public boolean isAtTarget(){ return isAtTarget; }
-    public void reset(){ targetValue = 0; errorProfiler.reset(); processVariableProfiler.reset(); isAtTarget = false; }
+    public void reset(){ targetValue = 0; errorProfiler.reset(); processVariableProfiler.reset(); isAtTarget = false; precision.reset(); }
     public double[] getErrorState(){ return new double[]{getError(), errorProfiler.getIntegral(), errorProfiler.getDerivative()}; }
     public double[] getProcessVariableState(){ return new double[]{currentValue, processVariableProfiler.getIntegral(), processVariableProfiler.getDerivative()}; }
 }

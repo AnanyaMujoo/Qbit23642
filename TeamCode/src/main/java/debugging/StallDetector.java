@@ -23,6 +23,7 @@ public class StallDetector {
         encoder = e;
         minSpeed = minSpeedThresh;
         maxCurrent = maxCurrentThresh;
+        precision.reset();
     }
 
     public void setCustomThresholds(double minSpeedThresh, double maxCurrentThresh){

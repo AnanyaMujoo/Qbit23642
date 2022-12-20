@@ -79,9 +79,13 @@ public abstract class RobotPart extends StageBuilder implements RobotUser {
     }
 
     /**
-     * Init method (to be overwritten)
+     * Init method (to be overriden)
      */
     public abstract void init();
+
+    /**
+     * Reset method (can be overriden)
+     */
     public void reset(){}
 
     /**
@@ -252,12 +256,8 @@ public abstract class RobotPart extends StageBuilder implements RobotUser {
     public final Stop returnPart(){return new Stop(() -> switchUser(mainUser));}
 
     /**
-     * Make part used for backgroud task
-     * @return
+     * Maintain the state of this robot part
      */
-    public Initial usePartForBackgroundTask(){return new Initial(() -> switchUser(User.BACK));}
-
-
     @Override
     protected void maintain() { bot.addBackgroundTask(new BackgroundTask(() -> {checkAccess(User.AUTO); move(0);}));}
 }

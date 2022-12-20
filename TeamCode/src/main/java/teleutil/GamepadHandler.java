@@ -35,7 +35,7 @@ public class GamepadHandler {
      * Ex: gph1.link(Button.A, OnPressEventHandler.class, <code to run>)
      */
 
-    private Precision precision;
+    private final Precision precision = new Precision();
 
     /**
      * Private gamepad object depending on which gamepad handler this is
@@ -91,7 +91,7 @@ public class GamepadHandler {
      */
     public GamepadHandler(Gamepad gp) {
         gamepad = gp;
-        precision = new Precision();
+        precision.reset();
         defineAllButtons();
     }
 

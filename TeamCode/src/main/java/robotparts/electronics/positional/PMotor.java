@@ -69,26 +69,53 @@ public class PMotor extends Electronic {
     // TOD 5 Make way for custom PID and custom rest pow function (feedforward)
 
 
+    /**
+     * Use the position holder with parameters
+     * @param restPower
+     */
     public void usePositionHolder(double restPower){ positionHolder.setRestOutput(restPower); resetPosition(); }
     public void usePositionHolder(double restPower, double pCoefficient){ positionHolder.setPCoefficient(pCoefficient); usePositionHolder(restPower); }
     public void usePositionHolder(ReturnCodeSeg<Double> restPowerFunction, double pCoefficient){ positionHolder.setRestPowerFunction(restPowerFunction); positionHolder.setPCoefficient(pCoefficient); resetPosition();}
 
+    /**
+     * Hold position by activating the position holder
+     */
     public void holdPosition(){ positionHolder.activate(); move(0); }
 
+    /**
+     * Hold the position exactly
+     */
     public void holdPositionExact(){ positionHolder.activate(getPosition()); move(0); }
 
+    /**
+     * Release the position
+     */
     public void releasePosition(){ positionHolder.deactivate(); }
 
+    /**
+     * Get the position holder object
+     * @return position holder
+     */
     public PositionHolder getPositionHolder(){ return positionHolder; }
 
-
-
+    /**
+     * Set the motor to linear mode
+     * @param ticksPerRev
+     * @param radius
+     * @param ratio
+     * @param angle
+     */
     public void setToLinear(double ticksPerRev, double radius, double ratio, double angle){
         movementType = MovementType.LINEAR;
         outputToTicks = distance -> (distance/(2*Math.PI*radius))*ticksPerRev*(ratio/cos(toRadians(angle)));
         ticksToOutput = Precision.invert(outputToTicks);
     }
 
+    /**
+     * Set the motor to rotational mode
+     * @param ticksPerRev
+     * @param ratio
+     */
     public void setToRotational(double ticksPerRev, double ratio){
         movementType = MovementType.ROTATIONAL;
         outputToTicks = distance -> (distance/360)*ticksPerRev*ratio;
@@ -199,12 +226,30 @@ public class PMotor extends Electronic {
      */
     public void resetPosition(){ motorEncoder.reset(); }
 
+    /**
+     * Get the stall detector
+     * @return stall detector
+     */
     public StallDetector getStallDetector(){ return detector; }
 
+    /**
+     * Get the motor encoder
+     * @return motor encoder
+     */
     public IEncoder getMotorEncoder(){ return motorEncoder; }
 
+    /**
+     * Get the type of movement
+     * @return movementType
+     */
     public MovementType getMovementType(){ return movementType; }
 
+    /**
+     * Default move with position holder
+     * @param p
+     * @param cutOffPosition
+     * @param backPower
+     */
     public void moveWithPositionHolder(double p, double cutOffPosition, double backPower) {
         if (p != 0) {
             releasePosition(); move(p); holdingExact = false;

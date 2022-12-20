@@ -21,7 +21,7 @@ public class Precision {
     private Object lastThrottleVal;
     private int counter = 0;
 
-    public Precision(){
+    public void reset(){
         inputTime.reset();
         outputTime.set(1000);
         throttleTime.reset();

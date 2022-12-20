@@ -16,6 +16,12 @@ public class DRP extends Controller1D{
     public DRP(double kp, double rp){ this.kp = kp; this.restPower = rp; }
 
     @Override
+    public void reset() {
+        super.reset();
+        precision.reset();
+    }
+
+    @Override
     protected double setDefaultAccuracy() { return 0.5; }
 
     @Override

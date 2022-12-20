@@ -23,22 +23,10 @@ public class OLed extends Electronic {
     public void setColor(LEDColor color){
         if(access.isAllowed()) {
             switch (color) {
-                case OFF:
-                    red.setState(false);
-                    green.setState(false);
-                    break;
-                case RED:
-                    red.setState(true);
-                    green.setState(false);
-                    break;
-                case GREEN:
-                    red.setState(false);
-                    green.setState(true);
-                    break;
-                case ORANGE:
-                    red.setState(true);
-                    green.setState(true);
-                    break;
+                case OFF: red.setState(false); green.setState(false); break;
+                case RED: red.setState(true); green.setState(false); break;
+                case GREEN: red.setState(false); green.setState(true); break;
+                case ORANGE: red.setState(true); green.setState(true); break;
             }
         }
     }

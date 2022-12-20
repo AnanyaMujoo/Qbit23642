@@ -23,15 +23,15 @@ public class ThreeOdometry extends TwoOdometry {
     public int mode = 0;
     public final Point odometryCenter = new Point();
     private final Vector leftOdometryCenterToRobotCenter = new Vector(11.5, 13.0);
-    private Precision precision;
+    private final Precision precision = new Precision();
 
     @Override
     protected void createEncoders() {
         super.createEncoders();
         enc3 = create("frEnc", ElectronicType.IENCODER_NORMAL);
+        precision.reset();
         addEncoders(enc3);
         enc3.invert();
-        precision = new Precision();
     }
 
     @Override

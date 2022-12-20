@@ -54,7 +54,9 @@ public class CMotor extends Electronic {
         motor.setPower(0);
     }
 
-
+    /**
+     * Enable stall detector
+     */
     public void useStallDetector(){
         motorEncoder.setUpdateCMotor();
     }
