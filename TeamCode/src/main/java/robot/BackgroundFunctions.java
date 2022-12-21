@@ -11,17 +11,26 @@ import static global.General.bot;
 import static robot.RobotFramework.backgroundThread;
 
 public class BackgroundFunctions {
+    /**
+     * Class to run parts of the robot in the background (stabilize lift, read encoder values, etc)
+     */
 
-    // TOD 5 Make a functions class which robot functions, background functions and indpendent functions all extend
+    // TOD 5 Make a functions class which robot functions, background functions and independent functions all extend
 
+
+    /**
+     * List of tasks to run
+     */
     public final ArrayList<BackgroundTask> tasks;
-    public final ArrayList<BackgroundTask> taskBuffer;
 
-    public BackgroundFunctions(){
-        tasks = new ArrayList<>();
-        taskBuffer = new ArrayList<>();
-    }
+    /**
+     * Remove all previous tasks in constructor
+     */
+    public BackgroundFunctions(){ tasks = new ArrayList<>(); }
 
+    /**
+     * Initialize the background thread with looping through all tasks
+     */
     public void init(){
         ExceptionCodeSeg<RuntimeException> updateCode = () -> {
             bot.checkAccess(User.BACK);
@@ -36,12 +45,22 @@ public class BackgroundFunctions {
         backgroundThread.setStatus(Status.ACTIVE);
     }
 
+    /**
+     * Add a new background task
+     * @param task
+     */
     public final void addBackgroundTask(BackgroundTask task){
         synchronized (tasks){ tasks.add(task); }
     }
 
+    /**
+     * Clear task list
+     */
     public final void emptyTaskList(){ synchronized (tasks){ tasks.clear(); } }
 
+    /**
+     * Remove tasks that are completed
+     */
     private void removeCompletedTasks(){
         synchronized (tasks) {
             Iterator.removeCondition(tasks, BackgroundTask::isDone);

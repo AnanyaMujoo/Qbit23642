@@ -11,6 +11,11 @@ public class DistanceSensors extends RobotPart {
      */
     private IDistance dsl,dsr,dsfl,dsfr,dso;
 
+    // TODO DISTANCE SENSORS (KALMAN FILTER)
+    // TODO VUFORIA (WITH OPENCV DETECT LOCATION)
+    // TODO JUNCTION SCANNER BETTER
+    // TODO MOVEMENT BETTER NO STOP PHYSICS
+
     @Override
     public void init() {
 //        dsl = createDistanceSensor("dsl");
@@ -39,4 +44,7 @@ public class DistanceSensors extends RobotPart {
     public double getOuttakeDistance(){
         return dso.getDistance();
     }
+
+
+    // TODO TEST
 }

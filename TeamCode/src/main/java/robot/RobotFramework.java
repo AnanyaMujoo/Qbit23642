@@ -163,28 +163,13 @@ public class RobotFramework {
     public synchronized void checkAccess(User potentialUser){ Iterator.forAll(allRobotParts, part -> part.checkAccess(potentialUser)); }
 
     /**
-     * Cancel all of the automodules by emptying the robot functions queue
+     * Cancel methods
      */
-    public void cancelAutoModules(){
-        setUserMainAndHalt();
-        rfsHandler.emptyQueue();
-    }
-
-    public void cancelBackgroundTasks(){
-        setUserMainAndHalt();
-        backHandler.emptyTaskList();
-    }
-
-    public void cancelIndependents(){
-        setUserMainAndHalt();
-        indHandler.stopCurrentIndependent();
-    }
-
-    public void cancelMovements(){
-        cancelAutoModules();
-        cancelIndependents();
-        cancelMachine();
-    }
+    public void cancelAutoModules(){ setUserMainAndHalt(); rfsHandler.emptyQueue(); }
+    public void cancelBackgroundTasks(){ setUserMainAndHalt(); backHandler.emptyTaskList(); }
+    public void cancelIndependents(){ setUserMainAndHalt(); indHandler.stopCurrentIndependent(); }
+    public void cancelMovements(){ setUserMainAndHalt(); rfsHandler.emptyQueue(); backHandler.emptyTaskList(); indHandler.stopCurrentIndependent(); }
+    public void cancelAll(){ cancelMovements(); cancelBackgroundTasks();  }
 
     /**
      * Set the user to main and halt all of the robot parts that aren't the main user
@@ -209,18 +194,27 @@ public class RobotFramework {
      */
     public void pauseAutoModules() { rfsHandler.pauseNow(); }
 
-
+    /**
+     * Add an independent to run
+     * @param independent
+     */
     public void addIndependent(Independent independent){ indHandler.runIndependent(independent); }
 
+    /**
+     * Add a machine to run
+     * @param machine
+     */
     public void addMachine(Machine machine){ this.machine = machine; this.machine.activate(); }
 
-    public void cancelMachine(){ this.machine.cancel(); }
-
-    public void cancelAll(){ cancelMovements(); cancelBackgroundTasks();  }
-
-
+    /**
+     * Get the battery voltage
+     * @return voltage
+     */
     public static double getBatteryVoltage() { double result = Constants.DEFAULT_VOLTAGE+10; for (VoltageSensor sensor : hardwareMap.voltageSensor) { double voltage = sensor.getVoltage(); if (voltage > 0) {result = Math.min(result, voltage); } } return Math.min(Math.max(result, 12.0), 15.0); }
 
+    /**
+     * Save and load methods
+     */
     public void savePose(Pose pose){ storage.addItem("XPos", pose.getX()); storage.addItem("YPos", pose.getY()); storage.addItem("Heading", pose.getAngle()); storage.saveItems(); }
     public Pose getSavedPose(){ return new Pose((double) storage.getItem("XPos").getValue(), (double) storage.getItem("YPos").getValue(), (double) storage.getItem("Heading").getValue()); }
     public void loadPose(){ odometry.setCurrentPose(getSavedPose());; }
