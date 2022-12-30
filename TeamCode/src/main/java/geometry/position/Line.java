@@ -45,4 +45,9 @@ public class Line extends GeometryObject implements Tracer {
                 ", my: " + my +
                 '}';
     }
+
+    @Override
+    public Line getCopy() {
+        return new Line(ps.getCopy(), pe.getCopy());
+    }
 }

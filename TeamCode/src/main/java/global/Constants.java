@@ -28,44 +28,16 @@ public class Constants {
      */
     public static final int INDEPENDENT_THREAD_REFRESH_RATE = 1000; //hz
 
-
     /**
      *  Minimum  refresh rate allowed before robot is considered to be lagging
      */
     public static final int MINIMUM_REFRESH_RATE = 30; //hz
-
-    /**
-     * Accuracies for creating points in arc and line generations in Autonomous
-     */
-    public static final double ANG_ACC_ARC = 0.05;
-    public static final double LINE_ACC_PATH = 0.05;
-
     public static final double ORBITAL_TICKS_PER_REV = 537.6;
-
-
     public static final double ENCODER_TICKS_PER_REV = 8192;
 
-    /**
-     * Constant for converting lift height to ticks for the motor to rotate
-     */
-    public static final double LIFT_CM_TO_TICKS = ((ORBITAL_TICKS_PER_REV)/(Math.PI*3))/3; //in ticks/cm , (ticks/rev)/(cm/rev), accounting for gear ratio
-    /**
-     * Constant for converting the angle of the turret in degrees to ticks for the motor to rotate
-     */
-    public static final double TURRET_ANGLE_DEG_TO_TICKS = (ORBITAL_TICKS_PER_REV /360.0)*4; //(8192.0/360.0)*4.0; //ticks/deg, (ticks/deg)*ratio
-    /**
-     * Rest power for the lift to prevent gravity from bringing it down
-     */
-    public static final double LIFT_REST_POW = 0.07;
-    /**
-     * Turret Angles for the robot to move (note that 0 is facing the front of the robot)
-     */
-    public static final double BLUE_TURRET_TARGET_TELE_1 = 135; // 120
-    public static final double BLUE_TURRET_TARGET_TELE_2 = 135;
-    public static final double RED_TURRET_TARGET_TELE_1 = -BLUE_TURRET_TARGET_TELE_1;
-    public static final double RED_TURRET_TARGET_TELE_2 = -BLUE_TURRET_TARGET_TELE_2;
-    public static final double BLUE_TURRET_TARGET_AUTO = 85;
-    public static final double RED_TURRET_TARGET_AUTO = -BLUE_TURRET_TARGET_AUTO;
-
     public static final double DEFAULT_VOLTAGE = 13.5;
+
+    public static final String VUFORIA_KEY = "ASEyqP7/////AAABmb4cSklfmUjBkxJayTfU3Woug32Gg9HrKpH+MBhQdW6OxZu5Fd+RHsBaSsL42WahxSOgd9FJTo4DVzuJaF9MUSjbE/Vy/MkBzjypT5O320DFwHzD8+RHFfWofe0zqC/sk8zBZCDtbPBGwhVIKPm8vrnOQBExz+Acru9akg3rGnVdhfiD6Qs6vuLPe+PVsR0diewGO93rSWI5mHOm3BNyaTfDru3b2qtCAwRsje8uzDLnus4PCEb7mZWE5NJiEMIsZlPUrNd0AllM1SnXVpUtHBwqmTQNCBvbbLP+glWpXlyWzanGq244GHkBT0YD54OAd84XJvTsykplKAXazA+FozkpPENdQVZd+oN4RvCkvZ0a";
+    public static final double INCH_TO_CM = 2.54;
+    public static final double VUFORIA_TARGET_HEIGHT_CM = 6*INCH_TO_CM;
 }

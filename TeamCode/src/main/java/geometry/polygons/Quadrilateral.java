@@ -15,6 +15,10 @@ public class Quadrilateral extends Polygon {
         addPoints(p1, p2, p3, p4);
     }
     public Quadrilateral(){}
+
+    public Quadrilateral getCopy(){
+        return new Quadrilateral(p1.getCopy(), p2.getCopy(), p3.getCopy(), p4.getCopy());
+    }
     @Override
     public String toString() {
         return "Quad {" + "p1=" + p1 + ", p2=" + p2 + ", p3=" + p3 + ", p4=" + p4 + '}';

@@ -30,6 +30,8 @@ public abstract class GeometryObject {
     public final void scaleX(double scale){ toAllPoints(p -> p.scaleX(scale));}
     public final void scaleY(double scale){ toAllPoints(p -> p.scaleY(scale));}
 
+    public abstract GeometryObject getCopy();
+
     // TOD 5 Make copy methods
 
 }

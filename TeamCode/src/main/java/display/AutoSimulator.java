@@ -9,18 +9,23 @@ import java.util.Locale;
 import automodules.AutoModuleUser;
 import auton.TerraAuto.*;
 import autoutil.AutoFramework;
+import elements.Field;
+import elements.GameItems;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
 import geometry.position.Line;
 import geometry.polygons.PolyLine;
 import geometry.position.Pose;
+import global.Constants;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
 import util.template.Iterator;
 
 public class AutoSimulator extends Drawer{
 
-    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - 89,180);
+    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - Field.tileWidth - GameItems.Cone.height - 16,180);
+
+//    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - 89,180);
     private static final Pose startUpper = new Pose(20.5,fieldSize/2.0 + 89,180);
     private static final Pose startMedium = new Pose(20.5 + 47.5 + 15.5, fieldSize/2.0 - 42.5, 180-24.0);
     private static final Pose startCycleAround = new Pose(20.5 + 66.5, fieldSize/2.0 - 23, 215);
@@ -44,7 +49,7 @@ public class AutoSimulator extends Drawer{
 //        setAuto(new TerraAutoLowerRedSimple(), startLower);
 //        setAuto(new TerraAutoUpperRedSimple(), startLower);
 
-        setAuto(AutoModuleUser.MoveToCycleStart, startLower);
+//        setAuto(AutoModuleUser.MoveToCycleStart, startLower);
 //        setAuto(AutoModuleUser.CycleFirst, startCycleFirst);
 //        setAuto(AutoModuleUser.Cycle, startCycle);
 //        setAuto(AutoModuleUser.CycleMediumFirst, startCycle);

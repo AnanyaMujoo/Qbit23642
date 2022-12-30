@@ -1,5 +1,6 @@
 package geometry.polygons;
 
+import geometry.framework.GeometryObject;
 import geometry.framework.Point;
 import geometry.position.Vector;
 
@@ -23,5 +24,10 @@ public class Hexagon extends Polygon{
     @Override
     public String toString() {
         return "Hexagon {" + "p1=" + p1 + ", p2=" + p2 + ", p3=" + p3 + ", p4=" + p4 + ", p5=" + p5 + ", p6=" + p6 + '}';
+    }
+
+    @Override
+    public Hexagon getCopy() {
+        return new Hexagon(p1.getCopy(), p2.getCopy(), p3.getCopy(), p4.getCopy(), p5.getCopy(), p6.getCopy());
     }
 }

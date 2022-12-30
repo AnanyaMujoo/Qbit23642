@@ -20,8 +20,6 @@ public class Mode {
      * ModeType enum to represent the different values of the mode
      */
 
-    // TODO TEST
-
 
     private final HashMap<ModeType, Double> valueMap = new HashMap<>();
 
@@ -43,8 +41,8 @@ public class Mode {
     public void cycleDown() { for (int i = 1; i < types.length; i++) { if(modeIs(types[i])){ set(types[i-1]); return; }} if(modeIs(types[0])){set(types[types.length-1]);} }
     public boolean modeIs(ModeType other){ return currentMode.equals(other); }
     public double getValue(ModeType modeType){
-        fault.check("Value for mode" + currentMode.toString() + "not defined", Expectation.EXPECTED, Magnitude.CRITICAL, valueMap.containsKey(modeType), true);
-        return valueMap.get(currentMode);
+        if(fault != null){ fault.check("Value for mode" + modeType.toString() + "not defined", Expectation.EXPECTED, Magnitude.CRITICAL, valueMap.containsKey(modeType), true); }
+        return valueMap.get(modeType);
     }
 
     public double getValue(){ return getValue(currentMode); }
@@ -56,7 +54,5 @@ public class Mode {
     public void set(ModeType mode){ this.currentMode = mode; }
 
     public interface ModeType extends Decision {};
-
-
 
 }

@@ -1,6 +1,7 @@
 package geometry.polygons;
 import java.util.Arrays;
 
+import geometry.framework.GeometryObject;
 import geometry.framework.Point;
 public class Triangle extends Polygon {
     private final Point p1, p2, p3;
@@ -19,5 +20,10 @@ public class Triangle extends Polygon {
     @Override
     public String toString() {
         return "Triangle {" + "p1=" + p1 + ", p2=" + p2 + ", p3=" + p3 + '}';
+    }
+
+    @Override
+    public Triangle getCopy() {
+        return new Triangle(p1.getCopy(), p2.getCopy(), p3.getCopy());
     }
 }

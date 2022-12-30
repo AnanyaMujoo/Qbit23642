@@ -42,4 +42,8 @@ public class Circle extends GeometryObject implements Tracer {
         return new Circle(this.center.getCopy(), r*scale);
     }
 
+    @Override
+    public Circle getCopy() {
+        return new Circle(center.getCopy(), r);
+    }
 }

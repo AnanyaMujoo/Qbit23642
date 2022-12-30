@@ -10,6 +10,7 @@ import elements.FieldSide;
 import unittests.UnitTester;
 import unittests.auto.framework.IteratorTest;
 import unittests.auto.framework.ThreadStopTest;
+import unittests.auto.framework.VuforiaTest;
 import unittests.auto.framework.movement.DRPTest;
 import unittests.auto.framework.movement.MoveTimeTest;
 import unittests.auto.framework.movement.OdometryTest;
@@ -41,9 +42,10 @@ public class AutoUnitTester extends Auto implements UnitTester {
          */
 
 //        Works as of 4.2.5
+//        add(new IteratorTest());
+//        add(new ThreadStopTest());
         // TODO TEST
-        add(new IteratorTest());
-        add(new ThreadStopTest());
+        add(new VuforiaTest());
 
         /**
          * Framework (needs hardware, in movement package)

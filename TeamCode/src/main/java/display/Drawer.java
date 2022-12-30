@@ -27,6 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
+import elements.Field;
+import elements.Robot;
 import geometry.circles.Circle;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.GeometryObject;
@@ -37,6 +39,7 @@ import geometry.polygons.Quadrilateral;
 import geometry.polygons.Rect;
 import geometry.position.Line;
 import geometry.position.Pose;
+import global.Constants;
 import util.ExceptionCatcher;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
@@ -58,8 +61,9 @@ public abstract class Drawer extends JPanel {
     public static final int fieldWidth = width-15;
     public static final int fieldHeight = height-35;
 
-    public static final double fieldSize = 358; // cm
-
+    public static final double sideOffset = 3;
+    public static final double fieldSize = Field.width;
+    private static final double drawFieldScale = (fieldSize - (2*sideOffset))/fieldSize;
     public static boolean shouldExit = false;
     public static int step = 0;
     public static boolean lastStep = false;
@@ -119,9 +123,9 @@ public abstract class Drawer extends JPanel {
         coordinatePlane.reflectPoses();
         coordinatePlane.translate(startPose.getX(), startPose.getY());
         coordinatePlane.reflectY();
-        coordinatePlane.translate(0, fieldSize);
-        coordinatePlane.scaleX(((double) fieldWidth)/fieldSize);
-        coordinatePlane.scaleY(((double) fieldHeight)/fieldSize);
+        coordinatePlane.translate(sideOffset, fieldSize + sideOffset);
+        coordinatePlane.scaleX(((double) fieldWidth)/fieldSize *  drawFieldScale);
+        coordinatePlane.scaleY(((double) fieldHeight)/fieldSize * drawFieldScale);
     }
 
     public static GeometryObject convertToField(GeometryObject object, Pose startPose){
@@ -165,12 +169,7 @@ public abstract class Drawer extends JPanel {
     }
 
     public static CoordinatePlane getRobot(Pose startPose, Pose pose){
-        CoordinatePlane robot = new CoordinatePlane();
-        robot.add(new Rect(new Point(-16,-20), new Point(16,20)));
-        robot.add(new Pose());
-        robot.add(new PolyLine(new Point(-8, -26), new Point(-3, -21), new Point(3, -21), new Point(8,-26)));
-        robot.add(new Circle(new Point(0,40), 6));
-        robot.add(new Circle(new Point(0, -26), 8));
+        CoordinatePlane robot = Robot.plane.getCopy();
         robot.reflectY(); robot.reflectX();
         robot.rotate(pose.getAngle());
         robot.translate(pose.getX(), pose.getY());

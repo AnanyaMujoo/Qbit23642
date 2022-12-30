@@ -1,5 +1,6 @@
 package elements;
 
+import global.Constants;
 import util.condition.Decision;
 
 public class GameItems {
@@ -30,6 +31,7 @@ public class GameItems {
     }
 
     public static class Cone {
-
+        public static final double height = 5.0 * Constants.INCH_TO_CM;
+        public static final double baseWidth = 4.0 * Constants.INCH_TO_CM;
     }
 }

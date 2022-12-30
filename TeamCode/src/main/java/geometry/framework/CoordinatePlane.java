@@ -61,4 +61,9 @@ public class CoordinatePlane {
         }
     }
 
+    public CoordinatePlane getCopy(){
+        CoordinatePlane copy = new CoordinatePlane();
+        Iterator.forAll(objects, o -> copy.add(o.getCopy()));
+        return copy;
+    }
 }

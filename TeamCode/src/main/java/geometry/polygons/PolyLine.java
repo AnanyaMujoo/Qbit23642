@@ -2,6 +2,7 @@ package geometry.polygons;
 
 import java.util.ArrayList;
 
+import geometry.framework.GeometryObject;
 import geometry.framework.Point;
 import geometry.polygons.Polygon;
 import geometry.position.Line;
@@ -29,5 +30,12 @@ public class PolyLine extends Polygon {
             ArrayList<Line> lines = new ArrayList<>(); for (int i = 1; i < points.size(); i++){ lines.add(new Line(points.get(i-1), points.get(i))); }
             return lines;
         }
+    }
+
+    @Override
+    public PolyLine getCopy() {
+        ArrayList<Point> pointsCopy = new ArrayList<>();
+        Iterator.forAll(points, p -> pointsCopy.add(p.getCopy()));
+        return new PolyLine(pointsCopy);
     }
 }
