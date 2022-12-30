@@ -21,7 +21,7 @@ public class Lift extends RobotPart {
 
     public static final double maxPosition = 61;
     public int stackedMode = 0;
-    public volatile double cutoffPosition = 6;
+    public volatile double cutoffPosition = 10;
     public boolean circuitMode = false;
 
     @Override

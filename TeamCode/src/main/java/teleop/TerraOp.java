@@ -102,7 +102,7 @@ public class TerraOp extends Tele {
 
         log.show("DriveMode", Modes.driveMode.get());
         log.show("HeightMode", Modes.heightMode.get());
-        log.show("GameplayMode", Modes.gameplayMode);
+        log.show("GameplayMode", Modes.gameplayMode.get());
         log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
         log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : Modes.GamepadMode.NORMAL);
 

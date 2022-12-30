@@ -76,7 +76,7 @@ public interface AutoModuleUser extends RobotUser{
     );}
     static AutoModule BackwardHeightTele(Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
-            outtake.stageClose(0.2),
+            outtake.stageClose(0.15),
             lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.1))
     );}
     OutputList BackwardTele = new OutputList(heightMode::get)
@@ -101,7 +101,7 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
             lift.changeCutoff(6.0),
-            lift.stageLift(0.4, 0)
+            lift.stageLift(0.7, 0)
     );
     OutputList ForwardAll = new OutputList(gameplayMode::get)
             .addOption(CYCLE, ForwardTele)
