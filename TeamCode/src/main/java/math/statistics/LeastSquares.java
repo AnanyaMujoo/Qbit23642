@@ -5,7 +5,7 @@ package math.statistics;
 
 public class LeastSquares {
 
-    // TODO 4 NEW
+    // TOD5
 
     // Function to calculate b
     private static double calculateB(

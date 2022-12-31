@@ -59,7 +59,7 @@ public class Display extends Drawer {
 
 
         plane = new CoordinatePlane(new Pose(0,0,0), detectionCircle.getScaledRadius(scale), detection);
-        convertToField(plane, new Pose(fieldSize/2.0, fieldSize/2.0, 0));
+        convertToField(plane);
 
         drawWindow(new Display(), "Display");
     }

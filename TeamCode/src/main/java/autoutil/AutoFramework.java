@@ -51,6 +51,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public void setConfig(AutoConfig config){ this.config = config; }
 
+    protected Pose startPose = new Pose();
+
     protected CoordinatePlane autoPlane = new CoordinatePlane();
 
     protected ArrayList<Pose> poses = new ArrayList<>();
@@ -92,6 +94,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         autoPlane.addAll(poses);
         postProcess();
         if(isFlipped()){ flip(); }
+        autoPlane.rotate(-90); autoPlane.setStart(startPose); autoPlane.toPoses(p -> p.rotateOrientation(90)); // TODO TEST
     }
 
     public static boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }
@@ -122,6 +125,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     @Override
     public void runAuto() {
+        odometry.setCurrentPose(startPose);
         setup();
         createSegments();
         if(scanning) { if(haltCameraAfterInit) { camera.halt(); }else{ camera.setScanner(scannerAfterInit); } }
@@ -236,6 +240,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         autoModuleIndex = 0;
         customSegmentIndex = 0;
         breakpointIndex = 0;
+        startPose = new Pose();
         poses.add(new Pose()); movementScales.addAll(Collections.nCopies(100,1.0)); accuracyScales.addAll(Collections.nCopies(100,1.0));
     }
 }

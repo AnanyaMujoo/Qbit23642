@@ -20,4 +20,9 @@ public class VuforiaTest extends AutoUnitTest {
         log.show("Target Visible", targetVisible);
         log.show("Robot Pose", robotPose);
     }
+
+    @Override
+    public void stop() {
+        camera.halt();
+    }
 }

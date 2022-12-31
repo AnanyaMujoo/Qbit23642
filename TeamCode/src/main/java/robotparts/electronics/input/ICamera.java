@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -39,7 +40,7 @@ public class ICamera extends Electronic {
     /**
      * Internal camera object
      */
-    private final OpenCvCamera camera;
+    private OpenCvCamera camera;
 
     private WebcamName name;
     /**
@@ -115,6 +116,8 @@ public class ICamera extends Electronic {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
             @Override
             public void onOpened() {
+                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                camera.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
                 camera.startStreaming(width, height, orientation);
                 if(!view) {
                     pause();
@@ -130,8 +133,10 @@ public class ICamera extends Electronic {
         VuforiaLocalizer.Parameters parameters;
         if(view){
             parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+            camera = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters, cameraMonitorViewId);
         }else {
             parameters = new VuforiaLocalizer.Parameters();
+            camera = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters);
         }
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -159,6 +164,8 @@ public class ICamera extends Electronic {
         Iterator.forAll(allTrackables, trackable -> ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(name, cameraLocationOnRobot));
 
         targets.activate();
+
+        start(view);
     }
 
     public boolean updateVuforia(){

@@ -117,20 +117,17 @@ public abstract class Drawer extends JPanel {
         Iterator.forAll(coordinatePlane.getCircles(), this::drawCircle);
     }
 
-    public static void convertToField(CoordinatePlane coordinatePlane, Pose startPose){
-        coordinatePlane.rotate(startPose.getAngle()-90);
-        coordinatePlane.toPoses(pose -> pose.rotateOrientation(90));
+    public static void convertToField(CoordinatePlane coordinatePlane){
         coordinatePlane.reflectPoses();
-        coordinatePlane.translate(startPose.getX(), startPose.getY());
         coordinatePlane.reflectY();
-        coordinatePlane.translate(sideOffset, fieldSize + sideOffset);
+        coordinatePlane.translate(sideOffset, fieldSize+sideOffset);
         coordinatePlane.scaleX(((double) fieldWidth)/fieldSize *  drawFieldScale);
         coordinatePlane.scaleY(((double) fieldHeight)/fieldSize * drawFieldScale);
     }
 
-    public static GeometryObject convertToField(GeometryObject object, Pose startPose){
+    public static GeometryObject convertToField(GeometryObject object){
         CoordinatePlane coordinatePlane = new CoordinatePlane(object);
-        convertToField(coordinatePlane, startPose);
+        convertToField(coordinatePlane);
         return coordinatePlane.getAll().get(0);
     }
 
@@ -168,12 +165,12 @@ public abstract class Drawer extends JPanel {
         drawer.timer.stop();
     }
 
-    public static CoordinatePlane getRobot(Pose startPose, Pose pose){
+    public static CoordinatePlane getRobot(Pose pose){
         CoordinatePlane robot = Robot.plane.getCopy();
-        robot.reflectY(); robot.reflectX();
-        robot.rotate(pose.getAngle());
+        robot.rotate(pose.getAngle()-90);
+        robot.toPoses(p -> p.rotateOrientation(90));
         robot.translate(pose.getX(), pose.getY());
-        convertToField(robot, startPose);
+        convertToField(robot);
         return robot;
     }
 

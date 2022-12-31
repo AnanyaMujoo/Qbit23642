@@ -23,14 +23,13 @@ import util.template.Iterator;
 
 public class AutoSimulator extends Drawer{
 
-    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - Field.tileWidth - GameItems.Cone.height - 16,180);
-
+//    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - Field.tileWidth - GameItems.Cone.height - 16,180);
 //    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - 89,180);
-    private static final Pose startUpper = new Pose(20.5,fieldSize/2.0 + 89,180);
-    private static final Pose startMedium = new Pose(20.5 + 47.5 + 15.5, fieldSize/2.0 - 42.5, 180-24.0);
-    private static final Pose startCycleAround = new Pose(20.5 + 66.5, fieldSize/2.0 - 23, 215);
-    private static final Pose startCycleFirst = new Pose(20.5 + 47.5, fieldSize/2.0, 180);
-    private static final Pose startCycle = new Pose(20.5 + 47.5 + 11.5, fieldSize/2.0, 180);
+//    private static final Pose startUpper = new Pose(20.5,fieldSize/2.0 + 89,180);
+//    private static final Pose startMedium = new Pose(20.5 + 47.5 + 15.5, fieldSize/2.0 - 42.5, 180-24.0);
+//    private static final Pose startCycleAround = new Pose(20.5 + 66.5, fieldSize/2.0 - 23, 215);
+//    private static final Pose startCycleFirst = new Pose(20.5 + 47.5, fieldSize/2.0, 180);
+//    private static final Pose startCycle = new Pose(20.5 + 47.5 + 11.5, fieldSize/2.0, 180);
 
     private static final double maxMovingVelocity = 150; // cm per sec
     private static final double maxTurningVelocity = 340; // deg per sec
@@ -38,11 +37,10 @@ public class AutoSimulator extends Drawer{
     private static final boolean developmentMode = true;
 
     public static void main(String[] args) {
-        setAuto(new TerraAutoLowerBlue(), startLower);
-//        setAuto(new TerraAutoUpperBlue(), startUpper);
-//        setAuto(new TerraAutoLowerRed(), startLower);
-//        setAuto(new TerraAutoUpperRed(), startUpper);
-//        setAuto(new TerraAutoTest(), startLower);
+        setAuto(new TerraAutoLowerBlue());
+//        setAuto(new TerraAutoUpperBlue());
+//        setAuto(new TerraAutoLowerRed());
+//        setAuto(new TerraAutoUpperRed());
 
 //        setAuto(new TerraAutoLowerBlueSimple(), startLower);
 //        setAuto(new TerraAutoUpperBlueSimple(), startLower);
@@ -73,7 +71,6 @@ public class AutoSimulator extends Drawer{
 
     private static CoordinatePlane autoPlane;
     private static CoordinatePlane robot;
-    private static Pose startPose;
     private static Pose robotPose = new Pose();
     private static ArrayList<Pose> poses = new ArrayList<>();
     private static ArrayList<Line> lines = new ArrayList<>();
@@ -81,17 +78,15 @@ public class AutoSimulator extends Drawer{
     public static double currentTime = 0;
     public static ElapsedTime timer = new ElapsedTime();
 
-    private static void setAuto(AutoFramework auto, Pose startPose) {
+    private static void setAuto(AutoFramework auto) {
         auto.setup();
-        if(auto.isFlipped()){ startPose.scaleX(-1); startPose.translate(fieldSize, 0); startPose.rotateOrientation(180);}
         autoPlane = auto.getAutoPlane();
         autoPlane.removeRedundantObjects();
 
         poses = autoPlane.getCopyOfPoses();
         PolyLine path = new PolyLine(poses, false); lines = path.getLines();
 
-        convertToField(autoPlane, startPose);
-        AutoSimulator.startPose = startPose;
+        convertToField(autoPlane);
 
         updateRobotPose(new Pose());
         timer.reset();
@@ -101,17 +96,17 @@ public class AutoSimulator extends Drawer{
         velocity.scale(1.0/refreshRate); velocity.scaleOrientation(1.0/refreshRate);
         robotPose.translate(velocity.getX(), velocity.getY());
         robotPose.rotate(velocity.getAngle());
-        robot = getRobot(startPose, robotPose);
+        robot = getRobot(robotPose);
     }
 
     public static void updateRobotPose(Point position, double heading){
         robotPose = new Pose(position, heading);
-        robot = getRobot(startPose, robotPose);
+        robot = getRobot(robotPose);
     }
 
     public static void updateRobotPose(double heading){
         robotPose = new Pose(robotPose.getPoint(), heading);
-        robot = getRobot(startPose, robotPose);
+        robot = getRobot(robotPose);
     }
 
 
@@ -189,9 +184,9 @@ public class AutoSimulator extends Drawer{
                     System.out.printf(Locale.US, "Editing Pose %d, %s %n", step, robotPose.toString());
                 }else{
                     System.out.printf(Locale.US, "Saved Pose %d, New %s Code %.1f, %.1f, %.1f %n", step, robotPose.toString(), -robotPose.getX(), -robotPose.getY(), robotPose.getAngle());
-                    autoPlane.remove(convertToField(poses.get(step).getCopy(), startPose));
+                    autoPlane.remove(convertToField(poses.get(step).getCopy()));
                     poses.set(step, robotPose);
-                    autoPlane.add(convertToField(robotPose.getCopy(), startPose));
+                    autoPlane.add(convertToField(robotPose.getCopy()));
                 }
             }
             if(c == 'p'){ System.out.printf(Locale.US, " Pose %d, %s %n", step, robotPose.toString()); }
@@ -199,7 +194,7 @@ public class AutoSimulator extends Drawer{
             if(e.getKeyCode() == KeyEvent.VK_RIGHT){
                 if(!editingMode) {if(step < 99){step++; lastStep = true; }}else {
                     if(!e.isAltDown()) {
-                        robotPose.add(new Pose(0, -v, 0));
+                        robotPose.add(new Pose(v, 0, 0));
                     }else{
                         robotPose.add(new Pose(0, 0, -v));
                     }
@@ -207,7 +202,7 @@ public class AutoSimulator extends Drawer{
             }else if(e.getKeyCode() == KeyEvent.VK_LEFT){
                 if(!editingMode){if(step > 0){step--; lastStep = false; }}else {
                     if(!e.isAltDown()) {
-                        robotPose.add(new Pose(0, v, 0));
+                        robotPose.add(new Pose(-v,0, 0));
                     }else{
                         robotPose.add(new Pose(0, 0, v));
                     }
@@ -215,13 +210,13 @@ public class AutoSimulator extends Drawer{
             }else if(e.getKeyCode() == KeyEvent.VK_UP){
                 if(editingMode){
                     if(!e.isAltDown()) {
-                        robotPose.add(new Pose(v, 0, 0));
+                        robotPose.add(new Pose(0, v, 0));
                     }
                 }
             }else if(e.getKeyCode() == KeyEvent.VK_DOWN){
                 if(editingMode){
                     if(!e.isAltDown()) {
-                        robotPose.add(new Pose(-v, 0, 0));
+                        robotPose.add(new Pose(0, -v, 0));
                     }
                 }
             }

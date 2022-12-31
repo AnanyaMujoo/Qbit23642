@@ -130,14 +130,14 @@ public class TerraAutoSimple extends AutoFramework {
         super.stopAuto();
     }
 
-
-    @Autonomous(name = "TerraAutoLowerBlueSimple", group = "auto")
-    public static class TerraAutoLowerBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; }}
-    @Autonomous(name = "TerraAutoLowerRedSimple", group = "auto")
-    public static class TerraAutoLowerRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; }}
-    @Autonomous(name = "TerraAutoUpperBlueSimple", group = "auto")
-    public static class TerraAutoUpperBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; }}
-    @Autonomous(name = "TerraAutoUpperRedSimple", group = "auto")
-    public static class TerraAutoUpperRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.UPPER; }}
+//
+//    @Autonomous(name = "TerraAutoLowerBlueSimple", group = "auto")
+//    public static class TerraAutoLowerBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; }}
+//    @Autonomous(name = "TerraAutoLowerRedSimple", group = "auto")
+//    public static class TerraAutoLowerRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; }}
+//    @Autonomous(name = "TerraAutoUpperBlueSimple", group = "auto")
+//    public static class TerraAutoUpperBlueSimple extends TerraAutoSimple {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; }}
+//    @Autonomous(name = "TerraAutoUpperRedSimple", group = "auto")
+//    public static class TerraAutoUpperRedSimple extends TerraAutoSimple {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.UPPER; }}
 
 }

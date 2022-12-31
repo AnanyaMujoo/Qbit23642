@@ -31,6 +31,7 @@ public class Pose extends GeometryObject {
     public Vector getAngleUnitVector(){ return new Vector(getAngle()); }
     public double getAngle(){ return angle; }
     public Pose getOnlyPointRotated(double angle){ return new Pose(p.getRotated(angle), getAngle()); }
+    public Pose getOnlyOrientationRotated(double angle){ return new Pose(p, getAngle()+angle); }
     public void setX(double x){ p.setX(x);}
     public void setY(double y){ p.setY(y);}
     public void setVector(Vector in){ setX(in.getX()); setY(in.getY()); }

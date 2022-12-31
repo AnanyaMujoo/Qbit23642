@@ -38,6 +38,8 @@ public class CoordinatePlane {
     public void reflectY(){ scaleY(-1); }
     public void reflectPoses(){ toPoses(Pose::invertOrientation); }
     public void toPoses(ParameterCodeSeg<Pose> code){Iterator.forAll(getPoses(), code); }
+    public void setStartInverse(Pose start){ translate(-start.getX(), -start.getY()); rotate(-start.getAngle()); }
+    public void setStart(Pose start){ rotate(start.getAngle()); translate(start.getX(), start.getY());}
 
     public ArrayList<Line> getLines() { return getObjectsOfType(Line.class); }
     public ArrayList<Pose> getPoses() { return getObjectsOfType(Pose.class); }
