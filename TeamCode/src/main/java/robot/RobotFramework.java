@@ -10,6 +10,8 @@ import elements.FieldSide;
 import geometry.framework.CoordinatePlane;
 import geometry.position.Pose;
 import global.Constants;
+import global.General;
+import math.polynomial.Linear;
 import robotparts.RobotPart;
 import robotparts.electronics.input.IEncoder;
 import teleutil.independent.Independent;
@@ -211,6 +213,15 @@ public class RobotFramework {
      * @return voltage
      */
     public static double getBatteryVoltage() { double result = Constants.DEFAULT_VOLTAGE+10; for (VoltageSensor sensor : hardwareMap.voltageSensor) { double voltage = sensor.getVoltage(); if (voltage > 0) {result = Math.min(result, voltage); } } return Math.min(Math.max(result, 12.0), 15.0); }
+
+    /**
+     * Calculate and return the voltage scale from battery voltage
+     * @return new voltage scale
+     */
+    public static double calculateVoltageScale(double currentVoltage){
+        Linear voltageScaleCurve = new Linear(-0.05896, 1);
+        return voltageScaleCurve.f(currentVoltage-Constants.DEFAULT_VOLTAGE);
+    }
 
     /**
      * Save and load methods

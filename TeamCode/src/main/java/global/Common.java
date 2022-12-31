@@ -56,7 +56,7 @@ public interface Common{
         /**
          * Set the voltage scale
          */
-        voltageScale = Math.pow(Constants.DEFAULT_VOLTAGE/RobotFramework.getBatteryVoltage(), 0.9); // TODO TEST AND MAKE PROPER FUNCTION
+        voltageScale = RobotFramework.calculateVoltageScale(RobotFramework.getBatteryVoltage());
         /**
          * Create the storage
          */
