@@ -8,6 +8,7 @@ import robotparts.Electronic;
 import robotparts.electronics.input.IEncoder;
 import util.condition.Expectation;
 import util.condition.Magnitude;
+import util.template.Precision;
 
 import static global.General.bot;
 import static global.General.fault;
@@ -68,7 +69,7 @@ public class CMotor extends Electronic {
     public void setPower(double p){
         if(access.isAllowed()){
             if(!detector.isStalling()){
-                motor.setPower(p*voltageScale);
+                motor.setPower(Precision.clip(p, 1)*voltageScale);
             }else{
                 motor.setPower(0);
                 fault.warn("Motor is stalling, stopped all AutoModules", Expectation.EXPECTED, Magnitude.CRITICAL);

@@ -35,7 +35,7 @@ public class Constants {
     public static final double ORBITAL_TICKS_PER_REV = 537.6;
     public static final double ENCODER_TICKS_PER_REV = 8192;
 
-    public static final double DEFAULT_VOLTAGE = 13.5;
+    public static final double DEFAULT_VOLTAGE = 12.5;
 
     public static final String VUFORIA_KEY = "ASEyqP7/////AAABmb4cSklfmUjBkxJayTfU3Woug32Gg9HrKpH+MBhQdW6OxZu5Fd+RHsBaSsL42WahxSOgd9FJTo4DVzuJaF9MUSjbE/Vy/MkBzjypT5O320DFwHzD8+RHFfWofe0zqC/sk8zBZCDtbPBGwhVIKPm8vrnOQBExz+Acru9akg3rGnVdhfiD6Qs6vuLPe+PVsR0diewGO93rSWI5mHOm3BNyaTfDru3b2qtCAwRsje8uzDLnus4PCEb7mZWE5NJiEMIsZlPUrNd0AllM1SnXVpUtHBwqmTQNCBvbbLP+glWpXlyWzanGq244GHkBT0YD54OAd84XJvTsykplKAXazA+FozkpPENdQVZd+oN4RvCkvZ0a";
     public static final double INCH_TO_CM = 2.54;

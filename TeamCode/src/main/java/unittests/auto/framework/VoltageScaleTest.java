@@ -45,9 +45,9 @@ public class VoltageScaleTest extends AutoUnitTest {
             drive.halt();
             double time = timer.seconds();
             log.show("Ending trial #" + (i+1) + ", Time", time);
-            pause(0.5);
+            pause(0.2);
             whileActive(() -> odometry.getY() > 0, () -> {
-                drive.move(0.8*-yCurve.fodd(odometry.getY()), 1.5*-xCurve.fodd(odometry.getX()), 0.5*hCurve.fodd(odometry.getHeading()));
+                drive.move(0.8*-yCurve.fodd(odometry.getY()), 0.8*-xCurve.fodd(odometry.getX()), 0.5*hCurve.fodd(odometry.getHeading()));
             });
             drive.halt();
             whileTime(() -> {
@@ -63,8 +63,6 @@ public class VoltageScaleTest extends AutoUnitTest {
             if(gamepad1.b){
                 whileActive(() -> !gamepad1.y, () -> {});
                 odometry.reset();
-                log.record("Voltages", voltages);
-                log.record("Times", times);
                 storage.addData("VoltageScale", voltages, times);
                 storage.saveItems();
                 storage.emptyItems();

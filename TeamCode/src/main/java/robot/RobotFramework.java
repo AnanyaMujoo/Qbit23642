@@ -20,6 +20,7 @@ import teleutil.independent.Machine;
 import util.TerraThread;
 import util.User;
 import util.template.Iterator;
+import util.template.Precision;
 
 import static global.General.*;
 import static robot.RobotUser.gyro;
@@ -212,7 +213,8 @@ public class RobotFramework {
      * Get the battery voltage
      * @return voltage
      */
-    public static double getBatteryVoltage() { double result = Constants.DEFAULT_VOLTAGE+10; for (VoltageSensor sensor : hardwareMap.voltageSensor) { double voltage = sensor.getVoltage(); if (voltage > 0) {result = Math.min(result, voltage); } } return Math.min(Math.max(result, 12.0), 15.0); }
+    public static double getBatteryVoltage() { double result = 15; for (VoltageSensor sensor : hardwareMap.voltageSensor) { double voltage = sensor.getVoltage(); if (voltage > 0) {result = Math.min(result, voltage); } } return Precision.clip(result, 12.0, 15.0);
+    }
 
     /**
      * Calculate and return the voltage scale from battery voltage

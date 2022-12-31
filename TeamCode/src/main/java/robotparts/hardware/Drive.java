@@ -4,11 +4,13 @@ import automodules.AutoModule;
 import automodules.stage.Stage;
 import autoutil.AutoFramework;
 import elements.FieldSide;
+import geometry.position.Vector;
 import global.Modes;
 import math.misc.Logistic;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
+import util.template.Precision;
 
 import static global.General.fieldSide;
 
@@ -36,11 +38,17 @@ public class Drive extends RobotPart {
 
     @Override
     public void move(double f, double s, double t) {
+        Vector power = new Vector(Precision.clip(s, 1), Precision.clip(f, 1));
+        power.scaleX(1.2);
+        power.scaleToLength(1);
+        f = power.getY(); s = power.getX(); t = Precision.clip(t, 1);
         fr.setPower(f - s - t);
         br.setPower(f + s - t);
         fl.setPower(f + s + t);
         bl.setPower(f - s + t);
     }
+
+
 
 
     public double getAntiTippingPower(){

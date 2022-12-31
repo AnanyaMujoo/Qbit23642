@@ -55,7 +55,7 @@ public abstract class Controller1D {
         errorProfiler.update();
         updateController(pose, generator);
         isAtTarget = precision.isInputTrueForTime(hasReachedTarget(), minimumTime);
-        output = (scale*setOutput()) + getRestOutput();
+        output = (scale*Precision.clip(setOutput(), 1)) + getRestOutput();
     }
     public final void update(){ update(new Pose(new Point(0,0),0), new PoseGenerator()); }
     protected double getCurrentValue(){

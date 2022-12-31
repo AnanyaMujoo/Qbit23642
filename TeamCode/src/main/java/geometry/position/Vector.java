@@ -63,6 +63,7 @@ public class Vector extends GeometryObject {
     public void invert(){ scale(-1); setTheta(); }
     public void reflectX(){ p.reflectX(); setTheta();}
     public void reflectY(){ p.reflectY(); setTheta(); }
+    public void scaleToLength(double length){ if(getLength() != 0) { scale(length/getLength());} }
 
     @Override
     public void rotate(Point anchor, double angle) { super.rotate(anchor, angle); setTheta(); }
@@ -78,7 +79,7 @@ public class Vector extends GeometryObject {
     public double getCrossProduct(Vector in){ return Vector3D.getCrossProduct(this, in); }
     public double getDotProduct(Vector in){ return Vector3D.getDotProduct(this, in); }
 
-    public Vector getUnitVector(){ return this.getLength() == 0.0 ? yHat() :  this.getScaled(1.0/this.getLength()); }
+    public Vector getUnitVector(){ return getLength() == 0.0 ? this : getScaled(1.0/getLength()); }
 
     public static Vector xHat(){ return new Vector(1,0); }
     public static Vector yHat(){ return new Vector(0,1); }
