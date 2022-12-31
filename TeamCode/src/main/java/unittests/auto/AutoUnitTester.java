@@ -10,6 +10,7 @@ import elements.FieldSide;
 import unittests.UnitTester;
 import unittests.auto.framework.IteratorTest;
 import unittests.auto.framework.ThreadStopTest;
+import unittests.auto.framework.VoltageScaleTest;
 import unittests.auto.framework.VuforiaTest;
 import unittests.auto.framework.movement.DRPTest;
 import unittests.auto.framework.movement.MoveTimeTest;
@@ -32,8 +33,8 @@ public class AutoUnitTester extends Auto implements UnitTester {
      * Type of testing mode
      * @link TestType
      */
-//    TestingMode testingMode = TestingMode.CONTROL;
-    TestingMode testingMode = TestingMode.SELECTION;
+    TestingMode testingMode = TestingMode.CONTROL;
+//    TestingMode testingMode = TestingMode.SELECTION;
 
     @Override
     public void createUnitTests(){
@@ -45,7 +46,8 @@ public class AutoUnitTester extends Auto implements UnitTester {
 //        add(new IteratorTest());
 //        add(new ThreadStopTest());
         // TODO TEST
-        add(new VuforiaTest());
+//        add(new VuforiaTest());
+        add(new VoltageScaleTest());
 
         /**
          * Framework (needs hardware, in movement package)
