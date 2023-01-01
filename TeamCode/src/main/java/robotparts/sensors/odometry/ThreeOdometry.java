@@ -25,6 +25,10 @@ public class ThreeOdometry extends TwoOdometry {
     private final Vector leftOdometryCenterToRobotCenter = new Vector(11.5, 13.0);
     private final Precision precision = new Precision();
 
+
+
+    private double xCorrectionScale = 0.001;
+
     @Override
     protected void createEncoders() {
         super.createEncoders();
@@ -48,6 +52,20 @@ public class ThreeOdometry extends TwoOdometry {
 
         double dyl = 0, dyr = 0, dx = 0, dh = 0;
 
+        dyl = enc1.getDeltaPosition();
+
+
+        dx = enc2.getDeltaPosition();
+//        dx = enc2.getDeltaPosition() + (xCorrectionScale*dyl);
+
+
+        dyr = enc3.getDeltaPosition();
+
+
+        updateCurrentPose(new Vector(dx, dyl));
+
+
+
 //        if(mode == 0) {
 //            dx = enc2.getDeltaPosition();
 //            dyl = (enc1.getDeltaPosition() - dx*sin(angleLeft));
@@ -59,24 +77,24 @@ public class ThreeOdometry extends TwoOdometry {
 //        }
 //
 //
-        dx = enc2.getDeltaPosition();
-        dyl = (enc1.getDeltaPosition() - dx*sin(angleLeft));
-        dyr = (enc3.getDeltaPosition() - dx*sin(angleRight));
-        dh = toDegrees(((scaleRight*dyr)-dyl)/width);
-
-        Vector localDelta = new Vector(dx, dyl);
-        localDelta = localDelta.getRotated(0.3);
-        localDelta.scaleY(1.01);
-        localDelta.scaleX(1.01);
-//        setHeading(gyro.getHeading());
+//        dx = enc2.getDeltaPosition();
+//        dyl = (enc1.getDeltaPosition() - dx*sin(angleLeft));
+//        dyr = (enc3.getDeltaPosition() - dx*sin(angleRight));
+//        dh = toDegrees(((scaleRight*dyr)-dyl)/width);
 //
-        updateCurrentHeading(dh);
-
-        precision.throttle(() -> setHeading(gyro.getHeading()), 100);
-
-        odometryCenter.translate(toGlobalFrame(localDelta));
-        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(leftOdometryCenterToRobotCenter).getSubtracted(leftOdometryCenterToRobotCenter);
-        setCurrentPose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()));
+//        Vector localDelta = new Vector(dx, dyl);
+//        localDelta = localDelta.getRotated(0.3);
+//        localDelta.scaleY(1.01);
+//        localDelta.scaleX(1.01);
+//        setHeading(gyro.getHeading());
+////
+//        updateCurrentHeading(dh);
+//
+//        precision.throttle(() -> setHeading(gyro.getHeading()), 100);
+//
+//        odometryCenter.translate(toGlobalFrame(localDelta));
+//        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(leftOdometryCenterToRobotCenter).getSubtracted(leftOdometryCenterToRobotCenter);
+//        setCurrentPose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()));
     }
 
     @Override

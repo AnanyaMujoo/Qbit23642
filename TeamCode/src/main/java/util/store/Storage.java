@@ -91,6 +91,9 @@ public class Storage {
     }
 
 
+    public void saveAndClear(){ saveItems(); emptyItems(); }
+
+
     /**
      * Get the number of items that are currently in storage (for this session)
      * @return numItems

@@ -5,19 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import static global.General.log;
 
 import auton.Auto;
-import elements.FieldPlacement;
-import elements.FieldSide;
 import unittests.UnitTester;
-import unittests.auto.framework.IteratorTest;
-import unittests.auto.framework.ThreadStopTest;
-import unittests.auto.framework.VoltageScaleTest;
-import unittests.auto.framework.VuforiaTest;
-import unittests.auto.framework.movement.DRPTest;
-import unittests.auto.framework.movement.MoveTimeTest;
-import unittests.auto.framework.movement.OdometryTest;
-import unittests.auto.framework.movement.PARTest;
-import unittests.auto.framework.movement.PIDTest;
-import unittests.auto.framework.movement.PurePursuitTest;
+import unittests.auto.framework.calibration.OdometryCalib;
 import util.condition.Status;
 
 @SuppressWarnings("ALL")
@@ -46,8 +35,9 @@ public class AutoUnitTester extends Auto implements UnitTester {
 //        add(new IteratorTest());
 //        add(new ThreadStopTest());
         // TODO TEST
-        add(new VuforiaTest());
-//        add(new VoltageScaleTest());
+//        add(new VuforiaTest());
+//        add(new VoltageScaleCalibTest());
+        add(new OdometryCalib());
 
         /**
          * Framework (needs hardware, in movement package)

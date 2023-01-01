@@ -130,4 +130,6 @@ public class Precision {
     public static double clip(double value, double range){
         return clip(value, -range, range);
     }
+
+    public static double round(double value, int places){ double shift = Math.pow(10, places); return ((int)(value*shift))/shift; }
 }

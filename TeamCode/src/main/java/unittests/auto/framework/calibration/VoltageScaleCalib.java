@@ -1,4 +1,4 @@
-package unittests.auto.framework;
+package unittests.auto.framework.calibration;
 
 import java.util.ArrayList;
 
@@ -6,15 +6,13 @@ import math.polynomial.Linear;
 import robot.RobotFramework;
 import unittests.auto.AutoUnitTest;
 import util.Timer;
-import util.store.Data;
 
-import static global.General.bot;
 import static global.General.gamepad1;
 import static global.General.log;
 import static global.General.storage;
 import static global.General.voltageScale;
 
-public class VoltageScaleTest extends AutoUnitTest {
+public class VoltageScaleCalib extends AutoUnitTest {
 
     boolean testing = true;
 
