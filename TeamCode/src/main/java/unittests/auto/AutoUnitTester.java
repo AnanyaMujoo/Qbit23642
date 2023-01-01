@@ -46,8 +46,8 @@ public class AutoUnitTester extends Auto implements UnitTester {
 //        add(new IteratorTest());
 //        add(new ThreadStopTest());
         // TODO TEST
-//        add(new VuforiaTest());
-        add(new VoltageScaleTest());
+        add(new VuforiaTest());
+//        add(new VoltageScaleTest());
 
         /**
          * Framework (needs hardware, in movement package)

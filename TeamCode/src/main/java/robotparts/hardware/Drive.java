@@ -40,7 +40,9 @@ public class Drive extends RobotPart {
     public void move(double f, double s, double t) {
         Vector power = new Vector(Precision.clip(s, 1), Precision.clip(f, 1));
         power.scaleX(1.2);
-        power.scaleToLength(1);
+        if(power.getLength() > 1) {
+            power.scaleToLength(1);
+        }
         f = power.getY(); s = power.getX(); t = Precision.clip(t, 1);
         fr.setPower(f - s - t);
         br.setPower(f + s - t);

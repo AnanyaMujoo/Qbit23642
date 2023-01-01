@@ -24,11 +24,12 @@ import static display.Drawer.fieldSize;
 import static global.General.bot;
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
+import static global.General.log;
 
 public class TerraAuto extends AutoFramework {
 
     @Override
-    public void initAuto() {
+    public void initialize() {
         setConfig(mecanumDefaultConfig);
         bot.savePose(new Pose());
         lift.maintain();
@@ -143,13 +144,13 @@ public class TerraAuto extends AutoFramework {
     }
 
     @Autonomous(name = "TerraAutoLowerBlue", group = "auto")
-    public static class TerraAutoLowerBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,180);}}
+    public static class TerraAutoLowerBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90);}}
     @Autonomous(name = "TerraAutoUpperBlue", group = "auto")
-    public static class TerraAutoUpperBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,180);}}
+    public static class TerraAutoUpperBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90);}}
     @Autonomous(name = "TerraAutoLowerRed", group = "auto")
-    public static class TerraAutoLowerRed extends TerraAuto {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(Field.width-20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,0);}}
+    public static class TerraAutoLowerRed extends TerraAuto {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(Field.width-20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,-90);}}
     @Autonomous(name = "TerraAutoUpperRed", group = "auto")
-    public static class TerraAutoUpperRed extends TerraAuto {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(Field.width-20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,0);}}
+    public static class TerraAutoUpperRed extends TerraAuto {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(Field.width-20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,-90);}}
 
 
 }

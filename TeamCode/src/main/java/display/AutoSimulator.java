@@ -31,7 +31,7 @@ public class AutoSimulator extends Drawer{
 //    private static final Pose startCycleFirst = new Pose(20.5 + 47.5, fieldSize/2.0, 180);
 //    private static final Pose startCycle = new Pose(20.5 + 47.5 + 11.5, fieldSize/2.0, 180);
 
-    private static final double maxMovingVelocity = 150; // cm per sec
+    private static final double maxMovingVelocity = 100; // cm per sec
     private static final double maxTurningVelocity = 340; // deg per sec
     private static final double speedUp = 1.0;
     private static final boolean developmentMode = true;

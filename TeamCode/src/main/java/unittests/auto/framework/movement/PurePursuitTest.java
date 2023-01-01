@@ -23,7 +23,7 @@ public class PurePursuitTest extends AutoUnitTest {
             }
 
             @Override
-            public void initAuto() {
+            public void initialize() {
                 addWaypoint(0, 40, 0);
             }
         });

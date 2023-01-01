@@ -18,7 +18,7 @@ public abstract class Independent extends AutoFramework {
      * Set to default config, can be overriden, reset should exit
      */
     @Override
-    public final void initAuto() { setConfig(mecanumDefaultConfig); shouldExit = false; }
+    public final void initialize() { setConfig(mecanumDefaultConfig); shouldExit = false; }
 
     /**
      * Add should exit to the exit condition

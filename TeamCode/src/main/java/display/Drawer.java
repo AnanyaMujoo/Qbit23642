@@ -118,6 +118,7 @@ public abstract class Drawer extends JPanel {
     }
 
     public static void convertToField(CoordinatePlane coordinatePlane){
+        coordinatePlane.toPoses(p -> p.rotateOrientation(90));
         coordinatePlane.reflectPoses();
         coordinatePlane.reflectY();
         coordinatePlane.translate(sideOffset, fieldSize+sideOffset);
@@ -167,8 +168,7 @@ public abstract class Drawer extends JPanel {
 
     public static CoordinatePlane getRobot(Pose pose){
         CoordinatePlane robot = Robot.plane.getCopy();
-        robot.rotate(pose.getAngle()-90);
-        robot.toPoses(p -> p.rotateOrientation(90));
+        robot.rotate(pose.getAngle());
         robot.translate(pose.getX(), pose.getY());
         convertToField(robot);
         return robot;

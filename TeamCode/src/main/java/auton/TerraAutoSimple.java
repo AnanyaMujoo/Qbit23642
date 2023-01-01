@@ -16,7 +16,7 @@ import static global.General.fieldSide;
 
 public class TerraAutoSimple extends AutoFramework {
     @Override
-    public void initAuto() {
+    public void initialize() {
         setConfig(mecanumDefaultConfig);
         bot.savePose(new Pose());
         lift.maintain();

@@ -12,9 +12,11 @@ public class DistanceSensors extends RobotPart {
     private IDistance dsl,dsr,dsfl,dsfr,dso;
 
     // TODO DISTANCE SENSORS (KALMAN FILTER)
-    // TODO AUTO POSITION SAME FOR DIFFERENT AUTONS AND BETTER AUTO
+    // TODO BETTER AUTO
     // TODO JUNCTION SCANNER BETTER
     // TODO MOVEMENT BETTER NO STOP PHYSICS
+    // TODO AUTO ODOMETRY TUNING
+    // TOTO AUTO PID TUNING
 
     @Override
     public void init() {
@@ -44,7 +46,4 @@ public class DistanceSensors extends RobotPart {
     public double getOuttakeDistance(){
         return dso.getDistance();
     }
-
-
-    // TODO TEST
 }

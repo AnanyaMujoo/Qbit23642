@@ -30,6 +30,7 @@ import elements.FieldSide;
 import geometry.framework.CoordinatePlane;
 import geometry.position.Pose;
 import robotparts.RobotPart;
+import util.ExceptionCatcher;
 import util.Timer;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
@@ -94,7 +95,11 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         autoPlane.addAll(poses);
         postProcess();
         if(isFlipped()){ flip(); }
-        autoPlane.rotate(-90); autoPlane.setStart(startPose); autoPlane.toPoses(p -> p.rotateOrientation(90)); // TODO TEST
+//        autoPlane.rotate(-90);
+        autoPlane.setStart(startPose);
+//        autoPlane.toPoses(p -> p.rotateOrientation(90));
+        System.out.println(autoPlane.getPoses());
+        System.out.println(startPose);
     }
 
     public static boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }
@@ -120,15 +125,25 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         caseScanner = new CaseScanner();
         camera.setScanner(caseScanner);
         camera.start(view);
-        while (!isStarted()){ caseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
     }
+
+    @Override
+    public final void initAuto() {
+        initialize();
+        setup();
+        createSegments();
+        if(scanning){
+            while (!isStarted() && !isStopRequested()){ caseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
+            if(haltCameraAfterInit) { camera.halt(); }else{ camera.setScanner(scannerAfterInit); }
+        }
+    }
+
+    public abstract void initialize();
 
     @Override
     public void runAuto() {
         odometry.setCurrentPose(startPose);
-        setup();
-        createSegments();
-        if(scanning) { if(haltCameraAfterInit) { camera.halt(); }else{ camera.setScanner(scannerAfterInit); } }
+        pause(0.05);
         timer.reset();
         Iterator.forAll(segments, segment -> segment.run(this));
     }

@@ -117,7 +117,9 @@ public class ICamera extends Electronic {
             @Override
             public void onOpened() {
                 camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-                camera.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+                if(cameraType.equals(CameraType.INTERNAL)) {
+                    camera.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+                }
                 camera.startStreaming(width, height, orientation);
                 if(!view) {
                     pause();
@@ -233,7 +235,10 @@ public class ICamera extends Electronic {
      */
     @Override
     public void halt(){
-        camera.closeCameraDevice();
+        camera.closeCameraDeviceAsync(new OpenCvCamera.AsyncCameraCloseListener() {
+            @Override
+            public void onClose() {}
+        });
         if(targets != null) {
             targets.deactivate();
         }
