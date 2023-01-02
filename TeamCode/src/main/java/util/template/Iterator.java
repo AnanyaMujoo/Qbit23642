@@ -1,10 +1,15 @@
 package util.template;
 
+import android.annotation.SuppressLint;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.function.ToDoubleFunction;
 
 import util.Timer;
 import util.codeseg.CodeSeg;
@@ -186,4 +191,17 @@ public interface Iterator {
     static int minIndex(double... arr){ int ind = 0; double min = arr[0]; for (int i = 0; i < arr.length ; i++) { if(arr[i] < min){min = arr[i]; ind = i;} } return ind; }
 
     static <T> void removeCondition(ArrayList<T> list, ReturnParameterCodeSeg<T, Boolean> condition){ for (int i = list.size() - 1; i >= 0; --i) { if (condition.run(list.get(i))) { list.remove(i); } } }
+
+    @SuppressLint("NewApi")
+    static <T> void sort(ArrayList<T> list, ToDoubleFunction<? super T> key){ Collections.sort(list, Comparator.comparingDouble(key)); }
+
+    @FunctionalInterface
+    interface DoubleParameterCodeSeg<P> { void run(P input, P input2); }
+
+    static <T> void forAllPairs(ArrayList<T> list, DoubleParameterCodeSeg<T> code){
+        if(list.size() > 1) {
+            for (int i = 0; i < list.size() - 1; i++) { code.run(list.get(i), list.get(i+1)); }
+            code.run(list.get(list.size()-1), list.get(0));
+        }
+    }
 }
