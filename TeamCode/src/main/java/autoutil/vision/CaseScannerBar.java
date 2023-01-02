@@ -47,11 +47,12 @@ public class CaseScannerBar extends CaseScanner {
         double minArea = 700;
         for (int i = 0; i < contours.size(); i++) {
             Rect rect = Imgproc.boundingRect(contours.get(i));
-            if(getAspectRatio(rect) > minAspect && rect.area() > minArea){
+            if(getAspectRatio(rect) > minAspect && rect.area() > minArea && getCenter(rect).y < 100){
                 rects.add(rect);
-//                drawRectangle(input, scaleRectAroundCenter(rect, 1.4), BLUE);
+                drawRectangle(input, scaleRectAroundCenter(rect, 1.4), BLUE);
             }
         }
+        drawRectangle(input, new Rect(100,60,10,10), GREEN);
 
         int num = rects.size();
         return num == 0 ? 1 : num > 2 ? 2 : num-1;
