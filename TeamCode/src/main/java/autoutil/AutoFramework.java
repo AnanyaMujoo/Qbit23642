@@ -2,14 +2,8 @@ package autoutil;
 
 
 
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
-
-import org.firstinspires.ftc.teamcode.R;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import automodules.AutoModule;
@@ -22,7 +16,7 @@ import autoutil.generators.Generator;
 import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
 import autoutil.vision.CaseScanner;
-import autoutil.vision.JunctionScanner;
+import autoutil.vision.CaseScannerBar;
 import autoutil.vision.Scanner;
 import elements.Case;
 import elements.FieldPlacement;
@@ -30,16 +24,13 @@ import elements.FieldSide;
 import geometry.framework.CoordinatePlane;
 import geometry.position.Pose;
 import robotparts.RobotPart;
-import util.ExceptionCatcher;
 import util.Timer;
 import util.codeseg.CodeSeg;
 import util.codeseg.ParameterCodeSeg;
 import util.codeseg.ReturnCodeSeg;
-import util.condition.Decision;
 import util.condition.DecisionList;
 import util.condition.Expectation;
 import util.condition.Magnitude;
-import util.condition.OutputList;
 import util.template.Iterator;
 
 import static global.General.fault;
@@ -122,7 +113,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public void scan(boolean view){
         scanning = true;
-        caseScanner = new CaseScanner();
+        caseScanner = new CaseScannerBar(); // TODO TEST
         camera.setScanner(caseScanner);
         camera.start(view);
     }

@@ -3,6 +3,7 @@ package util.template;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.TreeMap;
 
 import util.Timer;
@@ -166,21 +167,21 @@ public interface Iterator {
         return (double)sum[0]/list.size();
     }
 
-    static <T> T forAllCompareMax(ArrayList<T> list, ReturnParameterCodeSeg<T, Double> code){
+    static <T> T forAllCompareMax(List<T> list, ReturnParameterCodeSeg<T, Double> code){
         ArrayList<Double> values = new ArrayList<>();
         Iterator.forAll(list, o -> values.add(code.run(o)));
         return list.get(maxIndex(values));
     }
 
-    static <T> T forAllCompareMin(ArrayList<T> list, ReturnParameterCodeSeg<T, Double> code){
-        ArrayList<Double> values = new ArrayList<>();
+    static <T> T forAllCompareMin(List<T> list, ReturnParameterCodeSeg<T, Double> code){
+        List<Double> values = new ArrayList<>();
         Iterator.forAll(list, o -> values.add(code.run(o)));
         return list.get(minIndex(values));
     }
 
-    static int minIndex(ArrayList<Double> arr){ int ind = 0; double min = arr.get(0); for (int i = 0; i < arr.size() ; i++) { if(arr.get(i) < min){min = arr.get(i); ind = i;} } return ind; }
+    static int minIndex(List<Double> arr){ int ind = 0; double min = arr.get(0); for (int i = 0; i < arr.size() ; i++) { if(arr.get(i) < min){min = arr.get(i); ind = i;} } return ind; }
 
-    static int maxIndex(ArrayList<Double> arr){ int ind = 0; double max = arr.get(0); for (int i = 0; i < arr.size() ; i++) { if(arr.get(i) > max){max = arr.get(i); ind = i;} } return ind; }
+    static int maxIndex(List<Double> arr){ int ind = 0; double max = arr.get(0); for (int i = 0; i < arr.size() ; i++) { if(arr.get(i) > max){max = arr.get(i); ind = i;} } return ind; }
 
     static int minIndex(double... arr){ int ind = 0; double min = arr[0]; for (int i = 0; i < arr.length ; i++) { if(arr[i] < min){min = arr[i]; ind = i;} } return ind; }
 

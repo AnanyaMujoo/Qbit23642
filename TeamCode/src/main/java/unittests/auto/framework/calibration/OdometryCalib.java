@@ -18,7 +18,7 @@ public class OdometryCalib extends AutoUnitTest {
     @Override
     protected void run() {
         int numTrials = 20;
-        double distance = 150;
+        double distance = 120;
 
         ArrayList<Double> trialNumbers = new ArrayList<>();
         ArrayList<Double> xOffsets = new ArrayList<>();

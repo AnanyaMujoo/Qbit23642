@@ -47,6 +47,7 @@ public abstract class Scanner extends OpenCvPipeline {
     protected final Mat ScaledThresh = new Mat();
     protected final Mat Output = new Mat();
     protected final Mat Edges = new Mat();
+    protected final Mat Gray = new Mat();
 
     protected boolean isStarted = false;
 
@@ -78,6 +79,7 @@ public abstract class Scanner extends OpenCvPipeline {
     private void toYCrCb(Mat input, Mat output) { Imgproc.cvtColor(input, output, Imgproc.COLOR_RGB2YCrCb); }
     private void toCb(Mat YCrCb, Mat output){ Core.extractChannel(YCrCb, output, 2); }
     protected void getHSV(Mat input){ Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV); }
+    protected void getGray(Mat input){ Imgproc.cvtColor(input, Gray, Imgproc.COLOR_RGB2GRAY);}
 
     private Rect getLargestContour(List<MatOfPoint> contours){
         Rect maxRect = new Rect();
@@ -219,6 +221,14 @@ public abstract class Scanner extends OpenCvPipeline {
     public void cropAndFill(Mat input, Rect rect){
         Imgproc.resize(getSubmat(input, rect), Crop,  new Size(input.width(), input.height()), Imgproc.INTER_CUBIC);
         Crop.copyTo(input);
+    }
+
+    public double getAspectRatio(Rect rect){
+        if(rect.area() != 0) {
+            return (double) (rect.height) / rect.width;
+        }else{
+            return 0;
+        }
     }
 
 }

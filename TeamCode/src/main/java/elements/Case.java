@@ -7,9 +7,9 @@ public enum Case implements Mode.ModeType {
     /**
      * Represents the three auton cases
      */
-    FIRST("BLUE, LOCATION 1"),
-    SECOND("MAGENTA, LOCATION 2"),
-    THIRD("ORANGE, LOCATION 3");
+    FIRST("LEFT, LOCATION 1"),
+    SECOND("CENTER, LOCATION 2"),
+    THIRD("RIGHT, LOCATION 3");
 
     // TOD5 make base class for this
 

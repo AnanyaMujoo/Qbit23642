@@ -1,5 +1,7 @@
 package autoutil.vision;
 
+import android.os.Build;
+
 import static org.opencv.core.Core.inRange;
 
 
@@ -139,11 +141,16 @@ public class JunctionScanner2 extends OpenCvPipeline {
         inRange(yCrCb, poleLower, poleHigher, binaryMat);
 
         Imgproc.findContours(binaryMat, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-        contours.removeIf(c -> Imgproc.boundingRect(c).y + (Imgproc.boundingRect(c).height / 2.0) < horizon);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            contours.removeIf(c -> Imgproc.boundingRect(c).y + (Imgproc.boundingRect(c).height / 2.0) < horizon);
+        }
         Imgproc.drawContours(input, contours, -1, CONTOUR_COLOR);
 
         if(!contours.isEmpty()) {
-            MatOfPoint biggestPole = Collections.max(contours, Comparator.comparingDouble(t0 -> Imgproc.boundingRect(t0).height));
+            MatOfPoint biggestPole = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                biggestPole = Collections.max(contours, Comparator.comparingDouble(t0 -> Imgproc.boundingRect(t0).height));
+            }
             if(Imgproc.contourArea(biggestPole) > CONTOUR_AREA) {
                 poleRect = Imgproc.boundingRect(biggestPole);
 

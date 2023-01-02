@@ -31,14 +31,14 @@ public class TerraAuto extends AutoFramework {
     @Override
     public void initialize() {
         setConfig(mecanumDefaultConfig);
-        bot.savePose(new Pose());
-        lift.maintain();
-        outtake.readyStart();
-        outtake.closeClaw();
+//        bot.savePose(new Pose());
+//        lift.maintain();
+//        outtake.readyStart();
+//        outtake.closeClaw();
         scan(false);
-        MecanumJunctionReactor.setFlipped(isFlipped());
-        setScannerAfterInit(MecanumJunctionReactor.junctionScanner);
-        JunctionScanner.resume();
+//        MecanumJunctionReactor.setFlipped(isFlipped());
+//        setScannerAfterInit(MecanumJunctionReactor.junctionScanner);
+//        JunctionScanner.resume();
     }
 
     @Override
@@ -86,48 +86,48 @@ public class TerraAuto extends AutoFramework {
     }
     @Override
     public void define() {
-        addWaypoint(0, 40, 0);
-        customFlipped(() -> {
-            addScaledWaypoint(1.0, 0, 128, 0);
-        }, () -> {
-            addScaledWaypoint(1.0, 0, 125, 0);
-        });
-        addScaledWaypoint(1.0, 0, 120, 20);
-        place(0);
-        customNumber(4, i -> {
-            customFlipped(() -> {
-                addScaledWaypoint(0.4, 30, 125, 87);
-                pick(i+1);
-                addScaledWaypoint(0.6, 30, 128, 75);
-                addScaledWaypoint(0.35, 3, 128.5, 50);
-                place(i+1);
-            }, () -> {
-                addScaledWaypoint(0.4, 30, 125, 87);
-                pick(i+1);
-                addScaledWaypoint(0.6, 30, 128, 75);
-                addScaledWaypoint(0.35, 3, 128.5, 50);
-                place(i+1);
-            });
-        });
-        addBreakpointReturn();
-        customCase(() -> {
-            addWaypoint(-7, 124, 90);
-            addScaledWaypoint(0.8, -10, 124, 90);
-            addScaledWaypoint(0.8, -45, 122, 60);
-            addScaledWaypoint(0.8, -50, 123, 25);
-            addScaledSetpoint(0.9, -62, 75, 0);
-        }, () -> {
-            addWaypoint(0, 130, 35);
-            addWaypoint(0, 105, 0);
-            addScaledSetpoint(0.9, 0, 75, 0);
-        }, () -> {
-            addWaypoint(7, 128, 90);
-            addScaledWaypoint(0.8, 16, 128, 90);
-            addScaledWaypoint(0.8, 39, 122, 58);
-            addScaledWaypoint(0.8, 51, 111, 32);
-            addScaledWaypoint(0.8, 56, 95, 0);
-            addScaledSetpoint(0.9, 58, 75, 0);
-        });
+//        addWaypoint(0, 40, 0);
+//        customFlipped(() -> {
+//            addScaledWaypoint(1.0, 0, 128, 0);
+//        }, () -> {
+//            addScaledWaypoint(1.0, 0, 125, 0);
+//        });
+//        addScaledWaypoint(1.0, 0, 120, 20);
+//        place(0);
+//        customNumber(4, i -> {
+//            customFlipped(() -> {
+//                addScaledWaypoint(0.4, 30, 125, 87);
+//                pick(i+1);
+//                addScaledWaypoint(0.6, 30, 128, 75);
+//                addScaledWaypoint(0.35, 3, 128.5, 50);
+//                place(i+1);
+//            }, () -> {
+//                addScaledWaypoint(0.4, 30, 125, 87);
+//                pick(i+1);
+//                addScaledWaypoint(0.6, 30, 128, 75);
+//                addScaledWaypoint(0.35, 3, 128.5, 50);
+//                place(i+1);
+//            });
+//        });
+//        addBreakpointReturn();
+//        customCase(() -> {
+//            addWaypoint(-7, 124, 90);
+//            addScaledWaypoint(0.8, -10, 124, 90);
+//            addScaledWaypoint(0.8, -45, 122, 60);
+//            addScaledWaypoint(0.8, -50, 123, 25);
+//            addScaledSetpoint(0.9, -62, 75, 0);
+//        }, () -> {
+//            addWaypoint(0, 130, 35);
+//            addWaypoint(0, 105, 0);
+//            addScaledSetpoint(0.9, 0, 75, 0);
+//        }, () -> {
+//            addWaypoint(7, 128, 90);
+//            addScaledWaypoint(0.8, 16, 128, 90);
+//            addScaledWaypoint(0.8, 39, 122, 58);
+//            addScaledWaypoint(0.8, 51, 111, 32);
+//            addScaledWaypoint(0.8, 56, 95, 0);
+//            addScaledSetpoint(0.9, 58, 75, 0);
+//        });
     }
 
 
