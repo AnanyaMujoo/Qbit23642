@@ -25,9 +25,9 @@ public class CaseScannerBar extends CaseScanner {
 
         Imgproc.blur(Gray, Gray, new Size(2, 2));
 
-        Imgproc.adaptiveThreshold(Gray, Mask, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 51, 20);
+        Imgproc.adaptiveThreshold(Gray, Mask, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 131, 50);
 
-//        Mask.copyTo(input);
+        Mask.copyTo(input);
 
         Imgproc.Canny(Mask, Edges, 10, 20);
 

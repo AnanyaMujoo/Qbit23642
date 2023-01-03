@@ -35,7 +35,7 @@ public class TerraAuto extends AutoFramework {
 //        lift.maintain();
 //        outtake.readyStart();
 //        outtake.closeClaw();
-        scan(false);
+        scan(true);
 //        MecanumJunctionReactor.setFlipped(isFlipped());
 //        setScannerAfterInit(MecanumJunctionReactor.junctionScanner);
 //        JunctionScanner.resume();
