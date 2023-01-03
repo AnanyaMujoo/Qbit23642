@@ -25,11 +25,11 @@ public class CaseScannerBar extends CaseScanner {
 
         Imgproc.blur(Gray, Gray, new Size(2, 2));
 
-        Core.inRange(Gray, new Scalar(0,0,0), new Scalar(50,50,50), Mask);
+        Imgproc.adaptiveThreshold(Gray, Mask, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 51, 20);
 
 //        Mask.copyTo(input);
 
-        Imgproc.Canny(Mask, Edges, 100, 250);
+        Imgproc.Canny(Mask, Edges, 10, 20);
 
         Imgproc.blur(Edges, Edges, new Size(2, 2));
 
@@ -47,15 +47,24 @@ public class CaseScannerBar extends CaseScanner {
         double minArea = 700;
         for (int i = 0; i < contours.size(); i++) {
             Rect rect = Imgproc.boundingRect(contours.get(i));
-            if(getAspectRatio(rect) > minAspect && rect.area() > minArea && getCenter(rect).y < 100){
+            if(getAspectRatio(rect) > minAspect && rect.area() > minArea && getCenter(rect).y > 120){
                 rects.add(rect);
-                drawRectangle(input, scaleRectAroundCenter(rect, 1.4), BLUE);
+//                drawRectangle(input, scaleRectAroundCenter(rect, 1.4), BLUE);
             }
         }
-        drawRectangle(input, new Rect(100,60,10,10), GREEN);
 
         int num = rects.size();
         return num == 0 ? 1 : num > 2 ? 2 : num-1;
+
+
+        /**  (0,0)
+         *  ^
+         *  |
+         *  y
+         *  |
+         *  v            (320, 120)
+         *    < - x - >
+         */
     }
 
 }

@@ -20,7 +20,7 @@ import static java.lang.Math.abs;
 public class CaseScanner extends Scanner{
     private volatile Case caseDetected = Case.THIRD;
     protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
-    protected final Case[] pastCases = new Case[10];
+    protected final Case[] pastCases = new Case[30];
     { Arrays.fill(pastCases, caseDetected); }
 
     public int getCase(Mat input){
