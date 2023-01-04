@@ -223,6 +223,10 @@ public abstract class Scanner extends OpenCvPipeline {
         Crop.copyTo(input);
     }
 
+    public void crop(Mat input, Rect rect){
+        Imgproc.resize(getSubmat(input, rect), Crop,  new Size(input.width(), input.height()), Imgproc.INTER_CUBIC);
+    }
+
     public double getAspectRatio(Rect rect){
         if(rect.area() != 0) {
             return (double) (rect.height) / rect.width;

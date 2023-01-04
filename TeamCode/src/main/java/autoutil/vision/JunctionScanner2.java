@@ -2,14 +2,18 @@ package autoutil.vision;
 
 import android.os.Build;
 
+import static global.General.bot;
 import static global.General.gamepad1;
 import static global.General.log;
 import static org.opencv.core.Core.inRange;
+import static org.opencv.core.Core.min;
 
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -18,6 +22,7 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -28,12 +33,12 @@ import geometry.position.Vector;
 
 public class JunctionScanner2 extends Scanner {
 
-    // TODO TEST
-
     public double CONTOUR_AREA = 250.0;
     private final Scalar CONTOUR_COLOR = new Scalar(255,0,255);
     private final Scalar HORIZON_COLOR = new Scalar(0,255,0);
     private final Scalar TEXT_COLOR = new Scalar(0, 0, 0);
+
+    private final Pose target = new Pose(0,18.5, -5);
 
     enum DETECT_COLOR {
         RED,
@@ -44,6 +49,7 @@ public class JunctionScanner2 extends Scanner {
     public DETECT_COLOR coneColor = DETECT_COLOR.BOTH;
 
     public int horizon = 100;
+    public int horizonCone = 20;
 
     private Rect redRect = new Rect();
     private Rect blueRect = new Rect();
@@ -60,11 +66,11 @@ public class JunctionScanner2 extends Scanner {
     private final Scalar blueLow = new Scalar(0, 80, 138);
     private final Scalar blueHigh = new Scalar(150, 255, 255);
     // Pole mask scalars
-//    public Scalar poleLower = new Scalar(59, 134, 48);
-//    public Scalar poleHigher = new Scalar(180, 180, 105);
-
-    public Scalar poleLower = new Scalar(59, 134, 20);
+    public Scalar poleLower = new Scalar(59, 134, 40);
     public Scalar poleHigher = new Scalar(180, 180, 105);
+
+//    public Scalar poleLower = new Scalar(59, 134, 20);
+//    public Scalar poleHigher = new Scalar(180, 180, 105);
     // Signal sleeve mask scalars
     private final Scalar greenLower = new Scalar(32, 10, 75);
     private final Scalar greenUpper = new Scalar(86, 255,255);
@@ -84,9 +90,14 @@ public class JunctionScanner2 extends Scanner {
 
     private static final double cameraFov = 47;
     private static final double realJunctionWidth = 2.672; // cm
-    private static final double minConeWidth = 7.7; // cm
-    private static final double maxConeWidth = 10; // cm
+    private static final double oneConeWidth = 7.5; // cm
+    private static final double twoConeWidth = 9.7; // cm
+    private static final double manyConeWidth = 11.0; // cm
     public double distanceToJunction = 0, angleToJunction = 0;
+
+    public Pose error = new Pose();
+
+    public int coneMode = 1;
 
 
     @Override
@@ -101,17 +112,45 @@ public class JunctionScanner2 extends Scanner {
     Scalar mean = new Scalar(0,0,0);
     @Override
     public void message() {
-        log.show("Pose", getPose());
+//        log.show("Cone Mode", coneMode);
+//        log.show("Pose", getPose());
 //        log.showAndRecord("Mean", mean);
     }
 
     @Override
     public Mat processFrame(Mat input) {
-        cropAndFill(input, new Rect(0, horizon, input.width(), input.height()-horizon));
-        return detectCone(input);
+        crop(input, new Rect(0, horizon, input.width(), input.height()-horizon));
+        detectPole(Crop);
+        Pose errorInternal = getErrorInternal();
+        if(cuttoff(errorInternal)){
+            error = errorInternal.getCopy();
+            return Crop;
+        }
+        crop(input, new Rect(0, horizonCone, input.width(), input.height()-horizonCone));
+        detectCone(Crop);
+        errorInternal = getErrorInternal();
+        if(cuttoff(errorInternal)){
+            error = errorInternal.getCopy();
+            return Crop;
+        }
+        error = new Pose();
+        return input;
 //        return detectPole(input);
 //        detectPole(input).copyTo(input);
 //        return input;
+    }
+
+    public boolean cuttoff(Pose error){
+        return Math.abs(error.getY()) < 15 && Math.abs(error.getAngle()) < 20;
+    }
+
+    public Pose getError(){
+        return error;
+    }
+    private Pose getErrorInternal(){
+        Pose error = target.getSubtracted(getPose());
+        error.invertOrientation();
+        return error;
     }
 
     public Pose getPose(){
@@ -124,6 +163,8 @@ public class JunctionScanner2 extends Scanner {
 
 
     private Mat detectPole(Mat input) {
+        boolean exitEarly = true;
+
         Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
 
         Imgproc.erode(yCrCb, yCrCb, kernel);
@@ -146,6 +187,7 @@ public class JunctionScanner2 extends Scanner {
             if(biggestPole != null) {
                 if (Imgproc.contourArea(biggestPole) > CONTOUR_AREA) {
                     maxRect = Imgproc.boundingRect(biggestPole);
+                    exitEarly = false;
 
 //                    Imgproc.rectangle(input, maxRect, CONTOUR_COLOR, 2);
 //                    Imgproc.putText(input, "Pole", new Point(maxRect.x, maxRect.y < 10 ? (maxRect.y + maxRect.height + 20) : (maxRect.y - 8)), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, TEXT_COLOR, 2);
@@ -159,6 +201,11 @@ public class JunctionScanner2 extends Scanner {
         contours.clear();
         yCrCb.release();
         binaryMat.release();
+
+        if(exitEarly){
+            distanceToJunction = 1000; angleToJunction = 1000;
+            return input;
+        }
 
 
 
@@ -181,6 +228,8 @@ public class JunctionScanner2 extends Scanner {
 
 //    //ToD Convert to using only a single contour list
     private Mat detectCone(Mat input) {
+
+        boolean exitEarly = true;
 
         Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
         Imgproc.erode(yCrCb, yCrCb, kernel);
@@ -234,14 +283,27 @@ public class JunctionScanner2 extends Scanner {
 
 //        Imgproc.drawContours(input, blueContours, -1, CONTOUR_COLOR);
 
+        MatOfPoint2f bluePoly = new MatOfPoint2f();
+        MatOfPoint approxBluePoly = new MatOfPoint();
+
+        double blueArea;
+
         if(!blueContours.isEmpty()) {
             MatOfPoint biggestBlueContour = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 biggestBlueContour = Collections.max(blueContours, Comparator.comparingDouble(t0 -> Imgproc.boundingRect(t0).width));
             }
             if(biggestBlueContour != null) {
-                if (Imgproc.contourArea(biggestBlueContour) > CONTOUR_AREA) {
+
+                blueArea = Imgproc.contourArea(biggestBlueContour);
+                if (blueArea > CONTOUR_AREA) {
                     blueRect = Imgproc.boundingRect(biggestBlueContour);
+                    Imgproc.approxPolyDP(new MatOfPoint2f(biggestBlueContour.toArray()), bluePoly, 15, true);
+                    bluePoly.convertTo(approxBluePoly, CvType.CV_32S);
+//                    ArrayList<MatOfPoint> contours = new ArrayList<>();
+//                    contours.add(approxBluePoly);
+//                    Imgproc.drawContours(input, contours, -1, GREEN);
+                    exitEarly = false;
 //
 //                    Imgproc.rectangle(input, blueRect, CONTOUR_COLOR, 2);
 //                    Imgproc.putText(input, "Blue Cone", new Point(blueRect.x, blueRect.y < 10 ? (blueRect.y + blueRect.height + 20) : (blueRect.y - 8)), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, TEXT_COLOR, 1);
@@ -253,19 +315,39 @@ public class JunctionScanner2 extends Scanner {
         maskBlue.release();
         yCrCb.release();
 
+        if(exitEarly){
+            distanceToJunction = 1000; angleToJunction = 1000;
+            return input;
+        }
+
 
         double junctionCenterX = getCenter(blueRect).x;
         double screenCenterX = input.width() / 2.0;
         double junctionCenterOffset = junctionCenterX - screenCenterX;
         double screenWidth = input.width();
-
         double screenJunctionWidth = blueRect.width;
+//        double areaRatio = blueArea/screenJunctionWidth;
 
 
-        distanceToJunction = minConeWidth / distanceRatio(screenJunctionWidth, screenWidth);
+        double offset = blueRect.y;
+        int numPoints = approxBluePoly.toList().size();
+
+        if(numPoints <= 6){
+            coneMode = (offset > 5 ? 1 : 2);
+        }else if(numPoints <= 11){ coneMode = 3; } else if(numPoints <= 15){ coneMode = 4; }else{ coneMode = 5; }
+
+//        log.record("Height", input.height());
+//        log.record("Y", blueRect.y);
+//        log.record("HeightR", blueRect.height);
+//        log.record("Aspect", getAspectRatio(blueRect));
+//        log.record("Area Ratio", areaRatio);
+
+        distanceToJunction = (coneMode == 1 ? oneConeWidth : (coneMode == 2 ? twoConeWidth : manyConeWidth))/distanceRatio(screenJunctionWidth, screenWidth);
 
         double realJunctionOffset = distanceToJunction * distanceRatio(junctionCenterOffset, screenWidth);
         angleToJunction = Math.toDegrees(Math.atan2(realJunctionOffset, distanceToJunction));
+
+
 
         return input;
     }

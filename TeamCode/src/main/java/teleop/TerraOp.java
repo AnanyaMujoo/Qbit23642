@@ -116,16 +116,14 @@ public class TerraOp extends Tele {
         Linear hCurve = new Linear(0.007, 0.04);
 
 
-        Pose error = target.getSubtracted(junctionScanner.getPose());
-        error.invertOrientation();
-
-        if(error.getY() > 20 || error.getLength() > 20){ error = new Pose(); }
+        Pose error = junctionScanner.getError();
 
         Vector pow = new Vector(0, yCurve.fodd(error.getY()));
         pow.rotate(-error.getAngle());
         double h = hCurve.fodd(error.getAngle());
 
-        drive.move(Precision.clip(pow.getY(), 0.5) + (gph1.ry*0.5),  (gph1.rx*0.5), Precision.clip(h, 0.5) + (gph1.lx*0.5));
+        Pose power = drive.getMoveSmoothPower(gph1.ry, gph1.rx, gph1.lx);
+        drive.move(Precision.clip(pow.getY(), 0.5) + power.getX(),  power.getY(), Precision.clip(h, 0.5) + power.getAngle());
 
         lift.move(gph2.ry);
 
@@ -134,6 +132,10 @@ public class TerraOp extends Tele {
         log.show("GameplayMode", Modes.gameplayMode.get());
         log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
         log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : Modes.GamepadMode.NORMAL);
+
+        // CREATE STICKY MODE
+
+//        junctionScanner.message();
 
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());

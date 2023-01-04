@@ -42,7 +42,7 @@ public class JunctionScannerTest extends TeleUnitTest {
         Pose error = target.getSubtracted(junctionScanner.getPose());
         error.invertOrientation();
 
-        if(error.getY() > 20 || error.getLength() > 20){ error = new Pose(); }
+        if(Math.abs(error.getY()) > 15 || Math.abs(error.getAngle()) > 15){ error = new Pose(); }
 
         Vector pow = new Vector(0, yCurve.fodd(error.getY()));
         pow.rotate(-error.getAngle());

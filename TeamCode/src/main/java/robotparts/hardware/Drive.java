@@ -4,6 +4,7 @@ import automodules.AutoModule;
 import automodules.stage.Stage;
 import autoutil.AutoFramework;
 import elements.FieldSide;
+import geometry.position.Pose;
 import geometry.position.Vector;
 import global.Modes;
 import math.misc.Logistic;
@@ -66,6 +67,12 @@ public class Drive extends RobotPart {
 
     public void moveSmooth(double f, double s, double t) {
         double scale = Modes.driveMode.getValue(); move(movementCurveForward.fodd(f*scale), movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(
+                Modes.driveMode.modeIs(Modes.Drive.MEDIUM) ? 0.7*t*scale : t*1.2*scale));
+    }
+
+    public Pose getMoveSmoothPower(double f, double s, double t){
+        double scale = Modes.driveMode.getValue();
+        return new Pose(movementCurveForward.fodd(f*scale),movementCurveStrafe.fodd(s*1.2*scale), movementCurveTurn.fodd(
                 Modes.driveMode.modeIs(Modes.Drive.MEDIUM) ? 0.7*t*scale : t*1.2*scale));
     }
 
