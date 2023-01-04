@@ -1,37 +1,57 @@
 package unittests.tele.sensor;
 
 import autoutil.vision.JunctionScanner;
+import autoutil.vision.JunctionScanner2;
+import geometry.position.Pose;
 import geometry.position.Vector;
+import global.Modes;
+import math.polynomial.Linear;
 import teleutil.button.Button;
 import unittests.tele.TeleUnitTest;
+import util.template.Precision;
 
+import static global.General.bot;
 import static global.General.gph1;
+import static global.General.gph2;
 import static global.General.log;
 
 public class JunctionScannerTest extends TeleUnitTest {
 
-    private final JunctionScanner junctionScanner = new JunctionScanner();
+    private final Pose target = new Pose(0,18.5, -5);
+    private final JunctionScanner2 junctionScanner = new JunctionScanner2();
 
     @Override
     public void init() {
         camera.setScanner(junctionScanner);
         camera.start(true);
         JunctionScanner.resume();
-        gph1.link(Button.RIGHT_BUMPER, camera::resume);
-        gph1.link(Button.LEFT_BUMPER, camera::pause);
+//        gph1.link(Button.RIGHT_BUMPER, camera::resume);
+//        gph1.link(Button.LEFT_BUMPER, camera::pause);
+        gph1.link(Button.B, BackwardAllTele);
+        gph1.link(Button.Y, ForwardAll);
     }
 
     @Override
     protected void loop() {
         junctionScanner.message();
-//        double herr = junctionScanner.angleToJunction;
-//        double derr = 14-junctionScanner.distanceToJunction;
-//        double dpow = derr/30;
-//        double hpow = herr/90;
 
-//        Vector pow = new Vector(0, Math.abs(derr) < 40 ? dpow : 0);
-//        pow.rotate(-herr);
-//        drive.move(pow.getY(), pow.getX(), Math.abs(herr) < 45 ? hpow : 0);
+        Linear yCurve = new Linear(0.018, 0.06);
+        Linear hCurve = new Linear(0.007, 0.04);
+
+
+        Pose error = target.getSubtracted(junctionScanner.getPose());
+        error.invertOrientation();
+
+        if(error.getY() > 20 || error.getLength() > 20){ error = new Pose(); }
+
+        Vector pow = new Vector(0, yCurve.fodd(error.getY()));
+        pow.rotate(-error.getAngle());
+        double h = hCurve.fodd(error.getAngle());
+
+        drive.move(Precision.clip(pow.getY(), 0.5) + (gph1.ry*0.5),  (gph1.rx*0.5), Precision.clip(h, 0.5) + (gph1.lx*0.5));
+
+        lift.move(0);
+
     }
 
     @Override

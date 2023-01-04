@@ -3,13 +3,19 @@ package teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import automodules.AutoModuleUser;
+import autoutil.vision.JunctionScanner;
+import autoutil.vision.JunctionScanner2;
 import elements.FieldSide;
+import geometry.position.Pose;
+import geometry.position.Vector;
 import global.Constants;
 import global.Modes;
+import math.polynomial.Linear;
 import teleutil.button.Button;
 import teleutil.button.OnTurnOffEventHandler;
 import teleutil.button.OnTurnOnEventHandler;
 import util.User;
+import util.template.Precision;
 
 import static autoutil.reactors.MecanumJunctionReactor.junctionScanner;
 import static global.General.bot;
@@ -34,6 +40,12 @@ import static teleutil.button.Button.RIGHT_TRIGGER;
 
 @TeleOp(name = "TerraOp", group = "TeleOp")
 public class TerraOp extends Tele {
+
+    private final Pose target = new Pose(0,18.5, -5);
+
+
+
+    private final JunctionScanner2 junctionScanner = new JunctionScanner2();
 
     @Override
     public void initTele() {
@@ -84,6 +96,10 @@ public class TerraOp extends Tele {
          */
         lift.move(-0.12);
         bot.loadLocationOnField();
+
+        camera.setScanner(junctionScanner);
+        camera.start(false);
+        JunctionScanner.resume();
     }
 
     @Override
@@ -96,7 +112,20 @@ public class TerraOp extends Tele {
     @Override
     public void loopTele() {
 
-        drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
+        Linear yCurve = new Linear(0.018, 0.06);
+        Linear hCurve = new Linear(0.007, 0.04);
+
+
+        Pose error = target.getSubtracted(junctionScanner.getPose());
+        error.invertOrientation();
+
+        if(error.getY() > 20 || error.getLength() > 20){ error = new Pose(); }
+
+        Vector pow = new Vector(0, yCurve.fodd(error.getY()));
+        pow.rotate(-error.getAngle());
+        double h = hCurve.fodd(error.getAngle());
+
+        drive.move(Precision.clip(pow.getY(), 0.5) + (gph1.ry*0.5),  (gph1.rx*0.5), Precision.clip(h, 0.5) + (gph1.lx*0.5));
 
         lift.move(gph2.ry);
 
@@ -112,6 +141,11 @@ public class TerraOp extends Tele {
 //        log.show("SavedPose", bot.getSavedPose());
 //        log.show("Voltage", bot.getVoltage());
 //        log.show("Pitch", gyro.getPitch());
+    }
+
+    @Override
+    public void stopTele() {
+        camera.halt();
     }
 }
 

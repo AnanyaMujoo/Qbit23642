@@ -55,7 +55,7 @@ public abstract class Scanner extends OpenCvPipeline {
     public abstract void run(Mat input);
     public abstract void preProcess(Mat input);
     public abstract void postProcess(Mat input);
-    protected abstract void message();
+    public abstract void message();
 
     public final void log(){ if(isStarted) { message(); }else{ log.show("Vision Starting..."); } }
 
@@ -71,7 +71,7 @@ public abstract class Scanner extends OpenCvPipeline {
     public final void init(Mat firstFrame){ start(); }
 
     @Override
-    public final Mat processFrame(Mat input){
+    public Mat processFrame(Mat input){
         preProcess(input); run(input); postProcess(input);
         return input;
     }

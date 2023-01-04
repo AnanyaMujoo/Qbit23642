@@ -2,9 +2,12 @@ package autoutil.vision;
 
 import android.os.Build;
 
+import static global.General.gamepad1;
+import static global.General.log;
 import static org.opencv.core.Core.inRange;
 
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -19,8 +22,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import geometry.position.Pose;
+import geometry.position.Vector;
 
-public class JunctionScanner2 extends OpenCvPipeline {
+
+public class JunctionScanner2 extends Scanner {
 
     // TODO TEST
 
@@ -37,11 +43,11 @@ public class JunctionScanner2 extends OpenCvPipeline {
 
     public DETECT_COLOR coneColor = DETECT_COLOR.BOTH;
 
-    public double horizon = 100;
+    public int horizon = 100;
 
     private Rect redRect = new Rect();
     private Rect blueRect = new Rect();
-    private Rect poleRect = new Rect();
+    private Rect maxRect = new Rect();
 
     private final List<MatOfPoint> redContours = new ArrayList<>();
     private final List<MatOfPoint> blueContours = new ArrayList<>();
@@ -52,9 +58,12 @@ public class JunctionScanner2 extends OpenCvPipeline {
     private final Scalar redLow = new Scalar(0, 161, 60);
     private final Scalar redHigh = new Scalar(200, 255, 255);
     private final Scalar blueLow = new Scalar(0, 80, 138);
-    private final Scalar blueHigh = new Scalar(100, 255, 255);
+    private final Scalar blueHigh = new Scalar(150, 255, 255);
     // Pole mask scalars
-    public Scalar poleLower = new Scalar(59, 134, 48);
+//    public Scalar poleLower = new Scalar(59, 134, 48);
+//    public Scalar poleHigher = new Scalar(180, 180, 105);
+
+    public Scalar poleLower = new Scalar(59, 134, 20);
     public Scalar poleHigher = new Scalar(180, 180, 105);
     // Signal sleeve mask scalars
     private final Scalar greenLower = new Scalar(32, 10, 75);
@@ -73,17 +82,109 @@ public class JunctionScanner2 extends OpenCvPipeline {
     private final Size kSize = new Size(5, 5);
     private final Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, kSize);
 
+    private static final double cameraFov = 47;
+    private static final double realJunctionWidth = 2.672; // cm
+    private static final double minConeWidth = 7.7; // cm
+    private static final double maxConeWidth = 10; // cm
+    public double distanceToJunction = 0, angleToJunction = 0;
+
+
     @Override
-    public Mat processFrame(Mat input) {
-        return detectPole(input);
+    public void run(Mat input) {}
+
+    @Override
+    public void preProcess(Mat input) {}
+
+    @Override
+    public void postProcess(Mat input) {}
+
+    Scalar mean = new Scalar(0,0,0);
+    @Override
+    public void message() {
+        log.show("Pose", getPose());
+//        log.showAndRecord("Mean", mean);
     }
 
+    @Override
+    public Mat processFrame(Mat input) {
+        cropAndFill(input, new Rect(0, horizon, input.width(), input.height()-horizon));
+        return detectCone(input);
+//        return detectPole(input);
+//        detectPole(input).copyTo(input);
+//        return input;
+    }
+
+    public Pose getPose(){
+        double distance = distanceToJunction;
+        double angle = angleToJunction;
+        Vector distanceVector = new Vector(0, distance);
+        distanceVector.rotate(angle);
+        return new Pose(distanceVector.getX(), distanceVector.getY(), angle);
+    }
+
+
+    private Mat detectPole(Mat input) {
+        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
+
+        Imgproc.erode(yCrCb, yCrCb, kernel);
+
+
+
+        inRange(yCrCb, poleLower, poleHigher, binaryMat);
+
+//        binaryMat.copyTo(input);
+
+        Imgproc.findContours(binaryMat, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+
+//        Imgproc.drawContours(input, contours, -1, CONTOUR_COLOR);
+
+        if(!contours.isEmpty()) {
+            MatOfPoint biggestPole = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                biggestPole = Collections.max(contours, Comparator.comparingDouble(t0 -> Imgproc.boundingRect(t0).height));
+            }
+            if(biggestPole != null) {
+                if (Imgproc.contourArea(biggestPole) > CONTOUR_AREA) {
+                    maxRect = Imgproc.boundingRect(biggestPole);
+
+//                    Imgproc.rectangle(input, maxRect, CONTOUR_COLOR, 2);
+//                    Imgproc.putText(input, "Pole", new Point(maxRect.x, maxRect.y < 10 ? (maxRect.y + maxRect.height + 20) : (maxRect.y - 8)), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, TEXT_COLOR, 2);
+                }
+            }
+        }
+//        Rect rect = getRectFromCenter(getCenter(input), 80, 80);
+//        drawRectangle(input, rect, GREEN);
+//        mean = getAverage(yCrCb, rect);
+
+        contours.clear();
+        yCrCb.release();
+        binaryMat.release();
+
+
+
+        double junctionCenterX = getCenter(maxRect).x;
+        double screenCenterX = input.width() / 2.0;
+        double junctionCenterOffset = junctionCenterX - screenCenterX;
+        double screenWidth = input.width();
+
+
+        double screenJunctionWidth = maxRect.width;
+        distanceToJunction = realJunctionWidth / distanceRatio(screenJunctionWidth, screenWidth);
+
+        double realJunctionOffset = distanceToJunction * distanceRatio(junctionCenterOffset, screenWidth);
+        angleToJunction = Math.toDegrees(Math.atan2(realJunctionOffset, distanceToJunction));
+
+        return input;
+    }
+
+    private double distanceRatio(double sizeOnScreen, double screenWidth){ return 2*Math.tan(Math.toRadians(cameraFov*(sizeOnScreen/screenWidth))/2.0); }
+
 //    //ToD Convert to using only a single contour list
-//    private Mat detectCone(Mat input) {
-//
-//        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
-//        Imgproc.erode(yCrCb, yCrCb, kernel);
-//
+    private Mat detectCone(Mat input) {
+
+        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
+        Imgproc.erode(yCrCb, yCrCb, kernel);
+
 //        if (coneColor.equals(DETECT_COLOR.RED) || coneColor.equals(DETECT_COLOR.BOTH)) {
 //            inRange(yCrCb, redLow, redHigh, maskRed);
 //
@@ -126,48 +227,49 @@ public class JunctionScanner2 extends OpenCvPipeline {
 //            }
 //            maskBlue.release();
 //        }
-//
-//        Imgproc.line(input, new Point(0,horizon), new Point(640, horizon), HORIZON_COLOR);
-//
-//        yCrCb.release();
-//
-//        return input;
-//    }
 
-    private Mat detectPole(Mat input) {
-        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
-        Imgproc.erode(yCrCb, yCrCb, kernel);
+        inRange(yCrCb, blueLow, blueHigh, maskBlue);
 
-        inRange(yCrCb, poleLower, poleHigher, binaryMat);
+        Imgproc.findContours(maskBlue, blueContours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        Imgproc.findContours(binaryMat, contours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            contours.removeIf(c -> Imgproc.boundingRect(c).y + (Imgproc.boundingRect(c).height / 2.0) < horizon);
-        }
-        Imgproc.drawContours(input, contours, -1, CONTOUR_COLOR);
+//        Imgproc.drawContours(input, blueContours, -1, CONTOUR_COLOR);
 
-        if(!contours.isEmpty()) {
-            MatOfPoint biggestPole = null;
+        if(!blueContours.isEmpty()) {
+            MatOfPoint biggestBlueContour = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                biggestPole = Collections.max(contours, Comparator.comparingDouble(t0 -> Imgproc.boundingRect(t0).height));
+                biggestBlueContour = Collections.max(blueContours, Comparator.comparingDouble(t0 -> Imgproc.boundingRect(t0).width));
             }
-            if(Imgproc.contourArea(biggestPole) > CONTOUR_AREA) {
-                poleRect = Imgproc.boundingRect(biggestPole);
-
-                Imgproc.rectangle(input, poleRect, CONTOUR_COLOR, 2);
-                Imgproc.putText(input, "Pole", new Point(poleRect.x, poleRect.y < 10 ? (poleRect.y+poleRect.height+20) : (poleRect.y - 8)), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, TEXT_COLOR, 2);
+            if(biggestBlueContour != null) {
+                if (Imgproc.contourArea(biggestBlueContour) > CONTOUR_AREA) {
+                    blueRect = Imgproc.boundingRect(biggestBlueContour);
+//
+//                    Imgproc.rectangle(input, blueRect, CONTOUR_COLOR, 2);
+//                    Imgproc.putText(input, "Blue Cone", new Point(blueRect.x, blueRect.y < 10 ? (blueRect.y + blueRect.height + 20) : (blueRect.y - 8)), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, TEXT_COLOR, 1);
+                }
             }
         }
 
-
-        Imgproc.line(input, new Point(0,horizon), new Point(640, horizon), HORIZON_COLOR);
-
-        contours.clear();
+        blueContours.clear();
+        maskBlue.release();
         yCrCb.release();
-        binaryMat.release();
+
+
+        double junctionCenterX = getCenter(blueRect).x;
+        double screenCenterX = input.width() / 2.0;
+        double junctionCenterOffset = junctionCenterX - screenCenterX;
+        double screenWidth = input.width();
+
+        double screenJunctionWidth = blueRect.width;
+
+
+        distanceToJunction = minConeWidth / distanceRatio(screenJunctionWidth, screenWidth);
+
+        double realJunctionOffset = distanceToJunction * distanceRatio(junctionCenterOffset, screenWidth);
+        angleToJunction = Math.toDegrees(Math.atan2(realJunctionOffset, distanceToJunction));
 
         return input;
     }
+
 
 //    private Mat detectSleeve(Mat input) {
 //        Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);

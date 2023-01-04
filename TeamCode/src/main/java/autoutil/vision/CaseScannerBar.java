@@ -12,6 +12,7 @@ import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 
+import static global.General.log;
 
 
 public class CaseScannerBar extends CaseScanner {
@@ -25,9 +26,9 @@ public class CaseScannerBar extends CaseScanner {
 
         Imgproc.blur(Gray, Gray, new Size(2, 2));
 
-        Imgproc.adaptiveThreshold(Gray, Mask, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 131, 50);
+        Imgproc.adaptiveThreshold(Gray, Mask, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 131, 40);
 
-        Mask.copyTo(input);
+//        Mask.copyTo(input);
 
         Imgproc.Canny(Mask, Edges, 10, 20);
 
@@ -44,14 +45,15 @@ public class CaseScannerBar extends CaseScanner {
 
         ArrayList<Rect> rects = new ArrayList<>();
         double minAspect = 4;
-        double minArea = 700;
+        double minArea = 400;
         for (int i = 0; i < contours.size(); i++) {
             Rect rect = Imgproc.boundingRect(contours.get(i));
-            if(getAspectRatio(rect) > minAspect && rect.area() > minArea && getCenter(rect).y > 120){
+            if(getAspectRatio(rect) > minAspect && Imgproc.contourArea(contours.get(i)) > minArea && getCenter(rect).y > 120){
                 rects.add(rect);
 //                drawRectangle(input, scaleRectAroundCenter(rect, 1.4), BLUE);
             }
         }
+
 
         int num = rects.size();
         return num == 0 ? 1 : num > 2 ? 2 : num-1;

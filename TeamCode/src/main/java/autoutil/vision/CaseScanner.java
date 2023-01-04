@@ -20,11 +20,11 @@ import static java.lang.Math.abs;
 public class CaseScanner extends Scanner{
     private volatile Case caseDetected = Case.THIRD;
     protected final Case[] cases = new Case[]{Case.FIRST, Case.SECOND, Case.THIRD};
-    protected final Case[] pastCases = new Case[30];
+    protected final Case[] pastCases = new Case[5];
     { Arrays.fill(pastCases, caseDetected); }
 
     public int getCase(Mat input){
-        cropAndFill(input, getZoomedRect(input, 2));
+        cropAndFill(input, getZoomedRect(input, 1.6));
         getHSV(input);
 
         computeRects(80, 150);
@@ -44,7 +44,7 @@ public class CaseScanner extends Scanner{
     }
 
     @Override
-    protected void message(){
+    public void message(){
 //        logDebug();
         caseDetected = getCaseStable(getCase());
         log.show("Case Detected: ", caseDetected);
@@ -53,16 +53,25 @@ public class CaseScanner extends Scanner{
 
     private Case getCaseStable(Case currentCase){
         boolean casesAreSame = true;
-        for (int i = 0; i < pastCases.length-1; i++) { pastCases[i] = pastCases[i+1]; if(!pastCases[i].equals(currentCase)){ casesAreSame = false; } } pastCases[0] = currentCase;
-        return casesAreSame ? currentCase : caseDetected;
+        for (int i = 0; i < pastCases.length-1; i++) {
+
+            pastCases[i] = pastCases[i+1];
+            if(!pastCases[i].equals(currentCase)){ casesAreSame = false; }
+        }
+        pastCases[pastCases.length-1] = currentCase;
+        return casesAreSame ? currentCase : pastCases[0];
     }
 
 
     @Override
-    public final void preProcess(Mat input) { Core.rotate(input, input, Core.ROTATE_90_COUNTERCLOCKWISE); }
+    public final void preProcess(Mat input) {
+//        Core.rotate(input, input, Core.ROTATE_90_COUNTERCLOCKWISE);
+    }
 
     @Override
-    public final void postProcess(Mat input) { Core.rotate(input, input, Core.ROTATE_90_CLOCKWISE); }
+    public final void postProcess(Mat input) {
+//        Core.rotate(input, input, Core.ROTATE_90_CLOCKWISE);
+    }
 
     @Override
     public final void run(Mat input) { caseDetected = cases[getCase(input)]; }

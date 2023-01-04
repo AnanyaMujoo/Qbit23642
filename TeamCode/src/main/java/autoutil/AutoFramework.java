@@ -113,7 +113,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public void scan(boolean view){
         scanning = true;
-        caseScanner = new CaseScannerBar(); // TODO TEST
+        caseScanner = new CaseScannerBar();
         camera.setScanner(caseScanner);
         camera.start(view);
     }

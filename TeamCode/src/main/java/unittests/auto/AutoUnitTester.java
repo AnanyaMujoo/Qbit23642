@@ -6,7 +6,9 @@ import static global.General.log;
 
 import auton.Auto;
 import unittests.UnitTester;
+import unittests.auto.framework.VuforiaTest;
 import unittests.auto.framework.calibration.OdometryCalib;
+import unittests.auto.framework.calibration.VoltageScaleCalib;
 import util.condition.Status;
 
 @SuppressWarnings("ALL")
@@ -34,9 +36,11 @@ public class AutoUnitTester extends Auto implements UnitTester {
 //        Works as of 4.2.5
 //        add(new IteratorTest());
 //        add(new ThreadStopTest());
+
+
+//        add(new VoltageScaleCalib());
         // TODO TEST
 //        add(new VuforiaTest());
-//        add(new VoltageScaleCalibTest());
         add(new OdometryCalib());
 
         /**
