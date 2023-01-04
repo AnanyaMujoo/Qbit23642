@@ -2,6 +2,7 @@ package teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import automodules.AutoModule;
 import autoutil.vision.JunctionScanner;
 import autoutil.vision.JunctionScannerAll;
 import geometry.position.Pose;
@@ -12,12 +13,13 @@ import teleutil.button.Button;
 import util.template.Mode;
 import util.template.Precision;
 
-import static autoutil.reactors.MecanumJunctionReactor.junctionScanner;
 import static global.General.bot;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
+import static global.Modes.AttackMode.STICKY;
 import static global.Modes.GamepadMode.AUTOMATED;
+import static global.Modes.GamepadMode.NORMAL;
 import static teleutil.button.Button.DPAD_DOWN;
 import static teleutil.button.Button.DPAD_LEFT;
 import static teleutil.button.Button.DPAD_RIGHT;
@@ -54,8 +56,8 @@ public class TerraOp extends Tele {
         gph1.link(DPAD_DOWN, LiftGround);
         gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
         gph1.link(LEFT_BUMPER,  () -> lift.adjustHolderTarget(-2.5));
-        gph1.link(RIGHT_TRIGGER, () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ bot.addAutoModule(ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}});
-        gph1.link(LEFT_TRIGGER, () -> {bot.cancelAutoModules();  if(lift.stackedMode > 0){ bot.addAutoModule(ForwardStackTele(lift.stackedMode)); lift.stackedMode--;}});
+        gph1.link(RIGHT_TRIGGER, new AutoModule(attackMode.ChangeMode(NORMAL)));
+        gph1.link(LEFT_TRIGGER, new AutoModule(attackMode.ChangeMode(STICKY)));
 
         /**
          * Gamepad 1 Automated
@@ -102,16 +104,14 @@ public class TerraOp extends Tele {
 
         lift.move(gph2.ry);
 
-        junctionScanner.message();
-
         log.show("DriveMode", driveMode.get());
         log.show("HeightMode", heightMode.get());
         log.show("GameplayMode", gameplayMode.get());
         log.show("AttackMode", attackMode.get());
-        log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
         log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : GamepadMode.NORMAL);
 
 
+//        junctionScannerAll.message();
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());
 //        log.show("Pose", odometry.getPose());

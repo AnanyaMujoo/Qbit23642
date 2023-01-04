@@ -93,13 +93,12 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(CIRCUIT_PICK, BackwardCircuitPickAll::check)
             .addOption(CIRCUIT_PLACE, BackwardCircuitPlace::check);
     AutoModule ForwardCircuitTele = new AutoModule(
-            Modes.driveMode.ChangeMode(SLOW),
+            Modes.driveMode.ChangeMode(MEDIUM),
             Modes.attackMode.ChangeMode(NORMAL),
             outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
             lift.resetCutoff(),
-            lift.stageLift(0.4, 0),
-            Modes.driveMode.ChangeMode(MEDIUM)
+            lift.stageLift(0.4, 0)
     );
     AutoModule ForwardTele = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
@@ -113,18 +112,10 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(CYCLE, ForwardTele)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele);
-    default AutoModule ForwardStackTele(int i){return new AutoModule(
-            Modes.attackMode.ChangeMode(NORMAL),
-            lift.changeCutoff(2),
-            outtake.stageOpen(0.0),
-            outtake.stageStart(0.0),
-            lift.stageLift(0.7, Math.max(14.0 - (i*14.0/4.0), 0)),
-            lift.resetCutoff()
-    );}
-    AutoModule LiftHigh = new AutoModule(lift.stageLift(1.0, heightMode.getValue(HIGH)));
-    AutoModule LiftMiddle = new AutoModule(lift.stageLift(1.0, heightMode.getValue(MIDDLE)));
-    AutoModule LiftLow = new AutoModule(lift.stageLift(1.0, heightMode.getValue(LOW)));
-    AutoModule LiftGround = new AutoModule(lift.stageLift(1.0, heightMode.getValue(GROUND)));
+    AutoModule LiftHigh = new AutoModule(heightMode.ChangeMode(HIGH), lift.stageLift(1.0, heightMode.getValue(HIGH)));
+    AutoModule LiftMiddle = new AutoModule(heightMode.ChangeMode(MIDDLE), lift.stageLift(1.0, heightMode.getValue(MIDDLE)));
+    AutoModule LiftLow = new AutoModule(heightMode.ChangeMode(LOW), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(LOW)));
+    AutoModule LiftGround = new AutoModule(heightMode.ChangeMode(GROUND), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(GROUND)));
 
     /**
      * Auto

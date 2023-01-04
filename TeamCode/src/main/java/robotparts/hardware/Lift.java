@@ -1,5 +1,6 @@
 package robotparts.hardware;
 
+import automodules.AutoModule;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import global.Constants;
@@ -10,7 +11,10 @@ import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
 import robotparts.electronics.positional.PServo;
 import util.User;
+import util.codeseg.CodeSeg;
+import util.template.Precision;
 
+import static global.General.bot;
 import static global.Modes.gameplayMode;
 import static global.Modes.heightMode;
 
@@ -20,7 +24,6 @@ public class Lift extends RobotPart {
     public PMotor motorLeft;
 
     public static final double maxPosition = 61;
-    public int stackedMode = 0;
     public final double cutoffPosition = 10;
     public volatile double currentCutoffPosition = 10;
     public boolean circuitMode = false;
@@ -34,7 +37,6 @@ public class Lift extends RobotPart {
         motorRight.usePositionHolder(0.18, 0.18);
         motorLeft.usePositionHolder(0.18, 0.18);
         heightMode.set(Modes.Height.HIGH);
-        stackedMode = 0;
         circuitMode = false;
         gameplayMode.set(Modes.GameplayMode.CYCLE);
     }
@@ -52,7 +54,14 @@ public class Lift extends RobotPart {
         motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.2);
     }
 
-    public void adjustHolderTarget(double delta){ motorRight.setPositionHolderTarget(motorRight.getPositionHolder().getTarget()+delta); motorLeft.setPositionHolderTarget(motorRight.getPositionHolder().getTarget()+delta); }
+    public void adjustHolderTarget(double delta){
+        currentCutoffPosition = 0;
+        motorRight.holdPositionExact();
+        motorLeft.holdPositionExact();
+        double target = Precision.clip(motorRight.getPositionHolder().getTarget()+delta, 0, maxPosition);
+        motorRight.setPositionHolderTarget(target);
+        motorLeft.setPositionHolderTarget(target);
+    }
 
     @Override
     public Stage moveTime(double p, double t) {

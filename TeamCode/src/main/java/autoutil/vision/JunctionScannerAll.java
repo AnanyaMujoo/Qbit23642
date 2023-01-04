@@ -20,10 +20,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import autoutil.Profiler;
 import elements.FieldSide;
 import elements.GameItems;
 import geometry.position.Pose;
 import geometry.position.Vector;
+import util.template.Precision;
 
 
 public class JunctionScannerAll extends Scanner {
@@ -75,7 +77,7 @@ public class JunctionScannerAll extends Scanner {
 
     @Override
     public void message() {
-        log.show("Roll", rollOfJunction); // TODO TEST
+//        log.show("Roll", rollOfJunction);
 
 //        Scalar mean = new Scalar(0,0,0);
 //        log.show("Cone Mode", coneMode);
@@ -109,7 +111,7 @@ public class JunctionScannerAll extends Scanner {
         return input;
     }
 
-    public boolean cutoff(Pose error){ return Math.abs(error.getY()) < 15 && Math.abs(error.getAngle()) < 25; }
+    public boolean cutoff(Pose error){ return Math.abs(error.getY()) < 20 && Math.abs(error.getAngle()) < 35; }
 
     public static Pose getError(){
         return error;
@@ -142,9 +144,13 @@ public class JunctionScannerAll extends Scanner {
             if(biggestPole != null) {
                 if (Imgproc.contourArea(biggestPole) > minContourArea) {
                     poleRect = Imgproc.boundingRect(biggestPole);
-                    Imgproc.approxPolyDP(new MatOfPoint2f(biggestPole.toArray()), polePoly, 15, true);
-                    rollOfJunction = Imgproc.minAreaRect(polePoly).angle;
-                    target = defaultTarget.getAdded(new Pose(0,0, rollOfJunction * GameItems.Junction.highHeight / defaultTarget.getY()));
+                    Imgproc.approxPolyDP(new MatOfPoint2f(biggestPole.toArray()), polePoly, 2, true);
+                    rollOfJunction = Imgproc.minAreaRect(polePoly).angle; if(rollOfJunction > 45){ rollOfJunction -= 90; }
+                    if(rollOfJunction > -1){
+                        rollOfJunction = 0.0; target = defaultTarget;
+                    }else{
+                        Precision.clip(rollOfJunction, 5); target = defaultTarget.getAdded(new Pose(0, -0.2*Math.abs(rollOfJunction), -rollOfJunction * 1.25 * GameItems.Junction.highHeight / defaultTarget.getY()));
+                    }
                     exitEarly = false;
 
 //                    Imgproc.rectangle(input, maxRect, CONTOUR_COLOR, 2);
@@ -157,10 +163,13 @@ public class JunctionScannerAll extends Scanner {
         yCrCb.release();
         binaryMat.release();
 
-        if(exitEarly){ distanceToJunction = 1000; angleToJunction = 1000; rollOfJunction = 0; target = defaultTarget.getCopy(); return; }
+        if(exitEarly){ reset(); return; }
 
         update(input, poleRect, realPoleWidth);
 
+    }
+    public void reset(){
+        distanceToJunction = 1000; angleToJunction = 1000; rollOfJunction = 0; target = defaultTarget.getCopy();
     }
 
     private void detectCone(Mat input) {
@@ -209,7 +218,7 @@ public class JunctionScannerAll extends Scanner {
         maskCone.release();
         yCrCb.release();
 
-        if(exitEarly){ distanceToJunction = 1000; angleToJunction = 1000; rollOfJunction = 0; target = defaultTarget.getCopy();  return; }
+        if(exitEarly){ reset(); return;  }
 
         double offset = coneRect.y;
         int numPoints = approxConePoly.toList().size();

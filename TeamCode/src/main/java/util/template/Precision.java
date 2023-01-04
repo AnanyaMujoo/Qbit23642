@@ -123,9 +123,7 @@ public class Precision {
         }
     }
 
-    public static double clip(double value, double low, double high){
-        return Math.min(Math.max(value, low), high);
-    }
+    public static double clip(double value, double low, double high){ return Math.min(Math.max(value, low), high); }
 
     public static double clip(double value, double range){
         return clip(value, -range, range);
