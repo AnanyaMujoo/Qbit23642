@@ -11,6 +11,7 @@ public class Vector3D {
     public Vector3D(double x, double y, double z){
         vector = new VectorF((float) x, (float) y, (float) z);
     }
+    public Vector3D(){ this(0,0,0); }
 
     public Vector3D(Vector v2d, double z){
         this(v2d.getX(), v2d.getY(), z);

@@ -21,7 +21,8 @@ public class Lift extends RobotPart {
 
     public static final double maxPosition = 61;
     public int stackedMode = 0;
-    public volatile double cutoffPosition = 10;
+    public final double cutoffPosition = 10;
+    public volatile double currentCutoffPosition = 10;
     public boolean circuitMode = false;
 
     @Override
@@ -40,28 +41,18 @@ public class Lift extends RobotPart {
 
 
     public Stage changeCutoff(double cutoffPosition){
-        return customTime(() -> this.cutoffPosition = cutoffPosition, 0.01);
+        return customTime(() -> currentCutoffPosition = cutoffPosition, 0.01);
     }
+    public Stage resetCutoff(){ return changeCutoff(cutoffPosition); }
 
 
     @Override
     public void move(double p) {
-        motorRight.moveWithPositionHolder(p, cutoffPosition, 0.15);
-        motorLeft.moveWithPositionHolder(p, cutoffPosition, 0.15);
+        motorRight.moveWithPositionHolder(p, currentCutoffPosition, 0.2);
+        motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.2);
     }
 
-    public void setHolderTarget(Modes.Height height){
-        Modes.heightMode.set(height);
-        setHolderTarget(heightMode.getValue());
-    }
-
-    public void setHolderTarget(double height){
-        motorRight.setPositionHolderTarget(height); motorLeft.setPositionHolderTarget(height);
-    }
-
-    public void adjustHolderTarget(double delta){
-        motorRight.setPositionHolderTarget(motorRight.getPositionHolder().getTarget()+delta); motorLeft.setPositionHolderTarget(motorRight.getPositionHolder().getTarget()+delta);
-    }
+    public void adjustHolderTarget(double delta){ motorRight.setPositionHolderTarget(motorRight.getPositionHolder().getTarget()+delta); motorLeft.setPositionHolderTarget(motorRight.getPositionHolder().getTarget()+delta); }
 
     @Override
     public Stage moveTime(double p, double t) {
@@ -73,9 +64,6 @@ public class Lift extends RobotPart {
     @Override
     public void maintain() { super.maintain(); }
 
-
-    public Stage resetLift(){
-        return new Stage(usePart(), new Main(() -> {motorRight.resetPosition(); motorLeft.resetPosition();}), exitTime(0.1), stop(), returnPart());
-    }
+    public Stage resetLift(){ return new Stage(usePart(), new Main(() -> {motorRight.resetPosition(); motorLeft.resetPosition();}), exitTime(0.1), stop(), returnPart()); }
 }
 

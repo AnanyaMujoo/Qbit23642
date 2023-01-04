@@ -1,5 +1,10 @@
 package elements;
+import org.firstinspires.ftc.robotcore.internal.android.dex.Code;
+
+import util.codeseg.CodeSeg;
 import util.condition.Decision;
+
+import static global.General.fieldSide;
 
 public enum FieldSide implements Decision {
     /**
@@ -46,6 +51,14 @@ public enum FieldSide implements Decision {
             default:
                 return null;
         }
+    }
+
+    public static boolean isBlue(){
+        return fieldSide.equals(BLUE) || fieldSide.equals(UNKNOWN);
+    }
+
+    public static void on(CodeSeg blue, CodeSeg red){
+        if(isBlue()){blue.run();}else {red.run();};
     }
 
     @Override

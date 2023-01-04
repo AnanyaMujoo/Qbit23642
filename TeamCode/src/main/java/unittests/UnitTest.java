@@ -3,6 +3,7 @@ package unittests;
 import java.util.Map.*;
 
 import automodules.AutoModuleUser;
+import global.Modes;
 import robot.RobotConfig;
 import robot.RobotUser;
 import robotparts.RobotPart;
@@ -15,7 +16,7 @@ import util.template.Precision;
 
 import static global.General.*;
 
-public class UnitTest implements RobotUser, AutoModuleUser {
+public class UnitTest implements RobotUser, AutoModuleUser, Modes {
 
 
     protected final Precision precision = new Precision();

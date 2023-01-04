@@ -18,6 +18,7 @@ public class Cameras extends RobotPart {
         cam = create("ecam", ElectronicType.ICAMERA_EXTERNAL);
     }
     public void start(boolean view){ cam.start(view); }
+    public void startAndResume(boolean view){ start(view); resume(); }
     public void pause(){ cam.pause(); }
     public void resume(){ cam.resume(); }
     public void setScanner(Scanner scanner){ cam.setScanner(scanner);}

@@ -12,6 +12,8 @@ import teleutil.independent.Independent;
 import teleutil.independent.Machine;
 import util.condition.OutputList;
 
+import static global.Modes.AttackMode.NORMAL;
+import static global.Modes.AttackMode.STICKY;
 import static global.Modes.Drive.MEDIUM;
 import static global.Modes.Drive.SLOW;
 import static global.Modes.GameplayMode.CIRCUIT_PICK;
@@ -70,12 +72,14 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(GROUND, BackwardCircuitGroundPlace);
     static AutoModule BackwardCircuitPlace(Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
+            Modes.attackMode.ChangeMode(STICKY),
             outtake.stageFlip(0.0),
             lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.1)),
             gameplayMode.ChangeMode(CIRCUIT_PICK)
     );}
     static AutoModule BackwardHeightTele(Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
+            Modes.attackMode.ChangeMode(STICKY),
             outtake.stageClose(0.15),
             lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.1))
     );}
@@ -90,17 +94,19 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(CIRCUIT_PLACE, BackwardCircuitPlace::check);
     AutoModule ForwardCircuitTele = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
+            Modes.attackMode.ChangeMode(NORMAL),
             outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
-            lift.changeCutoff(6.0),
+            lift.resetCutoff(),
             lift.stageLift(0.4, 0),
             Modes.driveMode.ChangeMode(MEDIUM)
     );
     AutoModule ForwardTele = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
+            Modes.attackMode.ChangeMode(NORMAL),
             outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
-            lift.changeCutoff(6.0),
+            lift.resetCutoff(),
             lift.stageLift(0.7, 0)
     );
     OutputList ForwardAll = new OutputList(gameplayMode::get)
@@ -108,12 +114,17 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(CIRCUIT_PICK, ForwardCircuitTele)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele);
     default AutoModule ForwardStackTele(int i){return new AutoModule(
+            Modes.attackMode.ChangeMode(NORMAL),
             lift.changeCutoff(2),
             outtake.stageOpen(0.0),
             outtake.stageStart(0.0),
             lift.stageLift(0.7, Math.max(14.0 - (i*14.0/4.0), 0)),
-            lift.changeCutoff(6)
+            lift.resetCutoff()
     );}
+    AutoModule LiftHigh = new AutoModule(lift.stageLift(1.0, heightMode.getValue(HIGH)));
+    AutoModule LiftMiddle = new AutoModule(lift.stageLift(1.0, heightMode.getValue(MIDDLE)));
+    AutoModule LiftLow = new AutoModule(lift.stageLift(1.0, heightMode.getValue(LOW)));
+    AutoModule LiftGround = new AutoModule(lift.stageLift(1.0, heightMode.getValue(GROUND)));
 
     /**
      * Auto
@@ -192,7 +203,7 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
 //            RobotPart.pause(0.1),
-            lift.changeCutoff(6.0),
+            lift.resetCutoff(),
             lift.stageLift(0.4, 0)
     );
 

@@ -1,24 +1,20 @@
 package unittests.tele.sensor;
 
 import autoutil.vision.JunctionScanner;
-import autoutil.vision.JunctionScanner2;
+import autoutil.vision.JunctionScannerAll;
 import geometry.position.Pose;
 import geometry.position.Vector;
-import global.Modes;
 import math.polynomial.Linear;
 import teleutil.button.Button;
 import unittests.tele.TeleUnitTest;
 import util.template.Precision;
 
-import static global.General.bot;
 import static global.General.gph1;
-import static global.General.gph2;
-import static global.General.log;
 
 public class JunctionScannerTest extends TeleUnitTest {
 
     private final Pose target = new Pose(0,18.5, -5);
-    private final JunctionScanner2 junctionScanner = new JunctionScanner2();
+    private final JunctionScannerAll junctionScanner = new JunctionScannerAll();
 
     @Override
     public void init() {

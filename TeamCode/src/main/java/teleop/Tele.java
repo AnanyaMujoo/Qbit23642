@@ -7,13 +7,14 @@ import automodules.AutoModuleUser;
 import elements.FieldSide;
 import global.Common;
 import global.General;
+import global.Modes;
 import robot.RobotUser;
 import util.condition.Expectation;
 import util.condition.Magnitude;
 
 import static global.General.*;
 
-public abstract class Tele extends OpMode implements Common, RobotUser, AutoModuleUser {
+public abstract class Tele extends OpMode implements Common, RobotUser, AutoModuleUser, Modes {
     /**
      * Base class for teleops
      * NOTE: If you are creating a real teleop then call activate in initTele

@@ -39,8 +39,8 @@ public class AutoUnitTester extends Auto implements UnitTester {
 
 
 //        add(new VoltageScaleCalib());
-        // TODO TEST
 //        add(new VuforiaTest());
+        // TODO TEST
         add(new OdometryCalib());
 
         /**

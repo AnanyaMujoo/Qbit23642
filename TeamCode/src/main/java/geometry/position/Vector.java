@@ -64,6 +64,7 @@ public class Vector extends GeometryObject {
     public void reflectX(){ p.reflectX(); setTheta();}
     public void reflectY(){ p.reflectY(); setTheta(); }
     public void scaleToLength(double length){ if(getLength() != 0) { scale(length/getLength());} }
+    public void limitLength(double length){ if(getLength() > length){ scaleToLength(length); }}
 
     @Override
     public void rotate(Point anchor, double angle) { super.rotate(anchor, angle); setTheta(); }
