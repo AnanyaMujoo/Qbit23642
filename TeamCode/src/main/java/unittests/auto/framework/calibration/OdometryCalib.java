@@ -13,35 +13,37 @@ import static global.General.storage;
 
 public class OdometryCalib extends AutoUnitTest {
 
-    boolean autoCalib = false;
 
     @Override
     protected void run() {
         int numTrials = 20;
-        double distance = 120;
+        double distance = 100;
 
         ArrayList<Double> trialNumbers = new ArrayList<>();
         ArrayList<Double> xOffsets = new ArrayList<>();
         double startX;
         for (int i = 0; i < numTrials; i++) {
             log.show("Starting trial", (i+1));
-            startX = odometry.getX();
+            startX = odometry.getY() - odometry.getX();
+//                    odometry.getX();
+
             whileActive(() -> odometry.getY() < distance, () -> {
-                drive.move(0.4, -0.1, 0);
+                drive.move(0.35, -0.1, 0);
             });
             drive.halt();
-            double xOffset = odometry.getX() - startX;
+            double xOffset = odometry.getY() - odometry.getX() - startX;
+                    //(odometry.getX()) - startX;
             pause(0.5);
             log.show("Ending trial #" + (i+1) + ", xOffset", xOffset);
 
             Linear yCurve = new Linear(0.02, 0.07);
 
             whileActive(() -> odometry.getY() > 0, () -> {
-                drive.move(-0.4, -0.1, 0);
+                drive.move(-0.5, -0.1, 0);
             });
             drive.halt();
             whileTime(() -> {
-                drive.move(0.4*-yCurve.fodd(odometry.getY()), -0.1, 0);
+                drive.move(-yCurve.fodd(odometry.getY()), -0.1, 0);
             }, 1.5);
             trialNumbers.add((double) (i+1));
             xOffsets.add(Precision.round(xOffset, 3));

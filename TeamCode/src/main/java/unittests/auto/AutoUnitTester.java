@@ -2,13 +2,19 @@ package unittests.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import static global.General.fieldPlacement;
+import static global.General.fieldSide;
 import static global.General.log;
 
 import auton.Auto;
+import elements.FieldPlacement;
+import elements.FieldSide;
 import unittests.UnitTester;
 import unittests.auto.framework.VuforiaTest;
 import unittests.auto.framework.calibration.OdometryCalib;
+import unittests.auto.framework.calibration.RestPowerCalib;
 import unittests.auto.framework.calibration.VoltageScaleCalib;
+import unittests.auto.framework.movement.OdometryTest;
 import util.condition.Status;
 
 @SuppressWarnings("ALL")
@@ -40,8 +46,8 @@ public class AutoUnitTester extends Auto implements UnitTester {
 
 //        add(new VoltageScaleCalib());
 //        add(new VuforiaTest());
-        // TODO TEST
-        add(new OdometryCalib());
+//        add(new OdometryCalib());
+        add(new RestPowerCalib());
 
         /**
          * Framework (needs hardware, in movement package)
@@ -67,6 +73,8 @@ public class AutoUnitTester extends Auto implements UnitTester {
      */
     @Override
     public void initAuto() {
+        fieldSide = FieldSide.BLUE;
+        fieldPlacement = FieldPlacement.LOWER;
         AutoUnitTest.linearOpMode = this;
         readyTestsAndSelector(testingMode);
         activate();
