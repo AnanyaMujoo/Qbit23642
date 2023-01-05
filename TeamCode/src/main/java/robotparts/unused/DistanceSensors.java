@@ -12,8 +12,9 @@ public class DistanceSensors extends RobotPart {
     private IDistance dsl,dsr,dsfl,dsfr,dso;
 
     // TODO DISTANCE SENSORS (KALMAN FILTER)
+    // TODO VUFORIA
+    // TODO LEDS
     // TODO MOVEMENT BETTER NO STOP PHYSICS
-    // TODO AUTO PID TUNING
 
     @Override
     public void init() {

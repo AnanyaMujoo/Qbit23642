@@ -15,6 +15,8 @@ import util.codeseg.CodeSeg;
 import util.template.Precision;
 
 import static global.General.bot;
+import static global.Modes.Height.GROUND;
+import static global.Modes.Height.LOW;
 import static global.Modes.gameplayMode;
 import static global.Modes.heightMode;
 
@@ -45,7 +47,7 @@ public class Lift extends RobotPart {
     public Stage changeCutoff(double cutoffPosition){
         return customTime(() -> currentCutoffPosition = cutoffPosition, 0.01);
     }
-    public Stage resetCutoff(){ return changeCutoff(cutoffPosition); }
+    public Stage resetCutoff(){ return customTime( () -> {if(!heightMode.modeIs(GROUND) && !heightMode.modeIs(LOW)){ currentCutoffPosition = cutoffPosition; }}, 0.01); }
 
 
     @Override

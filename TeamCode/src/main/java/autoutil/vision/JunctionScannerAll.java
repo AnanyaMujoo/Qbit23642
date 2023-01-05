@@ -2,6 +2,9 @@ package autoutil.vision;
 
 import static global.General.fieldSide;
 import static global.General.log;
+import static global.Modes.Height.LOW;
+import static global.Modes.Height.MIDDLE;
+import static global.Modes.heightMode;
 import static org.opencv.core.Core.inRange;
 import static org.opencv.core.Core.min;
 
@@ -23,6 +26,7 @@ import java.util.List;
 import autoutil.Profiler;
 import elements.FieldSide;
 import elements.GameItems;
+import elements.Robot;
 import geometry.position.Pose;
 import geometry.position.Vector;
 import util.template.Precision;
@@ -32,7 +36,7 @@ public class JunctionScannerAll extends Scanner {
 
     public final double minContourArea = 250.0;
 
-    private final Pose defaultTarget = new Pose(0,18.5, -5);
+    private final Pose defaultTarget = new Pose(0,18.0, -1);
     private Pose target = defaultTarget.getCopy();
 
     public final int horizon = 100;
@@ -64,7 +68,7 @@ public class JunctionScannerAll extends Scanner {
     private static final double oneConeWidth = 7.5; // cm
     private static final double twoConeWidth = 9.7; // cm
     private static final double manyConeWidth = 11.0; // cm
-    public double distanceToJunction = 0, angleToJunction = 0, rollOfJunction = 0;
+    public static double distanceToJunction = 0, angleToJunction = 0, rollOfJunction = 0;
 
     public static Pose error = new Pose();
 
@@ -77,7 +81,7 @@ public class JunctionScannerAll extends Scanner {
 
     @Override
     public void message() {
-//        log.show("Roll", rollOfJunction);
+        log.show("Roll", rollOfJunction);
 
 //        Scalar mean = new Scalar(0,0,0);
 //        log.show("Cone Mode", coneMode);
@@ -111,7 +115,9 @@ public class JunctionScannerAll extends Scanner {
         return input;
     }
 
-    public boolean cutoff(Pose error){ return Math.abs(error.getY()) < 20 && Math.abs(error.getAngle()) < 35; }
+
+
+    public boolean cutoff(Pose error){return Math.abs(error.getY()) < 20 && (Math.abs(error.getAngle()) < 35); }
 
     public static Pose getError(){
         return error;
@@ -146,11 +152,16 @@ public class JunctionScannerAll extends Scanner {
                     poleRect = Imgproc.boundingRect(biggestPole);
                     Imgproc.approxPolyDP(new MatOfPoint2f(biggestPole.toArray()), polePoly, 2, true);
                     rollOfJunction = Imgproc.minAreaRect(polePoly).angle; if(rollOfJunction > 45){ rollOfJunction -= 90; }
-                    if(rollOfJunction > -1){
-                        rollOfJunction = 0.0; target = defaultTarget;
-                    }else{
-                        Precision.clip(rollOfJunction, 5); target = defaultTarget.getAdded(new Pose(0, -0.2*Math.abs(rollOfJunction), -rollOfJunction * 1.25 * GameItems.Junction.highHeight / defaultTarget.getY()));
+
+                    if(Math.abs(rollOfJunction) < 1){
+                        rollOfJunction = 0;
+                        target = defaultTarget.getCopy().getAdded(new Pose(0, targetCorrection(), 0));
+                    }else {
+                        rollOfJunction = Precision.clip(rollOfJunction, 8);
+                        target = defaultTarget.getAdded(new Pose(0, -0.2*Math.abs(rollOfJunction) + targetCorrection(), -rollOfJunction * 1.2 * GameItems.Junction.highHeight / (defaultTarget.getY())));
+
                     }
+
                     exitEarly = false;
 
 //                    Imgproc.rectangle(input, maxRect, CONTOUR_COLOR, 2);
@@ -170,6 +181,11 @@ public class JunctionScannerAll extends Scanner {
     }
     public void reset(){
         distanceToJunction = 1000; angleToJunction = 1000; rollOfJunction = 0; target = defaultTarget.getCopy();
+    }
+
+    public double targetCorrection(){
+        if(heightMode != null) { return heightMode.modeIs(MIDDLE) ? -1 : (heightMode.modeIs(LOW) ? -2 : 0); }
+        return 0;
     }
 
     private void detectCone(Mat input) {
@@ -206,6 +222,7 @@ public class JunctionScannerAll extends Scanner {
 //                    ArrayList<MatOfPoint> contours = new ArrayList<>();
 //                    contours.add(approxBluePoly);
 //                    Imgproc.drawContours(input, contours, -1, GREEN);
+                    target = defaultTarget.getCopy().getAdded(new Pose(0, targetCorrection(), 0));
                     exitEarly = false;
 //
 //                    Imgproc.rectangle(input, blueRect, CONTOUR_COLOR, 2);

@@ -124,10 +124,11 @@ public class Precision {
     }
 
     public static double clip(double value, double low, double high){ return Math.min(Math.max(value, low), high); }
-
-    public static double clip(double value, double range){
-        return clip(value, -range, range);
-    }
+    public static double clip(double value, double range){ return clip(value, -range, range); }
 
     public static double round(double value, int places){ double shift = Math.pow(10, places); return ((int)(value*shift))/shift; }
+    public static double round3(double value){ return round(value, 3); }
+
+    public static double attract(double value, double attractor, double range){ return  Math.abs(value - attractor) < range ? attractor : value; }
+    public static double attract(double value, double range){ return attract(value, 0, range); }
 }

@@ -98,7 +98,7 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
             lift.resetCutoff(),
-            lift.stageLift(0.4, 0)
+            lift.stageLift(0.7, 0)
     );
     AutoModule ForwardTele = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),

@@ -46,7 +46,7 @@ public class OdometryCalib extends AutoUnitTest {
                 drive.move(-yCurve.fodd(odometry.getY()), -0.1, 0);
             }, 1.5);
             trialNumbers.add((double) (i+1));
-            xOffsets.add(Precision.round(xOffset, 3));
+            xOffsets.add(Precision.round3(xOffset));
             Timer timer1 = new Timer();
             timer1.reset();
             whileActive(() -> !gamepad1.b && timer1.seconds() < 1, () -> {});

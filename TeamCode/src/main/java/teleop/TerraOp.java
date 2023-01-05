@@ -47,8 +47,8 @@ public class TerraOp extends Tele {
         gph1.link(Button.B, BackwardAllTele);
         gph1.link(Button.Y, () -> {if(lift.circuitMode) { gameplayMode.set(GameplayMode.CIRCUIT_PICK);} bot.addAutoModule(ForwardAll.check());});
         gph1.link(Button.X, bot::cancelMovements);
-        gph1.link(Button.A, () -> driveMode.set(Drive.MEDIUM));
-        gph1.link(Button.RIGHT_STICK_BUTTON, driveMode::cycleUp);
+        gph1.link(Button.A, () -> driveMode.set(Drive.FAST));
+        gph1.link(Button.RIGHT_STICK_BUTTON, () -> driveMode.set(Drive.MEDIUM));
 
         gph1.link(DPAD_UP, LiftHigh);
         gph1.link(DPAD_LEFT, LiftMiddle);
@@ -111,7 +111,7 @@ public class TerraOp extends Tele {
         log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : GamepadMode.NORMAL);
 
 
-//        junctionScannerAll.message();
+        junctionScannerAll.message();
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());
 //        log.show("Pose", odometry.getPose());
