@@ -3,6 +3,7 @@ package auton;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import autoutil.AutoFramework;
+import elements.Case;
 import elements.Field;
 import elements.FieldPlacement;
 import elements.FieldSide;
@@ -30,12 +31,9 @@ public class TerraAutoTest extends AutoFramework {
 //        setScannerAfterInit(MecanumJunctionReactor2.junctionScanner);
     }
 
-    public void place(){
-        addAccuracyScaledSetpoint(1.0, 1.0,4.0, 136.5, 50);
-    }
-
-    public void pick(){
-        addAccuracyScaledSetpoint(1.0, 0.7, 61, 126, 87);
+    @Override
+    public void preProcess() {
+        caseDetected = Case.FIRST;
     }
 
     @Override
@@ -48,37 +46,48 @@ public class TerraAutoTest extends AutoFramework {
 
         addScaledWaypoint(1.0, 0, 128, 0);
         addConcurrentAutoModule(BackwardAutoReady);
-        addScaledWaypoint(1.0, 0, 124, 0);
-        addAccuracyScaledSetpoint(2.0, 0.8,6, 142, 60);
+//        addScaledWaypoint(1.0, 0, 124, 0);
+//        addAccuracyScaledSetpoint(2.0, 0.8,6, 142, 60);
+        addAccuracyScaledSetpoint(5.0, 0.8,5, 143, 60);
         addAutoModule(BackwardAuto2);
-        addPause(1.0);
-        addAutoModule(ForwardAuto2);
+        addAccuracyScaledSetpoint(5.0, 1.41/(100.0*2.0),6, 142, 60);
+//        addPause(1.0);
+        addAutoModule(ForwardAuto(0));
         addPause(0.3);
-        customNumber(1, i -> {
+        customNumber(5, i -> {
             addScaledWaypoint(0.6, 30, 126, 87);
-            pick();
-//            addScaledWaypoint(0.6, 30, 128, 75);
-//            addScaledWaypoint(0.35, 3, 128.5, 50);
-//            place();
+
+            addAccuracyScaledSetpoint(5.0, 0.7, 64, 126, 87);
+            addConcurrentAutoModule(GrabAuto);
+            addAccuracyScaledSetpoint(5.0, 4.0/(100.0*0.8), 60, 126, 87);
+            addConcurrentAutoModule(BackwardAutoReady);
+
+            addScaledWaypoint(0.6, 30, 128, 65);
+
+            addAccuracyScaledSetpoint(5.0, 0.8,5, 143, 60);
+            addAutoModule(BackwardAuto2);
+            addAccuracyScaledSetpoint(5.0, 1.41/(100.0*2.0),6, 142, 60);
+
+            addAutoModule(ForwardAuto(i+1));
         });
-//        customCase(() -> {
-//            addWaypoint(-7, 124, 90);
-//            addScaledWaypoint(0.8, -10, 124, 90);
-//            addScaledWaypoint(0.8, -45, 122, 60);
-//            addScaledWaypoint(0.8, -50, 123, 25);
-//            addScaledSetpoint(0.9, -62, 75, 0);
-//        }, () -> {
-//            addWaypoint(0, 130, 35);
-//            addWaypoint(0, 105, 0);
-//            addScaledSetpoint(0.9, 0, 75, 0);
-//        }, () -> {
-//            addWaypoint(7, 128, 90);
-//            addScaledWaypoint(0.8, 16, 128, 90);
-//            addScaledWaypoint(0.8, 39, 122, 58);
-//            addScaledWaypoint(0.8, 51, 111, 32);
-//            addScaledWaypoint(0.8, 56, 95, 0);
-//            addScaledSetpoint(0.9, 58, 75, 0);
-//        });
+        customCase(() -> {
+            addWaypoint(-7, 124, 90);
+            addScaledWaypoint(0.8, -10, 124, 90);
+            addScaledWaypoint(0.8, -45, 122, 60);
+            addScaledWaypoint(0.8, -50, 123, 25);
+            addScaledSetpoint(0.9, -62, 75, 0);
+        }, () -> {
+            addWaypoint(0, 130, 35);
+            addWaypoint(0, 105, 0);
+            addScaledSetpoint(0.9, 0, 75, 0);
+        }, () -> {
+            addWaypoint(7, 128, 90);
+            addScaledWaypoint(0.8, 16, 128, 90);
+            addScaledWaypoint(0.8, 39, 122, 58);
+            addScaledWaypoint(0.8, 51, 111, 32);
+            addScaledWaypoint(0.8, 56, 95, 0);
+            addScaledSetpoint(0.9, 58, 75, 0);
+        });
     }
 
 

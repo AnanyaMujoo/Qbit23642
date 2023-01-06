@@ -61,7 +61,7 @@ public class Nonstop extends Controller2D{
         Vector power = error.getUnitVector().getScaled(rpController.getOutput()).getRotated(-pose.getAngle());
 
         if(setpoint){
-            rpController.scaleKp(scale*(1-t) + endTp*t);
+            rpController.scaleKp(Math.max(endTp,scale)*(1-t) + endTp*t);
         }else {
             rpController.scale(scale);
         }

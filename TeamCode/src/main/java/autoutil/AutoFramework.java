@@ -217,6 +217,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public ArrayList<AutoSegment.Type> getSegmentTypes(){ return segmentTypes; }
     public CoordinatePlane getAutoPlane(){ return autoPlane; }
 
+    public Pose getStartPose(){ return startPose; }
+
     @Override
     public void stopAuto() {
         if(scanning && !haltCameraAfterInit){ camera.halt(); }

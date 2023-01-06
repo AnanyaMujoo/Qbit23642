@@ -39,7 +39,6 @@ public class AutoSimulator extends Drawer{
 
     public static void main(String[] args) {
         setAuto(new TerraAutoTest());
-        // TODO FIX
 
 //        setAuto(new TerraAutoLowerBlue());
 //        setAuto(new TerraAutoUpperBlue());
@@ -76,6 +75,7 @@ public class AutoSimulator extends Drawer{
     private static CoordinatePlane autoPlane;
     private static CoordinatePlane robot;
     private static Pose robotPose = new Pose();
+    private static Pose startPose = new Pose();
     private static ArrayList<Pose> poses = new ArrayList<>();
     private static ArrayList<Line> lines = new ArrayList<>();
     private static int segmentIndex = 0;
@@ -85,6 +85,7 @@ public class AutoSimulator extends Drawer{
     private static void setAuto(AutoFramework auto) {
         auto.setup();
         autoPlane = auto.getAutoPlane();
+        startPose = auto.getStartPose().getCopy();
         autoPlane.removeRedundantObjects();
 
         poses = autoPlane.getCopyOfPoses();
@@ -187,7 +188,10 @@ public class AutoSimulator extends Drawer{
                 if(editingMode){
                     System.out.printf(Locale.US, "Editing Pose %d, %s %n", step, robotPose.toString());
                 }else{
-                    System.out.printf(Locale.US, "Saved Pose %d, New %s Code %.1f, %.1f, %.1f %n", step, robotPose.toString(), -robotPose.getX(), -robotPose.getY(), robotPose.getAngle());
+                    CoordinatePlane plane = new CoordinatePlane(robotPose.getCopy());
+                    plane.setStartInverse(startPose);
+                    Pose localPose = plane.getPoses().get(0);
+                    System.out.printf(Locale.US, "Saved Pose %d, New %s Code %.1f, %.1f, %.1f %n", step, robotPose.toString(), localPose.getX(), localPose.getY(), localPose.getAngle());
                     autoPlane.remove(convertToField(poses.get(step).getCopy()));
                     poses.set(step, robotPose);
                     autoPlane.add(convertToField(robotPose.getCopy()));
