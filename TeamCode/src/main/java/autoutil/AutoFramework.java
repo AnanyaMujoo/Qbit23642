@@ -89,8 +89,6 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 //        autoPlane.rotate(-90);
         autoPlane.setStart(startPose);
 //        autoPlane.toPoses(p -> p.rotateOrientation(90));
-        System.out.println(autoPlane.getPoses());
-        System.out.println(startPose);
     }
 
     public static boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }

@@ -20,6 +20,10 @@ public class Line extends GeometryObject implements Tracer {
         addPoints(ps, pe);
     }
 
+    public Line(){
+        this(new Point(), new Point());
+    }
+
     public Point getStartPoint(){ return ps; }
     public Point getEndPoint(){ return pe; }
 

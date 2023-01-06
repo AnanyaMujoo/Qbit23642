@@ -1,6 +1,7 @@
 package autoutil.reactors;
 
 import automodules.stage.Exit;
+import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stop;
 import autoutil.controllers.control1D.Controller1D;
@@ -22,6 +23,8 @@ public abstract class Reactor implements RobotUser {
     public abstract boolean isAtTarget();
     public abstract void moveToTarget(PoseGenerator generator);
 
+    public void firstTarget(){}
+
 
     public final void scale(double scale) {
         movementController.scale(scale);
@@ -33,6 +36,7 @@ public abstract class Reactor implements RobotUser {
         headingController.scaleAccuracy(scale);
     }
 
+    public final Initial initialTarget(){ return new Initial(this::firstTarget);}
     public final Main mainTarget(PoseGenerator generator){return new Main(() -> moveToTarget(generator)); }
     public final Exit exitTarget(){ return new Exit(this::isAtTarget); }
     public final Stop stopTarget(){ return new Stop(this::nextTarget); }

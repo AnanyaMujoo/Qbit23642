@@ -14,7 +14,6 @@ public class DistanceSensors extends RobotPart {
     // TODO DISTANCE SENSORS (KALMAN FILTER)
     // TODO VUFORIA
     // TODO LEDS
-    // TODO MOVEMENT BETTER NO STOP PHYSICS
 
     @Override
     public void init() {

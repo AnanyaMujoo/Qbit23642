@@ -14,7 +14,7 @@ public abstract class Controller1D {
 
     private final Precision precision = new Precision();
 
-    private ReturnCodeSeg<Double> processVariable;
+    private ReturnCodeSeg<Double> processVariable = () -> 0.0;
     private ReturnCodeSeg<Double> processError = this::getRawError;
     protected Profiler processVariableProfiler = new Profiler(this::getCurrentValue);
     protected Profiler errorProfiler = new Profiler(this::getError);
@@ -29,8 +29,8 @@ public abstract class Controller1D {
     private double minimumTime = setDefaultMinimumTimeReachedTarget();
     private double accuracy = setDefaultAccuracy();
 
-    private double scale = 1.0;
-    private double accuracyScale = 1.0;
+    protected double scale = 1.0;
+    protected double accuracyScale = 1.0;
 
     protected abstract double setDefaultAccuracy();
     protected abstract double setDefaultMinimumTimeReachedTarget();

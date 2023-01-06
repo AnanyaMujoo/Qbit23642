@@ -13,6 +13,6 @@ public class PoseGenerator extends Generator{
 
     @Override
     public Stage getStage(Reactor reactor) {
-        return new Stage(reactor.mainTarget(this), reactor.exitTarget(), reactor.stopTarget());
+        return new Stage(reactor.initialTarget(), reactor.mainTarget(this), reactor.exitTarget(), reactor.stopTarget());
     }
 }

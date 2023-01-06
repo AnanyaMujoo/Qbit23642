@@ -25,6 +25,7 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
     private double radiusK;
     private double t = 0;
     private boolean isStarting = true;
+    private Line currentLine = new Line();
 
     // TOD5 NEW Create option for tracer
 
@@ -46,7 +47,6 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
         xController = new PID(PID.PIDParameterType.DEFAULT, kx, 0.0, 0.0);
         yController = new PID(PID.PIDParameterType.DEFAULT, ky, 0.0, 0.0);
         radiusLogistic = new Exponential(1, 1, (radiusK/maxRadius));
-
     }
 
     @Override
@@ -56,12 +56,7 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
 
     @Override
     public void updateController(Pose pose, Generator generator) {
-        Line currentLine = new Line(new Point(0,0), new Point(0,0));
-        if(generator instanceof LineGenerator){
-            currentLine = ((LineGenerator) generator).getLine();
-        }else{
-            fault.check("Use Line Generator for Pure Pursuit", Expectation.UNEXPECTED, Magnitude.CATASTROPHIC);
-        }
+        checkGenerator(generator, LineGenerator.class, g -> currentLine = g.getLine());
         Point targetPos = getTargetPos(pose.getPoint(), currentLine);
         xController.setTarget(targetPos.getX());
         yController.setTarget(targetPos.getY());
@@ -72,11 +67,6 @@ public class PurePursuit extends Controller2D implements ParameterConstructor<Do
         powerVector.rotate(-pose.getAngle());
         setOutputX(powerVector.getX());
         setOutputY(powerVector.getY());
-    }
-
-    @Override
-    protected double setOutput() {
-        return 0;
     }
 
     public void updateRadius(double dis){

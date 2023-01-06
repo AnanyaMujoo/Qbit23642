@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import automodules.AutoModuleUser;
 import auton.TerraAuto.*;
+import auton.TerraAutoTest;
 import autoutil.AutoFramework;
 import elements.Field;
 import elements.GameItems;
@@ -37,7 +38,9 @@ public class AutoSimulator extends Drawer{
     private static final boolean developmentMode = true;
 
     public static void main(String[] args) {
-        setAuto(new TerraAutoLowerBlue());
+        setAuto(new TerraAutoTest());
+
+//        setAuto(new TerraAutoLowerBlue());
 //        setAuto(new TerraAutoUpperBlue());
 //        setAuto(new TerraAutoLowerRed());
 //        setAuto(new TerraAutoUpperRed());

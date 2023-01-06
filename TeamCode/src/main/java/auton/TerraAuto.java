@@ -143,13 +143,13 @@ public class TerraAuto extends AutoFramework {
         super.stopAuto();
     }
 
-    @Autonomous(name = "TerraAutoLowerBlue", group = "auto")
+    @Autonomous(name = "TerraAutoLowerBlue", group = "auto", preselectTeleOp = "TerraOp")
     public static class TerraAutoLowerBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90);}}
-    @Autonomous(name = "TerraAutoUpperBlue", group = "auto")
+    @Autonomous(name = "TerraAutoUpperBlue", group = "auto", preselectTeleOp = "TerraOp")
     public static class TerraAutoUpperBlue extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90);}}
-    @Autonomous(name = "TerraAutoLowerRed", group = "auto")
+    @Autonomous(name = "TerraAutoLowerRed", group = "auto", preselectTeleOp = "TerraOp")
     public static class TerraAutoLowerRed extends TerraAuto {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(Field.width-20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,-90);}}
-    @Autonomous(name = "TerraAutoUpperRed", group = "auto")
+    @Autonomous(name = "TerraAutoUpperRed", group = "auto", preselectTeleOp = "TerraOp")
     public static class TerraAutoUpperRed extends TerraAuto {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(Field.width-20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,-90);}}
 
 
