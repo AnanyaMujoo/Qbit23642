@@ -32,9 +32,6 @@ import static teleutil.button.Button.RIGHT_TRIGGER;
 @TeleOp(name = "TerraOp", group = "TeleOp")
 public class TerraOp extends Tele {
 
-    private final Pose target = new Pose(0,18.5, -5);
-
-
 
     private final JunctionScannerAll junctionScannerAll = new JunctionScannerAll();
 
@@ -88,13 +85,15 @@ public class TerraOp extends Tele {
         lift.move(-0.2);
         bot.loadLocationOnField();
 
-        camera.setScanner(junctionScannerAll); camera.startAndResume(false);
+        camera.setScanner(junctionScannerAll);
+        camera.startAndResume(false);
+        JunctionScannerAll.resume();
     }
 
     @Override
     public void startTele() {
         outtake.readyStart();
-        outtake.unFlip();
+        outtake.openClaw();
         bot.loadPose();
     }
 
@@ -111,7 +110,7 @@ public class TerraOp extends Tele {
         log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : GamepadMode.NORMAL);
 
 
-        junctionScannerAll.message();
+//        junctionScannerAll.message();
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());
 //        log.show("Pose", odometry.getPose());

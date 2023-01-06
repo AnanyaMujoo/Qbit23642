@@ -39,6 +39,7 @@ public class AutoSimulator extends Drawer{
 
     public static void main(String[] args) {
         setAuto(new TerraAutoTest());
+        // TODO FIX
 
 //        setAuto(new TerraAutoLowerBlue());
 //        setAuto(new TerraAutoUpperBlue());

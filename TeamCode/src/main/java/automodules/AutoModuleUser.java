@@ -4,7 +4,10 @@ import android.view.Display;
 
 import org.omg.CORBA.INITIALIZE;
 
+import automodules.stage.Main;
+import automodules.stage.Stage;
 import auton.Auto;
+import autoutil.reactors.MecanumJunctionReactor2;
 import global.Modes;
 import robot.RobotUser;
 import robotparts.RobotPart;
@@ -131,7 +134,7 @@ public interface AutoModuleUser extends RobotUser{
     );
     default AutoModule ForwardAuto(int i){return new AutoModule(
             outtake.stageStart(0.0),
-            lift.stageLift(0.5, Math.max(14.0 - (i*14.0/5.0), 0))
+            lift.stageLift(0.7, Math.max(14.0 - (i*14.0/5.0), 0))
     );}
     AutoModule BackwardAutoFirst = new AutoModule(
             outtake.stageReadyEnd(0.0),
@@ -140,6 +143,22 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardAuto = new AutoModule(
             RobotPart.pause(0.1),
             outtake.stageEnd(0.0)
+    );
+
+    AutoModule BackwardAutoReady = new AutoModule(
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+10).attach(outtake.stageMiddle(0.0))
+    );
+
+    AutoModule BackwardAuto2 = new AutoModule(
+//            outtake.stageClose(0.15),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)).attach(outtake.stageReadyEndAfter(0.12)),
+            junctionStop()
+    );
+//
+    AutoModule ForwardAuto2 = new AutoModule(
+            outtake.stageOpen(0.25),
+            outtake.stageStart(0.0),
+            lift.stageLift(0.7, 0)
     );
 
 
@@ -226,6 +245,9 @@ public interface AutoModuleUser extends RobotUser{
             lift.resetLift()
     );
 
+
+
+    static Stage junctionStop(){ return new Stage(new Main(() -> MecanumJunctionReactor2.stop = true), RobotPart.exitAlways()); }
 
 
 

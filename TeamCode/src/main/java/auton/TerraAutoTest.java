@@ -1,30 +1,17 @@
 package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import automodules.AutoModule;
-import automodules.AutoModuleUser;
-import automodules.stage.Main;
-import automodules.stage.Stage;
 import autoutil.AutoFramework;
-import autoutil.reactors.MecanumJunctionReactor;
-import autoutil.vision.JunctionScanner;
-import elements.Case;
 import elements.Field;
 import elements.FieldPlacement;
 import elements.FieldSide;
 import elements.GameItems;
 import geometry.position.Pose;
-import global.Constants;
-import util.Timer;
-import util.condition.DecisionList;
-
-import static display.Drawer.fieldSize;
 import static global.General.bot;
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
-import static global.General.log;
+
 
 
 @Autonomous(name = "TerraAutoTest", group = "auto")
@@ -37,27 +24,43 @@ public class TerraAutoTest extends AutoFramework {
     @Override
     public void initialize() {
         setConfig(mecanumNonstopConfig);
+        lift.maintain();
+        outtake.readyStart(); outtake.closeClaw();
+//        scan(false);
+//        setScannerAfterInit(MecanumJunctionReactor2.junctionScanner);
     }
 
     public void place(){
-        addAccuracyScaledSetpoint(1.0, 1.0,4.0, 130.5, 50);
+        addAccuracyScaledSetpoint(1.0, 1.0,4.0, 136.5, 50);
     }
 
     public void pick(){
-        addAccuracyScaledSetpoint(2.0, 0.7, 61, 125, 87);
+        addAccuracyScaledSetpoint(1.0, 0.7, 61, 126, 87);
     }
 
     @Override
     public void define() {
+//        addConcurrentAutoModule(BackwardAuto2);
+//        addCustomSegment(mecanumJunctionSetpoint2, 0, 0, 0);
+//        addConcurrentAutoModule(ForwardAuto2);
+//        addPause(2.0);
+//        addScaledSetpoint(1.0, 0,128, 0);
+
         addScaledWaypoint(1.0, 0, 128, 0);
-        addAccuracyScaledSetpoint(1.0, 0.8,5.5, 129, 50);
-//        customNumber(1, i -> {
-//            addScaledWaypoint(0.4, 30, 125, 87);
-//            pick();
+        addConcurrentAutoModule(BackwardAutoReady);
+        addScaledWaypoint(1.0, 0, 124, 0);
+        addAccuracyScaledSetpoint(2.0, 0.8,6, 142, 60);
+        addAutoModule(BackwardAuto2);
+        addPause(1.0);
+        addAutoModule(ForwardAuto2);
+        addPause(0.3);
+        customNumber(1, i -> {
+            addScaledWaypoint(0.6, 30, 126, 87);
+            pick();
 //            addScaledWaypoint(0.6, 30, 128, 75);
 //            addScaledWaypoint(0.35, 3, 128.5, 50);
 //            place();
-//        });
+        });
 //        customCase(() -> {
 //            addWaypoint(-7, 124, 90);
 //            addScaledWaypoint(0.8, -10, 124, 90);

@@ -74,6 +74,10 @@ public class JunctionScannerAll extends Scanner {
 
     public int coneMode = 1;
 
+    private static boolean pausing = true;
+
+    public static void pause(){ pausing = true; }
+    public static void resume(){ pausing = false; }
 
     @Override public void run(Mat input) {}
     @Override public void preProcess(Mat input) {}
@@ -81,7 +85,7 @@ public class JunctionScannerAll extends Scanner {
 
     @Override
     public void message() {
-        log.show("Roll", rollOfJunction);
+//        log.show("Roll", rollOfJunction);
 
 //        Scalar mean = new Scalar(0,0,0);
 //        log.show("Cone Mode", coneMode);
@@ -103,15 +107,23 @@ public class JunctionScannerAll extends Scanner {
 
     @Override
     public Mat processFrame(Mat input) {
-        crop(input, new Rect(0, horizon, input.width(), input.height()-horizon));
-        detectPole(Crop);
-        Pose errorInternal = getErrorInternal();
-        if(cutoff(errorInternal)){ error = errorInternal.getCopy(); return Crop; }
-        crop(input, new Rect(0, horizonCone, input.width(), input.height()-horizonCone));
-        detectCone(Crop);
-        errorInternal = getErrorInternal();
-        if(cutoff(errorInternal)){ error = errorInternal.getCopy(); return Crop; }
-        error = new Pose();
+        if(!pausing) {
+            crop(input, new Rect(0, horizon, input.width(), input.height() - horizon));
+            detectPole(Crop);
+            Pose errorInternal = getErrorInternal();
+            if (cutoff(errorInternal)) {
+                error = errorInternal.getCopy();
+                return Crop;
+            }
+            crop(input, new Rect(0, horizonCone, input.width(), input.height() - horizonCone));
+            detectCone(Crop);
+            errorInternal = getErrorInternal();
+            if (cutoff(errorInternal)) {
+                error = errorInternal.getCopy();
+                return Crop;
+            }
+            error = new Pose();
+        }
         return input;
     }
 

@@ -5,9 +5,12 @@ import geometry.position.Pose;
 
 public class RP extends Controller1D {
 
-    private final double kp;
+    private double skp;
+    private double kp;
 
-    public RP(double kp, double restPower){ setRestOutput(restPower); this.kp = kp; }
+    public RP(double kp, double restPower){ setRestOutput(restPower); this.skp = kp; this.kp = skp; }
+
+    public void scaleKp(double scale){ this.kp = skp*scale; }
 
     @Override
     protected double setDefaultAccuracy() { return 0.25; }

@@ -7,6 +7,7 @@ import geometry.framework.Point;
 import geometry.position.Line;
 import geometry.position.Pose;
 import geometry.position.Vector;
+import math.polynomial.Linear;
 import util.Timer;
 import util.codeseg.ReturnCodeSeg;
 import util.condition.Expectation;
@@ -24,12 +25,17 @@ public class Nonstop extends Controller2D{
     private double t = 0;
     private static final double tOffset = 0.05;
     private static final double maxVelocity = 100; // cm/s
+    private static final double endTp = 0.1;
+    private boolean setpoint = false;
 
 
     public Nonstop(double kp, double restPower, double accuracy){
         rpController = new RP(kp, restPower); rpController.setProcessVariable(() -> 0.0);
-        rpController.setMinimumTime(0.01); rpController.setAccuracy(accuracy);
+        rpController.setMinimumTime(0.01); rpController.setAccuracy(0.0);
+        setAccuracy(accuracy);
     }
+
+    public void setpoint(){ setpoint = true; }
 
     @Override
     public void scale(double scale) { this.scale = scale; }
@@ -47,12 +53,20 @@ public class Nonstop extends Controller2D{
     protected void updateController(Pose pose, Generator generator) {
         checkGenerator(generator, LineGenerator.class, g -> currentLine = g.getLine());
         t = Precision.clip(timer.seconds() / currentLine.getLength() * maxVelocity * scale, 1);
-        Point target = currentLine.getAt(t+tOffset);
+        Point target = currentLine.getAt(Precision.clip(t+tOffset, 1));
+        setProcessError(() -> currentLine.getEndPoint().getDistanceTo(pose.getPoint()));
         Vector error = target.getSubtracted(pose.getPoint()).getVector();
         rpController.update(pose, generator);
         rpController.setProcessError(error::getLength);
         Vector power = error.getUnitVector().getScaled(rpController.getOutput()).getRotated(-pose.getAngle());
-        setOutputX(scale*power.getX()); setOutputY(scale*power.getY());
+
+        if(setpoint){
+            rpController.scaleKp(scale*(1-t) + endTp*t);
+        }else {
+            rpController.scale(scale);
+        }
+        setOutputX(power.getX());
+        setOutputY(power.getY());
     }
 
 
@@ -63,6 +77,6 @@ public class Nonstop extends Controller2D{
 
     @Override
     protected boolean hasReachedTarget() {
-        return t > 0.99 && rpController.isWithinAccuracyRange();
+        return t > 0.99 && isWithinAccuracyRange();
     }
 }
