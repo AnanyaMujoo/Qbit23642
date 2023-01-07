@@ -26,7 +26,7 @@ public abstract class Reactor implements RobotUser {
     public void firstTarget(){}
 
 
-    public final void scale(double scale) {
+    public void scale(double scale) {
         movementController.scale(scale);
         headingController.scale(scale);
     }
@@ -34,6 +34,10 @@ public abstract class Reactor implements RobotUser {
     public final void scaleAccuracy(double scale){
         movementController.scaleAccuracy(scale);
         headingController.scaleAccuracy(scale);
+    }
+
+    public final void setTime(double time){
+        movementController.setTime(time);
     }
 
     public final Initial initialTarget(){ return new Initial(this::firstTarget);}

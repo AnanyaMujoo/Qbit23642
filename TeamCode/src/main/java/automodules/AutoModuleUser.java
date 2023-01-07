@@ -148,27 +148,38 @@ public interface AutoModuleUser extends RobotUser{
 
 
 
+    AutoModule BackwardAutoReadyFirst = new AutoModule(
+            outtake.stageMiddle(0.0),
+            lift.stageLift(1.0, heightMode.getValue(LOW))
+    );
+
     AutoModule BackwardAutoReady = new AutoModule(
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+10)
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-5)
+    );
+
+    AutoModule BackwardAuto2First = new AutoModule(
+            RobotPart.pause(0.3),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-5),
+            outtake.stageReadyEnd(0.2),
+            junctionStop()
     );
 
     AutoModule BackwardAuto2 = new AutoModule(
-//            outtake.stageClose(0.15),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)),
-            outtake.stageReadyStart(0.2),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-3),
+            outtake.stageReadyEnd(0.2),
             junctionStop()
     );
-//
-    AutoModule ForwardAuto2 = new AutoModule(
+
+    default AutoModule ForwardAuto2(int i){return new AutoModule(
             outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
-            lift.stageLift(0.7, 0)
-    );
+            lift.stageLift(1.0, Math.max(14.0 - (i*14.0/5.0), 0))
+    );}
 
     AutoModule GrabAuto2 = new AutoModule(
-            outtake.stageClose(0.2),
-            outtake.stageReadyStart(0.3)
+            outtake.stageClose(0.15),
+            outtake.stageReadyStart(0.2).attach(drive.moveTime(-0.2, 0, 0, 0.2))
     );
 
 

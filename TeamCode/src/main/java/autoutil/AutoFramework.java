@@ -54,6 +54,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected ArrayList<AutoModule> autoModules = new ArrayList<>();
     protected ArrayList<Double> movementScales = new ArrayList<>();
     protected ArrayList<Double> accuracyScales = new ArrayList<>();
+    protected ArrayList<Double> times = new ArrayList<>();
     protected ArrayList<AutoSegment<?,?>> customSegments = new ArrayList<>();
     protected ArrayList<CodeSeg> breakpoints = new ArrayList<>();
 
@@ -70,7 +71,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
 
     {
-        poses.add(new Pose()); movementScales.addAll(Collections.nCopies(100,1.0)); accuracyScales.addAll(Collections.nCopies(100,1.0));
+        poses.add(new Pose()); movementScales.addAll(Collections.nCopies(200,1.0)); accuracyScales.addAll(Collections.nCopies(200,1.0)); times.addAll(Collections.nCopies(200,100.0));
     }
 
     public void preProcess(){}
@@ -132,6 +133,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     @Override
     public void runAuto() {
         odometry.setCurrentPose(startPose);
+        odometry.setCurrentPose(startPose);
         pause(0.05);
         timer.reset();
         Iterator.forAll(segments, segment -> segment.run(this));
@@ -154,12 +156,14 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public void addScale(double scale){ movementScales.set(poses.size()-1, scale); }
     public void addAccuracy(double scale){ accuracyScales.set(poses.size()-1, scale); }
+    public void addTime(double time){ times.set(poses.size()-1, time);}
 
     public void addScaledSetpoint(double scale, double x, double y, double h){ addScale(scale); addSetpoint(x, y, h);}
     public void addScaledWaypoint(double scale, double x, double y, double h){ addScale(scale); addWaypoint(x, y, h);}
 
     public void addAccuracySetpoint(double acc, double x, double y, double h){ addAccuracy(acc); addSetpoint(x, y, h);}
     public void addAccuracyScaledSetpoint(double acc, double scale, double x, double y, double h){ addAccuracy(acc); addScaledSetpoint(scale, x, y, h);}
+    public void addAccuracyTimedScaledSetpoint(double acc, double scale, double time, double x, double y, double h){ addTime(time); addAccuracyScaledSetpoint(acc, scale, x, y, h); }
 
     public void addCustomCode(CodeSeg seg){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(seg); addLastPose(); }
     public void addSynchronisedDecision(DecisionList decisionList){ addCustomCode(decisionList::check); }
@@ -207,7 +211,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         autoSegment.setGeneratorFunction(gen -> gen.addSegment(lastPose, currentPose));
         final double scale = movementScales.get(segmentIndex-1);
         final double accuracy = accuracyScales.get(segmentIndex-1);
-        autoSegment.setReactorFunction(rea -> {rea.scale(scale); rea.scaleAccuracy(accuracy);});
+        final double time = times.get(segmentIndex - 1);
+        autoSegment.setReactorFunction(rea -> {rea.scale(scale); rea.scaleAccuracy(accuracy); rea.setTime(time);});
         segments.add(autoSegment);
     }
 
@@ -234,6 +239,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         autoModules = new ArrayList<>();
         movementScales = new ArrayList<>();
         accuracyScales = new ArrayList<>();
+        times = new ArrayList<>();
         customSegments = new ArrayList<>();
         breakpoints = new ArrayList<>();
         scanning = false;
@@ -247,6 +253,6 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         customSegmentIndex = 0;
         breakpointIndex = 0;
         startPose = new Pose();
-        poses.add(new Pose()); movementScales.addAll(Collections.nCopies(100,1.0)); accuracyScales.addAll(Collections.nCopies(100,1.0));
+        poses.add(new Pose()); movementScales.addAll(Collections.nCopies(200,1.0)); accuracyScales.addAll(Collections.nCopies(200,1.0)); times.addAll(Collections.nCopies(200,100.0));
     }
 }

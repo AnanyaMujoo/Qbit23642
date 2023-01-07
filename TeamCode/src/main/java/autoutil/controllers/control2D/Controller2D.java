@@ -17,8 +17,11 @@ public abstract class Controller2D extends Controller1D {
     public Controller1D yController;
     protected double xOutput = 0;
     protected double yOutput = 0;
+    protected double time = 100;
 
     public Controller2D(){}
+
+    public void setTime(double time){ this.time = time; }
 
     public Controller2D(Controller1D xController, Controller1D yController){
         this.xController = xController;

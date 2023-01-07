@@ -52,9 +52,13 @@ public class Nonstop extends Controller2D{
     @Override
     protected void updateController(Pose pose, Generator generator) {
         checkGenerator(generator, LineGenerator.class, g -> currentLine = g.getLine());
-        t = Precision.clip(timer.seconds() / currentLine.getLength() * maxVelocity * scale, 1);
-        Point target = currentLine.getAt(Precision.clip(t+tOffset, 1));
         setProcessError(() -> currentLine.getEndPoint().getDistanceTo(pose.getPoint()));
+        if(time > 10) {
+            t = Precision.clip(timer.seconds() / currentLine.getLength() * maxVelocity * scale, 1);
+        }else{
+            t = Precision.clip(timer.seconds() / time, 1);
+        }
+        Point target = currentLine.getAt(Precision.clip(t+tOffset, 1));
         Vector error = target.getSubtracted(pose.getPoint()).getVector();
         rpController.update(pose, generator);
         rpController.setProcessError(error::getLength);
@@ -77,6 +81,10 @@ public class Nonstop extends Controller2D{
 
     @Override
     protected boolean hasReachedTarget() {
-        return t > 0.99 && isWithinAccuracyRange();
+        if(setpoint) {
+            return t > 0.99 && isWithinAccuracyRange();
+        }else{
+            return t > 0.99;
+        }
     }
 }

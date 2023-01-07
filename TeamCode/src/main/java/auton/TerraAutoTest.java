@@ -42,52 +42,51 @@ public class TerraAutoTest extends AutoFramework {
 //        addCustomSegment(mecanumJunctionSetpoint2, 0, 0, 0);
 //        addConcurrentAutoModule(ForwardAuto2);
 //        addPause(2.0);
-//        addScaledSetpoint(1.0, 0,128, 0);
+//        addScaledSetpoint(1.0, 0,128, 90);
+//        addScaledSetpoint(1.0, 0,128, -90);
 
-        addScaledWaypoint(1.0, 0, 128, 0);
-        addConcurrentAutoModule(BackwardAutoReady);
-//        addScaledWaypoint(1.0, 0, 124, 0);
-//        addAccuracyScaledSetpoint(2.0, 0.8,6, 142, 60);
-        addAccuracyScaledSetpoint(5.0, 0.8,5, 143, 60);
-        addAutoModule(BackwardAuto2);
-        addAccuracyScaledSetpoint(5.0, 1.41/(100.0*2.0),6, 142, 60);
-//        addPause(1.0);
-        addAutoModule(ForwardAuto(0));
-        addPause(0.3);
+        // TODO FIX ADDING SCALE
+        // TODO FIX RANDOM MESSUPS
+
+        addConcurrentAutoModule(BackwardAutoReadyFirst);
+        addScaledWaypoint(1.0, 6, 130, 0);
+        addCancelAutoModules();
+        addConcurrentAutoModule(BackwardAuto2First);
+        addAccuracyTimedScaledSetpoint(1.0, 0.3, 0.9, 6, 142, 60);
+        addConcurrentAutoModule(ForwardAuto2(0));
+        addPause(0.4);
         customNumber(5, i -> {
-            addScaledWaypoint(0.6, 30, 126, 87);
-
-            addAccuracyScaledSetpoint(5.0, 0.7, 64, 126, 87);
-            addConcurrentAutoModule(GrabAuto);
-            addAccuracyScaledSetpoint(5.0, 4.0/(100.0*0.8), 60, 126, 87);
+            addScale(0.5); addCustomSegment(mecanumDefaultWayPoint, 20, 126, 87);
+            addScale(0.7); addCustomSegment(mecanumDefaultWayPoint, 50, 120, 87);
+            addScale(0.4); addCustomSegment(mecanumDefaultWayPoint, 76, 120, 87);
+            addConcurrentAutoModule(GrabAuto2);
+            addPause(0.35);
             addConcurrentAutoModule(BackwardAutoReady);
-
-            addScaledWaypoint(0.6, 30, 128, 65);
-
-            addAccuracyScaledSetpoint(5.0, 0.8,5, 143, 60);
-            addAutoModule(BackwardAuto2);
-            addAccuracyScaledSetpoint(5.0, 1.41/(100.0*2.0),6, 142, 60);
-
-            addAutoModule(ForwardAuto(i+1));
+            addScale(0.6); addCustomSegment(mecanumDefaultWayPoint, 35+(1.5*i), 128, 60);
+            addScale(0.6); addCustomSegment(mecanumDefaultWayPoint, 20+(1.5*i), 142, 60);
+            addConcurrentAutoModule(BackwardAuto2);
+            addAccuracyTimedScaledSetpoint(1.5, 0.35, 0.8, 6+(1.5*i), 142+(2.0*i), 60);
+            addConcurrentAutoModule(ForwardAuto2(i));
+            addPause(0.4);
         });
-        customCase(() -> {
-            addWaypoint(-7, 124, 90);
-            addScaledWaypoint(0.8, -10, 124, 90);
-            addScaledWaypoint(0.8, -45, 122, 60);
-            addScaledWaypoint(0.8, -50, 123, 25);
-            addScaledSetpoint(0.9, -62, 75, 0);
-        }, () -> {
-            addWaypoint(0, 130, 35);
-            addWaypoint(0, 105, 0);
-            addScaledSetpoint(0.9, 0, 75, 0);
-        }, () -> {
-            addWaypoint(7, 128, 90);
-            addScaledWaypoint(0.8, 16, 128, 90);
-            addScaledWaypoint(0.8, 39, 122, 58);
-            addScaledWaypoint(0.8, 51, 111, 32);
-            addScaledWaypoint(0.8, 56, 95, 0);
-            addScaledSetpoint(0.9, 58, 75, 0);
-        });
+//        customCase(() -> {
+//            addWaypoint(-7, 124, 90);
+//            addScaledWaypoint(0.8, -10, 124, 90);
+//            addScaledWaypoint(0.8, -45, 122, 60);
+//            addScaledWaypoint(0.8, -50, 123, 25);
+//            addScaledSetpoint(0.9, -62, 75, 0);
+//        }, () -> {
+//            addWaypoint(0, 130, 35);
+//            addWaypoint(0, 105, 0);
+//            addScaledSetpoint(0.9, 0, 75, 0);
+//        }, () -> {
+//            addWaypoint(7, 128, 90);
+//            addScaledWaypoint(0.8, 16, 128, 90);
+//            addScaledWaypoint(0.8, 39, 122, 58);
+//            addScaledWaypoint(0.8, 51, 111, 32);
+//            addScaledWaypoint(0.8, 56, 95, 0);
+//            addScaledSetpoint(0.9, 58, 75, 0);
+//        });
     }
 
 

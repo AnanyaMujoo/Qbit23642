@@ -93,7 +93,7 @@ public class ThreeOdometry extends TwoOdometry {
 
         updateCurrentHeading(dh);
 
-        precision.throttle(() -> setHeading(gyro.getHeading()), 100);
+//        precision.throttle(() -> setHeading(gyro.getHeading()), 100); // TODO SKETCH???
 
         odometryCenter.translate(toGlobalFrame(localDelta));
         Vector globalOdometryCenterToRobotCenter = toGlobalFrame(leftOdometryCenterToRobotCenter).getSubtracted(leftOdometryCenterToRobotCenter);
