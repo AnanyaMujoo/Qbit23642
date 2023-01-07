@@ -22,13 +22,16 @@ public class ThreeOdometry extends TwoOdometry {
     public double scaleRight = 1.015;
     public int mode = 0;
     public final Point odometryCenter = new Point();
-    private final Vector leftOdometryCenterToRobotCenter = new Vector(11.5, 13.0);
+    private final Vector leftOdometryCenterToRobotCenter = new Vector(10.5, 13.0);
     private final Precision precision = new Precision();
 
 
 
-    private static final double xCorrectionScale = -0.0006;
-    private static final double yCorrectionScale = -0.0011;
+//    private static final double xCorrectionScale = -0.0006;
+//    private static final double yCorrectionScale = -0.0011;
+
+    private static final double xCorrectionScale = -0.000;
+    private static final double yCorrectionScale = -0.00;
 
     @Override
     protected void createEncoders() {
@@ -59,7 +62,12 @@ public class ThreeOdometry extends TwoOdometry {
 
         dyr = enc3.getDeltaPosition() + (yCorrectionScale*dyl);
 
-        dh = toDegrees((dyr-dyl)/width);
+        double dhu = toDegrees((dyr-dyl)/width);
+        dh = dhu*1.011;
+//        if(dhu > 0){ dh = 1.0025*dhu; }else{ dh = 1.0013*dhu; }
+
+//        dx *= 1.01;
+
 //
 //
 //        updateCurrentPose(new Vector(dyr, dyl));
@@ -93,7 +101,8 @@ public class ThreeOdometry extends TwoOdometry {
 
         updateCurrentHeading(dh);
 
-//        precision.throttle(() -> setHeading(gyro.getHeading()), 100); // TODO SKETCH???
+//        setHeading(gyro.getHeading());
+//        precision.throttle(() -> setHeading(gyro.getHeading()), 100);
 
         odometryCenter.translate(toGlobalFrame(localDelta));
         Vector globalOdometryCenterToRobotCenter = toGlobalFrame(leftOdometryCenterToRobotCenter).getSubtracted(leftOdometryCenterToRobotCenter);

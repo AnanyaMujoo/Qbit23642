@@ -38,6 +38,29 @@ public class TerraAutoTest extends AutoFramework {
 
     @Override
     public void define() {
+
+
+//        for (int i = 0; i < 5; i++) {
+//            addScaledSetpoint( 0.5, 0, 50, 90);
+//            addScaledSetpoint(0.5, 0, 0, -90);
+//        }
+
+//        Pose target = new Pose(0, 50, 90);
+//        Pose adjusted = odometry.getAdjustedPose(target);
+//        addScaledSetpoint(0.5, 0, 50, 90);
+//        addScaledSetpoint(0.1, adjusted.getX(), adjusted.getY(), adjusted.getAngle());
+
+
+//        for (int i = 0; i < 5; i++) {
+//            addScaledSetpoint(0.5, 0, 50, 90);
+//            addScaledSetpoint(0.5, 50, 50, 180);
+//            addScaledSetpoint(0.5, 50, 0, 270);
+//            addScaledSetpoint(0.5, 0, 0, 360);
+//        }
+//        addAccuracyScaledSetpoint(0.1, 0.5, 0, 0, 0);
+
+
+
 //        addConcurrentAutoModule(BackwardAuto2);
 //        addCustomSegment(mecanumJunctionSetpoint2, 0, 0, 0);
 //        addConcurrentAutoModule(ForwardAuto2);
@@ -45,30 +68,34 @@ public class TerraAutoTest extends AutoFramework {
 //        addScaledSetpoint(1.0, 0,128, 90);
 //        addScaledSetpoint(1.0, 0,128, -90);
 
+        // TODO FIX ODOMETRY
         // TODO FIX ADDING SCALE
         // TODO FIX RANDOM MESSUPS
-
+//
         addConcurrentAutoModule(BackwardAutoReadyFirst);
-        addScaledWaypoint(1.0, 6, 130, 0);
+        addScaledWaypoint(1.0, 6, 126, 0);
         addCancelAutoModules();
         addConcurrentAutoModule(BackwardAuto2First);
         addAccuracyTimedScaledSetpoint(1.0, 0.3, 0.9, 6, 142, 60);
         addConcurrentAutoModule(ForwardAuto2(0));
         addPause(0.4);
         customNumber(5, i -> {
-            addScale(0.5); addCustomSegment(mecanumDefaultWayPoint, 20, 126, 87);
-            addScale(0.7); addCustomSegment(mecanumDefaultWayPoint, 50, 120, 87);
-            addScale(0.4); addCustomSegment(mecanumDefaultWayPoint, 76, 120, 87);
+            addScale(0.5); addCustomSegment(mecanumDefaultWayPoint, 20, 130, 70);
+            addScale(0.7); addCustomSegment(mecanumDefaultWayPoint, 55, 120, 90);
+            addAccuracyTimedScaledSetpoint(3.0, 0.4, 0.5, 70, 119, 90);
             addConcurrentAutoModule(GrabAuto2);
-            addPause(0.35);
+            addPause(0.45);
             addConcurrentAutoModule(BackwardAutoReady);
-            addScale(0.6); addCustomSegment(mecanumDefaultWayPoint, 35+(1.5*i), 128, 60);
-            addScale(0.6); addCustomSegment(mecanumDefaultWayPoint, 20+(1.5*i), 142, 60);
+            addScale(0.7); addCustomSegment(mecanumDefaultWayPoint, 46, 120, 80);
+            addScale(0.5); addCustomSegment(mecanumDefaultWayPoint, 26, 130, 70);
             addConcurrentAutoModule(BackwardAuto2);
-            addAccuracyTimedScaledSetpoint(1.5, 0.35, 0.8, 6+(1.5*i), 142+(2.0*i), 60);
+            addAccuracyTimedScaledSetpoint(1.0, 0.35, 0.8, 6, 142, 58);
             addConcurrentAutoModule(ForwardAuto2(i));
             addPause(0.4);
         });
+
+
+
 //        customCase(() -> {
 //            addWaypoint(-7, 124, 90);
 //            addScaledWaypoint(0.8, -10, 124, 90);
@@ -97,8 +124,8 @@ public class TerraAutoTest extends AutoFramework {
 
     @Override
     public void stopAuto() {
-        bot.savePose(odometry.getPose());
-        bot.saveLocationOnField();
+//        bot.savePose(odometry.getPose());
+//        bot.saveLocationOnField();
         super.stopAuto();
     }
 }
