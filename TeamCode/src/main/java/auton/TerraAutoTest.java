@@ -9,7 +9,7 @@ import elements.FieldPlacement;
 import elements.FieldSide;
 import elements.GameItems;
 import geometry.position.Pose;
-import static global.General.bot;
+
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
 
@@ -22,6 +22,8 @@ public class TerraAutoTest extends AutoFramework {
         startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90);
     }
 
+    double x, s, t;
+
     @Override
     public void initialize() {
         setConfig(mecanumNonstopConfig);
@@ -29,6 +31,7 @@ public class TerraAutoTest extends AutoFramework {
         outtake.readyStart(); outtake.closeClaw();
 //        scan(false);
 //        setScannerAfterInit(MecanumJunctionReactor2.junctionScanner);
+        x = 0; s = 0; t = 0;
     }
 
     @Override
@@ -68,31 +71,75 @@ public class TerraAutoTest extends AutoFramework {
 //        addScaledSetpoint(1.0, 0,128, 90);
 //        addScaledSetpoint(1.0, 0,128, -90);
 
-        // TODO FIX ODOMETRY
-        // TODO FIX ADDING SCALE
-        // TODO FIX RANDOM MESSUPS
-//
         addConcurrentAutoModule(BackwardAutoReadyFirst);
-        addScaledWaypoint(1.0, 6, 126, 0);
+        addWaypoint(1.0, 6, 122, 0);
         addCancelAutoModules();
         addConcurrentAutoModule(BackwardAuto2First);
-        addAccuracyTimedScaledSetpoint(1.0, 0.3, 0.9, 6, 142, 60);
+        addTimedSetpoint(1.0, 0.7, 1.1, -6.5, 138, 45);
         addConcurrentAutoModule(ForwardAuto2(0));
         addPause(0.4);
+
         customNumber(5, i -> {
-            addScale(0.5); addCustomSegment(mecanumDefaultWayPoint, 20, 130, 70);
-            addScale(0.7); addCustomSegment(mecanumDefaultWayPoint, 55, 120, 90);
-            addAccuracyTimedScaledSetpoint(3.0, 0.4, 0.5, 70, 119, 90);
+            switch (i){
+                case 0: s = 0.5; x = 0.0; t = 0.0; break;
+                case 1: s = 1.0; x = 0.6; t = 1.5; break;
+                case 2: s = 1.5; x = 1.2; t = 3.0; break;
+                case 3: s = 2.0; x = 1.8; t = 4.5; break;
+                case 4: s = 2.5; x = 2.4; t = 6.0; break;
+            }
+            t = 0;
+            addSegment(0.7, mecanumDefaultWayPoint, 18-x, 128 + s, 65-t);
+            addSegment(0.7, mecanumDefaultWayPoint, 55-x, 122 + s, 87-t);
+            addTimedWaypoint( 0.2, 0.3, 67-x, 123 + s, 87);
             addConcurrentAutoModule(GrabAuto2);
-            addPause(0.45);
+            addTimedWaypoint( 0.3, 0.3, 62-x, 123 + s, 87-t);
+            addCancelAutoModules();
             addConcurrentAutoModule(BackwardAutoReady);
-            addScale(0.7); addCustomSegment(mecanumDefaultWayPoint, 46, 120, 80);
-            addScale(0.5); addCustomSegment(mecanumDefaultWayPoint, 26, 130, 70);
+            addSegment(0.7, mecanumDefaultWayPoint, 30-x, 124 + s, 85-t);
+            addSegment(0.6, mecanumDefaultWayPoint, 11-x, 135 + s, 52-t);
+            addCancelAutoModules();
             addConcurrentAutoModule(BackwardAuto2);
-            addAccuracyTimedScaledSetpoint(1.0, 0.35, 0.8, 6, 142, 58);
+            addTimedSetpoint(1.0, 0.6, 0.6, -6.5-x, 135 + s, 53-t);
+            addCancelAutoModules();
             addConcurrentAutoModule(ForwardAuto2(i));
-            addPause(0.4);
+            addPause(0.25);
         });
+        double y = -1.5;
+        addConcurrentAutoModule(ForwardAuto2(-1));
+        addTimedWaypoint(0.2, 0.5, -8.5, 136, -90);
+        addSegment(1.0, mecanumDefaultWayPoint,  -50.0, 144, -93);
+        addSegment(1.0, mecanumDefaultWayPoint, -190.0, 146, -93);
+        addSegment(0.7, mecanumDefaultWayPoint,  -230.0, 146, -93);
+        addTimedWaypoint(0.2, 0.3, -239, 146 + y, -93);
+        addConcurrentAutoModule(GrabAuto2);
+        addTimedWaypoint(0.2, 0.3, -235, 146 + y, -93);
+//        addCancelAutoModules();
+//        addConcurrentAutoModule(BackwardAutoReady);
+//        addSegment(0.7, mecanumDefaultWayPoint, -200, 144, -85);
+//        addSegment(0.6, mecanumDefaultWayPoint, -183, 161, -52);
+//        addCancelAutoModules();
+//        addConcurrentAutoModule(BackwardAuto2);
+//        addTimedSetpoint(1.0, 0.6, 0.6, -161.5, 163+y, -56);
+//        addCancelAutoModules();
+//        addConcurrentAutoModule(ForwardAuto2(0));
+//        addPause(0.25);
+//        addSegment(0.7, mecanumDefaultWayPoint,  -186, 150, -65);
+//        addSegment(0.7, mecanumDefaultWayPoint, -230, 146, -93);
+//        addTimedWaypoint(0.2, 0.3, -239, 146+y, -93);
+//        addConcurrentAutoModule(GrabAuto2);
+//        addTimedWaypoint(0.2, 0.3, -235, 146+y, -93);
+//        addCancelAutoModules();
+//        addConcurrentAutoModule(BackwardAutoReady);
+//        addSegment(0.7, mecanumDefaultWayPoint, -200, 144, -85);
+//        addSegment(0.6, mecanumDefaultWayPoint, -183, 161, -52);
+//        addCancelAutoModules();
+//        addConcurrentAutoModule(BackwardAuto2);
+//        addTimedSetpoint(1.0, 0.6, 0.6, -161.5, 163+y, -56);
+//        addCancelAutoModules();
+//        addConcurrentAutoModule(ForwardAuto2(5));
+//        addPause(0.25);
+//        addTimedSetpoint(1.0, 0.8, 0.5, -180.0, 148, 0);
+
 
 
 

@@ -1,18 +1,11 @@
 package auton;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
 import autoutil.AutoFramework;
 import autoutil.reactors.MecanumJunctionReactor;
 import autoutil.vision.JunctionScanner;
-import elements.FieldPlacement;
-import elements.FieldSide;
 import geometry.position.Pose;
 
 import static global.General.bot;
-import static global.General.fieldPlacement;
-import static global.General.fieldSide;
 
 public class TerraAutoSimple extends AutoFramework {
     @Override
@@ -38,22 +31,22 @@ public class TerraAutoSimple extends AutoFramework {
             addConcurrentAutoModule(BackwardAutoFirst);
             customFlipped(() -> {
                 double x = 5.5; double y = 129;
-                addAccuracyScaledSetpoint(3.0,1.05,  x, y, 50);
-                addCustomSegment(mecanumJunctionSetpoint, x, y, 50);
-                addAccuracyScaledSetpoint(1.0, 1.05,x, y, 50);
+                addSetpoint(3.0,1.05,  x, y, 50);
+                addSegment(mecanumJunctionSetpoint, x, y, 50);
+                addSetpoint(1.0, 1.05,x, y, 50);
             }, () -> {
                 double x = -1.0; double y = 132;
-                addAccuracyScaledSetpoint(3.0,1.2,  -1, 129, 50);
-                addCustomSegment(mecanumJunctionSetpoint, x, y, 50);
-                addAccuracyScaledSetpoint(1.0, 1.2, x, y, 50);
+                addSetpoint(3.0,1.2,  -1, 129, 50);
+                addSegment(mecanumJunctionSetpoint, x, y, 50);
+                addSetpoint(1.0, 1.2, x, y, 50);
             });
             addAutoModule(DropAutoFirst);
         }else{
             addConcurrentAutoModule(BackwardAuto);
             customFlipped(() -> {
-                addAccuracyScaledSetpoint(1.0, 1.2,4.5-(i/5.0), 130+(i/4.0), 50);
+                addSetpoint(1.0, 1.2,4.5-(i/5.0), 130+(i/4.0), 50);
             }, () -> {
-                addAccuracyScaledSetpoint(1.0, 1.2,-1.0-(i/4.0), 130-(i/4.0), 50);
+                addSetpoint(1.0, 1.2,-1.0-(i/4.0), 130-(i/4.0), 50);
             });
             addCancelAutoModules();
             addAutoModule(DropAuto);
@@ -64,9 +57,9 @@ public class TerraAutoSimple extends AutoFramework {
     public void pick(int i){
         addBreakpoint(() -> timer.seconds() > 24.5);
         customFlipped(() -> {
-            addAccuracyScaledSetpoint(2.0, 0.7, 61-(i/5.0), 125, 87);
+            addSetpoint(2.0, 0.7, 61-(i/5.0), 125, 87);
         }, () -> {
-            addAccuracyScaledSetpoint(2.0, 0.7, 57-(i/4.0), 126, 87);
+            addSetpoint(2.0, 0.7, 57-(i/4.0), 126, 87);
         });
         addConcurrentAutoModule(GrabAuto);
         addPause(0.5);
@@ -75,45 +68,45 @@ public class TerraAutoSimple extends AutoFramework {
     public void define() {
         addWaypoint(0, 40, 0);
         customFlipped(() -> {
-            addScaledWaypoint(1.0, 0, 128, 0);
+            addWaypoint(1.0, 0, 128, 0);
         }, () -> {
-            addScaledWaypoint(1.0, 0, 125, 0);
+            addWaypoint(1.0, 0, 125, 0);
         });
-        addScaledWaypoint(1.0, 0, 120, 20);
+        addWaypoint(1.0, 0, 120, 20);
         place(0);
         customNumber(3, i -> {
             customFlipped(() -> {
-                addScaledWaypoint(0.4, 30, 125, 87);
+                addWaypoint(0.4, 30, 125, 87);
                 pick(i+1);
-                addScaledWaypoint(0.6, 30, 128, 75);
-                addScaledWaypoint(0.35, 3, 128.5, 50);
+                addWaypoint(0.6, 30, 128, 75);
+                addWaypoint(0.35, 3, 128.5, 50);
                 place(i+1);
             }, () -> {
-                addScaledWaypoint(0.5, 30, 125, 87);
+                addWaypoint(0.5, 30, 125, 87);
                 pick(i+1);
-                addScaledWaypoint(0.7, 30, 128, 75);
-                addScaledWaypoint(0.4, 3, 128.5, 50);
+                addWaypoint(0.7, 30, 128, 75);
+                addWaypoint(0.4, 3, 128.5, 50);
                 place(i+1);
             });
         });
         addBreakpointReturn();
         customCase(() -> {
             addWaypoint(-7, 124, 90);
-            addScaledWaypoint(0.8, -10, 124, 90);
-            addScaledWaypoint(0.8, -45, 122, 60);
-            addScaledWaypoint(0.8, -50, 123, 25);
-            addScaledSetpoint(0.9, -62, 75, 0);
+            addWaypoint(0.8, -10, 124, 90);
+            addWaypoint(0.8, -45, 122, 60);
+            addWaypoint(0.8, -50, 123, 25);
+            addSetpoint(0.9, -62, 75, 0);
         }, () -> {
             addWaypoint(0, 130, 35);
             addWaypoint(0, 105, 0);
-            addScaledSetpoint(0.9, 0, 75, 0);
+            addSetpoint(0.9, 0, 75, 0);
         }, () -> {
             addWaypoint(7, 128, 90);
-            addScaledWaypoint(0.8, 16, 128, 90);
-            addScaledWaypoint(0.8, 39, 122, 58);
-            addScaledWaypoint(0.8, 51, 111, 32);
-            addScaledWaypoint(0.8, 56, 95, 0);
-            addScaledSetpoint(0.9, 58, 75, 0);
+            addWaypoint(0.8, 16, 128, 90);
+            addWaypoint(0.8, 39, 122, 58);
+            addWaypoint(0.8, 51, 111, 32);
+            addWaypoint(0.8, 56, 95, 0);
+            addSetpoint(0.9, 58, 75, 0);
         });
     }
 

@@ -10,7 +10,7 @@ import util.template.Precision;
 public class MecanumNonstopReactor extends MecanumReactor {
 
     public Nonstop nonstop = new Nonstop(0.15, 0.1, 100.0);
-    public RP hRP = new RP(0.012, 0.07);
+    public RP hRP = new RP(0.012, 0.08);
 //    public PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.01, 6.0, 0.2, 50.0, 20.0);
 
     public MecanumNonstopReactor(){
@@ -33,23 +33,12 @@ public class MecanumNonstopReactor extends MecanumReactor {
     @Override
     public void moveToTarget(PoseGenerator generator) {
         movementController.update(getPose(), generator); headingController.update(getPose(), generator);
-        drive.move(movementController.getOutputY(), movementController.getOutputX(), -headingController.getOutput());
+        drive.move(movementController.getOutputY(), 1.1*movementController.getOutputX(), -headingController.getOutput());
     }
 
 
     public static class MecanumNonstopReactorSetpoint extends MecanumNonstopReactor {
-        private final Precision precision = new Precision();
         public MecanumNonstopReactorSetpoint(){ super(); nonstop.setpoint(); movementController.setAccuracy(2.0);  }
-
-        @Override
-        public void firstTarget() {
-            super.firstTarget(); precision.reset();
-        }
-
-        @Override
-        public boolean isAtTarget() {
-            return precision.isInputTrueForTime(movementController.isAtTarget(), 0.1) && headingController.isAtTarget();
-        }
     }
 
 }

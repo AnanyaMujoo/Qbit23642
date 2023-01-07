@@ -1,12 +1,7 @@
 package automodules;
 
-import android.view.Display;
-
-import org.omg.CORBA.INITIALIZE;
-
 import automodules.stage.Main;
 import automodules.stage.Stage;
-import auton.Auto;
 import autoutil.reactors.MecanumJunctionReactor2;
 import global.Modes;
 import robot.RobotUser;
@@ -162,25 +157,32 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardAuto2First = new AutoModule(
             RobotPart.pause(0.3),
             lift.stageLift(1.0, heightMode.getValue(HIGH)-5),
-            outtake.stageReadyEnd(0.2),
+            outtake.stageReadyEnd(0.37),
+            outtake.stageOpen(0.0),
             junctionStop()
     );
 
     AutoModule BackwardAuto2 = new AutoModule(
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-3),
-            outtake.stageReadyEnd(0.2),
+            RobotPart.pause(0.1),
+            outtake.stageReadyEnd(0.37),
+            outtake.stageOpen(0.0),
             junctionStop()
     );
 
     default AutoModule ForwardAuto2(int i){return new AutoModule(
-            outtake.stageOpen(0.25),
+            outtake.stageOpen(0.2),
             outtake.stageStart(0.0),
-            lift.stageLift(1.0, Math.max(14.0 - (i*14.0/3.0), 0))
+            lift.stageLift(1.0, i == 0 ? 14 : Math.max(13.0 - (i*13.0/3.0), 0))
     );}
+
+//    AutoModule GrabAuto2 = new AutoModule(
+//            outtake.stageClose(0.15),
+//            outtake.stageReadyStart(0.3).attach(drive.moveTime(-0.2, 0, 0, 0.2))
+//    );
 
     AutoModule GrabAuto2 = new AutoModule(
             outtake.stageClose(0.15),
-            outtake.stageReadyStart(0.3).attach(drive.moveTime(-0.2, 0, 0, 0.2))
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE)).attach(outtake.stageReadyStart(0.15))
     );
 
 
@@ -192,9 +194,9 @@ public interface AutoModuleUser extends RobotUser{
     Independent MoveToCycleStart = new Independent() {
         @Override
         public void define() {
-            addScaledWaypoint(0.8, 65,-71,0);
-            addScaledWaypoint(0.4, 93,-72, 0);
-            addScaledWaypoint(0.35,  89.0, -62.0, 0.0 );
+            addWaypoint(0.8, 65,-71,0);
+            addWaypoint(0.4, 93,-72, 0);
+            addWaypoint(0.35,  89.0, -62.0, 0.0 );
         }
     };
 
@@ -211,11 +213,11 @@ public interface AutoModuleUser extends RobotUser{
         @Override
         public void define() {
             addWaypoint(0,0.01,0);
-            addScaledWaypoint(0.38, 0,27, 0);
+            addWaypoint(0.38, 0,27, 0);
             addConcurrentAutoModule(BackwardCycle);
             addPause(0.2);
-            addScaledWaypoint(0.38, 0, 3, 0);
-            addAccuracyScaledSetpoint(1.05, 0.95,0, -4,0);
+            addWaypoint(0.38, 0, 3, 0);
+            addSetpoint(1.05, 0.95,0, -4,0);
             addCancelAutoModules();
             addConcurrentAutoModule(ForwardTele);
             addPause(0.4);
@@ -245,12 +247,12 @@ public interface AutoModuleUser extends RobotUser{
     Independent CycleMedium = new Independent() {
         @Override
         public void define() {
-            addScaledWaypoint(0.5, 0.0, 30.0, 0.0);
-            addScaledWaypoint(0.3, 0.0, 50, 0.0);
+            addWaypoint(0.5, 0.0, 30.0, 0.0);
+            addWaypoint(0.3, 0.0, 50, 0.0);
             addConcurrentAutoModule(BackwardCycleMedium);
             addPause(0.3);
-            addScaledWaypoint(0.4, 0.0, 19.0, 0.0);
-            addAccuracyScaledSetpoint(0.7, 1.1,0, 3,0);
+            addWaypoint(0.4, 0.0, 19.0, 0.0);
+            addSetpoint(0.7, 1.1,0, 3,0);
             addCancelAutoModules();
             addConcurrentAutoModule(ForwardMedium);
             addPause(0.5);

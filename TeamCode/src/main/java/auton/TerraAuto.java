@@ -1,30 +1,17 @@
 package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import automodules.AutoModule;
-import automodules.AutoModuleUser;
-import automodules.stage.Main;
-import automodules.stage.Stage;
 import autoutil.AutoFramework;
-import autoutil.reactors.MecanumJunctionReactor;
-import autoutil.vision.JunctionScanner;
-import elements.Case;
 import elements.Field;
 import elements.FieldPlacement;
 import elements.FieldSide;
 import elements.GameItems;
 import geometry.position.Pose;
-import global.Constants;
-import util.Timer;
-import util.condition.DecisionList;
 
-import static display.Drawer.fieldSize;
 import static global.General.bot;
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
-import static global.General.log;
 
 public class TerraAuto extends AutoFramework {
 
@@ -51,22 +38,22 @@ public class TerraAuto extends AutoFramework {
             addConcurrentAutoModule(BackwardAutoFirst);
             customFlipped(() -> {
                 double x = 5.5; double y = 129;
-                addAccuracyScaledSetpoint(3.0,1.05,  x, y, 50);
-                addCustomSegment(mecanumJunctionSetpoint, x, y, 50);
-                addAccuracyScaledSetpoint(1.0, 1.05,x, y, 50);
+                addSetpoint(3.0,1.05,  x, y, 50);
+                addSegment(mecanumJunctionSetpoint, x, y, 50);
+                addSetpoint(1.0, 1.05,x, y, 50);
             }, () -> {
                 double x = 5.5; double y = 129;
-                addAccuracyScaledSetpoint(3.0,1.05,  x, y, 50);
-                addCustomSegment(mecanumJunctionSetpoint, x, y, 50);
-                addAccuracyScaledSetpoint(1.0, 1.05,x, y, 50);
+                addSetpoint(3.0,1.05,  x, y, 50);
+                addSegment(mecanumJunctionSetpoint, x, y, 50);
+                addSetpoint(1.0, 1.05,x, y, 50);
             });
             addAutoModule(DropAutoFirst);
         }else{
             addConcurrentAutoModule(BackwardAuto);
             customFlipped(() -> {
-                addAccuracyScaledSetpoint(1.0, 1.2,4.0, 130.5 + (i/3.0), 50);
+                addSetpoint(1.0, 1.2,4.0, 130.5 + (i/3.0), 50);
             }, () -> {
-                addAccuracyScaledSetpoint(1.0, 1.2,3.5-(i/5.0), 131+(i/4.0), 50);
+                addSetpoint(1.0, 1.2,3.5-(i/5.0), 131+(i/4.0), 50);
             });
             addCancelAutoModules();
             addAutoModule(DropAuto);
@@ -77,9 +64,9 @@ public class TerraAuto extends AutoFramework {
     public void pick(int i){
         addBreakpoint(() -> timer.seconds() > 24.5);
         customFlipped(() -> {
-            addAccuracyScaledSetpoint(2.0, 0.7, 61, 125 + (i/3.0), 87);
+            addSetpoint(2.0, 0.7, 61, 125 + (i/3.0), 87);
         }, () -> {
-            addAccuracyScaledSetpoint(2.0, 0.7, 61-(i/5.0), 125, 87);
+            addSetpoint(2.0, 0.7, 61-(i/5.0), 125, 87);
         });
         addConcurrentAutoModule(GrabAuto);
         addPause(0.5);

@@ -132,8 +132,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     @Override
     public void runAuto() {
-        odometry.setCurrentPose(startPose);
-        odometry.setCurrentPose(startPose);
+        odometry.setCurrentPose(startPose); odometry.setCurrentPose(startPose);
         pause(0.05);
         timer.reset();
         Iterator.forAll(segments, segment -> segment.run(this));
@@ -150,7 +149,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.AUTOMODULE, autoModule); }
     public void addConcurrentAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.CONCURRENT_AUTOMODULE, autoModule);}
     public void addCancelAutoModules(){ addSegmentType(AutoSegment.Type.CANCEL_AUTOMODULE); addLastPose(); }
-    public void addCustomSegment(AutoSegment<?,?> segment, double x, double y, double h){ customSegments.add(segment); segmentTypes.add(AutoSegment.Type.CUSTOM); poses.add(new Pose(x, y, h)); }
+    public void addSegment(double scale, AutoSegment<?,?> segment, double x, double y, double h){addScale(scale); addSegment(segment, x, y, h); }
+    public void addSegment(AutoSegment<?,?> segment, double x, double y, double h){ customSegments.add(segment); segmentTypes.add(AutoSegment.Type.CUSTOM); poses.add(new Pose(x, y, h)); }
 
     private void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(config.getSetpointSegment().getReactorReference(), generator); }
 
@@ -158,12 +158,12 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addAccuracy(double scale){ accuracyScales.set(poses.size()-1, scale); }
     public void addTime(double time){ times.set(poses.size()-1, time);}
 
-    public void addScaledSetpoint(double scale, double x, double y, double h){ addScale(scale); addSetpoint(x, y, h);}
-    public void addScaledWaypoint(double scale, double x, double y, double h){ addScale(scale); addWaypoint(x, y, h);}
+    public void addSetpoint(double scale, double x, double y, double h){ addScale(scale); addSetpoint(x, y, h);}
+    public void addWaypoint(double scale, double x, double y, double h){ addScale(scale); addWaypoint(x, y, h);}
 
-    public void addAccuracySetpoint(double acc, double x, double y, double h){ addAccuracy(acc); addSetpoint(x, y, h);}
-    public void addAccuracyScaledSetpoint(double acc, double scale, double x, double y, double h){ addAccuracy(acc); addScaledSetpoint(scale, x, y, h);}
-    public void addAccuracyTimedScaledSetpoint(double acc, double scale, double time, double x, double y, double h){ addTime(time); addAccuracyScaledSetpoint(acc, scale, x, y, h); }
+    public void addSetpoint(double acc, double scale, double x, double y, double h){ addAccuracy(acc); addSetpoint(scale, x, y, h);}
+    public void addTimedSetpoint(double acc, double scale, double time, double x, double y, double h){ addTime(time); addSetpoint(acc, scale, x, y, h); }
+    public void addTimedWaypoint(double scale, double time, double x, double y, double h){ addTime(time); addWaypoint(scale, x, y, h);}
 
     public void addCustomCode(CodeSeg seg){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(seg); addLastPose(); }
     public void addSynchronisedDecision(DecisionList decisionList){ addCustomCode(decisionList::check); }

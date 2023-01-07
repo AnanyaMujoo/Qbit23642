@@ -25,8 +25,8 @@ public class Outtake extends RobotPart {
         arml.addPosition("startHalf", 0.35);
         armr.addPosition("startHalf", 0.35);
 
-        armr.addPosition("middle", 0.5);
-        arml.addPosition("middle", 0.5);
+        armr.addPosition("middle", 0.38);
+        arml.addPosition("middle", 0.38);
 
         arml.addPosition("endHalf", 0.73);
         armr.addPosition("endHalf", 0.73);

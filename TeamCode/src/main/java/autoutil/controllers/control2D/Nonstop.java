@@ -52,23 +52,23 @@ public class Nonstop extends Controller2D{
     @Override
     protected void updateController(Pose pose, Generator generator) {
         checkGenerator(generator, LineGenerator.class, g -> currentLine = g.getLine());
+
         setProcessError(() -> currentLine.getEndPoint().getDistanceTo(pose.getPoint()));
-        if(time > 10) {
-            t = Precision.clip(timer.seconds() / currentLine.getLength() * maxVelocity * scale, 1);
+
+        if(!isTimed()) {
+            t = Precision.clip((timer.seconds() / currentLine.getLength()) * maxVelocity * scale, 1);
         }else{
-            t = Precision.clip(timer.seconds() / time, 1);
+            t = isSetpoint() ? 1 : Precision.clip(timer.seconds() / time, 1);
         }
+
         Point target = currentLine.getAt(Precision.clip(t+tOffset, 1));
         Vector error = target.getSubtracted(pose.getPoint()).getVector();
         rpController.update(pose, generator);
         rpController.setProcessError(error::getLength);
         Vector power = error.getUnitVector().getScaled(rpController.getOutput()).getRotated(-pose.getAngle());
 
-        if(setpoint){
-            rpController.scaleKp(Math.max(endTp,scale)*(1-t) + endTp*t);
-        }else {
-            rpController.scale(scale);
-        }
+        rpController.scaleKp(isTimed() ? Math.max(endTp,scale)*(1-t) + endTp*t : scale);
+
         setOutputX(power.getX());
         setOutputY(power.getY());
     }
@@ -79,12 +79,19 @@ public class Nonstop extends Controller2D{
         timer.reset(); t = 0; rpController.reset();
     }
 
+
+    public boolean isTimed(){ return time < 10; }
+    public boolean isSetpoint(){ return setpoint; }
+
     @Override
     protected boolean hasReachedTarget() {
-        if(setpoint) {
-            return t > 0.99 && isWithinAccuracyRange();
-        }else{
-            return t > 0.99;
-        }
+        return isTimed() ? timer.seconds() > time : (isSetpoint() ? t > 0.99 && isWithinAccuracyRange() : t > 0.99);
     }
+
+    /**
+     * Waypoint - quick, inaccurate
+     * Timed Waypoint - variable, moderate accuracy
+     * Setpoint - slow, accurate
+     * Timed Setpoint - variable, accurate
+     */
 }

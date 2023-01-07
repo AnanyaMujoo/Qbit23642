@@ -62,8 +62,8 @@ public class ThreeOdometry extends TwoOdometry {
 
         dyr = enc3.getDeltaPosition() + (yCorrectionScale*dyl);
 
-        double dhu = toDegrees((dyr-dyl)/width);
-        dh = dhu*1.011;
+//        double dhu = toDegrees((dyr-dyl)/width);
+//        dh = dhu*1.011;
 //        if(dhu > 0){ dh = 1.0025*dhu; }else{ dh = 1.0013*dhu; }
 
 //        dx *= 1.01;
@@ -99,9 +99,9 @@ public class ThreeOdometry extends TwoOdometry {
 
         Vector localDelta = new Vector(dx, dyl);
 
-        updateCurrentHeading(dh);
+//        updateCurrentHeading(dh);
 
-//        setHeading(gyro.getHeading());
+        setHeading(gyro.getHeading());
 //        precision.throttle(() -> setHeading(gyro.getHeading()), 100);
 
         odometryCenter.translate(toGlobalFrame(localDelta));
