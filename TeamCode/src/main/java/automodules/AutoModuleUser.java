@@ -151,12 +151,12 @@ public interface AutoModuleUser extends RobotUser{
 
     AutoModule BackwardAutoReady = new AutoModule(
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-5)
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-3.5)
     );
 
     AutoModule BackwardAuto2First = new AutoModule(
             RobotPart.pause(0.3),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-5),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-4),
             outtake.stageReadyEnd(0.37),
             outtake.stageOpen(0.0),
             junctionStop()
@@ -172,7 +172,7 @@ public interface AutoModuleUser extends RobotUser{
     default AutoModule ForwardAuto2(int i){return new AutoModule(
             outtake.stageOpen(0.2),
             outtake.stageStart(0.0),
-            lift.stageLift(1.0, i == 0 ? 14 : Math.max(13.0 - (i*13.0/3.0), 0))
+            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0))
     );}
 
 //    AutoModule GrabAuto2 = new AutoModule(
