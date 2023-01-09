@@ -21,8 +21,8 @@ public class GyroSensors extends RobotPart {
     public void setHeading(double heading){ gsr.setHeading(heading); }
 
     public double getHeading(){ return gsr.getHeading(); }
-    public double getPitch(){ return gsr.getPitch(); }
-    public double getPitchDerivative(){ return gsr.getPitchDerivative(); }
+//    public double getPitch(){ return gsr.getPitch(); }
+//    public double getPitchDerivative(){ return gsr.getPitchDerivative(); }
 
     public double getDeltaHeading() { return gsr.getDeltaHeading(); }
 

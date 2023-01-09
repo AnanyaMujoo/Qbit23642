@@ -6,21 +6,13 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import automodules.AutoModuleUser;
-import auton.TerraAuto.*;
-import auton.TerraAutoTest;
+import auton.TerraAuto;
 import autoutil.AutoFramework;
-import elements.Field;
-import elements.GameItems;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
 import geometry.position.Line;
 import geometry.polygons.PolyLine;
 import geometry.position.Pose;
-import global.Constants;
-import util.codeseg.CodeSeg;
-import util.codeseg.ParameterCodeSeg;
-import util.template.Iterator;
 
 public class AutoSimulator extends Drawer{
 
@@ -38,7 +30,7 @@ public class AutoSimulator extends Drawer{
     private static final boolean developmentMode = true;
 
     public static void main(String[] args) {
-        setAuto(new TerraAutoTest());
+        setAuto(new TerraAuto.TerraAutoMegaRight());
 
 //        setAuto(new TerraAutoLowerBlue());
 //        setAuto(new TerraAutoUpperBlue());

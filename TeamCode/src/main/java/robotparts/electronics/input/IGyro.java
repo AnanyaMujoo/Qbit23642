@@ -37,10 +37,10 @@ public class IGyro extends Electronic {
         else if (deltaHeading > 180)
             deltaHeading -= 360;
         heading += deltaHeading;
-        lastHeading = heading;
+        lastHeading = currentHeading;
 
-        pitch = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
-        pitchProfiler.update();
+//        pitch = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).secondAngle;
+//        pitchProfiler.update();
     }
 
     public void setHeading(double heading){ update(); startHeading = this.heading-heading; }

@@ -170,7 +170,7 @@ public interface AutoModuleUser extends RobotUser{
     );
 
     default AutoModule ForwardAuto2(int i){return new AutoModule(
-            outtake.stageOpen(0.2),
+            outtake.stageOpen(0.15),
             outtake.stageStart(0.0),
             lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0))
     );}

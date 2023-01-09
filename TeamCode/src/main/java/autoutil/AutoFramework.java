@@ -2,6 +2,8 @@ package autoutil;
 
 
 
+import org.firstinspires.ftc.teamcode.R;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -104,6 +106,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void customSidePlacement(CodeSeg one, CodeSeg two, CodeSeg three, CodeSeg four){customSide(() -> customPlacement(one, two), () -> customPlacement(three, four));}
     public void customCase(CodeSeg first, CodeSeg second, CodeSeg third){ addDecision(new DecisionList(() -> caseDetected).addOption(Case.FIRST, first).addOption(Case.SECOND, second).addOption(Case.THIRD, third)); }
     public void customNumber(int num, ParameterCodeSeg<Integer> one){ for (int i = 0; i < num; i++) { one.run(i); } }
+    public void customIf(boolean value, CodeSeg ifTrue, CodeSeg ifFalse){ if(value){ifTrue.run();}else{ifFalse.run();} }
 
     public void setScannerAfterInit(Scanner scanner){
         haltCameraAfterInit = false;
