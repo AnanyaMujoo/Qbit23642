@@ -119,6 +119,8 @@ public interface AutoModuleUser extends RobotUser{
      * Auto
      */
 
+    // TODO CLEAN AND MOVE
+
     AutoModule DropAutoFirst = new AutoModule(outtake.stageEnd(0.3), outtake.stageOpen(0.1));
     AutoModule DropAuto = new AutoModule(outtake.stageOpen(0.15));
     AutoModule GrabAuto = new AutoModule(
@@ -143,20 +145,21 @@ public interface AutoModuleUser extends RobotUser{
 
 
 
+
+
     AutoModule BackwardAutoReadyFirst = new AutoModule(
             outtake.stageMiddle(0.0),
             lift.changeCutoff(2),
-            lift.stageLift(1.0, heightMode.getValue(LOW))
+            lift.stageLift(1.0, heightMode.getValue(LOW)+15)
     );
 
     AutoModule BackwardAutoReady = new AutoModule(
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-3.5)
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-4.5)
     );
 
     AutoModule BackwardAuto2First = new AutoModule(
-            RobotPart.pause(0.3),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-4),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-5.5),
             outtake.stageReadyEnd(0.37),
             outtake.stageOpen(0.0),
             junctionStop()
@@ -170,19 +173,13 @@ public interface AutoModuleUser extends RobotUser{
     );
 
     default AutoModule ForwardAuto2(int i){return new AutoModule(
-            outtake.stageOpen(0.15),
-            outtake.stageStart(0.0),
-            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0))
+            outtake.stageOpen(0.0),
+            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
     );}
-
-//    AutoModule GrabAuto2 = new AutoModule(
-//            outtake.stageClose(0.15),
-//            outtake.stageReadyStart(0.3).attach(drive.moveTime(-0.2, 0, 0, 0.2))
-//    );
 
     AutoModule GrabAuto2 = new AutoModule(
             outtake.stageClose(0.15),
-            lift.stageLift(1.0, heightMode.getValue(MIDDLE)).attach(outtake.stageReadyStart(0.15))
+            lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.1))
     );
 
 

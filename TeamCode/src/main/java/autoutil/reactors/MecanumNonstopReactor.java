@@ -33,7 +33,7 @@ public class MecanumNonstopReactor extends MecanumReactor {
     @Override
     public void moveToTarget(PoseGenerator generator) {
         movementController.update(getPose(), generator); headingController.update(getPose(), generator);
-        drive.move(movementController.getOutputY(), 1.2*movementController.getOutputX(), -headingController.getOutput());
+        drive.move(movementController.getOutputY(), 1.2*movementController.getOutputX(), -1.05*headingController.getOutput());
     }
 
 
