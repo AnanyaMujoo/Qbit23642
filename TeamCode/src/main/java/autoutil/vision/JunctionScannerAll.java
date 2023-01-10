@@ -9,10 +9,13 @@ import static org.opencv.core.Core.inRange;
 import static org.opencv.core.Core.min;
 
 
+import org.checkerframework.checker.units.qual.C;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -36,10 +39,10 @@ public class JunctionScannerAll extends Scanner {
 
     public final double minContourArea = 250.0;
 
-    private final Pose defaultTarget = new Pose(0,18.0, -1);
+    private final Pose defaultTarget = new Pose(0,17.0, -1);
     private Pose target = defaultTarget.getCopy();
 
-    public final int horizon = 100;
+    public final int horizon = 0;
     public final int horizonCone = 20;
 
     private Rect coneRect = new Rect();
@@ -58,7 +61,14 @@ public class JunctionScannerAll extends Scanner {
 
     private final Mat maskCone = new Mat();
     private final Mat yCrCb = new Mat();
+    private final Mat Cb = new Mat();
+    private final Mat Cr = new Mat();
     private final Mat binaryMat = new Mat();
+
+    private final Size blurSize = new Size(2,2);
+
+    private final Mat Mask2 = new Mat();
+    private final Mat S = new Mat();
 
     private final Size kSize = new Size(5, 5);
     private final Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, kSize);
@@ -107,6 +117,42 @@ public class JunctionScannerAll extends Scanner {
 
     @Override
     public Mat processFrame(Mat input) {
+
+//        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
+//
+//        Core.inRange(yCrCb, new Scalar(30,130,0), new Scalar(180,180,120), Mask);
+//
+//        Core.bitwise_and(input, input, Mask2, Mask);
+//
+//        Imgproc.cvtColor(Mask2, HSV, Imgproc.COLOR_RGB2HSV);
+//
+//        Core.inRange(HSV, new Scalar(20,150,0), new Scalar(30,255,255), binaryMat);
+//
+//        Imgproc.blur(binaryMat, binaryMat, blurSize);
+//
+//        binaryMat.copyTo(input);
+//
+//        yCrCb.release();
+//        Mask.release();
+//        Mask2.release();
+//        HSV.release();
+//        binaryMat.release();
+
+
+
+
+//        Imgproc.blur(Mask, Mask, blurSize);
+
+//
+//        Core.bitwise_and(Cb, Mask, Mask2);
+
+
+//        Imgproc.adaptiveThreshold(Cb, Mask, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 11, 10);
+
+//        Mask.copyTo(input);
+
+        // TODO CLEAN
+
         if(!pausing) {
             crop(input, new Rect(0, horizon, input.width(), input.height() - horizon));
             detectPole(Crop);
@@ -115,13 +161,13 @@ public class JunctionScannerAll extends Scanner {
                 error = errorInternal.getCopy();
                 return Crop;
             }
-            crop(input, new Rect(0, horizonCone, input.width(), input.height() - horizonCone));
-            detectCone(Crop);
-            errorInternal = getErrorInternal();
-            if (cutoff(errorInternal)) {
-                error = errorInternal.getCopy();
-                return Crop;
-            }
+//            crop(input, new Rect(0, horizonCone, input.width(), input.height() - horizonCone));
+//            detectCone(Crop);
+//            errorInternal = getErrorInternal();
+//            if (cutoff(errorInternal)) {
+//                error = errorInternal.getCopy();
+//                return Crop;
+//            }
             error = new Pose();
         }
         return input;
@@ -144,7 +190,23 @@ public class JunctionScannerAll extends Scanner {
 
         Imgproc.erode(yCrCb, yCrCb, kernel);
 
-        inRange(yCrCb, poleLower, poleHigher, binaryMat);
+        Core.inRange(yCrCb, new Scalar(30,120,0), new Scalar(180,180,120), Mask);
+//
+        Core.bitwise_and(input, input, Mask2, Mask);
+
+        Imgproc.cvtColor(Mask2, HSV, Imgproc.COLOR_RGB2HSV);
+
+        Core.inRange(HSV, new Scalar(20,150,0), new Scalar(30,255,255), binaryMat);
+
+        Imgproc.blur(binaryMat, binaryMat, blurSize);
+
+//
+//
+//        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
+//
+
+//
+//        inRange(yCrCb, poleLower, poleHigher, binaryMat);
 
 //        binaryMat.copyTo(input);
 
@@ -154,7 +216,15 @@ public class JunctionScannerAll extends Scanner {
 
 //        Imgproc.drawContours(input, contours, -1, CONTOUR_COLOR);
 
+        if(!poleContours.isEmpty()){ poleContours.removeIf(contour -> getAspectRatio(Imgproc.boundingRect(contour)) < 1.9);}
+
         if(!poleContours.isEmpty()) {
+
+//            for(MatOfPoint contour : poleContours) {
+//                Imgproc.rectangle(input, Imgproc.boundingRect(contour), RED, 2);
+//            }
+
+
             MatOfPoint biggestPole = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 biggestPole = Collections.max(poleContours, Comparator.comparingDouble(t0 -> Imgproc.boundingRect(t0).height));
@@ -175,15 +245,19 @@ public class JunctionScannerAll extends Scanner {
                     }
 
                     exitEarly = false;
-
-//                    Imgproc.rectangle(input, maxRect, CONTOUR_COLOR, 2);
-//                    Imgproc.putText(input, "Pole", new Point(maxRect.x, maxRect.y < 10 ? (maxRect.y + maxRect.height + 20) : (maxRect.y - 8)), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, TEXT_COLOR, 2);
+//
+//                    Imgproc.rectangle(input, poleRect, RED, 2);
+//                    Imgproc.putText(input, "Pole", new Point(poleRect.x, poleRect.y < 10 ? (poleRect.y + poleRect.height + 20) : (poleRect.y - 8)), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, RED, 2);
                 }
             }
         }
 
         poleContours.clear();
+
         yCrCb.release();
+        Mask.release();
+        Mask2.release();
+        HSV.release();
         binaryMat.release();
 
         if(exitEarly){ reset(); return; }

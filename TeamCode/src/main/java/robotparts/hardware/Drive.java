@@ -60,12 +60,12 @@ public class Drive extends RobotPart {
     public void moveSmooth(double f, double s, double t) {
         Vector3D attackPow = new Vector3D();
         if(Modes.attackMode.modeIs(STICKY)) {
-            Linear yCurve = new Linear(0.02, 0.06);
+            Linear yCurve = new Linear(0.025, 0.06);
             Linear hCurve = new Linear(0.008, 0.04);
             Pose error = JunctionScannerAll.getError();
             Vector junctionPow = new Vector(0, yCurve.fodd(error.getY()));
-            junctionPow.rotate(-error.getAngle()); junctionPow.limitLength(Math.abs(JunctionScannerAll.rollOfJunction) > 1 ? 0.1 : 0.4);
-            attackPow = new Vector3D(junctionPow, Precision.clip(hCurve.fodd(error.getAngle()), Math.abs(JunctionScannerAll.rollOfJunction) > 1 ? 0.1 : 0.4));
+            junctionPow.rotate(-error.getAngle()); junctionPow.limitLength(0.4);
+            attackPow = new Vector3D(junctionPow, Precision.clip(hCurve.fodd(error.getAngle()), 0.3));
         }
         Pose power = drive.getMoveSmoothPower(f, s, t);
         drive.move(attackPow.getY() + power.getX(), power.getY(), attackPow.getZ() + power.getAngle());
