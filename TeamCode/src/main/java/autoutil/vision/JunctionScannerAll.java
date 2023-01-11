@@ -5,8 +5,10 @@ import static global.General.log;
 import static global.Modes.Height.LOW;
 import static global.Modes.Height.MIDDLE;
 import static global.Modes.heightMode;
+import static org.opencv.core.Core.NORM_TYPE_MASK;
 import static org.opencv.core.Core.inRange;
 import static org.opencv.core.Core.min;
+import static robot.RobotUser.odometry;
 
 
 import org.checkerframework.checker.units.qual.C;
@@ -17,11 +19,13 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
+import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -32,6 +36,7 @@ import elements.GameItems;
 import elements.Robot;
 import geometry.position.Pose;
 import geometry.position.Vector;
+import util.template.Iterator;
 import util.template.Precision;
 
 
@@ -39,10 +44,10 @@ public class JunctionScannerAll extends Scanner {
 
     public final double minContourArea = 250.0;
 
-    private final Pose defaultTarget = new Pose(0,17.0, -1);
-    private Pose target = defaultTarget.getCopy();
+    private static final Pose defaultTarget = new Pose(0,16.5, -1);
+    public static Pose target = defaultTarget.getCopy();
 
-    public final int horizon = 0;
+    public final int horizon = 20;
     public final int horizonCone = 20;
 
     private Rect coneRect = new Rect();
@@ -64,13 +69,14 @@ public class JunctionScannerAll extends Scanner {
     private final Mat Cb = new Mat();
     private final Mat Cr = new Mat();
     private final Mat binaryMat = new Mat();
+    private final Mat Mask3 = new Mat();
 
     private final Size blurSize = new Size(2,2);
 
     private final Mat Mask2 = new Mat();
     private final Mat S = new Mat();
 
-    private final Size kSize = new Size(5, 5);
+    private final Size kSize = new Size(8, 8);
     private final Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, kSize);
 
     private static final double cameraFov = 47;
@@ -95,7 +101,7 @@ public class JunctionScannerAll extends Scanner {
 
     @Override
     public void message() {
-//        log.show("Roll", rollOfJunction);
+        log.show("Roll", rollOfJunction);
 
 //        Scalar mean = new Scalar(0,0,0);
 //        log.show("Cone Mode", coneMode);
@@ -117,6 +123,8 @@ public class JunctionScannerAll extends Scanner {
 
     @Override
     public Mat processFrame(Mat input) {
+
+//        detectPole(input);
 
 //        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
 //
@@ -175,23 +183,29 @@ public class JunctionScannerAll extends Scanner {
 
 
 
-    public boolean cutoff(Pose error){return Math.abs(error.getY()) < 20 && (Math.abs(error.getAngle()) < 35); }
-
-    public static Pose getError(){
-        return error;
+    public boolean cutoff(Pose error){
+        return Math.abs(error.getY()) < 20 && (Math.abs(error.getAngle()) < 45);
     }
+
+
+
+    public static Pose getError(){ return error; }
     private Pose getErrorInternal(){ Pose error = target.getSubtracted(getPose()); error.invertOrientation(); return error; }
-    public Pose getPose(){ Vector distanceVector = new Vector(0, distanceToJunction); distanceVector.rotate(angleToJunction); return new Pose(distanceVector.getX(), distanceVector.getY(), angleToJunction); }
+    public static Pose getPose(){ Vector distanceVector = new Vector(0, distanceToJunction); distanceVector.rotate(angleToJunction); return new Pose(distanceVector.getX(), distanceVector.getY(), angleToJunction); }
 
     private void detectPole(Mat input) {
         boolean exitEarly = true;
 
         Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
 
-        Imgproc.erode(yCrCb, yCrCb, kernel);
+        Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
 
-        Core.inRange(yCrCb, new Scalar(30,120,0), new Scalar(180,180,120), Mask);
-//
+//        Imgproc.erode(yCrCb, yCrCb, kernel);
+
+        Core.inRange(yCrCb, new Scalar(30,100,0), new Scalar(180,180,120), Mask);
+
+        Mask.copyTo(binaryMat);
+
         Core.bitwise_and(input, input, Mask2, Mask);
 
         Imgproc.cvtColor(Mask2, HSV, Imgproc.COLOR_RGB2HSV);
@@ -200,15 +214,32 @@ public class JunctionScannerAll extends Scanner {
 
         Imgproc.blur(binaryMat, binaryMat, blurSize);
 
-//
-//
-//        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
-//
-
-//
-//        inRange(yCrCb, poleLower, poleHigher, binaryMat);
-
 //        binaryMat.copyTo(input);
+
+
+//
+//        Imgproc.dilate(binaryMat, binaryMat, kernel);
+//
+//
+//        Core.bitwise_and(input, input, Mask3, binaryMat);
+//
+//        Imgproc.cvtColor(Mask3, Mask3, Imgproc.COLOR_RGB2GRAY);
+//
+//        Imgproc.Canny(Mask3, Edges, 80, 180);
+//
+//        Core.bitwise_and(Edges, binaryMat, Edges);
+//
+//        Edges.copyTo(input);
+
+
+//
+////        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
+////
+//
+////
+////        inRange(yCrCb, poleLower, poleHigher, binaryMat);
+//
+////        binaryMat.copyTo(input);
 
         Imgproc.findContours(binaryMat, poleContours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
@@ -216,8 +247,8 @@ public class JunctionScannerAll extends Scanner {
 
 //        Imgproc.drawContours(input, contours, -1, CONTOUR_COLOR);
 
-        if(!poleContours.isEmpty()){ poleContours.removeIf(contour -> getAspectRatio(Imgproc.boundingRect(contour)) < 1.9);}
-
+        if(!poleContours.isEmpty()){ poleContours.removeIf(contour -> getAspectRatio(Imgproc.boundingRect(contour)) < 1.7);}
+//
         if(!poleContours.isEmpty()) {
 
 //            for(MatOfPoint contour : poleContours) {
@@ -232,16 +263,55 @@ public class JunctionScannerAll extends Scanner {
             if(biggestPole != null) {
                 if (Imgproc.contourArea(biggestPole) > minContourArea) {
                     poleRect = Imgproc.boundingRect(biggestPole);
-                    Imgproc.approxPolyDP(new MatOfPoint2f(biggestPole.toArray()), polePoly, 2, true);
-                    rollOfJunction = Imgproc.minAreaRect(polePoly).angle; if(rollOfJunction > 45){ rollOfJunction -= 90; }
+                    Imgproc.approxPolyDP(new MatOfPoint2f(biggestPole.toArray()), polePoly, poleRect.width/20.0, true);
+                    ArrayList<Point> points = new ArrayList<>(polePoly.toList());
+                    ArrayList<geometry.framework.Point> points1 = new ArrayList<>();
 
-                    if(Math.abs(rollOfJunction) < 1){
-                        rollOfJunction = 0;
-                        target = defaultTarget.getCopy().getAdded(new Pose(0, targetCorrection(), 0));
-                    }else {
-                        rollOfJunction = Precision.clip(rollOfJunction, 8);
-                        target = defaultTarget.getAdded(new Pose(0, -0.2*Math.abs(rollOfJunction) + targetCorrection(), -rollOfJunction * 1.2 * GameItems.Junction.highHeight / (defaultTarget.getY())));
+                    if(!points.isEmpty()){
+                        points.removeIf(p -> p.y > 20 && p.y < (input.height()/2.0));
+                    }
 
+                    if(points.size() >= 4){
+                        ArrayList<Point> points2 = new ArrayList<>(points);
+                        points2.removeIf(p -> p.y > 20);
+                        ArrayList<Point> points3 = new ArrayList<>(points);
+                        points3.removeIf(p -> p.y < (input.height()/2.0));
+
+                        if(points2.size() >= 2 && points3.size() >= 2) {
+                            Collections.sort(points2, Comparator.comparingDouble(p -> p.x));
+                            Collections.sort(points3, Comparator.comparingDouble(p -> p.x));
+                            Point point1 = points2.get(0);
+                            Point point2 = points3.get(0);
+                            Point point3 = points3.get(points3.size()-1);
+                            Point point4 = points2.get(points2.size() - 1);
+
+                            points = new ArrayList<>(Arrays.asList(point1, point2, point3, point4));
+                        }
+                    }
+
+                    if(points.size() == 4) {
+//                        drawPoly(input, new MatOfPoint2f(points.toArray(new Point[]{})));
+
+                        for(Point p : points){
+                            geometry.framework.Point point = new geometry.framework.Point(p);
+                            points1.add(point);
+                        }
+                        Vector v1 = new Vector(points1.get(0), points1.get(1));
+                        Vector v3 = new Vector(points1.get(3), points1.get(2));
+
+                        RotatedRect rot = Imgproc.minAreaRect(new MatOfPoint2f(points.toArray(new Point[]{})));
+                        poleRect = new Rect(poleRect.x,poleRect.y, (int) Math.min(rot.size.width, rot.size.height), (int) Math.max(rot.size.width, rot.size.height));
+
+
+                        if(getCenter(poleRect).x > input.width()*0.1 && getCenter(poleRect).x < input.width()*0.9){
+                            rollOfJunction = ((v1.getTheta() + v3.getTheta())/2.0)-90;
+//                            if(Math.abs(rollOfJunction) < 2){ rollOfJunction = 0; }
+                            rollOfJunction = Precision.clip(rollOfJunction, 10);
+                            // TODO FIX
+                            target = defaultTarget.getAdded(new Pose(0, -0.15*Math.abs(rollOfJunction) + targetCorrection(), -rollOfJunction * GameItems.Junction.highHeight / (defaultTarget.getY())));
+                        }else{
+                            rollOfJunction = 0;
+                        }
                     }
 
                     exitEarly = false;
@@ -259,6 +329,9 @@ public class JunctionScannerAll extends Scanner {
         Mask2.release();
         HSV.release();
         binaryMat.release();
+        Mask3.release();
+        Edges.release();
+        S.release();
 
         if(exitEarly){ reset(); return; }
 
@@ -266,7 +339,9 @@ public class JunctionScannerAll extends Scanner {
 
     }
     public void reset(){
-        distanceToJunction = 1000; angleToJunction = 1000; rollOfJunction = 0; target = defaultTarget.getCopy();
+        distanceToJunction = 1000; angleToJunction = 1000;
+//        rollOfJunction = 0;
+        target = defaultTarget.getCopy();
     }
 
     public double targetCorrection(){
@@ -304,10 +379,7 @@ public class JunctionScannerAll extends Scanner {
                 if (coneArea > minContourArea) {
                     coneRect = Imgproc.boundingRect(biggestConeContour);
                     Imgproc.approxPolyDP(new MatOfPoint2f(biggestConeContour.toArray()), conePoly, 15, true);
-                    conePoly.convertTo(approxConePoly, CvType.CV_32S);
-//                    ArrayList<MatOfPoint> contours = new ArrayList<>();
-//                    contours.add(approxBluePoly);
-//                    Imgproc.drawContours(input, contours, -1, GREEN);
+//                    drawPoly(input, conePoly);
                     target = defaultTarget.getCopy().getAdded(new Pose(0, targetCorrection(), 0));
                     exitEarly = false;
 //
@@ -349,4 +421,12 @@ public class JunctionScannerAll extends Scanner {
 
     private double distanceRatio(double sizeOnScreen, double screenWidth){ return 2*Math.tan(Math.toRadians(cameraFov*(sizeOnScreen/screenWidth))/2.0); }
 
+
+    private void drawPoly(Mat input, MatOfPoint2f poly){
+        MatOfPoint approxPoly = new MatOfPoint();
+        poly.convertTo(approxPoly, CvType.CV_32S);
+        ArrayList<MatOfPoint> contours = new ArrayList<>();
+        contours.add(approxPoly);
+        Imgproc.drawContours(input, contours, -1, GREEN);
+    }
 }

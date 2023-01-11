@@ -15,6 +15,7 @@ import static java.lang.Math.*;
 public class Point {
     private double x, y;
     public Point(double x, double y) { setX(x); setY(y); }
+    public Point(org.opencv.core.Point point){ setX(point.x); setY(point.y);}
     public Point(){ setX(0); setY(0);}
     public double getX(){ return x; }
     public double getY(){ return y; }

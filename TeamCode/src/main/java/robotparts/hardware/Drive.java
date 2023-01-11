@@ -65,7 +65,7 @@ public class Drive extends RobotPart {
             Pose error = JunctionScannerAll.getError();
             Vector junctionPow = new Vector(0, yCurve.fodd(error.getY()));
             junctionPow.rotate(-error.getAngle()); junctionPow.limitLength(0.4);
-            attackPow = new Vector3D(junctionPow, Precision.clip(hCurve.fodd(error.getAngle()), 0.3));
+            attackPow = new Vector3D(junctionPow, Precision.clip(hCurve.fodd(error.getAngle()), 0.2));
         }
         Pose power = drive.getMoveSmoothPower(f, s, t);
         drive.move(attackPow.getY() + power.getX(), power.getY(), attackPow.getZ() + power.getAngle());

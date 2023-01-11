@@ -30,7 +30,7 @@ public class Vector extends GeometryObject {
     }
 
     public Vector(Point start, Point end){
-        p = end.getSubtracted(start);
+        p = end.getSubtracted(start); setTheta();
         addPoints(p);
     }
 
