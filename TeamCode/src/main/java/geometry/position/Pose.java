@@ -44,9 +44,12 @@ public class Pose extends GeometryObject {
     public void rotateOrientation(double angle){ setAngle(getAngle() + angle);}
     public void scaleOrientation(double scale){setAngle(getAngle()*scale);}
     public Pose getCopy(){ return new Pose(getX(), getY(), getAngle()); }
+    public Pose getOrientationInverted(){ return new Pose(p.getCopy(), -getAngle()); }
 
     public double getDistanceTo(Pose p){ return getPoint().getDistanceTo(p.getPoint()); }
+    public double getAngleTo(Pose p){ return p.getAngle() - getAngle(); }
     public double getLength(){ return getVector().getLength(); }
+    public boolean within(Pose target, double length, double angle){ return this.getDistanceTo(target) < length && Math.abs(target.getAngleTo(target)) < angle; }
 
     @Override
     public boolean equals(Object o) {

@@ -11,8 +11,8 @@ public class DistanceSensors extends RobotPart {
      */
     private IDistance dsl,dsr,dsfl,dsfr,dso;
 
-    // TODO DISTANCE SENSORS (KALMAN FILTER)
-    // TODO VUFORIA
+    // TOD4 DISTANCE SENSORS (KALMAN FILTER)
+    // TOD4 VUFORIA
     // TODO LEDS
 
     @Override

@@ -51,7 +51,7 @@ public class MecanumJunctionReactor2 extends MecanumNonstopReactor{
 
     @Override
     public void moveToTarget(PoseGenerator generator) {
-        error = JunctionScannerAll.getError().getCopy();
+//        error = JunctionScannerAll.getError().getCopy();
         Vector junctionPow = new Vector(0, yCurve.fodd(error.getY()));
         junctionPow.rotate(-error.getAngle());
         junctionPow.limitLength(0.5);

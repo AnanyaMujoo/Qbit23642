@@ -51,7 +51,7 @@ public abstract class Odometry extends RobotPart {
         update();
     }
 
-    public final Pose getPose(){ return currentPose; }
+    public final Pose getPose(){ return currentPose.getCopy(); }
     public final double getX(){ return currentPose.getX(); }
     public final double getY(){ return currentPose.getY(); }
     public final double getHeading(){ return currentPose.getAngle(); }

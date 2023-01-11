@@ -68,4 +68,9 @@ public class CoordinatePlane {
         Iterator.forAll(objects, o -> copy.add(o.getCopy()));
         return copy;
     }
+
+    public static Pose applyCoordinateTransform(Pose p, ParameterCodeSeg<CoordinatePlane> operation){
+        CoordinatePlane plane = new CoordinatePlane(p.getCopy()); operation.run(plane);
+        return plane.getPoses().get(0).getCopy();
+    }
 }

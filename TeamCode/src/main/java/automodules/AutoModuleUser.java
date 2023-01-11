@@ -78,7 +78,7 @@ public interface AutoModuleUser extends RobotUser{
     static AutoModule BackwardHeightTele(Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             Modes.attackMode.ChangeMode(STICKY),
-            outtake.stageClose(0.15),
+            outtake.stageClose(0.18),
             lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.1))
     );}
     OutputList BackwardTele = new OutputList(heightMode::get)
@@ -119,7 +119,37 @@ public interface AutoModuleUser extends RobotUser{
      * Auto
      */
 
-    // TODO CLEAN AND MOVE
+    AutoModule BackwardAuto2First = new AutoModule(
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-5.5),
+            outtake.stageReadyEnd(0.32),
+            outtake.stageOpen(0.0),
+            junctionStop()
+    );
+
+    AutoModule BackwardAuto2 = new AutoModule(
+            RobotPart.pause(0.1),
+            outtake.stageReadyEnd(0.32),
+            outtake.stageOpen(0.0),
+            junctionStop()
+    );
+
+    default AutoModule ForwardAuto2(int i){return new AutoModule(
+            outtake.stageOpen(0.0),
+            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
+    );}
+
+    AutoModule GrabAuto2 = new AutoModule(
+            outtake.stageClose(0.15),
+            lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.1))
+    );
+
+
+
+
+
+    /**
+     * Old Auto
+     */
 
     AutoModule DropAutoFirst = new AutoModule(outtake.stageEnd(0.3), outtake.stageOpen(0.1));
     AutoModule DropAuto = new AutoModule(outtake.stageOpen(0.15));
@@ -142,11 +172,6 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageEnd(0.0)
     );
 
-
-
-
-
-
     AutoModule BackwardAutoReadyFirst = new AutoModule(
             outtake.stageMiddle(0.0),
             lift.changeCutoff(2),
@@ -157,31 +182,6 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageMiddle(0.0),
             lift.stageLift(1.0, heightMode.getValue(HIGH)-4.5)
     );
-
-    AutoModule BackwardAuto2First = new AutoModule(
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-5.5),
-            outtake.stageReadyEnd(0.37),
-            outtake.stageOpen(0.0),
-            junctionStop()
-    );
-
-    AutoModule BackwardAuto2 = new AutoModule(
-            RobotPart.pause(0.1),
-            outtake.stageReadyEnd(0.37),
-            outtake.stageOpen(0.0),
-            junctionStop()
-    );
-
-    default AutoModule ForwardAuto2(int i){return new AutoModule(
-            outtake.stageOpen(0.0),
-            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
-    );}
-
-    AutoModule GrabAuto2 = new AutoModule(
-            outtake.stageClose(0.15),
-            lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.1))
-    );
-
 
 
     /**

@@ -2,6 +2,7 @@ package autoutil.vision;
 
 import static global.General.fieldSide;
 import static global.General.log;
+import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
 import static global.Modes.Height.MIDDLE;
 import static global.Modes.heightMode;
@@ -36,6 +37,7 @@ import elements.GameItems;
 import elements.Robot;
 import geometry.position.Pose;
 import geometry.position.Vector;
+import math.trigonmetry.Trig;
 import util.template.Iterator;
 import util.template.Precision;
 
@@ -45,10 +47,9 @@ public class JunctionScannerAll extends Scanner {
     public final double minContourArea = 250.0;
 
     private static final Pose defaultTarget = new Pose(0,16.5, -1);
-    public static Pose target = defaultTarget.getCopy();
+    private static Pose target = defaultTarget.getCopy();
 
     public final int horizon = 20;
-    public final int horizonCone = 20;
 
     private Rect coneRect = new Rect();
     private Rect poleRect = new Rect();
@@ -86,8 +87,6 @@ public class JunctionScannerAll extends Scanner {
     private static final double manyConeWidth = 11.0; // cm
     public static double distanceToJunction = 0, angleToJunction = 0, rollOfJunction = 0;
 
-    public static Pose error = new Pose();
-
     public int coneMode = 1;
 
     private static boolean pausing = true;
@@ -123,74 +122,19 @@ public class JunctionScannerAll extends Scanner {
 
     @Override
     public Mat processFrame(Mat input) {
-
-//        detectPole(input);
-
-//        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
-//
-//        Core.inRange(yCrCb, new Scalar(30,130,0), new Scalar(180,180,120), Mask);
-//
-//        Core.bitwise_and(input, input, Mask2, Mask);
-//
-//        Imgproc.cvtColor(Mask2, HSV, Imgproc.COLOR_RGB2HSV);
-//
-//        Core.inRange(HSV, new Scalar(20,150,0), new Scalar(30,255,255), binaryMat);
-//
-//        Imgproc.blur(binaryMat, binaryMat, blurSize);
-//
-//        binaryMat.copyTo(input);
-//
-//        yCrCb.release();
-//        Mask.release();
-//        Mask2.release();
-//        HSV.release();
-//        binaryMat.release();
-
-
-
-
-//        Imgproc.blur(Mask, Mask, blurSize);
-
-//
-//        Core.bitwise_and(Cb, Mask, Mask2);
-
-
-//        Imgproc.adaptiveThreshold(Cb, Mask, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY_INV, 11, 10);
-
-//        Mask.copyTo(input);
-
-        // TODO CLEAN
-
         if(!pausing) {
             crop(input, new Rect(0, horizon, input.width(), input.height() - horizon));
             detectPole(Crop);
-            Pose errorInternal = getErrorInternal();
-            if (cutoff(errorInternal)) {
-                error = errorInternal.getCopy();
-                return Crop;
-            }
-//            crop(input, new Rect(0, horizonCone, input.width(), input.height() - horizonCone));
 //            detectCone(Crop);
-//            errorInternal = getErrorInternal();
-//            if (cutoff(errorInternal)) {
-//                error = errorInternal.getCopy();
-//                return Crop;
-//            }
-            error = new Pose();
+            return Crop;
         }
         return input;
     }
 
+    public static Pose getTarget(){ return target.getCopy(); }
 
+    public static Pose getDefaultTarget(){ return defaultTarget.getAdded(new Pose(0, targetCorrection(),0)).getCopy(); }
 
-    public boolean cutoff(Pose error){
-        return Math.abs(error.getY()) < 20 && (Math.abs(error.getAngle()) < 45);
-    }
-
-
-
-    public static Pose getError(){ return error; }
-    private Pose getErrorInternal(){ Pose error = target.getSubtracted(getPose()); error.invertOrientation(); return error; }
     public static Pose getPose(){ Vector distanceVector = new Vector(0, distanceToJunction); distanceVector.rotate(angleToJunction); return new Pose(distanceVector.getX(), distanceVector.getY(), angleToJunction); }
 
     private void detectPole(Mat input) {
@@ -199,8 +143,6 @@ public class JunctionScannerAll extends Scanner {
         Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
 
         Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
-
-//        Imgproc.erode(yCrCb, yCrCb, kernel);
 
         Core.inRange(yCrCb, new Scalar(30,100,0), new Scalar(180,180,120), Mask);
 
@@ -216,45 +158,15 @@ public class JunctionScannerAll extends Scanner {
 
 //        binaryMat.copyTo(input);
 
-
-//
-//        Imgproc.dilate(binaryMat, binaryMat, kernel);
-//
-//
-//        Core.bitwise_and(input, input, Mask3, binaryMat);
-//
-//        Imgproc.cvtColor(Mask3, Mask3, Imgproc.COLOR_RGB2GRAY);
-//
-//        Imgproc.Canny(Mask3, Edges, 80, 180);
-//
-//        Core.bitwise_and(Edges, binaryMat, Edges);
-//
-//        Edges.copyTo(input);
-
-
-//
-////        Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
-////
-//
-////
-////        inRange(yCrCb, poleLower, poleHigher, binaryMat);
-//
-////        binaryMat.copyTo(input);
-
         Imgproc.findContours(binaryMat, poleContours, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
         MatOfPoint2f polePoly = new MatOfPoint2f();
 
 //        Imgproc.drawContours(input, contours, -1, CONTOUR_COLOR);
 
-        if(!poleContours.isEmpty()){ poleContours.removeIf(contour -> getAspectRatio(Imgproc.boundingRect(contour)) < 1.7);}
+        if(!poleContours.isEmpty()){ poleContours.removeIf(contour -> getAspectRatio(Imgproc.boundingRect(contour)) < 1.6);}
 //
         if(!poleContours.isEmpty()) {
-
-//            for(MatOfPoint contour : poleContours) {
-//                Imgproc.rectangle(input, Imgproc.boundingRect(contour), RED, 2);
-//            }
-
 
             MatOfPoint biggestPole = null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -303,19 +215,19 @@ public class JunctionScannerAll extends Scanner {
                         poleRect = new Rect(poleRect.x,poleRect.y, (int) Math.min(rot.size.width, rot.size.height), (int) Math.max(rot.size.width, rot.size.height));
 
 
-                        if(getCenter(poleRect).x > input.width()*0.1 && getCenter(poleRect).x < input.width()*0.9){
+                        if(getCenter(poleRect).x > input.width()*0.05 && getCenter(poleRect).x < input.width()*0.95){
                             rollOfJunction = ((v1.getTheta() + v3.getTheta())/2.0)-90;
-//                            if(Math.abs(rollOfJunction) < 2){ rollOfJunction = 0; }
                             rollOfJunction = Precision.clip(rollOfJunction, 10);
-                            // TODO FIX
-                            target = defaultTarget.getAdded(new Pose(0, -0.15*Math.abs(rollOfJunction) + targetCorrection(), -rollOfJunction * GameItems.Junction.highHeight / (defaultTarget.getY())));
+                            double robotCenterToDetection = Robot.halfLength + defaultTarget.getY();
+                            double robotAngle = -rollOfJunction * (heightMode.modeIs(HIGH) ? GameItems.Junction.highHeight : (heightMode.modeIs(MIDDLE) ? GameItems.Junction.middleHeight : GameItems.Junction.lowHeight)) / robotCenterToDetection;
+                            double yOffset = (Trig.cos(robotAngle) - 1 )*robotCenterToDetection;
+                            target = getDefaultTarget().getAdded(new Pose(0, yOffset, robotAngle));
                         }else{
                             rollOfJunction = 0;
                         }
                     }
 
                     exitEarly = false;
-//
 //                    Imgproc.rectangle(input, poleRect, RED, 2);
 //                    Imgproc.putText(input, "Pole", new Point(poleRect.x, poleRect.y < 10 ? (poleRect.y + poleRect.height + 20) : (poleRect.y - 8)), Imgproc.FONT_HERSHEY_SIMPLEX, 0.8, RED, 2);
                 }
@@ -329,9 +241,6 @@ public class JunctionScannerAll extends Scanner {
         Mask2.release();
         HSV.release();
         binaryMat.release();
-        Mask3.release();
-        Edges.release();
-        S.release();
 
         if(exitEarly){ reset(); return; }
 
@@ -339,16 +248,16 @@ public class JunctionScannerAll extends Scanner {
 
     }
     public void reset(){
-        distanceToJunction = 1000; angleToJunction = 1000;
-//        rollOfJunction = 0;
-        target = defaultTarget.getCopy();
+        distanceToJunction = 1000; angleToJunction = 1000; //        rollOfJunction = 0;
+        target = getDefaultTarget();
     }
 
-    public double targetCorrection(){
+    public static double targetCorrection(){
         if(heightMode != null) { return heightMode.modeIs(MIDDLE) ? -1 : (heightMode.modeIs(LOW) ? -2 : 0); }
         return 0;
     }
 
+    // TODO FINISH
     private void detectCone(Mat input) {
 
         boolean exitEarly = true;

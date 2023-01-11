@@ -24,13 +24,12 @@ public class TerraAuto extends AutoFramework {
 
     private double x, s, y;
     private final double pauseBetweenCycles = 0.15;
-    private final double timeToPlace = 0.5;
+    private final double timeToPlace = 0.45;
     private final double timeToPick = 0.2;
     private final double pickUpScale = 0.8;
     private final double placeScale = 0.8;
 
     // TODO COMMUNCATE BETWEEN AUTOMODULES AND MOVING
-    // TODO JUNCTION SCANNER BETTER
 
     @Override
     public void initialize() {
