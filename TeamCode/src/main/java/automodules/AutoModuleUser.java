@@ -3,6 +3,7 @@ package automodules;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import autoutil.reactors.MecanumJunctionReactor2;
+import autoutil.reactors.Reactor;
 import global.Modes;
 import robot.RobotUser;
 import robotparts.RobotPart;
@@ -122,18 +123,17 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardAuto2First = new AutoModule(
             lift.stageLift(1.0, heightMode.getValue(HIGH)-5.5),
             outtake.stageReadyEnd(0.32),
-            outtake.stageOpen(0.0),
-            junctionStop()
+            outtake.stageOpen(0.0)
     );
 
     AutoModule BackwardAuto2 = new AutoModule(
             RobotPart.pause(0.1),
             outtake.stageReadyEnd(0.32),
-            outtake.stageOpen(0.0),
-            junctionStop()
+            outtake.stageOpen(0.0)
     );
 
     default AutoModule ForwardAuto2(int i){return new AutoModule(
+            Reactor.forceExit(),
             outtake.stageOpen(0.0),
             lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
     );}
@@ -145,43 +145,6 @@ public interface AutoModuleUser extends RobotUser{
 
 
 
-
-
-    /**
-     * Old Auto
-     */
-
-    AutoModule DropAutoFirst = new AutoModule(outtake.stageEnd(0.3), outtake.stageOpen(0.1));
-    AutoModule DropAuto = new AutoModule(outtake.stageOpen(0.15));
-    AutoModule GrabAuto = new AutoModule(
-            outtake.stageClose(0.2),
-            outtake.stageReadyStart(0.3).attach(drive.moveTime(-0.2, 0, 0, 0.2)),
-            outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+5)
-    );
-    default AutoModule ForwardAuto(int i){return new AutoModule(
-            outtake.stageStart(0.0),
-            lift.stageLift(0.7, Math.max(14.0 - (i*14.0/5.0), 0))
-    );}
-    AutoModule BackwardAutoFirst = new AutoModule(
-            outtake.stageReadyEnd(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+7)
-    );
-    AutoModule BackwardAuto = new AutoModule(
-            RobotPart.pause(0.1),
-            outtake.stageEnd(0.0)
-    );
-
-    AutoModule BackwardAutoReadyFirst = new AutoModule(
-            outtake.stageMiddle(0.0),
-            lift.changeCutoff(2),
-            lift.stageLift(1.0, heightMode.getValue(LOW)+15)
-    );
-
-    AutoModule BackwardAutoReady = new AutoModule(
-            outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-4.5)
-    );
 
 
     /**
@@ -271,6 +234,44 @@ public interface AutoModuleUser extends RobotUser{
     static Stage junctionStop(){ return new Stage(new Main(() -> MecanumJunctionReactor2.stop = true), RobotPart.exitAlways()); }
 
 
+
+
+
+    /**
+     * Old Auto
+     */
+
+    AutoModule DropAutoFirst = new AutoModule(outtake.stageEnd(0.3), outtake.stageOpen(0.1));
+    AutoModule DropAuto = new AutoModule(outtake.stageOpen(0.15));
+    AutoModule GrabAuto = new AutoModule(
+            outtake.stageClose(0.2),
+            outtake.stageReadyStart(0.3).attach(drive.moveTime(-0.2, 0, 0, 0.2)),
+            outtake.stageMiddle(0.0),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+5)
+    );
+    default AutoModule ForwardAuto(int i){return new AutoModule(
+            outtake.stageStart(0.0),
+            lift.stageLift(0.7, Math.max(14.0 - (i*14.0/5.0), 0))
+    );}
+    AutoModule BackwardAutoFirst = new AutoModule(
+            outtake.stageReadyEnd(0.0),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+7)
+    );
+    AutoModule BackwardAuto = new AutoModule(
+            RobotPart.pause(0.1),
+            outtake.stageEnd(0.0)
+    );
+
+    AutoModule BackwardAutoReadyFirst = new AutoModule(
+            outtake.stageMiddle(0.0),
+            lift.changeCutoff(2),
+            lift.stageLift(1.0, heightMode.getValue(LOW)+15)
+    );
+
+    AutoModule BackwardAutoReady = new AutoModule(
+            outtake.stageMiddle(0.0),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-4.5)
+    );
 
 
 

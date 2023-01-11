@@ -29,8 +29,6 @@ public class TerraAuto extends AutoFramework {
     private final double pickUpScale = 0.8;
     private final double placeScale = 0.8;
 
-    // TODO COMMUNCATE BETWEEN AUTOMODULES AND MOVING
-
     @Override
     public void initialize() {
         setConfig(mecanumNonstopConfig);

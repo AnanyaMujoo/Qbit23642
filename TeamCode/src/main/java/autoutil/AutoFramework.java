@@ -71,6 +71,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     protected Timer timer = new Timer();
 
+    // TOD5 better breakpoint system
+
 
     {
         poses.add(new Pose()); movementScales.addAll(Collections.nCopies(200,1.0)); accuracyScales.addAll(Collections.nCopies(200,1.0)); times.addAll(Collections.nCopies(200,100.0));
