@@ -53,9 +53,7 @@ public enum FieldSide implements Decision {
         }
     }
 
-    public static boolean isBlue(){
-        return fieldSide.equals(BLUE) || fieldSide.equals(UNKNOWN);
-    }
+    public static boolean isBlue(){ if(fieldSide != null) { return fieldSide.equals(BLUE) || fieldSide.equals(UNKNOWN);}else {return true; } }
 
     public static void on(CodeSeg blue, CodeSeg red){
         if(isBlue()){blue.run();}else {red.run();};

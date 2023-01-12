@@ -1,18 +1,14 @@
 package autoutil.vision;
 
-import static global.General.fieldSide;
 import static global.General.log;
 import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
 import static global.Modes.Height.MIDDLE;
 import static global.Modes.heightMode;
-import static org.opencv.core.Core.NORM_TYPE_MASK;
 import static org.opencv.core.Core.inRange;
 import static org.opencv.core.Core.min;
-import static robot.RobotUser.odometry;
 
 
-import org.checkerframework.checker.units.qual.C;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -26,19 +22,16 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import autoutil.Profiler;
 import elements.FieldSide;
 import elements.GameItems;
 import elements.Robot;
 import geometry.position.Pose;
 import geometry.position.Vector;
 import math.trigonmetry.Trig;
-import util.template.Iterator;
 import util.template.Precision;
 
 
@@ -46,10 +39,10 @@ public class JunctionScannerAll extends Scanner {
 
     public final double minContourArea = 250.0;
 
-    private static final Pose defaultTarget = new Pose(0,16.5, -1);
-    private static Pose target = defaultTarget.getCopy();
+    private static final Pose defaultTarget = new Pose(0,16.0, -1);
 
-    public final int horizon = 20;
+    public final int horizonPole = 90;
+    public final int horizonCone = 20;
 
     private Rect coneRect = new Rect();
     private Rect poleRect = new Rect();
@@ -58,9 +51,10 @@ public class JunctionScannerAll extends Scanner {
     private final ArrayList<MatOfPoint> poleContours = new ArrayList<>();
 
     private final Scalar redLow = new Scalar(0, 161, 60);
-    private final Scalar redHigh = new Scalar(200, 255, 255);
+    private final Scalar redHigh = new Scalar(255, 255, 255);
+
     private final Scalar blueLow = new Scalar(0, 80, 138);
-    private final Scalar blueHigh = new Scalar(150, 255, 255);
+    private final Scalar blueHigh = new Scalar(255, 255, 255);
 
     public Scalar poleLower = new Scalar(59, 134, 40);
     public Scalar poleHigher = new Scalar(180, 180, 105);
@@ -83,8 +77,8 @@ public class JunctionScannerAll extends Scanner {
     private static final double cameraFov = 47;
     private static final double realPoleWidth = 2.672; // cm
     private static final double oneConeWidth = 7.5; // cm
-    private static final double twoConeWidth = 9.7; // cm
-    private static final double manyConeWidth = 11.0; // cm
+    private static final double twoConeWidth = 9.4; // cm
+    private static final double manyConeWidth = 10.7; // cm
     public static double distanceToJunction = 0, angleToJunction = 0, rollOfJunction = 0;
 
     public int coneMode = 1;
@@ -123,30 +117,39 @@ public class JunctionScannerAll extends Scanner {
     @Override
     public Mat processFrame(Mat input) {
         if(!pausing) {
-            crop(input, new Rect(0, horizon, input.width(), input.height() - horizon));
-            detectPole(Crop);
-//            detectCone(Crop);
+            crop(input, new Rect(0, horizonPole, input.width(), input.height() - horizonPole));
+            if(detectPole(Crop)){ return Crop; }
+            // TODO FIX
+//            crop(input, new Rect(0, horizonCone, input.width(), input.height() - horizonCone));
+//            if(detectCone(Crop)){ return Crop; }
             return Crop;
         }
         return input;
     }
 
-    public static Pose getTarget(){ return target.getCopy(); }
+    private static boolean cutoff(){
+        return getPose().within(getTarget(), 30, 45);
+    }
 
-    public static Pose getDefaultTarget(){ return defaultTarget.getAdded(new Pose(0, targetCorrection(),0)).getCopy(); }
+    public static Pose getTarget(){
+        double robotCenterToDetection = defaultTarget.getY();
+        double robotAngle = -rollOfJunction * (heightMode.modeIs(HIGH) ? GameItems.Junction.highHeight : (heightMode.modeIs(MIDDLE) ? GameItems.Junction.middleHeight : GameItems.Junction.lowHeight)) / robotCenterToDetection;
+        double yOffset = (Trig.cos(robotAngle) - 1) * (robotCenterToDetection + Robot.halfLength);
+        return defaultTarget.getAdded(new Pose(0, targetCorrection()+yOffset,robotAngle)).getCopy();
+    }
 
     public static Pose getPose(){ Vector distanceVector = new Vector(0, distanceToJunction); distanceVector.rotate(angleToJunction); return new Pose(distanceVector.getX(), distanceVector.getY(), angleToJunction); }
 
-    private void detectPole(Mat input) {
+    private boolean detectPole(Mat input) {
         boolean exitEarly = true;
 
         Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
 
         Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV);
 
-        Core.inRange(yCrCb, new Scalar(30,100,0), new Scalar(180,180,120), Mask);
+        Core.inRange(yCrCb, new Scalar(20,130,0), new Scalar(255,255,120), Mask);
 
-        Mask.copyTo(binaryMat);
+//        Mask.copyTo(binaryMat);
 
         Core.bitwise_and(input, input, Mask2, Mask);
 
@@ -164,7 +167,7 @@ public class JunctionScannerAll extends Scanner {
 
 //        Imgproc.drawContours(input, contours, -1, CONTOUR_COLOR);
 
-        if(!poleContours.isEmpty()){ poleContours.removeIf(contour -> getAspectRatio(Imgproc.boundingRect(contour)) < 1.6);}
+        if(!poleContours.isEmpty()){ poleContours.removeIf(contour -> getAspectRatio(Imgproc.boundingRect(contour)) < 1.5);}
 //
         if(!poleContours.isEmpty()) {
 
@@ -175,55 +178,82 @@ public class JunctionScannerAll extends Scanner {
             if(biggestPole != null) {
                 if (Imgproc.contourArea(biggestPole) > minContourArea) {
                     poleRect = Imgproc.boundingRect(biggestPole);
-                    Imgproc.approxPolyDP(new MatOfPoint2f(biggestPole.toArray()), polePoly, poleRect.width/20.0, true);
+                    Imgproc.approxPolyDP(new MatOfPoint2f(biggestPole.toArray()), polePoly, 5, true);
                     ArrayList<Point> points = new ArrayList<>(polePoly.toList());
+
                     ArrayList<geometry.framework.Point> points1 = new ArrayList<>();
 
-                    if(!points.isEmpty()){
-                        points.removeIf(p -> p.y > 20 && p.y < (input.height()/2.0));
-                    }
+                    RotatedRect rot1 = Imgproc.minAreaRect(new MatOfPoint2f(points.toArray(new Point[]{})));
 
-                    if(points.size() >= 4){
-                        ArrayList<Point> points2 = new ArrayList<>(points);
-                        points2.removeIf(p -> p.y > 20);
-                        ArrayList<Point> points3 = new ArrayList<>(points);
-                        points3.removeIf(p -> p.y < (input.height()/2.0));
+                    double bottomHorizon = Precision.clip(input.height()/2.0 + Math.min(rot1.size.width,rot1.size.height)*0.5, 0, input.height());
 
-                        if(points2.size() >= 2 && points3.size() >= 2) {
-                            Collections.sort(points2, Comparator.comparingDouble(p -> p.x));
-                            Collections.sort(points3, Comparator.comparingDouble(p -> p.x));
-                            Point point1 = points2.get(0);
-                            Point point2 = points3.get(0);
-                            Point point3 = points3.get(points3.size()-1);
-                            Point point4 = points2.get(points2.size() - 1);
+                    /**
+                     * Bottom Horizon
+                     */
 
-                            points = new ArrayList<>(Arrays.asList(point1, point2, point3, point4));
-                        }
-                    }
+//                    Imgproc.line(input, new Point(0, bottomHorizon), new Point(input.width(), bottomHorizon), RED);
 
-                    if(points.size() == 4) {
+                    if(!points.isEmpty()){ points.removeIf(p -> p.y > 20 && p.y < bottomHorizon); }
+
+//
+//                    if(points.size() >= 4){
+//                        ArrayList<Point> points2 = new ArrayList<>(points);
+//                        points2.removeIf(p -> p.y > 20);
+//                        ArrayList<Point> points3 = new ArrayList<>(points);
+//                        points3.removeIf(p -> p.y < bottomHorizon);
+//
+//                        if(points2.size() >= 2 && points3.size() >= 2) {
+//                            Collections.sort(points2, Comparator.comparingDouble(p -> p.x));
+//                            Collections.sort(points3, Comparator.comparingDouble(p -> p.x));
+//                            Point point1 = points2.get(0);
+//                            Point point2 = points3.get(0);
+//                            Point point3 = points3.get(points3.size()-1);
+//                            Point point4 = points2.get(points2.size() - 1);
+//
+//                            points = new ArrayList<>(Arrays.asList(point1, point2, point3, point4));
+//                        }
+//                    }
+
+                    if(points.size() >= 4) {
+
+                        /**
+                         * Contour
+                         */
+
 //                        drawPoly(input, new MatOfPoint2f(points.toArray(new Point[]{})));
 
-                        for(Point p : points){
-                            geometry.framework.Point point = new geometry.framework.Point(p);
-                            points1.add(point);
-                        }
-                        Vector v1 = new Vector(points1.get(0), points1.get(1));
-                        Vector v3 = new Vector(points1.get(3), points1.get(2));
-
                         RotatedRect rot = Imgproc.minAreaRect(new MatOfPoint2f(points.toArray(new Point[]{})));
-                        poleRect = new Rect(poleRect.x,poleRect.y, (int) Math.min(rot.size.width, rot.size.height), (int) Math.max(rot.size.width, rot.size.height));
+                        double height = Math.max(rot.size.width, rot.size.height);
+                        double width = Math.min(rot.size.width, rot.size.height);
 
 
-                        if(getCenter(poleRect).x > input.width()*0.05 && getCenter(poleRect).x < input.width()*0.95){
-                            rollOfJunction = ((v1.getTheta() + v3.getTheta())/2.0)-90;
-                            rollOfJunction = Precision.clip(rollOfJunction, 10);
-                            double robotCenterToDetection = Robot.halfLength + defaultTarget.getY();
-                            double robotAngle = -rollOfJunction * (heightMode.modeIs(HIGH) ? GameItems.Junction.highHeight : (heightMode.modeIs(MIDDLE) ? GameItems.Junction.middleHeight : GameItems.Junction.lowHeight)) / robotCenterToDetection;
-                            double yOffset = (Trig.cos(robotAngle) - 1 )*robotCenterToDetection;
-                            target = getDefaultTarget().getAdded(new Pose(0, yOffset, robotAngle));
-                        }else{
-                            rollOfJunction = 0;
+                        if(height > input.height()*0.4) {
+                            /**
+                             * Rotated Rect
+                             */
+
+                            drawRotatedRect(input, rot, BLUE);
+
+//                        for(Point p : points){
+//                            geometry.framework.Point point = new geometry.framework.Point(p);
+//                            points1.add(point);
+//                        }
+//                        Vector v1 = new Vector(points1.get(0), points1.get(1));
+//                        Vector v3 = new Vector(points1.get(3), points1.get(2));
+
+                            poleRect = new Rect(poleRect.x, poleRect.y, (int) width, (int) height);
+
+                            /**
+                             * Rect
+                             */
+//                        drawRectangle(input, poleRect, RED);
+
+
+                            if (getCenter(poleRect).x > input.width() * 0.05 && getCenter(poleRect).x < input.width() * 0.95) {
+                                rollOfJunction = rot.angle > 45 ? rot.angle - 90.0 : rot.angle;
+//                            rollOfJunction = ((v1.getTheta() + v3.getTheta())/2.0)-90;
+                                rollOfJunction = Precision.clip(rollOfJunction, 10);
+                            }
                         }
                     }
 
@@ -242,14 +272,14 @@ public class JunctionScannerAll extends Scanner {
         HSV.release();
         binaryMat.release();
 
-        if(exitEarly){ reset(); return; }
+        if(exitEarly){ reset(); return false; }
 
         update(input, poleRect, realPoleWidth);
 
+        return cutoff();
     }
     public void reset(){
-        distanceToJunction = 1000; angleToJunction = 1000; //        rollOfJunction = 0;
-        target = getDefaultTarget();
+        distanceToJunction = 1000; angleToJunction = 1000;
     }
 
     public static double targetCorrection(){
@@ -257,14 +287,13 @@ public class JunctionScannerAll extends Scanner {
         return 0;
     }
 
-    // TODO FINISH
-    private void detectCone(Mat input) {
+    // TODO FIX
+
+    private boolean detectCone(Mat input) {
 
         boolean exitEarly = true;
 
         Imgproc.cvtColor(input, yCrCb, Imgproc.COLOR_RGB2YCrCb);
-
-        Imgproc.erode(yCrCb, yCrCb, kernel);
 
         FieldSide.on(() -> inRange(yCrCb, blueLow, blueHigh, maskCone), () -> inRange(yCrCb, redLow, redHigh, maskCone));
 
@@ -288,8 +317,9 @@ public class JunctionScannerAll extends Scanner {
                 if (coneArea > minContourArea) {
                     coneRect = Imgproc.boundingRect(biggestConeContour);
                     Imgproc.approxPolyDP(new MatOfPoint2f(biggestConeContour.toArray()), conePoly, 15, true);
-//                    drawPoly(input, conePoly);
-                    target = defaultTarget.getCopy().getAdded(new Pose(0, targetCorrection(), 0));
+
+                    drawPoly(input, conePoly);
+
                     exitEarly = false;
 //
 //                    Imgproc.rectangle(input, blueRect, CONTOUR_COLOR, 2);
@@ -302,7 +332,7 @@ public class JunctionScannerAll extends Scanner {
         maskCone.release();
         yCrCb.release();
 
-        if(exitEarly){ reset(); return;  }
+        if(exitEarly){ reset(); return false;  }
 
         double offset = coneRect.y;
         int numPoints = approxConePoly.toList().size();
@@ -312,6 +342,8 @@ public class JunctionScannerAll extends Scanner {
         }else if(numPoints <= 11){ coneMode = 3; } else if(numPoints <= 15){ coneMode = 4; }else{ coneMode = 5; }
 
         update(input, coneRect, coneMode == 1 ? oneConeWidth : (coneMode == 2 ? twoConeWidth : manyConeWidth));
+
+        return cutoff();
     }
 
 

@@ -49,7 +49,8 @@ public class Pose extends GeometryObject {
     public double getDistanceTo(Pose p){ return getPoint().getDistanceTo(p.getPoint()); }
     public double getAngleTo(Pose p){ return p.getAngle() - getAngle(); }
     public double getLength(){ return getVector().getLength(); }
-    public boolean within(Pose target, double length, double angle){ return this.getDistanceTo(target) < length && Math.abs(target.getAngleTo(target)) < angle; }
+    public boolean within(Pose target, double disError, double angleError){ return this.getDistanceTo(target) < disError && Math.abs(target.getAngleTo(target)) < angleError; }
+    public boolean withinY(Pose target, double yError, double angleError){ return Math.abs(this.getY() - target.getY()) < yError && Math.abs(target.getAngleTo(target)) < angleError; }
 
     @Override
     public boolean equals(Object o) {

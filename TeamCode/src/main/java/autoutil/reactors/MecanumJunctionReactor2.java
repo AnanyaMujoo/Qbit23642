@@ -36,6 +36,8 @@ public class MecanumJunctionReactor2 extends MecanumNonstopReactor{
     private final Precision precision = new Precision();
     public static boolean stop = false;
 
+    // TODO FIX
+
 
     @Override
     public void init() { super.init(); junctionScanner.reset(); }
