@@ -29,6 +29,7 @@ public interface Modes {
             .set(Height.LOW, 9)
             .set(Height.GROUND, 9);
     enum Drive implements Mode.ModeType{ FAST, MEDIUM, SLOW }
+    // TODO MULTI DIMENSIONAL MODE
     Mode driveMode = new Mode(Drive.class)
             .set(Drive.FAST, 1.0)
             .set(Drive.MEDIUM, 0.75)

@@ -10,6 +10,7 @@ import geometry.position.Vector;
 import math.linearalgebra.Vector3D;
 import math.polynomial.Linear;
 import teleutil.button.Button;
+import teleutil.independent.Machine;
 import util.template.Precision;
 
 import static global.General.bot;
@@ -17,6 +18,8 @@ import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
 import static global.Modes.AttackMode.STICKY;
+import static global.Modes.Drive.MEDIUM;
+import static global.Modes.Drive.SLOW;
 import static global.Modes.GamepadMode.AUTOMATED;
 import static global.Modes.GamepadMode.NORMAL;
 import static teleutil.button.Button.DPAD_DOWN;
@@ -31,7 +34,6 @@ import static teleutil.button.Button.RIGHT_TRIGGER;
 @TeleOp(name = "TerraOp", group = "TeleOp")
 public class TerraOp extends Tele {
 
-
     private final JunctionScannerAll junctionScannerAll = new JunctionScannerAll();
 
     @Override
@@ -41,10 +43,14 @@ public class TerraOp extends Tele {
          * Gamepad 1 Normal
          */
         gph1.link(Button.B, BackwardAllTele);
+
+//        gph1.link(Button.B, MachineAutoAlign);
+
+
         gph1.link(Button.Y, () -> {if(lift.circuitMode) { gameplayMode.set(GameplayMode.CIRCUIT_PICK);} bot.addAutoModule(ForwardAll.check());});
         gph1.link(Button.X, bot::cancelMovements);
         gph1.link(Button.A, () -> driveMode.set(Drive.FAST));
-        gph1.link(Button.RIGHT_STICK_BUTTON, () -> driveMode.set(Drive.MEDIUM));
+        gph1.link(Button.RIGHT_STICK_BUTTON, () -> driveMode.set(MEDIUM));
 
         gph1.link(DPAD_UP, LiftHigh);
         gph1.link(DPAD_LEFT, LiftMiddle);
@@ -59,9 +65,9 @@ public class TerraOp extends Tele {
          * Gamepad 1 Automated
          */
         gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
-        gph1.link(Button.B, CycleMachine, AUTOMATED);
+        gph1.link(Button.B, MachineAutoAlign, AUTOMATED);
         gph1.link(Button.Y, CycleMediumMachine, AUTOMATED);
-        gph1.link(Button.X, () -> {lift.circuitMode = true; gameplayMode.set(GameplayMode.CIRCUIT_PICK);}, () -> {lift.circuitMode = false; gameplayMode.set(GameplayMode.CYCLE);}, AUTOMATED);
+        gph1.link(Button.X, () -> {lift.circuitMode = true; gameplayMode.set(GameplayMode.CIRCUIT_PICK); driveMode.set(MEDIUM);}, () -> {lift.circuitMode = false; gameplayMode.set(GameplayMode.CYCLE); driveMode.set(SLOW);}, AUTOMATED);
         gph1.link(RIGHT_TRIGGER, UprightCone, AUTOMATED);
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
@@ -85,7 +91,7 @@ public class TerraOp extends Tele {
         bot.loadLocationOnField();
 
         camera.setScanner(junctionScannerAll);
-        camera.startAndResume(true);
+        camera.startAndResume(false);
         JunctionScannerAll.resume();
     }
 
@@ -96,53 +102,9 @@ public class TerraOp extends Tele {
         bot.loadPose();
     }
 
-    // TODO CLEAN
-
-    private Pose startOdometryPose = new Pose();
-    private Pose startJunctionPose = new Pose();
-    private Pose startTarget = JunctionScannerAll.getTarget();
-    private final Linear yCurve = new Linear(0.023, 0.05);
-    private final Linear hCurve = new Linear(0.0055, 0.05);
-    private Pose error = new Pose();
-    private Pose lastError = new Pose();
-    private boolean tracking = false;
-
     @Override
     public void loopTele() {
-
-        Vector3D attackPow = new Vector3D();
-        Pose currentPose = JunctionScannerAll.getPose();
-        boolean inRange = currentPose.within(startTarget, 15, 30);
-        if(inRange){ tracking = true; }
-        if(attackMode.modeIs(STICKY) && tracking) {
-            if (inRange && lastError.withinY(error, 2, 2)) {
-                startOdometryPose = odometry.getPose();
-                startJunctionPose = currentPose.getCopy();
-                startTarget = JunctionScannerAll.getTarget();
-            }
-            if(!startOdometryPose.equals(new Pose())) {
-                currentPose = CoordinatePlane.applyCoordinateTransform(odometry.getPose(), p -> p.setStartInverse(startOdometryPose)).getOnlyPointRotated(startJunctionPose.getAngle()).getAdded(startJunctionPose);
-                error = startTarget.getSubtracted(currentPose).getOrientationInverted();
-                lastError = error.getCopy();
-
-                if(Math.abs(gph1.ry) > 0.9 || Math.abs(gph1.rx) > 0.9 || Math.abs(gph1.lx) > 0.9){ tracking = false; }
-
-                Vector junctionPow = new Vector(0, yCurve.fodd(error.getY()));
-                junctionPow.rotate(-error.getAngle()); junctionPow.limitLength(0.3);
-                attackPow = new Vector3D(junctionPow, Precision.clip(hCurve.fodd(error.getAngle()), 0.2));
-            }
-        }else{
-            startOdometryPose = new Pose();
-            startJunctionPose = new Pose();
-            error = new Pose();
-            lastError = new Pose();
-            startTarget = JunctionScannerAll.getTarget();
-        }
-
-        Pose power = drive.getMoveSmoothPower(gph1.ry, gph1.rx, gph1.lx);
-        drive.move(attackPow.getY() + power.getX(), attackPow.getX() + power.getY(), attackPow.getZ() + power.getAngle());
-
-//        drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
+        drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
 
         lift.move(gph2.ry);
 
@@ -152,6 +114,7 @@ public class TerraOp extends Tele {
         log.show("AttackMode", attackMode.get());
         log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : GamepadMode.NORMAL);
 
+        log.show("Is", bot.indHandler.isIndependentRunning());
 
 //        junctionScannerAll.message();
 //        log.show("Right", lift.motorRight.getPosition());

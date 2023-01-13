@@ -4,6 +4,7 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import autoutil.reactors.MecanumJunctionReactor2;
 import autoutil.reactors.Reactor;
+import geometry.position.Pose;
 import global.Modes;
 import robot.RobotUser;
 import robotparts.RobotPart;
@@ -143,6 +144,22 @@ public interface AutoModuleUser extends RobotUser{
             lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.1))
     );
 
+    AutoModule BackwardAutoReadyFirst = new AutoModule(
+            outtake.stageMiddle(0.0),
+            lift.changeCutoff(2),
+            lift.stageLift(1.0, heightMode.getValue(LOW)+15)
+    );
+
+    AutoModule BackwardAutoReady = new AutoModule(
+            outtake.stageMiddle(0.0),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-4.5)
+    );
+
+
+
+
+
+
 
 
 
@@ -230,8 +247,61 @@ public interface AutoModuleUser extends RobotUser{
     );
 
 
+    /**
+     * Cycle 2
+     */
+
+    AutoModule BackwardCycle2 = new AutoModule(
+            outtake.stageClose(0.2),
+            outtake.stageMiddle(0.0),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)-2).attach(outtake.stageReadyEndAfter(0.45))
+//            Reactor.forceExit()
+    );
+
+    AutoModule ForwardCycle2 = new AutoModule(
+            lift.moveTime(-1.0, 0.2).attach(outtake.stageOpen(0.15)),
+            outtake.stageStart(0.1),
+            lift.stageLift(1.0,0)
+    );
+
+
+    static Independent AutoAlign(int i) {
+        return new Independent() {
+            @Override
+            public void define() {
+                double x = i*0.0; double y = i*0.0;
+                addCancelAutoModules();
+                addConcurrentAutoModule(new AutoModule(outtake.stageStart(0.0)));
+                addTime(0.8); addSegment(0.7, mecanumNonstopSetPoint, x, 24+y, 0);
+                addCancelAutoModules();
+                addConcurrentAutoModule(BackwardCycle2);
+                addPause(0.2);
+                addTime(0.9); addSegment(0.4, mecanumNonstopSetPoint, x, -7+y, 0);
+                addPause(0.1);
+//                addSegment(mecanumJunctionSetpoint2, 0, 0, 0);
+                addCancelAutoModules();
+                addConcurrentAutoModule(ForwardCycle2);
+                addPause(0.4);
+            }
+        };
+    }
+
+    // TODO CHECK RESET
+
+    Machine MachineAutoAlign = new Machine()
+            .addInstruction(() -> {odometry.reset(); odometry.setCurrentPose(new Pose()); odometry.setCurrentPose(new Pose());}, 0.3)
+            .addIndependent(12, AutoModuleUser::AutoAlign);
+
+
 
     static Stage junctionStop(){ return new Stage(new Main(() -> MecanumJunctionReactor2.stop = true), RobotPart.exitAlways()); }
+
+
+
+
+
+
+
 
 
 
@@ -261,19 +331,6 @@ public interface AutoModuleUser extends RobotUser{
             RobotPart.pause(0.1),
             outtake.stageEnd(0.0)
     );
-
-    AutoModule BackwardAutoReadyFirst = new AutoModule(
-            outtake.stageMiddle(0.0),
-            lift.changeCutoff(2),
-            lift.stageLift(1.0, heightMode.getValue(LOW)+15)
-    );
-
-    AutoModule BackwardAutoReady = new AutoModule(
-            outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-4.5)
-    );
-
-
 
 
 

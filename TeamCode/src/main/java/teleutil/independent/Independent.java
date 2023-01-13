@@ -1,6 +1,7 @@
 package teleutil.independent;
 
 import autoutil.AutoFramework;
+import geometry.position.Pose;
 import util.codeseg.ParameterCodeSeg;
 
 public abstract class Independent extends AutoFramework {
@@ -8,11 +9,19 @@ public abstract class Independent extends AutoFramework {
      * Class to run an auton program in teleop, independent of teleop
      */
 
+    {
+        startPose = new Pose();
+    }
+
 
     /**
      * Should the independent exit?
      */
     private volatile boolean shouldExit = false;
+
+
+    @Override
+    protected void resetBeforeRun() {}
 
     /**
      * Set to default config, can be overriden, reset should exit

@@ -58,9 +58,11 @@ public class ThreeOdometry extends TwoOdometry {
 
         dyl = enc1.getDeltaPosition();
 
-        dx = enc2.getDeltaPosition() + (xCorrectionScale*dyl);
+        dx = enc2.getDeltaPosition();
 
-        dyr = enc3.getDeltaPosition() + (yCorrectionScale*dyl);
+//        dx = enc2.getDeltaPosition() + (xCorrectionScale*dyl);
+
+//        dyr = enc3.getDeltaPosition() + (yCorrectionScale*dyl);
 
 //        double dhu = toDegrees((dyr-dyl)/width);
 //        dh = dhu*1.011;

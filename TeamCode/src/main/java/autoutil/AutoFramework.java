@@ -135,9 +135,14 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public abstract void initialize();
 
+
+    protected void resetBeforeRun(){
+        odometry.setCurrentPose(startPose); odometry.setCurrentPose(startPose);
+    }
+
     @Override
     public void runAuto() {
-        odometry.setCurrentPose(startPose); odometry.setCurrentPose(startPose);
+        resetBeforeRun();
         pause(0.05);
         timer.reset();
         Iterator.forAll(segments, segment -> segment.run(this));

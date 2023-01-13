@@ -25,17 +25,18 @@ public class IGyro extends Electronic {
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        // parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
         this.gyro.initialize(parameters);
     }
 
     public void update(){
         double currentHeading = (gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle);
         deltaHeading = currentHeading - lastHeading;
-        if (deltaHeading < -180)
+        if (deltaHeading < -180) {
             deltaHeading += 360;
-        else if (deltaHeading > 180)
+        } else if (deltaHeading > 180) {
             deltaHeading -= 360;
+        }
         heading += deltaHeading;
         lastHeading = currentHeading;
 
