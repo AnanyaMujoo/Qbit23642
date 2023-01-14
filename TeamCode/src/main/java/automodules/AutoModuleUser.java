@@ -203,7 +203,7 @@ public interface AutoModuleUser extends RobotUser{
     static AutoModule BackwardCycle2(Height height, boolean longScan) {return new AutoModule(
             outtake.stageClose(0.2),
             outtake.stageMiddle(0.0),
-            RobotPart.pause(longScan ? 1.0 : 0.4),
+            RobotPart.pause(longScan ? 1.0 : 0.75),
             lift.stageLift(1.0, heightMode.getValue(height)-2).attach(outtake.stageReadyEndAfter(0.45)),
             junctionStop()
 //            Reactor.forceExit()
@@ -228,7 +228,7 @@ public interface AutoModuleUser extends RobotUser{
                 addWaypoint(0.2,  x, 27+y, 0 );
                 addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH, i == 0), 0.2);
 //                addSegment(0.9, 0.5, mecanumNonstopSetPoint, x, -7+y, 0);
-                addSegment(0.7, 0.5, mecanumNonstopSetPoint, x, -4+y, 0);
+                addSegment(0.8, 0.5, mecanumNonstopSetPoint, x, -4 +y, 0);
                 addSegment(mecanumJunctionSetpoint2, 0, 0, 0);
 //                addPause(0.1);
                 addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);

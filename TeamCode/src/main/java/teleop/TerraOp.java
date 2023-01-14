@@ -97,6 +97,7 @@ public class TerraOp extends Tele {
 
     @Override
     public void loopTele() {
+
         drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
 
         lift.move(gph2.ry);
@@ -108,7 +109,7 @@ public class TerraOp extends Tele {
         log.show("AttackMode", attackMode.get());
         log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : GamepadMode.NORMAL);
 
-        log.show("Is", bot.indHandler.isIndependentRunning());
+//        log.show("Is", bot.indHandler.isIndependentRunning());
 
 //        junctionScannerAll.message();
 //        log.show("Right", lift.motorRight.getPosition());

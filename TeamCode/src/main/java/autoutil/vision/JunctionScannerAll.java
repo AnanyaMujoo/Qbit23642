@@ -33,6 +33,7 @@ import elements.Robot;
 import geometry.position.Pose;
 import geometry.position.Vector;
 import math.trigonmetry.Trig;
+import util.template.Iterator;
 import util.template.Precision;
 
 
@@ -79,8 +80,10 @@ public class JunctionScannerAll extends Scanner {
     private static final double realPoleWidth = 2.672; // cm
     private static final double oneConeWidth = 7.0; // cm
     private static final double twoConeWidth = 7.8; // cm
-    private static final double manyConeWidth = 12.0; // cm bigger means closer
+    private static final double manyConeWidth = 10.5; // cm bigger means closer
     public static double distanceToJunction = 0, angleToJunction = 0, rollOfJunction = 0;
+
+    // TODO SAVE ODOMETRY AND USE THAT
 
     public int coneMode = 1;
 
@@ -132,8 +135,8 @@ public class JunctionScannerAll extends Scanner {
     }
 
     public static Pose getTarget(){
-        double robotCenterToDetection = defaultTarget.getY();
-        double robotAngle = -rollOfJunction * (heightMode.modeIs(HIGH) ? GameItems.Junction.highHeight : (heightMode.modeIs(MIDDLE) ? GameItems.Junction.middleHeight : GameItems.Junction.lowHeight)) / robotCenterToDetection;
+        double robotCenterToDetection = defaultTarget.getY()-2;
+        double robotAngle = -(rollOfJunction) * (heightMode.modeIs(HIGH) ? GameItems.Junction.highHeight : (heightMode.modeIs(MIDDLE) ? GameItems.Junction.middleHeight : GameItems.Junction.lowHeight)) / robotCenterToDetection;
         double yOffset = (Trig.cos(robotAngle) - 1) * (robotCenterToDetection + Robot.halfLength);
         return defaultTarget.getAdded(new Pose(0, targetCorrection()+yOffset,robotAngle)).getCopy();
     }
@@ -325,57 +328,82 @@ public class JunctionScannerAll extends Scanner {
                 if (coneArea > minContourArea) {
                     coneRect = Imgproc.boundingRect(biggestConeContour);
 
-                    Imgproc.approxPolyDP(new MatOfPoint2f(biggestConeContour.toArray()), conePoly, 4, true);
+                    Imgproc.approxPolyDP(new MatOfPoint2f(biggestConeContour.toArray()), conePoly, coneRect.width/16.0, true);
 
                     ArrayList<Point> points = new ArrayList<>(conePoly.toList());
 
+//                    drawPoly(input, new MatOfPoint2f(points.toArray(new Point[]{})));
+
+
+                    /**
+                     * Top Horizon
+                     */
+                    double topHorizon = Precision.clip((input.height() / 2.0) - coneRect.width * 0.5, 0, input.height());
+
+//                    Imgproc.line(input, new Point(0, topHorizon), new Point(input.width(), topHorizon), GREEN);
+
+
+                    /**
+                     * Largest Y Delta
+                     */
+                    ArrayList<Double> yDeltas = new ArrayList<>();
+                    Iterator.forAllPairs(points, (p1, p2) -> {yDeltas.add(Math.abs(p1.y - p2.y));});
+                    double maxDeltaY = Iterator.forAllCompareMax(yDeltas, y -> y);
+
+                    coneMode = coneRect.y > topHorizon ? 1 : ((coneRect.y < 5 && maxDeltaY > input.height()-5) ? 2 : 3);
 
 
 
-                    if(points.size() >= 4){
-                        ArrayList<Point> points2 = new ArrayList<>(points);
-                        points2.removeIf(p -> p.y > coneRect.y + 10);
-                        ArrayList<Point> points3 = new ArrayList<>(points);
-                        points3.removeIf(p -> p.y < coneRect.y+coneRect.height-20);
-
-                        if(points2.size() >= 2 && points3.size() >= 2) {
-                            Collections.sort(points2, Comparator.comparingDouble(p -> p.x));
-                            Collections.sort(points3, Comparator.comparingDouble(p -> p.x));
-                            Point point1 = points2.get(0);
-                            Point point2 = points3.get(0);
-                            Point point3 = points3.get(points3.size() - 1);
-                            Point point4 = points2.get(points2.size() - 1);
-
-                            points = new ArrayList<>(Arrays.asList(point1, point2, point3, point4));
-
+//
+//                    if(points.size() >= 4) {
+//                        ArrayList<Point> points2 = new ArrayList<>(points);
+////                        points2.removeIf(p -> p.y > coneRect.y + 10);
+//                        double lowerBound =  coneRect.y + coneRect.height - 40;
+//                        double upperBound = coneRect.y + coneRect.height - 5;
+//                        points2.removeIf(p -> p.y < lowerBound-50 || p.y > lowerBound);
+//                        ArrayList<Point> points3 = new ArrayList<>(points);
+////                        points3.removeIf(p -> p.y < coneRect.y + coneRect.height - 20);
+//                        points3.removeIf(p -> p.y < upperBound);
+//
+//                        if (points2.size() >= 2 && points3.size() >= 2) {
+//                            Collections.sort(points2, Comparator.comparingDouble(p -> p.x));
+//                            Collections.sort(points3, Comparator.comparingDouble(p -> p.x));
+//                            Point point1 = points2.get(0);
+//                            Point point2 = points3.get(0);
+//                            Point point3 = points3.get(points3.size() - 1);
+//                            Point point4 = points2.get(points2.size() - 1);
+//
+//                            points = new ArrayList<>(Arrays.asList(point1, point2, point3, point4));
+//
 //                            drawPoly(input, new MatOfPoint2f(points.toArray(new Point[]{})));
+//
+//
+//                            double minWidth = Math.abs(point1.x - point4.x);
+//                            double maxWidth = Math.abs(point2.x - point3.x);
+//
+//
+//                            /**
+//                             * Top Horizon
+//                             */
+//                            double topHorizon = Precision.clip((input.height() / 2.0) - coneRect.width * 0.5, 0, input.height());
+//
+////                            Imgproc.line(input, new Point(0, topHorizon), new Point(input.width(), topHorizon), GREEN);
+//
+//
+//                            /**
+//                             * Ratio
+//                             */
+//
+//                            double ratio = maxWidth / minWidth;
+//
+////                            log.record("Ratio", ratio);
+//
+//                            coneMode = coneRect.y > topHorizon ? 1 : (ratio < 1.65 ? 2 : 3);
+//                        }
+//                    }
 
 
-                            double minWidth = Math.abs(point1.x - point4.x);
-                            double maxWidth = Math.abs(point2.x - point3.x);
 
-
-                            /**
-                             * Top Horizon
-                             */
-                            double topHorizon = Precision.clip((input.height() / 2.0) - coneRect.width * 0.5, 0, input.height());
-
-//                            Imgproc.line(input, new Point(0, topHorizon), new Point(input.width(), topHorizon), GREEN);
-
-
-                            /**
-                             * Ratio
-                             */
-
-                            double ratio = maxWidth/minWidth;
-
-//                            log.record("Ratio", ratio);
-
-                            coneMode = coneRect.y > topHorizon ? 1 : (ratio < 1.65 ? 2 : 3);
-                        }
-
-
-                    }
 
                     exitEarly = false;
 
