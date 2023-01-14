@@ -10,6 +10,9 @@ import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PServo;
 
+import static global.Modes.OuttakeStatus.DRIVING;
+import static global.Modes.outtakeStatus;
+
 public class Outtake extends RobotPart {
 
     private PServo armr, arml, turn, claw;
@@ -44,6 +47,7 @@ public class Outtake extends RobotPart {
         claw.addPosition("close", 0.35);
 
         unFlip();
+        outtakeStatus.set(DRIVING);
     }
 
     public void moveStart(){ armr.setPosition("start"); arml.setPosition("start"); unFlip(); }

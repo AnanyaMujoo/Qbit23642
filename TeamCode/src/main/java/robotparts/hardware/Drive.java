@@ -2,28 +2,21 @@ package robotparts.hardware;
 
 import automodules.AutoModule;
 import automodules.stage.Stage;
-import autoutil.AutoFramework;
 import autoutil.reactors.MecanumJunctionReactor2;
-import autoutil.vision.JunctionScannerAll;
-import elements.FieldSide;
 import geometry.position.Pose;
 import geometry.position.Vector;
 import global.Modes;
-import math.linearalgebra.Vector3D;
 import math.misc.Logistic;
-import math.polynomial.Linear;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 import util.template.Precision;
 
 import static global.General.bot;
-import static global.General.fieldSide;
-import static global.General.gph1;
-import static global.Modes.AttackMode.STICKY;
+import static global.Modes.AttackStatus.ATTACK;
 import static global.Modes.Drive.MEDIUM;
 import static global.Modes.Drive.SLOW;
-import static global.Modes.attackMode;
+import static global.Modes.attackStatus;
 
 public class Drive extends RobotPart {
 
@@ -40,7 +33,7 @@ public class Drive extends RobotPart {
 
 
 
-    private final double[][] powers = {new double[]{0.35, 0.35, 0.4}, new double[]{0.75, 0.6, 0.6}, new double[]{1.0, 1.0, 1.0}};
+    private final double[][] powers = {new double[]{0.35, 0.35, 0.4}, new double[]{0.75, 0.6, 0.5}, new double[]{1.0, 1.0, 1.0}};
 
 
     @Override
@@ -50,7 +43,7 @@ public class Drive extends RobotPart {
         fl = create("fl", ElectronicType.CMOTOR_FORWARD);
         bl = create("bl", ElectronicType.CMOTOR_FORWARD);
         Modes.driveMode.set(SLOW);
-        attackMode.set(Modes.AttackMode.NORMAL);
+        attackStatus.set(Modes.AttackStatus.REST);
 //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
@@ -70,7 +63,7 @@ public class Drive extends RobotPart {
 
     public void moveSmooth(double f, double s, double t) {
         if(!bot.indHandler.isIndependentRunning()) {
-            mecanumJunctionReactor2.move(attackMode.modeIs(STICKY), drive.getMoveSmoothPower(f, s, t));
+            mecanumJunctionReactor2.move(attackStatus.modeIs(ATTACK), drive.getMoveSmoothPower(f, s, t));
         }
     }
 

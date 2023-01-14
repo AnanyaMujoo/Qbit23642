@@ -19,8 +19,14 @@ public interface Modes {
     enum GameplayMode implements Mode.ModeType { CYCLE,  CIRCUIT_PICK,  CIRCUIT_PLACE }
     Mode gameplayMode = new Mode(GameplayMode.class);
 
-    enum AttackMode implements Mode.ModeType { NORMAL, STICKY }
+    enum AttackStatus implements Mode.ModeType {REST, ATTACK}
+    Mode attackStatus = new Mode(AttackStatus.class);
+
+    enum AttackMode implements Mode.ModeType {PRESS_TO_ENABLE, ON_BY_DEFAULT}
     Mode attackMode = new Mode(AttackMode.class);
+
+    enum OuttakeStatus implements Mode.ModeType { DRIVING, PLACING}
+    Mode outtakeStatus = new Mode(OuttakeStatus.class);
 
     enum Height implements Mode.ModeType {HIGH, MIDDLE, LOW, GROUND}
     Mode heightMode = new Mode(Height.class)

@@ -1,33 +1,15 @@
 package autoutil.reactors;
 
-import automodules.stage.Main;
-import automodules.stage.Stage;
-import autoutil.Profiler;
-import autoutil.controllers.control1D.PID;
-import autoutil.controllers.control2D.Default2D;
 import autoutil.generators.PoseGenerator;
-import autoutil.vision.JunctionScanner;
 import autoutil.vision.JunctionScannerAll;
-import geometry.circles.Circle;
 import geometry.framework.CoordinatePlane;
-import geometry.framework.Point;
-import geometry.position.Line;
 import geometry.position.Pose;
 import geometry.position.Vector;
-import global.Modes;
 import math.linearalgebra.Vector3D;
 import math.polynomial.Linear;
-import robotparts.RobotPart;
-import util.Timer;
-import util.condition.Expectation;
-import util.condition.Magnitude;
 import util.template.Precision;
 
-import static global.General.bot;
-import static global.General.fault;
 import static global.General.gph1;
-import static global.General.log;
-import static global.Modes.AttackMode.STICKY;
 
 public class MecanumJunctionReactor2 extends MecanumNonstopReactor{
 
@@ -69,7 +51,7 @@ public class MecanumJunctionReactor2 extends MecanumNonstopReactor{
     public void move(boolean attack, Pose power){
         Vector3D attackPow = new Vector3D();
         Pose currentPose = JunctionScannerAll.getPose();
-        inRange = currentPose.within(startTarget, 10, 20);
+        inRange = currentPose.within(startTarget, 15, 20);
         if(attack && inRange){ tracking = true; }
         if(attack && tracking) {
             if (inRange && lastError.withinY(error, 2, 2)) {

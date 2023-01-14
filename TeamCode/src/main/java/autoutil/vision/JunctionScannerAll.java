@@ -40,7 +40,7 @@ public class JunctionScannerAll extends Scanner {
 
     public final double minContourArea = 250.0;
 
-    private static final Pose defaultTarget = new Pose(0,16.0, -1);
+    private static final Pose defaultTarget = new Pose(0,17.0, -1);
 
     public final int horizonPole = 90;
     public final int horizonCone = 20;
@@ -77,9 +77,9 @@ public class JunctionScannerAll extends Scanner {
 
     private static final double cameraFov = 47;
     private static final double realPoleWidth = 2.672; // cm
-    private static final double oneConeWidth = 7.7; // cm
-    private static final double twoConeWidth = 8.7; // cm
-    private static final double manyConeWidth = 11.5; // cm bigger means closer
+    private static final double oneConeWidth = 7.0; // cm
+    private static final double twoConeWidth = 7.8; // cm
+    private static final double manyConeWidth = 12.0; // cm bigger means closer
     public static double distanceToJunction = 0, angleToJunction = 0, rollOfJunction = 0;
 
     public int coneMode = 1;

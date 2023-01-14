@@ -4,24 +4,21 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import automodules.AutoModule;
 import autoutil.vision.JunctionScannerAll;
-import geometry.framework.CoordinatePlane;
-import geometry.position.Pose;
-import geometry.position.Vector;
-import math.linearalgebra.Vector3D;
-import math.polynomial.Linear;
 import teleutil.button.Button;
-import teleutil.independent.Machine;
-import util.template.Precision;
 
 import static global.General.bot;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
-import static global.Modes.AttackMode.STICKY;
+import static global.Modes.AttackMode.ON_BY_DEFAULT;
+import static global.Modes.AttackMode.PRESS_TO_ENABLE;
+import static global.Modes.AttackStatus.ATTACK;
+import static global.Modes.AttackStatus.REST;
 import static global.Modes.Drive.MEDIUM;
 import static global.Modes.Drive.SLOW;
 import static global.Modes.GamepadMode.AUTOMATED;
 import static global.Modes.GamepadMode.NORMAL;
+import static global.Modes.OuttakeStatus.PLACING;
 import static teleutil.button.Button.DPAD_DOWN;
 import static teleutil.button.Button.DPAD_LEFT;
 import static teleutil.button.Button.DPAD_RIGHT;
@@ -48,14 +45,14 @@ public class TerraOp extends Tele {
         gph1.link(Button.A, () -> driveMode.set(Drive.FAST));
         gph1.link(Button.RIGHT_STICK_BUTTON, () -> driveMode.set(MEDIUM));
 
-        gph1.link(DPAD_UP, LiftHigh);
-        gph1.link(DPAD_LEFT, LiftMiddle);
-        gph1.link(DPAD_RIGHT, LiftLow);
-        gph1.link(DPAD_DOWN, LiftGround);
+        gph1.link(DPAD_UP, () -> outtakeStatus.modeIs(PLACING), LiftHigh, High);
+        gph1.link(DPAD_LEFT, () -> outtakeStatus.modeIs(PLACING), LiftMiddle, Middle);
+        gph1.link(DPAD_RIGHT,  () -> outtakeStatus.modeIs(PLACING), LiftLow, Low);
+        gph1.link(DPAD_DOWN,  () -> outtakeStatus.modeIs(PLACING), LiftGround, Ground);
         gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
         gph1.link(LEFT_BUMPER,  () -> lift.adjustHolderTarget(-2.5));
-        gph1.link(RIGHT_TRIGGER, new AutoModule(attackMode.ChangeMode(NORMAL)));
-        gph1.link(LEFT_TRIGGER, new AutoModule(attackMode.ChangeMode(STICKY)));
+        gph1.link(RIGHT_TRIGGER, () -> attackStatus.toggle(ATTACK, REST));
+        gph1.link(LEFT_TRIGGER, () -> attackMode.toggle(PRESS_TO_ENABLE, ON_BY_DEFAULT));
 
         /**
          * Gamepad 1 Automated
@@ -107,6 +104,7 @@ public class TerraOp extends Tele {
         log.show("DriveMode", driveMode.get());
         log.show("HeightMode", heightMode.get());
         log.show("GameplayMode", gameplayMode.get());
+        log.show("AttackStatus", attackStatus.get());
         log.show("AttackMode", attackMode.get());
         log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : GamepadMode.NORMAL);
 

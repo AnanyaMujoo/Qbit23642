@@ -1,5 +1,7 @@
 package automodules;
 
+import org.checkerframework.checker.units.qual.A;
+
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import autoutil.reactors.MecanumJunctionReactor2;
@@ -15,9 +17,9 @@ import teleutil.independent.Machine;
 import util.codeseg.CodeSeg;
 import util.condition.OutputList;
 
-import static global.General.bot;
-import static global.Modes.AttackMode.NORMAL;
-import static global.Modes.AttackMode.STICKY;
+import static global.Modes.AttackMode.ON_BY_DEFAULT;
+import static global.Modes.AttackStatus.REST;
+import static global.Modes.AttackStatus.ATTACK;
 import static global.Modes.Drive.MEDIUM;
 import static global.Modes.Drive.SLOW;
 import static global.Modes.GameplayMode.CIRCUIT_PICK;
@@ -28,6 +30,8 @@ import static global.Modes.Height.GROUND;
 import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
 import static global.Modes.Height.MIDDLE;
+import static global.Modes.OuttakeStatus.DRIVING;
+import static global.Modes.OuttakeStatus.PLACING;
 
 
 public interface AutoModuleUser extends RobotUser{
@@ -76,16 +80,18 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(GROUND, BackwardCircuitGroundPlace);
     static AutoModule BackwardCircuitPlace(Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
-            Modes.attackMode.ChangeMode(height.equals(LOW) ? STICKY : NORMAL),
+            outtakeStatus.ChangeMode(PLACING),
+            Modes.attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST),
             outtake.stageFlip(0.0),
-            lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.1)),
+            lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.4)),
             gameplayMode.ChangeMode(CIRCUIT_PICK)
     );}
     static AutoModule BackwardHeightTele(Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
-            Modes.attackMode.ChangeMode(height.equals(LOW) ? STICKY : NORMAL),
+            outtakeStatus.ChangeMode(PLACING),
+            Modes.attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST),
             outtake.stageClose(0.18),
-            lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.1))
+            lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.4))
     );}
     OutputList BackwardTele = new OutputList(heightMode::get)
             .addOption(HIGH, BackwardHeightTele(HIGH))
@@ -98,7 +104,8 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(CIRCUIT_PLACE, BackwardCircuitPlace::check);
     AutoModule ForwardCircuitTele = new AutoModule(
             Modes.driveMode.ChangeMode(MEDIUM),
-            Modes.attackMode.ChangeMode(NORMAL),
+            Modes.attackStatus.ChangeMode(REST),
+            outtakeStatus.ChangeMode(DRIVING),
             outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
             lift.resetCutoff(),
@@ -106,7 +113,8 @@ public interface AutoModuleUser extends RobotUser{
     );
     AutoModule ForwardTele = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
-            Modes.attackMode.ChangeMode(NORMAL),
+            Modes.attackStatus.ChangeMode(REST),
+            outtakeStatus.ChangeMode(DRIVING),
             outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
             lift.resetCutoff(),
@@ -116,10 +124,14 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(CYCLE, ForwardTele)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele);
-    AutoModule LiftHigh = new AutoModule(heightMode.ChangeMode(HIGH), attackMode.ChangeMode(NORMAL), lift.stageLift(1.0, heightMode.getValue(HIGH)));
-    AutoModule LiftMiddle = new AutoModule(heightMode.ChangeMode(MIDDLE), attackMode.ChangeMode(NORMAL), lift.stageLift(1.0, heightMode.getValue(MIDDLE)));
-    AutoModule LiftLow = new AutoModule(heightMode.ChangeMode(LOW), attackMode.ChangeMode(STICKY), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(LOW)));
-    AutoModule LiftGround = new AutoModule(heightMode.ChangeMode(GROUND), attackMode.ChangeMode(NORMAL), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(GROUND)));
+    AutoModule High = new AutoModule(heightMode.ChangeMode(HIGH), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
+    AutoModule Middle = new AutoModule(heightMode.ChangeMode(MIDDLE),attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
+    AutoModule Low = new AutoModule(heightMode.ChangeMode(LOW), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2));
+    AutoModule Ground = new AutoModule(heightMode.ChangeMode(GROUND), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2));
+    AutoModule LiftHigh = new AutoModule(heightMode.ChangeMode(HIGH), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.stageLift(1.0, heightMode.getValue(HIGH)));
+    AutoModule LiftMiddle = new AutoModule(heightMode.ChangeMode(MIDDLE),attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.stageLift(1.0, heightMode.getValue(MIDDLE)));
+    AutoModule LiftLow = new AutoModule(heightMode.ChangeMode(LOW), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(LOW)));
+    AutoModule LiftGround = new AutoModule(heightMode.ChangeMode(GROUND), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(GROUND)));
     AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5),  lift.resetLift() );
 
 

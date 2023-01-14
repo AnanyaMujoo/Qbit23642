@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import automodules.stage.Main;
 import automodules.stage.Stage;
+import util.codeseg.ReturnCodeSeg;
 import util.condition.Decision;
 import util.condition.Expectation;
 import util.condition.Magnitude;
@@ -51,7 +52,10 @@ public class Mode {
 
     public ModeType get(){ return currentMode; }
     public Stage ChangeMode(ModeType newMode){return new Stage(new Main(() -> currentMode = newMode), exitAlways()); }
+    public Stage ChangeMode(ReturnCodeSeg<ModeType> newMode){return new Stage(new Main(() -> currentMode = newMode.run()), exitAlways()); }
     public void set(ModeType mode){ this.currentMode = mode; }
+
+    public void toggle(ModeType one, ModeType two){ if(modeIs(one)){set(two);}else{set(one);} }
 
     public interface ModeType extends Decision {};
 
