@@ -64,11 +64,11 @@ public class General {
     /**
      * FieldSide object to represent which side of the field we are on (red or blue)
      */
-    public static FieldSide fieldSide;
+    public static FieldSide fieldSide = FieldSide.BLUE;
     /**
      * FieldPlacement object to represent which location of the field we are on (upper [closer to audience] or lower)
      */
-    public static FieldPlacement fieldPlacement;
+    public static FieldPlacement fieldPlacement = FieldPlacement.LOWER;
     /**
      * The main user
      * NOTE: This should either be TELE or AUTO

@@ -4,14 +4,18 @@ import automodules.stage.Main;
 import automodules.stage.Stage;
 import autoutil.reactors.MecanumJunctionReactor2;
 import autoutil.reactors.Reactor;
+import elements.Field;
+import elements.Robot;
 import geometry.position.Pose;
 import global.Modes;
 import robot.RobotUser;
 import robotparts.RobotPart;
 import teleutil.independent.Independent;
 import teleutil.independent.Machine;
+import util.codeseg.CodeSeg;
 import util.condition.OutputList;
 
+import static global.General.bot;
 import static global.Modes.AttackMode.NORMAL;
 import static global.Modes.AttackMode.STICKY;
 import static global.Modes.Drive.MEDIUM;
@@ -72,14 +76,14 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(GROUND, BackwardCircuitGroundPlace);
     static AutoModule BackwardCircuitPlace(Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
-            Modes.attackMode.ChangeMode(STICKY),
+            Modes.attackMode.ChangeMode(height.equals(LOW) ? STICKY : NORMAL),
             outtake.stageFlip(0.0),
             lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.1)),
             gameplayMode.ChangeMode(CIRCUIT_PICK)
     );}
     static AutoModule BackwardHeightTele(Height height){ return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
-            Modes.attackMode.ChangeMode(STICKY),
+            Modes.attackMode.ChangeMode(height.equals(LOW) ? STICKY : NORMAL),
             outtake.stageClose(0.18),
             lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.1))
     );}
@@ -112,10 +116,12 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(CYCLE, ForwardTele)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele);
-    AutoModule LiftHigh = new AutoModule(heightMode.ChangeMode(HIGH), lift.stageLift(1.0, heightMode.getValue(HIGH)));
-    AutoModule LiftMiddle = new AutoModule(heightMode.ChangeMode(MIDDLE), lift.stageLift(1.0, heightMode.getValue(MIDDLE)));
-    AutoModule LiftLow = new AutoModule(heightMode.ChangeMode(LOW), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(LOW)));
-    AutoModule LiftGround = new AutoModule(heightMode.ChangeMode(GROUND), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(GROUND)));
+    AutoModule LiftHigh = new AutoModule(heightMode.ChangeMode(HIGH), attackMode.ChangeMode(NORMAL), lift.stageLift(1.0, heightMode.getValue(HIGH)));
+    AutoModule LiftMiddle = new AutoModule(heightMode.ChangeMode(MIDDLE), attackMode.ChangeMode(NORMAL), lift.stageLift(1.0, heightMode.getValue(MIDDLE)));
+    AutoModule LiftLow = new AutoModule(heightMode.ChangeMode(LOW), attackMode.ChangeMode(STICKY), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(LOW)));
+    AutoModule LiftGround = new AutoModule(heightMode.ChangeMode(GROUND), attackMode.ChangeMode(NORMAL), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(GROUND)));
+    AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5),  lift.resetLift() );
+
 
     /**
      * Auto
@@ -133,17 +139,6 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageOpen(0.0)
     );
 
-    default AutoModule ForwardAuto2(int i){return new AutoModule(
-            Reactor.forceExit(),
-            outtake.stageOpen(0.0),
-            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
-    );}
-
-    AutoModule GrabAuto2 = new AutoModule(
-            outtake.stageClose(0.15),
-            lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.1))
-    );
-
     AutoModule BackwardAutoReadyFirst = new AutoModule(
             outtake.stageMiddle(0.0),
             lift.changeCutoff(2),
@@ -155,14 +150,16 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0, heightMode.getValue(HIGH)-4.5)
     );
 
+    default AutoModule ForwardAuto2(int i){return new AutoModule(
+            Reactor.forceExit(),
+            outtake.stageOpen(0.0),
+            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
+    );}
 
-
-
-
-
-
-
-
+    AutoModule GrabAuto2 = new AutoModule(
+            outtake.stageClose(0.15),
+            lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.1))
+    );
 
     /**
      * Misc
@@ -177,6 +174,10 @@ public interface AutoModuleUser extends RobotUser{
         }
     };
 
+    CodeSeg ResetOdometry = () -> {
+        odometry.reset(); odometry.setCurrentPose(new Pose()); odometry.setCurrentPose(new Pose());
+    };
+
     AutoModule BackwardCycle = new AutoModule(
             outtake.stageClose(0.2),
             outtake.stageMiddle(0.0),
@@ -184,7 +185,108 @@ public interface AutoModuleUser extends RobotUser{
     );
 
     /**
-     * Cycle
+     * Cycle 2
+     */
+
+    static AutoModule BackwardCycle2(Height height, boolean longScan) {return new AutoModule(
+            outtake.stageClose(0.2),
+            outtake.stageMiddle(0.0),
+            RobotPart.pause(longScan ? 1.0 : 0.4),
+            lift.stageLift(1.0, heightMode.getValue(height)-2).attach(outtake.stageReadyEndAfter(0.45)),
+            junctionStop()
+//            Reactor.forceExit()
+    );}
+
+    AutoModule ForwardCycle2 = new AutoModule(
+            outtake.stageOpen(0.2),
+            outtake.stageStart(0.0),
+            lift.stageLift(1.0,0)
+    );
+
+    AutoModule StageStart = new AutoModule(outtake.stageStart(0.0));
+    AutoModule ReadyStart = new AutoModule(outtake.stageReadyStart(0.0));
+
+
+    static Independent Cycle2(int i) { return new Independent() {
+            @Override
+            public void define() {
+                double x = i*0.0; double y = i*0.05;
+                addConcurrentAutoModule(StageStart);
+                addWaypoint(0.7, x, 17+y, 0);
+                addWaypoint(0.2,  x, 27+y, 0 );
+                addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH, i == 0), 0.2);
+//                addSegment(0.9, 0.5, mecanumNonstopSetPoint, x, -7+y, 0);
+                addSegment(0.7, 0.5, mecanumNonstopSetPoint, x, -4+y, 0);
+                addSegment(mecanumJunctionSetpoint2, 0, 0, 0);
+//                addPause(0.1);
+                addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
+                if(i == 11){ addSegment(0.4, 0.3, mecanumNonstopSetPoint, x, y, 0); }
+    }};}
+
+//                    addSegment(mecanumJunctionSetpoint2, 0, 0, 0);
+
+
+    Machine MachineCycle2 = new Machine()
+            .addInstruction(ResetOdometry, 0.3)
+            .addIndependent(12, AutoModuleUser::Cycle2);
+
+
+
+
+
+
+
+
+    /**
+     * Cycle Medium
+     */
+    Independent CycleMedium = new Independent() {
+        @Override
+        public void define() {
+            startPose = new Pose(Robot.halfLength + 59, Field.width/2.0, 90);
+            addWaypoint(0.5,0,0.01,0);
+            addConcurrentAutoModule(ReadyStart);
+            addWaypoint(0.5,0,-14,0);
+            addWaypoint(0.5,-16.0, -14.0, 0.0);
+            addConcurrentAutoModule(StageStart);
+            addWaypoint(0.5, -31.0, 1.0, 0.0);
+            addSegment(0.8, 0.7, mecanumNonstopSetPoint,  -25.0, 37.0, -21.0);
+            addConcurrentAutoModuleWithCancel(BackwardCycle2(MIDDLE, true), 0.2);
+            addSegment(1.2, 0.7, mecanumNonstopSetPoint, -49.0, -14.0, -21.0);
+            addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
+            addSegment(0.8, 0.7, mecanumNonstopSetPoint,  -25.0, 37.0, -21.0);
+            addConcurrentAutoModuleWithCancel(BackwardCycle2(LOW, true), 0.2);
+            addSegment(0.8, 0.7, mecanumNonstopSetPoint, -34.0, 37.0, -57.0);
+            addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
+            addWaypoint(0.5, -43.0, 43.0, -57.0 );
+            addSegment(0.8, 0.7, mecanumNonstopSetPoint, -37.0, 47.5, -57.0);
+            addConcurrentAutoModuleWithCancel(BackwardCycle2(GROUND, true), 0.2);
+            addWaypoint(0.5, -64.0, 55.0, -90.0);
+            addWaypoint(0.5, -136.0, 58.0, -90.0);
+            addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
+        }
+    };
+    Machine CycleMediumMachine = new Machine()
+            .addInstruction(ResetOdometry, 0.3)
+            .addIndependent(CycleMedium)
+    ;
+
+
+
+
+
+
+
+
+    static Stage junctionStop(){ return new Stage(new Main(() -> MecanumJunctionReactor2.stop = true), RobotPart.exitAlways()); }
+
+
+
+
+
+
+    /**
+     * Cycle Old
      */
     Independent Cycle = new Independent() {
         @Override
@@ -217,93 +319,6 @@ public interface AutoModuleUser extends RobotUser{
             lift.resetCutoff(),
             lift.stageLift(0.4, 0)
     );
-
-    /**
-     * Cycle Medium
-     */
-    Independent CycleMedium = new Independent() {
-        @Override
-        public void define() {
-            addWaypoint(0.5, 0.0, 30.0, 0.0);
-            addWaypoint(0.3, 0.0, 50, 0.0);
-            addConcurrentAutoModule(BackwardCycleMedium);
-            addPause(0.3);
-            addWaypoint(0.4, 0.0, 19.0, 0.0);
-            addSetpoint(0.7, 1.1,0, 3,0);
-            addCancelAutoModules();
-            addConcurrentAutoModule(ForwardMedium);
-            addPause(0.5);
-        }
-    };
-    Machine CycleMediumMachine = new Machine()
-            .addInstruction(odometry::reset, 0.3)
-            .addIndependent(8, CycleMedium)
-    ;
-
-
-    AutoModule ResetLift = new AutoModule(
-            lift.moveTime(-0.3, 0.5),
-            lift.resetLift()
-    );
-
-
-    /**
-     * Cycle 2
-     */
-
-    AutoModule BackwardCycle2 = new AutoModule(
-            outtake.stageClose(0.2),
-            outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-2).attach(outtake.stageReadyEndAfter(0.45))
-//            Reactor.forceExit()
-    );
-
-    AutoModule ForwardCycle2 = new AutoModule(
-            lift.moveTime(-1.0, 0.2).attach(outtake.stageOpen(0.15)),
-            outtake.stageStart(0.1),
-            lift.stageLift(1.0,0)
-    );
-
-
-    static Independent AutoAlign(int i) {
-        return new Independent() {
-            @Override
-            public void define() {
-                double x = i*0.0; double y = i*0.0;
-                addCancelAutoModules();
-                addConcurrentAutoModule(new AutoModule(outtake.stageStart(0.0)));
-                addTime(0.8); addSegment(0.7, mecanumNonstopSetPoint, x, 24+y, 0);
-                addCancelAutoModules();
-                addConcurrentAutoModule(BackwardCycle2);
-                addPause(0.2);
-                addTime(0.9); addSegment(0.4, mecanumNonstopSetPoint, x, -7+y, 0);
-                addPause(0.1);
-//                addSegment(mecanumJunctionSetpoint2, 0, 0, 0);
-                addCancelAutoModules();
-                addConcurrentAutoModule(ForwardCycle2);
-                addPause(0.4);
-            }
-        };
-    }
-
-    // TODO CHECK RESET
-
-    Machine MachineAutoAlign = new Machine()
-            .addInstruction(() -> {odometry.reset(); odometry.setCurrentPose(new Pose()); odometry.setCurrentPose(new Pose());}, 0.3)
-            .addIndependent(12, AutoModuleUser::AutoAlign);
-
-
-
-    static Stage junctionStop(){ return new Stage(new Main(() -> MecanumJunctionReactor2.stop = true), RobotPart.exitAlways()); }
-
-
-
-
-
-
-
-
-
 
 
 

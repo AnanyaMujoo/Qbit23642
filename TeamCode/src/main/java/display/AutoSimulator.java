@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import automodules.AutoModuleUser;
 import auton.TerraAuto;
 import autoutil.AutoFramework;
 import geometry.framework.CoordinatePlane;
@@ -30,7 +31,8 @@ public class AutoSimulator extends Drawer{
     private static final boolean developmentMode = true;
 
     public static void main(String[] args) {
-        setAuto(new TerraAuto.TerraAutoMegaRight());
+//        setAuto(new TerraAuto.TerraAutoMegaRight());
+        setAuto(AutoModuleUser.CycleMedium);
 
 //        setAuto(new TerraAutoLowerBlue());
 //        setAuto(new TerraAutoUpperBlue());

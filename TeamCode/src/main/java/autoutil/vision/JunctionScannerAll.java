@@ -77,9 +77,9 @@ public class JunctionScannerAll extends Scanner {
 
     private static final double cameraFov = 47;
     private static final double realPoleWidth = 2.672; // cm
-    private static final double oneConeWidth = 7.5; // cm
-    private static final double twoConeWidth = 8.5; // cm
-    private static final double manyConeWidth = 10.7; // cm
+    private static final double oneConeWidth = 7.7; // cm
+    private static final double twoConeWidth = 8.7; // cm
+    private static final double manyConeWidth = 11.5; // cm bigger means closer
     public static double distanceToJunction = 0, angleToJunction = 0, rollOfJunction = 0;
 
     public int coneMode = 1;
@@ -230,7 +230,7 @@ public class JunctionScannerAll extends Scanner {
                              * Rotated Rect
                              */
 
-                            drawRotatedRect(input, rot, BLUE);
+//                            drawRotatedRect(input, rot, BLUE);
 
 //                        for(Point p : points){
 //                            geometry.framework.Point point = new geometry.framework.Point(p);
@@ -348,7 +348,7 @@ public class JunctionScannerAll extends Scanner {
 
                             points = new ArrayList<>(Arrays.asList(point1, point2, point3, point4));
 
-                            drawPoly(input, new MatOfPoint2f(points.toArray(new Point[]{})));
+//                            drawPoly(input, new MatOfPoint2f(points.toArray(new Point[]{})));
 
 
                             double minWidth = Math.abs(point1.x - point4.x);

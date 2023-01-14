@@ -171,7 +171,7 @@ public class RobotFramework {
     public void cancelAutoModules(){ setUserMainAndHalt(); rfsHandler.emptyQueue(); }
     public void cancelBackgroundTasks(){ setUserMainAndHalt(); backHandler.emptyTaskList(); }
     public void cancelIndependents(){ setUserMainAndHalt(); indHandler.stopCurrentIndependent(); }
-    public void cancelMovements(){ setUserMainAndHalt(); rfsHandler.emptyQueue(); backHandler.emptyTaskList(); indHandler.stopCurrentIndependent(); }
+    public void cancelMovements(){ setUserMainAndHalt(); rfsHandler.emptyQueue(); indHandler.stopCurrentIndependent(); machine.cancel(); }
     public void cancelAll(){ cancelMovements(); cancelBackgroundTasks();  }
 
     /**

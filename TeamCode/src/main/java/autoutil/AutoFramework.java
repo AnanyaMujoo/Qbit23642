@@ -158,7 +158,10 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addWaypoint(double x, double y, double h){ addSegmentType(AutoSegment.Type.WAYPOINT); poses.add(new Pose(x,y,h)); }
     public void addAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.AUTOMODULE, autoModule); }
     public void addConcurrentAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.CONCURRENT_AUTOMODULE, autoModule);}
+    public void addConcurrentAutoModuleWithCancel(AutoModule autoModule, double pauseAfter){ addCancelAutoModules(); addConcurrentAutoModule(autoModule); addPause(pauseAfter);}
+    public void addConcurrentAutoModuleWithCancel(AutoModule autoModule){ addCancelAutoModules(); addConcurrentAutoModule(autoModule);}
     public void addCancelAutoModules(){ addSegmentType(AutoSegment.Type.CANCEL_AUTOMODULE); addLastPose(); }
+    public void addSegment(double time, double scale, AutoSegment<?,?> segment, double x, double y, double h){addTime(time); addSegment(scale, segment, x, y, h); }
     public void addSegment(double scale, AutoSegment<?,?> segment, double x, double y, double h){addScale(scale); addSegment(segment, x, y, h); }
     public void addSegment(AutoSegment<?,?> segment, double x, double y, double h){ customSegments.add(segment); segmentTypes.add(AutoSegment.Type.CUSTOM); poses.add(new Pose(x, y, h)); }
 

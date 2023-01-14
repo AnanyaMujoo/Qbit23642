@@ -39,10 +39,10 @@ public class JunctionScannerTest extends TeleUnitTest {
     @Override
     protected void loop() {
         junctionScanner.message();
-
-        drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
-
-        lift.move(0);
+//
+//        drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
+//
+//        lift.move(0);
 
 //        log.show("Start Odometry Pose" , startOdometryPose);
 //        log.show("OdometryPose" , odometry.getPose());

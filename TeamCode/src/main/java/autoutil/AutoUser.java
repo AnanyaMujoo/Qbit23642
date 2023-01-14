@@ -16,6 +16,8 @@ import util.template.ParameterConstructor;
 public interface AutoUser {
 
 
+    // TOD5 Fix naming conventions (drop mecanum, setpoint -> SP)
+
     ReturnCodeSeg<LineGenerator> lineGenerator = generator(LineGenerator.class);
     ReturnCodeSeg<PoseGenerator> poseGenerator = generator(PoseGenerator.class);
 

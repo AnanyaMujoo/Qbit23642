@@ -43,10 +43,6 @@ public class TerraOp extends Tele {
          * Gamepad 1 Normal
          */
         gph1.link(Button.B, BackwardAllTele);
-
-//        gph1.link(Button.B, MachineAutoAlign);
-
-
         gph1.link(Button.Y, () -> {if(lift.circuitMode) { gameplayMode.set(GameplayMode.CIRCUIT_PICK);} bot.addAutoModule(ForwardAll.check());});
         gph1.link(Button.X, bot::cancelMovements);
         gph1.link(Button.A, () -> driveMode.set(Drive.FAST));
@@ -65,7 +61,7 @@ public class TerraOp extends Tele {
          * Gamepad 1 Automated
          */
         gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
-        gph1.link(Button.B, MachineAutoAlign, AUTOMATED);
+        gph1.link(Button.B, MachineCycle2, AUTOMATED);
         gph1.link(Button.Y, CycleMediumMachine, AUTOMATED);
         gph1.link(Button.X, () -> {lift.circuitMode = true; gameplayMode.set(GameplayMode.CIRCUIT_PICK); driveMode.set(MEDIUM);}, () -> {lift.circuitMode = false; gameplayMode.set(GameplayMode.CYCLE); driveMode.set(SLOW);}, AUTOMATED);
         gph1.link(RIGHT_TRIGGER, UprightCone, AUTOMATED);
