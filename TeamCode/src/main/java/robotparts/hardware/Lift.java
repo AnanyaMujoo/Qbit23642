@@ -16,6 +16,7 @@ import util.template.Precision;
 
 import static global.General.bot;
 import static global.Modes.AttackMode.ON_BY_DEFAULT;
+import static global.Modes.AttackMode.PRESS_TO_ENABLE;
 import static global.Modes.Height.GROUND;
 import static global.Modes.Height.LOW;
 import static global.Modes.attackMode;
@@ -43,7 +44,7 @@ public class Lift extends RobotPart {
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
         gameplayMode.set(Modes.GameplayMode.CYCLE);
-        attackMode.set(ON_BY_DEFAULT);
+        attackMode.set(PRESS_TO_ENABLE);
     }
 
 

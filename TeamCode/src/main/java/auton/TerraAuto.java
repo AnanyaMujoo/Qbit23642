@@ -22,6 +22,8 @@ public class TerraAuto extends AutoFramework {
     protected enum AutoMode implements Mode.ModeType {MEGA, NORMAL, SIMPLE}
     protected AutoMode autoMode;
 
+    // TODO CLEAN
+
     private double x, s, y;
     private final double pauseBetweenCycles = 0.15;
     private final double timeToPlace = 0.45;
@@ -192,25 +194,25 @@ public class TerraAuto extends AutoFramework {
     }
 
 
-    @Autonomous(name = "TerraAutoMegaRight", group = "auto")
-    public static class TerraAutoMegaRight extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.MEGA;}}
-    @Autonomous(name = "TerraAutoMegaLeft", group = "auto")
-    public static class TerraAutoMegaLeft extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.MEGA; }}
-
-    @Autonomous(name = "TerraAutoNormalRight", group = "auto")
-    public static class TerraAutoNormalRight extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
-    @Autonomous(name = "TerraAutoNormalLeft", group = "auto")
-    public static class TerraAutoNormalLeft extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
-
-    @Autonomous(name = "TerraAutoSimpleRight", group = "auto")
-    public static class TerraAutoSimpleRight extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.SIMPLE;}}
-    @Autonomous(name = "TerraAutoSimpleLeft", group = "auto")
-    public static class TerraAutoSimpleLeft extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.SIMPLE;}}
-
-//    @Autonomous(name = "TerraAutoMegaRight", group = "auto", preselectTeleOp = "TerraOp")
+//    @Autonomous(name = "TerraAutoMegaRight", group = "auto")
 //    public static class TerraAutoMegaRight extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.MEGA;}}
-//    @Autonomous(name = "TerraAutoMegaLeft", group = "auto", preselectTeleOp = "TerraOp")
+//    @Autonomous(name = "TerraAutoMegaLeft", group = "auto")
 //    public static class TerraAutoMegaLeft extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.MEGA; }}
+
+//    @Autonomous(name = "TerraAutoNormalRight", group = "auto")
+//    public static class TerraAutoNormalRight extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
+//    @Autonomous(name = "TerraAutoNormalLeft", group = "auto")
+//    public static class TerraAutoNormalLeft extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
+//
+//    @Autonomous(name = "TerraAutoSimpleRight", group = "auto")
+//    public static class TerraAutoSimpleRight extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.SIMPLE;}}
+//    @Autonomous(name = "TerraAutoSimpleLeft", group = "auto")
+//    public static class TerraAutoSimpleLeft extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.SIMPLE;}}
+
+    @Autonomous(name = "TerraAutoMegaRight", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TerraAutoMegaRight extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.MEGA;}}
+    @Autonomous(name = "TerraAutoMegaLeft", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TerraAutoMegaLeft extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.MEGA; }}
 //
 //    @Autonomous(name = "TerraAutoNormalRight", group = "auto", preselectTeleOp = "TerraOp")
 //    public static class TerraAutoNormalRight extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
