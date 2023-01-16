@@ -111,20 +111,23 @@ public interface AutoModuleUser extends RobotUser{
             lift.resetCutoff(),
             lift.stageLift(0.7, 0)
     );
-    AutoModule ForwardTele = new AutoModule(
+    OutputList ForwardTele = new OutputList(outtakeStatus::get)
+            .addOption(DRIVING, ForwardTele(false))
+            .addOption(PLACING, ForwardTele(true));
+    static AutoModule ForwardTele(boolean move) {return new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             Modes.attackStatus.ChangeMode(REST),
             outtakeStatus.ChangeMode(DRIVING),
             outtake.stageOpen(0.0),
-            lift.moveTime(-1.0, 0.1).attach(drive.moveTime(1.0, 0.0, 0.0, 0.1)),
+            !move ? RobotPart.pause(0.0) : lift.moveTime(-1.0, 0.1).attach(drive.moveTime(1.0, 0.0, 0.0, 0.1)),
 
 //            outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
             lift.resetCutoff(),
             lift.stageLift(0.7, 0)
-    );
+    );}
     OutputList ForwardAll = new OutputList(gameplayMode::get)
-            .addOption(CYCLE, ForwardTele)
+            .addOption(CYCLE, ForwardTele::check)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele)
             .addOption(CIRCUIT_PICK, ForwardCircuitTele);
     AutoModule High = new AutoModule(heightMode.ChangeMode(HIGH), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
@@ -203,47 +206,51 @@ public interface AutoModuleUser extends RobotUser{
      * Cycle 2
      */
 
-    static AutoModule BackwardCycle2(Height height, boolean longScan) {return new AutoModule(
-            outtake.stageClose(0.2),
+    static AutoModule BackwardCycle2(Height height) {return new AutoModule(
+            outtake.stageClose(0.18),
             outtake.stageMiddle(0.0),
-            RobotPart.pause(longScan ? 1.0 : 0.75),
-            lift.stageLift(1.0, heightMode.getValue(height)-2).attach(outtake.stageReadyEndAfter(0.45)),
-            junctionStop()
-//            Reactor.forceExit()
+            lift.stageLift(1.0, heightMode.getValue(height)-2).attach(outtake.stageReadyEndAfter(0.5))
     );}
 
     AutoModule ForwardCycle2 = new AutoModule(
-            outtake.stageOpen(0.2),
-            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0)
+            outtake.stageEnd(0.0),
+            outtake.stageOpen(0.0),
+            lift.moveTime(-1.0, 0.1),
+            outtake.stageMiddle(0.0),
+            lift.stageLift(1.0,  0).attach(outtake.stageStartAfter(0.05))
     );
 
     AutoModule StageStart = new AutoModule(outtake.stageStart(0.0));
     AutoModule ReadyStart = new AutoModule(outtake.stageReadyStart(0.0));
 
+    AutoModule HoldMiddle = new AutoModule(
+            outtake.stageClose(0.18),
+            outtake.stageMiddle(0.0)
+    );
+
 
     static Independent Cycle2(int i) { return new Independent() {
             @Override
             public void define() {
-                double x = i*0.0; double y = i*0.05;
-                addConcurrentAutoModule(StageStart);
-                addWaypoint(0.7, x, 17+y, 0);
-                addWaypoint(0.2,  x, 27+y, 0 );
-                addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH, i == 0), 0.2);
-//                addSegment(0.9, 0.5, mecanumNonstopSetPoint, x, -7+y, 0);
-                addSegment(0.8, 0.5, mecanumNonstopSetPoint, x, -4 +y, 0);
-                addSegment(mecanumJunctionSetpoint2, 0, 0, 0);
-//                addPause(0.1);
-                addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
-                if(i == 11){ addSegment(0.4, 0.3, mecanumNonstopSetPoint, x, y, 0); }
+            double x = i*0.0; double y = i*0.08;
+            if(i+1 == 1){ addWaypoint(0.7,  x, 17+y, 0); addWaypoint(0.4,  x, 22+y, 0); }
+            if(i+1 != 11){
+                addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH), 0.18);
+                addSegment(0.9, 0.6, mecanumNonstopSetPoint, x, -10.5+y, 0);
+                addConcurrentAutoModuleWithCancel(ForwardCycle2);
+                addWaypoint(0.7,  x, 6+y, 0);
+                addWaypoint(0.4,  x, 28+y, 0);
+            } else{
+                addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
+                addSegment(0.8, 0.5, mecanumNonstopSetPoint, x, y, 0);
+                addPause(0.05);
+            }
     }};}
-
-//                    addSegment(mecanumJunctionSetpoint2, 0, 0, 0);
 
 
     Machine MachineCycle2 = new Machine()
-            .addInstruction(ResetOdometry, 0.3)
-            .addIndependent(12, AutoModuleUser::Cycle2);
+            .addInstruction(ResetOdometry, 0.2)
+            .addIndependent(11, AutoModuleUser::Cycle2);
 
 
 
@@ -266,16 +273,16 @@ public interface AutoModuleUser extends RobotUser{
             addConcurrentAutoModule(StageStart);
             addWaypoint(0.5, -31.0, 1.0, 0.0);
             addSegment(0.8, 0.7, mecanumNonstopSetPoint,  -25.0, 37.0, -21.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle2(MIDDLE, true), 0.2);
+            addConcurrentAutoModuleWithCancel(BackwardCycle2(MIDDLE), 0.2);
             addSegment(1.2, 0.7, mecanumNonstopSetPoint, -49.0, -14.0, -21.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
             addSegment(0.8, 0.7, mecanumNonstopSetPoint,  -25.0, 37.0, -21.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle2(LOW, true), 0.2);
+            addConcurrentAutoModuleWithCancel(BackwardCycle2(LOW), 0.2);
             addSegment(0.8, 0.7, mecanumNonstopSetPoint, -34.0, 37.0, -57.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
             addWaypoint(0.5, -43.0, 43.0, -57.0 );
             addSegment(0.8, 0.7, mecanumNonstopSetPoint, -37.0, 47.5, -57.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle2(GROUND, true), 0.2);
+            addConcurrentAutoModuleWithCancel(BackwardCycle2(GROUND), 0.2);
             addWaypoint(0.5, -64.0, 55.0, -90.0);
             addWaypoint(0.5, -136.0, 58.0, -90.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
@@ -313,7 +320,7 @@ public interface AutoModuleUser extends RobotUser{
             addWaypoint(0.38, 0, 3, 0);
             addSetpoint(1.05, 0.95,0, -4,0);
             addCancelAutoModules();
-            addConcurrentAutoModule(ForwardTele);
+            addConcurrentAutoModule(ForwardTele(false));
             addPause(0.4);
         }
     };
