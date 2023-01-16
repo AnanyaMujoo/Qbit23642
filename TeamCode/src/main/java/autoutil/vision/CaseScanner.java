@@ -46,15 +46,14 @@ public class CaseScanner extends Scanner{
     @Override
     public void message(){
 //        logDebug();
-        caseDetected = getCaseStable(getCase());
-        log.show("Case Detected: ", caseDetected);
+//        caseDetected = getCaseStable(getCase());
+        log.show("Case Detected", caseDetected);
     }
 
 
     private Case getCaseStable(Case currentCase){
         boolean casesAreSame = true;
         for (int i = 0; i < pastCases.length-1; i++) {
-
             pastCases[i] = pastCases[i+1];
             if(!pastCases[i].equals(currentCase)){ casesAreSame = false; }
         }
@@ -74,7 +73,9 @@ public class CaseScanner extends Scanner{
     }
 
     @Override
-    public final void run(Mat input) { caseDetected = cases[getCase(input)]; }
+    public final void run(Mat input) {
+        caseDetected = getCaseStable(cases[getCase(input)]);
+    }
 
     public final Case getCase(){ return caseDetected; }
 }

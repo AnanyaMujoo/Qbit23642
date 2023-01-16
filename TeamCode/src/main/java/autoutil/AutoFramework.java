@@ -125,12 +125,12 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     @Override
     public final void initAuto() {
         initialize();
-        setup();
-        createSegments();
         if(scanning){
             while (!isStarted() && !isStopRequested()){ caseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
             if(haltCameraAfterInit) { camera.halt(); }else{ camera.setScanner(scannerAfterInit); }
         }
+        setup();
+        createSegments();
     }
 
     public abstract void initialize();

@@ -115,7 +115,10 @@ public interface AutoModuleUser extends RobotUser{
             Modes.driveMode.ChangeMode(SLOW),
             Modes.attackStatus.ChangeMode(REST),
             outtakeStatus.ChangeMode(DRIVING),
-            outtake.stageOpen(0.25),
+            outtake.stageOpen(0.0),
+            lift.moveTime(-1.0, 0.1).attach(drive.moveTime(1.0, 0.0, 0.0, 0.1)),
+
+//            outtake.stageOpen(0.25),
             outtake.stageStart(0.0),
             lift.resetCutoff(),
             lift.stageLift(0.7, 0)
