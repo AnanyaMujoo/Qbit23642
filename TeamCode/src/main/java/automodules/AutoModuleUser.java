@@ -230,20 +230,17 @@ public interface AutoModuleUser extends RobotUser{
 
     static AutoModule BackwardCycle2(Height height) {return new AutoModule(
             outtake.stageClose(0.18),
-            outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(height)-2).attach(outtake.stageReadyEndAfter(0.5))
+            outtake.stageReadyEnd(0.0),
+            lift.stageLift(1.0, heightMode.getValue(height)+2.5)
     );}
 
 
     AutoModule ForwardCycle2 = new AutoModule(
 
-            outtake.stageEnd(0.0),
-            outtake.stageOpen(0.0),
-            RobotPart.pause(0.05),
-            lift.moveTime(-0.2,0.1),
-            outtake.stageStart(0.0),
+            outtake.stageEnd(0.1),
+            outtake.stageOpen(0.2),
             lift.resetCutoff(),
-            lift.stageLift(0.8,0)
+            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.1))
 
 //
 //
@@ -264,18 +261,19 @@ public interface AutoModuleUser extends RobotUser{
     static Independent Cycle2(int i) { return new Independent() {
             @Override
             public void define() {
-            double x = i*0.0; double y = i*0.08;
-            if(i+1 == 1){ addWaypoint(0.7,  x, 17+y, 0); addWaypoint(0.4,  x, 22+y, 0); }
+            double x = i*0.08; double y = i*0.0;
+            if(i+1 == 1){ addWaypoint(0.7,  x, 17+y, 0);
+                addWaypoint(0.4,  x, 22+y, 0);
+            }
             if(i+1 != 11){
-                addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH), 0.18);
-                addSegment(1.2, 0.65, mecanumNonstopSetPoint, x, -13+y, 0);
+                addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH), 0.5);
+                addSegment(0.95, 0.6, mecanumNonstopSetPoint, x, -23+y, 0);
                 addConcurrentAutoModuleWithCancel(ForwardCycle2);
-                addWaypoint(0.8,  x, 6+y, 0);
-                addPause(0.12);
-                addWaypoint(0.4,  x, 28+y, 0);
+                addSegment(0.8, 0.7, mecanumNonstopSetPoint, x, 8+y, 0);
+                addWaypoint(0.5,  x, 27+y, 0);
             } else{
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
-                addSegment(0.8, 0.5, mecanumNonstopSetPoint, x, y, 0);
+                addSegment(0.6, 0.5, mecanumNonstopSetPoint, x, y, 0);
                 addPause(0.05);
                 addAutoModule(new AutoModule(gameplayMode.ChangeMode(CIRCUIT_PLACE), heightMode.ChangeMode(MIDDLE), driveMode.ChangeMode(MEDIUM)));
             }
