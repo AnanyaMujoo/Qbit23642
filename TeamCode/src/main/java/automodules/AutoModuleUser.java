@@ -41,14 +41,14 @@ public interface AutoModuleUser extends RobotUser{
      */
     AutoModule BackwardCircuitPick = new AutoModule(
             driveMode.ChangeMode(MEDIUM),
-            outtake.stageClose(0.2),
+            outtake.stageClose(0.25),
             outtake.stageReadyStart(0.4),
             gameplayMode.ChangeMode(CIRCUIT_PLACE)
     );
     AutoModule BackwardCircuitGroundPick = new AutoModule(
             Modes.driveMode.ChangeMode(MEDIUM),
             lift.changeCutoff(2.0),
-            outtake.stageClose(0.2),
+            outtake.stageClose(0.25),
             outtake.stageReadyStart(0.0),
             lift.stageLift(1.0, heightMode.getValue(GROUND)),
             gameplayMode.ChangeMode(CIRCUIT_PLACE)
@@ -60,7 +60,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardCycleGroundPick = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             lift.changeCutoff(2.0),
-            outtake.stageClose(0.2),
+            outtake.stageClose(0.25),
             lift.stageLift(1.0, heightMode.getValue(GROUND))
     );
     OutputList BackwardCircuitPickAll = new OutputList(heightMode::get)
@@ -71,7 +71,8 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardCircuitGroundPlace = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             outtake.stageStart(0.6),
-            gameplayMode.ChangeMode(CIRCUIT_PICK)
+            gameplayMode.ChangeMode(CIRCUIT_PICK),
+            heightMode.ChangeMode(LOW)
     );
     OutputList BackwardCircuitPlace = new OutputList(heightMode::get)
             .addOption(LOW, BackwardCircuitPlace(LOW))
@@ -90,7 +91,7 @@ public interface AutoModuleUser extends RobotUser{
             Modes.driveMode.ChangeMode(SLOW),
             outtakeStatus.ChangeMode(PLACING),
             Modes.attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST),
-            outtake.stageClose(0.18),
+            outtake.stageClose(0.25),
             lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.4))
     );}
     OutputList BackwardTele = new OutputList(heightMode::get)
@@ -102,15 +103,28 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(CYCLE, BackwardTele::check)
             .addOption(CIRCUIT_PICK, BackwardCircuitPickAll::check)
             .addOption(CIRCUIT_PLACE, BackwardCircuitPlace::check);
-    AutoModule ForwardCircuitTele = new AutoModule(
+    OutputList ForwardCircuitTele = new OutputList(outtakeStatus::get)
+            .addOption(DRIVING, ForwardCircuitTele(false))
+            .addOption(PLACING, ForwardCircuitTele(true));
+    static AutoModule ForwardCircuitTele(boolean move) {return new AutoModule(
             Modes.driveMode.ChangeMode(MEDIUM),
             Modes.attackStatus.ChangeMode(REST),
             outtakeStatus.ChangeMode(DRIVING),
-            outtake.stageOpen(0.25),
-            outtake.stageStart(0.0),
+
+            !move ? RobotPart.pause(0.0) : outtake.stageEnd(0.0),
+            outtake.stageOpen(0.0),
+            !move ? RobotPart.pause(0.0) : drive.moveTime(1.0, 0.0, 0.0, 0.12),
             lift.resetCutoff(),
-            lift.stageLift(0.7, 0)
-    );
+            outtake.stageStart(0.0),
+            lift.stageLift(0.7,0)
+
+
+//
+//            outtake.stageOpen(0.25),
+//            outtake.stageStart(0.0),
+//            lift.resetCutoff(),
+//            lift.stageLift(0.7, 0)
+    );}
     OutputList ForwardTele = new OutputList(outtakeStatus::get)
             .addOption(DRIVING, ForwardTele(false))
             .addOption(PLACING, ForwardTele(true));
@@ -118,18 +132,26 @@ public interface AutoModuleUser extends RobotUser{
             Modes.driveMode.ChangeMode(SLOW),
             Modes.attackStatus.ChangeMode(REST),
             outtakeStatus.ChangeMode(DRIVING),
-            outtake.stageOpen(0.0),
-            !move ? RobotPart.pause(0.0) : lift.moveTime(-1.0, 0.1).attach(drive.moveTime(1.0, 0.0, 0.0, 0.1)),
 
-//            outtake.stageOpen(0.25),
-            outtake.stageStart(0.0),
+            !move ? RobotPart.pause(0.0) : outtake.stageEnd(0.0),
+            outtake.stageOpen(0.0),
+            !move ? RobotPart.pause(0.0) : drive.moveTime(1.0, 0.0, 0.0, 0.12),
             lift.resetCutoff(),
-            lift.stageLift(0.7, 0)
+            outtake.stageStart(0.0),
+            lift.stageLift(0.7,0)
+//
+//            outtake.stageOpen(0.0),
+//            !move ? RobotPart.pause(0.0) : lift.moveTime(-1.0, 0.1).attach(drive.moveTime(1.0, 0.0, 0.0, 0.1)),
+//
+////            outtake.stageOpen(0.25),
+//            outtake.stageStart(0.0),
+//            lift.resetCutoff(),
+//            lift.stageLift(0.7, 0)
     );}
     OutputList ForwardAll = new OutputList(gameplayMode::get)
             .addOption(CYCLE, ForwardTele::check)
-            .addOption(CIRCUIT_PICK, ForwardCircuitTele)
-            .addOption(CIRCUIT_PICK, ForwardCircuitTele);
+            .addOption(CIRCUIT_PICK, ForwardCircuitTele::check)
+            .addOption(CIRCUIT_PLACE, ForwardCircuitTele::check);
     AutoModule High = new AutoModule(heightMode.ChangeMode(HIGH), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
     AutoModule Middle = new AutoModule(heightMode.ChangeMode(MIDDLE),attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
     AutoModule Low = new AutoModule(heightMode.ChangeMode(LOW), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2));
@@ -212,22 +234,32 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0, heightMode.getValue(height)-2).attach(outtake.stageReadyEndAfter(0.5))
     );}
 
+
     AutoModule ForwardCycle2 = new AutoModule(
+
             outtake.stageEnd(0.0),
             outtake.stageOpen(0.0),
-            lift.moveTime(-1.0, 0.1),
-            outtake.stageMiddle(0.0),
-            lift.stageLift(1.0,  0).attach(outtake.stageStartAfter(0.05))
+            RobotPart.pause(0.05),
+            lift.moveTime(-0.2,0.1),
+            outtake.stageStart(0.0),
+            lift.resetCutoff(),
+            lift.stageLift(0.8,0)
+
+//
+//
+//            outtake.stageEnd(0.0),
+//            outtake.stageOpen(0.0),
+//            lift.moveTime(-1.0, 0.1),
+//            outtake.stageMiddle(0.0),
+//            lift.stageLift(1.0,  0).attach(outtake.stageStartAfter(0.05))
     );
 
     AutoModule StageStart = new AutoModule(outtake.stageStart(0.0));
     AutoModule ReadyStart = new AutoModule(outtake.stageReadyStart(0.0));
 
-    AutoModule HoldMiddle = new AutoModule(
-            outtake.stageClose(0.18),
-            outtake.stageMiddle(0.0)
-    );
+    AutoModule HoldMiddle = new AutoModule(outtake.stageClose(0.18), outtake.stageMiddle(0.0));
 
+    // TODO FIX CYCLE MACHINE
 
     static Independent Cycle2(int i) { return new Independent() {
             @Override
@@ -236,14 +268,16 @@ public interface AutoModuleUser extends RobotUser{
             if(i+1 == 1){ addWaypoint(0.7,  x, 17+y, 0); addWaypoint(0.4,  x, 22+y, 0); }
             if(i+1 != 11){
                 addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH), 0.18);
-                addSegment(0.9, 0.6, mecanumNonstopSetPoint, x, -10.5+y, 0);
+                addSegment(1.2, 0.65, mecanumNonstopSetPoint, x, -13+y, 0);
                 addConcurrentAutoModuleWithCancel(ForwardCycle2);
-                addWaypoint(0.7,  x, 6+y, 0);
+                addWaypoint(0.8,  x, 6+y, 0);
+                addPause(0.12);
                 addWaypoint(0.4,  x, 28+y, 0);
             } else{
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
                 addSegment(0.8, 0.5, mecanumNonstopSetPoint, x, y, 0);
                 addPause(0.05);
+                addAutoModule(new AutoModule(gameplayMode.ChangeMode(CIRCUIT_PLACE), heightMode.ChangeMode(MIDDLE), driveMode.ChangeMode(MEDIUM)));
             }
     }};}
 
