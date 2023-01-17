@@ -63,7 +63,9 @@ public class Drive extends RobotPart {
 
     public void moveSmooth(double f, double s, double t) {
         if(!bot.indHandler.isIndependentRunning()) {
-            mecanumJunctionReactor2.move(attackStatus.modeIs(ATTACK), drive.getMoveSmoothPower(f, s, t));
+            Pose power = getMoveSmoothPower(f, s, t);
+            drive.move(power.getX(), power.getY(), power.getAngle());
+//            mecanumJunctionReactor2.move(attackStatus.modeIs(ATTACK), drive.getMoveSmoothPower(f, s, t));
         }
     }
 

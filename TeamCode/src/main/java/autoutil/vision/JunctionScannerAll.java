@@ -83,7 +83,7 @@ public class JunctionScannerAll extends Scanner {
     private static final double manyConeWidth = 10.5; // cm bigger means closer
     public static double distanceToJunction = 0, angleToJunction = 0, rollOfJunction = 0;
 
-    // TODO SAVE ODOMETRY AND USE THAT
+    // TOD4 SAVE ODOMETRY AND USE THAT
 
     public int coneMode = 1;
 

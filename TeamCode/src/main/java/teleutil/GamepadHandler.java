@@ -111,9 +111,8 @@ public class GamepadHandler {
     public void link(Button b, Independent independent, Modes.GamepadMode mode){ link(b, () -> bot.addIndependent(independent), mode); }
     public void link(Button b, Machine machine, Modes.GamepadMode mode){ link(b, () -> bot.addMachine(machine), mode);}
     public void link(Button b, CodeSeg codeSeg, Modes.GamepadMode mode) { link(b, OnPressEventHandler.class, codeSeg, mode); }
-    public void link(Button b, ReturnCodeSeg<Boolean> condition, AutoModule one, AutoModule two){
-        link(b, () -> {if(condition.run()){bot.addAutoModule(one);}else{bot.addAutoModule(two);}});
-    }
+    public void link(Button b, ReturnCodeSeg<Boolean> condition, AutoModule one, AutoModule two){ link(b, () -> {if(condition.run()){bot.addAutoModule(one);}else{bot.addAutoModule(two);}}); }
+    public void link(Button b, ReturnCodeSeg<Boolean> condition, CodeSeg one, CodeSeg two){ link(b, () -> {if(condition.run()){one.run();}else{two.run();}});}
 
     /**
      * Link toggle

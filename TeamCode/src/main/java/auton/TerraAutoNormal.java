@@ -29,7 +29,7 @@ public class TerraAutoNormal extends AutoFramework {
     protected enum AutoMode implements Mode.ModeType {NORMAL, SIMPLE}
     protected AutoMode autoMode;
 
-    // TODO CLEAN
+    // TOD4 CLEAN
 
 
     private double x, s, y;
@@ -83,8 +83,14 @@ public class TerraAutoNormal extends AutoFramework {
         addWaypoint(0.7, 4, 118, 10);
         // Pre-loaded cone place
         addConcurrentAutoModuleWithCancel(BackwardFirst);
-        addTimedSetpoint(1.0, 0.7, 0.9, -1.5, 132, 45);
-        addTimedSetpoint(1.0, 0.7, 0.5, -9.5, 140, 45);
+        customFlipped(() -> {
+            addTimedSetpoint(1.0, 0.7, 0.9, -1.5, 132, 45);
+            addTimedSetpoint(1.0, 0.7, 0.5, -9.5, 140, 45);
+        }, () -> {
+            addTimedSetpoint(1.0, 0.7, 0.9, -1.5, 132, 45);
+            addTimedSetpoint(1.0, 0.7, 0.5, -9.5, 140, 45);
+        });
+
         addConcurrentAutoModule(Forward(0));
         addPause(0.2);
 
@@ -109,8 +115,13 @@ public class TerraAutoNormal extends AutoFramework {
             addSegment(0.7, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
             addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
             // Place
-            addTimedSetpoint(1.0, 0.6, 0.5, -1.3-x, 134 + s, 53);
-            addTimedSetpoint(1.0, 0.6, 0.7, -8.3-x, 141 + s, 53);
+            customFlipped(() -> {
+                addTimedSetpoint(1.0, 0.6, 0.5, -1.3 - x, 134 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 0.7, -8.3 - x, 141 + s, 53);
+            }, () -> {
+                addTimedSetpoint(1.0, 0.6, 0.5, -1.3 - x, 134 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 0.7, -8.3 - x, 141 + s, 53);
+            });
             addConcurrentAutoModuleWithCancel(Forward(i+1));
             addPause(0.2);
 //            addBreakpoint(() -> autoMode.equals(TerraAuto.AutoMode.SIMPLE) && i+1 == 3);

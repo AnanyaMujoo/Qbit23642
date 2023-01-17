@@ -22,7 +22,7 @@ public class TerraAuto extends AutoFramework {
     protected enum AutoMode implements Mode.ModeType {MEGA, NORMAL, SIMPLE}
     protected AutoMode autoMode;
 
-    // TODO CLEAN
+    // TOD4 CLEAN
 
     private double x, s, y;
     private final double pauseBetweenCycles = 0.15;

@@ -74,7 +74,13 @@ public class PServo extends Electronic {
      * Set the position to the pservo based on the name
      * @param name
      */
-    public void setPosition(String name){ if(access.isAllowed()){ servo.setPosition(positions.get(name)); } }
+    public void setPosition(String name){
+        if(access != null) {
+            if (access.isAllowed()) {
+                servo.setPosition(positions.get(name));
+            }
+        }
+    }
 
     /**
      * Get the position that the servo is trying to move to

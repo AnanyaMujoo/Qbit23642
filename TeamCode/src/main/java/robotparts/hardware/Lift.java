@@ -31,6 +31,7 @@ public class Lift extends RobotPart {
     public static final double maxPosition = 61;
     public final double cutoffPosition = 10;
     public volatile double currentCutoffPosition = 10;
+    public int stackedMode = 0;
     public boolean circuitMode = false;
 
     @Override
@@ -44,6 +45,7 @@ public class Lift extends RobotPart {
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
         gameplayMode.set(Modes.GameplayMode.CYCLE);
+        stackedMode = 0;
         attackMode.set(PRESS_TO_ENABLE);
     }
 

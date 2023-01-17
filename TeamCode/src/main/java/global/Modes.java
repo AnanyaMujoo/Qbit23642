@@ -31,7 +31,7 @@ public interface Modes {
     enum Height implements Mode.ModeType {HIGH, MIDDLE, LOW, GROUND}
     Mode heightMode = new Mode(Height.class)
             .set(Height.HIGH, Lift.maxPosition-9)
-            .set(Height.MIDDLE, 28)
+            .set(Height.MIDDLE, 30)
             .set(Height.LOW, 9)
             .set(Height.GROUND, 9);
     enum Drive implements Mode.ModeType{ FAST, MEDIUM, SLOW }

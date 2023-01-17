@@ -45,6 +45,7 @@ public class TerraOp extends Tele {
         gph1.link(Button.B, BackwardAllTele);
         gph1.link(Button.Y, () -> {if(lift.circuitMode) { gameplayMode.set(GameplayMode.CIRCUIT_PICK);} bot.addAutoModule(ForwardAll.check());});
         gph1.link(Button.X, bot::cancelMovements);
+
         gph1.link(Button.A, () -> driveMode.set(Drive.FAST));
         gph1.link(Button.RIGHT_STICK_BUTTON, () -> driveMode.set(MEDIUM));
 
@@ -52,11 +53,16 @@ public class TerraOp extends Tele {
         gph1.link(DPAD_LEFT, () -> outtakeStatus.modeIs(PLACING), LiftMiddle, Middle);
         gph1.link(DPAD_RIGHT,  () -> outtakeStatus.modeIs(PLACING), LiftLow, Low);
         gph1.link(DPAD_DOWN,  () -> outtakeStatus.modeIs(PLACING), LiftGround, Ground);
-        gph1.link(RIGHT_BUMPER, () -> {if(outtakeStatus.modeIs(PLACING)){ lift.adjustHolderTarget(2.5); }else {lift.adjustHolderTarget(5.0); }});
-        gph1.link(LEFT_BUMPER,  () -> {if(outtakeStatus.modeIs(PLACING)){ lift.adjustHolderTarget(-2.5); }else {lift.adjustHolderTarget(-5.0); }});
-        gph1.link(LEFT_TRIGGER, () -> attackStatus.toggle(ATTACK, REST));
+
+        gph1.link(RIGHT_BUMPER, () -> outtakeStatus.modeIs(PLACING),() -> lift.adjustHolderTarget(2.5), () -> lift.adjustHolderTarget(5.0));
+        gph1.link(LEFT_BUMPER, () -> outtakeStatus.modeIs(PLACING),() -> lift.adjustHolderTarget(-2.5), () -> lift.adjustHolderTarget(-5.0));
+
+
+        gph1.link(LEFT_TRIGGER, () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ bot.addAutoModule(ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}});
         gph1.link(RIGHT_TRIGGER, () -> driveMode.set(FAST));
         gph1.link(RIGHT_TRIGGER, OnNotHeldEventHandler.class, () -> driveMode.set(MEDIUM));
+
+//        gph1.link(LEFT_TRIGGER, () -> attackStatus.toggle(ATTACK, REST)); // LIFT MOVE
 //        gph1.link(LEFT_TRIGGER, () -> attackMode.toggle(PRESS_TO_ENABLE, ON_BY_DEFAULT));
 
         /**
@@ -86,11 +92,11 @@ public class TerraOp extends Tele {
          * Start code
          */
         lift.move(-0.2);
-        bot.loadLocationOnField();
 
-        camera.setScanner(junctionScannerAll);
-        camera.startAndResume(false);
-        JunctionScannerAll.resume();
+//        bot.loadLocationOnField();
+//        camera.setScanner(junctionScannerAll);
+//        camera.startAndResume(false);
+//        JunctionScannerAll.resume();
     }
 
     @Override
@@ -109,11 +115,15 @@ public class TerraOp extends Tele {
 
         log.show("DriveMode", driveMode.get());
         log.show("HeightMode", heightMode.get());
-        log.show("OuttakeStatus", outtakeStatus.get());
         log.show("GameplayMode", gameplayMode.get());
-        log.show("AttackStatus", attackStatus.get());
-        log.show("AttackMode", attackMode.get());
-        log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : GamepadMode.NORMAL);
+        log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
+
+//        log.show("OuttakeStatus", outtakeStatus.get());
+
+//        log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : GamepadMode.NORMAL);
+
+        //        log.show("AttackStatus", attackStatus.get());
+//        log.show("AttackMode", attackMode.get());
 
 //        log.show("Is", bot.indHandler.isIndependentRunning());
 
@@ -126,10 +136,10 @@ public class TerraOp extends Tele {
 //        log.show("Pitch", gyro.getPitch());
     }
 
-    @Override
-    public void stopTele() {
-        camera.halt();
-    }
+//    @Override
+//    public void stopTele() {
+//        camera.halt();
+//    }
 }
 
 
