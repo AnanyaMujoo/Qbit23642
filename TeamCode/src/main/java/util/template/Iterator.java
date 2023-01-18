@@ -7,7 +7,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.ToDoubleFunction;
 
@@ -111,6 +113,12 @@ public interface Iterator {
         }
     }
 
+    static<K, V> void forAll(HashMap<K, V> list, DoubleParameterCodeSegDifferent<K, V> code){
+        for(Map.Entry<K, V> entry : list.entrySet()){
+            code.run(entry.getKey(), entry.getValue());
+        }
+    }
+
     static<T> void forAll(T[] list, ParameterCodeSeg<T> code){
         for(T obj: list){
             code.run(obj);
@@ -197,6 +205,9 @@ public interface Iterator {
 
     @FunctionalInterface
     interface DoubleParameterCodeSeg<P> { void run(P input, P input2); }
+
+    @FunctionalInterface
+    interface DoubleParameterCodeSegDifferent<A, B> { void run(A input, B input2); }
 
     static <T> void forAllPairs(ArrayList<T> list, DoubleParameterCodeSeg<T> code){
         if(list.size() > 1) {

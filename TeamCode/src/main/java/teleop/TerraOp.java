@@ -3,38 +3,64 @@ package teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import automodules.AutoModule;
+import automodules.AutoModuleUser;
 import autoutil.vision.JunctionScannerAll;
+import math.polynomial.Linear;
+import robotparts.electronics.output.OLed;
+import teleutil.TeleTrack;
 import teleutil.button.Button;
 import teleutil.button.OnNotHeldEventHandler;
+import util.codeseg.CodeSeg;
 
 import static global.General.bot;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
-import static global.Modes.AttackMode.ON_BY_DEFAULT;
-import static global.Modes.AttackMode.PRESS_TO_ENABLE;
-import static global.Modes.AttackStatus.ATTACK;
-import static global.Modes.AttackStatus.REST;
-import static global.Modes.Drive.FAST;
-import static global.Modes.Drive.MEDIUM;
-import static global.Modes.Drive.SLOW;
-import static global.Modes.GamepadMode.AUTOMATED;
-import static global.Modes.GamepadMode.NORMAL;
-import static global.Modes.OuttakeStatus.DRIVING;
-import static global.Modes.OuttakeStatus.PLACING;
-import static teleutil.button.Button.DPAD_DOWN;
-import static teleutil.button.Button.DPAD_LEFT;
-import static teleutil.button.Button.DPAD_RIGHT;
-import static teleutil.button.Button.DPAD_UP;
-import static teleutil.button.Button.LEFT_BUMPER;
-import static teleutil.button.Button.LEFT_TRIGGER;
-import static teleutil.button.Button.RIGHT_BUMPER;
-import static teleutil.button.Button.RIGHT_TRIGGER;
+import static global.Modes.Drive.*;
+import static global.Modes.GamepadMode.*;
+import static global.Modes.GameplayMode.*;
+import static global.Modes.OuttakeStatus.*;
+import static global.Modes.Height.*;
+import static teleutil.button.Button.*;
+import static teleutil.TeleTrack.*;
 
 @TeleOp(name = "TerraOp", group = "TeleOp")
 public class TerraOp extends Tele {
 
-    private final JunctionScannerAll junctionScannerAll = new JunctionScannerAll();
+    // Medium, Low, Terminal (Ground), Low, Low, High, Ground, Terminal (Ground), Ground, Cap (Low)
+    public static final CodeSeg stack = () -> {bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;};
+    public static final TeleTrack kappaBefore = new TeleTrack(
+            new Step(heightMode, LOW).add(driveMode, MEDIUM).add(gameplayMode, CIRCUIT_PICK),
+            new Step(heightMode, GROUND).add(driveMode, SLOW),
+            new Step(heightMode, LOW).add(driveMode, MEDIUM),
+            new Step(heightMode, LOW).add(driveMode, MEDIUM).add(stack),
+            new Step(heightMode, HIGH).add(driveMode, MEDIUM).add(stack),
+            new Step(heightMode, GROUND).add(driveMode, SLOW).add(stack),
+            new Step(heightMode, GROUND).add(driveMode, SLOW),
+            new Step(heightMode, GROUND).add(driveMode, MEDIUM),
+            new Step(heightMode, LOW).add(driveMode, SLOW)
+    );
+    public static final TeleTrack kappaAfter = new TeleTrack(
+            new Step(driveMode, SLOW),
+            new Step(driveMode, FAST),
+            new Step(driveMode, SLOW),
+            new Step(driveMode, SLOW),
+            new Step(driveMode, MEDIUM),
+            new Step(driveMode, SLOW),
+            new Step(driveMode, FAST),
+            new Step(driveMode, MEDIUM)
+    );
+
+    public static final TeleTrack tauBefore = new TeleTrack();
+    public static final TeleTrack tauAfter = new TeleTrack();
+
+    public static TeleTrack trackBefore = new TeleTrack();
+    public static TeleTrack trackAfter = new TeleTrack();
+
+    public static void setTrack(TeleTrack before, TeleTrack after){ trackBefore = before; trackAfter = after; }
+    public static void disable(){ trackBefore.disable(); trackAfter.disable(); }
+
+
 
     @Override
     public void initTele() {
@@ -61,25 +87,27 @@ public class TerraOp extends Tele {
         gph1.link(LEFT_BUMPER, () -> outtakeStatus.modeIs(PLACING),() -> lift.adjustHolderTarget(-2.5), () -> lift.adjustHolderTarget(-5.0));
 
 
-        gph1.link(LEFT_TRIGGER, () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ bot.addAutoModule(ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}});
+        gph1.link(LEFT_TRIGGER, () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}});
         gph1.link(RIGHT_TRIGGER, () -> driveMode.set(FAST));
         gph1.link(RIGHT_TRIGGER, OnNotHeldEventHandler.class, () -> driveMode.set(MEDIUM));
-
-//        gph1.link(LEFT_TRIGGER, () -> attackStatus.toggle(ATTACK, REST)); // LIFT MOVE
-//        gph1.link(LEFT_TRIGGER, () -> attackMode.toggle(PRESS_TO_ENABLE, ON_BY_DEFAULT));
 
         /**
          * Gamepad 1 Automated
          */
-        gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
+//        gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
         gph1.link(Button.B, MachineCycle2, AUTOMATED);
-        gph1.link(Button.Y, CycleMediumMachine, AUTOMATED);
+//        gph1.link(Button.Y, CycleMediumMachine, AUTOMATED);
         gph1.link(Button.X, () -> {lift.circuitMode = true; gameplayMode.set(GameplayMode.CIRCUIT_PICK); driveMode.set(MEDIUM);}, () -> {lift.circuitMode = false; gameplayMode.set(GameplayMode.CYCLE); driveMode.set(SLOW);}, AUTOMATED);
         gph1.link(RIGHT_TRIGGER, UprightCone, AUTOMATED);
         gph1.link(LEFT_TRIGGER, TakeOffCone, AUTOMATED);
 
-        gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
-        gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);
+//        gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
+//        gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);
+
+        gph1.link(RIGHT_BUMPER, () -> setTrack(kappaBefore, kappaAfter));
+        gph1.link(LEFT_BUMPER, () -> setTrack(tauBefore, tauAfter));
+        gph1.link(Button.Y, TerraOp::disable);
+
         gph1.link(DPAD_DOWN, ResetLift, AUTOMATED);
 
 
@@ -96,11 +124,6 @@ public class TerraOp extends Tele {
          * Start code
          */
         lift.move(-0.2);
-
-//        bot.loadLocationOnField();
-//        camera.setScanner(junctionScannerAll);
-//        camera.startAndResume(false);
-//        JunctionScannerAll.resume();
     }
 
     @Override
@@ -112,6 +135,13 @@ public class TerraOp extends Tele {
 
     @Override
     public void loopTele() {
+        // TODO TEST
+        double endTime = 90;
+        if(time > endTime){
+            Linear rate = new Linear(0.3, 1.0, 30.0);
+            leds.pulse(OLed.LEDColor.RED, OLed.LEDColor.OFF, rate.f(time - endTime));
+        }
+
 
         drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
 
@@ -140,10 +170,6 @@ public class TerraOp extends Tele {
 //        log.show("Pitch", gyro.getPitch());
     }
 
-//    @Override
-//    public void stopTele() {
-//        camera.halt();
-//    }
 }
 
 

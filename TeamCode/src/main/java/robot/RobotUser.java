@@ -30,6 +30,7 @@ public interface RobotUser {
     Intake intake = new Intake();
     Lift lift = new Lift();
     Outtake outtake = new Outtake();
+    Leds leds = new Leds();
 
 
     ColorSensors color = new ColorSensors();
@@ -44,7 +45,6 @@ public interface RobotUser {
 
     TouchSensors touchSensors = new TouchSensors();
     DistanceSensors distanceSensors = new DistanceSensors();
-    Leds leds = new Leds();
 
     /**
      * Test Part

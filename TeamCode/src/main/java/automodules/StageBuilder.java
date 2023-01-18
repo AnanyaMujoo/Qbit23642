@@ -47,9 +47,13 @@ public class StageBuilder {
      * @param time
      * @return
      */
-    public static Stage pause(double time){
-        return new Stage(exitTime(time));
-    }
+    public static Stage pause(double time){ return new Stage(exitTime(time));}
+
+    public static Stage empty(){return new Stage(exitAlways());}
+
+    public static Stage emptyIfNot(boolean condition, Stage alternative){ return condition ? empty() : alternative;}
+
+    public static Stage condition(boolean condition, Stage one, Stage two){return condition ? one : two;}
 
     /**
      * Stop the part

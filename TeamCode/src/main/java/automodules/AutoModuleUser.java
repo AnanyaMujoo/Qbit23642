@@ -12,6 +12,9 @@ import geometry.position.Pose;
 import global.Modes;
 import robot.RobotUser;
 import robotparts.RobotPart;
+import robotparts.electronics.output.OLed;
+import teleop.TerraOp;
+import teleutil.TeleTrack;
 import teleutil.independent.Independent;
 import teleutil.independent.Machine;
 import util.codeseg.CodeSeg;
@@ -40,12 +43,14 @@ public interface AutoModuleUser extends RobotUser{
      * Tele
      */
     AutoModule BackwardCircuitPick = new AutoModule(
+            TerraOp.trackAfter.next(),
             driveMode.ChangeMode(MEDIUM),
             outtake.stageClose(0.25),
             outtake.stageReadyStart(0.4),
             gameplayMode.ChangeMode(CIRCUIT_PLACE)
     );
     AutoModule BackwardCircuitGroundPick = new AutoModule(
+            TerraOp.trackAfter.next(),
             Modes.driveMode.ChangeMode(MEDIUM),
             lift.changeCutoff(2.0),
             outtake.stageClose(0.25),
@@ -100,14 +105,15 @@ public interface AutoModuleUser extends RobotUser{
             Modes.driveMode.ChangeMode(circuit ? MEDIUM : SLOW),
             Modes.attackStatus.ChangeMode(REST),
             outtakeStatus.ChangeMode(DRIVING),
-            !move ? RobotPart.pause(0.0) : outtake.stageEnd(0.0),
-            !place ? outtake.stageOpen(0.0) : outtake.stageStart(0.0),
-            !place ? RobotPart.pause(0.0) : lift.stageLift(1.0, heightMode.getValue(LOW)+8),
-            !move ? RobotPart.pause(0.0) : drive.moveTime(1.0, 0.0, 0.0, () -> heightMode.modeIs(LOW) ? 0.2 : 0.12),
+            RobotPart.emptyIfNot(move, outtake.stageEnd(0.0)),
+            RobotPart.condition(place, outtake.stageStart(0.0), outtake.stageOpen(0.0)),
+            RobotPart.emptyIfNot(place, lift.stageLift(1.0, heightMode.getValue(LOW)+8)),
+            RobotPart.emptyIfNot(move, drive.moveTime(1.0, 0.0, 0.0, () -> heightMode.modeIs(LOW) ? 0.2 : 0.12)),
             lift.resetCutoff(),
-            !place ? outtake.stageStart(0.0) : outtake.stageOpen(0.0),
-            lift.stageLift(0.7,0),
-            !circuit ? RobotPart.pause(0.0) : gameplayMode.ChangeMode(CIRCUIT_PICK)
+            RobotPart.condition(place, outtake.stageOpen(0.0), outtake.stageStart(0.0)),
+            lift.stageLift(0.8,0),
+            RobotPart.emptyIfNot(circuit, gameplayMode.ChangeMode(CIRCUIT_PICK)),
+            TerraOp.trackBefore.next()
     );}
     OutputList ForwardAll = new OutputList(gameplayMode::get).addOption(CYCLE, ForwardTele::check).addOption(CIRCUIT_PICK, ForwardCircuitTele::check).addOption(CIRCUIT_PLACE, ForwardCircuitTelePlaceAll::check);
     AutoModule High = new AutoModule(heightMode.ChangeMode(HIGH), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
@@ -122,7 +128,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule UprightCone = new AutoModule(driveMode.ChangeMode(SLOW), lift.stageLift(1.0, 15));
     AutoModule TakeOffCone = new AutoModule(outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.3),outtake.stageFlip(0.0), gameplayMode.ChangeMode(() -> lift.circuitMode ? CIRCUIT_PLACE : CYCLE));
 
-    default AutoModule ForwardStackTele(int i){return new AutoModule(
+    static AutoModule ForwardStackTele(int i){return new AutoModule(
             lift.changeCutoff(2),
             outtake.stageOpen(0.0),
             outtake.stageStart(0.0),
@@ -231,23 +237,29 @@ public interface AutoModuleUser extends RobotUser{
                 addWaypoint(0.4,  x, 20+y, 0);
             }
             if(i+1 != 11){
+                if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
                 addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH), 0.5);
                 addSegment(1.0, 0.7, mecanumNonstopSetPoint, x, -23+y, 0);
                 addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.1);
                 addSegment(0.8, 0.73, mecanumNonstopSetPoint, x, 8+y, 0);
                 addWaypoint(0.5,  x, 25+y, 0);
             } else{
+                addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
                 addSegment(0.6, 0.5, mecanumNonstopSetPoint, x, y, 0);
                 addPause(0.05);
                 addAutoModule(new AutoModule(gameplayMode.ChangeMode(CIRCUIT_PLACE), heightMode.ChangeMode(MIDDLE), driveMode.ChangeMode(MEDIUM)));
+                addAutoModule(new AutoModule(drive.stageRetract()));
+                addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
             }
     }};}
 
 
+    // TODO TEST
     Machine MachineCycle2 = new Machine()
             .addInstruction(ResetOdometry, 0.2)
-            .addIndependent(11, AutoModuleUser::Cycle2);
+            .addIndependent(11, AutoModuleUser::Cycle2)
+            .addInstruction(() -> {TerraOp.setTrack(TerraOp.kappaBefore, TerraOp.kappaAfter);}, 0.1);
 
 
 

@@ -10,6 +10,7 @@ import math.misc.Logistic;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
+import robotparts.electronics.positional.PServo;
 import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
@@ -26,15 +27,13 @@ public class Drive extends RobotPart {
     private final Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
     private final Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
 
-    private final MecanumJunctionReactor2 mecanumJunctionReactor2 = new MecanumJunctionReactor2();
-    //
-//    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 1000.0, 6.0);
-//    private final Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 1000.0, 6.0);
-//    private final Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 1000.0, 6.0);
-
+//    private final MecanumJunctionReactor2 mecanumJunctionReactor2 = new MecanumJunctionReactor2();
 
 
     private final double[][] powers = {new double[]{0.35, 0.35, 0.4}, new double[]{0.75, 0.6, 0.5}, new double[]{1.0, 1.0, 1.0}};
+
+    // TODO TEST
+    private PServo retract;
 
 
     @Override
@@ -43,10 +42,24 @@ public class Drive extends RobotPart {
         br = create("br", ElectronicType.CMOTOR_REVERSE);
         fl = create("fl", ElectronicType.CMOTOR_FORWARD);
         bl = create("bl", ElectronicType.CMOTOR_FORWARD);
+
+        retract = create("ret", ElectronicType.PSERVO_FORWARD);
+
+        retract.changePosition("start", 0.03);
+        retract.changePosition("end", 1.0);
+
+        engage();
+
         Modes.driveMode.set(SLOW);
         attackStatus.set(Modes.AttackStatus.REST);
 //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
+
+    public void retract(){ retract.setPosition("end"); }
+    public void engage(){ retract.setPosition("start"); }
+
+    public Stage stageRetract(){ return customTime(this::retract, 0.0); }
+    public Stage stageEngage(){ return customTime(this::engage, 0.0); }
 
     @Override
     public void move(double f, double s, double t) {
