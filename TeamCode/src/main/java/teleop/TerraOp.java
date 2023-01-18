@@ -39,11 +39,14 @@ public class TerraOp extends Tele {
     @Override
     public void initTele() {
 
+        outtake.arml.changePosition("start", 0.06);
+        outtake.armr.changePosition("start", 0.06);
+
         /**
          * Gamepad 1 Normal
          */
         gph1.link(Button.B, BackwardAllTele);
-        gph1.link(Button.Y, () -> {if(lift.circuitMode) { gameplayMode.set(GameplayMode.CIRCUIT_PICK);} bot.addAutoModule(ForwardAll.check());});
+        gph1.link(Button.Y, ForwardAll);
         gph1.link(Button.X, bot::cancelMovements);
 
         gph1.link(Button.A, () -> driveMode.set(Drive.FAST));
@@ -73,10 +76,11 @@ public class TerraOp extends Tele {
         gph1.link(Button.Y, CycleMediumMachine, AUTOMATED);
         gph1.link(Button.X, () -> {lift.circuitMode = true; gameplayMode.set(GameplayMode.CIRCUIT_PICK); driveMode.set(MEDIUM);}, () -> {lift.circuitMode = false; gameplayMode.set(GameplayMode.CYCLE); driveMode.set(SLOW);}, AUTOMATED);
         gph1.link(RIGHT_TRIGGER, UprightCone, AUTOMATED);
+        gph1.link(LEFT_TRIGGER, TakeOffCone, AUTOMATED);
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
         gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);
-        gph1.link(DPAD_UP, ResetLift, AUTOMATED);
+        gph1.link(DPAD_DOWN, ResetLift, AUTOMATED);
 
 
         /**

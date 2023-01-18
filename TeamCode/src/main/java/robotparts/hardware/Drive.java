@@ -10,6 +10,7 @@ import math.misc.Logistic;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
+import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
 import static global.General.bot;
@@ -76,6 +77,11 @@ public class Drive extends RobotPart {
 
     @Override
     public Stage moveTime(double fp, double sp, double tp, double t) {
+        return super.moveTime(fp, sp, tp, t);
+    }
+
+    @Override
+    public Stage moveTime(double fp, double sp, double tp, ReturnCodeSeg<Double> t) {
         return super.moveTime(fp, sp, tp, t);
     }
 

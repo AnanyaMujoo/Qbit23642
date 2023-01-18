@@ -53,10 +53,6 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0, heightMode.getValue(GROUND)),
             gameplayMode.ChangeMode(CIRCUIT_PLACE)
     );
-    AutoModule UprightCone = new AutoModule(
-            driveMode.ChangeMode(SLOW),
-            lift.stageLift(1.0, 15)
-    );
     AutoModule BackwardCycleGroundPick = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
             lift.changeCutoff(2.0),
@@ -92,20 +88,28 @@ public interface AutoModuleUser extends RobotUser{
     );}
     OutputList BackwardTele = new OutputList(heightMode::get).addOption(HIGH, BackwardHeightTele(HIGH)).addOption(MIDDLE, BackwardHeightTele(MIDDLE)).addOption(LOW, BackwardHeightTele(LOW)).addOption(GROUND, BackwardCycleGroundPick);
     OutputList BackwardAllTele = new OutputList(gameplayMode::get).addOption(CYCLE, BackwardTele::check).addOption(CIRCUIT_PICK, BackwardCircuitPickAll::check).addOption(CIRCUIT_PLACE, BackwardCircuitPlace::check);
-    OutputList ForwardCircuitTele = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTele(true, false)).addOption(PLACING, ForwardTele(true, true));
-    OutputList ForwardTele = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTele(false, false)).addOption(PLACING, ForwardTele(false, true));
-    static AutoModule ForwardTele(boolean circuit, boolean move) {return new AutoModule(
+
+
+
+    OutputList ForwardCircuitTele = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTele(false, true, false)).addOption(PLACING, ForwardTele(false, true, true));
+    OutputList ForwardCircuitTelePlace = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTele(true, true, false)).addOption(PLACING, ForwardTele(true, true, true));
+    OutputList ForwardCircuitTelePlaceAll = new OutputList(heightMode::get).addOption(HIGH, ForwardCircuitTelePlace::check).addOption(MIDDLE, ForwardCircuitTelePlace::check).addOption(LOW, ForwardCircuitTelePlace::check).addOption(GROUND, ForwardCircuitTele::check);
+
+    OutputList ForwardTele = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTele(false, false, false)).addOption(PLACING, ForwardTele(false, false, true));
+    static AutoModule ForwardTele(boolean place, boolean circuit, boolean move) {return new AutoModule(
             Modes.driveMode.ChangeMode(circuit ? MEDIUM : SLOW),
             Modes.attackStatus.ChangeMode(REST),
             outtakeStatus.ChangeMode(DRIVING),
             !move ? RobotPart.pause(0.0) : outtake.stageEnd(0.0),
-            outtake.stageOpen(0.0),
-            !move ? RobotPart.pause(0.0) : drive.moveTime(1.0, 0.0, 0.0, 0.12),
+            !place ? outtake.stageOpen(0.0) : outtake.stageStart(0.0),
+            !place ? RobotPart.pause(0.0) : lift.stageLift(1.0, heightMode.getValue(LOW)+8),
+            !move ? RobotPart.pause(0.0) : drive.moveTime(1.0, 0.0, 0.0, () -> heightMode.modeIs(LOW) ? 0.2 : 0.12),
             lift.resetCutoff(),
-            outtake.stageStart(0.0),
-            lift.stageLift(0.7,0)
+            !place ? outtake.stageStart(0.0) : outtake.stageOpen(0.0),
+            lift.stageLift(0.7,0),
+            !circuit ? RobotPart.pause(0.0) : gameplayMode.ChangeMode(CIRCUIT_PICK)
     );}
-    OutputList ForwardAll = new OutputList(gameplayMode::get).addOption(CYCLE, ForwardTele::check).addOption(CIRCUIT_PICK, ForwardCircuitTele::check).addOption(CIRCUIT_PLACE, ForwardCircuitTele::check);
+    OutputList ForwardAll = new OutputList(gameplayMode::get).addOption(CYCLE, ForwardTele::check).addOption(CIRCUIT_PICK, ForwardCircuitTele::check).addOption(CIRCUIT_PLACE, ForwardCircuitTelePlaceAll::check);
     AutoModule High = new AutoModule(heightMode.ChangeMode(HIGH), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
     AutoModule Middle = new AutoModule(heightMode.ChangeMode(MIDDLE),attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
     AutoModule Low = new AutoModule(heightMode.ChangeMode(LOW), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2));
@@ -115,7 +119,8 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule LiftLow = new AutoModule(heightMode.ChangeMode(LOW), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(LOW)));
     AutoModule LiftGround = new AutoModule(heightMode.ChangeMode(GROUND), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(GROUND)));
     AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5),  lift.resetLift() );
-
+    AutoModule UprightCone = new AutoModule(driveMode.ChangeMode(SLOW), lift.stageLift(1.0, 15));
+    AutoModule TakeOffCone = new AutoModule(outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.3),outtake.stageFlip(0.0), gameplayMode.ChangeMode(() -> lift.circuitMode ? CIRCUIT_PLACE : CYCLE));
 
     default AutoModule ForwardStackTele(int i){return new AutoModule(
             lift.changeCutoff(2),
@@ -223,14 +228,14 @@ public interface AutoModuleUser extends RobotUser{
             public void define() {
             double x = i*0.0; double y = i*0.0;
             if(i+1 == 1){ addWaypoint(0.7,  x, 17+y, 0);
-                addWaypoint(0.4,  x, 21+y, 0);
+                addWaypoint(0.4,  x, 20+y, 0);
             }
             if(i+1 != 11){
                 addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH), 0.5);
                 addSegment(1.0, 0.7, mecanumNonstopSetPoint, x, -23+y, 0);
-                addConcurrentAutoModuleWithCancel(ForwardCycle2);
-                addSegment(0.9, 0.7, mecanumNonstopSetPoint, x, 8+y, 0);
-                addWaypoint(0.5,  x, 26+y, 0);
+                addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.1);
+                addSegment(0.8, 0.73, mecanumNonstopSetPoint, x, 8+y, 0);
+                addWaypoint(0.5,  x, 25+y, 0);
             } else{
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
                 addSegment(0.6, 0.5, mecanumNonstopSetPoint, x, y, 0);
@@ -312,7 +317,7 @@ public interface AutoModuleUser extends RobotUser{
             addWaypoint(0.38, 0, 3, 0);
             addSetpoint(1.05, 0.95,0, -4,0);
             addCancelAutoModules();
-            addConcurrentAutoModule(ForwardTele(false,false));
+            addConcurrentAutoModule(ForwardTele(false, false,false));
             addPause(0.4);
         }
     };

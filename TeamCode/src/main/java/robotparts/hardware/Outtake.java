@@ -15,7 +15,7 @@ import static global.Modes.outtakeStatus;
 
 public class Outtake extends RobotPart {
 
-    private PServo armr, arml, turn, claw;
+    public PServo armr, arml, turn, claw;
 
     @Override
     public void init() {
@@ -25,8 +25,8 @@ public class Outtake extends RobotPart {
         arml.changePosition("start", 0.03);
         armr.changePosition("start", 0.03);
 
-        arml.addPosition("startHalf", 0.35);
-        armr.addPosition("startHalf", 0.35);
+        arml.addPosition("startHalf", 0.38);
+        armr.addPosition("startHalf", 0.38);
 
         armr.addPosition("middle", 0.38);
         arml.addPosition("middle", 0.38);
