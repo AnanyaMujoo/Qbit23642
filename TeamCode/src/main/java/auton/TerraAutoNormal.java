@@ -29,10 +29,7 @@ public class TerraAutoNormal extends AutoFramework {
     protected enum AutoMode implements Mode.ModeType {NORMAL, SIMPLE}
     protected AutoMode autoMode;
 
-    // TOD4 CLEAN
-
-
-    private double x, s, y;
+    private double x, s;
 
     @Override
     public void initialize() {
@@ -40,16 +37,8 @@ public class TerraAutoNormal extends AutoFramework {
         lift.maintain();
         outtake.readyStart(); outtake.closeClaw();
         scan(false);
-//        setScannerAfterInit(MecanumJunctionReactor2.junctionScanner);
-        x = 0; s = 0; y = 0;
+        x = 0; s = 0;
     }
-
-    @Override
-    public void preProcess() {
-//        caseDetected = Case.THIRD;
-    }
-//
-//    Stage junctionStop(){ return new Stage(new Main(() -> MecanumJunctionReactor2.stop = true), RobotPart.exitAlways()); }
 
     AutoModule BackwardFirst = new AutoModule(
             lift.changeCutoff(1.0),
@@ -159,29 +148,6 @@ public class TerraAutoNormal extends AutoFramework {
         });
         addPause(0.1);
         // End
-
-
-
-
-
-//        customCase(() -> {
-//            addWaypoint(-7, 124, 90);
-//            addScaledWaypoint(0.8, -10, 124, 90);
-//            addScaledWaypoint(0.8, -45, 122, 60);
-//            addScaledWaypoint(0.8, -50, 123, 25);
-//            addScaledSetpoint(0.9, -62, 75, 0);
-//        }, () -> {
-//            addWaypoint(0, 130, 35);
-//            addWaypoint(0, 105, 0);
-//            addScaledSetpoint(0.9, 0, 75, 0);
-//        }, () -> {
-//            addWaypoint(7, 128, 90);
-//            addScaledWaypoint(0.8, 16, 128, 90);
-//            addScaledWaypoint(0.8, 39, 122, 58);
-//            addScaledWaypoint(0.8, 51, 111, 32);
-//            addScaledWaypoint(0.8, 56, 95, 0);
-//            addScaledSetpoint(0.9, 58, 75, 0);
-//        });
     }
 
 
@@ -189,20 +155,11 @@ public class TerraAutoNormal extends AutoFramework {
     public void postProcess() {
         autoPlane.reflectY(); autoPlane.reflectX();
     }
-
-    @Override
-    public void stopAuto() {
-//        bot.savePose(odometry.getPose());
-//        bot.saveLocationOnField();
-        super.stopAuto();
-    }
-
-
-    @Autonomous(name = "TerraAutoNormalRight", group = "auto")
+    @Autonomous(name = "TerraAutoNormalRight", group = "auto", preselectTeleOp = "TerraOp")
     public static class TerraAutoNormalRight extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
-    @Autonomous(name = "TerraAutoNormalLeft", group = "auto")
+    @Autonomous(name = "TerraAutoNormalLeft", group = "auto", preselectTeleOp = "TerraOp")
     public static class TerraAutoNormalLeft extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
-//
+
 //    @Autonomous(name = "TerraAutoSimpleRight", group = "auto")
 //    public static class TerraAutoSimpleRight extends TerraAuto {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.SIMPLE;}}
 //    @Autonomous(name = "TerraAutoSimpleLeft", group = "auto")

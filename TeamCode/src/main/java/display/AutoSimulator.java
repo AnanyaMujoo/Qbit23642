@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import automodules.AutoModuleUser;
-import auton.TerraAuto;
 import autoutil.AutoFramework;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
