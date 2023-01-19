@@ -44,25 +44,26 @@ public interface AutoModuleUser extends RobotUser{
 
     CodeSeg stack = () -> {bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;};
     TeleTrack kappaBefore = new TeleTrack(
-            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(MEDIUM)).add(gameplayMode.setTo(CIRCUIT_PICK)),
-            new TeleTrack.Step(heightMode.setTo(GROUND)).add(driveMode.setTo(SLOW)),
-            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(MEDIUM)),
-            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(MEDIUM)).add(stack),
-            new TeleTrack.Step(heightMode.setTo(HIGH)).add(driveMode.setTo(MEDIUM)).add(stack),
-            new TeleTrack.Step(heightMode.setTo(GROUND)).add(driveMode.setTo(SLOW)).add(stack),
-            new TeleTrack.Step(heightMode.setTo(GROUND)).add(driveMode.setTo(SLOW)),
-            new TeleTrack.Step(heightMode.setTo(GROUND)).add(driveMode.setTo(MEDIUM)),
-            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(SLOW))
+            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(MEDIUM)).add(gameplayMode.setTo(CIRCUIT_PICK)), // LOW
+            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(SLOW)), // TERMINAL
+            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(MEDIUM)), // LOW
+            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(MEDIUM)).add(stack), // LOW
+            new TeleTrack.Step(heightMode.setTo(HIGH)).add(driveMode.setTo(SLOW)).add(stack), // HIGH
+            new TeleTrack.Step(heightMode.setTo(GROUND)).add(driveMode.setTo(MEDIUM)).add(stack), // GROUND
+            new TeleTrack.Step(heightMode.setTo(GROUND)).add(driveMode.setTo(SLOW)), // TERMINAL
+            new TeleTrack.Step(heightMode.setTo(GROUND)).add(driveMode.setTo(MEDIUM)), // GROUND
+            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(SLOW)) // LOW + CAP
     );
     TeleTrack kappaAfter = new TeleTrack(
-            new TeleTrack.Step(driveMode.setTo(SLOW)),
-            new TeleTrack.Step(driveMode.setTo(FAST)),
-            new TeleTrack.Step(driveMode.setTo(SLOW)),
-            new TeleTrack.Step(driveMode.setTo(SLOW)),
-            new TeleTrack.Step(driveMode.setTo(MEDIUM)),
-            new TeleTrack.Step(driveMode.setTo(SLOW)),
-            new TeleTrack.Step(driveMode.setTo(FAST)),
-            new TeleTrack.Step(driveMode.setTo(MEDIUM))
+            new TeleTrack.Step(driveMode.setTo(SLOW)), // LOW
+            new TeleTrack.Step(driveMode.setTo(FAST)), // TERMINAL
+            new TeleTrack.Step(driveMode.setTo(SLOW)), // LOW
+            new TeleTrack.Step(driveMode.setTo(SLOW)), // LOW
+            new TeleTrack.Step(driveMode.setTo(MEDIUM)), // HIGH
+            new TeleTrack.Step(driveMode.setTo(SLOW)), // GROUND
+            new TeleTrack.Step(driveMode.setTo(FAST)), // TERMINAL
+            new TeleTrack.Step(driveMode.setTo(SLOW)), // GROUND
+            new TeleTrack.Step(driveMode.setTo(MEDIUM)) // LOW + CAP
     );
 
     static void enableKappa(){ kappaAfter.enable(); kappaBefore.enable(); }
@@ -72,20 +73,20 @@ public interface AutoModuleUser extends RobotUser{
      * Tele
      */
     AutoModule BackwardCircuitPick = new AutoModule(
-            kappaAfter.next(),
             driveMode.ChangeMode(MEDIUM),
+            gameplayMode.ChangeMode(CIRCUIT_PLACE),
+            kappaAfter.next(),
             outtake.stageClose(0.25),
-            outtake.stageReadyStart(0.4),
-            gameplayMode.ChangeMode(CIRCUIT_PLACE)
+            outtake.stageReadyStart(0.4)
     );
     AutoModule BackwardCircuitGroundPick = new AutoModule(
-            kappaAfter.next(),
             Modes.driveMode.ChangeMode(MEDIUM),
+            gameplayMode.ChangeMode(CIRCUIT_PLACE),
+            kappaAfter.next(),
             lift.changeCutoff(2.0),
             outtake.stageClose(0.25),
             outtake.stageReadyStart(0.0),
-            lift.stageLift(1.0, heightMode.getValue(GROUND)),
-            gameplayMode.ChangeMode(CIRCUIT_PLACE)
+            lift.stageLift(1.0, heightMode.getValue(GROUND))
     );
     AutoModule BackwardCycleGroundPick = new AutoModule(
             Modes.driveMode.ChangeMode(SLOW),
@@ -110,6 +111,7 @@ public interface AutoModuleUser extends RobotUser{
             outtakeStatus.ChangeMode(PLACING),
             Modes.attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST),
             outtake.stageFlip(0.0),
+            lift.changeCutoff(1.0),
             lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.4)),
             gameplayMode.ChangeMode(CIRCUIT_PICK)
     );}
@@ -118,6 +120,7 @@ public interface AutoModuleUser extends RobotUser{
             outtakeStatus.ChangeMode(PLACING),
             Modes.attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST),
             outtake.stageClose(0.25),
+            lift.changeCutoff(1.0),
             lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(height.equals(HIGH) ? 0.4 : height.equals(MIDDLE) ? 0.2 : 0.0))
     );}
     OutputList BackwardTele = new OutputList(heightMode::get).addOption(HIGH, BackwardHeightTele(HIGH)).addOption(MIDDLE, BackwardHeightTele(MIDDLE)).addOption(LOW, BackwardHeightTele(LOW)).addOption(GROUND, BackwardCycleGroundPick);
@@ -286,6 +289,7 @@ public interface AutoModuleUser extends RobotUser{
             .addInstruction(ResetOdometry, 0.2)
             .addIndependent(11, AutoModuleUser::Cycle2)
             .addInstruction(AutoModuleUser::enableKappa, 0.1);
+    // TODO TEST
 
 
 

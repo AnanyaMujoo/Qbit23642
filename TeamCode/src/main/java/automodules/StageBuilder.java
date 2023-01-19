@@ -99,12 +99,13 @@ public class StageBuilder {
     protected Stage moveNow(double p){ return new Stage(usePart(), main(p), exitAlways(), stop(), returnPart()); }
     protected AutoModule MoveTime(double p, double t){ return new AutoModule(moveTime(p, t)); }
 
+    // TOD5 Problem with using exitAlways
     protected final Stage moveCustomExit(double fp, double sp, double tp, Exit exit){ return new Stage(usePart(), main(fp, sp, tp), exit, stop(), returnPart()); }
     protected final Stage customExit(double p, Exit exit){ return new Stage(usePart(), main(p), exit, stop(), returnPart()); }
     protected final Stage customExit(double p, ReturnCodeSeg<Boolean> exit){ return new Stage(usePart(), main(p), new Exit(exit), stop(), returnPart()); }
-    protected final Stage customTime(CodeSeg m, double t){ return new Stage(usePart(), new Main(m), exitTime(t != 0 ? t : 0.01), stop(), returnPart()); }
-    protected final Stage customTime(Main m, double t){ return new Stage(usePart(), m, exitTime(t != 0 ? t : 0.01), stop(), returnPart()); }
-    protected final Stage customTimeAfter(CodeSeg m, double t){ return new Stage(usePart(), new Main(()-> {}), exitTime(t != 0 ? t : 0.01), new Stop(m), returnPart()); }
+    protected final Stage customTime(CodeSeg m, double t){ return new Stage(usePart(), new Main(m), t != 0.0 ? exitTime(t) : exitTime(0.05), stop(), returnPart()); }
+    protected final Stage customTime(Main m, double t){ return new Stage(usePart(), m, t != 0.0 ? exitTime(t) : exitTime(0.05), stop(), returnPart()); }
+    protected final Stage customTimeAfter(CodeSeg m, double t){ return new Stage(usePart(), new Main(()-> {}), t != 0.0 ? exitTime(t) : exitTime(0.05), new Stop(m), returnPart()); }
     protected final Stage customContinuousTime(ReturnCodeSeg<PServo> servo1, ReturnCodeSeg<PServo> servo2, String target, double t){ return new Stage(usePart(), new Initial(() -> {servo1.run().setContinuousTarget(target); servo2.run().setContinuousTarget(target);}), new Main(() -> {servo1.run().moveContinuous(t); servo2.run().moveContinuous(t);}), RobotPart.exitTime(t), returnPart());}
 
     protected void setTarget(double target){}

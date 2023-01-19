@@ -56,4 +56,7 @@ public class Leds extends RobotPart {
             setColor(active ? on : off);
         }
     }
+    public void pulse(LEDColor on, double rate){
+        pulse(on, LEDColor.OFF, rate);
+    }
 }

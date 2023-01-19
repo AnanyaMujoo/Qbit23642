@@ -108,9 +108,19 @@ public class TerraOp extends Tele {
         if(time > cutoff){
             if(time < cutoff+20) {
                 Linear rate = new Linear(0.5, 1.0, 20.0);
-                leds.pulse(OLed.LEDColor.ORANGE, OLed.LEDColor.OFF, rate.f(time - cutoff));
+                leds.pulse(OLed.LEDColor.GREEN, OLed.LEDColor.RED, rate.f(time - cutoff));
             }else{
                 leds.setColor(OLed.LEDColor.RED);
+            }
+        }else if(!bot.indHandler.isIndependentRunning()){
+            if(heightMode.modeIs(HIGH)){
+                leds.pulse(OLed.LEDColor.GREEN, OLed.LEDColor.OFF, 0.5);
+            }else if(heightMode.modeIs(MIDDLE)){
+                leds.pulse(OLed.LEDColor.ORANGE, OLed.LEDColor.OFF, 0.5);
+            }else if(heightMode.modeIs(LOW)){
+                leds.pulse(OLed.LEDColor.RED, OLed.LEDColor.OFF, 0.5);
+            }else if(heightMode.modeIs(GROUND)){
+                leds.setColor(OLed.LEDColor.OFF);
             }
         }
 
