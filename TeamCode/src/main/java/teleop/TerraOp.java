@@ -27,43 +27,15 @@ import static teleutil.TeleTrack.*;
 @TeleOp(name = "TerraOp", group = "TeleOp")
 public class TerraOp extends Tele {
 
+
     // Medium, Low, Terminal (Ground), Low, Low, High, Ground, Terminal (Ground), Ground, Cap (Low)
-    public static final CodeSeg stack = () -> {bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;};
-    public static final TeleTrack kappaBefore = new TeleTrack(
-            new Step(heightMode, LOW).add(driveMode, MEDIUM).add(gameplayMode, CIRCUIT_PICK),
-            new Step(heightMode, GROUND).add(driveMode, SLOW),
-            new Step(heightMode, LOW).add(driveMode, MEDIUM),
-            new Step(heightMode, LOW).add(driveMode, MEDIUM).add(stack),
-            new Step(heightMode, HIGH).add(driveMode, MEDIUM).add(stack),
-            new Step(heightMode, GROUND).add(driveMode, SLOW).add(stack),
-            new Step(heightMode, GROUND).add(driveMode, SLOW),
-            new Step(heightMode, GROUND).add(driveMode, MEDIUM),
-            new Step(heightMode, LOW).add(driveMode, SLOW)
-    );
-    public static final TeleTrack kappaAfter = new TeleTrack(
-            new Step(driveMode, SLOW),
-            new Step(driveMode, FAST),
-            new Step(driveMode, SLOW),
-            new Step(driveMode, SLOW),
-            new Step(driveMode, MEDIUM),
-            new Step(driveMode, SLOW),
-            new Step(driveMode, FAST),
-            new Step(driveMode, MEDIUM)
-    );
-
-    public static final TeleTrack tauBefore = new TeleTrack();
-    public static final TeleTrack tauAfter = new TeleTrack();
-
-    public static TeleTrack trackBefore = new TeleTrack();
-    public static TeleTrack trackAfter = new TeleTrack();
-
-    public static void setTrack(TeleTrack before, TeleTrack after){ trackBefore = before; trackAfter = after; }
-    public static void disable(){ trackBefore.disable(); trackAfter.disable(); }
 
 
 
     @Override
     public void initTele() {
+
+        kappaBefore.disable(); kappaAfter.disable();
 
         outtake.arml.changePosition("start", 0.06);
         outtake.armr.changePosition("start", 0.06);
@@ -74,7 +46,6 @@ public class TerraOp extends Tele {
         gph1.link(Button.B, BackwardAllTele);
         gph1.link(Button.Y, ForwardAll);
         gph1.link(Button.X, bot::cancelMovements);
-
         gph1.link(Button.A, () -> driveMode.set(Drive.FAST));
         gph1.link(Button.RIGHT_STICK_BUTTON, () -> driveMode.set(MEDIUM));
 
@@ -104,9 +75,8 @@ public class TerraOp extends Tele {
 //        gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
 //        gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);
 
-        gph1.link(RIGHT_BUMPER, () -> setTrack(kappaBefore, kappaAfter));
-        gph1.link(LEFT_BUMPER, () -> setTrack(tauBefore, tauAfter));
-        gph1.link(Button.Y, TerraOp::disable);
+        gph1.link(RIGHT_BUMPER, AutoModuleUser::enableKappa, AUTOMATED);
+        gph1.link(LEFT_BUMPER, AutoModuleUser::disableKappa, AUTOMATED);
 
         gph1.link(DPAD_DOWN, ResetLift, AUTOMATED);
 
@@ -130,16 +100,18 @@ public class TerraOp extends Tele {
     public void startTele() {
         outtake.readyStart();
         outtake.openClaw();
-        bot.loadPose();
     }
 
     @Override
     public void loopTele() {
-        // TODO TEST
-        double endTime = 90;
-        if(time > endTime){
-            Linear rate = new Linear(0.3, 1.0, 30.0);
-            leds.pulse(OLed.LEDColor.RED, OLed.LEDColor.OFF, rate.f(time - endTime));
+        double cutoff = 90;
+        if(time > cutoff){
+            if(time < cutoff+20) {
+                Linear rate = new Linear(0.5, 1.0, 20.0);
+                leds.pulse(OLed.LEDColor.ORANGE, OLed.LEDColor.OFF, rate.f(time - cutoff));
+            }else{
+                leds.setColor(OLed.LEDColor.RED);
+            }
         }
 
 
@@ -152,7 +124,10 @@ public class TerraOp extends Tele {
         log.show("GameplayMode", gameplayMode.get());
         log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
 
-//        log.show("OuttakeStatus", outtakeStatus.get());
+        log.show("OuttakeStatus", outtakeStatus.get());
+        log.show("TrackStatus", kappaBefore.isEnabled() ? "Kappa" : "None");
+//        log.show("Kappa Size", kappaBefore.steps.size());
+//        log.show("Kappa #", kappaBefore.stepNumber);
 
 //        log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : GamepadMode.NORMAL);
 

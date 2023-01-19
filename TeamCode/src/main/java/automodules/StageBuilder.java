@@ -51,7 +51,7 @@ public class StageBuilder {
 
     public static Stage empty(){return new Stage(exitAlways());}
 
-    public static Stage emptyIfNot(boolean condition, Stage alternative){ return condition ? empty() : alternative;}
+    public static Stage emptyIfNot(boolean condition, Stage alternative){ return condition ? alternative : empty();}
 
     public static Stage condition(boolean condition, Stage one, Stage two){return condition ? one : two;}
 

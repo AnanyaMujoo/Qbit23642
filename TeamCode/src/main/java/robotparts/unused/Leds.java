@@ -15,7 +15,7 @@ public class Leds extends RobotPart {
     /**
      * Leds
      */
-    private OLed ledBack;
+//    private OLed ledBack;
     private OLed ledFront;
 
     private boolean active = false;
@@ -26,7 +26,7 @@ public class Leds extends RobotPart {
     @Override
     public void init() {
         ledFront = create("ledf", ElectronicType.OLED);
-        ledBack = create("ledb", ElectronicType.OLED);
+//        ledBack = create("ledb", ElectronicType.OLED);
 //        ledfl = create("ledfl", ElectronicType.OLED);
 //        ledbl = create("ledbl", ElectronicType.OLED);
         setColor(LEDColor.OFF);
@@ -38,7 +38,7 @@ public class Leds extends RobotPart {
      * @param color
      */
     public void setColor(LEDColor color){
-        ledBack.setColor(color);
+//        ledBack.setColor(color);
         ledFront.setColor(color);
     }
 

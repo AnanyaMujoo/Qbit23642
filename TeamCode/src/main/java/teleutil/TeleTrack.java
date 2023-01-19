@@ -15,25 +15,34 @@ import util.template.Mode;
 
 public class TeleTrack {
 
-    private boolean enabled = true;
-    private final ArrayList<Step> steps;
-    private int stepNumber = 0;
+    public final ArrayList<Step> steps;
+    public int stepNumber = 0;
 
-    public TeleTrack(){ disable(); steps = new ArrayList<>(); }
+    public boolean enabled = false;
 
     public TeleTrack(Step... steps){ this.steps = new ArrayList<>(Arrays.asList(steps)); }
-    public Stage nextStep(){ return stepNumber < steps.size() ? new Stage(new Main(() -> {steps.get(stepNumber).run(); stepNumber++;}), RobotPart.exitAlways()) : new Stage(new Main(() -> {stepNumber = 0; disable();}), RobotPart.exitAlways()); }
+    public Stage next(){
+        return new Stage(new Main(() -> {
+            if(enabled) {
+                if (stepNumber < steps.size()) {
+                    steps.get(stepNumber).run();
+                    stepNumber++;
+                } else {
+                    disable();
+                }
+            }
+        }), RobotPart.exitAlways());
+    }
 
-    public void disable(){ enabled = false; }
-    public Stage next(){ return enabled ? nextStep() : RobotPart.empty(); }
+    public void enable(){ enabled = true; }
+    public void disable(){ enabled = false; stepNumber = 0; }
+
+    public boolean isEnabled(){ return enabled; }
 
     public static class Step{
-        private final HashMap<Mode, Mode.ModeType> map = new HashMap<>();
         private final ArrayList<CodeSeg> codes = new ArrayList<>();
-        public Step(Mode mode, Mode.ModeType value){ map.put(mode, value); }
         public Step(CodeSeg seg){ codes.add(seg); }
-        public void run(){ Iterator.forAll(map, Mode::set); Iterator.forAllRun(codes); }
-        public Step add(Mode mode, Mode.ModeType value){ map.put(mode, value); return this; }
+        public void run(){ Iterator.forAllRun(codes); }
         public Step add(CodeSeg seg){ codes.add(seg); return this; }
     }
 }

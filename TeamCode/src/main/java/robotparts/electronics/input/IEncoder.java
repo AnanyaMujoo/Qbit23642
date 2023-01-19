@@ -73,9 +73,11 @@ public class IEncoder extends Electronic {
     private void updatePMotor(){ position = motor.getCurrentPosition(); angularVelocity = motor.getVelocity(AngleUnit.RADIANS); current = motor.getCurrent(CurrentUnit.AMPS); }
 
     public void updateNormal(){
-        position = !inverted ? motor.getCurrentPosition() : -motor.getCurrentPosition();
-        deltaPosition = (position - lastPosition)*wheelDiameter*Math.PI/Constants.ENCODER_TICKS_PER_REV;
-        lastPosition = position;
+        synchronized (motor) {
+            position = !inverted ? motor.getCurrentPosition() : -motor.getCurrentPosition();
+            deltaPosition = (position - lastPosition) * wheelDiameter * Math.PI / Constants.ENCODER_TICKS_PER_REV;
+            lastPosition = position;
+        }
     }
 
     public void setWheelDiameter(double wheelDiameter){ this.wheelDiameter = wheelDiameter; }
