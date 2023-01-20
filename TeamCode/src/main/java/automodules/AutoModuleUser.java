@@ -157,6 +157,8 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule LiftLow = new AutoModule(heightMode.ChangeMode(LOW), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(LOW)));
     AutoModule LiftGround = new AutoModule(heightMode.ChangeMode(GROUND), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(GROUND)));
     AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5),  lift.resetLift() );
+    AutoModule RetractOdometry = new AutoModule(drive.stageRetract());
+    AutoModule EngageOdometry = new AutoModule(drive.stageEngage());
     AutoModule UprightCone = new AutoModule(driveMode.ChangeMode(SLOW), lift.stageLift(1.0, 15));
     AutoModule TakeOffCone = new AutoModule(outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.3),outtake.stageFlip(0.0), gameplayMode.ChangeMode(() -> lift.circuitMode ? CIRCUIT_PLACE : CYCLE));
 
@@ -266,6 +268,7 @@ public interface AutoModuleUser extends RobotUser{
             double x = i*0.0; double y = i*0.0;
             if(i+1 == 1){ addWaypoint(0.7,  x, 17+y, 0);
                 addWaypoint(0.4,  x, 20+y, 0);
+                addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
             }
             if(i+1 != 11){
                 if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
@@ -280,7 +283,7 @@ public interface AutoModuleUser extends RobotUser{
                 addSegment(0.6, 0.5, mecanumNonstopSetPoint, x, y, 0);
                 addPause(0.05);
                 addAutoModule(new AutoModule(gameplayMode.ChangeMode(CIRCUIT_PLACE), heightMode.ChangeMode(MIDDLE), driveMode.ChangeMode(MEDIUM)));
-                addAutoModule(new AutoModule(drive.stageRetract()));
+                addAutoModule(RetractOdometry);
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
             }
     }};}
@@ -289,7 +292,6 @@ public interface AutoModuleUser extends RobotUser{
             .addInstruction(ResetOdometry, 0.2)
             .addIndependent(11, AutoModuleUser::Cycle2)
             .addInstruction(AutoModuleUser::enableKappa, 0.1);
-    // TODO TEST
 
 
 

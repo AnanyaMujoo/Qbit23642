@@ -27,11 +27,6 @@ import static teleutil.TeleTrack.*;
 @TeleOp(name = "TerraOp", group = "TeleOp")
 public class TerraOp extends Tele {
 
-
-    // Medium, Low, Terminal (Ground), Low, Low, High, Ground, Terminal (Ground), Ground, Cap (Low)
-
-
-
     @Override
     public void initTele() {
 
@@ -79,6 +74,8 @@ public class TerraOp extends Tele {
         gph1.link(LEFT_BUMPER, AutoModuleUser::disableKappa, AUTOMATED);
 
         gph1.link(DPAD_DOWN, ResetLift, AUTOMATED);
+        gph1.link(DPAD_UP, RetractOdometry, AUTOMATED);
+        gph1.link(DPAD_RIGHT, EngageOdometry, AUTOMATED);
 
 
         /**
@@ -114,11 +111,11 @@ public class TerraOp extends Tele {
             }
         }else if(!bot.indHandler.isIndependentRunning()){
             if(heightMode.modeIs(HIGH)){
-                leds.pulse(OLed.LEDColor.GREEN, OLed.LEDColor.OFF, 0.5);
+                leds.pulse(OLed.LEDColor.GREEN, 0.5);
             }else if(heightMode.modeIs(MIDDLE)){
-                leds.pulse(OLed.LEDColor.ORANGE, OLed.LEDColor.OFF, 0.5);
+                leds.pulse(OLed.LEDColor.ORANGE, 0.5);
             }else if(heightMode.modeIs(LOW)){
-                leds.pulse(OLed.LEDColor.RED, OLed.LEDColor.OFF, 0.5);
+                leds.pulse(OLed.LEDColor.RED, 0.5);
             }else if(heightMode.modeIs(GROUND)){
                 leds.setColor(OLed.LEDColor.OFF);
             }
@@ -133,9 +130,10 @@ public class TerraOp extends Tele {
         log.show("HeightMode", heightMode.get());
         log.show("GameplayMode", gameplayMode.get());
         log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
-
-        log.show("OuttakeStatus", outtakeStatus.get());
         log.show("TrackStatus", kappaBefore.isEnabled() ? "Kappa" : "None");
+
+//        log.show("OuttakeStatus", outtakeStatus.get());
+
 //        log.show("Kappa Size", kappaBefore.steps.size());
 //        log.show("Kappa #", kappaBefore.stepNumber);
 
