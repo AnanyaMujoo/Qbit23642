@@ -61,6 +61,7 @@ public class TerraOp extends Tele {
          * Gamepad 1 Automated
          */
 //        gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
+        gph1.link(Button.Y, ForwardCircuitTelePlaceAll, AUTOMATED);
         gph1.link(Button.B, MachineCycle2, AUTOMATED);
 //        gph1.link(Button.Y, CycleMediumMachine, AUTOMATED);
         gph1.link(Button.X, () -> {lift.circuitMode = true; gameplayMode.set(GameplayMode.CIRCUIT_PICK); driveMode.set(MEDIUM);}, () -> {lift.circuitMode = false; gameplayMode.set(GameplayMode.CYCLE); driveMode.set(SLOW);}, AUTOMATED);
@@ -109,7 +110,7 @@ public class TerraOp extends Tele {
             }else{
                 leds.setColor(OLed.LEDColor.RED);
             }
-        }else if(!bot.indHandler.isIndependentRunning()){
+        }else if(!gameplayMode.modeIs(CYCLE)){
             if(heightMode.modeIs(HIGH)){
                 leds.pulse(OLed.LEDColor.GREEN, 0.5);
             }else if(heightMode.modeIs(MIDDLE)){

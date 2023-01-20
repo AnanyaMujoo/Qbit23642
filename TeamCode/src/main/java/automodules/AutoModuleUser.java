@@ -67,7 +67,7 @@ public interface AutoModuleUser extends RobotUser{
     );
 
     static void enableKappa(){ kappaAfter.enable(); kappaBefore.enable(); }
-    static void disableKappa(){ kappaAfter.enable(); kappaBefore.enable(); }
+    static void disableKappa(){ kappaAfter.disable(); kappaBefore.disable(); }
 
     /**
      * Tele
@@ -112,16 +112,16 @@ public interface AutoModuleUser extends RobotUser{
             Modes.attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST),
             outtake.stageFlip(0.0),
             lift.changeCutoff(1.0),
-            lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(0.4)),
+            lift.stageLift(1.0, heightMode.getValue(height) + 2).attach(outtake.stageReadyEndAfter(0.4)),
             gameplayMode.ChangeMode(CIRCUIT_PICK)
     );}
     static AutoModule BackwardHeightTele(Height height){ return new AutoModule(
-            Modes.driveMode.ChangeMode(SLOW),
+            Modes.driveMode.ChangeMode(MEDIUM),
             outtakeStatus.ChangeMode(PLACING),
             Modes.attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST),
             outtake.stageClose(0.25),
             lift.changeCutoff(1.0),
-            lift.stageLift(1.0, heightMode.getValue(height)).attach(outtake.stageReadyEndAfter(height.equals(HIGH) ? 0.4 : height.equals(MIDDLE) ? 0.2 : 0.0))
+            lift.stageLift(1.0, heightMode.getValue(height) + 2).attach(outtake.stageReadyEndAfter(height.equals(HIGH) ? 0.4 : height.equals(MIDDLE) ? 0.2 : 0.0))
     );}
     OutputList BackwardTele = new OutputList(heightMode::get).addOption(HIGH, BackwardHeightTele(HIGH)).addOption(MIDDLE, BackwardHeightTele(MIDDLE)).addOption(LOW, BackwardHeightTele(LOW)).addOption(GROUND, BackwardCycleGroundPick);
     OutputList BackwardAllTele = new OutputList(gameplayMode::get).addOption(CYCLE, BackwardTele::check).addOption(CIRCUIT_PICK, BackwardCircuitPickAll::check).addOption(CIRCUIT_PLACE, BackwardCircuitPlace::check);
@@ -134,7 +134,7 @@ public interface AutoModuleUser extends RobotUser{
 
     OutputList ForwardTele = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTele(false, false, false)).addOption(PLACING, ForwardTele(false, false, true));
     static AutoModule ForwardTele(boolean place, boolean circuit, boolean move) {return new AutoModule(
-            Modes.driveMode.ChangeMode(circuit ? MEDIUM : SLOW),
+            Modes.driveMode.ChangeMode(MEDIUM),
             Modes.attackStatus.ChangeMode(REST),
             outtakeStatus.ChangeMode(DRIVING),
             RobotPart.emptyIfNot(move, outtake.stageEnd(0.0)),
@@ -147,7 +147,7 @@ public interface AutoModuleUser extends RobotUser{
             RobotPart.emptyIfNot(circuit, gameplayMode.ChangeMode(CIRCUIT_PICK)),
             kappaBefore.next()
     );}
-    OutputList ForwardAll = new OutputList(gameplayMode::get).addOption(CYCLE, ForwardTele::check).addOption(CIRCUIT_PICK, ForwardCircuitTele::check).addOption(CIRCUIT_PLACE, ForwardCircuitTelePlaceAll::check);
+    OutputList ForwardAll = new OutputList(gameplayMode::get).addOption(CYCLE, ForwardTele::check).addOption(CIRCUIT_PICK, ForwardCircuitTele::check).addOption(CIRCUIT_PLACE, ForwardCircuitTele::check);
     AutoModule High = new AutoModule(heightMode.ChangeMode(HIGH), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
     AutoModule Middle = new AutoModule(heightMode.ChangeMode(MIDDLE),attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
     AutoModule Low = new AutoModule(heightMode.ChangeMode(LOW), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2));
@@ -235,20 +235,20 @@ public interface AutoModuleUser extends RobotUser{
      */
 
     static AutoModule BackwardCycle2(Height height) {return new AutoModule(
-            outtake.stageClose(0.18),
+            outtake.stageClose(0.2),
             outtake.stageReadyEnd(0.0),
-            lift.stageLift(1.0, heightMode.getValue(height)+3.5)
+            lift.stageLift(1.0, heightMode.getValue(height)+4)
     );}
 
 
     AutoModule ForwardCycle2 = new AutoModule(
 
             outtake.stageEnd(0.1),
-            outtake.stageOpen(0.1),
-            lift.moveTime(-0.5, 0.1),
+            outtake.stageOpen(0.0),
+//            lift.moveTime(-1.0, 0.1),
             lift.resetCutoff(),
-            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0)
+//            outtake.stageStart(0.0),
+            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.2))
 
 //            outtake.stageEnd(0.0),
 //            outtake.stageOpen(0.0),
@@ -265,18 +265,24 @@ public interface AutoModuleUser extends RobotUser{
     static Independent Cycle2(int i) { return new Independent() {
             @Override
             public void define() {
-            double x = i*0.0; double y = i*0.0;
-            if(i+1 == 1){ addWaypoint(0.7,  x, 17+y, 0);
-                addWaypoint(0.4,  x, 20+y, 0);
+            double x = (i*0.0)-0.2; double y = i*0.0;
+            if(i+1 == 1){
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
+                addWaypoint(0.7,  x, 18+y, 0);
+                addWaypoint(0.4,  x, 21+y, 0);
             }
             if(i+1 != 11){
                 if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
-                addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH), 0.5);
-                addSegment(1.0, 0.7, mecanumNonstopSetPoint, x, -23+y, 0);
+
+                addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH), 0.2);
+                addWaypoint(i == 0 ? 0.5 : 0.65, x, -15+y, 0);
+                addSegment(0.2, 0.5, mecanumNonstopSetPoint, x, -23+y, 0);
                 addConcurrentAutoModuleWithCancel(ForwardCycle2);
-                addSegment(0.85, 0.7, mecanumNonstopSetPoint, x, 8+y, 0);
-                addWaypoint(0.5,  x, 25+y, 0);
+                addWaypoint(0.65, x, y, 0);
+//                addSegment(0.5, 1.0, mecanumNonstopSetPoint, x, 10+y, 0);
+                addWaypoint(0.4,  x, 25+y, 0);
+
+
             } else{
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
@@ -291,7 +297,8 @@ public interface AutoModuleUser extends RobotUser{
     Machine MachineCycle2 = new Machine()
             .addInstruction(ResetOdometry, 0.2)
             .addIndependent(11, AutoModuleUser::Cycle2)
-            .addInstruction(AutoModuleUser::enableKappa, 0.1);
+//            .addInstruction(AutoModuleUser::enableKappa, 0.1)
+    ;
 
 
 

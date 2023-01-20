@@ -122,8 +122,8 @@ public class TerraAutoNormal extends AutoFramework {
                 addTimedSetpoint(1.0, 0.6, 0.4, -1.3 - x, 134 + s, 53);
                 addTimedSetpoint(1.0, 0.6, 0.8, -9 - x, 143 + s, 53);
             }, () -> {
-                addTimedSetpoint(1.0, 0.6, 0.4, -0.3 - x, 126 + s, 53);
-                addTimedSetpoint(1.0, 0.6, 0.8, -7.3 - x, 134 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 0.4, -0.3 - x, 128 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 0.8, -7.3 - x, 136 + s, 53);
             });
             addConcurrentAutoModuleWithCancel(Forward(i+1));
 //            addBreakpoint(() -> autoMode.equals(TerraAuto.AutoMode.SIMPLE) && i+1 == 3);
