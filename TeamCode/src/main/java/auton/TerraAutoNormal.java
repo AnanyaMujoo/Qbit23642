@@ -15,6 +15,7 @@ import elements.FieldSide;
 import elements.GameItems;
 import geometry.position.Pose;
 import robotparts.RobotPart;
+import util.ExceptionCatcher;
 import util.template.Mode;
 
 import static global.General.bot;
@@ -35,7 +36,9 @@ public class TerraAutoNormal extends AutoFramework {
     public void initialize() {
         setConfig(mecanumNonstopConfig);
         lift.maintain();
-        outtake.readyStart(); outtake.closeClaw();
+        outtake.closeClaw();
+        ExceptionCatcher.catchInterrupted(() -> Thread.sleep(500));
+        outtake.readyStart();
         scan(false);
         x = 0; s = 0;
     }
@@ -120,10 +123,10 @@ public class TerraAutoNormal extends AutoFramework {
             // Place
             customFlipped(() -> {
                 addTimedSetpoint(1.0, 0.6, 0.4, -1.3 - x, 134 + s, 53);
-                addTimedSetpoint(1.0, 0.6, 0.8, -9 - x, 143 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 1.0, -9 - x, 143 + s, 53);
             }, () -> {
                 addTimedSetpoint(1.0, 0.6, 0.4, -0.3 - x, 128 + s, 53);
-                addTimedSetpoint(1.0, 0.6, 0.8, -7.3 - x, 136 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 1.0, -7.3 - x, 136 + s, 53);
             });
             addConcurrentAutoModuleWithCancel(Forward(i+1));
 //            addBreakpoint(() -> autoMode.equals(TerraAuto.AutoMode.SIMPLE) && i+1 == 3);
@@ -135,16 +138,16 @@ public class TerraAutoNormal extends AutoFramework {
             addSegment(0.7, mecanumDefaultWayPoint, -10, 128, 90);
             addSegment(0.7, mecanumDefaultWayPoint, -45, 125, 60);
             addSegment(0.7, mecanumDefaultWayPoint, -50, 126, 25);
-            addTimedSetpoint(1.0, 0.8, 2.0, -58, 78, 0);
+            addTimedSetpoint(1.0, 0.8, 1.2, -58, 78, 0);
         }, () -> {
             addTimedWaypoint(0.7, 0.5, 3.0, 122, 0);
-            addTimedSetpoint(1.0, 0.8, 2.0, 3.0, 78, 0);
+            addTimedSetpoint(1.0, 0.8, 1.2, 3.0, 78, 0);
         }, () -> {
             addSegment(0.7, mecanumDefaultWayPoint, 7, 130, 90);
             addSegment(0.7, mecanumDefaultWayPoint, 39, 130, 58);
             addSegment(0.7, mecanumDefaultWayPoint, 51, 114, 32);
             addSegment(0.7, mecanumDefaultWayPoint,  56, 98, 0);
-            addTimedSetpoint(1.0, 0.8, 2.0, 65, 78, 0);
+            addTimedSetpoint(1.0, 0.8, 1.2, 65, 78, 0);
         });
         addPause(0.1);
         // End

@@ -15,6 +15,7 @@ import elements.FieldSide;
 import elements.GameItems;
 import geometry.position.Pose;
 import robotparts.RobotPart;
+import util.ExceptionCatcher;
 import util.template.Mode;
 
 import static global.General.bot;
@@ -33,54 +34,63 @@ public class TerraAutoMega extends AutoFramework {
     public void initialize() {
         setConfig(mecanumNonstopConfig);
 
-        outtake.arml.changePosition("start", 0.02);
-        outtake.armr.changePosition("start", 0.02);
+        outtake.arml.changePosition("start", 0.03);
+        outtake.armr.changePosition("start", 0.03);
 
         lift.maintain();
-        outtake.readyStart(); outtake.closeClaw();
+        outtake.closeClaw();
+        ExceptionCatcher.catchInterrupted(() -> Thread.sleep(500));
+        outtake.readyStart();
         scan(false);
         x = 0; s = 0; y = 125;
     }
 
-    AutoModule BackwardReadyFirst = new AutoModule(
-            outtake.stageMiddle(0.0),
-            lift.changeCutoff(1),
-            lift.stageLift(1.0, heightMode.getValue(MIDDLE))
-    );
+//    AutoModule BackwardReadyFirst = new AutoModule(
+//            outtake.stageMiddle(0.0),
+//            lift.changeCutoff(1),
+//            lift.stageLift(1.0, heightMode.getValue(MIDDLE))
+//    );
 
     AutoModule BackwardFirst = new AutoModule(
-            outtake.stageReadyEnd(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.0)
+            outtake.stageMiddle(0.0),
+            RobotPart.pause(0.5),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.0).attach(outtake.stageReadyEndAfter(0.2))
     );
 
     AutoModule Backward = new AutoModule(
-            RobotPart.pause(0.15),
-            outtake.stageReadyEnd(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.0)
+            RobotPart.pause(0.1),
+            outtake.stageFlip(0.0),
+            RobotPart.pause(0.1),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.0).attach(outtake.stageReadyEndAfter(0.2))
     );
 
     AutoModule Forward(int i){return new AutoModule(
             outtake.stageEnd(0.05),
             outtake.stageOpen(0.0),
-            lift.moveTime(-0.6, 0.15),
-            lift.stageLift(1.0,  i == 0 ? 13.0 : Math.max(13.5 - (i*13.5/5.0), 0)).attach(outtake.stageStartAfter(0.1))
+            lift.moveTime(-1, 0.2),
+            outtake.stageAfter(0.03*(5-i) + 0.03, 0.0),
+            lift.stageLift(1.0, 0)
+//            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
+//            outtake.stageEnd(0.05),
+//            outtake.stageOpen(0.0),
+//            lift.moveTime(-0.6, 0.15),
+//            lift.stageLift(1.0,  i == 0 ? 13.0 : Math.max(13.5 - (i*13.5/5.0), 0)).attach(outtake.stageStartAfter(0.1))
     );}
 
     AutoModule Grab = new AutoModule(
             outtake.stageClose(0.15),
-            lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.1))
+            outtake.stageMiddleWithoutFlip(0.0),
+            lift.moveTime(1,0.3)
     );
 
     @Override
     public void define() {
 
         // Pre-loaded cone move
-        addWaypoint(1.0, 0, 124, 0);
-        addConcurrentAutoModule(BackwardReadyFirst);
-        addWaypoint(0.7, 5, 112, 30);
-        addConcurrentAutoModuleWithCancel(BackwardFirst);
+        addConcurrentAutoModule(BackwardFirst);
+        addWaypoint(1.0, 0, 112, 10);
         // Pre-loaded cone place
-        addTimedSetpoint(1.0, 0.7, 1.0, -6.5, 138, 45);
+        addTimedSetpoint(1.0, 0.5, 0.7, -6.5, 138, 45);
         addConcurrentAutoModule(Forward(0));
         // Start 5 cycle
         customNumber(5, i -> {
@@ -93,17 +103,17 @@ public class TerraAutoMega extends AutoFramework {
             }
             // Move to pick
             addSegment(0.8, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
-            addSegment(0.7, mecanumDefaultWayPoint, 57-x, 125 + s, 87);
+            addSegment(0.8, mecanumDefaultWayPoint, 52-x, 125 + s, 87);
+            addSegment(0.3, mecanumDefaultWayPoint, 66-x, 125 + s, 87);
             // Pick
-            addTimedWaypoint( 0.3, 0.2, 66-x, 126 + s, 87);
             addConcurrentAutoModuleWithCancel(Grab);
-            addTimedWaypoint( 0.2, 0.3, 62-x, 126 + s, 89);
+            addTimedWaypoint( 0.3, 0.3, 60-x, 126 + s, 89);
             // Move to place
             addConcurrentAutoModuleWithCancel(Backward);
-            addSegment(0.8, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
-            addSegment(0.7, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
+            addSegment(0.9, mecanumDefaultWayPoint, 30-x, 124 + s, 75);
+            addSegment(0.7, mecanumDefaultWayPoint, 15-x, 130 + s, 47);
             // Place
-            addTimedSetpoint(1.0, 0.6, 0.6, -9 - x, 143 + s, 53);
+            addTimedSetpoint(1.0, 0.7, 0.5, -9 - x, 143 + s, 53);
             addConcurrentAutoModuleWithCancel(Forward(i+1 == 5 ? 0 : i+1));
         });
         addPause(0.05);
@@ -159,7 +169,7 @@ public class TerraAutoMega extends AutoFramework {
             addWaypoint(0.7, -120.0, y, -45);
             addTimedSetpoint(1.0, 0.7, 1.0, -115.0, 120, 0);
         });
-        addPause(0.1);
+//        addPause(0.1);
         // End
     }
 
@@ -171,7 +181,7 @@ public class TerraAutoMega extends AutoFramework {
 //    preselectTeleOp = "TerraOp"
     @Autonomous(name = "TerraAutoMegaRight", group = "auto")
     public static class TerraAutoMegaRight extends TerraAutoMega {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
-    @Autonomous(name = "TerraAutoMegaLeft", group = "auto")
-    public static class TerraAutoMegaLeft extends TerraAutoMega {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
+//    @Autonomous(name = "TerraAutoMegaLeft", group = "auto")
+//    public static class TerraAutoMegaLeft extends TerraAutoMega {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
 
 }

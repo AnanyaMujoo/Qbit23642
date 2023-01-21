@@ -236,7 +236,7 @@ public interface AutoModuleUser extends RobotUser{
 
     static AutoModule BackwardCycle2(Height height) {return new AutoModule(
             outtake.stageClose(0.2),
-            outtake.stageReadyEnd(0.0),
+            outtake.stageReadyEnd(0.1),
             lift.stageLift(1.0, heightMode.getValue(height)+4)
     );}
 
@@ -248,7 +248,7 @@ public interface AutoModuleUser extends RobotUser{
 //            lift.moveTime(-1.0, 0.1),
             lift.resetCutoff(),
 //            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.2))
+            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.1))
 
 //            outtake.stageEnd(0.0),
 //            outtake.stageOpen(0.0),
@@ -265,7 +265,7 @@ public interface AutoModuleUser extends RobotUser{
     static Independent Cycle2(int i) { return new Independent() {
             @Override
             public void define() {
-            double x = (i*0.0)-0.2; double y = i*0.0;
+            double x = (i*0.0); double y = i*0.0;
             if(i+1 == 1){
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
                 addWaypoint(0.7,  x, 18+y, 0);
@@ -275,12 +275,12 @@ public interface AutoModuleUser extends RobotUser{
                 if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
 
                 addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH), 0.2);
-                addWaypoint(i == 0 ? 0.5 : 0.65, x, -15+y, 0);
+                addWaypoint(i == 0 ? 0.5 : 0.6, x, -15+y, 0);
                 addSegment(0.2, 0.5, mecanumNonstopSetPoint, x, -23+y, 0);
                 addConcurrentAutoModuleWithCancel(ForwardCycle2);
-                addWaypoint(0.65, x, y, 0);
+                addWaypoint(0.6, x, y, 0);
 //                addSegment(0.5, 1.0, mecanumNonstopSetPoint, x, 10+y, 0);
-                addWaypoint(0.4,  x, 25+y, 0);
+                addWaypoint(0.35,  x, 25+y, 0);
 
 
             } else{

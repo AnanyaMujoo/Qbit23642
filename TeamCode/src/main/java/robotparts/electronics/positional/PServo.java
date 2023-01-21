@@ -80,6 +80,20 @@ public class PServo extends Electronic {
                 servo.setPosition(positions.get(name));
             }
         }
+//        else{
+//            servo.setPosition(positions.get(name));
+//        }
+    }
+
+    public void setPosition(double pos){
+        if(access != null){
+            if (access.isAllowed()) {
+                servo.setPosition(pos);
+            }
+        }
+//        else{
+//            servo.setPosition(pos);
+//        }
     }
 
     /**
