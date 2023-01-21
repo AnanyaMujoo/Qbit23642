@@ -42,7 +42,7 @@ public class TerraAutoMega extends AutoFramework {
         ExceptionCatcher.catchInterrupted(() -> Thread.sleep(500));
         outtake.readyStart();
         scan(false);
-        x = 0; s = 0; y = 125;
+        x = 0; s = 0; y = 119;
     }
 
 //    AutoModule BackwardReadyFirst = new AutoModule(
@@ -53,23 +53,21 @@ public class TerraAutoMega extends AutoFramework {
 
     AutoModule BackwardFirst = new AutoModule(
             outtake.stageMiddle(0.0),
-            RobotPart.pause(0.5),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.0).attach(outtake.stageReadyEndAfter(0.2))
+            RobotPart.pause(0.45),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+1.0).attach(outtake.stageReadyEndAfter(0.28))
     );
 
-    AutoModule Backward = new AutoModule(
-            RobotPart.pause(0.1),
-            outtake.stageFlip(0.0),
-            RobotPart.pause(0.1),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.0).attach(outtake.stageReadyEndAfter(0.2))
-    );
+    static AutoModule Backward(double height){return new AutoModule(
+            outtake.stage(0.67, 0.1),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+height).attach(outtake.stageReadyEndAfter(0.1))
+    );}
 
     AutoModule Forward(int i){return new AutoModule(
             outtake.stageEnd(0.05),
             outtake.stageOpen(0.0),
-            lift.moveTime(-1, 0.2),
-            outtake.stageAfter(0.03*(5-i) + 0.03, 0.0),
-            lift.stageLift(1.0, 0)
+            lift.moveTime(-0.7, 0.2),
+            outtake.stageAfter(0.025*(5-i) + 0.03, 0.0),
+            lift.stageLift(1.0, i < 2 ? 5 : 0)
 //            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
 //            outtake.stageEnd(0.05),
 //            outtake.stageOpen(0.0),
@@ -79,7 +77,8 @@ public class TerraAutoMega extends AutoFramework {
 
     AutoModule Grab = new AutoModule(
             outtake.stageClose(0.15),
-            outtake.stageMiddleWithoutFlip(0.0),
+            outtake.stage(0.67, 0.0),
+//            outtake.stageMiddleWithoutFlip(0.0),
             lift.moveTime(1,0.3)
     );
 
@@ -88,9 +87,9 @@ public class TerraAutoMega extends AutoFramework {
 
         // Pre-loaded cone move
         addConcurrentAutoModule(BackwardFirst);
-        addWaypoint(1.0, 0, 112, 10);
+        addWaypoint(1.0, 0, 90, 0);
         // Pre-loaded cone place
-        addTimedSetpoint(1.0, 0.5, 0.7, -6.5, 138, 45);
+        addTimedSetpoint(1.0, 0.65, 0.9, -6.5, 138, 40);
         addConcurrentAutoModule(Forward(0));
         // Start 5 cycle
         customNumber(5, i -> {
@@ -99,77 +98,75 @@ public class TerraAutoMega extends AutoFramework {
                 case 1: x = 0.6;  s = 1.0;  break;
                 case 2: x = 0.6;  s = 1.5;  break;
                 case 3: x = 1.0;  s = 2.0;  break;
-                case 4: x = 1.0;  s = 2.5;   break;
+                case 4: x = 1.0;  s = 3.0;   break;
             }
             // Move to pick
             addSegment(0.8, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
             addSegment(0.8, mecanumDefaultWayPoint, 52-x, 125 + s, 87);
-            addSegment(0.3, mecanumDefaultWayPoint, 66-x, 125 + s, 87);
+            addTimedWaypoint( 0.2, 0.2, 66-x, 126 + s, 87);
             // Pick
             addConcurrentAutoModuleWithCancel(Grab);
             addTimedWaypoint( 0.3, 0.3, 60-x, 126 + s, 89);
             // Move to place
-            addConcurrentAutoModuleWithCancel(Backward);
+            addConcurrentAutoModuleWithCancel(Backward(4));
             addSegment(0.9, mecanumDefaultWayPoint, 30-x, 124 + s, 75);
-            addSegment(0.7, mecanumDefaultWayPoint, 15-x, 130 + s, 47);
+            addSegment(0.8, mecanumDefaultWayPoint, 15-x, 135 + s, 47);
             // Place
             addTimedSetpoint(1.0, 0.7, 0.5, -9 - x, 143 + s, 53);
             addConcurrentAutoModuleWithCancel(Forward(i+1 == 5 ? 0 : i+1));
         });
         addPause(0.05);
-        addTimedSetpoint(2.0, 0.6, 0.6, -8.5, y, -95);
+        addTimedSetpoint(2.0, 0.6, 0.6, -8.5, 129, -95);
         // Move to other side
-        addSegment(1.0, mecanumDefaultWayPoint, -225.0, y, -95);
-        addSegment(0.2, mecanumDefaultWayPoint,  -234.0, y, -95);
-        // First cone pick up
-        addTimedWaypoint(0.3, 0.2, -240, y+1, -93);
-        addConcurrentAutoModule(GrabAuto2);
-        addTimedWaypoint(0.2, 0.3, -237, y+1, -93);
+        addSegment(1.0, mecanumDefaultWayPoint, -214.0, y+11, -93);
+        addSegment(0.2, mecanumDefaultWayPoint,  -231.0, y+15, -93);
+//        // First cone pick up
+        addTimedWaypoint(0.2, 0.1, -236, y+15, -93);
+        addConcurrentAutoModule(Grab);
+        addTimedWaypoint(0.3, 0.3, -233, y+15, -93);
         // First cone move to place
-        addConcurrentAutoModuleWithCancel(Backward);
-        addSegment(0.8, mecanumDefaultWayPoint, -200, y, -85);
-        addSegment(0.7, mecanumDefaultWayPoint, -183, y+10, -52);
+        addConcurrentAutoModuleWithCancel(Backward(4));
+        addSegment(0.8, mecanumDefaultWayPoint, -200, y+12, -85);
+        addSegment(0.8, mecanumDefaultWayPoint, -180, y+15, -52);
         // First cone place
-        addTimedSetpoint(1.0, 0.6, 0.7, -167, y+10.5, -52);
+        addTimedSetpoint(1.0, 0.7, 0.5, -160, y+22, -52);
         addConcurrentAutoModuleWithCancel(Forward(1));
         // Start 2 cycle
-        customNumber(1, i -> {
-            // Check enough time?
-//            addBreakpoint(() -> timer.seconds() > 25.2);
+        customNumber(caseDetected.equals(Case.SECOND) ? 3 : 2, i -> {
             switch (i){
-                case 0: x = 0.0; s = -0.0;  break;
-                case 1: x = 0.0; s = 0.0;  break;
+                case 0: x = 0.0; s = 1.0;  break;
+                case 1: x = 0.0; s = 1.5;  break;
+                case 2: x = 0.0; s = 2.0;  break;
+                case 3: x = 0.0; s = 2.5;  break;
             }
             // Move to pick
-            addSegment(1.0, mecanumDefaultWayPoint,  -186, y+10, -65);
-            addSegment(0.5, mecanumDefaultWayPoint, -226, y, -93);
+            addSegment(0.8, mecanumDefaultWayPoint,  -186, y+16+s, -65);
+            addSegment(0.8, mecanumDefaultWayPoint, -223, y+10+s, -93);
             // Pick
-            addTimedWaypoint(0.3, 0.2, -239, y, -93);
+            addTimedWaypoint(0.2, 0.2, -235, y+10+s, -93);
             addConcurrentAutoModule(Grab);
-            addTimedWaypoint(0.2, 0.3, -236, y, -93);
+            addTimedWaypoint(0.3, 0.3, -231, y+10+s, -93);
             // Move to place
-            addConcurrentAutoModuleWithCancel(Backward);
-            addSegment(0.8, mecanumDefaultWayPoint, -200, y, -85);
-            addSegment(0.7, mecanumDefaultWayPoint, -183, y+8.5, -52);
+            addConcurrentAutoModuleWithCancel(Backward(5));
+            addSegment(0.9, mecanumDefaultWayPoint, -200, y+10+s, -85);
+            addSegment(0.8, mecanumDefaultWayPoint, -180, y+13+s, -52);
             // Place
-            addTimedSetpoint(1.0, 0.6, 0.7, -165, y+10.5, -52);
-            addConcurrentAutoModuleWithCancel(Forward(i+1 == 1 ? 5 : i+2));
+            addTimedSetpoint(1.0, 0.7, 0.5, -160, y+21+s, -52);
+            addConcurrentAutoModuleWithCancel(Forward(i+1 == (caseDetected.equals(Case.SECOND) ? 3 : 2) ? 5 : i+2));
         });
-
-        addBreakpointReturn();
-        // Park other side
+//        // Park other side
         customCase(() -> {
             addTimedWaypoint(1.0, 0.2, -170.0, y, -93);
             addWaypoint(0.7, -215.0, y, -45);
             addTimedSetpoint(1.0, 0.5,1.0, -227.0, 120, 0);
         }, () -> {
-            addTimedSetpoint(1.0, 0.7, 1.0, -170.0, y, 0);
+            addTimedSetpoint(1.0, 0.7, 1.0, -170.0, y, -93);
         }, () -> {
             addTimedWaypoint(1.0, 0.2, -170.0, y, -93);
             addWaypoint(0.7, -120.0, y, -45);
             addTimedSetpoint(1.0, 0.7, 1.0, -115.0, 120, 0);
         });
-//        addPause(0.1);
+        addPause(0.1);
         // End
     }
 

@@ -50,8 +50,10 @@ public class TerraAutoNormal extends AutoFramework {
     );
 
     AutoModule Backward = new AutoModule(
-            outtake.stageMiddle(0.2),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.0).attach(outtake.stageReadyEndAfter(0.4))
+//            outtake.stageMiddle(0.2),
+            RobotPart.pause(0.05),
+            outtake.stageFlip(0.0),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.2).attach(outtake.stageReadyEndAfter(0.25))
     );
 
     AutoModule Forward(int i){return new AutoModule(
@@ -111,15 +113,15 @@ public class TerraAutoNormal extends AutoFramework {
             });
             // Move to pick
             addSegment(0.7, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
-            addSegment(0.6, mecanumDefaultWayPoint, 59-x, 125 + s, 87);
+            addSegment(0.6, mecanumDefaultWayPoint, 61-x, 125 + s, 87);
             // Pick
-            addTimedWaypoint( 0.2, 0.3, 66-x, 126 + s, 87);
+            addTimedWaypoint( 0.2, 0.3, 67-x, 126 + s, 87);
             addConcurrentAutoModuleWithCancel(Grab);
-            addTimedWaypoint( 0.2, 0.3, 62-x, 126 + s, 89);
+            addTimedWaypoint( 0.2, 0.3, 60.5-x, 126 + s, 89);
             // Move to place
             addConcurrentAutoModuleWithCancel(Backward);
             addSegment(0.7, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
-            addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
+            addSegment(0.6, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
             // Place
             customFlipped(() -> {
                 addTimedSetpoint(1.0, 0.6, 0.4, -1.3 - x, 134 + s, 53);

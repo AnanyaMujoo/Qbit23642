@@ -49,7 +49,7 @@ public class PMotor extends Electronic {
     public PMotor(DcMotor m, DcMotor.Direction dir, DcMotor.ZeroPowerBehavior zpb, DcMotor.RunMode mode){
         motor = (DcMotorEx) m;
         motorEncoder = new IEncoder(motor, IEncoder.EncoderType.PMOTOR);
-        detector = new StallDetector(motorEncoder, 10, 10);
+        detector = new StallDetector(motorEncoder, 10, 13);
         positionHolder.setProcessVariable(motorEncoder::getAngularVelocity);
         defaultCoeffs = motor.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
         currentCoeffs = defaultCoeffs;

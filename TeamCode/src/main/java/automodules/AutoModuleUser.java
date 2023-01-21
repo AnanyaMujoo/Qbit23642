@@ -268,7 +268,7 @@ public interface AutoModuleUser extends RobotUser{
             double x = (i*0.0); double y = i*0.0;
             if(i+1 == 1){
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
-                addWaypoint(0.7,  x, 18+y, 0);
+                addWaypoint(0.7,  x, 17+y, 0);
                 addWaypoint(0.4,  x, 21+y, 0);
             }
             if(i+1 != 11){
@@ -278,9 +278,9 @@ public interface AutoModuleUser extends RobotUser{
                 addWaypoint(i == 0 ? 0.5 : 0.6, x, -15+y, 0);
                 addSegment(0.2, 0.5, mecanumNonstopSetPoint, x, -23+y, 0);
                 addConcurrentAutoModuleWithCancel(ForwardCycle2);
-                addWaypoint(0.6, x, y, 0);
+//                addWaypoint(0.6, x, y, 0);
 //                addSegment(0.5, 1.0, mecanumNonstopSetPoint, x, 10+y, 0);
-                addWaypoint(0.35,  x, 25+y, 0);
+                addWaypoint(0.4,  x, 30+y, 0);
 
 
             } else{
