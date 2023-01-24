@@ -53,7 +53,7 @@ public class Drive extends RobotPart {
 
         Modes.driveMode.set(SLOW);
         attackStatus.set(Modes.AttackStatus.REST);
-//        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
+        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
     public void retract(){ retract.setPosition("end"); }

@@ -59,13 +59,14 @@ public class TerraAutoMega extends AutoFramework {
 
     static AutoModule Backward(double height){return new AutoModule(
             outtake.stage(0.67, 0.1),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+height).attach(outtake.stageReadyEndAfter(0.1))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+height).attach(outtake.stageReadyEndAfter(0.1)),
+            lift.moveTime(0.2, 0.4)
     );}
 
     AutoModule Forward(int i){return new AutoModule(
             outtake.stageEnd(0.05),
             outtake.stageOpen(0.0),
-            lift.moveTime(-0.7, 0.2),
+            lift.moveTime(-0.8, 0.2),
             outtake.stageAfter(0.025*(5-i) + 0.03, 0.0),
             lift.stageLift(1.0, i < 2 ? 5 : 0)
 //            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
@@ -110,9 +111,9 @@ public class TerraAutoMega extends AutoFramework {
             // Move to place
             addConcurrentAutoModuleWithCancel(Backward(4));
             addSegment(0.9, mecanumDefaultWayPoint, 30-x, 124 + s, 75);
-            addSegment(0.8, mecanumDefaultWayPoint, 15-x, 135 + s, 47);
+            addSegment(0.9, mecanumDefaultWayPoint, 15-x, 137 + s, 47);
             // Place
-            addTimedSetpoint(1.0, 0.7, 0.5, -9 - x, 143 + s, 53);
+            addTimedSetpoint(1.0, 0.8, 0.4, -9 - x, 143 + s, 53);
             addConcurrentAutoModuleWithCancel(Forward(i+1 == 5 ? 0 : i+1));
         });
         addPause(0.05);
@@ -126,10 +127,10 @@ public class TerraAutoMega extends AutoFramework {
         addTimedWaypoint(0.3, 0.3, -233, y+15, -93);
         // First cone move to place
         addConcurrentAutoModuleWithCancel(Backward(4));
-        addSegment(0.8, mecanumDefaultWayPoint, -200, y+12, -85);
-        addSegment(0.8, mecanumDefaultWayPoint, -180, y+15, -52);
+        addSegment(0.9, mecanumDefaultWayPoint, -200, y+12, -85);
+        addSegment(0.9, mecanumDefaultWayPoint, -180, y+17, -52);
         // First cone place
-        addTimedSetpoint(1.0, 0.7, 0.5, -160, y+22, -52);
+        addTimedSetpoint(1.0, 0.8, 0.4, -160, y+22, -52);
         addConcurrentAutoModuleWithCancel(Forward(1));
         // Start 2 cycle
         customNumber(caseDetected.equals(Case.SECOND) ? 3 : 2, i -> {
@@ -149,9 +150,9 @@ public class TerraAutoMega extends AutoFramework {
             // Move to place
             addConcurrentAutoModuleWithCancel(Backward(5));
             addSegment(0.9, mecanumDefaultWayPoint, -200, y+10+s, -85);
-            addSegment(0.8, mecanumDefaultWayPoint, -180, y+13+s, -52);
+            addSegment(0.9, mecanumDefaultWayPoint, -180, y+15+s, -52);
             // Place
-            addTimedSetpoint(1.0, 0.7, 0.5, -160, y+21+s, -52);
+            addTimedSetpoint(1.0, 0.8, 0.4, -160, y+21+s, -52);
             addConcurrentAutoModuleWithCancel(Forward(i+1 == (caseDetected.equals(Case.SECOND) ? 3 : 2) ? 5 : i+2));
         });
 //        // Park other side
