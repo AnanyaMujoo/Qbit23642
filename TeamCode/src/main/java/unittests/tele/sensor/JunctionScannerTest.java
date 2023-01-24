@@ -22,8 +22,8 @@ public class JunctionScannerTest extends TeleUnitTest {
         camera.setScanner(junctionScanner);
         camera.start(true);
         JunctionScannerAll.resume();
-        gph1.link(Button.B, BackwardAllTele);
-        gph1.link(Button.Y, ForwardAll);
+//        gph1.link(Button.B, BackwardAllTele);
+//        gph1.link(Button.Y, ForwardAll);
     }
 
 

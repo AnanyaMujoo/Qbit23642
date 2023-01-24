@@ -7,6 +7,7 @@ import geometry.position.Pose;
 import geometry.position.Vector;
 import global.Modes;
 import math.misc.Logistic;
+import math.polynomial.Linear;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
@@ -17,24 +18,27 @@ import util.template.Precision;
 
 import static global.General.bot;
 import static global.Modes.AttackStatus.ATTACK;
-import static global.Modes.Drive.MEDIUM;
+import static global.Modes.Drive.NORMAL;
 import static global.Modes.Drive.SLOW;
 import static global.Modes.attackStatus;
+import static global.Modes.driveMode;
 
 public class Drive extends RobotPart {
 
     private CMotor fr, br, fl, bl;
-    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 60.0, 2.0);
+//    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 60.0, 2.0);
+
+    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 200.0, 3.0);
+
     private final Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
     private final Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
 
 //    private final MecanumJunctionReactor2 mecanumJunctionReactor2 = new MecanumJunctionReactor2();
 
+//
+    private final double[][] powers = {new double[]{0.35, 0.35, 0.4}, new double[]{1.0, 0.9, 0.6}};
 
-    private final double[][] powers = {new double[]{0.35, 0.35, 0.4}, new double[]{0.75, 0.6, 0.5}, new double[]{1.0, 1.0, 1.0}};
-
-    // TODO TEST
-    private PServo retract;
+//    private PServo retract;
 
 
     @Override
@@ -43,24 +47,24 @@ public class Drive extends RobotPart {
         br = create("br", ElectronicType.CMOTOR_REVERSE);
         fl = create("fl", ElectronicType.CMOTOR_FORWARD);
         bl = create("bl", ElectronicType.CMOTOR_FORWARD);
+//
+//        retract = create("ret", ElectronicType.PSERVO_FORWARD);
+//
+//        retract.changePosition("start", 0.03);
+//        retract.changePosition("end", 1.0);
 
-        retract = create("ret", ElectronicType.PSERVO_FORWARD);
+//        engage();
 
-        retract.changePosition("start", 0.03);
-        retract.changePosition("end", 1.0);
-
-        engage();
-
-        Modes.driveMode.set(SLOW);
+        Modes.driveMode.set(NORMAL);
         attackStatus.set(Modes.AttackStatus.REST);
-        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
+//        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
-    public void retract(){ retract.setPosition("end"); }
-    public void engage(){ retract.setPosition("start"); }
+//    public void retract(){ retract.setPosition("end"); }
+//    public void engage(){ retract.setPosition("start"); }
 
-    public Stage stageRetract(){ return customTime(this::retract, 0.0); }
-    public Stage stageEngage(){ return customTime(this::engage, 0.0); }
+//    public Stage stageRetract(){ return customTime(this::retract, 0.0); }
+//    public Stage stageEngage(){ return customTime(this::engage, 0.0); }
 
     @Override
     public void move(double f, double s, double t) {
@@ -78,6 +82,11 @@ public class Drive extends RobotPart {
 
     public void moveSmooth(double f, double s, double t) {
         if(!bot.indHandler.isIndependentRunning()) {
+            if(Math.abs(t) > 0.9 && driveMode.modeIs(NORMAL)){ f *= 0.8; }
+            if(Math.abs(f) > 0.8 && driveMode.modeIs(NORMAL)){ s = 0.0; }
+//            Vector vector = new Vector(f, t);
+//            vector.scaleToLength(1);
+//            f = vector.getX(); t = vector.getY();
             Pose power = getMoveSmoothPower(f, s, t);
             drive.move(power.getX(), power.getY(), power.getAngle());
 //            mecanumJunctionReactor2.move(attackStatus.modeIs(ATTACK), drive.getMoveSmoothPower(f, s, t));
@@ -85,7 +94,7 @@ public class Drive extends RobotPart {
     }
 
     public Pose getMoveSmoothPower(double f, double s, double t){
-        double[] scales = powers[Modes.driveMode.modeIs(SLOW) ? 0 : Modes.driveMode.modeIs(MEDIUM) ? 1 : 2];
+        double[] scales = powers[Modes.driveMode.modeIs(SLOW) ? 0 : 1];
         return new Pose(movementCurveForward.fodd(f*scales[0]),movementCurveStrafe.fodd(s*scales[1]), movementCurveTurn.fodd(t*scales[2]));
     }
 

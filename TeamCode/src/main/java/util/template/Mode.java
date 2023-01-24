@@ -42,6 +42,7 @@ public class Mode {
     public void cycleUp() { for (int i = 0; i < types.length-1; i++) { if(modeIs(types[i])){ set(types[i+1]); return; }} if(modeIs(types[types.length-1])){set(types[0]);} }
     public void cycleDown() { for (int i = 1; i < types.length; i++) { if(modeIs(types[i])){ set(types[i-1]); return; }} if(modeIs(types[0])){set(types[types.length-1]);} }
     public boolean modeIs(ModeType other){ return currentMode.equals(other); }
+    public ReturnCodeSeg<Boolean> isMode(ModeType other){return () -> currentMode.equals(other); }
     public double getValue(ModeType modeType){
         if(fault != null){ fault.check("Value for mode" + modeType.toString() + "not defined", Expectation.EXPECTED, Magnitude.CRITICAL, valueMap.containsKey(modeType), true); }
         return valueMap.get(modeType);

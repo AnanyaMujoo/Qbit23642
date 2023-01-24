@@ -16,8 +16,8 @@ public interface Modes {
 
     enum GamepadMode implements Mode.ModeType { NORMAL, AUTOMATED }
 
-    enum GameplayMode implements Mode.ModeType { CYCLE,  CIRCUIT_PICK,  CIRCUIT_PLACE }
-    Mode gameplayMode = new Mode(GameplayMode.class);
+//    enum GameplayMode implements Mode.ModeType { CYCLE,  CIRCUIT_PICK,  CIRCUIT_PLACE }
+//    Mode gameplayMode = new Mode(GameplayMode.class);
 
     enum AttackStatus implements Mode.ModeType {REST, ATTACK}
     Mode attackStatus = new Mode(AttackStatus.class);
@@ -34,11 +34,12 @@ public interface Modes {
             .set(Height.MIDDLE, 30)
             .set(Height.LOW, 9)
             .set(Height.GROUND, 9);
-    enum Drive implements Mode.ModeType{ FAST, MEDIUM, SLOW }
+    enum Drive implements Mode.ModeType{ NORMAL, SLOW }
     // TOD5 MULTI DIMENSIONAL MODE
-    Mode driveMode = new Mode(Drive.class)
-            .set(Drive.FAST, 1.0)
-            .set(Drive.MEDIUM, 0.75)
-            .set(Drive.SLOW, 0.35);
+    Mode driveMode = new Mode(Drive.class);
+
+//            .set(Drive.FAST, 1.0)
+//            .set(Drive.MEDIUM, 0.75)
+//            .set(Drive.SLOW, 0.35);
 
 }
