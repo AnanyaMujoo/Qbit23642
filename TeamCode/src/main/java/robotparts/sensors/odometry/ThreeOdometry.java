@@ -52,6 +52,15 @@ public class ThreeOdometry extends TwoOdometry {
     }
 
     @Override
+    public void setCurrentPose(Point point) {
+        synchronized (odometryCenter) {
+            Vector globalOdometryCenterToRobotCenter = leftOdometryCenterToRobotCenter.getRotated(getHeading()).getSubtracted(leftOdometryCenterToRobotCenter);
+            odometryCenter.set(point.getSubtracted(globalOdometryCenterToRobotCenter.getPoint()));
+            super.setCurrentPose(point);
+        }
+    }
+
+    @Override
     protected void update() {
 
         double dyl = 0, dyr = 0, dx = 0, dh = 0;

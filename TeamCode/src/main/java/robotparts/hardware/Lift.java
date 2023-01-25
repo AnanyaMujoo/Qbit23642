@@ -15,12 +15,8 @@ import util.codeseg.CodeSeg;
 import util.template.Precision;
 
 import static global.General.bot;
-import static global.Modes.AttackMode.ON_BY_DEFAULT;
-import static global.Modes.AttackMode.PRESS_TO_ENABLE;
 import static global.Modes.Height.GROUND;
 import static global.Modes.Height.LOW;
-import static global.Modes.attackMode;
-//import static global.Modes.gameplayMode;
 import static global.Modes.heightMode;
 
 public class Lift extends RobotPart {
@@ -46,9 +42,7 @@ public class Lift extends RobotPart {
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
         high = false;
-//        gameplayMode.set(Modes.GameplayMode.CYCLE);
         stackedMode = 0;
-        attackMode.set(PRESS_TO_ENABLE);
     }
 
     public Stage changeHigh(boolean high){

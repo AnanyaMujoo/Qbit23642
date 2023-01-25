@@ -33,6 +33,11 @@ public class OutputList {
         this.condition = condition;
     }
 
+    public OutputList(ReturnCodeSeg<Boolean> condition, Object ifTrue, Object ifFalse){ this(condition, () -> ifTrue, () -> ifFalse); }
+    public OutputList(ReturnCodeSeg<Boolean> condition, ReturnCodeSeg<Object> ifTrue, Object ifFalse){ this(condition, ifTrue, () -> ifFalse); }
+    public OutputList(ReturnCodeSeg<Boolean> condition, Object ifTrue, ReturnCodeSeg<Object> ifFalse){ this(condition, () -> ifTrue, ifFalse); }
+    public OutputList(ReturnCodeSeg<Boolean> condition, ReturnCodeSeg<Object> ifTrue, ReturnCodeSeg<Object> ifFalse){ this.condition = () -> condition.run() ? BooleanDecision.TRUE : BooleanDecision.FALSE; addOption(BooleanDecision.TRUE, ifTrue); addOption(BooleanDecision.FALSE, ifFalse); }
+
     /**
      * @param decision
      * @param obj
@@ -54,6 +59,7 @@ public class OutputList {
         return this;
     }
 
+
     public <T> T check(){
         Decision currentDecision = condition.run();
         T o = null;
@@ -64,4 +70,6 @@ public class OutputList {
         }
         return o;
     }
+
+    public enum BooleanDecision implements Decision { FALSE,  TRUE; }
 }

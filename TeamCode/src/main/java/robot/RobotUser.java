@@ -28,13 +28,10 @@ public interface RobotUser {
      * USED
      */
     Drive drive = new Drive();
-    Intake intake = new Intake();
     Lift lift = new Lift();
     Outtake outtake = new Outtake();
     Leds leds = new Leds();
-
-
-    ColorSensors color = new ColorSensors();
+    DistanceSensors distanceSensors = new DistanceSensors();
     GyroSensors gyro = new GyroSensors();
     Cameras camera = new Cameras();
 
@@ -44,8 +41,10 @@ public interface RobotUser {
      * UNUSED
      */
 
+    Intake intake = new Intake();
     TouchSensors touchSensors = new TouchSensors();
-    DistanceSensors distanceSensors = new DistanceSensors();
+
+    ColorSensors color = new ColorSensors();
 
     /**
      * Test Part

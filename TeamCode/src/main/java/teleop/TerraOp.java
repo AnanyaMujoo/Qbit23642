@@ -16,9 +16,7 @@ import static global.General.bot;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
-import static global.Modes.Drive.*;
 import static global.Modes.GamepadMode.*;
-//import static global.Modes.GameplayMode.*;
 import static global.Modes.OuttakeStatus.*;
 import static global.Modes.Height.*;
 import static teleutil.button.Button.*;
@@ -30,10 +28,9 @@ public class TerraOp extends Tele {
     @Override
     public void initTele() {
 
-        kappaBefore.disable(); kappaAfter.disable();
+        kappaBefore.disable();
 
-        outtake.arml.changePosition("start", 0.06);
-        outtake.armr.changePosition("start", 0.06);
+        outtake.changeArmPosition("start", 0.06);
 
         /**
          * Gamepad 1 Normal
@@ -68,7 +65,7 @@ public class TerraOp extends Tele {
         gph1.link(RIGHT_TRIGGER, AutoModuleUser::enableKappa, AUTOMATED);
         gph1.link(LEFT_TRIGGER, AutoModuleUser::disableKappa, AUTOMATED);
 
-        gph1.link(DPAD_DOWN, ResetLift, AUTOMATED);
+        gph1.link(DPAD_DOWN, () -> {bot.cancelAutoModules(); bot.addAutoModule(ResetLift);}, AUTOMATED);
 //        gph1.link(DPAD_UP, RetractOdometry, AUTOMATED);
 //        gph1.link(DPAD_RIGHT, EngageOdometry, AUTOMATED);
 
@@ -119,12 +116,9 @@ public class TerraOp extends Tele {
         drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
 
         lift.move(gph2.ry);
-//
-//        log.show("DriveMode", driveMode.get());
-//        log.show("HeightMode", heightMode.get());
-//        log.show("GameplayMode", gameplayMode.get());
+
         log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
-//        log.show("TrackStatus", kappaBefore.isEnabled() ? "Kappa" : "None");
+        log.show("TrackStatus", kappaBefore.isEnabled() ? "Kappa" : "None");
 
         log.show("OuttakeStatus", outtakeStatus.get());
 
@@ -133,8 +127,6 @@ public class TerraOp extends Tele {
 
 //        log.show("GamepadMode", gph1.isBackPressed() ? AUTOMATED : GamepadMode.NORMAL);
 
-        //        log.show("AttackStatus", attackStatus.get());
-//        log.show("AttackMode", attackMode.get());
 
 //        log.show("Is", bot.indHandler.isIndependentRunning());
 

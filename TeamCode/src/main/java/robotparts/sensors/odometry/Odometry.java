@@ -72,8 +72,12 @@ public abstract class Odometry extends RobotPart {
         }
     }
 
-    public final void setCurrentPose(Point current){
-        currentPose.setX(current.getX()); currentPose.setY(current.getY());
+    public void setCurrentPose(Point current){
+        synchronized (currentPose){
+            currentPose.setX(current.getX());
+            currentPose.setY(current.getY());
+            synchronized (encoders) { Iterator.forAll(encoders, IEncoder::updateNormal);}
+        }
     }
 
     public final void updateCurrentPose(Vector delta){ currentPose.add(delta); }

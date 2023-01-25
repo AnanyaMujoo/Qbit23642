@@ -13,6 +13,8 @@ import elements.Field;
 import elements.FieldPlacement;
 import elements.FieldSide;
 import elements.GameItems;
+import elements.Robot;
+import geometry.framework.Point;
 import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.ExceptionCatcher;
@@ -34,8 +36,7 @@ public class TerraAutoMega extends AutoFramework {
     public void initialize() {
         setConfig(mecanumNonstopConfig);
 
-        outtake.arml.changePosition("start", 0.03);
-        outtake.armr.changePosition("start", 0.03);
+        outtake.changeArmPosition("start", 0.03);
 
         lift.maintain();
         outtake.closeClaw();
@@ -44,12 +45,6 @@ public class TerraAutoMega extends AutoFramework {
         scan(false);
         x = 0; s = 0; y = 119;
     }
-
-//    AutoModule BackwardReadyFirst = new AutoModule(
-//            outtake.stageMiddle(0.0),
-//            lift.changeCutoff(1),
-//            lift.stageLift(1.0, heightMode.getValue(MIDDLE))
-//    );
 
     AutoModule BackwardFirst = new AutoModule(
             outtake.stageMiddle(0.0),
@@ -69,17 +64,11 @@ public class TerraAutoMega extends AutoFramework {
             lift.moveTime(-0.8, 0.2),
             outtake.stageAfter(0.025*(5-i) + 0.03, 0.0),
             lift.stageLift(1.0, i < 2 ? 5 : 0)
-//            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
-//            outtake.stageEnd(0.05),
-//            outtake.stageOpen(0.0),
-//            lift.moveTime(-0.6, 0.15),
-//            lift.stageLift(1.0,  i == 0 ? 13.0 : Math.max(13.5 - (i*13.5/5.0), 0)).attach(outtake.stageStartAfter(0.1))
     );}
 
     AutoModule Grab = new AutoModule(
             outtake.stageClose(0.15),
             outtake.stage(0.67, 0.0),
-//            outtake.stageMiddleWithoutFlip(0.0),
             lift.moveTime(1,0.3)
     );
 
@@ -118,6 +107,16 @@ public class TerraAutoMega extends AutoFramework {
         });
         addPause(0.05);
         addTimedSetpoint(2.0, 0.6, 0.6, -8.5, 129, -95);
+
+
+        // TODO TEST
+        addCustomCode(() -> {
+            distanceSensors.ready();
+            double distanceRight = distanceSensors.getRightDistance();
+            odometry.setCurrentPose(new Point(0,distanceRight + Robot.halfWidth));
+        });
+
+
         // Move to other side
         addSegment(1.0, mecanumDefaultWayPoint, -214.0, y+11, -93);
         addSegment(0.2, mecanumDefaultWayPoint,  -231.0, y+15, -93);

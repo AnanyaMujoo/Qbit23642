@@ -14,6 +14,7 @@ import unittests.auto.framework.VuforiaTest;
 import unittests.auto.framework.calibration.OdometryCalib;
 import unittests.auto.framework.calibration.RestPowerCalib;
 import unittests.auto.framework.calibration.VoltageScaleCalib;
+import unittests.auto.framework.movement.DistanceSensorStraightenTest;
 import unittests.auto.framework.movement.OdometryTest;
 import util.condition.Status;
 
@@ -47,7 +48,7 @@ public class AutoUnitTester extends Auto implements UnitTester {
 //        add(new VoltageScaleCalib());
 //        add(new VuforiaTest());
 //        add(new OdometryCalib());
-        add(new RestPowerCalib());
+//        add(new RestPowerCalib());
 
         /**
          * Framework (needs hardware, in movement package)
@@ -65,6 +66,8 @@ public class AutoUnitTester extends Auto implements UnitTester {
 //        add(new OdometryTest.ForwardTest());
 //        add(new OdometryTest.StrafeTest());
 //        add(new OdometryTest.TurnTest());
+
+        add(new DistanceSensorStraightenTest());
 
     }
 

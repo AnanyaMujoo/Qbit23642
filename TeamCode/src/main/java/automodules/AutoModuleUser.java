@@ -21,11 +21,6 @@ import util.codeseg.CodeSeg;
 import util.condition.OutputList;
 
 import static global.General.bot;
-import static global.Modes.AttackMode.ON_BY_DEFAULT;
-import static global.Modes.AttackStatus.REST;
-import static global.Modes.AttackStatus.ATTACK;
-import static global.Modes.Drive.NORMAL;
-import static global.Modes.Drive.SLOW;
 import static global.Modes.*;
 import static global.Modes.Height.GROUND;
 import static global.Modes.Height.HIGH;
@@ -40,84 +35,37 @@ public interface AutoModuleUser extends RobotUser{
 
     CodeSeg stack = () -> {bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;};
     TeleTrack kappaBefore = new TeleTrack(
-//            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(MEDIUM)).add(gameplayMode.setTo(CIRCUIT_PICK)), // LOW
-//            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(SLOW)), // TERMINAL
-//            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(MEDIUM)), // LOW
-//            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(MEDIUM)).add(stack), // LOW
-//            new TeleTrack.Step(heightMode.setTo(HIGH)).add(driveMode.setTo(SLOW)).add(stack), // HIGH
-//            new TeleTrack.Step(heightMode.setTo(GROUND)).add(driveMode.setTo(MEDIUM)).add(stack), // GROUND
-//            new TeleTrack.Step(heightMode.setTo(GROUND)).add(driveMode.setTo(SLOW)), // TERMINAL
-//            new TeleTrack.Step(heightMode.setTo(GROUND)).add(driveMode.setTo(MEDIUM)), // GROUND
-//            new TeleTrack.Step(heightMode.setTo(LOW)).add(driveMode.setTo(SLOW)) // LOW + CAP
-    );
-    TeleTrack kappaAfter = new TeleTrack(
-//            new TeleTrack.Step(driveMode.setTo(SLOW)), // LOW
-//            new TeleTrack.Step(driveMode.setTo(FAST)), // TERMINAL
-//            new TeleTrack.Step(driveMode.setTo(SLOW)), // LOW
-//            new TeleTrack.Step(driveMode.setTo(SLOW)), // LOW
-//            new TeleTrack.Step(driveMode.setTo(MEDIUM)), // HIGH
-//            new TeleTrack.Step(driveMode.setTo(SLOW)), // GROUND
-//            new TeleTrack.Step(driveMode.setTo(FAST)), // TERMINAL
-//            new TeleTrack.Step(driveMode.setTo(SLOW)), // GROUND
-//            new TeleTrack.Step(driveMode.setTo(MEDIUM)) // LOW + CAP
+            new TeleTrack.Step(heightMode.setTo(LOW)), // LOW
+            new TeleTrack.Step(heightMode.setTo(LOW)), // TERMINAL
+            new TeleTrack.Step(heightMode.setTo(LOW)), // LOW
+            new TeleTrack.Step(heightMode.setTo(LOW)).add(stack), // LOW
+            new TeleTrack.Step(heightMode.setTo(HIGH)).add(stack), // HIGH
+            new TeleTrack.Step(heightMode.setTo(GROUND)).add(stack), // GROUND
+            new TeleTrack.Step(heightMode.setTo(GROUND)), // TERMINAL
+            new TeleTrack.Step(heightMode.setTo(GROUND)), // GROUND
+            new TeleTrack.Step(heightMode.setTo(LOW)) // LOW + CAP
     );
 
-    static void enableKappa(){ kappaAfter.enable(); kappaBefore.enable(); }
-    static void disableKappa(){ kappaAfter.disable(); kappaBefore.disable(); }
+    static void enableKappa(){ kappaBefore.enable(); }
+    static void disableKappa(){ kappaBefore.disable(); }
 
     /**
      * Tele
      */
-    AutoModule BackwardCircuitPick = new AutoModule(
-//            driveMode.ChangeMode(MEDIUM),
-//            gameplayMode.ChangeMode(CIRCUIT_PLACE),
-            kappaAfter.next(),
-            outtake.stageClose(0.25),
-            outtake.stageReadyStart(0.4)
-    );
-    AutoModule BackwardCircuitGroundPick = new AutoModule(
-//            Modes.driveMode.ChangeMode(MEDIUM),
-//            gameplayMode.ChangeMode(CIRCUIT_PLACE),
-            kappaAfter.next(),
-            lift.changeCutoff(2.0),
-            outtake.stageClose(0.25),
-            outtake.stageReadyStart(0.0),
-            lift.stageLift(1.0, heightMode.getValue(GROUND))
-    );
-    AutoModule BackwardCycleGroundPick = new AutoModule(
-            lift.changeCutoff(2.0),
-            outtake.stageClose(0.25),
-            lift.stageLift(1.0, heightMode.getValue(GROUND))
-    );
-    OutputList BackwardCircuitPickAll = new OutputList(heightMode::get)
-            .addOption(HIGH, BackwardCircuitPick)
-            .addOption(MIDDLE, BackwardCircuitPick)
-            .addOption(LOW, BackwardCircuitPick)
-            .addOption(GROUND, BackwardCircuitGroundPick);
-    AutoModule BackwardCircuitGroundPlace = new AutoModule(
-            outtake.stageStart(0.6),
-//            gameplayMode.ChangeMode(CIRCUIT_PICK),
-            heightMode.ChangeMode(LOW)
-    );
-    OutputList BackwardCircuitPlace = new OutputList(heightMode::get).addOption(LOW, BackwardCircuitPlace(LOW)).addOption(MIDDLE, BackwardCircuitPlace(MIDDLE)).addOption(HIGH, BackwardCircuitPlace(HIGH)).addOption(GROUND, BackwardCircuitGroundPlace);
-    static AutoModule BackwardCircuitPlace(Height height){ return new AutoModule(
-            outtakeStatus.ChangeMode(PLACING),
-            Modes.attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST),
-            outtake.stageFlip(0.0),
-            lift.changeCutoff(1.0),
-            lift.stageLift(1.0, heightMode.getValue(height) + 2).attach(outtake.stageReadyEndAfter(0.4))
-//            gameplayMode.ChangeMode(CIRCUIT_PICK)
-    );}
 
 
-    // TODO SPLIT
+    /**
+     * Forward
+     */
+
 
     AutoModule ForwardTeleHigh = new AutoModule(
             outtakeStatus.ChangeMode(DRIVING),
             outtake.stageEnd(0.1),
             outtake.stageOpen(0.0),
             lift.resetCutoff(),
-            lift.stageLift(0.9,0).attach(outtake.stageStartAfter(0.1))
+            lift.stageLift(0.9,0).attach(outtake.stageStartAfter(0.1)),
+            kappaBefore.next()
     );
 
     AutoModule ForwardTeleMiddle = new AutoModule(
@@ -127,7 +75,8 @@ public interface AutoModuleUser extends RobotUser{
             drive.moveTime(1.0, 0.0, 0.0, 0.22),
             outtake.stageStart(0.0),
             lift.resetCutoff(),
-            lift.stageLift(1.0,0)
+            lift.stageLift(1.0,0),
+            kappaBefore.next()
     );
 
     AutoModule ForwardTeleLow = new AutoModule(
@@ -137,7 +86,8 @@ public interface AutoModuleUser extends RobotUser{
             drive.moveTime(1.0, 0.0, 0.0, 0.25),
             outtake.stageStart(0.0),
             lift.resetCutoff(),
-            lift.stageLift(1.0,0)
+            lift.stageLift(1.0,0),
+            kappaBefore.next()
     );
 
     AutoModule ForwardTeleGround = new AutoModule(
@@ -145,9 +95,13 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageStart(0.1),
             lift.resetCutoff(),
             lift.stageLift(1.0,0),
-            outtake.stageOpen(0.0)
+            outtake.stageOpen(0.0),
+            kappaBefore.next()
     );
 
+    /**
+     * Backward
+     */
 
     AutoModule BackwardPlaceHighTele = new AutoModule(
             lift.changeHigh(false),
@@ -164,7 +118,6 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2)
     );
 
-
     OutputList BackwardHighTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabHighTele).addOption(PLACING, ForwardTeleHigh);
 
     AutoModule BackwardGrabMiddleTele = new AutoModule(
@@ -174,13 +127,7 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(outtake.stageReadyEndAfter(0.1))
     );
 
-    // TODO FIX WHEN DIFFERENT MODES
-
     OutputList BackwardMiddleTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabMiddleTele).addOption(PLACING, ForwardTeleMiddle);
-
-
-
-    // TODO TEST AND CLEAN
 
     AutoModule BackwardGrabLowTele = new AutoModule(
             outtakeStatus.ChangeMode(PLACING),
@@ -194,7 +141,6 @@ public interface AutoModuleUser extends RobotUser{
     OutputList BackwardLowTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabLowTele).addOption(PLACING, ForwardTeleLow);
 
 
-
     AutoModule BackwardGrabGroundTele = new AutoModule(
             outtakeStatus.ChangeMode(PLACING),
             heightMode.ChangeMode(GROUND),
@@ -203,15 +149,7 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0, heightMode.getValue(GROUND)+2)
     );
 
-
     OutputList BackwardGroundTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabGroundTele).addOption(PLACING, ForwardTeleGround);
-
-
-
-
-
-
-
 
     AutoModule ForwardTeleBottom = new AutoModule(
             outtakeStatus.ChangeMode(DRIVING),
@@ -221,60 +159,8 @@ public interface AutoModuleUser extends RobotUser{
             lift.resetCutoff(),
             lift.stageLift(1.0,0)
     );
-//
-//    OutputList ForwardTeleAll = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTeleBottom).addOption(PLACING, ForwardTeleHigh);
 
 
-
-    static AutoModule BackwardHeightTele(Height height){ return new AutoModule(
-//            Modes.driveMode.ChangeMode(MEDIUM),
-            outtakeStatus.ChangeMode(PLACING),
-            Modes.attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST),
-            outtake.stageClose(0.22),
-            lift.changeCutoff(1.0),
-            lift.stageLift(1.0, heightMode.getValue(height) + 2).attach(outtake.stageReadyEndAfter(height.equals(HIGH) ? 0.4 : height.equals(MIDDLE) ? 0.2 : 0.0))
-    );}
-
-
-
-
-
-//    OutputList BackwardTele = new OutputList(heightMode::get).addOption(HIGH, BackwardHighTele).addOption(MIDDLE, BackwardMiddleTele).addOption(LOW, BackwardHeightTele(LOW)).addOption(GROUND, BackwardCycleGroundPick);
-
-
-
-//    OutputList BackwardAllTele = new OutputList(gameplayMode::get).addOption(CYCLE, BackwardTele::check).addOption(CIRCUIT_PICK, BackwardCircuitPickAll::check).addOption(CIRCUIT_PLACE, BackwardCircuitPlace::check);
-
-
-
-    OutputList ForwardCircuitTele = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTele(false, true, false)).addOption(PLACING, ForwardTele(false, true, true));
-    OutputList ForwardCircuitTelePlace = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTele(true, true, false)).addOption(PLACING, ForwardTele(true, true, true));
-    OutputList ForwardCircuitTelePlaceAll = new OutputList(heightMode::get).addOption(HIGH, ForwardCircuitTelePlace::check).addOption(MIDDLE, ForwardCircuitTelePlace::check).addOption(LOW, ForwardCircuitTelePlace::check).addOption(GROUND, ForwardCircuitTele::check);
-
-//    OutputList ForwardTele = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTele(false, false, false)).addOption(PLACING, ForwardTele(false, false, true));
-    static AutoModule ForwardTele(boolean place, boolean circuit, boolean move) {return new AutoModule(
-//            Modes.driveMode.ChangeMode(MEDIUM),
-            Modes.attackStatus.ChangeMode(REST),
-            outtakeStatus.ChangeMode(DRIVING),
-            RobotPart.emptyIfNot(move, outtake.stageEnd(0.0)),
-            RobotPart.condition(place, outtake.stageStart(0.0), outtake.stageOpen(0.0)),
-            RobotPart.emptyIfNot(place, lift.stageLift(1.0, heightMode.getValue(LOW)+8)),
-            RobotPart.emptyIfNot(move, drive.moveTime(1.0, 0.0, 0.0, () -> heightMode.modeIs(LOW) ? 0.2 : 0.12)),
-            lift.resetCutoff(),
-            RobotPart.condition(place, outtake.stageOpen(0.0), outtake.stageStart(0.0)),
-            lift.stageLift(0.8,0),
-//            RobotPart.emptyIfNot(circuit, gameplayMode.ChangeMode(CIRCUIT_PICK)),
-            kappaBefore.next()
-    );}
-//    OutputList ForwardAll = new OutputList(gameplayMode::get).addOption(CYCLE, ForwardTele::check).addOption(CIRCUIT_PICK, ForwardCircuitTele::check).addOption(CIRCUIT_PLACE, ForwardCircuitTele::check);
-    AutoModule High = new AutoModule(heightMode.ChangeMode(HIGH), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
-    AutoModule Middle = new AutoModule(heightMode.ChangeMode(MIDDLE),attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST));
-    AutoModule Low = new AutoModule(heightMode.ChangeMode(LOW), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2));
-    AutoModule Ground = new AutoModule(heightMode.ChangeMode(GROUND), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2));
-    AutoModule LiftHigh = new AutoModule(heightMode.ChangeMode(HIGH), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.stageLift(1.0, heightMode.getValue(HIGH)));
-    AutoModule LiftMiddle = new AutoModule(heightMode.ChangeMode(MIDDLE),attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.stageLift(1.0, heightMode.getValue(MIDDLE)));
-    AutoModule LiftLow = new AutoModule(heightMode.ChangeMode(LOW), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(LOW)));
-    AutoModule LiftGround = new AutoModule(heightMode.ChangeMode(GROUND), attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST), lift.changeCutoff(2), lift.stageLift(1.0, heightMode.getValue(GROUND)));
     AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5),  lift.resetLift() );
 //    AutoModule RetractOdometry = new AutoModule(drive.stageRetract());
 //    AutoModule EngageOdometry = new AutoModule(drive.stageEngage());
@@ -287,44 +173,6 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageStart(0.0),
             lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0))
     );}
-
-    /**
-     * Auto
-     */
-
-    AutoModule BackwardAuto2First = new AutoModule(
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-5.5),
-            outtake.stageReadyEnd(0.32),
-            outtake.stageOpen(0.0)
-    );
-
-    AutoModule BackwardAuto2 = new AutoModule(
-            RobotPart.pause(0.1),
-            outtake.stageReadyEnd(0.32),
-            outtake.stageOpen(0.0)
-    );
-
-    AutoModule BackwardAutoReadyFirst = new AutoModule(
-            outtake.stageMiddle(0.0),
-            lift.changeCutoff(2),
-            lift.stageLift(1.0, heightMode.getValue(LOW)+15)
-    );
-
-    AutoModule BackwardAutoReady = new AutoModule(
-            outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-4.5)
-    );
-
-    default AutoModule ForwardAuto2(int i){return new AutoModule(
-            Reactor.forceExit(),
-            outtake.stageOpen(0.0),
-            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.15))
-    );}
-
-    AutoModule GrabAuto2 = new AutoModule(
-            outtake.stageClose(0.15),
-            lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.1))
-    );
 
     /**
      * Misc
@@ -343,37 +191,22 @@ public interface AutoModuleUser extends RobotUser{
         odometry.reset(); odometry.setCurrentPose(new Pose()); odometry.setCurrentPose(new Pose());
     };
 
-    AutoModule BackwardCycle = new AutoModule(
-            outtake.stageClose(0.2),
-            outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)-2).attach(outtake.stageReadyEndAfter(0.25))
-    );
-
     /**
-     * Cycle 2
+     * Cycle
      */
 
-    static AutoModule BackwardCycle2(Height height) {return new AutoModule(
+    static AutoModule BackwardCycle(Height height) {return new AutoModule(
             outtake.stageClose(0.2),
             outtake.stageReadyEnd(0.1),
             lift.stageLift(1.0, heightMode.getValue(height)+4)
     );}
 
 
-    AutoModule ForwardCycle2 = new AutoModule(
-
+    AutoModule ForwardCycle = new AutoModule(
             outtake.stageEnd(0.1),
             outtake.stageOpen(0.0),
-//            lift.moveTime(-1.0, 0.1),
             lift.resetCutoff(),
-//            outtake.stageStart(0.0),
             lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.1))
-
-//            outtake.stageEnd(0.0),
-//            outtake.stageOpen(0.0),
-//            lift.moveTime(-1.0, 0.1),
-//            outtake.stageMiddle(0.0),
-//            lift.stageLift(1.0,  0).attach(outtake.stageStartAfter(0.05))
     );
 
     AutoModule StageStart = new AutoModule(outtake.stageStart(0.0));
@@ -393,12 +226,10 @@ public interface AutoModuleUser extends RobotUser{
             if(i+1 != 11){
                 if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
 
-                addConcurrentAutoModuleWithCancel(BackwardCycle2(HIGH), 0.2);
+                addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH), 0.2);
                 addWaypoint(i == 0 ? 0.5 : 0.6, x, -15+y, 0);
                 addSegment(0.2, 0.5, mecanumNonstopSetPoint, x, -23+y, 0);
-                addConcurrentAutoModuleWithCancel(ForwardCycle2);
-//                addWaypoint(0.6, x, y, 0);
-//                addSegment(0.5, 1.0, mecanumNonstopSetPoint, x, 10+y, 0);
+                addConcurrentAutoModuleWithCancel(ForwardCycle);
                 addWaypoint(0.4,  x, 30+y, 0);
 
 
@@ -407,7 +238,6 @@ public interface AutoModuleUser extends RobotUser{
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
                 addSegment(0.6, 0.5, mecanumNonstopSetPoint, x, y, 0);
                 addPause(0.05);
-//                addAutoModule(new AutoModule(gameplayMode.ChangeMode(CIRCUIT_PLACE), heightMode.ChangeMode(MIDDLE), driveMode.ChangeMode(MEDIUM)));
 //                addAutoModule(RetractOdometry);
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
             }
@@ -440,185 +270,25 @@ public interface AutoModuleUser extends RobotUser{
             addConcurrentAutoModule(StageStart);
             addWaypoint(0.5, -31.0, 1.0, 0.0);
             addSegment(0.8, 0.7, mecanumNonstopSetPoint,  -25.0, 37.0, -21.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle2(MIDDLE), 0.2);
+            addConcurrentAutoModuleWithCancel(BackwardCycle(MIDDLE), 0.2);
             addSegment(1.2, 0.7, mecanumNonstopSetPoint, -49.0, -14.0, -21.0);
-            addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
+            addConcurrentAutoModuleWithCancel(ForwardCycle, 0.3);
             addSegment(0.8, 0.7, mecanumNonstopSetPoint,  -25.0, 37.0, -21.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle2(LOW), 0.2);
+            addConcurrentAutoModuleWithCancel(BackwardCycle(LOW), 0.2);
             addSegment(0.8, 0.7, mecanumNonstopSetPoint, -34.0, 37.0, -57.0);
-            addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
+            addConcurrentAutoModuleWithCancel(ForwardCycle, 0.3);
             addWaypoint(0.5, -43.0, 43.0, -57.0 );
             addSegment(0.8, 0.7, mecanumNonstopSetPoint, -37.0, 47.5, -57.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle2(GROUND), 0.2);
+            addConcurrentAutoModuleWithCancel(BackwardCycle(GROUND), 0.2);
             addWaypoint(0.5, -64.0, 55.0, -90.0);
             addWaypoint(0.5, -136.0, 58.0, -90.0);
-            addConcurrentAutoModuleWithCancel(ForwardCycle2, 0.3);
+            addConcurrentAutoModuleWithCancel(ForwardCycle, 0.3);
         }
     };
     Machine CycleMediumMachine = new Machine()
             .addInstruction(ResetOdometry, 0.3)
             .addIndependent(CycleMedium)
     ;
-
-
-
-
-
-
-
-
-    static Stage junctionStop(){ return new Stage(new Main(() -> MecanumJunctionReactor2.stop = true), RobotPart.exitAlways()); }
-
-
-
-
-
-
-    /**
-     * Cycle Old
-     */
-    Independent Cycle = new Independent() {
-        @Override
-        public void define() {
-            addWaypoint(0,0.01,0);
-            addWaypoint(0.38, 0,27, 0);
-            addConcurrentAutoModule(BackwardCycle);
-            addPause(0.2);
-            addWaypoint(0.38, 0, 3, 0);
-            addSetpoint(1.05, 0.95,0, -4,0);
-            addCancelAutoModules();
-            addConcurrentAutoModule(ForwardTele(false, false,false));
-            addPause(0.4);
-        }
-    };
-    Machine CycleMachine = new Machine()
-            .addInstruction(odometry::reset, 0.3)
-            .addIndependent(12, AutoModuleUser.Cycle);
-
-
-    AutoModule BackwardCycleMedium = new AutoModule(
-            outtake.stageClose(0.2),
-            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+9).attach(outtake.stageEndAfter(0.4))
-    );
-
-    AutoModule ForwardMedium = new AutoModule(
-            outtake.stageOpen(0.25),
-            outtake.stageStart(0.0),
-//            RobotPart.pause(0.1),
-            lift.resetCutoff(),
-            lift.stageLift(0.4, 0)
-    );
-
-
-
-    /**
-     * Old Auto
-     */
-
-    AutoModule DropAutoFirst = new AutoModule(outtake.stageEnd(0.3), outtake.stageOpen(0.1));
-    AutoModule DropAuto = new AutoModule(outtake.stageOpen(0.15));
-    AutoModule GrabAuto = new AutoModule(
-            outtake.stageClose(0.2),
-            outtake.stageReadyStart(0.3).attach(drive.moveTime(-0.2, 0, 0, 0.2)),
-            outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+5)
-    );
-    default AutoModule ForwardAuto(int i){return new AutoModule(
-            outtake.stageStart(0.0),
-            lift.stageLift(0.7, Math.max(14.0 - (i*14.0/5.0), 0))
-    );}
-    AutoModule BackwardAutoFirst = new AutoModule(
-            outtake.stageReadyEnd(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+7)
-    );
-    AutoModule BackwardAuto = new AutoModule(
-            RobotPart.pause(0.1),
-            outtake.stageEnd(0.0)
-    );
-
-
-
-
-
-
-    //        gph1.link(Button.X, () -> {odometry.reset(); bot.cancelIndependents(); bot.addIndependent(CycleAround);}, AUTOMATED)
-
-
-
-//
-//    Independent CycleAround = new Independent() { @Override public void define() {
-//        addPause(0.1);
-//        addScaledWaypoint(0.5, 9.5, 24.5, -35.0);
-//        addScaledSetpoint(1.0, 23.5, 41.0, -58.0);
-//        addAutoModule(BackwardHeightTele(HIGH));
-//        addPause(0.3);
-//        addScaledWaypoint(0.5, 9.5, 24.5, -35.0);
-//        addAccuracyScaledSetpoint(1.0,1.0, 0.01, 0.01, 2);
-//        addConcurrentAutoModule(ForwardTele);
-//        addPause(0.3);
-//    }}
-
-//    Independent CycleMediumFirst = new Independent() {
-//        @Override
-//        public void define() {
-//            addScaledWaypoint(0.6, 0.0, -6, 24.0);
-//            addScaledWaypoint(1.0, 18.0, -6, 24.0);
-//            addScaledWaypoint(1.0, 29.0, -8.5, 24.0);
-//            addAccuracySetpoint(0.3, 42, -6.0, 26.0);
-//        }
-//    };
-
-//      .addInstruction(odometry::reset, 0.05)
-//            .addIndependent(CycleMediumFirst)
-
-
-
-
-//
-//    /**
-//     * Cycle Around
-//     */
-//
-//
-//    AutoModule ForwardAutoCycleAround = new AutoModule(outtake.stageStart(0.0), lift.stageLift(0.4, 0));
-//    AutoModule CloseAutoCycleAround = new AutoModule(outtake.stageClose(0.2));
-//    Independent MoveToJunction = new Independent() { @Override public void define() { addCustomSegment(mecanumJunctionSetpoint, 0.0, 0.0, 0.0); }};
-//    Independent CycleAroundFirst = new Independent() {
-//        @Override
-//        public void define() {
-//            addWaypoint(0.01,0.01,0.01);
-//            addScaledSetpoint(1.0, 11.5, 32.5, -52.0);
-//            addPause(0.5);
-//            addScaledSetpoint(1.0, 20.5, 38.5, -52.0);
-//            addAutoModule(new AutoModule(outtake.stageClose(0.2)));
-//            addScaledWaypoint(0.8, 9.5, 24.5, -35.0);
-//            addConcurrentAutoModule(BackwardAuto);
-//            addAccuracyScaledSetpoint(1.0,1.0, 0.01, 0.01, 2);
-//            addPause(0.2);
-//            addAutoModule(DropAuto);
-//            addConcurrentAutoModule(ForwardAutoCycleAround);
-//            addPause(0.4);
-//        }
-//    };
-//    Independent CycleAround = new Independent() { @Override public void define() {
-//        addPause(0.1);
-//        addScaledWaypoint(0.6, 9.5, 24.5, -52.0);
-//        addScaledSetpoint(1.0, 20.5, 38.5, -52.0);
-//        addAutoModule(CloseAutoCycleAround);
-//        addScaledWaypoint(0.8, 9.5, 24.5, -35.0);
-//        addConcurrentAutoModule(BackwardAuto);
-//        addAccuracyScaledSetpoint(1.0,1.0, 0.01, 0.01, 2);
-//        addPause(0.2);
-//        addAutoModule(DropAuto);
-//        addConcurrentAutoModule(ForwardAutoCycleAround);
-//        addPause(0.4);
-//    }};
-//    Machine CycleAroundMachine = new Machine()
-//            .addIndependent(MoveToJunction)
-//            .addInstruction(odometry::reset, 0.1)
-//            .addIndependent(CycleAroundFirst)
-//            .addIndependent(9, CycleAround)
-//    ;
 
 
 }

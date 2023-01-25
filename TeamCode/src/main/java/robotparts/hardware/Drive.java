@@ -17,28 +17,14 @@ import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
 import static global.General.bot;
-import static global.Modes.AttackStatus.ATTACK;
-import static global.Modes.Drive.NORMAL;
-import static global.Modes.Drive.SLOW;
-import static global.Modes.attackStatus;
 //import static global.Modes.driveMode;
 
 public class Drive extends RobotPart {
 
     private CMotor fr, br, fl, bl;
-//    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
-
-    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 200.0, 3.0);
-
-    private final Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
-    private final Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
-
 
     public boolean slow = false;
 
-//    private final MecanumJunctionReactor2 mecanumJunctionReactor2 = new MecanumJunctionReactor2();
-
-//
     private final double[][] powers = {new double[]{0.35, 0.35, 0.4}, new double[]{1.0, 0.9, 0.6}};
 
 //    private PServo retract;
@@ -58,8 +44,7 @@ public class Drive extends RobotPart {
 
 //        engage();
 
-//        Modes.driveMode.set(NORMAL);
-        attackStatus.set(Modes.AttackStatus.REST);
+
         slow = false;
 //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
@@ -103,12 +88,6 @@ public class Drive extends RobotPart {
     }
 
 
-
-
-//    public Pose getMoveSmoothPower(double f, double s, double t){
-//        double[] scales = powers[Modes.driveMode.modeIs(SLOW) ? 0 : 1];
-//        return new Pose(movementCurveForward.fodd(f*scales[0]),movementCurveStrafe.fodd(s*scales[1]), movementCurveTurn.fodd(t*scales[2]));
-//    }
 
     @Override
     public Stage moveTime(double fp, double sp, double tp, double t) {
