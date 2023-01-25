@@ -11,6 +11,7 @@ import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PServo;
 
 import static global.Modes.OuttakeStatus.DRIVING;
+import static global.Modes.OuttakeStatus.PLACING;
 import static global.Modes.outtakeStatus;
 
 public class Outtake extends RobotPart {
@@ -47,7 +48,7 @@ public class Outtake extends RobotPart {
         claw.addPosition("close", 0.35);
 
         unFlip();
-        outtakeStatus.set(DRIVING);
+        outtakeStatus.set(PLACING);
     }
 
     public void arm(double pos){ armr.setPosition(pos); arml.setPosition(pos); }

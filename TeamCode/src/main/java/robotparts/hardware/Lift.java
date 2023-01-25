@@ -33,6 +33,7 @@ public class Lift extends RobotPart {
     public volatile double currentCutoffPosition = 10;
     public int stackedMode = 0;
     public boolean circuitMode = false;
+    public boolean high = false;
 
     @Override
     public void init() {
@@ -44,9 +45,14 @@ public class Lift extends RobotPart {
         motorLeft.usePositionHolder(0.18, 0.18);
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
+        high = false;
 //        gameplayMode.set(Modes.GameplayMode.CYCLE);
         stackedMode = 0;
         attackMode.set(PRESS_TO_ENABLE);
+    }
+
+    public Stage changeHigh(boolean high){
+        return customTime(() -> this.high = high, 0.01);
     }
 
 

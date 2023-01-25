@@ -131,4 +131,6 @@ public class Precision {
 
     public static double attract(double value, double attractor, double range){ return  Math.abs(value - attractor) < range ? attractor : value; }
     public static double attract(double value, double range){ return attract(value, 0, range); }
+
+    public static boolean range(double value, double max){ return Math.abs(value) < max; }
 }

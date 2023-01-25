@@ -21,17 +21,20 @@ import static global.Modes.AttackStatus.ATTACK;
 import static global.Modes.Drive.NORMAL;
 import static global.Modes.Drive.SLOW;
 import static global.Modes.attackStatus;
-import static global.Modes.driveMode;
+//import static global.Modes.driveMode;
 
 public class Drive extends RobotPart {
 
     private CMotor fr, br, fl, bl;
-//    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 60.0, 2.0);
+//    private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
 
     private final Logistic movementCurveForward = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 200.0, 3.0);
 
     private final Logistic movementCurveStrafe = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
     private final Logistic movementCurveTurn = new Logistic(Logistic.LogisticParameterType.ONE_ONE, 30.0, 6.0);
+
+
+    public boolean slow = false;
 
 //    private final MecanumJunctionReactor2 mecanumJunctionReactor2 = new MecanumJunctionReactor2();
 
@@ -55,8 +58,9 @@ public class Drive extends RobotPart {
 
 //        engage();
 
-        Modes.driveMode.set(NORMAL);
+//        Modes.driveMode.set(NORMAL);
         attackStatus.set(Modes.AttackStatus.REST);
+        slow = false;
 //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
@@ -82,21 +86,29 @@ public class Drive extends RobotPart {
 
     public void moveSmooth(double f, double s, double t) {
         if(!bot.indHandler.isIndependentRunning()) {
-            if(Math.abs(t) > 0.9 && driveMode.modeIs(NORMAL)){ f *= 0.8; }
-            if(Math.abs(f) > 0.8 && driveMode.modeIs(NORMAL)){ s = 0.0; }
-//            Vector vector = new Vector(f, t);
-//            vector.scaleToLength(1);
-//            f = vector.getX(); t = vector.getY();
-            Pose power = getMoveSmoothPower(f, s, t);
-            drive.move(power.getX(), power.getY(), power.getAngle());
-//            mecanumJunctionReactor2.move(attackStatus.modeIs(ATTACK), drive.getMoveSmoothPower(f, s, t));
+            Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
+            Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
+            Linear rx = new Linear(1.0, 0.7, 1.0);
+
+            f = rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0);
+            s = rm.fodd(s) * 0.6;
+            t = rt.fodd(t) * 0.7;
+
+            if(slow) {
+                drive.move(f*0.5, s*0.5, t*0.5);
+            }else{
+                drive.move(f, s, t);
+            }
         }
     }
 
-    public Pose getMoveSmoothPower(double f, double s, double t){
-        double[] scales = powers[Modes.driveMode.modeIs(SLOW) ? 0 : 1];
-        return new Pose(movementCurveForward.fodd(f*scales[0]),movementCurveStrafe.fodd(s*scales[1]), movementCurveTurn.fodd(t*scales[2]));
-    }
+
+
+
+//    public Pose getMoveSmoothPower(double f, double s, double t){
+//        double[] scales = powers[Modes.driveMode.modeIs(SLOW) ? 0 : 1];
+//        return new Pose(movementCurveForward.fodd(f*scales[0]),movementCurveStrafe.fodd(s*scales[1]), movementCurveTurn.fodd(t*scales[2]));
+//    }
 
     @Override
     public Stage moveTime(double fp, double sp, double tp, double t) {

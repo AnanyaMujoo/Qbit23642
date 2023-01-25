@@ -85,7 +85,6 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0, heightMode.getValue(GROUND))
     );
     AutoModule BackwardCycleGroundPick = new AutoModule(
-            Modes.driveMode.ChangeMode(SLOW),
             lift.changeCutoff(2.0),
             outtake.stageClose(0.25),
             lift.stageLift(1.0, heightMode.getValue(GROUND))
@@ -96,14 +95,12 @@ public interface AutoModuleUser extends RobotUser{
             .addOption(LOW, BackwardCircuitPick)
             .addOption(GROUND, BackwardCircuitGroundPick);
     AutoModule BackwardCircuitGroundPlace = new AutoModule(
-            Modes.driveMode.ChangeMode(SLOW),
             outtake.stageStart(0.6),
 //            gameplayMode.ChangeMode(CIRCUIT_PICK),
             heightMode.ChangeMode(LOW)
     );
     OutputList BackwardCircuitPlace = new OutputList(heightMode::get).addOption(LOW, BackwardCircuitPlace(LOW)).addOption(MIDDLE, BackwardCircuitPlace(MIDDLE)).addOption(HIGH, BackwardCircuitPlace(HIGH)).addOption(GROUND, BackwardCircuitGroundPlace);
     static AutoModule BackwardCircuitPlace(Height height){ return new AutoModule(
-            Modes.driveMode.ChangeMode(SLOW),
             outtakeStatus.ChangeMode(PLACING),
             Modes.attackStatus.ChangeMode(() -> attackMode.modeIs(ON_BY_DEFAULT) ? ATTACK : REST),
             outtake.stageFlip(0.0),
@@ -115,53 +112,117 @@ public interface AutoModuleUser extends RobotUser{
 
     // TODO SPLIT
 
-    AutoModule BackwardHighTele = new AutoModule(
-            outtakeStatus.ChangeMode(PLACING),
-            driveMode.ChangeMode(NORMAL),
-            outtake.stageClose(0.22),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+2).attach(outtake.stageReadyEndAfter(0.3))
+    AutoModule ForwardTeleHigh = new AutoModule(
+            outtakeStatus.ChangeMode(DRIVING),
+            outtake.stageEnd(0.1),
+            outtake.stageOpen(0.0),
+            lift.resetCutoff(),
+            lift.stageLift(0.9,0).attach(outtake.stageStartAfter(0.1))
     );
 
-    AutoModule BackwardMiddleTele = new AutoModule(
+    AutoModule ForwardTeleMiddle = new AutoModule(
+            outtakeStatus.ChangeMode(DRIVING),
+            outtake.stageEnd(0.1),
+            outtake.stageOpen(0.0),
+            drive.moveTime(1.0, 0.0, 0.0, 0.22),
+            outtake.stageStart(0.0),
+            lift.resetCutoff(),
+            lift.stageLift(1.0,0)
+    );
+
+    AutoModule ForwardTeleLow = new AutoModule(
+            outtakeStatus.ChangeMode(DRIVING),
+            outtake.stageEnd(0.1),
+            outtake.stageOpen(0.0),
+            drive.moveTime(1.0, 0.0, 0.0, 0.25),
+            outtake.stageStart(0.0),
+            lift.resetCutoff(),
+            lift.stageLift(1.0,0)
+    );
+
+    AutoModule ForwardTeleGround = new AutoModule(
+            outtakeStatus.ChangeMode(DRIVING),
+            outtake.stageStart(0.1),
+            lift.resetCutoff(),
+            lift.stageLift(1.0,0),
+            outtake.stageOpen(0.0)
+    );
+
+
+    AutoModule BackwardPlaceHighTele = new AutoModule(
+            lift.changeHigh(false),
+            outtake.stageReadyEnd(0.0),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+2)
+    );
+
+    AutoModule BackwardGrabHighTele = new AutoModule(
+            heightMode.ChangeMode(HIGH),
             outtakeStatus.ChangeMode(PLACING),
-            driveMode.ChangeMode(NORMAL),
+            lift.changeHigh(true),
+            outtake.stageClose(0.22),
+            outtake.stageMiddle(0.0),
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2)
+    );
+
+
+    OutputList BackwardHighTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabHighTele).addOption(PLACING, ForwardTeleHigh);
+
+    AutoModule BackwardGrabMiddleTele = new AutoModule(
+            outtakeStatus.ChangeMode(PLACING),
+            heightMode.ChangeMode(MIDDLE),
             outtake.stageClose(0.22),
             lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(outtake.stageReadyEndAfter(0.1))
     );
 
+    // TODO FIX WHEN DIFFERENT MODES
+
+    OutputList BackwardMiddleTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabMiddleTele).addOption(PLACING, ForwardTeleMiddle);
+
+
+
     // TODO TEST AND CLEAN
 
-    AutoModule BackwardLowTele = new AutoModule(
+    AutoModule BackwardGrabLowTele = new AutoModule(
             outtakeStatus.ChangeMode(PLACING),
-            driveMode.ChangeMode(NORMAL),
+            heightMode.ChangeMode(LOW),
             outtake.stageClose(0.22),
             lift.changeCutoff(0.0),
             outtake.stageReadyEndAfter(0.0),
             lift.stageLift(1.0, heightMode.getValue(LOW)+2)
     );
 
+    OutputList BackwardLowTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabLowTele).addOption(PLACING, ForwardTeleLow);
 
 
-    AutoModule ForwardTele = new AutoModule(
-            outtakeStatus.ChangeMode(DRIVING),
-            driveMode.ChangeMode(NORMAL),
-            outtake.stageEnd(0.0),
-            outtake.stageOpen(0.0),
-            drive.moveTime(1.0, 0.0, 0.0, 0.15),
-            outtake.stageStart(0.0),
-            lift.resetCutoff(),
-            lift.stageLift(0.8,0)
+
+    AutoModule BackwardGrabGroundTele = new AutoModule(
+            outtakeStatus.ChangeMode(PLACING),
+            heightMode.ChangeMode(GROUND),
+            outtake.stageClose(0.22),
+            lift.changeCutoff(0.0),
+            lift.stageLift(1.0, heightMode.getValue(GROUND)+2)
     );
+
+
+    OutputList BackwardGroundTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabGroundTele).addOption(PLACING, ForwardTeleGround);
+
+
+
+
+
+
+
 
     AutoModule ForwardTeleBottom = new AutoModule(
             outtakeStatus.ChangeMode(DRIVING),
-            driveMode.ChangeMode(NORMAL),
+            lift.changeHigh(false),
             outtake.stageStart(0.0),
+            outtake.stageOpen(0.0),
             lift.resetCutoff(),
-            lift.stageLift(0.8,0)
+            lift.stageLift(1.0,0)
     );
-
-    OutputList ForwardTeleAll = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTeleBottom).addOption(PLACING, ForwardTele);
+//
+//    OutputList ForwardTeleAll = new OutputList(outtakeStatus::get).addOption(DRIVING, ForwardTeleBottom).addOption(PLACING, ForwardTeleHigh);
 
 
 
@@ -217,8 +278,8 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5),  lift.resetLift() );
 //    AutoModule RetractOdometry = new AutoModule(drive.stageRetract());
 //    AutoModule EngageOdometry = new AutoModule(drive.stageEngage());
-    AutoModule UprightCone = new AutoModule(driveMode.ChangeMode(SLOW), lift.stageLift(1.0, 15));
-//    AutoModule TakeOffCone = new AutoModule(outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.3),outtake.stageFlip(0.0), gameplayMode.ChangeMode(() -> lift.circuitMode ? CIRCUIT_PLACE : CYCLE));
+    AutoModule UprightCone = new AutoModule(lift.stageLift(1.0, 15));
+    AutoModule TakeOffCone = new AutoModule(outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.3),outtake.stageFlip(0.0));
 
     static AutoModule ForwardStackTele(int i){return new AutoModule(
             lift.changeCutoff(2),
