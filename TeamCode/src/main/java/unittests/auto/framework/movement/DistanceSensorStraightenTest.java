@@ -15,24 +15,40 @@ public class DistanceSensorStraightenTest extends AutoUnitTest {
 
     public static final Pose odometryCenterToDistanceSensor = new Pose(-14,6,0);
 
-    // TODO TEST
     @Override
     protected void run() {
         final double turn = 0.2;
         distanceSensors.ready();
 
-        ArrayList<Double> distances = new ArrayList<>();
-        distances.add(getDis());
-        distances.add(getDis());
-        whileActive(() -> distances.get(distances.size() - 2) <= distances.get(distances.size()-1), () -> {
-            distances.add(getDis());
-            drive.move(0,0,turn);
+        Pose startPose = getDSPose();
+        double startDis = getDis();
+        Double[] currentDis = new Double[]{startDis};
+        whileActive(() -> currentDis[0] >= (startDis+1), () -> {
+            drive.move(0, 0, turn);
+            currentDis[0] = getDis() - getDSPose().getSubtracted(startPose).getLength();
         });
         drive.halt();
 
-        whileActive(() -> {
-            log.show("Distances", distances);
-        });
+
+
+
+
+
+
+
+
+//        ArrayList<Double> distances = new ArrayList<>();
+//        distances.add(getDis());
+//        distances.add(getDis());
+//        whileActive(() -> distances.get(distances.size() - 2) <= distances.get(distances.size()-1), () -> {
+//            distances.add(getDis());
+//            drive.move(0,0,turn);
+//        });
+//        drive.halt();
+//
+//        whileActive(() -> {
+//            log.show("Distances", distances);
+//        });
 
 //
 //        Double[] startDistance = new Double[]{distanceSensors.getRightDistance()*scale};
@@ -130,5 +146,9 @@ public class DistanceSensorStraightenTest extends AutoUnitTest {
     public double getDis(){
         double scale = 1.061224;
         return distanceSensors.getRightDistance()*scale;
+    }
+
+    public Pose getDSPose(){
+        return odometry.getPose().getAdded(odometryCenterToDistanceSensor.getOnlyPointRotated(odometry.getHeading()));
     }
 }

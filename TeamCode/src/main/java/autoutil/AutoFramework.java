@@ -178,7 +178,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addTimedSetpoint(double acc, double scale, double time, double x, double y, double h){ addTime(time); addSetpoint(acc, scale, x, y, h); }
     public void addTimedWaypoint(double scale, double time, double x, double y, double h){ addTime(time); addWaypoint(scale, x, y, h);}
 
-    public void addCustomCode(CodeSeg seg){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(seg); addLastPose(); }
+    public void addCustomCode(CodeSeg code){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(code); addLastPose(); }
+    public void addCustomCode(CodeSeg code, double time){ addCustomCode(code); addPause(time); }
     public void addSynchronisedDecision(DecisionList decisionList){ addCustomCode(decisionList::check); }
     public void addBreakpoint(ReturnCodeSeg<Boolean> exit){ addCustomCode(() -> {
         if(exit.run()){

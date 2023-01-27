@@ -8,8 +8,10 @@ import autoutil.reactors.MecanumJunctionReactor2;
 import autoutil.reactors.Reactor;
 import elements.Field;
 import elements.Robot;
+import geometry.framework.Point;
 import geometry.position.Pose;
 import global.Modes;
+import math.polynomial.Linear;
 import robot.RobotUser;
 import robotparts.RobotPart;
 import robotparts.electronics.output.OLed;
@@ -19,6 +21,7 @@ import teleutil.independent.Independent;
 import teleutil.independent.Machine;
 import util.codeseg.CodeSeg;
 import util.condition.OutputList;
+import util.template.Precision;
 
 import static global.General.bot;
 import static global.Modes.*;
@@ -181,26 +184,35 @@ public interface AutoModuleUser extends RobotUser{
     Independent MoveToCycleStart = new Independent() {
         @Override
         public void define() {
-            addWaypoint(0.8, 65,-71,0);
-            addWaypoint(0.4, 93,-72, 0);
-            addWaypoint(0.35,  89.0, -62.0, 0.0 );
+            addCustomCode(() -> {
+                whileActive(() -> !Precision.range(gyro.getHeading(), 0.3), () -> {
+                    Linear hCurve = new Linear(0.03, 0.008);
+                    drive.move(0,0, hCurve.fodd(gyro.getHeading()));
+                });
+                ResetOdometryForCycle.run();
+            }, 0.2);
+            addTimedSetpoint(2.0, 1.0, 2.0, 0, -10, 0);
+            addTimedSetpoint(1.0, 0.5, 0.5, 0, 0.01, 0);
         }
     };
 
-    CodeSeg ResetOdometry = () -> {
-        odometry.reset(); odometry.setCurrentPose(new Pose()); odometry.setCurrentPose(new Pose());
-    };
 
     /**
      * Cycle
      */
+    Point cyclePoint = new Point(Field.halfWidth, -71);
+    // TODO TEST
+    CodeSeg ResetOdometryForCycle =  () -> {
+        distanceSensors.ready();
+        odometry.setCurrentPose(new Point(distanceSensors.getRightDistance() - cyclePoint.getX(),-distanceSensors.getFrontDistance() - cyclePoint.getY()));
+        odometry.setCurrentPose(new Point(distanceSensors.getRightDistance() - cyclePoint.getX(),-distanceSensors.getFrontDistance() - cyclePoint.getY()));
+    };
 
     static AutoModule BackwardCycle(Height height) {return new AutoModule(
             outtake.stageClose(0.2),
             outtake.stageReadyEnd(0.1),
             lift.stageLift(1.0, heightMode.getValue(height)+4)
     );}
-
 
     AutoModule ForwardCycle = new AutoModule(
             outtake.stageEnd(0.1),
@@ -217,36 +229,34 @@ public interface AutoModuleUser extends RobotUser{
     static Independent Cycle2(int i) { return new Independent() {
             @Override
             public void define() {
-            double x = (i*0.0); double y = i*0.0;
             if(i+1 == 1){
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
-                addWaypoint(0.7,  x, 17+y, 0);
-                addWaypoint(0.4,  x, 21+y, 0);
+                addWaypoint(0.7,  0, 17, 0);
+                addWaypoint(0.4,  0, 21, 0);
             }
             if(i+1 != 11){
                 if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
 
                 addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH), 0.2);
-                addWaypoint(i == 0 ? 0.5 : 0.6, x, -15+y, 0);
-                addSegment(0.2, 0.5, mecanumNonstopSetPoint, x, -23+y, 0);
+                addWaypoint(i == 0 ? 0.5 : 0.6, 0, -15, 0);
+                addSegment(0.2, 0.5, mecanumNonstopSetPoint, 0, -23, 0);
                 addConcurrentAutoModuleWithCancel(ForwardCycle);
-                addWaypoint(0.4,  x, 30+y, 0);
+                addWaypoint(0.4,  0, 30, 0);
 
 
             } else{
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
-                addSegment(0.6, 0.5, mecanumNonstopSetPoint, x, y, 0);
+                addSegment(0.6, 0.5, mecanumNonstopSetPoint, 0, 0, 0);
                 addPause(0.05);
 //                addAutoModule(RetractOdometry);
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
             }
     }};}
 
-    Machine MachineCycle2 = new Machine()
-            .addInstruction(ResetOdometry, 0.2)
+    Machine MachineCycle = new Machine()
+            .addInstruction(ResetOdometryForCycle, 0.2)
             .addIndependent(11, AutoModuleUser::Cycle2)
-//            .addInstruction(AutoModuleUser::enableKappa, 0.1)
     ;
 
 
@@ -259,7 +269,7 @@ public interface AutoModuleUser extends RobotUser{
     /**
      * Cycle Medium
      */
-    Independent CycleMedium = new Independent() {
+    Independent CycleExtra = new Independent() {
         @Override
         public void define() {
             startPose = new Pose(Robot.halfLength + 59, Field.width/2.0, 90);
@@ -285,9 +295,10 @@ public interface AutoModuleUser extends RobotUser{
             addConcurrentAutoModuleWithCancel(ForwardCycle, 0.3);
         }
     };
-    Machine CycleMediumMachine = new Machine()
-            .addInstruction(ResetOdometry, 0.3)
-            .addIndependent(CycleMedium)
+
+    Machine MachineCycleExtra= new Machine()
+            .addInstruction(ResetOdometryForCycle, 0.2)
+            .addIndependent(CycleExtra)
     ;
 
 

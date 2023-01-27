@@ -31,7 +31,7 @@ public class AutoSimulator extends Drawer{
 
     public static void main(String[] args) {
 //        setAuto(new TerraAuto.TerraAutoMegaRight());
-        setAuto(AutoModuleUser.CycleMedium);
+//        setAuto(AutoModuleUser.CycleMedium);
 
 //        setAuto(new TerraAutoLowerBlue());
 //        setAuto(new TerraAutoUpperBlue());
