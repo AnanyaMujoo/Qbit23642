@@ -13,34 +13,22 @@ import util.template.Precision;
 import static java.lang.Math.*;
 
 public class ThreeOdometry extends TwoOdometry {
-    private IEncoder enc3; // right
+//    private IEncoder enc3; // right
     public final double width = 21.55;
-    public double angleLeft = toRadians(1.3);
-    public double angleRight = toRadians(1.3);
-    public final double scaleX = 1.004;
-    public final double scaleY = 1.004;
-    public double scaleRight = 1.015;
     public int mode = 0;
     public final Point odometryCenter = new Point();
     private final Vector leftOdometryCenterToRobotCenter = new Vector(10.5, 13.0);
-    private final Precision precision = new Precision();
+//    private final Precision precision = new Precision();
 
 
-
-//    private static final double xCorrectionScale = -0.0006;
-//    private static final double yCorrectionScale = -0.0011;
-
-    private static final double xCorrectionScale = -0.000;
-    private static final double yCorrectionScale = -0.00;
-
-    @Override
-    protected void createEncoders() {
-        super.createEncoders();
-        enc3 = create("frEnc", ElectronicType.IENCODER_NORMAL);
-        precision.reset();
-        addEncoders(enc3);
-        enc3.invert();
-    }
+//    @Override
+//    protected void createEncoders() {
+//        super.createEncoders();
+////        enc3 = create("frEnc", ElectronicType.IENCODER_NORMAL);
+////        precision.reset();
+////        addEncoders(enc3);
+////        enc3.invert();
+//    }
 
     @Override
     public void setCurrentPose(Pose pose) {
@@ -52,13 +40,7 @@ public class ThreeOdometry extends TwoOdometry {
     }
 
     @Override
-    public void setCurrentPose(Point point) {
-        synchronized (odometryCenter) {
-            Vector globalOdometryCenterToRobotCenter = leftOdometryCenterToRobotCenter.getRotated(getHeading()).getSubtracted(leftOdometryCenterToRobotCenter);
-            odometryCenter.set(point.getSubtracted(globalOdometryCenterToRobotCenter.getPoint()));
-            super.setCurrentPose(point);
-        }
-    }
+    public void setCurrentPoint(Point point) { setCurrentPose(new Pose(point, getHeading())); }
 
     @Override
     protected void update() {

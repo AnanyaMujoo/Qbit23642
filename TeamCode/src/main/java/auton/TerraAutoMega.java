@@ -113,7 +113,7 @@ public class TerraAutoMega extends AutoFramework {
         addCustomCode(() -> {
             distanceSensors.ready();
             double distanceRight = distanceSensors.getRightDistance();
-            odometry.setCurrentPose(new Point(0,distanceRight + Robot.halfWidth));
+            odometry.setCurrentPoint(new Point(0,distanceRight + Robot.halfWidth));
         });
 
 

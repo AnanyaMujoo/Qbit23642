@@ -31,7 +31,8 @@ public abstract class Odometry extends RobotPart {
         createEncoders();
         setEncoderPoses();
         setConstantObjects();
-        resetObjects();
+//        resetObjects();
+        reset();
         odometryThread.setExecutionCode(odometryUpdateCode);
     }
 
@@ -72,13 +73,9 @@ public abstract class Odometry extends RobotPart {
         }
     }
 
-    public void setCurrentPose(Point current){
-        synchronized (currentPose){
-            currentPose.setX(current.getX());
-            currentPose.setY(current.getY());
-            synchronized (encoders) { Iterator.forAll(encoders, IEncoder::updateNormal);}
-        }
-    }
+    protected final void setCurrentPose(Point current){ synchronized (currentPose){ currentPose.setX(current.getX()); currentPose.setY(current.getY()); } }
+
+    public void setCurrentPoint(Point current){ }
 
     public final void updateCurrentPose(Vector delta){ currentPose.add(delta); }
 
@@ -96,7 +93,6 @@ public abstract class Odometry extends RobotPart {
     public final void reset(){
         if(usingGyro){ gyro.reset(); }
         Iterator.forAll(encoders, IEncoder::reset);
-        ExceptionCatcher.catchInterrupted(() -> Thread.sleep(10));
         currentPose.setZero();
         resetObjects();
     }

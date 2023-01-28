@@ -12,7 +12,7 @@ import global.Constants;
 public class Field {
     public static final double width = 144*Constants.INCH_TO_CM;
     public static final double tileWidth = 24* Constants.INCH_TO_CM;
-    public static final double halfWidth = width/2.0;
+    public static final double halfWidth = width/2.0; // 183 cm
     public static final CoordinatePlane plane = new CoordinatePlane();
 
     static {
