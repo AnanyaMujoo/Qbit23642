@@ -24,6 +24,7 @@ import util.condition.OutputList;
 import util.template.Precision;
 
 import static global.General.bot;
+import static global.General.log;
 import static global.Modes.*;
 import static global.Modes.Height.GROUND;
 import static global.Modes.Height.HIGH;
@@ -191,8 +192,13 @@ public interface AutoModuleUser extends RobotUser{
                 });
                 ResetOdometryForCycle.run();
             }, 0.2);
-            addTimedSetpoint(2.0, 1.0, 2.0, 0, -10, 0);
-            addTimedSetpoint(1.0, 0.5, 0.5, 0, 0.01, 0);
+            addCustomCode(() -> {
+                whileActive(() -> {
+                    log.show("pose", odometry.getPose());
+                });
+            });
+//            addTimedSetpoint(2.0, 1.0, 2.0, 0, -10, 0);
+//            addTimedSetpoint(1.0, 0.5, 0.5, 0, 0.01, 0);
         }
     };
 

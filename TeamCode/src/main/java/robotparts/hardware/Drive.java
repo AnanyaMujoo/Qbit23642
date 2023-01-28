@@ -76,7 +76,7 @@ public class Drive extends RobotPart {
             Linear rx = new Linear(1.0, 0.7, 1.0);
 
             f = rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0);
-            s = rm.fodd(s) * 0.6;
+            s = !Precision.range(s, 0.7) ? rm.fodd(s) * 0.6 : 0.0;
             t = rt.fodd(t) * 0.7;
 
             if(slow) {

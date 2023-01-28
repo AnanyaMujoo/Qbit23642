@@ -26,7 +26,7 @@ public class DistanceTest extends TeleUnitTest {
          * NOTE: The readings are in centimeters
          */
         log.show("Right distance sensor reading", distanceSensors.getRightDistance()*1.061224);
-//        log.show("Front distance sensor reading", distanceSensors.getFrontDistance());
+        log.show("Front distance sensor reading", distanceSensors.getFrontDistance()*1.061224);
 
 
     }

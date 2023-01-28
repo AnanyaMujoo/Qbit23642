@@ -115,7 +115,7 @@ public class RobotFramework {
      */
     public void start() {
         rfsHandler.resume();
-        Iterator.forAll(allRobotParts, RobotPart::reset);
+//        Iterator.forAll(allRobotParts, RobotPart::reset); // TODO CHECK
     }
 
     public void update(){
