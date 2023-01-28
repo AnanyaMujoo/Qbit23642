@@ -185,19 +185,25 @@ public interface AutoModuleUser extends RobotUser{
     Independent MoveToCycleStart = new Independent() {
         @Override
         public void define() {
-            addCustomCode(() -> {
-                whileActive(() -> !Precision.range(gyro.getHeading(), 0.3), () -> {
-                    Linear hCurve = new Linear(0.03, 0.008);
-                    drive.move(0,0, hCurve.fodd(gyro.getHeading()));
-                });
-                ResetOdometryForCycle.run();
-            }, 0.2);
-            addCustomCode(() -> {
-                whileActive(() -> {
-                    log.show("pose", odometry.getPose());
-                });
-            });
-//            addTimedSetpoint(2.0, 1.0, 2.0, 0, -10, 0);
+//            addCustomCode(() -> {
+//                whileActive(() -> !Precision.range(gyro.getHeading(), 0.3), () -> {
+//                    Linear hCurve = new Linear(0.03, 0.008);
+//                    drive.move(0,0, hCurve.fodd(gyro.getHeading()));
+//                });
+//                ResetOdometryForCycle.run();
+//            }, 0.2);
+//            addCustomCode(() -> {
+//                whileActive(() -> {
+//                    log.record("Front", distanceSensors.getFrontDistance());
+//                    log.record("Right", distanceSensors.getRightDistance());
+//                    log.record("Point", cyclePoint);
+//                    log.record("Pose", odometry.getPose());
+//                });
+//            });
+//            addTimedSetpoint(2.0, 1.0, 3.0, 0, -13, 0);
+
+            addSegment(3.0, 1.0, mecanumNonstopSetPoint, 88, 0, 0);
+//            addTimedSetpoint(2.0, 1.0, 3.0, 88, 0, 0);
 //            addTimedSetpoint(1.0, 0.5, 0.5, 0, 0.01, 0);
         }
     };
@@ -206,12 +212,12 @@ public interface AutoModuleUser extends RobotUser{
     /**
      * Cycle
      */
-    Point cyclePoint = new Point(Field.halfWidth, -71);
-    // TODO TEST
+    Point cyclePoint = new Point(Field.halfWidth-22, -58);
     CodeSeg ResetOdometryForCycle =  () -> {
         distanceSensors.ready();
-        odometry.setCurrentPose(new Point(distanceSensors.getRightDistance() - cyclePoint.getX(),-distanceSensors.getFrontDistance() - cyclePoint.getY()));
-        odometry.setCurrentPose(new Point(distanceSensors.getRightDistance() - cyclePoint.getX(),-distanceSensors.getFrontDistance() - cyclePoint.getY()));
+        Point point = new Point(distanceSensors.getRightDistance() - cyclePoint.getX(),-distanceSensors.getFrontDistance() - cyclePoint.getY());
+        point.scaleX(0.8);
+        odometry.setCurrentPose(point); odometry.setCurrentPose(point);
     };
 
     static AutoModule BackwardCycle(Height height) {return new AutoModule(

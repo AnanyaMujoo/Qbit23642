@@ -25,8 +25,10 @@ public class DistanceTest extends TeleUnitTest {
          * These should all change when something goes infront of the distance sensors
          * NOTE: The readings are in centimeters
          */
-        log.show("Right distance sensor reading", distanceSensors.getRightDistance()*1.061224);
-        log.show("Front distance sensor reading", distanceSensors.getFrontDistance()*1.061224);
+        log.show("Right distance sensor reading", distanceSensors.getRightDistance());
+        log.show("Front distance sensor reading", distanceSensors.getFrontDistance());
+
+        log.show("Odometry Pose", odometry.getPose());
 
 
     }

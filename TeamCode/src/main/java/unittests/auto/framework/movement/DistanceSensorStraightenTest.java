@@ -144,8 +144,7 @@ public class DistanceSensorStraightenTest extends AutoUnitTest {
     }
 
     public double getDis(){
-        double scale = 1.061224;
-        return distanceSensors.getRightDistance()*scale;
+        return distanceSensors.getRightDistance();
     }
 
     public Pose getDSPose(){
