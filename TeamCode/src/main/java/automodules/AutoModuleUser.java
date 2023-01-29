@@ -206,36 +206,42 @@ public interface AutoModuleUser extends RobotUser{
 //            });
 //            addSegment(0.7, 0.3, mecanumNonstopSetPoint, 0, 0.01, 0);
 
+            addCustomCode(() -> {  odometry.setHeading(0); gyro.reset();}, 0.05);
 
 
 
-            addCustomCode(JunctionScannerAll::resume, 0.05);
-            addCustomCode(ResetOdometryForCycle, 0.05);
-            addWaypoint(1.0, -10, -14, 0);
+
+//            addCustomCode(JunctionScannerAll::resume, 0.05);
+            addCustomCode(ResetOdometryForCycle(cyclePoint), 0.05);
+            addWaypoint(1.0, -10, -26, 0);
             addSegment(0.7, 0.7, mecanumNonstopSetPoint, 0, 0.01, 0);
-            addCustomCode(() -> {
-                Pose pose = new Pose();
-                while (pose.getLength() < 10) {
-                    ArrayList<Pose> poses = new ArrayList<>();
-                    for (int i = 0; i < 100; i++) {
-                        poses.add(JunctionScannerAll.getPose());
-                    }
-                    pose = Pose.forAllAverage(poses);
-//                    log.show("JunctionScannerPose", pose);
-//                    log.show("CurrentPose", JunctionScannerAll.getPose());
-                }
-//                pose.add(new Pose(0, -23, 0));
-                Point point = new Point(pose.getX(), odometry.getY());
-                odometry.setCurrentPoint(point); odometry.setCurrentPoint(point);
-//                odometry.setCurrentPose(pose);
-//                odometry.setCurrentPose(pose);
-//                whileActive(() -> {
-//                    log.show("JunctionScannerPose", pose);
-//                });
+//            addCustomCode(ResetOdometryForCycle(cyclePoint2), 0.05);
+//            addSegment(0.6, 0.5, mecanumNonstopSetPoint, 0, 0.01, 0);
 
-            });
-            addSegment(0.7, 0.7, mecanumNonstopSetPoint, 0, 0.01, 0);
-            addCustomCode(JunctionScannerAll::pause, 0.05);
+
+//            addCustomCode(() -> {
+//                Pose pose = new Pose();
+//                while (pose.getLength() < 10) {
+//                    ArrayList<Pose> poses = new ArrayList<>();
+//                    for (int i = 0; i < 100; i++) {
+//                        poses.add(JunctionScannerAll.getPose());
+//                    }
+//                    pose = Pose.forAllAverage(poses);
+////                    log.show("JunctionScannerPose", pose);
+////                    log.show("CurrentPose", JunctionScannerAll.getPose());
+//                }
+////                pose.add(new Pose(0, -23, 0));
+//                Point point = new Point(pose.getX(), odometry.getY());
+//                odometry.setCurrentPoint(point); odometry.setCurrentPoint(point);
+////                odometry.setCurrentPose(pose);
+////                odometry.setCurrentPose(pose);
+////                whileActive(() -> {
+////                    log.show("JunctionScannerPose", pose);
+////                });
+//
+//            });
+//            addSegment(0.7, 0.7, mecanumNonstopSetPoint, 0, 0.01, 0);
+//            addCustomCode(JunctionScannerAll::pause, 0.05);
             addCustomCode(() -> drive.slow = true);
             addAutoModule(ForwardTeleBottom);
         }
@@ -245,13 +251,13 @@ public interface AutoModuleUser extends RobotUser{
     /**
      * Cycle
      */
-    Point cyclePoint = new Point(Field.halfWidth-19, -62);
-    CodeSeg ResetOdometryForCycle =  () -> {
+    Point cyclePoint = new Point(Field.halfWidth-19, -51);
+    Point cyclePoint2 = new Point(46.5, -50);
+    static CodeSeg ResetOdometryForCycle(Point point) {return  () -> {
         distanceSensors.ready();
-        Point point = new Point(distanceSensors.getRightDistance() - cyclePoint.getX(),-distanceSensors.getFrontDistance() - cyclePoint.getY());
-        odometry.setCurrentPoint(point); odometry.setCurrentPoint(point);
-        odometry.setHeading(0); gyro.reset();
-    };
+        Point point1 = new Point(distanceSensors.getRightDistance() - point.getX(),-distanceSensors.getFrontDistance() - point.getY());
+        odometry.setCurrentPoint(point1); odometry.setCurrentPoint(point1);
+    };}
 
     static AutoModule BackwardCycle(Height height, double offset) {return new AutoModule(
             outtake.stageClose(0.2),
@@ -260,10 +266,10 @@ public interface AutoModuleUser extends RobotUser{
     );}
 
     AutoModule ForwardCycle = new AutoModule(
-            outtake.stageEnd(0.1),
+            outtake.stageEnd(0.15),
             outtake.stageOpen(0.0),
             lift.resetCutoff(),
-            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.1))
+            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.2))
     );
 
     AutoModule StageStart = new AutoModule(outtake.stageStart(0.0));
@@ -274,25 +280,34 @@ public interface AutoModuleUser extends RobotUser{
     static Independent Cycle2(int i) { return new Independent() {
             @Override
             public void define() {
+            double x = 0.0;
             if(i+1 == 1){
                 addCustomCode(() -> drive.slow = false);
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
-                addWaypoint(0.7,  0, 17, 0);
-                addWaypoint(0.4,  0, 21, 0);
+                addCustomCode(ResetOdometryForCycle(cyclePoint2), 0.05);
+//                addSegment(0.6, 0.5, mecanumNonstopSetPoint, x, 0.01, 0);
+                addSegment(0.6, 0.3, mecanumNonstopWayPoint, x, 12, 0);
             }
             if(i+1 != 11){
                 if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
-
                 addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 4), 0.2);
-                addWaypoint(i == 0 ? 0.5 : 0.6, 0, -15, 0);
-                addSegment(0.2, 0.5, mecanumNonstopSetPoint, 0, -23, 0);
+                addWaypoint(i == 0 ? 0.5 : 0.6, x, -26, 0);
+                addSegment(0.2, 0.5, mecanumNonstopSetPoint, x, -32, 0);
                 addConcurrentAutoModuleWithCancel(ForwardCycle);
-                addSegment(1.0, 0.25, mecanumNonstopWayPoint, 0, 25, 0);
+                if(i % 3 == 0) {
+                    addWaypoint(0.4, 0.0, -3.0, 0.0);
+                    addSegment(0.4, 0.2, mecanumNonstopSetPoint, x, 0.01, 0);
+                    addCustomCode(ResetOdometryForCycle(cyclePoint2), 0.1);
+                    addSegment(0.4, 0.3, mecanumNonstopWayPoint,  x, 12,0);
+                }else{
+                    addWaypoint(0.3, x-1, -8.0, 0.0);
+                    addSegment(0.6, 0.2, mecanumNonstopWayPoint,  x-1, 12,0);
+                }
 
             } else{
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
-                addSegment(0.6, 0.5, mecanumNonstopSetPoint, 0, 0, 0);
+                addSegment(0.7, 0.7, mecanumNonstopSetPoint, x, 0.01, 0);
                 addPause(0.05);
 //                addAutoModule(RetractOdometry);
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
@@ -300,11 +315,17 @@ public interface AutoModuleUser extends RobotUser{
     }};}
 
     Machine MachineCycle = new Machine()
-            .addInstruction(odometry::reset, 0.1)
             .addIndependent(11, AutoModuleUser::Cycle2)
     ;
 
 
+
+    AutoModule ForwardCycleLow = new AutoModule(
+            lift.moveTime(1.0, 0.1).attach(outtake.stageEnd(0.1)),
+            lift.moveTime(-1.0, 0.1).attach(outtake.stageOpen(0.0)),
+            lift.resetCutoff(),
+            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.1))
+    );
 
 
 
@@ -317,33 +338,42 @@ public interface AutoModuleUser extends RobotUser{
     Independent CycleExtra = new Independent() {
         @Override
         public void define() {
-//            startPose = new Pose(Robot.halfLength + 59, Field.width/2.0, 90);
-            addWaypoint(0.7,0,-10,0);
-            addWaypoint(1.0,-16.0, -14.0, -21.0);
+            addCustomCode(ResetOdometryForCycle(cyclePoint2), 0.05);
+            addSegment(0.7, 0.3, mecanumNonstopSetPoint, 0, 0.01, 0);
+            addWaypoint(0.6,0,-10,0);
+            addWaypoint(1.0,-16.0, -25.0, -21.0);
             addConcurrentAutoModule(BackwardCycle(MIDDLE, 2));
-            addWaypoint(1.0, -31.0, 1.0, -25.0);
-//
-//            addSegment(0.8, 0.7, mecanumNonstopSetPoint,  -25.0, 37.0, -21.0);
-//            addConcurrentAutoModuleWithCancel(BackwardCycle(MIDDLE), 0.2);
-            addSegment(1.1, 0.7, mecanumNonstopSetPoint, -47.0, -14.0, -25.0);
+            addWaypoint(1.0, -31.0, -10.0, -25.0);
+            addSegment(1.0, 0.7, mecanumNonstopSetPoint, -47.0, -25.0, -25.0);
+            addConcurrentAutoModuleWithCancel(ForwardCycle, 0.2);
+            addSegment(1.3, 0.4, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
+            addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 1), 0.2);
+            addWaypoint(1.0, -25.0, 25.0, 0.0);
+            addWaypoint(1.0, -30.0, 0.0, -45);
+            addWaypoint(1.0, -50.0, -10.0, -90);
+            addWaypoint(1.0, -70.0, -20.0, -45);
+            addSegment(1.1, 0.6, mecanumNonstopSetPoint, -99.0, -33.0, -50);
+            addConcurrentAutoModuleWithCancel(ForwardCycleLow, 0.2);
+            addWaypoint(1.0, -70.0, -20.0, -90);
+            addWaypoint(1.0, -50.0, -10.0, -70);
+            addWaypoint(0.8, -30.0, 0.0, 0.0);
+            addSegment(1.3, 0.4, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
+            addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 1), 0.4);
+            addSegment(0.9, 0.6, mecanumNonstopSetPoint, -35.0, 24.0, -57.0);
+            addConcurrentAutoModuleWithCancel(ForwardCycleLow,0.2);
+            addWaypoint(-25.0, 36.0, -57.0);
+            addSegment(1.3, 0.7, mecanumNonstopSetPoint, -32.0, 20.0, -21.0);
+            addSegment(0.7, 0.4, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
+            addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 0), 0.2);
+            addSegment(0.7, 0.7, mecanumNonstopWayPoint,  -25.0, 40.0, -90.0);
+            addWaypoint(1.0, -64.0, 44.0, -90.0);
+            addWaypoint(1.0, -126.0, 44.0, -110.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle, 0.3);
-
-
-//            addSegment(0.8, 0.7, mecanumNonstopSetPoint,  -25.0, 37.0, -21.0);
-//            addConcurrentAutoModuleWithCancel(BackwardCycle(LOW), 0.2);
-//            addSegment(0.8, 0.7, mecanumNonstopSetPoint, -34.0, 37.0, -57.0);
-//            addConcurrentAutoModuleWithCancel(ForwardCycle, 0.3);
-//            addWaypoint(0.5, -43.0, 43.0, -57.0 );
-//            addSegment(0.8, 0.7, mecanumNonstopSetPoint, -37.0, 47.5, -57.0);
-//            addConcurrentAutoModuleWithCancel(BackwardCycle(GROUND), 0.2);
-//            addWaypoint(0.5, -64.0, 55.0, -90.0);
-//            addWaypoint(0.5, -136.0, 58.0, -90.0);
-//            addConcurrentAutoModuleWithCancel(ForwardCycle, 0.3);
+            addWaypoint(1.0, -80.0, 44.0, -90.0);
         }
     };
 
     Machine MachineCycleExtra = new Machine()
-            .addInstruction(odometry::reset, 0.1)
             .addIndependent(CycleExtra)
     ;
 

@@ -25,7 +25,7 @@ import static teleutil.TeleTrack.*;
 @TeleOp(name = "TerraOp", group = "TeleOp")
 public class TerraOp extends Tele {
 
-    private final JunctionScannerAll junctionScannerAll = new JunctionScannerAll();
+//    private final JunctionScannerAll junctionScannerAll = new JunctionScannerAll();
 
     @Override
     public void initTele() {
@@ -89,9 +89,9 @@ public class TerraOp extends Tele {
          */
         lift.move(-0.2);
 
-        camera.setScanner(junctionScannerAll);
-        camera.start(false);
-        camera.resume();
+//        camera.setScanner(junctionScannerAll);
+//        camera.start(false);
+//        camera.resume();
     }
 
     @Override
