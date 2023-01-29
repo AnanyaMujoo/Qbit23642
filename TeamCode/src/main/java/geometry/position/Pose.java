@@ -1,10 +1,12 @@
 package geometry.position;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 
 import geometry.framework.GeometryObject;
 import geometry.framework.Point;
+import util.template.Iterator;
 
 /**
  * NOTE: Uncommented
@@ -52,6 +54,13 @@ public class Pose extends GeometryObject {
     public boolean within(Pose target, double disError, double angleError){ return this.getDistanceTo(target) < disError && Math.abs(target.getAngleTo(target)) < angleError; }
     public boolean withinY(Pose target, double yError, double angleError){ return Math.abs(this.getY() - target.getY()) < yError && Math.abs(target.getAngleTo(target)) < angleError; }
 
+
+    public static Pose forAllAverage(ArrayList<Pose> poses){
+        double x = Iterator.forAllAverage(poses, Pose::getX);
+        double y = Iterator.forAllAverage(poses, Pose::getY);
+        double h = Iterator.forAllAverage(poses, Pose::getAngle);
+        return new Pose(x, y, h);
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

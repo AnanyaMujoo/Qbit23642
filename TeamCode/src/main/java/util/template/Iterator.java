@@ -174,6 +174,20 @@ public interface Iterator {
 
     static void forAllRun(ArrayList<CodeSeg> codeSegments){ forAll(codeSegments, CodeSeg::run); }
 
+    static double forAllAverage(ReturnCodeSeg<Double> code, int number){
+        ArrayList<Double> values = new ArrayList<>();
+        for (int i = 0; i < number; i++) {
+            values.add(code.run());
+        }
+        return forAllAverage(values);
+    }
+
+    static <T> double forAllAverage(ArrayList<T> list, ReturnParameterCodeSeg<T, Double> code){
+        final double[] sum = {0};
+        Iterator.forAll(list, l-> sum[0]+=code.run(l) );
+        return (double)sum[0]/list.size();
+    }
+
     static double forAllAverage(ArrayList<Double> list){
         final double[] sum = {0};
         Iterator.forAll(list, l->sum[0]+=l);

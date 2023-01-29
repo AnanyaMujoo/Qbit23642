@@ -123,8 +123,8 @@ public class JunctionScannerAll extends Scanner {
         if(!pausing) {
             crop(input, new Rect(0, horizonPole, input.width(), input.height() - horizonPole));
             if(detectPole(Crop)){ return Crop; }
-            crop(input, new Rect(0, horizonCone, input.width(), input.height() - horizonCone));
-            if(detectCone(Crop)){ return Crop; }
+//            crop(input, new Rect(0, horizonCone, input.width(), input.height() - horizonCone));
+//            if(detectCone(Crop)){ return Crop; }
             return Crop;
         }
         return input;
