@@ -189,6 +189,26 @@ public interface AutoModuleUser extends RobotUser{
     Independent MoveToCycleStart = new Independent() {
         @Override
         public void define() {
+
+            // TODO FIX
+            // EVERYTHING WORKS, USE DIFFERENT JUNCTION?
+            // DONT USE JUNCTION SCANNER???
+
+
+//            addCustomCode(JunctionScannerAll::resume, 0.05);
+//            addCustomCode(() -> {
+//                Pose pose = JunctionScannerAll.getPose();
+////                whileActive(() -> {
+////                    log.show("JunctionScannerPose", JunctionScannerAll.getPose());
+////                });
+//                Point point = new Point(-pose.getX(), odometry.getY());
+//                odometry.setCurrentPoint(point); odometry.setCurrentPoint(point);
+//            });
+//            addSegment(0.7, 0.3, mecanumNonstopSetPoint, 0, 0.01, 0);
+
+
+
+
             addCustomCode(JunctionScannerAll::resume, 0.05);
             addCustomCode(ResetOdometryForCycle, 0.05);
             addWaypoint(1.0, -10, -14, 0);

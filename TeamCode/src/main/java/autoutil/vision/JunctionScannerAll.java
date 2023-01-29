@@ -131,7 +131,8 @@ public class JunctionScannerAll extends Scanner {
     }
 
     private static boolean cutoff(){
-        return getPose().within(getTarget(), 20, 40) && !getPose().within(new Pose(), 2, 40);
+        return !getPose().within(new Pose(), 2, 40);
+//        return getPose().within(getTarget(), 20, 40) && !getPose().within(new Pose(), 2, 40);
     }
 
     public static Pose getTarget(){
