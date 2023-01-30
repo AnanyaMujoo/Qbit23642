@@ -66,6 +66,17 @@ public interface Iterator {
         log.setShouldUpdateOnShow(oldShouldUpdate);
     }
 
+    default void whileNotExit(ReturnCodeSeg<Boolean> exit, CodeSeg code){
+        boolean oldShouldUpdate = log.getShouldUpdateOnShow();
+        log.setShouldUpdateOnShow(false);
+        while (condition()){
+            code.run();
+            log.showTelemetry();
+            if(exit.run()){ break; }
+        }
+        log.setShouldUpdateOnShow(oldShouldUpdate);
+    }
+
     /**
      * Do something for some amount of time
      * @param code

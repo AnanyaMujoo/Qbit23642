@@ -176,8 +176,8 @@ public class TerraAutoMega extends AutoFramework {
         autoPlane.reflectY(); autoPlane.reflectX();
     }
 //    preselectTeleOp = "TerraOp"
-    @Autonomous(name = "TerraAutoMegaRight", group = "auto")
-    public static class TerraAutoMegaRight extends TerraAutoMega {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
+//    @Autonomous(name = "TerraAutoMegaRight", group = "auto")
+//    public static class TerraAutoMegaRight extends TerraAutoMega {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
 //    @Autonomous(name = "TerraAutoMegaLeft", group = "auto")
 //    public static class TerraAutoMegaLeft extends TerraAutoMega {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
 

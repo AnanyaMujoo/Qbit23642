@@ -89,16 +89,19 @@ public class TerraOp extends Tele {
          */
         lift.move(-0.2);
 
+        outtake.readyStart();
+        outtake.openClaw();
+
 //        camera.setScanner(junctionScannerAll);
 //        camera.start(false);
 //        camera.resume();
     }
-
-    @Override
-    public void startTele() {
-        outtake.readyStart();
-        outtake.openClaw();
-    }
+//
+//    @Override
+//    public void startTele() {
+//        outtake.readyStart();
+//        outtake.openClaw();
+//    }
 
     @Override
     public void loopTele() {
