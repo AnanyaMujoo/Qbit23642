@@ -1,6 +1,8 @@
 package robotparts.hardware;
 
 import automodules.AutoModule;
+import automodules.stage.Exit;
+import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import global.Constants;
@@ -80,6 +82,13 @@ public class Lift extends RobotPart {
 
     @Override
     public Stage moveTime(double p, ReturnCodeSeg<Double> t) { return super.moveTime(p, t); }
+
+    public Stage moveTimeBack(double fp, double p, ReturnCodeSeg<Double> t){
+        final Double[] val = {0.0};
+        return new Stage(drive.usePart(), usePart(), new Initial(() -> val[0] = t.run()),
+        new Main(() -> {drive.move(fp, 0,0); move(p);}),
+        new Exit(() -> { synchronized (val){ return bot.rfsHandler.getTimer().seconds() > val[0]; }}), stop(), drive.stop(), returnPart(), drive.returnPart());
+    }
 
     public Stage stageLift(double power, double target) { return moveTarget(() -> motorRight, () -> motorLeft, power, power, target); }
 

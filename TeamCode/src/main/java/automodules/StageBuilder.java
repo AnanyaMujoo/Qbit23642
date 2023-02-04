@@ -96,7 +96,7 @@ public class StageBuilder {
     protected void move(double p){}
     protected Main main(double p){ return new Main(() -> move(p)); }
     protected Stage moveTime(double p, double t){ return new Stage(usePart(), main(p), exitTime(t), stop(), returnPart()); }
-    protected Stage moveTime(double p, ReturnCodeSeg<Double> t){ Boolean[] first = {true}; Double[] val = {0.0}; return new Stage(usePart(), main(p), new Exit(() -> { if(first[0]){ val[0] = t.run(); first[0] = false; } return bot.rfsHandler.getTimer().seconds() > val[0]; }), stop(), returnPart()); }
+    protected Stage moveTime(double p, ReturnCodeSeg<Double> t){ final Double[] val = {0.0}; return new Stage(usePart(), new Initial(() -> val[0] = t.run()), main(p), new Exit(() -> { synchronized (val){ return bot.rfsHandler.getTimer().seconds() > val[0]; }}), stop(), returnPart()); }
     protected Stage moveNow(double p){ return new Stage(usePart(), main(p), exitAlways(), stop(), returnPart()); }
     protected AutoModule MoveTime(double p, double t){ return new AutoModule(moveTime(p, t)); }
 

@@ -45,7 +45,7 @@ public class TerraOp extends Tele {
 
         gph1.link(DPAD_DOWN, ForwardTeleBottom);
         gph1.link(DPAD_UP, UprightCone);
-        gph1.link(DPAD_LEFT, TakeOffCone);
+        gph1.link(DPAD_LEFT, () -> {lift.high = true; bot.addAutoModule(TakeOffCone);});
 
         gph1.link(RIGHT_BUMPER, () -> outtakeStatus.modeIs(PLACING), () -> lift.adjustHolderTarget(2.5), () -> lift.adjustHolderTarget(5.0));
         gph1.link(LEFT_BUMPER, () -> outtakeStatus.modeIs(PLACING), () -> lift.adjustHolderTarget(-2.5), () -> lift.adjustHolderTarget(-5.0));
