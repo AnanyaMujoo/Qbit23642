@@ -24,9 +24,6 @@ public class Drive extends RobotPart {
     private CMotor fr, br, fl, bl;
 
     public boolean slow = false;
-
-    private final double[][] powers = {new double[]{0.35, 0.35, 0.4}, new double[]{1.0, 0.9, 0.6}};
-
 //    private PServo retract;
 
 

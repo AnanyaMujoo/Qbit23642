@@ -134,7 +134,7 @@ public class TerraAuto7 extends AutoFramework {
                 distanceRight[0] = distanceSensors.getRightDistance();
             });
             Point point = new Point(135+distanceRight[0], Field.width - 46 - Robot.halfLength);
-            odometry.setPoseUsingOffset(new Pose(point, 0));
+            odometry.setPoseUsingOffset(point);
         });
 //        addConcurrentAutoModuleWithCancel(new AutoModule(new Stage(
 //                drive.usePart(),

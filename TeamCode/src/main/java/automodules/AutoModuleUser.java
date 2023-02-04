@@ -122,6 +122,7 @@ public interface AutoModuleUser extends RobotUser{
             outtakeStatus.ChangeMode(PLACING),
             lift.changeHigh(true),
             outtake.stageClose(0.22),
+            lift.moveTime(1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.2;}else{return 0.0;}}),
             outtake.stageMiddle(0.0),
             lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2)
     );
@@ -132,6 +133,7 @@ public interface AutoModuleUser extends RobotUser{
             outtakeStatus.ChangeMode(PLACING),
             heightMode.ChangeMode(MIDDLE),
             outtake.stageClose(0.22),
+            lift.moveTime(1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.2;}else{return 0.0;}}),
             lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(outtake.stageReadyEndAfter(0.1))
     );
 
@@ -141,6 +143,7 @@ public interface AutoModuleUser extends RobotUser{
             outtakeStatus.ChangeMode(PLACING),
             heightMode.ChangeMode(LOW),
             outtake.stageClose(0.22),
+            lift.moveTime(1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.2;}else{return 0.0;}}),
             lift.changeCutoff(0.0),
             outtake.stageReadyEndAfter(0.0),
             lift.stageLift(1.0, heightMode.getValue(LOW)+2)
@@ -153,6 +156,7 @@ public interface AutoModuleUser extends RobotUser{
             outtakeStatus.ChangeMode(PLACING),
             heightMode.ChangeMode(GROUND),
             outtake.stageClose(0.22),
+            lift.moveTime(1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.2;}else{return 0.0;}}),
             lift.changeCutoff(0.0),
             lift.stageLift(1.0, heightMode.getValue(GROUND)+2)
     );
@@ -257,7 +261,7 @@ public interface AutoModuleUser extends RobotUser{
     static CodeSeg SoftResetOdometryForCycle(Point point) {return  () -> {
         distanceSensors.ready();
         Point point1 = new Point(distanceSensors.getRightDistance() - point.getX(),-distanceSensors.getFrontDistance() - point.getY());
-        odometry.setPoseUsingOffset(new Pose(point1, 0));
+        odometry.setPoseUsingOffset(point1);
     };}
 
     static AutoModule BackwardCycle(Height height, double offset) {return new AutoModule(
@@ -285,25 +289,42 @@ public interface AutoModuleUser extends RobotUser{
             if(i+1 == 1){
                 addCustomCode(() -> drive.slow = false);
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
-                addCustomCode(ResetOdometryForCycle(cyclePoint2), 0.4);
-                addSegment(0.6, 0.3, mecanumNonstopWayPoint, x, 12, 0);
+                addCustomCode(SoftResetOdometryForCycle(cyclePoint2), 0.05);
+                addSegment(0.6, 0.3, mecanumNonstopWayPoint, x, 11, 0);
                 addPause(0.05);
             }
             if(i+1 != 11){
                 if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
                 addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 4), 0.2);
-                addWaypoint(0.45, x, -26, 0);
-                addSegment(0.25, 0.5, mecanumNonstopSetPoint, x, -32, 0);
+                addWaypoint(0.5, x, -26, 0);
+                addSegment(0.35, 0.5, mecanumNonstopSetPoint, x, -32, 0);
                 addConcurrentAutoModuleWithCancel(ForwardCycle);
-                if(i % 3 == 0) {
-                    addWaypoint(0.4, 0.0, -3.0, 0.0);
-                    addSegment(0.4, 0.2, mecanumNonstopSetPoint, x, 0.01, 0);
-                    addCustomCode(SoftResetOdometryForCycle(cyclePoint2), 0.1);
-                    addSegment(0.4, 0.3, mecanumNonstopWayPoint,  x, 12,0);
-                }else{
-                    addWaypoint(0.3, x-1, -8.0, 0.0);
-                    addSegment(0.6, 0.2, mecanumNonstopWayPoint,  x-1, 12,0);
-                }
+                addWaypoint(0.4, 0.0, -5.0, 0.0);
+                addCustomCode(() -> {
+                    ArrayList<Double> values = new ArrayList<>();
+                    whileNotExit(() -> values.size() > 3, () -> {
+                        drive.move(0.35,0.08*(x-odometry.getX()), 0.004*odometry.getHeading());
+                        distanceSensors.ready();
+                        double distance = distanceSensors.getRightDistance();
+                        if(distance < 52){ values.add(distance); }
+                    });
+                    double avgDis = Iterator.forAllAverage(values);
+                    Point point = new Point(avgDis-49, odometry.getY());
+                    odometry.setPoseUsingOffset(point);
+                });
+                addSegment(0.5, 0.3, mecanumNonstopSetPoint,  x, 9,0);
+
+
+
+//                if(i % 3 == 0) {
+//                    addWaypoint(0.4, 0.0, -3.0, 0.0);
+//                    addSegment(0.4, 0.2, mecanumNonstopSetPoint, x, 0.01, 0);
+//                    addCustomCode(SoftResetOdometryForCycle(cyclePoint2), 0.1);
+//                    addSegment(0.4, 0.3, mecanumNonstopWayPoint,  x, 12,0);
+//                }else{
+//                    addWaypoint(0.3, x-1, -8.0, 0.0);
+//                    addSegment(0.6, 0.2, mecanumNonstopWayPoint,  x-1, 12,0);
+//                }
 
             } else{
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));

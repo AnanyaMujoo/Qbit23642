@@ -12,6 +12,7 @@ import robotparts.electronics.positional.PMotor;
 import robotparts.electronics.positional.PServo;
 import util.User;
 import util.codeseg.CodeSeg;
+import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
 import static global.General.bot;
@@ -30,6 +31,7 @@ public class Lift extends RobotPart {
     public int stackedMode = 0;
     public boolean circuitMode = false;
     public boolean high = false;
+    public boolean stacked = false;
 
     @Override
     public void init() {
@@ -42,6 +44,7 @@ public class Lift extends RobotPart {
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
         high = false;
+        stacked = false;
         stackedMode = 0;
     }
 
@@ -54,7 +57,6 @@ public class Lift extends RobotPart {
         return customTime(() -> currentCutoffPosition = cutoffPosition, 0.01);
     }
     public Stage resetCutoff(){ return customTime( () -> {if(!heightMode.modeIs(GROUND) && !heightMode.modeIs(LOW)){ currentCutoffPosition = cutoffPosition; }}, 0.01); }
-
 
     @Override
     public void move(double p) {
@@ -75,6 +77,9 @@ public class Lift extends RobotPart {
     public Stage moveTime(double p, double t) {
         return super.moveTime(p, t);
     }
+
+    @Override
+    public Stage moveTime(double p, ReturnCodeSeg<Double> t) { return super.moveTime(p, t); }
 
     public Stage stageLift(double power, double target) { return moveTarget(() -> motorRight, () -> motorLeft, power, power, target); }
 
