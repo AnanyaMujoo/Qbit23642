@@ -156,6 +156,7 @@ public interface AutoModuleUser extends RobotUser{
             outtakeStatus.ChangeMode(PLACING),
             heightMode.ChangeMode(GROUND),
             outtake.stageClose(0.22),
+            outtake.stageStart(0.0),
             lift.moveTimeBack(-0.25, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.2;}else{return 0.0;}}),
             lift.changeCutoff(0.0),
             lift.stageLift(1.0, heightMode.getValue(GROUND)+2)
@@ -177,7 +178,7 @@ public interface AutoModuleUser extends RobotUser{
 //    AutoModule RetractOdometry = new AutoModule(drive.stageRetract());
 //    AutoModule EngageOdometry = new AutoModule(drive.stageEngage());
     AutoModule UprightCone = new AutoModule(lift.stageLift(1.0, 15));
-    AutoModule TakeOffCone = new AutoModule(outtakeStatus.ChangeMode(PLACING), outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.3),outtake.stageFlip(0.0));
+    AutoModule TakeOffCone = new AutoModule(heightMode.ChangeMode(HIGH), outtakeStatus.ChangeMode(PLACING), outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.3),outtake.stageFlip(0.0));
 
     static AutoModule ForwardStackTele(int i){return new AutoModule(
             lift.changeCutoff(2),

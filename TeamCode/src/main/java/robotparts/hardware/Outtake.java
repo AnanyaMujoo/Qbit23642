@@ -77,6 +77,7 @@ public class Outtake extends RobotPart {
     public Stage stageFlip(double t){ return super.customTime(this::flip, t); }
 
     public Stage stageFlipAfter(double t){ return super.customTimeAfter(this::flip, t); }
+    public Stage stageUnFlip(double t){ return super.customTime(this::unFlip, t); }
     public Stage stageEndAfter(double t){ return super.customTimeAfter(this::moveEnd, t); }
     public Stage stageOpenAfter(double t){ return super.customTimeAfter(this::openClaw, t); }
 
