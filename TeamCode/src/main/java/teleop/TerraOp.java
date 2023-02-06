@@ -30,6 +30,8 @@ public class TerraOp extends Tele {
     @Override
     public void initTele() {
 
+        bot.loadLocationOnField();
+
         kappaBefore.disable();
 
         outtake.changeArmPosition("start", 0.06);
@@ -40,7 +42,7 @@ public class TerraOp extends Tele {
         gph1.link(Button.Y, heightMode.isMode(HIGH), () -> {if(lift.high){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceHighTele);}else{bot.addAutoModule(BackwardHighTele.check());}}, () -> bot.addAutoModule(BackwardGrabHighTele));
         gph1.link(Button.X, heightMode.isMode(MIDDLE), () -> bot.addAutoModule(BackwardMiddleTele.check()), () -> bot.addAutoModule(BackwardGrabMiddleTele));
         gph1.link(Button.B, heightMode.isMode(LOW), () -> bot.addAutoModule(BackwardLowTele.check()), () -> bot.addAutoModule(BackwardGrabLowTele));
-        gph1.link(Button.A, heightMode.isMode(GROUND), () -> bot.addAutoModule(BackwardGroundTele.check()), () -> bot.addAutoModule(BackwardGrabGroundTele));
+        gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceGroundTele);}else{bot.addAutoModule(BackwardGroundTele.check());}}, () -> bot.addAutoModule(BackwardGrabGroundTele));
 
 
         gph1.link(DPAD_DOWN, ForwardTeleBottom);
@@ -66,9 +68,9 @@ public class TerraOp extends Tele {
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
         gph1.link(LEFT_BUMPER, MoveToZero, AUTOMATED);
-
-        gph1.link(RIGHT_TRIGGER, AutoModuleUser::enableKappa, AUTOMATED);
-        gph1.link(LEFT_TRIGGER, AutoModuleUser::disableKappa, AUTOMATED);
+//
+//        gph1.link(RIGHT_TRIGGER, AutoModuleUser::enableKappa, AUTOMATED);
+//        gph1.link(LEFT_TRIGGER, AutoModuleUser::disableKappa, AUTOMATED);
 
         gph1.link(DPAD_DOWN, () -> {bot.cancelAutoModules(); bot.addAutoModule(ResetLift);}, AUTOMATED);
 //        gph1.link(DPAD_UP, RetractOdometry, AUTOMATED);
@@ -130,8 +132,7 @@ public class TerraOp extends Tele {
         lift.move(gph2.ry);
 
         log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
-        log.show("TrackStatus", kappaBefore.isEnabled() ? "Kappa" : "None");
-
+//        log.show("TrackStatus", kappaBefore.isEnabled() ? "Kappa" : "None");
         log.show("OuttakeStatus", outtakeStatus.get());
 
 //        log.show("Kappa Size", kappaBefore.steps.size());
@@ -141,8 +142,8 @@ public class TerraOp extends Tele {
 
 
 //        log.show("Is", bot.indHandler.isIndependentRunning());
-
-        log.show("heading", gyro.getHeading());
+//
+//        log.show("heading", gyro.getHeading());
 
 //        junctionScannerAll.message();
 //        log.show("Right", lift.motorRight.getPosition());

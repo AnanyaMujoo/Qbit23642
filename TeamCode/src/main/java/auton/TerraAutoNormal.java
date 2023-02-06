@@ -31,6 +31,21 @@ public class TerraAutoNormal extends AutoFramework {
     protected AutoMode autoMode;
 
     private double x, s;
+    protected double minusTime = 0.0;
+
+    // TODO GROUND BUTTON SEQUENCE TEST
+
+
+    // TODO CYCLE EXTRA TERMINAL TEST
+
+
+
+    // TODO CYCLE MACHINE RESET GYRO TEST
+
+    // TODO DIFFERENT TIMING 5 Cones TEST
+
+
+    // TODO 7 CONE
 
     @Override
     public void initialize() {
@@ -123,7 +138,7 @@ public class TerraAutoNormal extends AutoFramework {
             // Place
             customFlipped(() -> {
                 addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.6, 1.4, -9 - x, 143 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 1.4 - minusTime, -9 - x, 143 + s, 53);
             }, () -> {
                 addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 60);
                 addTimedSetpoint(1.0, 0.6, 1.4, -7.3 - x, 134 + s, 53);
@@ -155,11 +170,26 @@ public class TerraAutoNormal extends AutoFramework {
 
 
     @Override
-    public void postProcess() {
-        autoPlane.reflectY(); autoPlane.reflectX();
-    }
-    @Autonomous(name = "TerraAutoNormalRight", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TerraAutoNormalRight extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
-    @Autonomous(name = "TerraAutoNormalLeft", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TerraAutoNormalLeft extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
+    public void postProcess() { autoPlane.reflectY(); autoPlane.reflectX(); }
+
+    @Override
+    public void stopAuto() { bot.saveLocationOnField(); }
+
+    @Autonomous(name = "RIGHT - 1", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
+
+    @Autonomous(name = "LEFT - 1", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_LEFT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
+
+    @Autonomous(name = "RIGHT - 2", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_2 extends TA_RIGHT_1 {{minusTime = 0.2;}}
+
+    @Autonomous(name = "RIGHT - 3", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_3 extends TA_RIGHT_1 {{minusTime = 0.4;}}
+
+    @Autonomous(name = "RIGHT - 4", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_4 extends TA_RIGHT_1 {{minusTime = 0.6;}}
+
+    @Autonomous(name = "RIGHT - 5", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_5 extends TA_RIGHT_1 {{minusTime = 0.8;}}
 }

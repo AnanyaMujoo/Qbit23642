@@ -24,6 +24,7 @@ public class Drive extends RobotPart {
     private CMotor fr, br, fl, bl;
 
     public boolean slow = false;
+    public boolean hasGyroBeenReset = false;
 //    private PServo retract;
 
 
@@ -43,6 +44,7 @@ public class Drive extends RobotPart {
 
 
         slow = false;
+        hasGyroBeenReset = false;
 //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 

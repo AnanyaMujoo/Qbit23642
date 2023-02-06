@@ -155,11 +155,20 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardGrabGroundTele = new AutoModule(
             outtakeStatus.ChangeMode(PLACING),
             heightMode.ChangeMode(GROUND),
+            lift.changeGround(true),
             outtake.stageClose(0.22),
             outtake.stageStart(0.0),
             lift.moveTimeBack(-0.25, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.2;}else{return 0.0;}}),
             lift.changeCutoff(0.0),
             lift.stageLift(1.0, heightMode.getValue(GROUND)+2)
+    );
+
+    AutoModule BackwardPlaceGroundTele = new AutoModule(
+            lift.changeGround(false),
+            outtakeStatus.ChangeMode(PLACING),
+            heightMode.ChangeMode(GROUND),
+            lift.resetCutoff(),
+            lift.moveTime(-0.5, 0.3)
     );
 
     OutputList BackwardGroundTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabGroundTele).addOption(PLACING, ForwardTeleGround);
@@ -206,7 +215,7 @@ public interface AutoModuleUser extends RobotUser{
 //            });
 //            addSegment(0.7, 0.3, mecanumNonstopSetPoint, 0, 0.01, 0);
 
-            addCustomCode(() -> {  odometry.setHeading(0); gyro.reset();}, 0.05);
+            addCustomCode(() -> {  odometry.setHeading(0); gyro.reset(); drive.hasGyroBeenReset = true; }, 0.05);
 
 
 
@@ -292,7 +301,7 @@ public interface AutoModuleUser extends RobotUser{
             public void define() {
             double x = 0.0;
             if(i+1 == 1){
-                addCustomCode(() -> drive.slow = false);
+                addCustomCode(() -> { if(!drive.hasGyroBeenReset) { odometry.setHeading(0); gyro.reset(); drive.slow = false; drive.hasGyroBeenReset = false; }  }, 0.05);
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
                 addCustomCode(SoftResetOdometryForCycle(cyclePoint2), 0.05);
                 addSegment(0.35, 0.55, mecanumNonstopWayPoint, x, 11, 0);
@@ -373,18 +382,23 @@ public interface AutoModuleUser extends RobotUser{
             addWaypoint(-25.0, 36.0, -57.0);
             addSegment(1.0, 0.8, mecanumNonstopSetPoint, -32.0, 20.0, -21.0);
             addSegment(0.5, 0.5, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 0), 0.2);
-            addSegment(0.5, 0.7, mecanumNonstopWayPoint,  -25.0, 40.0, -90.0);
-            addWaypoint(1.0, -64.0, 42.0, -90.0);
-            addWaypoint(1.0, -128.0, 42.0, -125.0);
-            addConcurrentAutoModuleWithCancel(ForwardCycle, 0.1);
-            addWaypoint(1.0, -80.0, 44.0, -90.0);
+            customSide(() -> {
+                addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 0), 0.2);
+                addSegment(0.5, 0.7, mecanumNonstopWayPoint,  -25.0, 40.0, -90.0);
+                addWaypoint(1.0, -64.0, 42.0, -90.0);
+                addWaypoint(1.0, -128.0, 42.0, -125.0);
+                addConcurrentAutoModuleWithCancel(ForwardCycle, 0.1);
+                addWaypoint(1.0, -80.0, 44.0, -90.0);
+            }, () -> {
+                addConcurrentAutoModuleWithCancel(BackwardGrabGroundTele, 0.2);
+                addSegment(1.0, 0.7, mecanumNonstopSetPoint, -25.0, 40.0, -90.0);
+                addCustomCode(() -> { lift.ground = false; }, 0.05);
+            });
         }
     };
 
     Machine MachineCycleExtra = new Machine()
             .addIndependent(CycleExtra)
     ;
-
 
 }

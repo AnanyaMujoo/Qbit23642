@@ -33,6 +33,7 @@ public class Lift extends RobotPart {
     public int stackedMode = 0;
     public boolean circuitMode = false;
     public boolean high = false;
+    public boolean ground = false;
     public boolean stacked = false;
 
     @Override
@@ -47,12 +48,14 @@ public class Lift extends RobotPart {
         circuitMode = false;
         high = false;
         stacked = false;
+        ground = false;
         stackedMode = 0;
     }
 
     public Stage changeHigh(boolean high){
-        return customTime(() -> this.high = high, 0.01);
+        return customTime(() -> this.high = high, 0.0);
     }
+    public Stage changeGround(boolean ground){ return customTime(() -> this.ground = ground, 0.0);}
 
 
     public Stage changeCutoff(double cutoffPosition){
