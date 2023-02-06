@@ -2,6 +2,8 @@ package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import java.util.ArrayList;
+
 import automodules.AutoModule;
 import automodules.stage.Exit;
 import automodules.stage.Initial;
@@ -20,7 +22,9 @@ import geometry.framework.Point;
 import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.ExceptionCatcher;
+import util.template.Iterator;
 import util.template.Mode;
+import util.template.Precision;
 
 import static global.General.bot;
 import static global.General.fieldPlacement;
@@ -126,29 +130,18 @@ public class TerraAuto7 extends AutoFramework {
 //        addTimedSetpoint(1.0, 0.4, 1.0, 0,0.01, -90);
         addCancelAutoModules();
         addCustomCode(() -> {
-            Double[] distanceRight = new Double[]{100.0};
-            whileNotExit(() -> odometry.getY() > 240 && distanceRight[0] < 30, () -> {
-                log.show("Pose", odometry.getPose());
-                drive.move(1.0,0.1*(150-odometry.getX()), 0.015*odometry.getHeading());
+            ArrayList<Double> values = new ArrayList<>();
+            whileNotExit(() -> values.size() > 3, () -> {
+                drive.moveWithoutVS(1.0,0.1*(150-odometry.getX()), 0.015*odometry.getHeading());
                 distanceSensors.ready();
-                distanceRight[0] = distanceSensors.getRightDistance();
+                double distance = distanceSensors.getRightDistance();
+                if(distance < 50){ values.add(distance); }
             });
-            Point point = new Point(135+distanceRight[0], Field.width - 46 - Robot.halfLength);
+            double avgDis = Iterator.forAllAverage(values);
+            Point point = new Point(135+avgDis, Field.width - 46 - Robot.halfLength);
             odometry.setPoseUsingOffset(point);
+
         });
-//        addConcurrentAutoModuleWithCancel(new AutoModule(new Stage(
-//                drive.usePart(),
-//                // TODO Move without voltage scale here
-//                new Main(() -> {
-////                    log.show("Pose", odometry.getPose());
-//                    drive.move(1.0,0.1*(150-odometry.getX()), 0.015*odometry.getHeading());
-////                    drive.move(1.0, 0.03*(odometry.getY()-135), -0.01*(odometry.getHeading()-(-93)));
-//                    distanceSensors.ready();
-//                    //&& distanceSensors.getRightDistance() < 30
-//                }),
-//                new Exit(() -> (odometry.getY() < 240)),
-//                drive.returnPart())
-//        ));
 
 //        addCustomCode(() -> {
 //            distanceSensors.ready();

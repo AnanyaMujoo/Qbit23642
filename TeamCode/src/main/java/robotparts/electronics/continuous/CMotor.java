@@ -78,6 +78,8 @@ public class CMotor extends Electronic {
         }
     }
 
+    public void setPowerRaw(double power){ motor.setPower(Precision.clip(power, 1)); }
+
     /**
      * Gets the direction of the motor
      * @return direction

@@ -66,6 +66,17 @@ public class Drive extends RobotPart {
         bl.setPower(f - s + t);
     }
 
+    public void moveWithoutVS(double f, double s, double t) {
+        Vector power = new Vector(Precision.clip(s, 1), Precision.clip(f, 1));
+        power.scaleX(1.2);
+        power.limitLength(1);
+        f = power.getY(); s = power.getX(); t = Precision.clip(t, 1);
+        fr.setPowerRaw(f - s - t);
+        br.setPowerRaw(f + s - t);
+        fl.setPowerRaw(f + s + t);
+        bl.setPowerRaw(f - s + t);
+    }
+
 
 
     public void moveSmooth(double f, double s, double t) {

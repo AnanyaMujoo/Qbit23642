@@ -203,54 +203,10 @@ public interface AutoModuleUser extends RobotUser{
     Independent MoveToCycleStart = new Independent() {
         @Override
         public void define() {
-
-//            addCustomCode(JunctionScannerAll::resume, 0.05);
-//            addCustomCode(() -> {
-//                Pose pose = JunctionScannerAll.getPose();
-////                whileActive(() -> {
-////                    log.show("JunctionScannerPose", JunctionScannerAll.getPose());
-////                });
-//                Point point = new Point(-pose.getX(), odometry.getY());
-//                odometry.setCurrentPoint(point); odometry.setCurrentPoint(point);
-//            });
-//            addSegment(0.7, 0.3, mecanumNonstopSetPoint, 0, 0.01, 0);
-
             addCustomCode(() -> {  odometry.setHeading(0); gyro.reset(); drive.hasGyroBeenReset = true; }, 0.05);
-
-
-
-
-//            addCustomCode(JunctionScannerAll::resume, 0.05);
             addCustomCode(ResetOdometryForCycle(cyclePoint), 0.05);
             addWaypoint(1.0, -10, -26, 0);
             addSegment(0.7, 0.7, mecanumNonstopSetPoint, 0, 0.01, 0);
-//            addCustomCode(ResetOdometryForCycle(cyclePoint2), 0.05);
-//            addSegment(0.6, 0.5, mecanumNonstopSetPoint, 0, 0.01, 0);
-
-
-//            addCustomCode(() -> {
-//                Pose pose = new Pose();
-//                while (pose.getLength() < 10) {
-//                    ArrayList<Pose> poses = new ArrayList<>();
-//                    for (int i = 0; i < 100; i++) {
-//                        poses.add(JunctionScannerAll.getPose());
-//                    }
-//                    pose = Pose.forAllAverage(poses);
-////                    log.show("JunctionScannerPose", pose);
-////                    log.show("CurrentPose", JunctionScannerAll.getPose());
-//                }
-////                pose.add(new Pose(0, -23, 0));
-//                Point point = new Point(pose.getX(), odometry.getY());
-//                odometry.setCurrentPoint(point); odometry.setCurrentPoint(point);
-////                odometry.setCurrentPose(pose);
-////                odometry.setCurrentPose(pose);
-////                whileActive(() -> {
-////                    log.show("JunctionScannerPose", pose);
-////                });
-//
-//            });
-//            addSegment(0.7, 0.7, mecanumNonstopSetPoint, 0, 0.01, 0);
-//            addCustomCode(JunctionScannerAll::pause, 0.05);
             addCustomCode(() -> drive.slow = true);
             addAutoModule(ForwardTeleBottom);
         }

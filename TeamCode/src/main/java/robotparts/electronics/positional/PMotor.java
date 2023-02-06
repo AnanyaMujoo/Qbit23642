@@ -162,7 +162,7 @@ public class PMotor extends Electronic {
      * Sets the power of motor without access checking, stall detection, or restPower
      * @param power
      */
-    public void setPowerRaw(double power){ motor.setPower(Precision.clip(power, 1)*voltageScale); }
+    public void setPowerRaw(double power){ motor.setPower(Precision.clip(power, 1)); }
 
     /**
      * Set the position to move to
