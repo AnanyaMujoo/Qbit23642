@@ -75,8 +75,8 @@ public class TerraAutoNormal extends AutoFramework {
             addWaypoint(1.0, 2, 126, 0);
             addWaypoint(0.7, 9, 110, 0);
         }, () -> {
-            addWaypoint(1.0, -4, 126, 0);
-            addWaypoint(0.7, 0, 118, 10);
+            addWaypoint(1.0, 0, 126, 0);
+            addWaypoint(0.7, -2, 110, 0);
         });
         // Pre-loaded cone place
         addConcurrentAutoModuleWithCancel(BackwardFirst);
@@ -84,7 +84,8 @@ public class TerraAutoNormal extends AutoFramework {
             addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
             addTimedSetpoint(1.0, 0.6, 0.9, -9.5, 140, 45);
         }, () -> {
-            addTimedSetpoint(1.0, 0.7, 0.5, -9.5, 130, 45);
+            addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
+            addTimedSetpoint(1.0, 0.6, 0.9, -10.0, 137.5, 45);
         });
 
         addConcurrentAutoModule(Forward(0));
@@ -103,10 +104,10 @@ public class TerraAutoNormal extends AutoFramework {
             }, () -> {
                 switch (i){
                     case 0: x = 2.0; s = -0.2;  break;
-                    case 1: x = 3.0;  s = 1.0;  break;
-                    case 2: x = 3.0;  s = 1.5;  break;
-                    case 3: x = 4.0;  s = 2.0;  break;
-                    case 4: x = 4.0;  s = 2.5;   break;
+                    case 1: x = 3.0;  s = -0.4;  break;
+                    case 2: x = 3.0;  s = -0.8;  break;
+                    case 3: x = 4.0;  s = -1.2;  break;
+                    case 4: x = 4.0;  s = -1.6;   break;
                 }
             });
             // Move to pick
@@ -119,12 +120,13 @@ public class TerraAutoNormal extends AutoFramework {
             // Move to place
             addConcurrentAutoModuleWithCancel(Backward);
             addSegment(0.65, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
-            addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
             // Place
             customFlipped(() -> {
+                addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
                 addTimedSetpoint(1.0, 0.6, 1.4, -9 - x, 143 + s, 53);
             }, () -> {
-                addTimedSetpoint(1.0, 0.6, 1.4, -7.3 - x, 136 + s, 53);
+                addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 60);
+                addTimedSetpoint(1.0, 0.6, 1.4, -7.3 - x, 134 + s, 53);
             });
             addConcurrentAutoModuleWithCancel(Forward(i+1));
             addPause(0.15);
