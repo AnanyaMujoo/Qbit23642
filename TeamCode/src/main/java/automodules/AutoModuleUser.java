@@ -100,9 +100,7 @@ public interface AutoModuleUser extends RobotUser{
 
     AutoModule ForwardTeleGround = new AutoModule(
             outtakeStatus.ChangeMode(DRIVING),
-            outtake.stageStart(0.1),
-            lift.resetCutoff(),
-            lift.stageLift(1.0,0),
+            outtake.stageStart(0.0),
             outtake.stageOpen(0.0),
             kappaBefore.next()
     );
@@ -168,7 +166,7 @@ public interface AutoModuleUser extends RobotUser{
             outtakeStatus.ChangeMode(PLACING),
             heightMode.ChangeMode(GROUND),
             lift.resetCutoff(),
-            lift.moveTime(-0.5, 0.3)
+            lift.moveTime(-0.35, 0.35)
     );
 
     OutputList BackwardGroundTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabGroundTele).addOption(PLACING, ForwardTeleGround);

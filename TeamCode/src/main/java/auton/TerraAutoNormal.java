@@ -33,9 +33,6 @@ public class TerraAutoNormal extends AutoFramework {
     private double x, s;
     protected double minusTime = 0.0;
 
-    // TODO GROUND BUTTON SEQUENCE TEST
-
-
     // TODO CYCLE EXTRA TERMINAL TEST
 
 
