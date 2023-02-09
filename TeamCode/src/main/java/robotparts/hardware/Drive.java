@@ -90,7 +90,8 @@ public class Drive extends RobotPart {
             t = rt.fodd(t) * 0.7;
 
             if(slow) {
-                drive.move(f*0.5, s*0.5, t*0.5);
+                double slowScale = 0.7;
+                drive.move(f*slowScale, s*slowScale, t*slowScale);
             }else{
                 drive.move(f, s, t);
             }

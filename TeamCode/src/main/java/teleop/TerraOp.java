@@ -55,8 +55,11 @@ public class TerraOp extends Tele {
 
         gph1.link(LEFT_TRIGGER, () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }});
 
-        gph1.link(RIGHT_TRIGGER, () -> drive.slow = true);
-        gph1.link(RIGHT_TRIGGER, OnNotHeldEventHandler.class, () -> drive.slow = false);
+
+        gph1.link(RIGHT_TRIGGER, () -> drive.slow = !drive.slow);
+
+//        gph1.link(RIGHT_TRIGGER, () -> drive.slow = true);
+//        gph1.link(RIGHT_TRIGGER, OnNotHeldEventHandler.class, () -> drive.slow = false);
 
         /**
          * Gamepad 1 Automated

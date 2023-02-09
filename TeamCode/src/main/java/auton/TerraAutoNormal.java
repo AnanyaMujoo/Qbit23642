@@ -35,14 +35,13 @@ public class TerraAutoNormal extends AutoFramework {
 
     // TODO CYCLE EXTRA TERMINAL TEST
 
-
-
     // TODO CYCLE MACHINE RESET GYRO TEST
 
     // TODO DIFFERENT TIMING 5 Cones TEST
 
+    // TODO PICK UP STACK TEST
 
-    // TODO 7 CONE
+    // TODO SLOW MODE TELE TEST
 
     @Override
     public void initialize() {
@@ -76,7 +75,7 @@ public class TerraAutoNormal extends AutoFramework {
 
     AutoModule Grab = new AutoModule(
             outtake.stageClose(0.2),
-            lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.15))
+            lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.1))
     );
 
     @Override
@@ -172,21 +171,21 @@ public class TerraAutoNormal extends AutoFramework {
     @Override
     public void stopAuto() { bot.saveLocationOnField(); }
 
-    @Autonomous(name = "RIGHT - 1", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "RIGHT - 1.4s", group = "auto", preselectTeleOp = "TerraOp")
     public static class TA_RIGHT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
 
-    @Autonomous(name = "LEFT - 1", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "LEFT - 1.4s", group = "auto", preselectTeleOp = "TerraOp")
     public static class TA_LEFT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
 
-    @Autonomous(name = "RIGHT - 2", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "RIGHT - 1.2s", group = "auto", preselectTeleOp = "TerraOp")
     public static class TA_RIGHT_2 extends TA_RIGHT_1 {{minusTime = 0.2;}}
 
-    @Autonomous(name = "RIGHT - 3", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "RIGHT - 1.0s", group = "auto", preselectTeleOp = "TerraOp")
     public static class TA_RIGHT_3 extends TA_RIGHT_1 {{minusTime = 0.4;}}
 
-    @Autonomous(name = "RIGHT - 4", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "RIGHT - 0.8s", group = "auto", preselectTeleOp = "TerraOp")
     public static class TA_RIGHT_4 extends TA_RIGHT_1 {{minusTime = 0.6;}}
 
-    @Autonomous(name = "RIGHT - 5", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "RIGHT - 0.6s", group = "auto", preselectTeleOp = "TerraOp")
     public static class TA_RIGHT_5 extends TA_RIGHT_1 {{minusTime = 0.8;}}
 }
