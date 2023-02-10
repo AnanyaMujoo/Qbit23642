@@ -34,8 +34,6 @@ public class TerraAutoNormal extends AutoFramework {
     protected double minusTime = 0.0;
     protected double startTime = 0.0;
 
-    // TODO MAKE PAUSE MECHANISM
-
     @Override
     public void initialize() {
         setConfig(mecanumNonstopConfig);
@@ -164,8 +162,8 @@ public class TerraAutoNormal extends AutoFramework {
     @Override
     public void postProcess() { autoPlane.reflectY(); autoPlane.reflectX(); }
 
-    @Override
-    public void stopAuto() { bot.saveLocationOnField(); }
+//    @Override
+//    public void stopAuto() { bot.saveLocationOnField(); }
 
 
     /**
@@ -244,6 +242,24 @@ public class TerraAutoNormal extends AutoFramework {
     public static class TA_RIGHT_2 extends TA_RIGHT_1 {{minusTime = 0.2;}}
 
     @Autonomous(name = "A. RIGHT - 5.0s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
+    public static class TA_RIGHT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
+
+    @Autonomous(name = "Z. BLUE", group = "auto")
+    public static class TA_BLUE extends Auto {
+        @Override
+        public void initAuto() { fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; }
+        @Override
+        public void runAuto() { bot.saveLocationOnField(); }
+    }
+
+    @Autonomous(name = "Z. RED", group = "auto")
+    public static class TA_RED extends Auto {
+        @Override
+        public void initAuto() { fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; }
+        @Override
+        public void runAuto() { bot.saveLocationOnField(); }
+    }
+
+    // TOD 4 Convert to enter program that saves constants
 
 }

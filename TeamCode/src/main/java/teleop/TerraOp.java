@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import automodules.AutoModule;
 import automodules.AutoModuleUser;
 import autoutil.vision.JunctionScannerAll;
+import elements.FieldPlacement;
 import math.polynomial.Linear;
 import robotparts.electronics.output.OLed;
 import teleutil.TeleTrack;
@@ -13,6 +14,7 @@ import teleutil.button.OnNotHeldEventHandler;
 import util.codeseg.CodeSeg;
 
 import static global.General.bot;
+import static global.General.fieldPlacement;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
@@ -31,6 +33,8 @@ public class TerraOp extends Tele {
     public void initTele() {
 
         bot.loadLocationOnField();
+
+        fieldPlacement = FieldPlacement.LOWER;
 
         kappaBefore.disable();
 
