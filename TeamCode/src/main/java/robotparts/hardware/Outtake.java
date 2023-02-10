@@ -20,6 +20,7 @@ public class Outtake extends RobotPart {
 
     public boolean cycleMachine = false;
     public boolean pauseMachine = false;
+    public boolean skipMachine = false;
 
     @Override
     public void init() {
@@ -50,7 +51,7 @@ public class Outtake extends RobotPart {
         claw.addPosition("open", 0.15);
         claw.addPosition("close", 0.35);
 
-        cycleMachine = false; pauseMachine = false;
+        cycleMachine = false; pauseMachine = false; skipMachine = false;
 
         unFlip();
         outtakeStatus.set(PLACING);

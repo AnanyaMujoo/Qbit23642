@@ -289,7 +289,7 @@ public interface AutoModuleUser extends RobotUser{
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
                 addSegment(0.7, 0.7, mecanumNonstopSetPoint, x, 0.01, 0);
-                addPause(0.05);
+                addCustomCode(() -> outtake.cycleMachine = true, 0.05);
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
             }
     }};}
@@ -297,6 +297,7 @@ public interface AutoModuleUser extends RobotUser{
     Machine MachineCycle = new Machine()
             .addIndependent(11, AutoModuleUser::Cycle2)
             .addPauseCondition(() -> outtake.pauseMachine)
+            .addSkipToLast(() -> outtake.skipMachine)
     ;
 
 
@@ -336,7 +337,7 @@ public interface AutoModuleUser extends RobotUser{
             addWaypoint(0.8, -30.0, 0.0, 0.0);
             addSegment(1.0, 0.5, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
             addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 1), 0.3);
-            addSegment(1.0, 0.6, mecanumNonstopSetPoint, -35.0, 24.0, -57.0);
+            addSegment(1.2, 0.5, mecanumNonstopSetPoint, -35.0, 23.0, -57.0);
             addConcurrentAutoModuleWithCancel(ForwardCycleLow,0.1);
             addWaypoint(-25.0, 36.0, -57.0);
             addSegment(1.0, 0.8, mecanumNonstopSetPoint, -32.0, 20.0, -21.0);

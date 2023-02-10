@@ -26,7 +26,8 @@ public class Machine {
 
     public ReturnCodeSeg<Boolean> pause = () -> false;
     public boolean waiting = false;
-    public int skip = 0;
+    public ReturnCodeSeg<Boolean> skip = () -> false;
+    public int skipTo = 0;
     /**
      * Is the machine running
      */
@@ -51,6 +52,8 @@ public class Machine {
     public Machine addInstruction(CodeSeg code, double time){ return addInstruction(new Stage(new Main(code), RobotPart.exitTime(time))); }
 
     public Machine addPauseCondition(ReturnCodeSeg<Boolean> condition){ pause = condition; return this; }
+    public Machine addSkipTo(ReturnCodeSeg<Boolean> condition, int n){ skipTo = n; skip = condition; return this; }
+    public Machine addSkipToLast(ReturnCodeSeg<Boolean> condition){ return addSkipTo(condition, stages.size()-1); }
     /**
      * Update the machine, go through each stage and cancel when done
      */
@@ -60,6 +63,11 @@ public class Machine {
                 if(!pause.run()){
                     stageNumber++;
                     waiting = false;
+                    if(stageNumber < stages.size()){
+                        if(skip.run() && (stageNumber-1) != skipTo){ stageNumber = skipTo; }
+                    }else{
+                        cancel();
+                    }
                 }
             }else if (stageNumber < stages.size()) {
                 Stage stage = stages.get(stageNumber);

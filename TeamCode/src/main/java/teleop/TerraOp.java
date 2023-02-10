@@ -45,7 +45,7 @@ public class TerraOp extends Tele {
         gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceGroundTele);}else{bot.addAutoModule(BackwardGroundTele.check());}}, () -> bot.addAutoModule(BackwardGrabGroundTele));
 
 
-        gph1.link(DPAD_DOWN, () -> !outtake.cycleMachine, () -> {bot.cancelAutoModules();bot.addAutoModule(ForwardTeleBottom);}, () -> outtake.cycleMachine = false);
+        gph1.link(DPAD_DOWN, () -> !outtake.cycleMachine, () -> {bot.cancelAutoModules();bot.addAutoModule(ForwardTeleBottom);}, () -> outtake.skipMachine = true);
         gph1.link(DPAD_UP, () -> !outtake.cycleMachine, () -> {bot.cancelAutoModules(); bot.addAutoModule(UprightCone);}, ()-> outtake.pauseMachine = !outtake.pauseMachine);
         gph1.link(DPAD_LEFT, () -> {lift.high = true; bot.addAutoModule(TakeOffCone);});
 
