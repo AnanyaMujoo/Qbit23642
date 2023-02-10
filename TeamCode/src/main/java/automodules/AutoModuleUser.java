@@ -256,21 +256,21 @@ public interface AutoModuleUser extends RobotUser{
             double x = 0.0;
             if(i+1 == 1){
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
-                addCustomCode(() -> { if(!drive.hasGyroBeenReset) {
+                addCustomCode(() -> { outtake.cycleMachine = true; if(!drive.hasGyroBeenReset) {
                     odometry.setHeading(0); gyro.reset(); drive.slow = false; drive.hasGyroBeenReset = false;
                     ResetOdometryForCycle(cyclePoint2).run();
                     pause(0.2);
                 }else{
                     SoftResetOdometryForCycle(cyclePoint2).run();
                 }}, 0.05);
-                addSegment(0.35, 0.55, mecanumNonstopWayPoint, x, 11, 0);
+                addSegment(0.4, 0.25, mecanumNonstopSetPoint,  x-0.5, 11,0);
                 addPause(0.05);
             }
             if(i+1 != 11){
                 if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
                 addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 4), 0.2);
                 addWaypoint(0.57, x-1, -26, -2);
-                addSegment(0.15, 0.8, mecanumNonstopSetPoint, x-1, -32, -2);
+                addSegment(0.2, 0.8, mecanumNonstopSetPoint, x-1, -32, -2);
                 addConcurrentAutoModuleWithCancel(ForwardCycle);
                 addCustomCode(() -> {
                     ArrayList<Double> values = new ArrayList<>();
@@ -284,19 +284,19 @@ public interface AutoModuleUser extends RobotUser{
                     Point point = new Point(((avgDis-48.0)+odometry.getX())/2.0, odometry.getY());
                     odometry.setPoseUsingOffset(point);
                 });
-                addSegment(0.15, 0.4, mecanumNonstopSetPoint,  x-0.5, 5.0,0);
+                addSegment(0.15, 0.1, mecanumNonstopSetPoint,  x-0.5, 5.5,0);
             } else{
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
                 addSegment(0.7, 0.7, mecanumNonstopSetPoint, x, 0.01, 0);
                 addPause(0.05);
-//                addAutoModule(RetractOdometry);
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
             }
     }};}
 
     Machine MachineCycle = new Machine()
             .addIndependent(11, AutoModuleUser::Cycle2)
+            .addPauseCondition(() -> outtake.pauseMachine)
     ;
 
 
@@ -322,7 +322,7 @@ public interface AutoModuleUser extends RobotUser{
             addWaypoint(0.6,0,-10,-10.0);
             addConcurrentAutoModule(BackwardCycle(MIDDLE, 4));
             addWaypoint(1.0, -25.0, -12.0, -25.0);
-            addSegment(0.6, 0.55, mecanumNonstopWayPoint, -47.0, -25.0, -25.0);
+            addSegment(0.6, 0.55, mecanumNonstopSetPoint, -47.0, -25.0, -25.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle);
             addSegment(1.3, 0.45, mecanumNonstopWayPoint,  -24.0, 40.0, -21.0);
             addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 2), 0.2);
@@ -341,10 +341,11 @@ public interface AutoModuleUser extends RobotUser{
             addWaypoint(-25.0, 36.0, -57.0);
             addSegment(1.0, 0.8, mecanumNonstopSetPoint, -32.0, 20.0, -21.0);
             addSegment(0.5, 0.5, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 0), 0.2);
+            addConcurrentAutoModuleWithCancel(BackwardGrabLowTele, 0.25);
             addSegment(0.5, 0.7, mecanumNonstopWayPoint,  -25.0, 40.0, -90.0);
             addWaypoint(1.0, -64.0, 40.0, -90.0);
-            addWaypoint(1.0, -128.0, 40.0, -125.0);
+            addWaypoint(1.0, -128.0, 37.0, -125.0);
+
 //            customSide(() -> {
 //                addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 0), 0.2);
 //                addSegment(0.5, 0.7, mecanumNonstopWayPoint,  -25.0, 40.0, -90.0);

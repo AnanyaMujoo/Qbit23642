@@ -36,7 +36,7 @@ import static global.Modes.Height.MIDDLE;
 
 
 //    preselectTeleOp = "TerraOp"
-@Autonomous(name = "TerraAuto7", group = "auto")
+//@Autonomous(name = "TerraAuto7", group = "auto")
 public class TerraAuto7 extends AutoFramework {
 
     {

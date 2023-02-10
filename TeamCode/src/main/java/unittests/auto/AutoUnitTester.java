@@ -19,7 +19,7 @@ import unittests.auto.framework.movement.OdometryTest;
 import util.condition.Status;
 
 @SuppressWarnings("ALL")
-@Autonomous(name = "AutoUnitTester", group = "UnitTests")
+//@Autonomous(name = "AutoUnitTester", group = "UnitTests")
 public class AutoUnitTester extends Auto implements UnitTester {
     /**
      * Status of this unit tester

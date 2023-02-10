@@ -32,16 +32,9 @@ public class TerraAutoNormal extends AutoFramework {
 
     private double x, s;
     protected double minusTime = 0.0;
+    protected double startTime = 0.0;
 
-    // TODO CYCLE EXTRA TERMINAL TEST
-
-    // TODO CYCLE MACHINE RESET GYRO TEST
-
-    // TODO DIFFERENT TIMING 5 Cones TEST
-
-    // TODO PICK UP STACK TEST
-
-    // TODO SLOW MODE TELE TEST
+    // TODO MAKE PAUSE MECHANISM
 
     @Override
     public void initialize() {
@@ -57,7 +50,7 @@ public class TerraAutoNormal extends AutoFramework {
     AutoModule BackwardFirst = new AutoModule(
             lift.changeCutoff(1.0),
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyEndAfter(0.3))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+3.2).attach(outtake.stageReadyEndAfter(0.3))
     );
 
     AutoModule Backward = new AutoModule(
@@ -70,12 +63,14 @@ public class TerraAutoNormal extends AutoFramework {
             outtake.stageEnd(0.15),
             outtake.stageOpen(0.0),
             lift.moveTime(-0.7, 0.15),
-            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)).attach(outtake.stageStartAfter(0.1))
+            lift.stageLift(1.0,  i == 0 ? 16.0 : Math.max(16.0 - (i*16.0/5.0), 0)).attach(outtake.stageStartAfter(0.1))
     );}
 
-    AutoModule Grab = new AutoModule(
+
+
+    AutoModule GrabBack = new AutoModule(
             outtake.stageClose(0.2),
-            lift.moveTime(1,0.2).attach(outtake.stageReadyStartAfter(0.1))
+            lift.moveTimeBack(-0.7, 0.5, () -> 0.3).attach(outtake.stageReadyStart(0.0))
     );
 
     @Override
@@ -93,24 +88,22 @@ public class TerraAutoNormal extends AutoFramework {
         addConcurrentAutoModuleWithCancel(BackwardFirst);
         customFlipped(() -> {
             addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
-            addTimedSetpoint(1.0, 0.6, 0.9, -9.5, 140, 45);
+            addTimedSetpoint(1.0, 0.6, 0.9+startTime, -9.5, 140, 45);
         }, () -> {
             addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
             addTimedSetpoint(1.0, 0.6, 0.9, -10.0, 137.5, 45);
         });
-
-        addConcurrentAutoModule(Forward(0));
-        addPause(0.2);
+        addConcurrentAutoModuleWithCancel(Forward(0), 0.2);
 
         // Start 5 cycle
         customNumber(5, i -> {
             customFlipped(() -> {
                 switch (i){
-                    case 0: x = -0.5; s = -0.2;  break;
-                    case 1: x = 0.6;  s = 1.0;  break;
-                    case 2: x = 0.6;  s = 1.5;  break;
-                    case 3: x = 1.0;  s = 2.0;  break;
-                    case 4: x = 1.0;  s = 2.5;   break;
+                    case 0: x = -0.5; s = -1.2;  break;
+                    case 1: x = 0.6;  s = -0.5;  break;
+                    case 2: x = 0.6;  s = 0.0;  break;
+                    case 3: x = 1.0;  s = 0.5;  break;
+                    case 4: x = 1.0;  s = 1.0;   break;
                 }
             }, () -> {
                 switch (i){
@@ -123,21 +116,24 @@ public class TerraAutoNormal extends AutoFramework {
             });
             // Move to pick
             addSegment(0.7, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
-            addSegment(0.6, mecanumDefaultWayPoint, 61-x, 125 + s, 87);
+            addSegment(0.6, mecanumDefaultWayPoint, 59-x, 125 + s, 87);
             // Pick
-            addTimedWaypoint( 0.2, 0.3, 67-x, 126 + s, 87);
-            addConcurrentAutoModuleWithCancel(Grab);
-            addTimedWaypoint( 0.2, 0.35, 60.5-x, 126 + s, 89);
+            addTimedWaypoint( 0.1, 0.2, 68-x, 126 + s, 87);
+            addCustomCode(() -> {
+                bot.cancelAutoModules(); bot.addAutoModule(GrabBack);
+                pause(0.5);
+            });
+//            addTimedWaypoint( 0.1, 0.35, 63-x, 126 + s, 89);
             // Move to place
             addConcurrentAutoModuleWithCancel(Backward);
             addSegment(0.65, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
             // Place
             customFlipped(() -> {
                 addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.6, 1.4 - minusTime, -9 - x, 143 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 1.8 - minusTime, -9 - x, 143 + s, 53);
             }, () -> {
                 addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 60);
-                addTimedSetpoint(1.0, 0.6, 1.4, -7.3 - x, 134 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 1.6, -9 - x, 138 + s, 50);
             });
             addConcurrentAutoModuleWithCancel(Forward(i+1));
             addPause(0.15);
@@ -171,21 +167,83 @@ public class TerraAutoNormal extends AutoFramework {
     @Override
     public void stopAuto() { bot.saveLocationOnField(); }
 
-    @Autonomous(name = "RIGHT - 1.4s", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
 
-    @Autonomous(name = "LEFT - 1.4s", group = "auto", preselectTeleOp = "TerraOp")
+    /**
+     * Left
+     */
+
+    @Autonomous(name = "S. LEFT - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
     public static class TA_LEFT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
 
-    @Autonomous(name = "RIGHT - 1.2s", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_2 extends TA_RIGHT_1 {{minusTime = 0.2;}}
 
-    @Autonomous(name = "RIGHT - 1.0s", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_3 extends TA_RIGHT_1 {{minusTime = 0.4;}}
+    /**
+     *  6.0 start
+     */
 
-    @Autonomous(name = "RIGHT - 0.8s", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "R. RIGHT - 4.0s + 6.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_18 extends TA_RIGHT_1 {{minusTime = 1.0; startTime = 3.0;}}
+
+    @Autonomous(name = "Q. RIGHT - 4.2s + 6.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_17 extends TA_RIGHT_1 {{minusTime = 0.8; startTime = 3.0;}}
+
+    @Autonomous(name = "P. RIGHT - 4.4s + 6.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_16 extends TA_RIGHT_1 {{minusTime = 0.6; startTime = 3.0;}}
+
+    /**
+     *  5.0 start
+     */
+
+    @Autonomous(name = "O. RIGHT - 4.0s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_15 extends TA_RIGHT_1 {{minusTime = 1.0; startTime = 2.0;}}
+
+    @Autonomous(name = "N. RIGHT - 4.2s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_14 extends TA_RIGHT_1 {{minusTime = 0.8; startTime = 2.0;}}
+
+    @Autonomous(name = "M. RIGHT - 4.4s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_13 extends TA_RIGHT_1 {{minusTime = 0.6; startTime = 2.0;}}
+
+    @Autonomous(name = "L. RIGHT - 4.6s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_12 extends TA_RIGHT_1 {{minusTime = 0.4; startTime = 2.0;}}
+
+    /**
+     *  4.0 start
+     */
+
+    @Autonomous(name = "K. RIGHT - 4.0s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_11 extends TA_RIGHT_1 {{minusTime = 1.0; startTime = 1.0;}}
+
+    @Autonomous(name = "J. RIGHT - 4.2s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_10 extends TA_RIGHT_1 {{minusTime = 0.8; startTime = 1.0;}}
+
+    @Autonomous(name = "I. RIGHT - 4.4s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_9 extends TA_RIGHT_1 {{minusTime = 0.6; startTime = 1.0;}}
+
+    @Autonomous(name = "H. RIGHT - 4.6s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_8 extends TA_RIGHT_1 {{minusTime = 0.4; startTime = 1.0;}}
+
+    @Autonomous(name = "G. RIGHT - 4.8s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_7 extends TA_RIGHT_1 {{minusTime = 0.2; startTime = 1.0; }}
+
+    /**
+     *  3.0 start
+     */
+
+    @Autonomous(name = "F. RIGHT - 4.0s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_6 extends TA_RIGHT_1 {{minusTime = 1.0;}}
+
+    @Autonomous(name = "E. RIGHT - 4.2s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_5 extends TA_RIGHT_1 {{minusTime = 0.8;}}
+
+    @Autonomous(name = "D. RIGHT - 4.4s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
     public static class TA_RIGHT_4 extends TA_RIGHT_1 {{minusTime = 0.6;}}
 
-    @Autonomous(name = "RIGHT - 0.6s", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_5 extends TA_RIGHT_1 {{minusTime = 0.8;}}
+    @Autonomous(name = "C. RIGHT - 4.6s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_3 extends TA_RIGHT_1 {{minusTime = 0.4;}}
+
+    @Autonomous(name = "B. RIGHT - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_2 extends TA_RIGHT_1 {{minusTime = 0.2;}}
+
+    @Autonomous(name = "A. RIGHT - 5.0s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
+
 }

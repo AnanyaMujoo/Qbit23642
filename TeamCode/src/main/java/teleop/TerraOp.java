@@ -45,8 +45,8 @@ public class TerraOp extends Tele {
         gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceGroundTele);}else{bot.addAutoModule(BackwardGroundTele.check());}}, () -> bot.addAutoModule(BackwardGrabGroundTele));
 
 
-        gph1.link(DPAD_DOWN, ForwardTeleBottom);
-        gph1.link(DPAD_UP, UprightCone);
+        gph1.link(DPAD_DOWN, () -> !outtake.cycleMachine, () -> {bot.cancelAutoModules();bot.addAutoModule(ForwardTeleBottom);}, () -> outtake.cycleMachine = false);
+        gph1.link(DPAD_UP, () -> !outtake.cycleMachine, () -> {bot.cancelAutoModules(); bot.addAutoModule(UprightCone);}, ()-> outtake.pauseMachine = !outtake.pauseMachine);
         gph1.link(DPAD_LEFT, () -> {lift.high = true; bot.addAutoModule(TakeOffCone);});
 
         gph1.link(RIGHT_BUMPER, () -> outtakeStatus.modeIs(PLACING), () -> lift.adjustHolderTarget(2.5), () -> lift.adjustHolderTarget(5.0));
@@ -134,9 +134,10 @@ public class TerraOp extends Tele {
 
         lift.move(gph2.ry);
 
+        log.show("DriveMode", drive.slow ? "SLOW" : "FAST");
         log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
 //        log.show("TrackStatus", kappaBefore.isEnabled() ? "Kappa" : "None");
-        log.show("OuttakeStatus", outtakeStatus.get());
+//        log.show("OuttakeStatus", outtakeStatus.get());
 
 //        log.show("Kappa Size", kappaBefore.steps.size());
 //        log.show("Kappa #", kappaBefore.stepNumber);
