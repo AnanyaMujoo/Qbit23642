@@ -37,6 +37,7 @@ public class TerraAutoNormal extends AutoFramework {
     @Override
     public void initialize() {
         setConfig(mecanumNonstopConfig);
+        bot.saveLocationOnField();
         lift.maintain();
         outtake.closeClaw();
         ExceptionCatcher.catchInterrupted(() -> Thread.sleep(500));
@@ -128,7 +129,7 @@ public class TerraAutoNormal extends AutoFramework {
             // Place
             customFlipped(() -> {
                 addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.6, 1.8 - minusTime, -9 - x, 143 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 1.6 - minusTime, -9 - x, 143 + s, 53);
             }, () -> {
                 addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 60);
                 addTimedSetpoint(1.0, 0.6, 1.6, -9 - x, 138 + s, 50);
@@ -162,103 +163,113 @@ public class TerraAutoNormal extends AutoFramework {
     @Override
     public void postProcess() { autoPlane.reflectY(); autoPlane.reflectX(); }
 
-//    @Override
-//    public void stopAuto() { bot.saveLocationOnField(); }
+//
+//    /**
+//     *  6.0 start
+//     */
+//
+//    @Autonomous(name = "R. RIGHT - 4.0s + 6.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_18 extends TA_RIGHT_1 {{minusTime = 1.0; startTime = 3.0;}}
+//
+//    @Autonomous(name = "Q. RIGHT - 4.2s + 6.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_17 extends TA_RIGHT_1 {{minusTime = 0.8; startTime = 3.0;}}
+//
+//    @Autonomous(name = "P. RIGHT - 4.4s + 6.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_16 extends TA_RIGHT_1 {{minusTime = 0.6; startTime = 3.0;}}
+//
+//    /**
+//     *  5.0 start
+//     */
+//
+//    @Autonomous(name = "O. RIGHT - 4.0s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_15 extends TA_RIGHT_1 {{minusTime = 1.0; startTime = 2.0;}}
+//
+//    @Autonomous(name = "N. RIGHT - 4.2s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_14 extends TA_RIGHT_1 {{minusTime = 0.8; startTime = 2.0;}}
+//
+//    @Autonomous(name = "M. RIGHT - 4.4s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_13 extends TA_RIGHT_1 {{minusTime = 0.6; startTime = 2.0;}}
+//
+//    @Autonomous(name = "L. RIGHT - 4.6s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_12 extends TA_RIGHT_1 {{minusTime = 0.4; startTime = 2.0;}}
+//
+//    /**
+//     *  4.0 start
+//     */
+//
+//    @Autonomous(name = "K. RIGHT - 4.0s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_11 extends TA_RIGHT_1 {{minusTime = 1.0; startTime = 1.0;}}
+//
+//    @Autonomous(name = "J. RIGHT - 4.2s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_10 extends TA_RIGHT_1 {{minusTime = 0.8; startTime = 1.0;}}
+//
+//    @Autonomous(name = "I. RIGHT - 4.4s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_9 extends TA_RIGHT_1 {{minusTime = 0.6; startTime = 1.0;}}
+//
+//    @Autonomous(name = "H. RIGHT - 4.6s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_8 extends TA_RIGHT_1 {{minusTime = 0.4; startTime = 1.0;}}
+//
+//    @Autonomous(name = "G. RIGHT - 4.8s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_7 extends TA_RIGHT_1 {{minusTime = 0.2; startTime = 1.0; }}
+//
+//    /**
+//     *  3.0 start
+//     */
+//
+//    @Autonomous(name = "F. RIGHT - 4.0s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_6 extends TA_RIGHT_1 {{minusTime = 1.0;}}
+//
+//    @Autonomous(name = "E. RIGHT - 4.2s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_5 extends TA_RIGHT_1 {{minusTime = 0.8;}}
+//
+//    @Autonomous(name = "D. RIGHT - 4.4s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_4 extends TA_RIGHT_1 {{minusTime = 0.6;}}
+//
+//    @Autonomous(name = "C. RIGHT - 4.6s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_3 extends TA_RIGHT_1 {{minusTime = 0.4;}}
+
+//    @Autonomous(name = "A. RIGHT - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_2 extends TA_RIGHT_1 {{minusTime = 0.2;}}
+
+
+    /**
+     * Right
+     */
+
+    @Autonomous(name = "A. RIGHT BLUE - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
+
+    @Autonomous(name = "B. RIGHT RED - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_RIGHT_2 extends TerraAutoNormal {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
 
 
     /**
      * Left
      */
 
-    @Autonomous(name = "S. LEFT - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "C. LEFT BLUE - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
     public static class TA_LEFT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
 
+    @Autonomous(name = "D. LEFT RED - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+    public static class TA_LEFT_2 extends TerraAutoNormal {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
 
-    /**
-     *  6.0 start
-     */
 
-    @Autonomous(name = "R. RIGHT - 4.0s + 6.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_18 extends TA_RIGHT_1 {{minusTime = 1.0; startTime = 3.0;}}
 
-    @Autonomous(name = "Q. RIGHT - 4.2s + 6.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_17 extends TA_RIGHT_1 {{minusTime = 0.8; startTime = 3.0;}}
-
-    @Autonomous(name = "P. RIGHT - 4.4s + 6.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_16 extends TA_RIGHT_1 {{minusTime = 0.6; startTime = 3.0;}}
-
-    /**
-     *  5.0 start
-     */
-
-    @Autonomous(name = "O. RIGHT - 4.0s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_15 extends TA_RIGHT_1 {{minusTime = 1.0; startTime = 2.0;}}
-
-    @Autonomous(name = "N. RIGHT - 4.2s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_14 extends TA_RIGHT_1 {{minusTime = 0.8; startTime = 2.0;}}
-
-    @Autonomous(name = "M. RIGHT - 4.4s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_13 extends TA_RIGHT_1 {{minusTime = 0.6; startTime = 2.0;}}
-
-    @Autonomous(name = "L. RIGHT - 4.6s + 5.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_12 extends TA_RIGHT_1 {{minusTime = 0.4; startTime = 2.0;}}
-
-    /**
-     *  4.0 start
-     */
-
-    @Autonomous(name = "K. RIGHT - 4.0s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_11 extends TA_RIGHT_1 {{minusTime = 1.0; startTime = 1.0;}}
-
-    @Autonomous(name = "J. RIGHT - 4.2s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_10 extends TA_RIGHT_1 {{minusTime = 0.8; startTime = 1.0;}}
-
-    @Autonomous(name = "I. RIGHT - 4.4s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_9 extends TA_RIGHT_1 {{minusTime = 0.6; startTime = 1.0;}}
-
-    @Autonomous(name = "H. RIGHT - 4.6s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_8 extends TA_RIGHT_1 {{minusTime = 0.4; startTime = 1.0;}}
-
-    @Autonomous(name = "G. RIGHT - 4.8s + 4.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_7 extends TA_RIGHT_1 {{minusTime = 0.2; startTime = 1.0; }}
-
-    /**
-     *  3.0 start
-     */
-
-    @Autonomous(name = "F. RIGHT - 4.0s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_6 extends TA_RIGHT_1 {{minusTime = 1.0;}}
-
-    @Autonomous(name = "E. RIGHT - 4.2s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_5 extends TA_RIGHT_1 {{minusTime = 0.8;}}
-
-    @Autonomous(name = "D. RIGHT - 4.4s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_4 extends TA_RIGHT_1 {{minusTime = 0.6;}}
-
-    @Autonomous(name = "C. RIGHT - 4.6s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_3 extends TA_RIGHT_1 {{minusTime = 0.4;}}
-
-    @Autonomous(name = "B. RIGHT - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_2 extends TA_RIGHT_1 {{minusTime = 0.2;}}
-
-    @Autonomous(name = "A. RIGHT - 5.0s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
-
-    @Autonomous(name = "Z. BLUE", group = "auto")
-    public static class TA_BLUE extends Auto {
-        @Override
-        public void initAuto() { fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; }
-        @Override
-        public void runAuto() { bot.saveLocationOnField(); }
-    }
-
-    @Autonomous(name = "Z. RED", group = "auto")
-    public static class TA_RED extends Auto {
-        @Override
-        public void initAuto() { fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; }
-        @Override
-        public void runAuto() { bot.saveLocationOnField(); }
-    }
+//    @Autonomous(name = "Z. BLUE", group = "auto")
+//    public static class TA_BLUE extends Auto {
+//        @Override
+//        public void initAuto() { fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; }
+//        @Override
+//        public void runAuto() { bot.saveLocationOnField(); }
+//    }
+//
+//    @Autonomous(name = "Z. RED", group = "auto")
+//    public static class TA_RED extends Auto {
+//        @Override
+//        public void initAuto() { fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; }
+//        @Override
+//        public void runAuto() { bot.saveLocationOnField(); }
+//    }
 
     // TOD 4 Convert to enter program that saves constants
 

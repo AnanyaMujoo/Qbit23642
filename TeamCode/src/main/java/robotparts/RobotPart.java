@@ -51,6 +51,7 @@ import util.codeseg.ParameterCodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.condition.Expectation;
 import util.condition.Magnitude;
+import util.store.Item;
 import util.template.Iterator;
 
 public abstract class RobotPart extends StageBuilder implements RobotUser {
@@ -193,7 +194,12 @@ public abstract class RobotPart extends StageBuilder implements RobotUser {
      * Halt the cmotors and cservos (i.e. set the power to 0)
      * NOTE: This should only be called in a thread that has access to use the robot
      */
-    public void halt(){ Iterator.forAll(electronics, Electronic::halt); }
+    public void halt(){
+        Iterator.forAll(getElectronicsOfType(CMotor.class), CMotor::halt);
+        Iterator.forAll(getElectronicsOfType(PMotor.class), PMotor::halt);
+        Iterator.forAll(getElectronicsOfType(CServo.class), CServo::halt);
+//        Iterator.forAll(electronics, Electronic::halt);
+    }
 
     /**
      * Get the currentUser

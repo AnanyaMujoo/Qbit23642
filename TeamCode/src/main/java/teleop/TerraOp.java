@@ -70,7 +70,7 @@ public class TerraOp extends Tele {
          */
         gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
         gph1.link(Button.B, MachineCycle, AUTOMATED);
-        gph1.link(Button.X, bot::cancelMovements, AUTOMATED);
+        gph1.link(Button.X, () -> {outtake.cycleMachine = false; outtake.pauseMachine = false; outtake.skipMachine = false;  bot.cancelMovements(); }, AUTOMATED);
         gph1.link(Button.Y, MachineCycleExtra, AUTOMATED);
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);

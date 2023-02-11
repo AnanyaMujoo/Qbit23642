@@ -256,21 +256,27 @@ public interface AutoModuleUser extends RobotUser{
             double x = 0.0;
             if(i+1 == 1){
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
-                addCustomCode(() -> { outtake.cycleMachine = true; if(!drive.hasGyroBeenReset) {
-                    odometry.setHeading(0); gyro.reset(); drive.slow = false; drive.hasGyroBeenReset = false;
+                addCustomCode(() -> {
+                    outtake.cycleMachine = true;
+//                    if(!drive.hasGyroBeenReset) {
+                    odometry.setHeading(0);
+                    gyro.reset();
+                    drive.slow = false;
+                    drive.hasGyroBeenReset = false;
                     ResetOdometryForCycle(cyclePoint2).run();
-                    pause(0.2);
-                }else{
-                    SoftResetOdometryForCycle(cyclePoint2).run();
-                }}, 0.05);
+                    pause(0.3);
+//                }else{
+//                    SoftResetOdometryForCycle(cyclePoint2).run();
+//                }}
+                }, 0.05);
                 addSegment(0.4, 0.25, mecanumNonstopSetPoint,  x-0.5, 11,0);
                 addPause(0.05);
             }
             if(i+1 != 11){
                 if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
                 addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 4), 0.2);
-                addWaypoint(0.57, x-1, -26, -2);
-                addSegment(0.2, 0.8, mecanumNonstopSetPoint, x-1, -32, -2);
+                addWaypoint(0.57, x-1, -26, 0.1);
+                addSegment(0.2, 0.8, mecanumNonstopSetPoint, x-1, -32, 0.1);
                 addConcurrentAutoModuleWithCancel(ForwardCycle);
                 addCustomCode(() -> {
                     ArrayList<Double> values = new ArrayList<>();
@@ -281,15 +287,15 @@ public interface AutoModuleUser extends RobotUser{
                         if(distance < 50){ values.add(distance); }
                     });
                     double avgDis = Iterator.forAllAverage(values);
-                    Point point = new Point(((avgDis-48.0)+odometry.getX())/2.0, odometry.getY());
+                    Point point = new Point(((avgDis-49.0)*0.7)+(odometry.getX()*0.3), odometry.getY());
                     odometry.setPoseUsingOffset(point);
                 });
-                addSegment(0.15, 0.1, mecanumNonstopSetPoint,  x-0.5, 5.5,0);
+                addSegment(0.18, 0.1, mecanumNonstopSetPoint,  x-0.5, 6.5,0.1);
             } else{
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
                 addSegment(0.7, 0.7, mecanumNonstopSetPoint, x, 0.01, 0);
-                addCustomCode(() -> outtake.cycleMachine = true, 0.05);
+                addCustomCode(() -> {outtake.cycleMachine = false; outtake.pauseMachine = false; outtake.skipMachine = false; }, 0.05);
                 addAutoModule(leds.autoModuleColor(OLed.LEDColor.OFF));
             }
     }};}
@@ -332,9 +338,15 @@ public interface AutoModuleUser extends RobotUser{
             addWaypoint(1.0, -50.0, -8.0, -85);
             addSegment(1.2, 0.65, mecanumNonstopSetPoint, -99.0, -35.0, -50);
             addConcurrentAutoModuleWithCancel(ForwardCycleLow, 0.1);
-            addWaypoint(1.0, -70.0, -20.0, -90);
-            addWaypoint(1.0, -50.0, -10.0, -70);
-            addWaypoint(0.8, -30.0, 0.0, 0.0);
+            customFlipped(() -> {
+                addWaypoint(1.0, -70.0, -20.0, -90);
+                addWaypoint(1.0, -50.0, -10.0, -70);
+                addWaypoint(0.8, -30.0, 0.0, 0.0);
+            }, () -> {
+                addWaypoint(1.0, -70.0, -20.0, -90);
+                addWaypoint(1.0, -60.0, -10.0, -60);
+                addWaypoint(0.8, -30.0, 0.0, 0.0);
+            });
             addSegment(1.0, 0.5, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
             addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 1), 0.3);
             addSegment(1.2, 0.5, mecanumNonstopSetPoint, -35.0, 23.0, -57.0);

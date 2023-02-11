@@ -43,13 +43,11 @@ public class Access {
      * Is access allowed?
      */
     public synchronized boolean isAllowed(){
-        return hasAccess.get();
-    }
-    /**
-     * Is access denied?
-     */
-    public synchronized boolean isDenied(){
-        return !hasAccess.get();
+        if (hasAccess != null) {
+            return hasAccess.get();
+        }else{
+            return false;
+        }
     }
 
 }

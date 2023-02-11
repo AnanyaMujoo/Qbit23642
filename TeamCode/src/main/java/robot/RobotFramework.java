@@ -168,10 +168,10 @@ public class RobotFramework {
     /**
      * Cancel methods
      */
-    public void cancelAutoModules(){ setUserMainAndHalt(); rfsHandler.emptyQueue(); }
-    public void cancelBackgroundTasks(){ setUserMainAndHalt(); backHandler.emptyTaskList(); }
-    public void cancelIndependents(){ setUserMainAndHalt(); indHandler.stopCurrentIndependent(); }
-    public void cancelMovements(){ setUserMainAndHalt(); rfsHandler.emptyQueue(); indHandler.stopCurrentIndependent(); machine.cancel(); }
+    public void cancelAutoModules(){ rfsHandler.emptyQueue(); setUserMainAndHalt();  }
+    public void cancelBackgroundTasks(){  backHandler.emptyTaskList(); setUserMainAndHalt(); }
+    public void cancelIndependents(){ indHandler.stopCurrentIndependent(); setUserMainAndHalt(); }
+    public void cancelMovements(){ rfsHandler.emptyQueue(); indHandler.stopCurrentIndependent(); machine.cancel(); setUserMainAndHalt(); }
     public void cancelAll(){ cancelMovements(); cancelBackgroundTasks();  }
 
     /**
