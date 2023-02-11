@@ -203,8 +203,8 @@ public interface AutoModuleUser extends RobotUser{
         public void define() {
             addCustomCode(() -> {  odometry.setHeading(0); gyro.reset(); drive.hasGyroBeenReset = true; }, 0.05);
             addCustomCode(ResetOdometryForCycle(cyclePoint), 0.05);
-            addWaypoint(1.0, -10, -26, 0);
-            addSegment(0.7, 0.7, mecanumNonstopSetPoint, 0, 0.01, 0);
+            addWaypoint(1.0, -13, -26, 0);
+            addSegment(0.8, 0.7, mecanumNonstopSetPoint, 0, 1.0, 0);
             addCustomCode(() -> drive.slow = true);
             addAutoModule(ForwardTeleBottom);
         }
@@ -269,14 +269,14 @@ public interface AutoModuleUser extends RobotUser{
 //                    SoftResetOdometryForCycle(cyclePoint2).run();
 //                }}
                 }, 0.05);
-                addSegment(0.4, 0.25, mecanumNonstopSetPoint,  x-0.5, 11,0);
+                addSegment(0.4, 0.25, mecanumNonstopSetPoint,  x-0.5, 12,0);
                 addPause(0.05);
             }
             if(i+1 != 11){
-                if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
-                addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 4), 0.2);
+//                if(i+1 == 10){ addAutoModule(leds.autoModuleColor(OLed.LEDColor.ORANGE)); }
+                addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 5), 0.2);
                 addWaypoint(0.57, x-1, -26, 0.1);
-                addSegment(0.2, 0.8, mecanumNonstopSetPoint, x-1, -32, 0.1);
+                addSegment(0.25, 0.8, mecanumNonstopSetPoint, x-1, -32.5, 0.1);
                 addConcurrentAutoModuleWithCancel(ForwardCycle);
                 addCustomCode(() -> {
                     ArrayList<Double> values = new ArrayList<>();
@@ -290,9 +290,9 @@ public interface AutoModuleUser extends RobotUser{
                     Point point = new Point(((avgDis-49.0)*0.7)+(odometry.getX()*0.3), odometry.getY());
                     odometry.setPoseUsingOffset(point);
                 });
-                addSegment(0.18, 0.1, mecanumNonstopSetPoint,  x-0.5, 6.5,0.1);
+                addSegment(0.3, 0.1, mecanumNonstopSetPoint,  x-0.5, 11,0.1);
             } else{
-                addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));
+//                addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
                 addSegment(0.7, 0.7, mecanumNonstopSetPoint, x, 0.01, 0);
                 addCustomCode(() -> {outtake.cycleMachine = false; outtake.pauseMachine = false; outtake.skipMachine = false; }, 0.05);
@@ -329,31 +329,25 @@ public interface AutoModuleUser extends RobotUser{
             addWaypoint(0.6,0,-10,-10.0);
             addConcurrentAutoModule(BackwardCycle(MIDDLE, 4));
             addWaypoint(1.0, -25.0, -12.0, -25.0);
-            addSegment(0.6, 0.55, mecanumNonstopSetPoint, -47.0, -25.0, -25.0);
+            addSegment(0.8, 0.55, mecanumNonstopSetPoint, -48.5, -25.0, -25.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle);
-            addSegment(1.3, 0.45, mecanumNonstopWayPoint,  -24.0, 40.0, -21.0);
+            addSegment(1.4, 0.45, mecanumNonstopWayPoint,  -24.0, 40.0, -21.0);
             addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 2), 0.2);
             addWaypoint(1.0, -25.0, 25.0, 0.0);
             addWaypoint(1.0, -30.0, 5.0, -45);
             addWaypoint(1.0, -50.0, -8.0, -85);
-            addSegment(1.2, 0.65, mecanumNonstopSetPoint, -99.0, -35.0, -50);
+            addSegment(1.3, 0.65, mecanumNonstopSetPoint, -99.0, -35.0, -50);
             addConcurrentAutoModuleWithCancel(ForwardCycleLow, 0.1);
-            customFlipped(() -> {
-                addWaypoint(1.0, -70.0, -20.0, -90);
-                addWaypoint(1.0, -50.0, -10.0, -70);
-                addWaypoint(0.8, -30.0, 0.0, 0.0);
-            }, () -> {
-                addWaypoint(1.0, -70.0, -20.0, -90);
-                addWaypoint(1.0, -60.0, -10.0, -60);
-                addWaypoint(0.8, -30.0, 0.0, 0.0);
-            });
-            addSegment(1.0, 0.5, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
+            addWaypoint(1.0, -70.0, -20.0, -90);
+            addWaypoint(1.0, -55.0, -10.0, -60);
+            addWaypoint(0.65, -30.0, 0.0, 0.0);
+            addSegment(1.1, 0.5, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
             addConcurrentAutoModuleWithCancel(BackwardCycle(LOW, 1), 0.3);
-            addSegment(1.2, 0.5, mecanumNonstopSetPoint, -35.0, 23.0, -57.0);
+            addSegment(1.3, 0.5, mecanumNonstopSetPoint, -35.0, 23.0, -57.0);
             addConcurrentAutoModuleWithCancel(ForwardCycleLow,0.1);
             addWaypoint(-25.0, 36.0, -57.0);
             addSegment(1.0, 0.8, mecanumNonstopSetPoint, -32.0, 20.0, -21.0);
-            addSegment(0.5, 0.5, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
+            addSegment(0.6, 0.5, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
             addConcurrentAutoModuleWithCancel(BackwardGrabLowTele, 0.25);
             addSegment(0.5, 0.7, mecanumNonstopWayPoint,  -25.0, 40.0, -90.0);
             addWaypoint(1.0, -64.0, 40.0, -90.0);

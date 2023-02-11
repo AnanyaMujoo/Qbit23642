@@ -49,20 +49,20 @@ public class TerraAutoNormal extends AutoFramework {
     AutoModule BackwardFirst = new AutoModule(
             lift.changeCutoff(1.0),
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+3.2).attach(outtake.stageReadyEndAfter(0.3))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyEndAfter(0.3))
     );
 
     AutoModule Backward = new AutoModule(
             RobotPart.pause(0.05),
             outtake.stageFlip(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.2).attach(outtake.stageReadyEndAfter(0.25))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.8).attach(outtake.stageReadyEndAfter(0.25))
     );
 
     AutoModule Forward(int i){return new AutoModule(
             outtake.stageEnd(0.15),
             outtake.stageOpen(0.0),
             lift.moveTime(-0.7, 0.15),
-            lift.stageLift(1.0,  i == 0 ? 16.0 : Math.max(16.0 - (i*16.0/5.0), 0)).attach(outtake.stageStartAfter(0.1))
+            lift.stageLift(1.0,  i == 0 ? 16.4 : Math.max(16.4 - (i*16.4/5.0), 0)).attach(outtake.stageStartAfter(0.1))
     );}
 
 
@@ -115,8 +115,12 @@ public class TerraAutoNormal extends AutoFramework {
             });
             // Move to pick
             addSegment(0.7, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
-            addSegment(0.6, mecanumDefaultWayPoint, 59-x, 125 + s, 87);
             // Pick
+            customFlipped(() -> {
+                addSegment(0.6, mecanumDefaultWayPoint, 60-x, 125 + s, 87);
+            }, () -> {
+                addSegment(0.6, mecanumDefaultWayPoint, 61-x, 125 + s, 87);
+            });
             addTimedWaypoint( 0.1, 0.2, 68-x, 126 + s, 87);
             addCustomCode(() -> {
                 bot.cancelAutoModules(); bot.addAutoModule(GrabBack);
@@ -129,7 +133,7 @@ public class TerraAutoNormal extends AutoFramework {
             // Place
             customFlipped(() -> {
                 addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.6, 1.6 - minusTime, -9 - x, 143 + s, 53);
+                addTimedSetpoint(1.0, 0.6, 1.6 - minusTime, -9 - x, 143 + s, 51.5);
             }, () -> {
                 addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 60);
                 addTimedSetpoint(1.0, 0.6, 1.6, -9 - x, 138 + s, 50);
