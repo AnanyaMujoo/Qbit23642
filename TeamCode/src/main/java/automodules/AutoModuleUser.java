@@ -290,7 +290,7 @@ public interface AutoModuleUser extends RobotUser{
                     Point point = new Point(((avgDis-49.0)*0.7)+(odometry.getX()*0.3), odometry.getY());
                     odometry.setPoseUsingOffset(point);
                 });
-                addSegment(0.3, 0.1, mecanumNonstopSetPoint,  x-0.5, 11,0.1);
+                addSegment(0.3, 0.1, mecanumNonstopSetPoint,  x-0.5, 12+(i*0.1),0.1);
             } else{
 //                addAutoModule(leds.autoModuleColor(OLed.LEDColor.GREEN));
                 addConcurrentAutoModuleWithCancel(HoldMiddle, 0.2);
