@@ -26,23 +26,23 @@ import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
 
 public class TerraAutoNormal extends AutoFramework {
-
-    protected enum AutoMode implements Mode.ModeType {NORMAL, SIMPLE}
-    protected AutoMode autoMode;
-
     private double x, s;
     protected double minusTime = 0.0;
     protected double startTime = 0.0;
 
-    @Override
-    public void initialize() {
-        setConfig(mecanumNonstopConfig);
+    public static void normalInit(AutoFramework auto){
+        auto.setConfig(mecanumNonstopConfig);
         bot.saveLocationOnField();
         lift.maintain();
         outtake.closeClaw();
         ExceptionCatcher.catchInterrupted(() -> Thread.sleep(500));
         outtake.readyStart();
-        scan(false);
+        auto.scan(false);
+    }
+
+    @Override
+    public void initialize() {
+        normalInit(this);
         x = 0; s = 0;
     }
 
@@ -240,22 +240,27 @@ public class TerraAutoNormal extends AutoFramework {
      * Right
      */
 
-    @Autonomous(name = "A. RIGHT BLUE - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
+    // - 4.8s + 3.0
+    @Autonomous(name = "A. RIGHT NORMAL", group = "auto", preselectTeleOp = "TerraOp")
+    public static class RIGHT extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
 
-    @Autonomous(name = "B. RIGHT RED - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_RIGHT_2 extends TerraAutoNormal {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
+    @Autonomous(name = "B. LEFT NORMAL", group = "auto", preselectTeleOp = "TerraOp")
+    public static class LEFT extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
+
+
+
+//    @Autonomous(name = "B. RIGHT RED - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_RIGHT_2 extends TerraAutoNormal {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); autoMode = AutoMode.NORMAL;}}
 
 
     /**
      * Left
      */
 
-    @Autonomous(name = "C. LEFT BLUE - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_LEFT_1 extends TerraAutoNormal {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
+    // 4.8s + 3.0
 
-    @Autonomous(name = "D. LEFT RED - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
-    public static class TA_LEFT_2 extends TerraAutoNormal {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
+//    @Autonomous(name = "D. LEFT RED - 4.8s + 3.0", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class TA_LEFT_2 extends TerraAutoNormal {{ fieldSide = FieldSide.RED; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); autoMode = AutoMode.NORMAL;}}
 
 
 

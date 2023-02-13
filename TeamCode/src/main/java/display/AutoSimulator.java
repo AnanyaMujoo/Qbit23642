@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import automodules.AutoModuleUser;
 import auton.TerraAutoNormal;
+import auton.TerraAutoSafe;
 import autoutil.AutoFramework;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
@@ -17,18 +18,10 @@ import geometry.position.Pose;
 
 public class AutoSimulator extends Drawer{
 
-//    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - Field.tileWidth - GameItems.Cone.height - 16,180);
-//    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - 89,180);
-//    private static final Pose startUpper = new Pose(20.5,fieldSize/2.0 + 89,180);
-//    private static final Pose startMedium = new Pose(20.5 + 47.5 + 15.5, fieldSize/2.0 - 42.5, 180-24.0);
-//    private static final Pose startCycleAround = new Pose(20.5 + 66.5, fieldSize/2.0 - 23, 215);
-//    private static final Pose startCycleFirst = new Pose(20.5 + 47.5, fieldSize/2.0, 180);
-//    private static final Pose startCycle = new Pose(20.5 + 47.5 + 11.5, fieldSize/2.0, 180);
-
-    private static final double maxMovingVelocity = 100; // cm per sec
+    private static final double maxMovingVelocity = 150; // cm per sec
     private static final double maxTurningVelocity = 340; // deg per sec
-    private static final double speedUp = 1.0;
-    private static final boolean developmentMode = true;
+    private static final double speedUp = 2.0;
+    private static final boolean developmentMode = false;
 
     public static void main(String[] args) {
 //        setAuto(new TerraAuto.TerraAutoMegaRight());
@@ -50,6 +43,10 @@ public class AutoSimulator extends Drawer{
 //        setAuto(AutoModuleUser.CycleMediumFirst, startCycle);
 //        setAuto(AutoModuleUser.CycleMedium, startMedium);
 //        setAuto(AutoModuleUser.CycleAround, startCycleAround);
+
+//        setAuto(new TerraAutoNormal.RIGHT());
+        setAuto(new TerraAutoSafe.RIGHT());
+
 
         drawWindow(new AutoSimulator(), "Auto Simulator");
     }
@@ -149,7 +146,7 @@ public class AutoSimulator extends Drawer{
                 }
             } else if (segmentIndex == lines.size()) {
                 System.out.println("Time taken: " + timer.seconds() * speedUp);
-                System.out.println("Estimated Robot Time: " + 2.32 * (timer.seconds() * speedUp));
+//                System.out.println("Estimated Robot Time: " + 2.32 * (timer.seconds() * speedUp));
                 segmentIndex++;
             }
         }else{
@@ -185,7 +182,7 @@ public class AutoSimulator extends Drawer{
                     CoordinatePlane plane = new CoordinatePlane(robotPose.getCopy());
                     plane.setStartInverse(startPose);
                     Pose localPose = plane.getPoses().get(0);
-                    System.out.printf(Locale.US, "Saved Pose %d, New %s Code %.1f, %.1f, %.1f %n", step, robotPose.toString(), localPose.getX(), localPose.getY(), localPose.getAngle());
+                    System.out.printf(Locale.US, "Saved Pose %d, New %s Code %.1f, %.1f, %.1f %n", step, robotPose.toString(), -localPose.getX(), -localPose.getY(), localPose.getAngle());
                     autoPlane.remove(convertToField(poses.get(step).getCopy()));
                     poses.set(step, robotPose);
                     autoPlane.add(convertToField(robotPose.getCopy()));
@@ -224,5 +221,19 @@ public class AutoSimulator extends Drawer{
             }
         };
     }
+
+
+
+
+
+
+
+//    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - Field.tileWidth - GameItems.Cone.height - 16,180);
+//    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - 89,180);
+//    private static final Pose startUpper = new Pose(20.5,fieldSize/2.0 + 89,180);
+//    private static final Pose startMedium = new Pose(20.5 + 47.5 + 15.5, fieldSize/2.0 - 42.5, 180-24.0);
+//    private static final Pose startCycleAround = new Pose(20.5 + 66.5, fieldSize/2.0 - 23, 215);
+//    private static final Pose startCycleFirst = new Pose(20.5 + 47.5, fieldSize/2.0, 180);
+//    private static final Pose startCycle = new Pose(20.5 + 47.5 + 11.5, fieldSize/2.0, 180);
 
 }
