@@ -109,7 +109,6 @@ public class TerraAutoMega extends AutoFramework {
         addTimedSetpoint(2.0, 0.6, 0.6, -8.5, 129, -95);
 
 
-        // TODO TEST
         addCustomCode(() -> {
             distanceSensors.ready();
             double distanceRight = distanceSensors.getRightDistance();

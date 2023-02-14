@@ -222,6 +222,7 @@ public interface AutoModuleUser extends RobotUser{
         odometry.setCurrentPoint(point1); odometry.setCurrentPoint(point1);
     };}
 
+    // TODO CHECK
     static CodeSeg SoftResetOdometryForCycle(Point point) {return  () -> {
         distanceSensors.ready();
         double front = distanceSensors.getFrontDistance();
@@ -249,6 +250,11 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule ReadyStart = new AutoModule(outtake.stageReadyStart(0.0));
 
     AutoModule HoldMiddle = new AutoModule(outtake.stageClose(0.18), outtake.stageMiddle(0.0));
+
+
+    // TODO TEST
+
+
 
     static Independent Cycle2(int i) { return new Independent() {
             @Override
@@ -287,7 +293,10 @@ public interface AutoModuleUser extends RobotUser{
                         if(distance < 50){ values.add(distance); }
                     });
                     double avgDis = Iterator.forAllAverage(values);
-                    Point point = new Point(((avgDis-49.0)*0.7)+(odometry.getX()*0.3), odometry.getY());
+                    double dis  = -distanceSensors.getFrontDistance()-cyclePoint2.getY();
+                    double y = odometry.getY();
+                    if(!Precision.range(dis-y, 10)){ dis = y; }
+                    Point point = new Point(((avgDis-49.0)*0.7)+(odometry.getX()*0.3), dis);
                     odometry.setPoseUsingOffset(point);
                 });
                 addSegment(0.3, 0.1, mecanumNonstopSetPoint,  x-0.5, 12+(i*0.1),0.1);
