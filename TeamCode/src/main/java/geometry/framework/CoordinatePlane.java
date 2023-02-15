@@ -63,6 +63,22 @@ public class CoordinatePlane {
         }
     }
 
+    public void removeRedundantPosesEqualTo(Pose pose){
+        boolean first = true;
+        for (int i = 0; i < objects.size(); i++) {
+            if (objects.get(i) instanceof Pose) {
+                if (((Pose) objects.get(i)).getDistanceTo(pose) < 1.0) {
+                    if(!first) {
+                        objects.remove(i);
+                        i--;
+                    }else{
+                        first = false;
+                    }
+                }
+            }
+        }
+    }
+
     public CoordinatePlane getCopy(){
         CoordinatePlane copy = new CoordinatePlane();
         Iterator.forAll(objects, o -> copy.add(o.getCopy()));

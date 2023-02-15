@@ -19,6 +19,7 @@ public class ThreeOdometry extends TwoOdometry {
     public final Point odometryCenter = new Point();
     private final Vector leftOdometryCenterToRobotCenter = new Vector(10.5, 13.0);
     private Point offset = new Point();
+    private Vector adjust = new Vector();
 //    private final Precision precision = new Precision();
 
 
@@ -105,17 +106,25 @@ public class ThreeOdometry extends TwoOdometry {
     }
 
     @Override
-    protected void resetObjects() { odometryCenter.set(new Point()); offset = new Point(); }
+    protected void resetObjects() { odometryCenter.set(new Point()); offset = new Point(); adjust = new Vector(); }
 
 
     @Override
     public Pose getPose() {
-        return super.getPose().getAdded(new Pose(offset, 0));
+        return super.getPose().getAdded(new Pose(offset, 0)).getSubtracted(new Pose(adjust.getPoint(), 0));
     }
 
     public void setPoseUsingOffset(Point pose){
         setOffset(pose.getSubtracted(super.getPose().getPoint()));
     }
+
+    public void adjust(Vector delta){ this.adjust = this.adjust.getAdded(delta); }
+    public void adjustUp(double delta){ adjust(new Vector(0,abs(delta)));}
+    public void adjustDown(double delta){ adjust(new Vector(0,-abs(delta)));}
+    public void adjustRight(double delta){ adjust(new Vector(abs(delta),0));}
+    public void adjustLeft(double delta){ adjust(new Vector(-abs(delta), 0));}
+
+
 
     public void setOffset(Point offset){
         this.offset = offset.getCopy();

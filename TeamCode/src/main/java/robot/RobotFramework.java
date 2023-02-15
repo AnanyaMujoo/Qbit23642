@@ -115,7 +115,6 @@ public class RobotFramework {
      */
     public void start() {
         rfsHandler.resume();
-//        Iterator.forAll(allRobotParts, RobotPart::reset); // TODO CHECK
     }
 
     public void update(){
@@ -173,6 +172,10 @@ public class RobotFramework {
     public void cancelIndependents(){ indHandler.stopCurrentIndependent(); setUserMainAndHalt(); }
     public void cancelMovements(){ rfsHandler.emptyQueue(); indHandler.stopCurrentIndependent(); machine.cancel(); setUserMainAndHalt(); }
     public void cancelAll(){ cancelMovements(); cancelBackgroundTasks();  }
+
+    public boolean isMachineRunning(){ return machine.isRunning(); }
+    public boolean isIndependentRunning(){ return bot.indHandler.isIndependentRunning(); }
+    public void pauseOrPlayMachine(){ machine.pauseOrPlay(); }
 
     /**
      * Set the user to main and halt all of the robot parts that aren't the main user

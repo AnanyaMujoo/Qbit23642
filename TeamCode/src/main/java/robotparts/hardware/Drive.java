@@ -24,7 +24,6 @@ public class Drive extends RobotPart {
     private CMotor fr, br, fl, bl;
 
     public boolean slow = false;
-    public boolean hasGyroBeenReset = false;
 //    private PServo retract;
 
 
@@ -44,7 +43,6 @@ public class Drive extends RobotPart {
 
 
         slow = false;
-        hasGyroBeenReset = false;
 //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
@@ -79,20 +77,20 @@ public class Drive extends RobotPart {
 
 
 
+    // TODO TEST
     public void moveSmooth(double f, double s, double t) {
         if(!bot.indHandler.isIndependentRunning()) {
             Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
             Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
             Linear rx = new Linear(1.0, 0.7, 1.0);
 
-            f = rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0);
-            s = !Precision.range(s, 0.7) || slow ? rm.fodd(s) * 0.6 : 0.0;
-            t = rt.fodd(t) * 0.7;
-
             if(slow) {
-                double slowScale = 0.7;
-                drive.move(f*slowScale, s*slowScale, t*slowScale);
+                double slowScale = 0.3;
+                drive.move(rm.fodd(f)*slowScale, rm.fodd(s)*slowScale, rt.fodd(t)*slowScale);
             }else{
+                f = rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0);
+                s = !Precision.range(s, 0.7) || slow ? rm.fodd(s) * 0.6 : 0.0;
+                t = rt.fodd(t) * 0.7;
                 drive.move(f, s, t);
             }
         }

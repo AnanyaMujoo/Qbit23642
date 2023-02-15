@@ -10,18 +10,22 @@ import automodules.AutoModuleUser;
 import auton.TerraAutoNormal;
 import auton.TerraAutoSafe;
 import autoutil.AutoFramework;
+import elements.Field;
+import elements.GameItems;
+import elements.Robot;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
 import geometry.position.Line;
 import geometry.polygons.PolyLine;
 import geometry.position.Pose;
+import teleutil.independent.Machine;
 
 public class AutoSimulator extends Drawer{
 
     private static final double maxMovingVelocity = 150; // cm per sec
     private static final double maxTurningVelocity = 340; // deg per sec
-    private static final double speedUp = 2.0;
-    private static final boolean developmentMode = false;
+    private static final double speedUp = 1.0;
+    private static final boolean developmentMode = true;
 
     public static void main(String[] args) {
 //        setAuto(new TerraAuto.TerraAutoMegaRight());
@@ -45,7 +49,10 @@ public class AutoSimulator extends Drawer{
 //        setAuto(AutoModuleUser.CycleAround, startCycleAround);
 
 //        setAuto(new TerraAutoNormal.RIGHT());
-        setAuto(new TerraAutoSafe.RIGHT());
+//        setAuto(new TerraAutoSafe.RIGHT());
+
+//        setAuto(AutoModuleUser.MachineCycle, startCycle);
+        setAuto(AutoModuleUser.MachineCycleExtra, startCycle);
 
 
         drawWindow(new AutoSimulator(), "Auto Simulator");
@@ -73,10 +80,12 @@ public class AutoSimulator extends Drawer{
     public static double currentTime = 0;
     public static ElapsedTime timer = new ElapsedTime();
 
-    private static void setAuto(AutoFramework auto) {
-        auto.setup();
-        autoPlane = auto.getAutoPlane();
-        startPose = auto.getStartPose().getCopy();
+    private static void setAuto(Machine machine, Pose startPose){ setAuto(machine.getAutoPlane(startPose), startPose); }
+    private static void setAuto(AutoFramework auto){ auto.setup(); setAuto(auto.getAutoPlane(), auto.getStartPose()); }
+
+    private static void setAuto(CoordinatePlane auto, Pose start) {
+        autoPlane = auto.getCopy();
+        startPose = start.getCopy();
         autoPlane.removeRedundantObjects();
 
         poses = autoPlane.getCopyOfPoses();
@@ -226,14 +235,14 @@ public class AutoSimulator extends Drawer{
 
 
 
-
-
+//
+//
 //    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - Field.tileWidth - GameItems.Cone.height - 16,180);
 //    private static final Pose startLower = new Pose(20.5,fieldSize/2.0 - 89,180);
 //    private static final Pose startUpper = new Pose(20.5,fieldSize/2.0 + 89,180);
 //    private static final Pose startMedium = new Pose(20.5 + 47.5 + 15.5, fieldSize/2.0 - 42.5, 180-24.0);
 //    private static final Pose startCycleAround = new Pose(20.5 + 66.5, fieldSize/2.0 - 23, 215);
 //    private static final Pose startCycleFirst = new Pose(20.5 + 47.5, fieldSize/2.0, 180);
-//    private static final Pose startCycle = new Pose(20.5 + 47.5 + 11.5, fieldSize/2.0, 180);
+    private static final Pose startCycle = new Pose(-AutoModuleUser.cyclePoint2.getY()+ Robot.halfLength, fieldSize/2.0, 90);
 
 }

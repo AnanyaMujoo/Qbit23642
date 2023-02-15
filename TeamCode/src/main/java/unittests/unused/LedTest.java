@@ -18,10 +18,10 @@ public class LedTest extends TeleUnitTest {
         /**
          * Link gamepad handlers
          */
-        gph1.link(Button.DPAD_UP, OnPressEventHandler.class, () -> bot.leds.setColor(OLed.LEDColor.OFF));
-        gph1.link(Button.DPAD_RIGHT, OnPressEventHandler.class, () -> bot.leds.setColor(OLed.LEDColor.GREEN));
-        gph1.link(Button.DPAD_DOWN, OnPressEventHandler.class, () -> bot.leds.setColor(OLed.LEDColor.RED));
-        gph1.link(Button.DPAD_LEFT, OnPressEventHandler.class, () -> bot.leds.setColor(OLed.LEDColor.ORANGE));
+//        gph1.link(Button.DPAD_UP, OnPressEventHandler.class, () -> bot.leds.setColor(OLed.LEDColor.OFF));
+//        gph1.link(Button.DPAD_RIGHT, OnPressEventHandler.class, () -> bot.leds.setColor(OLed.LEDColor.GREEN));
+//        gph1.link(Button.DPAD_DOWN, OnPressEventHandler.class, () -> bot.leds.setColor(OLed.LEDColor.RED));
+//        gph1.link(Button.DPAD_LEFT, OnPressEventHandler.class, () -> bot.leds.setColor(OLed.LEDColor.ORANGE));
     }
 
     @Override

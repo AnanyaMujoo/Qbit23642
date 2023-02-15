@@ -238,6 +238,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public Pose getStartPose(){ return startPose; }
 
+    public void setStartPose(Pose start){ startPose = start.getCopy(); }
+
     @Override
     public void stopAuto() {
         if(scanning && !haltCameraAfterInit){ camera.halt(); }

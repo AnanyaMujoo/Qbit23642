@@ -36,8 +36,6 @@ public class TerraOp extends Tele {
 
         fieldPlacement = FieldPlacement.LOWER;
 
-        kappaBefore.disable();
-
         outtake.changeArmPosition("start", 0.06);
 
         /**
@@ -49,18 +47,17 @@ public class TerraOp extends Tele {
         gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceGroundTele);}else{bot.addAutoModule(BackwardGroundTele.check());}}, () -> bot.addAutoModule(BackwardGrabGroundTele));
 
 
-        gph1.link(DPAD_DOWN, () -> !outtake.cycleMachine, () -> {bot.cancelAutoModules();bot.addAutoModule(ForwardTeleBottom);}, () -> outtake.skipMachine = true);
-        gph1.link(DPAD_UP, () -> !outtake.cycleMachine, () -> {bot.cancelAutoModules(); bot.addAutoModule(UprightCone);}, ()-> outtake.pauseMachine = !outtake.pauseMachine);
-        gph1.link(DPAD_LEFT, () -> {lift.high = true; bot.addAutoModule(TakeOffCone);});
+        gph1.link(DPAD_DOWN, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); bot.addAutoModule(ForwardTeleBottom);}, () -> odometry.adjustDown(1.0));
+        gph1.link(DPAD_UP, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); bot.addAutoModule(UprightCone);}, () -> odometry.adjustUp(1.0));
+        gph1.link(DPAD_LEFT, () -> !bot.isMachineRunning(), () -> {lift.high = true; bot.addAutoModule(TakeOffCone);}, () -> odometry.adjustLeft(1.0));
+        gph1.link(DPAD_RIGHT, () -> !bot.isMachineRunning(), () -> {}, () -> odometry.adjustRight(1.0));
 
         gph1.link(RIGHT_BUMPER, () -> outtakeStatus.modeIs(PLACING), () -> lift.adjustHolderTarget(2.5), () -> lift.adjustHolderTarget(5.0));
         gph1.link(LEFT_BUMPER, () -> outtakeStatus.modeIs(PLACING), () -> lift.adjustHolderTarget(-2.5), () -> lift.adjustHolderTarget(-5.0));
 
 
-        gph1.link(LEFT_TRIGGER, () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }});
-
-
-        gph1.link(RIGHT_TRIGGER, () -> drive.slow = !drive.slow);
+        gph1.link(LEFT_TRIGGER, () -> !MachineCycle.isRunning(), () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }}, MachineCycle::skipToLast);
+        gph1.link(RIGHT_TRIGGER, () -> !bot.isMachineRunning(), () -> drive.slow = !drive.slow, bot::pauseOrPlayMachine);
 
 //        gph1.link(RIGHT_TRIGGER, () -> drive.slow = true);
 //        gph1.link(RIGHT_TRIGGER, OnNotHeldEventHandler.class, () -> drive.slow = false);
@@ -70,7 +67,7 @@ public class TerraOp extends Tele {
          */
         gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
         gph1.link(Button.B, MachineCycle, AUTOMATED);
-        gph1.link(Button.X, () -> {outtake.cycleMachine = false; outtake.pauseMachine = false; outtake.skipMachine = false;  bot.cancelMovements(); }, AUTOMATED);
+        gph1.link(Button.X, bot::cancelMovements, AUTOMATED);
         gph1.link(Button.Y, MachineCycleExtra, AUTOMATED);
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
@@ -80,6 +77,7 @@ public class TerraOp extends Tele {
 //        gph1.link(LEFT_TRIGGER, AutoModuleUser::disableKappa, AUTOMATED);
 
         gph1.link(DPAD_DOWN, () -> {bot.cancelAutoModules(); bot.addAutoModule(ResetLift);}, AUTOMATED);
+
 //        gph1.link(DPAD_UP, RetractOdometry, AUTOMATED);
 //        gph1.link(DPAD_RIGHT, EngageOdometry, AUTOMATED);
 
@@ -114,25 +112,25 @@ public class TerraOp extends Tele {
 
     @Override
     public void loopTele() {
-        double cutoff = 90;
-        if(time > cutoff){
-            if(time < cutoff+20) {
-                Linear rate = new Linear(0.5, 1.0, 20.0);
-                leds.pulse(OLed.LEDColor.GREEN, OLed.LEDColor.RED, rate.f(time - cutoff));
-            }else{
-                leds.setColor(OLed.LEDColor.RED);
-            }
-        }else if(!bot.indHandler.isIndependentRunning()){
-            if(heightMode.modeIs(HIGH)){
-                leds.pulse(OLed.LEDColor.GREEN, 0.5);
-            }else if(heightMode.modeIs(MIDDLE)){
-                leds.pulse(OLed.LEDColor.ORANGE, 0.5);
-            }else if(heightMode.modeIs(LOW)){
-                leds.pulse(OLed.LEDColor.RED, 0.5);
-            }else if(heightMode.modeIs(GROUND)){
-                leds.setColor(OLed.LEDColor.OFF);
-            }
-        }
+//        double cutoff = 90;
+//        if(time > cutoff){
+//            if(time < cutoff+20) {
+//                Linear rate = new Linear(0.5, 1.0, 20.0);
+//                leds.pulse(OLed.LEDColor.GREEN, OLed.LEDColor.RED, rate.f(time - cutoff));
+//            }else{
+//                leds.setColor(OLed.LEDColor.RED);
+//            }
+//        }else if(!bot.indHandler.isIndependentRunning()){
+//            if(heightMode.modeIs(HIGH)){
+//                leds.pulse(OLed.LEDColor.GREEN, 0.5);
+//            }else if(heightMode.modeIs(MIDDLE)){
+//                leds.pulse(OLed.LEDColor.ORANGE, 0.5);
+//            }else if(heightMode.modeIs(LOW)){
+//                leds.pulse(OLed.LEDColor.RED, 0.5);
+//            }else if(heightMode.modeIs(GROUND)){
+//                leds.setColor(OLed.LEDColor.OFF);
+//            }
+//        }
 
         drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
 

@@ -30,7 +30,7 @@ public interface RobotUser {
     Drive drive = new Drive();
     Lift lift = new Lift();
     Outtake outtake = new Outtake();
-    Leds leds = new Leds();
+//    Leds leds = new Leds();
     DistanceSensors distanceSensors = new DistanceSensors();
     GyroSensors gyro = new GyroSensors();
     Cameras camera = new Cameras();
