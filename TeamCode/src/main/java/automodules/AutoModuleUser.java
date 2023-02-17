@@ -221,16 +221,6 @@ public interface AutoModuleUser extends RobotUser{
 
     static CodeSeg DriveMode(boolean slow){return () -> {drive.slow = slow;};}
 
-//    static CodeSeg SoftResetOdometryForCycle(Point point) {return  () -> {
-//        distanceSensors.ready();
-//        double front = distanceSensors.getFrontDistance();
-//        double right = distanceSensors.getRightDistance();
-//        if(Precision.range(front, 45, 51) && Precision.range(right, 44, 50)){
-//            Point point1 = new Point(right - point.getX(),-front - point.getY());
-//            odometry.setPoseUsingOffset(point1);
-//        }
-//    };}
-
     static AutoModule BackwardCycle(Height height, double offset) {return new AutoModule(
             outtake.stageClose(0.18),
             outtake.stageReadyEnd(0.0),
@@ -249,20 +239,6 @@ public interface AutoModuleUser extends RobotUser{
             lift.moveTime(-0.7, 0.1).attach(outtake.stageOpen(0.0)),
             lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.05))
     );
-    // TODO FIX ATTACH
-
-//    AutoModule ForwardCycle = new AutoModule(
-//            outtake.stageEnd(0.1),
-//            Stage.attach(lift.moveTime(-0.7, 0.15), outtake.stageOpen(0.0)),
-////            lift.moveTime(-0.7, 0.15),
-//            outtake.stageStart(0.0),
-//            lift.stageLift(1.0, 0)
-//
-//                    //.attach(outtake.stageOpen(0.0)),
-////            Stage.attach(lift.stageLift(1.0, 0), outtake.stageStartAfter(0.05))
-////            lift.stageLift(1.0,0)
-//                    //.attach(outtake.stageStartAfter(0.05))
-//    );
 
 
     AutoModule StageStart = new AutoModule(outtake.stageStart(0.0));

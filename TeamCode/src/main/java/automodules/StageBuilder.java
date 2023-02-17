@@ -106,7 +106,14 @@ public class StageBuilder {
     protected final Stage customExit(double p, ReturnCodeSeg<Boolean> exit){ return new Stage(usePart(), main(p), new Exit(exit), stop(), returnPart()); }
     protected final Stage customTime(CodeSeg m, double t){ return new Stage(usePart(), new Main(m), t != 0.0 ? exitTime(t) : exitTime(0.05), stop(), returnPart()); }
     protected final Stage customTime(Main m, double t){ return new Stage(usePart(), m, t != 0.0 ? exitTime(t) : exitTime(0.05), stop(), returnPart()); }
-    protected final Stage customTimeAfter(CodeSeg m, double t){ return new Stage(usePart(), new Main(()-> {}), t != 0.0 ? exitTime(t) : exitTime(0.05), new Stop(m), returnPart()); }
+    protected final Stage customTimeAfter(CodeSeg m, double t){
+        Boolean[] exit = {false};
+        return new Stage(usePart(), new Initial(() -> {exit[0] = false;}), new Main(()-> {
+            if(bot.rfsHandler.getTimer().seconds() > (t != 0 ? t : 0.05)){
+                exit[0] = true;
+                m.run();
+            }
+        }), new Exit(() -> exit[0]), returnPart()); }
     protected final Stage customContinuousTime(ReturnCodeSeg<PServo> servo1, ReturnCodeSeg<PServo> servo2, String target, double t){ return new Stage(usePart(), new Initial(() -> {servo1.run().setContinuousTarget(target); servo2.run().setContinuousTarget(target);}), new Main(() -> {servo1.run().moveContinuous(t); servo2.run().moveContinuous(t);}), RobotPart.exitTime(t), returnPart());}
 
     protected void setTarget(double target){}
