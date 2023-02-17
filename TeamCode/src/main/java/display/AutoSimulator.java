@@ -243,6 +243,6 @@ public class AutoSimulator extends Drawer{
 //    private static final Pose startMedium = new Pose(20.5 + 47.5 + 15.5, fieldSize/2.0 - 42.5, 180-24.0);
 //    private static final Pose startCycleAround = new Pose(20.5 + 66.5, fieldSize/2.0 - 23, 215);
 //    private static final Pose startCycleFirst = new Pose(20.5 + 47.5, fieldSize/2.0, 180);
-    private static final Pose startCycle = new Pose(-AutoModuleUser.cyclePoint2.getY()+ Robot.halfLength, fieldSize/2.0, 90);
+    private static final Pose startCycle = new Pose(-AutoModuleUser.cyclePoint.getY()+ Robot.halfLength, fieldSize/2.0, 90);
 
 }

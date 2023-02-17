@@ -11,6 +11,7 @@ import geometry.framework.Point;
 import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.codeseg.CodeSeg;
+import util.codeseg.ParameterCodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.codeseg.ReturnParameterCodeSeg;
 import util.template.Iterator;
@@ -25,7 +26,7 @@ public class Machine {
     /**
      * Stage number machine is on
      */
-    public volatile int stageNumber = 0;
+    public int stageNumber = 0;
 
     public volatile boolean pause = false;
     public volatile boolean waiting = false;
@@ -66,7 +67,6 @@ public class Machine {
 
     public boolean isRunning(){ return running; }
 
-    // TODO FIX
     public CoordinatePlane getAutoPlane(Pose startPose){
         CoordinatePlane plane = new CoordinatePlane();
         Iterator.forAll(independents, i -> {i.setStartPose(startPose); i.setup(); plane.addAll(i.getAutoPlane().getAll());});
@@ -82,14 +82,13 @@ public class Machine {
     public void update(){
         if (running) {
             if(waiting){
-                if(pause){
+                if(skip){
+                    stageNumber = skipTo;
+                    skip = false;
+                    waiting = false;
+                }else if(!pause){
                     stageNumber++;
                     waiting = false;
-                    if(stageNumber < stages.size()){
-                        if(skip && (stageNumber-1) != skipTo){ stageNumber = skipTo; }
-                    }else{
-                        cancel();
-                    }
                 }
             }else if (stageNumber < stages.size()) {
                 Stage stage = stages.get(stageNumber);
@@ -116,4 +115,9 @@ public class Machine {
      * Cancel the machine
      */
     public void cancel(){ pause = false; waiting = false; skip = false; skipTo = 0; running = false; stageNumber = 0; }
+
+    @FunctionalInterface
+    public interface DoubleParameterCodeSeg<P, Q> {
+        void run(P input1, Q input2);
+    }
 }

@@ -75,9 +75,6 @@ public class Drive extends RobotPart {
         bl.setPowerRaw(f - s + t);
     }
 
-
-
-    // TODO TEST
     public void moveSmooth(double f, double s, double t) {
         if(!bot.indHandler.isIndependentRunning()) {
             Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
@@ -85,8 +82,8 @@ public class Drive extends RobotPart {
             Linear rx = new Linear(1.0, 0.7, 1.0);
 
             if(slow) {
-                double slowScale = 0.3;
-                drive.move(rm.fodd(f)*slowScale, rm.fodd(s)*slowScale, rt.fodd(t)*slowScale);
+                double slowScale = 0.5;
+                drive.move(rm.fodd(f*slowScale), rm.fodd(s*slowScale), rt.fodd(t*slowScale));
             }else{
                 f = rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0);
                 s = !Precision.range(s, 0.7) || slow ? rm.fodd(s) * 0.6 : 0.0;

@@ -109,6 +109,74 @@ public class Stage {
         return this;
     }
 
+
+
+    public static Stage attach(Stage stage1, Stage stage2){
+        final int[] exitCode = {0};
+        return new Stage(){
+            @Override
+            public void start() {
+                stage1.start(); stage2.start(); exitCode[0] = 0;
+            }
+
+            @Override
+            public void loop() {
+                switch (exitCode[0]){
+                    case 0:
+                        stage1.loop();
+                        stage2.loop();
+                        boolean stop1 = stage1.shouldStop();
+                        boolean stop2 = stage2.shouldStop();
+                        if(stop1 && stop2){
+                            exitCode[0] = 3;
+                        }else if(stop1){
+                            exitCode[0] = 1;
+                        }else if(stop2){
+                            exitCode[0] = 2;
+                        }
+                        break;
+                    case 1:
+                        stage2.loop();
+                        if(stage2.shouldStop()){
+                            stage2.runOnStop();
+                            exitCode[0] = 3;
+                        }
+                        break;
+                    case 2:
+                        stage1.loop();
+                        if(stage1.shouldStop()){
+                            stage1.runOnStop();
+                            exitCode[0] = 3;
+                        }
+                        break;
+                }
+            }
+
+            @Override
+            public boolean shouldStop() {
+                return exitCode[0] == 3;
+            }
+
+            @Override
+            public void runOnStop() {
+                switch (exitCode[0]){
+                    case 0:
+                        stage1.runOnStop(); stage2.runOnStop();
+                        break;
+                    case 1:
+                        stage2.runOnStop();
+                        break;
+                    case 2:
+                        stage1.runOnStop();
+                        break;
+                }
+                exitCode[0] = 0;
+            }
+        };
+    }
+
+    // TODO FIX PROBLEM WITH ATTACH
+
     /**
      * The new stage "attaches" to the old one. NOTE: This is different than combine, because the exit condition of the new stage overlaps
      * [ --- old stage --- ]
