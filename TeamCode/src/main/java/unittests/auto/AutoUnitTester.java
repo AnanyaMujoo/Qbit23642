@@ -11,6 +11,7 @@ import elements.FieldPlacement;
 import elements.FieldSide;
 import unittests.UnitTester;
 import unittests.auto.framework.VuforiaTest;
+import unittests.auto.framework.calibration.ArmRestPowerCalib;
 import unittests.auto.framework.calibration.OdometryCalib;
 import unittests.auto.framework.calibration.RestPowerCalib;
 import unittests.auto.framework.calibration.VoltageScaleCalib;
@@ -19,7 +20,7 @@ import unittests.auto.framework.movement.OdometryTest;
 import util.condition.Status;
 
 @SuppressWarnings("ALL")
-//@Autonomous(name = "AutoUnitTester", group = "UnitTests")
+@Autonomous(name = "AutoUnitTester", group = "UnitTests")
 public class AutoUnitTester extends Auto implements UnitTester {
     /**
      * Status of this unit tester
@@ -49,6 +50,7 @@ public class AutoUnitTester extends Auto implements UnitTester {
 //        add(new VuforiaTest());
 //        add(new OdometryCalib());
 //        add(new RestPowerCalib());
+        add(new ArmRestPowerCalib());
 
         /**
          * Framework (needs hardware, in movement package)
@@ -67,7 +69,7 @@ public class AutoUnitTester extends Auto implements UnitTester {
 //        add(new OdometryTest.StrafeTest());
 //        add(new OdometryTest.TurnTest());
 
-        add(new DistanceSensorStraightenTest());
+//        add(new DistanceSensorStraightenTest());
 
     }
 

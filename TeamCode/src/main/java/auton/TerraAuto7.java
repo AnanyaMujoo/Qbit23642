@@ -43,6 +43,8 @@ public class TerraAuto7 extends AutoFramework {
         fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90);
     }
 
+    // TODO MAKE
+
     private double x, s, y;
 
     @Override

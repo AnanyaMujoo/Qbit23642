@@ -48,7 +48,7 @@ public class RobotFunctions {
                  * If the stage has not started start it,
                  * Then run the loop code
                  */
-                if (!Objects.requireNonNull(s).hasStarted()) {
+                if (Objects.requireNonNull(s).hasNotStartedYet()) {
                     s.start();
                     synchronized (timer) {
                         timer.reset();

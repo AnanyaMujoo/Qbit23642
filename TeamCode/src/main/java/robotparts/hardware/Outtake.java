@@ -36,8 +36,8 @@ public class Outtake extends RobotPart {
         armr.addPosition("middle", 0.38);
         arml.addPosition("middle", 0.38);
 
-        arml.addPosition("endHalf", 0.73);
-        armr.addPosition("endHalf", 0.73);
+        arml.addPosition("endHalf", 0.71);
+        armr.addPosition("endHalf", 0.71);
 
         arml.changePosition("end", 0.84);
         armr.changePosition("end", 0.84);
@@ -92,7 +92,10 @@ public class Outtake extends RobotPart {
     public Stage stageReadyStartAfter(double t){ return super.customTimeAfter(this::readyStart, t); }
 
     public Stage stage(double pos, double t){ return super.customTime(() -> {unFlip(); arm(pos);},  t); }
+
+    public Stage stageWithFlip(double pos, double t){ return super.customTime(() -> {flip(); arm(pos);},  t); }
     public Stage stageAfter(double pos, double t){ return super.customTimeAfter(() -> {unFlip(); arm(pos);},  t); }
+    public Stage stageWithFlipAfter(double pos, double t){ return super.customTimeAfter(() -> {flip(); arm(pos);},  t); }
 
     public Stage stageEndContinuous(double t){ return super.customContinuousTime(() -> armr, () -> arml, "end", t); }
 

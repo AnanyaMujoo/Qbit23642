@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import robotparts.RobotPart;
+import teleop.TerraOp;
+import util.iter.FinalInteger;
 import util.template.Iterator;
 
 public class Stage {
@@ -13,7 +15,7 @@ public class Stage {
      */
     private final ArrayList<StageComponent> components = new ArrayList<>();
     /**
-     * Has the stage started
+     * Has the stage started?
      */
     private volatile boolean hasStarted = false;
     /**
@@ -26,13 +28,14 @@ public class Stage {
      * @param stageComponents
      */
     public Stage(StageComponent...stageComponents){
-        components.addAll(Arrays.asList(stageComponents));
-        addDefaults();
+        components.addAll(Arrays.asList(stageComponents)); addDefaults();
     }
 
     public Stage(ArrayList<StageComponent> stageComponents){
         components.addAll(stageComponents); addDefaults();
     }
+
+    private Stage(boolean defaults, boolean other){}
 
     /**
      * Create a stage that is a pause
@@ -46,8 +49,8 @@ public class Stage {
      * Has the stage started
      * @return hasStarted
      */
-    public boolean hasStarted(){
-        return hasStarted;
+    public boolean hasNotStartedYet(){
+        return !hasStarted;
     }
 
     /**
@@ -99,83 +102,8 @@ public class Stage {
         }
     }
 
-    public Stage combine(Stage stage){
-        Iterator.forAll(stage.components, components::add);
-        return this;
-    }
-
-    public Stage combine(StageComponent... stageComponents){
-        components.addAll(Arrays.asList(stageComponents));
-        return this;
-    }
-
-
-//
-//    public static Stage attach(Stage stage1, Stage stage2){
-//        final int[] exitCode = {0};
-//        return new Stage(){
-//            @Override
-//            public void start() {
-//                stage1.start(); stage2.start(); exitCode[0] = 0;
-//            }
-//
-//            @Override
-//            public void loop() {
-//                switch (exitCode[0]){
-//                    case 0:
-//                        stage1.loop();
-//                        stage2.loop();
-//                        boolean stop1 = stage1.shouldStop();
-//                        boolean stop2 = stage2.shouldStop();
-//                        if(stop1 && stop2){
-//                            exitCode[0] = 3;
-//                        }else if(stop1){
-//                            exitCode[0] = 1;
-//                        }else if(stop2){
-//                            exitCode[0] = 2;
-//                        }
-//                        break;
-//                    case 1:
-//                        stage2.loop();
-//                        if(stage2.shouldStop()){
-//                            stage2.runOnStop();
-//                            exitCode[0] = 3;
-//                        }
-//                        break;
-//                    case 2:
-//                        stage1.loop();
-//                        if(stage1.shouldStop()){
-//                            stage1.runOnStop();
-//                            exitCode[0] = 3;
-//                        }
-//                        break;
-//                }
-//            }
-//
-//            @Override
-//            public boolean shouldStop() {
-//                return exitCode[0] == 3;
-//            }
-//
-//            @Override
-//            public void runOnStop() {
-//                switch (exitCode[0]){
-//                    case 0:
-//                        stage1.runOnStop(); stage2.runOnStop();
-//                        break;
-//                    case 1:
-//                        stage2.runOnStop();
-//                        break;
-//                    case 2:
-//                        stage1.runOnStop();
-//                        break;
-//                }
-//                exitCode[0] = 0;
-//            }
-//        };
-//    }
-
-    // TODO TEST
+    public Stage combine(Stage stage){ Iterator.forAll(stage.components, components::add); return this; }
+    public Stage combine(StageComponent... stageComponents){ components.addAll(Arrays.asList(stageComponents)); return this; }
 
     /**
      * The new stage "attaches" to the old one. NOTE: This is different than combine, because the exit condition of the new stage overlaps
@@ -190,18 +118,22 @@ public class Stage {
     public Stage attach(Stage stage){
         final ArrayList<StageComponent> oldComponents = new ArrayList<>(this.components);
         final ArrayList<StageComponent> newComponents = new ArrayList<>(stage.components);
-        final int[] exitCode = {0};
-        return new Stage(oldComponents){
+        FinalInteger exitCode = new FinalInteger();
+        return new Stage(false, false){
             @Override
-            public void loop() { switch (exitCode[0]){
-                case 0: Iterator.forAll(oldComponents, StageComponent::loop); Iterator.forAll(newComponents, StageComponent::loop); if(Iterator.forAllConditionOR(newComponents, StageComponent::shouldStop)){ exitCode[0] = 1; } if(Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop)){ exitCode[0] = 3; } break;
-                case 1: Iterator.forAll(newComponents, StageComponent::runOnStop); exitCode[0] = 2; break;
-                case 2: Iterator.forAll(oldComponents, StageComponent::loop); if(Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop)){ exitCode[0] = 5; } break;
-                case 3: Iterator.forAll(oldComponents, StageComponent::runOnStop); exitCode[0] = 4; break;
-                case 4: Iterator.forAll(newComponents, StageComponent::loop); if(Iterator.forAllConditionOR(newComponents, StageComponent::shouldStop)){ exitCode[0] = 5; } break;
+            public void start() { Iterator.forAll(oldComponents, StageComponent::start); Iterator.forAll(newComponents, StageComponent::start); super.hasStarted = true; }
+            @Override
+            public void loop() { switch (exitCode.get()) {
+                case 0: Iterator.forAll(oldComponents, StageComponent::loop); Iterator.forAll(newComponents, StageComponent::loop); boolean oldStop = Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop); boolean newStop = Iterator.forAllConditionOR(newComponents, StageComponent::shouldStop); if (oldStop && newStop) { Iterator.forAll(oldComponents, StageComponent::runOnStop); Iterator.forAll(newComponents, StageComponent::runOnStop); exitCode.set(3); } else if (oldStop) { Iterator.forAll(oldComponents, StageComponent::runOnStop); exitCode.set(1); } else if (newStop) { Iterator.forAll(newComponents, StageComponent::runOnStop); exitCode.set(2); } break;
+                case 1: Iterator.forAll(newComponents, StageComponent::loop); if (Iterator.forAllConditionOR(newComponents, StageComponent::shouldStop)) { Iterator.forAll(newComponents, StageComponent::runOnStop); exitCode.set(3); } break;
+                case 2: Iterator.forAll(oldComponents, StageComponent::loop); if (Iterator.forAllConditionOR(oldComponents, StageComponent::shouldStop)) { Iterator.forAll(oldComponents, StageComponent::runOnStop); exitCode.set(3); } break;
             }}
-            @Override public boolean shouldStop(){ return exitCode[0] == 5; }
-            @Override public void runOnStop() { super.runOnStop(); exitCode[0] = 0; }
-        }.combine(stage);
+            @Override public boolean shouldStop(){ return exitCode.equals(3); }
+            @Override public void runOnStop() { switch (exitCode.get()){
+                case 0: Iterator.forAll(oldComponents, StageComponent::runOnStop); Iterator.forAll(newComponents, StageComponent::runOnStop); break;
+                case 1: Iterator.forAll(newComponents, StageComponent::runOnStop); break;
+                case 2: Iterator.forAll(oldComponents, StageComponent::runOnStop); break;
+            } super.hasStarted = false; exitCode.set(0); }
+        };
     }
 }

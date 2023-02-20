@@ -30,6 +30,15 @@ public class TerraAutoSafe extends AutoFramework {
         s = 0;
     }
 
+    // TODO FIX TURNING AT END (MAKE LIFT GO UP LATER)
+    // TODO FIX PATH TAKEN
+    // TODO CREATE OTHER SIDE
+    // TODO FIX GRABBING FROM STACK
+
+    // TODO FIX CYCLE MACHINE
+    // TODO FIX Y MACHINE
+    // TODO FIX CYCLE STACK MACHINE
+
     AutoModule BackwardFirst = new AutoModule(
             lift.changeCutoff(1.0),
             outtake.stageMiddle(0.0),

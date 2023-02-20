@@ -114,6 +114,15 @@ public class StageBuilder {
                 m.run();
             }
         }), new Exit(() -> exit[0]), returnPart()); }
+//
+//    protected final Stage customTimeAfter(CodeSeg m, double t){
+//        Boolean[] exit = {false};
+//        return new Stage(usePart(), new Initial(() -> {exit[0] = false;}), new Main(()-> {
+//            if(t < 0.05 || bot.rfsHandler.getTimer().seconds() > t){
+//                exit[0] = true;
+//                m.run();
+//            }
+//        }),  t < 0.05 ? RobotPart.exitAlways() : new Exit(() -> exit[0]) , returnPart()); }
     protected final Stage customContinuousTime(ReturnCodeSeg<PServo> servo1, ReturnCodeSeg<PServo> servo2, String target, double t){ return new Stage(usePart(), new Initial(() -> {servo1.run().setContinuousTarget(target); servo2.run().setContinuousTarget(target);}), new Main(() -> {servo1.run().moveContinuous(t); servo2.run().moveContinuous(t);}), RobotPart.exitTime(t), returnPart());}
 
     protected void setTarget(double target){}

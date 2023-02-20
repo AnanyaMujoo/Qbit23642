@@ -42,8 +42,8 @@ public class TerraOp extends Tele {
          * Gamepad 1 Normal
          */
         gph1.link(Button.Y, heightMode.isMode(HIGH), () -> {if(lift.high){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceHighTele);}else{bot.addAutoModule(BackwardHighTele.check());}}, () -> bot.addAutoModule(BackwardGrabHighTele));
-        gph1.link(Button.X, heightMode.isMode(MIDDLE), () -> bot.addAutoModule(BackwardMiddleTele.check()), () -> bot.addAutoModule(BackwardGrabMiddleTele));
-        gph1.link(Button.B, heightMode.isMode(LOW), () -> bot.addAutoModule(BackwardLowTele.check()), () -> bot.addAutoModule(BackwardGrabLowTele));
+        gph1.link(Button.X, heightMode.isMode(MIDDLE), () -> {if(lift.mid){ bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceMiddleTele);}else{ bot.addAutoModule(BackwardMiddleTele.check());}}, () -> bot.addAutoModule(BackwardGrabMiddleTele));
+        gph1.link(Button.B, heightMode.isMode(LOW), () -> {if(lift.low){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceLowTele);}else{bot.addAutoModule(BackwardLowTele.check());}}, () -> bot.addAutoModule(BackwardGrabLowTele));
         gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceGroundTele);}else{bot.addAutoModule(BackwardGroundTele.check());}}, () -> bot.addAutoModule(BackwardGrabGroundTele));
 
 

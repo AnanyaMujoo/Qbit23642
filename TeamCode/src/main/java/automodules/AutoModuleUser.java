@@ -77,9 +77,9 @@ public interface AutoModuleUser extends RobotUser{
 
     AutoModule ForwardTeleMiddle = new AutoModule(
             outtakeStatus.ChangeMode(DRIVING),
-            outtake.stageEnd(0.1),
+            outtake.stageEnd(0.15),
             outtake.stageOpen(0.0),
-            drive.moveTime(1.0, 0.0, 0.0, 0.22),
+            drive.moveTime(1.0, 0.0, 0.0, 0.2),
             outtake.stageStart(0.0),
             lift.resetCutoff(),
             lift.stageLift(1.0,0)
@@ -87,9 +87,9 @@ public interface AutoModuleUser extends RobotUser{
 
     AutoModule ForwardTeleLow = new AutoModule(
             outtakeStatus.ChangeMode(DRIVING),
-            outtake.stageEnd(0.1),
+            outtake.stageEnd(0.15),
             outtake.stageOpen(0.0),
-            drive.moveTime(1.0, 0.0, 0.0, 0.25),
+            drive.moveTime(1.0, 0.0, 0.0, 0.2),
             outtake.stageStart(0.0),
             lift.resetCutoff(),
             lift.stageLift(1.0,0)
@@ -117,30 +117,46 @@ public interface AutoModuleUser extends RobotUser{
             lift.changeHigh(true),
             outtake.stageClose(0.22),
             lift.moveTimeBack(-0.2, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.3;}else{return 0.0;}}),
-            outtake.stageMiddle(0.0),
+            outtake.stageWithFlip(0.55,0.0),
             lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2)
     );
 
     OutputList BackwardHighTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabHighTele).addOption(PLACING, ForwardTeleHigh);
 
+
+    AutoModule BackwardPlaceMiddleTele = new AutoModule(
+            lift.changeMid(false),
+            outtake.stageReadyEnd(0.0),
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2)
+    );
+
     AutoModule BackwardGrabMiddleTele = new AutoModule(
             outtakeStatus.ChangeMode(PLACING),
             heightMode.ChangeMode(MIDDLE),
+            lift.changeMid(true),
             outtake.stageClose(0.22),
             lift.moveTimeBack(-0.2, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.3;}else{return 0.0;}}),
-            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(outtake.stageReadyEndAfter(0.1))
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(outtake.stageWithFlipAfter(0.55,0.1))
     );
 
     OutputList BackwardMiddleTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabMiddleTele).addOption(PLACING, ForwardTeleMiddle);
 
+    AutoModule BackwardPlaceLowTele = new AutoModule(
+            lift.changeLow(false),
+            outtake.stageReadyEnd(0.0),
+            lift.stageLift(1.0, heightMode.getValue(LOW)+1)
+    );
+
+
     AutoModule BackwardGrabLowTele = new AutoModule(
             outtakeStatus.ChangeMode(PLACING),
             heightMode.ChangeMode(LOW),
+            lift.changeLow(true),
             outtake.stageClose(0.22),
             lift.moveTimeBack(-0.2, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.3;}else{return 0.0;}}),
             lift.changeCutoff(0.0),
-            outtake.stageReadyEndAfter(0.0),
-            lift.stageLift(1.0, heightMode.getValue(LOW)+2)
+            outtake.stageWithFlip(0.55,0.0),
+            lift.stageLift(1.0, heightMode.getValue(LOW)+1)
     );
 
     OutputList BackwardLowTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabLowTele).addOption(PLACING, ForwardTeleLow);
@@ -234,12 +250,6 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0, heightMode.getValue(height)+offset)
     );}
 
-    AutoModule ForwardCycle = new AutoModule(
-            outtake.stageEnd(0.1),
-            lift.moveTime(-0.7, 0.1).attach(outtake.stageOpen(0.0)),
-            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.05))
-    );
-
 
     AutoModule StageStart = new AutoModule(outtake.stageStart(0.0));
     AutoModule ReadyStart = new AutoModule(outtake.stageReadyStart(0.0));
@@ -258,6 +268,14 @@ public interface AutoModuleUser extends RobotUser{
             addCustomCode(ResetOdometryForCycle(cyclePoint), 0.4);
         }
     };
+
+
+    AutoModule ForwardCycle = new AutoModule(
+            outtake.stageEnd(0.1),
+            outtake.stageOpen(0.0),
+            lift.moveTime(-0.7, 0.1),
+            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.0))
+    );
 
     static Independent Cycle(int i) {return new Independent() {
         @Override

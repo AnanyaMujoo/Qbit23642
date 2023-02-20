@@ -33,6 +33,8 @@ public class Lift extends RobotPart {
     public int stackedMode = 0;
     public boolean circuitMode = false;
     public boolean high = false;
+    public boolean mid = false;
+    public boolean low = false;
     public boolean ground = false;
     public boolean stacked = false;
 
@@ -42,26 +44,31 @@ public class Lift extends RobotPart {
         motorLeft = create("lir", ElectronicType.PMOTOR_REVERSE);
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
-        motorRight.usePositionHolder(0.18, 0.18);
-        motorLeft.usePositionHolder(0.18, 0.18);
+        motorRight.usePositionHolder(0.4, 0.1);
+        motorLeft.usePositionHolder(0.4, 0.1);
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
         high = false;
+        mid = false;
+        low = false;
         stacked = false;
         ground = false;
         stackedMode = 0;
     }
 
-    public Stage changeHigh(boolean high){
-        return customTime(() -> this.high = high, 0.0);
-    }
+    public Stage changeHigh(boolean high){ return customTime(() -> this.high = high, 0.0); }
+
+    public Stage changeMid(boolean mid){ return customTime(() -> this.mid = mid, 0.0); }
+
+    public Stage changeLow(boolean low){ return customTime(() -> this.low = low, 0.0); }
+
     public Stage changeGround(boolean ground){ return customTime(() -> this.ground = ground, 0.0);}
 
 
     public Stage changeCutoff(double cutoffPosition){
-        return customTime(() -> currentCutoffPosition = cutoffPosition, 0.01);
+        return customTime(() -> currentCutoffPosition = cutoffPosition, 0.0);
     }
-    public Stage resetCutoff(){ return customTime( () -> {if(!heightMode.modeIs(GROUND) && !heightMode.modeIs(LOW)){ currentCutoffPosition = cutoffPosition; }}, 0.01); }
+    public Stage resetCutoff(){ return customTime( () -> currentCutoffPosition = cutoffPosition, 0.0); }
 
     @Override
     public void move(double p) {

@@ -7,12 +7,9 @@ import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import geometry.framework.CoordinatePlane;
-import geometry.framework.Point;
 import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.codeseg.CodeSeg;
-import util.codeseg.ParameterCodeSeg;
-import util.codeseg.ReturnCodeSeg;
 import util.codeseg.ReturnParameterCodeSeg;
 import util.template.Iterator;
 
@@ -92,7 +89,7 @@ public class Machine {
                 }
             }else if (stageNumber < stages.size()) {
                 Stage stage = stages.get(stageNumber);
-                if (!stage.hasStarted()) {
+                if (stage.hasNotStartedYet()) {
                     stage.start();
                 }
                 stage.loop();
