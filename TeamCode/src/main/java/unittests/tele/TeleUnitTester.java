@@ -32,7 +32,7 @@ import unittests.tele.sensor.JunctionScannerTest;
 import static global.General.*;
 
 @SuppressWarnings("ALL")
-//@TeleOp(name = "TeleUnitTester", group = "UnitTests")
+@TeleOp(name = "TeleUnitTester", group = "UnitTests")
 public class TeleUnitTester extends Tele implements UnitTester{
 
     /**
