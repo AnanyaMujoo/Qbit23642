@@ -54,11 +54,11 @@ public class Machine {
     public Machine addIndependent(int n, Independent independent){ return addIndependent(n, i -> independent); }
     public Machine addIndependent(int n, ReturnParameterCodeSeg<Integer, Independent> independent){ for (int i = 0; i < n; i++) { addIndependent(independent.run(i)); } return this; }
     public Machine addInstruction(CodeSeg code, double time){ return addInstruction(new Stage(new Main(code), RobotPart.exitTime(time))); }
-    public Machine addInstruction(CodeSeg code){ return addInstruction(code, 0.0); }
+    public Machine addInstruction(CodeSeg code){ return addInstruction(code, 0.1); }
 
     public void pause(){ pause = true; }
     public void play(){ pause = false; }
-    public void pauseOrPlay(){ if(pause){ play(); }else{ pause(); } }
+    public void pauseOrPlay(){ if(waiting) { if(pause){ play(); }else{ pause(); } } }
     public void skipTo(int n){ skipTo = n; skip = true; }
     public void skipToLast(){ skipTo(stages.size()-1);}
 

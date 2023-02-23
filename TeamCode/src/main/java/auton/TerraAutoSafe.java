@@ -30,8 +30,8 @@ public class TerraAutoSafe extends AutoFramework {
         x = 0;
         s = 0;
     }
+    // TODO TEST ADJUST
 
-    // TODO FIX CYCLE MACHINE
     // TODO FIX Y MACHINE
     // TODO FIX CYCLE STACK MACHINE
 

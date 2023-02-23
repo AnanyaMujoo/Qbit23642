@@ -244,8 +244,8 @@ public interface AutoModuleUser extends RobotUser{
     );}
 
     static AutoModule BackwardCycleMove(Height height, double offset) {return new AutoModule(
-            outtake.stageClose(0.0),
-            drive.moveTime(0.5,0.2),
+            drive.moveTime(0.6, 0, 0,0.3),
+            outtake.stageClose(0.2),
             outtake.stageReadyEnd(0.0),
             lift.stageLift(1.0, heightMode.getValue(height)+offset)
     );}
@@ -259,7 +259,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule ForwardCycleLow = new AutoModule(
             lift.moveTime(1.0, 0.1).attach(outtake.stageEnd(0.2)),
             outtake.stageOpen(0.0),
-            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.1))
+            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.4))
     );
 
     Independent CycleFirst = new Independent() {
@@ -306,14 +306,14 @@ public interface AutoModuleUser extends RobotUser{
     Independent CycleLast = new Independent() {
         @Override
         public void define() {
-            addSegment(0.8, 0.7, mecanumNonstopSetPoint, -2, 0.01, 0);
+            addSegment(0.8, 0.7, mecanumNonstopSetPoint, -2, 3.0, 0);
             addCustomCode(DriveMode(false));
         }
     };
 
     Machine MachineCycle = new Machine()
             .addIndependent(CycleFirst)
-            .addIndependent(8, AutoModuleUser::Cycle)
+            .addIndependent(6, AutoModuleUser::Cycle)
             .addIndependent(AutoModuleUser.CycleLast)
     ;
 
@@ -326,8 +326,6 @@ public interface AutoModuleUser extends RobotUser{
      * Cycle Extra
      */
 
-
-    // TODO FIX POSITIONS
     Machine MachineCycleExtra = new Machine()
             .addInstruction(DriveMode(true))
             .addIndependentWithPause(new Independent() {
@@ -337,62 +335,62 @@ public interface AutoModuleUser extends RobotUser{
                     addSegment(0.3, 0.3, mecanumNonstopSetPoint,  -2, 16,0.01);
                     addAutoModule(HoldMiddle);
                     addWaypoint(0.6,-2,-10,-10.0);
-                    addConcurrentAutoModule(BackwardCycle(MIDDLE, 4));
-                    addWaypoint(1.0, -25.0, -12.0, -25.0);
-                    addSegment(0.8, 0.55, mecanumNonstopSetPoint, -48.5, -25.0, -25.0);
+                    addConcurrentAutoModule(BackwardCycle(MIDDLE, 2));
+                    addWaypoint(1.0, -25.0, -7.0, -25.0);
+                    addSegment(0.8, 0.5, mecanumNonstopSetPoint, -48.5, -25.0, -25.0);
                 }
             })
             .addIndependentWithPause(new Independent() {
                 @Override
                 public void define() {
-                    addConcurrentAutoModuleWithCancel(ForwardCycle);
-                    addWaypoint(0.5, -23.5, 16.0, -21.0);
-                    addSegment(0.5, 0.1, mecanumNonstopSetPoint, -30.0, 22.0, -21.0);
+                    addConcurrentAutoModuleWithCancel(ForwardCycle, 0.15);
+                    addWaypoint(0.5, -25.0, 0.0, -21.0);
+                    addWaypoint(0.3, -27.0, 16.0, -25.0);
+                    addSegment(0.5, 0.1, mecanumNonstopSetPoint, -27.0, 20.0, -25.0);
                 }
             })
             .addIndependentWithPause(new Independent() {
                 @Override
                 public void define() {
-                    addConcurrentAutoModuleWithCancel(BackwardCycleMove(LOW, 2), 0.25);
+                    addCustomCode(() -> {
+                        bot.cancelAutoModules(); bot.addAutoModule(BackwardCycleMove(LOW, 0));
+                        pause(0.5);
+                    });
                     addWaypoint(1.0, -25.0, 25.0, 0.0);
                     addWaypoint(1.0, -30.0, 5.0, -45);
                     addWaypoint(1.0, -50.0, -8.0, -85);
-                    addSegment(1.3, 0.65, mecanumNonstopSetPoint, -99.0, -35.0, -50);
+                    addWaypoint(0.6, -80.0, -20.0, -50);
+                    addSegment(0.8, 0.4, mecanumNonstopSetPoint, -99.0, -35.0, -50);
                 }
             })
             .addIndependentWithPause(new Independent() {
                 @Override
                 public void define() {
-                    addConcurrentAutoModuleWithCancel(ForwardCycleLow, 0.1);
+                    addConcurrentAutoModuleWithCancel(ForwardCycleLow, 0.15);
                     addWaypoint(1.0, -70.0, -20.0, -75);
-                    addWaypoint(1.0, -52.0, -10.0, -42);
-                    addWaypoint(0.65, -30.0, 0.0, 0.0);
-                    addSegment(1.1, 0.5, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
+                    addWaypoint(0.8, -50.0, -10.0, -70);
+                    addWaypoint(0.45, -40.0, 0.0, 0.0);
+                    addWaypoint(0.4, -27.0, 16.0, 0.0);
+                    addSegment(0.5, 0.1, mecanumNonstopSetPoint, -27.0, 20.0, -25.0);
                 }
             })
             .addIndependentWithPause(new Independent() {
                 @Override
                 public void define() {
-                    addConcurrentAutoModuleWithCancel(BackwardCycleMove(LOW, 1), 0.25);
+                    addCustomCode(() -> {
+                        bot.cancelAutoModules(); bot.addAutoModule(BackwardCycleMove(LOW, 0));
+                        pause(0.5);
+                    });
                     addSegment(1.3, 0.5, mecanumNonstopSetPoint, -35.0, 23.0, -57.0);
                 }
             })
-            .addIndependentWithPause(new Independent() {
+            .addIndependent(new Independent() {
                 @Override
                 public void define() {
-                    addConcurrentAutoModuleWithCancel(ForwardCycleLow,0.1);
+                    addConcurrentAutoModuleWithCancel(ForwardCycleLow,0.15);
                     addWaypoint(-25.0, 36.0, -57.0);
-                    addSegment(1.0, 0.8, mecanumNonstopSetPoint, -32.0, 20.0, -21.0);
-                    addSegment(0.6, 0.5, mecanumNonstopWayPoint,  -25.0, 36.0, -21.0);
-                }
-            })
-            .addIndependentWithPause(new Independent() {
-                @Override
-                public void define() {
-                    addConcurrentAutoModuleWithCancel(BackwardGrabLowTele, 0.25);
-                    addSegment(0.5, 0.7, mecanumNonstopWayPoint,  -25.0, 40.0, -90.0);
-                    addWaypoint(1.0, -64.0, 40.0, -90.0);
-                    addWaypoint(1.0, -128.0, 37.0, -125.0);
+                    addWaypoint(0.6, -32.0, 20.0, -25.0);
+                    addSegment(1.3, 0.6, mecanumNonstopSetPoint, -50, 45.0, -90);
                 }
             })
             .addInstruction(DriveMode(false))
