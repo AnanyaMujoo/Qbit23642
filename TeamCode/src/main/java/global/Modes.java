@@ -1,5 +1,6 @@
 package global;
 
+import robotparts.hardware.Drive;
 import robotparts.hardware.Lift;
 import util.template.Mode;
 
@@ -27,10 +28,7 @@ public interface Modes {
             .set(Height.GROUND, 9);
 
     // TOD5 MULTI DIMENSIONAL MODE
-//    Mode driveMode = new Mode(Drive.class);
-
-//            .set(Drive.FAST, 1.0)
-//            .set(Drive.MEDIUM, 0.75)
-//            .set(Drive.SLOW, 0.35);
+    enum Drive implements Mode.ModeType {FAST, MEDIUM, SLOW}
+    Mode driveMode = new Mode(Drive.class);
 
 }

@@ -27,6 +27,7 @@ public class Machine {
 
     public volatile boolean pause = false;
     public volatile boolean waiting = false;
+    public volatile boolean quit = false;
     public volatile boolean skip = false;
     public volatile int skipTo = 0;
     /**
@@ -58,7 +59,8 @@ public class Machine {
 
     public void pause(){ pause = true; }
     public void play(){ pause = false; }
-    public void pauseOrPlay(){ if(waiting) { if(pause){ play(); }else{ pause(); } } }
+    public void pauseOrPlay(){ if(waiting) { if(pause){ play(); }else{ pause(); } }else{skipToNext();}}
+    public void skipToNext(){ quit = true; }
     public void skipTo(int n){ skipTo = n; skip = true; }
     public void skipToLast(){ skipTo(stages.size()-1);}
 
@@ -78,27 +80,36 @@ public class Machine {
      */
     public void update(){
         if (running) {
-            if(waiting){
-                if(skip){
-                    stageNumber = skipTo;
-                    skip = false;
-                    waiting = false;
-                }else if(!pause){
-                    stageNumber++;
-                    waiting = false;
+            if(!quit) {
+                if (waiting) {
+                    if (skip) {
+                        stageNumber = skipTo;
+                        skip = false;
+                        waiting = false;
+                    } else if (!pause) {
+                        stageNumber++;
+                        waiting = false;
+                    }
+                } else if (stageNumber < stages.size()) {
+                    Stage stage = stages.get(stageNumber);
+                    if (stage.hasNotStartedYet()) {
+                        stage.start();
+                    }
+                    stage.loop();
+                    if (stage.shouldStop()) {
+                        stage.runOnStop();
+                        waiting = true;
+                    }
+                } else {
+                    cancel();
                 }
-            }else if (stageNumber < stages.size()) {
-                Stage stage = stages.get(stageNumber);
-                if (stage.hasNotStartedYet()) {
-                    stage.start();
-                }
-                stage.loop();
-                if (stage.shouldStop()) {
-                    stage.runOnStop();
-                    waiting = true;
-                }
-            } else {
-                cancel();
+            }else{
+                bot.cancelIndependents(); bot.cancelAutoModules();
+                stages.get(stageNumber).runOnStop();
+                stageNumber+=2;
+                pause = false;
+                waiting = false;
+                quit = false;
             }
         }
     }

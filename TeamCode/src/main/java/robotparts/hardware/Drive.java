@@ -17,13 +17,19 @@ import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
 import static global.General.bot;
+import static global.Modes.Drive.FAST;
+import static global.Modes.Drive.MEDIUM;
+import static global.Modes.Drive.SLOW;
+import static global.Modes.driveMode;
 //import static global.Modes.driveMode;
 
 public class Drive extends RobotPart {
 
     private CMotor fr, br, fl, bl;
 
-    public boolean slow = false;
+    private final Precision precision = new Precision();
+
+//    public boolean slow = false;
 //    private PServo retract;
 
 
@@ -41,8 +47,8 @@ public class Drive extends RobotPart {
 
 //        engage();
 
-
-        slow = false;
+        driveMode.set(MEDIUM);
+        precision.reset();
 //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
@@ -79,16 +85,22 @@ public class Drive extends RobotPart {
         if(!bot.indHandler.isIndependentRunning()) {
             Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
             Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
-            Linear rx = new Linear(1.0, 0.7, 1.0);
+            Linear rx = new Linear(1.0, 0.4, 1.0);
 
-            if(slow) {
-                double slowScale = 0.5;
-                drive.move(rm.fodd(f*slowScale), rm.fodd(s*slowScale), rt.fodd(t*slowScale));
+            if(!driveMode.modeIs(SLOW)) {
+                if (precision.outputTrueForTime(precision.isInputTrueForTime(Math.abs(f) > 0.9, 0.5), 0.5) && Math.abs(f) > 0.9) {
+                    driveMode.set(FAST);
+                } else {
+                    driveMode.set(MEDIUM);
+                }
+            }
+
+            if(driveMode.modeIs(SLOW)) {
+                drive.move(rm.fodd(f*0.4), rm.fodd(s*0.5), rt.fodd(t*0.6));
+            }else if(driveMode.modeIs(MEDIUM)){
+                drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, rt.fodd(t*0.8));
             }else{
-                f = rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0);
-                s = !Precision.range(s, 0.7) || slow ? rm.fodd(s) * 0.6 : 0.0;
-                t = rt.fodd(t) * 0.7;
-                drive.move(f, s, t);
+                drive.move(rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0), 0.0, rt.fodd(t*0.8));
             }
         }
     }
@@ -120,10 +132,6 @@ public class Drive extends RobotPart {
 //            return pitch*0.15/(pitchDerivative > 0.7 ? Math.pow(Math.abs(pitchDerivative), 0.5) : 1.0);
 //        }
         return 0;
-    }
-
-    public Stage changeSlow(boolean slow){
-        return customTime(() -> this.slow = slow, 0.0);
     }
 
 }

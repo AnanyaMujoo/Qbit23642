@@ -18,6 +18,8 @@ import static global.General.fieldPlacement;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
+import static global.Modes.Drive.MEDIUM;
+import static global.Modes.Drive.SLOW;
 import static global.Modes.GamepadMode.*;
 import static global.Modes.OuttakeStatus.*;
 import static global.Modes.Height.*;
@@ -52,12 +54,12 @@ public class TerraOp extends Tele {
         gph1.link(DPAD_LEFT, () -> !bot.isMachineRunning(), () -> {lift.high = true; bot.addAutoModule(TakeOffCone);}, () -> odometry.adjustLeft(1.0));
         gph1.link(DPAD_RIGHT, () -> !bot.isMachineRunning(), () -> {}, () -> odometry.adjustRight(1.0));
 
-        gph1.link(RIGHT_BUMPER, () -> outtakeStatus.modeIs(PLACING), () -> lift.adjustHolderTarget(2.5), () -> lift.adjustHolderTarget(5.0));
-        gph1.link(LEFT_BUMPER, () -> outtakeStatus.modeIs(PLACING), () -> lift.adjustHolderTarget(-2.5), () -> lift.adjustHolderTarget(-5.0));
+        gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
+        gph1.link(LEFT_BUMPER, () -> lift.adjustHolderTarget(-2.5));
 
 
         gph1.link(LEFT_TRIGGER, () -> !MachineCycle.isRunning(), () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }}, MachineCycle::skipToLast);
-        gph1.link(RIGHT_TRIGGER, () -> !bot.isMachineRunning(), () -> drive.slow = !drive.slow, bot::pauseOrPlayMachine);
+        gph1.link(RIGHT_TRIGGER, () -> !bot.isMachineRunning(), () -> {if(!driveMode.modeIs(SLOW)){driveMode.set(SLOW);}else{driveMode.set(MEDIUM);}}, bot::pauseOrPlayMachine);
 
 //        gph1.link(RIGHT_TRIGGER, () -> drive.slow = true);
 //        gph1.link(RIGHT_TRIGGER, OnNotHeldEventHandler.class, () -> drive.slow = false);
@@ -67,7 +69,7 @@ public class TerraOp extends Tele {
          */
         gph1.link(Button.A, MoveToCycleStart, AUTOMATED);
         gph1.link(Button.B, MachineCycle, AUTOMATED);
-        gph1.link(Button.X, () -> {drive.slow = false; bot.cancelMovements();}, AUTOMATED);
+        gph1.link(Button.X, () -> {driveMode.set(MEDIUM); bot.cancelMovements();}, AUTOMATED);
         gph1.link(Button.Y, MachineCycleExtra, AUTOMATED);
 
         gph1.link(RIGHT_BUMPER, odometry::reset, AUTOMATED);
@@ -136,7 +138,7 @@ public class TerraOp extends Tele {
 
         lift.move(gph2.ry);
 
-        log.show("DriveMode", drive.slow ? "SLOW" : "FAST");
+        log.show("DriveMode", driveMode.get());
         log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
 //        log.show("TrackStatus", kappaBefore.isEnabled() ? "Kappa" : "None");
 //        log.show("OuttakeStatus", outtakeStatus.get());
