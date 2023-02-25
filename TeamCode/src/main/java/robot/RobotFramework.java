@@ -176,6 +176,7 @@ public class RobotFramework {
     public boolean isMachineRunning(){ return machine.isRunning(); }
     public boolean isIndependentRunning(){ return bot.indHandler.isIndependentRunning(); }
     public void pauseOrPlayMachine(){ machine.pauseOrPlay(); }
+    public void skipToNextMachine(){ machine.skipToNext(); }
 
     /**
      * Set the user to main and halt all of the robot parts that aren't the main user
