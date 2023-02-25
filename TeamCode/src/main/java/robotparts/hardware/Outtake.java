@@ -45,11 +45,11 @@ public class Outtake extends RobotPart {
         turn = create("turn", ElectronicType.PSERVO_REVERSE);
         claw = create("claw", ElectronicType.PSERVO_REVERSE);
 
-        turn.changePosition("start", 0.05);
-        turn.addPosition("flipped", 0.84);
+        turn.changePosition("start", 0.07); // 0.05
+        turn.addPosition("flipped", 0.86); //0.84
 
-        claw.addPosition("open", 0.15);
-        claw.addPosition("close", 0.35);
+        claw.addPosition("open", 0.12); // 0.15
+        claw.addPosition("close", 0.32); //0.35
 
         unFlip();
         outtakeStatus.set(PLACING);

@@ -231,10 +231,10 @@ public class RobotFramework {
     /**
      * Save and load methods
      */
-    public void savePose(Pose pose){ storage.addItem("XPos", pose.getX()); storage.addItem("YPos", pose.getY()); storage.addItem("Heading", pose.getAngle()); storage.saveItems(); }
-    public Pose getSavedPose(){ return new Pose((double) storage.getItem("XPos").getValue(), (double) storage.getItem("YPos").getValue(), (double) storage.getItem("Heading").getValue()); }
-    public void loadPose(){ odometry.setCurrentPose(getSavedPose());; }
-    public void saveLocationOnField(){ storage.addItem("FieldSide", fieldSide); storage.addItem("FieldPlacement", fieldPlacement); storage.saveItems(); }
+//    public void savePose(Pose pose){ storage.addItem("XPos", pose.getX()); storage.addItem("YPos", pose.getY()); storage.addItem("Heading", pose.getAngle()); storage.saveItems(); }
+//    public Pose getSavedPose(){ return new Pose((double) storage.getItem("XPos").getValue(), (double) storage.getItem("YPos").getValue(), (double) storage.getItem("Heading").getValue()); }
+//    public void loadPose(){ odometry.setCurrentPose(getSavedPose());; }
+    public void saveLocationOnField(){ storage.addItem("FieldSide", fieldSide.toString()); storage.addItem("FieldPlacement", fieldPlacement.toString()); storage.saveItems(); }
     public void loadLocationOnField(){ fieldSide = FieldSide.create((String) storage.getItem("FieldSide").getValue()); fieldPlacement = FieldPlacement.create((String) storage.getItem("FieldPlacement").getValue()); }
 
 }

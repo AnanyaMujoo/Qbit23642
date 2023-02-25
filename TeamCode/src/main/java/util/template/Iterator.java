@@ -202,7 +202,7 @@ public interface Iterator {
     static double forAllAverage(ArrayList<Double> list){
         final double[] sum = {0};
         Iterator.forAll(list, l->sum[0]+=l);
-        return (double)sum[0]/list.size();
+        return sum[0] / list.size();
     }
 
     static <T> T forAllCompareMax(List<T> list, ReturnParameterCodeSeg<T, Double> code){

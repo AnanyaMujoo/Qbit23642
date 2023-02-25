@@ -121,7 +121,7 @@ public class Item<T> {
             case ARRAYLIST:
                 return Storage.gson.fromJson(rawValue, ArrayList.class);
             case OTHER:
-                fault.log("Are you sure you want the raw value of an object of type other?");
+                fault.check("Are you sure you want the raw value of an object of type other?");
                 return rawValue;
         }
         fault.warn("Object does not match any known type", Expectation.EXPECTED, Magnitude.MINOR);

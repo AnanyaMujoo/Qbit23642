@@ -3,6 +3,7 @@ package automodules;
 import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import automodules.stage.Main;
 import automodules.stage.Stage;
@@ -23,11 +24,14 @@ import teleutil.TeleTrack;
 import teleutil.independent.Independent;
 import teleutil.independent.Machine;
 import util.codeseg.CodeSeg;
+import util.condition.Expectation;
+import util.condition.Magnitude;
 import util.condition.OutputList;
 import util.template.Iterator;
 import util.template.Precision;
 
 import static global.General.bot;
+import static global.General.fault;
 import static global.General.log;
 import static global.Modes.*;
 import static global.Modes.Drive.MEDIUM;
@@ -212,12 +216,31 @@ public interface AutoModuleUser extends RobotUser{
      * Misc
      */
     Independent MoveToZero = new Independent() { @Override public void define() {addSetpoint(0.0, 0.01, 0.0); }};
+
+    Point cyclePointStart = new Point(Field.halfWidth-19, -51);
+
     Independent MoveToCycleStart = new Independent() {
         @Override
         public void define() {
-            addCustomCode(ResetOdometryForCycle(cyclePointStart), 0.4);
-            addWaypoint(1.0, -13, -26, 0);
-            addSegment(0.8, 0.7, mecanumNonstopSetPoint, 0, 1.0, 0);
+            addCustomCode(() -> {
+                ArrayList<Double> xs = new ArrayList<>(); ArrayList<Double> ys = new ArrayList<>();
+                whileNotExit(() -> xs.size() > 3, () -> {
+                    distanceSensors.ready();
+                    xs.add(distanceSensors.getRightDistance() - cyclePointStart.getX());
+                    ys.add(-distanceSensors.getFrontDistance() - cyclePointStart.getY());
+                });
+                Point point = new Point(Iterator.forAllAverage(xs), Iterator.forAllAverage(ys));
+                odometry.reset();
+                pause(0.05);
+                odometry.reset();
+                whileTime(() -> {
+                    fault.check("ODOMETRY RESET FAILED", Expectation.EXPECTED, Magnitude.CRITICAL, odometry.getPose().getDistanceTo(new Pose()) < 0.5 && Double.isFinite(odometry.getPose().getY()) && Double.isFinite(odometry.getPose().getX()), true);
+                }, 0.05);
+                odometry.setPointUsingOffset(point);
+                pause(0.05);
+            });
+            addWaypoint(1.0, -13, -22, 0);
+            addSegment(0.8, 0.7, mecanumNonstopSetPoint, 0.5, 1.0, 0);
             addCustomCode(DriveMode(true));
             addAutoModule(ForwardTeleBottom);
         }
@@ -227,15 +250,6 @@ public interface AutoModuleUser extends RobotUser{
     /**
      * Cycle
      */
-    Point cyclePointStart = new Point(Field.halfWidth-19, -51);
-    Point cyclePoint = new Point(46.5, -50);
-    static CodeSeg ResetOdometryForCycle(Point point) {return  () -> {
-        distanceSensors.ready();
-        Point point1 = new Point(distanceSensors.getRightDistance() - point.getX(),-distanceSensors.getFrontDistance() - point.getY());
-        odometry.setCurrentPoint(point1); odometry.setCurrentPoint(point1);
-        odometry.setHeading(0); odometry.setHeading(0);
-        gyro.reset(); gyro.reset();
-    };}
 
     static CodeSeg DriveMode(boolean slow){return () -> {
         if(slow){
@@ -247,7 +261,7 @@ public interface AutoModuleUser extends RobotUser{
 
     static AutoModule BackwardCycle(Height height, double offset) {return new AutoModule(
             outtake.stageClose(0.18),
-            outtake.stageWithFlip(0.75, 0.0),
+            outtake.stageWithFlip(0.73, 0.0),
             lift.stageLift(1.0, heightMode.getValue(height)+offset)
     );}
 
@@ -270,10 +284,28 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.4))
     );
 
+
+    Point cyclePoint = new Point(46.5, -50);
     Independent CycleFirst = new Independent() {
         @Override
         public void define() {
-            addCustomCode(ResetOdometryForCycle(cyclePoint), 0.4);
+            addCustomCode(() -> {
+                ArrayList<Double> xs = new ArrayList<>(); ArrayList<Double> ys = new ArrayList<>();
+                whileNotExit(() -> xs.size() > 3, () -> {
+                    distanceSensors.ready();
+                    xs.add(distanceSensors.getRightDistance() - cyclePoint.getX());
+                    ys.add(-distanceSensors.getFrontDistance() - cyclePoint.getY());
+                });
+                Point point = new Point(Iterator.forAllAverage(xs), Iterator.forAllAverage(ys));
+                odometry.reset();
+                pause(0.05);
+                odometry.reset();
+                whileTime(() -> {
+                    fault.check("ODOMETRY RESET FAILED", Expectation.EXPECTED, Magnitude.CRITICAL, odometry.getPose().getDistanceTo(new Pose()) < 0.5 && Double.isFinite(odometry.getPose().getY()) && Double.isFinite(odometry.getPose().getX()), true);
+                }, 0.05);
+                odometry.setPointUsingOffset(point);
+                pause(0.05);
+            });
         }
     };
 
@@ -288,33 +320,37 @@ public interface AutoModuleUser extends RobotUser{
     static Independent Cycle(int i) {return new Independent() {
         @Override
         public void define() {
-            addSegment(0.3, 0.2, mecanumNonstopSetPoint,  -1, 16.5+(i*0.1),0.1);
-            addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 5), 0.2);
-            addWaypoint(0.52, -1, -26, 0.1);
-            addSegment(0.3, 0.8, mecanumNonstopSetPoint, -1, -32.5, 0.1);
+            addSegment(0.35, 0.2, mecanumNonstopSetPoint, -0.3, 16.0, 0.0);
+            addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 4), 0.2);
+            addWaypoint(0.52, -1.0, -26, 0.0);
+            addSegment(0.3, 0.8, mecanumNonstopSetPoint, -1.5, -32.5, 0.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle);
-            addCustomCode(() -> {
-                ArrayList<Double> values = new ArrayList<>();
-                whileNotExit(() -> values.size() > 3 || odometry.getY() > 10, () -> {
-                    drive.move(0.4,0.12*Math.signum(Precision.attract(-odometry.getX()-1, 1)), 0.008*odometry.getHeading());
-                    distanceSensors.ready();
-                    double distance = distanceSensors.getRightDistance();
-                    if(distance < 50){ values.add(distance); }
+            if (i == 1 || i == 4) {
+                addSegment(1.4, 0.5, mecanumNonstopSetPoint, -0.3, 0.01, 0.0);
+                addCustomCode(() -> {
+                    ArrayList<Double> xs = new ArrayList<>();
+                    ArrayList<Double> ys = new ArrayList<>();
+                    whileNotExit(() -> xs.size() > 3, () -> {
+                        distanceSensors.ready();
+                        xs.add(distanceSensors.getRightDistance() - cyclePoint.getX());
+                        ys.add(-distanceSensors.getFrontDistance() - cyclePoint.getY());
+                    });
+                    Point point = new Point(Iterator.forAllAverage(xs), Iterator.forAllAverage(ys));
+                    if(point.getDistanceTo(new Point()) < 10){
+                        odometry.setPointUsingOffset(point);
+                    }
+                    pause(0.1);
                 });
-                double avgDis = Iterator.forAllAverage(values);
-                double dis  = -distanceSensors.getFrontDistance()-cyclePoint.getY();
-                double y = odometry.getY();
-                if(!Precision.range(dis-y, 10)){ dis = y; }else{ dis = (dis*0.75) + (y*0.25);}
-                Point point = new Point(((avgDis-49.0)*0.75)+(odometry.getX()*0.25), dis);
-                odometry.setPoseUsingOffset(point);
-            });
+            }else{
+                addWaypoint(0.4, -0.3, 8.0, 0.0);
+            }
         }
     };}
 
     Independent CycleLast = new Independent() {
         @Override
         public void define() {
-            addSegment(0.8, 0.7, mecanumNonstopSetPoint, -2, 3.0, 0);
+            addSegment(0.8, 0.7, mecanumNonstopSetPoint, 0, 3.0, 0);
             addCustomCode(DriveMode(false));
         }
     };
@@ -339,7 +375,23 @@ public interface AutoModuleUser extends RobotUser{
             .addIndependentWithPause(new Independent() {
                 @Override
                 public void define() {
-                    addCustomCode(ResetOdometryForCycle(cyclePoint), 0.4);
+                    addCustomCode(() -> {
+                        ArrayList<Double> xs = new ArrayList<>(); ArrayList<Double> ys = new ArrayList<>();
+                        whileNotExit(() -> xs.size() > 3, () -> {
+                            distanceSensors.ready();
+                            xs.add(distanceSensors.getRightDistance() - cyclePoint.getX());
+                            ys.add(-distanceSensors.getFrontDistance() - cyclePoint.getY());
+                        });
+                        Point point = new Point(Iterator.forAllAverage(xs), Iterator.forAllAverage(ys));
+                        odometry.reset();
+                        pause(0.05);
+                        odometry.reset();
+                        whileTime(() -> {
+                            fault.check("ODOMETRY RESET FAILED", Expectation.EXPECTED, Magnitude.CRITICAL, odometry.getPose().getDistanceTo(new Pose()) < 0.5 && Double.isFinite(odometry.getPose().getY()) && Double.isFinite(odometry.getPose().getX()), true);
+                        }, 0.05);
+                        odometry.setPointUsingOffset(point);
+                        pause(0.05);
+                    });
                     addSegment(0.4, 0.4, mecanumNonstopSetPoint,  -2, 18,0.01);
                     addAutoModule(HoldMiddle);
                     addWaypoint(0.6,-2,-10,-10.0);

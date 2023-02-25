@@ -38,8 +38,6 @@ public class TerraOp extends Tele {
 
         fieldPlacement = FieldPlacement.LOWER;
 
-        outtake.changeArmPosition("start", 0.06);
-
         /**
          * Gamepad 1 Normal
          */
@@ -49,10 +47,10 @@ public class TerraOp extends Tele {
         gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceGroundTele);}else{bot.addAutoModule(BackwardGroundTele.check());}}, () -> bot.addAutoModule(BackwardGrabGroundTele));
 
 
-        gph1.link(DPAD_DOWN, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); bot.addAutoModule(ForwardTeleBottom);}, () -> odometry.adjustDown(1.0));
-        gph1.link(DPAD_UP, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); bot.addAutoModule(UprightCone);}, () -> odometry.adjustUp(1.0));
-        gph1.link(DPAD_LEFT, () -> !bot.isMachineRunning(), () -> {lift.high = true; bot.addAutoModule(TakeOffCone);}, () -> odometry.adjustLeft(1.0));
-        gph1.link(DPAD_RIGHT, () -> !bot.isMachineRunning(), () -> {}, () -> odometry.adjustRight(1.0));
+        gph1.link(DPAD_DOWN, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); bot.addAutoModule(ForwardTeleBottom);}, () -> odometry.adjustUp(1.0));
+        gph1.link(DPAD_UP, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); bot.addAutoModule(UprightCone);}, () -> odometry.adjustDown(1.0));
+        gph1.link(DPAD_LEFT, () -> !bot.isMachineRunning(), () -> {lift.high = true; bot.addAutoModule(TakeOffCone);}, () -> odometry.adjustRight(1.0));
+        gph1.link(DPAD_RIGHT, () -> !bot.isMachineRunning(), () -> {}, () -> odometry.adjustLeft(1.0));
 
         gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
         gph1.link(LEFT_BUMPER, () -> lift.adjustHolderTarget(-2.5));
@@ -63,6 +61,8 @@ public class TerraOp extends Tele {
 
 //        gph1.link(RIGHT_TRIGGER, () -> drive.slow = true);
 //        gph1.link(RIGHT_TRIGGER, OnNotHeldEventHandler.class, () -> drive.slow = false);
+
+        // TODO FIX PAUSING FOR NORMAL MACHINE !!!!!!!!!!
 
         /**
          * Gamepad 1 Automated

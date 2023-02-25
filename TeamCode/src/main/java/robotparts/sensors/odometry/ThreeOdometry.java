@@ -33,19 +33,6 @@ public class ThreeOdometry extends TwoOdometry {
 //    }
 
     @Override
-    public void setCurrentPose(Pose pose) {
-        synchronized (odometryCenter) {
-            offset = new Point();
-            Vector globalOdometryCenterToRobotCenter = leftOdometryCenterToRobotCenter.getRotated(pose.getAngle()).getSubtracted(leftOdometryCenterToRobotCenter);
-            odometryCenter.set(pose.getPoint().getSubtracted(globalOdometryCenterToRobotCenter.getPoint()));
-            super.setCurrentPose(pose);
-        }
-    }
-
-    @Override
-    public void setCurrentPoint(Point point) { setCurrentPose(new Pose(point, getHeading())); }
-
-    @Override
     protected void update() {
 
         double dyl = 0, dyr = 0, dx = 0, dh = 0;
@@ -114,7 +101,7 @@ public class ThreeOdometry extends TwoOdometry {
         return super.getPose().getAdded(new Pose(offset, 0)).getSubtracted(new Pose(adjust.getPoint(), 0));
     }
 
-    public void setPoseUsingOffset(Point pose){
+    public void setPointUsingOffset(Point pose){
         setOffset(pose.getSubtracted(super.getPose().getPoint()));
     }
 
@@ -126,7 +113,5 @@ public class ThreeOdometry extends TwoOdometry {
 
 
 
-    public void setOffset(Point offset){
-        this.offset = offset.getCopy();
-    }
+    public void setOffset(Point offset){ this.offset = offset.getCopy(); }
 }

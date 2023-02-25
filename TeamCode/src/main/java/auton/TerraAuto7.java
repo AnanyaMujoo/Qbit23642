@@ -141,7 +141,7 @@ public class TerraAuto7 extends AutoFramework {
             });
             double avgDis = Iterator.forAllAverage(values);
             Point point = new Point(135+avgDis, Field.width - 46 - Robot.halfLength);
-            odometry.setPoseUsingOffset(point);
+            odometry.setPointUsingOffset(point);
 
         });
 
