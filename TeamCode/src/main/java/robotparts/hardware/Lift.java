@@ -76,6 +76,8 @@ public class Lift extends RobotPart {
         motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.2);
     }
 
+    // TODO FIX LIFT ADJUST
+
     public void adjustHolderTarget(double delta){
         currentCutoffPosition = 0;
         motorRight.holdPositionExact();

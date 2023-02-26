@@ -28,6 +28,7 @@ public class Drive extends RobotPart {
     private CMotor fr, br, fl, bl;
 
     private final Precision precision = new Precision();
+    private final Precision precision2 = new Precision();
 
 //    public boolean slow = false;
 //    private PServo retract;
@@ -49,6 +50,7 @@ public class Drive extends RobotPart {
 
         driveMode.set(MEDIUM);
         precision.reset();
+        precision2.reset();
 //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
@@ -98,7 +100,11 @@ public class Drive extends RobotPart {
             if(driveMode.modeIs(SLOW)) {
                 drive.move(rm.fodd(f*0.4), rm.fodd(s*0.5), rt.fodd(t*0.6));
             }else if(driveMode.modeIs(MEDIUM)){
-                drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, rt.fodd(t*0.8));
+                if(precision2.outputTrueForTime(precision2.isInputTrueForTime(Math.abs(t) > 0.9, 0.6), 0.5) && Math.abs(t) > 0.9){
+                    drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, t);
+                }else{
+                    drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, rt.fodd(t*0.8));
+                }
             }else{
                 drive.move(rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0), 0.0, rt.fodd(t*0.8));
             }

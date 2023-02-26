@@ -30,10 +30,18 @@ public class TerraAutoSafe extends AutoFramework {
         x = 0;
         s = 0;
     }
-    // TODO TEST ADJUST
 
-    // TODO FIX Y MACHINE
-    // TODO FIX CYCLE STACK MACHINE
+    // TODO FIX SAFE AUTO
+
+    // TODO UPDATE CONTROL HUB/ CODE VERSION
+
+    // TODO MAKE UPRIGHT CONE
+
+    // TODO MAKE ADJUST WHILE PAUSED
+
+    // TODO MAKE Y MACHINE
+
+    // TODO MAKE CYCLE STACK MACHINE
 
     AutoModule BackwardFirst = new AutoModule(
             RobotPart.pause(0.1),

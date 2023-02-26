@@ -38,13 +38,16 @@ public class TerraOp extends Tele {
 
         fieldPlacement = FieldPlacement.LOWER;
 
+        outtake.changeArmPosition("start", 0.06);
+
+
         /**
          * Gamepad 1 Normal
          */
-        gph1.link(Button.Y, heightMode.isMode(HIGH), () -> {if(lift.high){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceHighTele);}else{bot.addAutoModule(BackwardHighTele.check());}}, () -> bot.addAutoModule(BackwardGrabHighTele));
-        gph1.link(Button.X, heightMode.isMode(MIDDLE), () -> {if(lift.mid){ bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceMiddleTele);}else{ bot.addAutoModule(BackwardMiddleTele.check());}}, () -> bot.addAutoModule(BackwardGrabMiddleTele));
-        gph1.link(Button.B, heightMode.isMode(LOW), () -> {if(lift.low){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceLowTele);}else{bot.addAutoModule(BackwardLowTele.check());}}, () -> bot.addAutoModule(BackwardGrabLowTele));
-        gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){bot.cancelAutoModules(); bot.addAutoModule(BackwardPlaceGroundTele);}else{bot.addAutoModule(BackwardGroundTele.check());}}, () -> bot.addAutoModule(BackwardGrabGroundTele));
+        gph1.link(Button.Y, heightMode.isMode(HIGH), () -> {if(lift.high){bot.addAutoModuleWithCancel(BackwardPlaceHighTele);}else{if(outtakeStatus.modeIs(DRIVING)){ bot.addAutoModuleWithCancel(BackwardGrabHighTele);}else{ bot.addAutoModuleWithCancel(ForwardTeleHigh);}}}, () -> bot.addAutoModuleWithCancel(BackwardGrabHighTele));
+        gph1.link(Button.X, heightMode.isMode(MIDDLE), () -> {if(lift.mid){ bot.addAutoModuleWithCancel(BackwardPlaceMiddleTele);}else{if(outtakeStatus.modeIs(DRIVING)){ bot.addAutoModuleWithCancel(BackwardGrabMiddleTele);}else{ bot.addAutoModuleWithCancel(ForwardTeleMiddle);}}}, () -> bot.addAutoModuleWithCancel(BackwardGrabMiddleTele));
+        gph1.link(Button.B, heightMode.isMode(LOW), () -> {if(lift.low){bot.addAutoModuleWithCancel(BackwardPlaceLowTele);}else{ if(outtakeStatus.modeIs(DRIVING)){ bot.addAutoModuleWithCancel(BackwardGrabLowTele);}else{ bot.addAutoModuleWithCancel(ForwardTeleLow);}}}, () -> bot.addAutoModuleWithCancel(BackwardGrabLowTele));
+        gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){bot.addAutoModuleWithCancel(BackwardPlaceGroundTele);}else{if(outtakeStatus.modeIs(DRIVING)){ bot.addAutoModuleWithCancel(BackwardGrabGroundTele);}else{ bot.addAutoModuleWithCancel(ForwardTeleGround);}}}, () -> bot.addAutoModuleWithCancel(BackwardGrabGroundTele));
 
 
         gph1.link(DPAD_DOWN, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); bot.addAutoModule(ForwardTeleBottom);}, () -> odometry.adjustUp(1.0));
@@ -61,8 +64,6 @@ public class TerraOp extends Tele {
 
 //        gph1.link(RIGHT_TRIGGER, () -> drive.slow = true);
 //        gph1.link(RIGHT_TRIGGER, OnNotHeldEventHandler.class, () -> drive.slow = false);
-
-        // TODO FIX PAUSING FOR NORMAL MACHINE !!!!!!!!!!
 
         /**
          * Gamepad 1 Automated

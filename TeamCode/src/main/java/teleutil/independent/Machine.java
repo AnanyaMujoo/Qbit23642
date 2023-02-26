@@ -59,8 +59,8 @@ public class Machine {
 
     public void pause(){ pause = true; }
     public void play(){ pause = false; }
-    public void pauseOrPlay(){ if(waiting) { if(pause){ play(); }else{ pause(); } }}
-    public void skipToNext(){ if(waiting) { pauseOrPlay(); }else{quit = true;} }
+    public void pauseOrPlay(){ if(pause){ play(); }else{ pause(); } }
+    public void skipToNext(){ if(waiting) { pauseOrPlay(); }else{ quit = true; } }
     public void skipTo(int n){ skipTo = n; skip = true; }
     public void skipToLast(){ skipTo(stages.size()-1);}
 

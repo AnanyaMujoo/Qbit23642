@@ -146,6 +146,10 @@ public class RobotFramework {
         rfsHandler.addAutoModule(autoModule);
     }
 
+    public void addAutoModuleWithCancel(AutoModule autoModule){
+        cancelAutoModules(); addAutoModule(autoModule);
+    }
+
     public void addBackgroundTask(BackgroundTask backgroundTask){
         backHandler.addBackgroundTask(backgroundTask);
     }

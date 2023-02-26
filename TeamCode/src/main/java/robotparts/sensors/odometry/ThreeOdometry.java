@@ -23,6 +23,17 @@ public class ThreeOdometry extends TwoOdometry {
 //    private final Precision precision = new Precision();
 
 
+    @Override
+    public void setCurrentPose(Pose pose) {
+        synchronized (odometryCenter) {
+            offset = new Point();
+            Vector globalOdometryCenterToRobotCenter = leftOdometryCenterToRobotCenter.getRotated(pose.getAngle()).getSubtracted(leftOdometryCenterToRobotCenter);
+            odometryCenter.set(pose.getPoint().getSubtracted(globalOdometryCenterToRobotCenter.getPoint()));
+            super.setCurrentPose(pose);
+        }
+    }
+
+
 //    @Override
 //    protected void createEncoders() {
 //        super.createEncoders();
