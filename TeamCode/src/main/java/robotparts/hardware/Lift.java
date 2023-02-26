@@ -19,8 +19,12 @@ import util.template.Precision;
 
 import static global.General.bot;
 import static global.Modes.Height.GROUND;
+import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
+import static global.Modes.Height.MIDDLE;
+import static global.Modes.OuttakeStatus.PLACING;
 import static global.Modes.heightMode;
+import static global.Modes.outtakeStatus;
 
 public class Lift extends RobotPart {
 
@@ -37,6 +41,8 @@ public class Lift extends RobotPart {
     public boolean low = false;
     public boolean ground = false;
     public boolean stacked = false;
+    public boolean upright = false;
+    public double globalOffset = 0;
 
     @Override
     public void init() {
@@ -44,8 +50,8 @@ public class Lift extends RobotPart {
         motorLeft = create("lir", ElectronicType.PMOTOR_REVERSE);
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.25, 5);
-        motorRight.usePositionHolder(0.4, 0.1);
-        motorLeft.usePositionHolder(0.4, 0.1);
+        motorRight.usePositionHolder(0.35, 0.2);
+        motorLeft.usePositionHolder(0.35, 0.2);
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
         high = false;
@@ -53,7 +59,9 @@ public class Lift extends RobotPart {
         low = false;
         stacked = false;
         ground = false;
+        upright = false;
         stackedMode = 0;
+        globalOffset = 0;
     }
 
     public Stage changeHigh(boolean high){ return customTime(() -> this.high = high, 0.0); }
@@ -76,12 +84,11 @@ public class Lift extends RobotPart {
         motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.2);
     }
 
-    // TODO FIX LIFT ADJUST
-
-    // TODO MAKE UP GLOBAL DOWN LOCAL
-
     public void adjustHolderTarget(double delta){
-        currentCutoffPosition = 0;
+        if(outtakeStatus.modeIs(PLACING) && !heightMode.modeIs(GROUND)) {
+            globalOffset += delta;
+        }
+        currentCutoffPosition = -10;
         motorRight.holdPositionExact();
         motorLeft.holdPositionExact();
         double target = Precision.clip(motorRight.getPositionHolder().getTarget()+delta, 0, maxPosition);
@@ -104,11 +111,19 @@ public class Lift extends RobotPart {
         new Exit(() -> { synchronized (val){ return bot.rfsHandler.getTimer().seconds() > val[0]; }}), stop(), drive.stop(), returnPart(), drive.returnPart());
     }
 
-    public Stage stageLift(double power, double target) { return moveTarget(() -> motorRight, () -> motorLeft, power, power, target); }
+    public Stage stageLift(double power, double target) { return moveTarget(() -> motorRight, () -> motorLeft, power, power, () -> {
+        if(target == heightMode.getValue(LOW)+2 || target == heightMode.getValue(MIDDLE)+2 || target == heightMode.getValue(HIGH)+2){
+            return target+globalOffset;
+        }else{
+            return target;
+        }
+    }); }
 
     @Override
     public void maintain() { super.maintain(); }
 
-    public Stage resetLift(){ return new Stage(usePart(), new Main(() -> {motorRight.resetPosition(); motorLeft.resetPosition();}), exitTime(0.1), stop(), returnPart()); }
+    public void reset(){ motorRight.softReset(); motorLeft.softReset(); }
+
+    public Stage resetLift(){ return new Stage(usePart(), new Main(this::reset), exitTime(0.1), stop(), returnPart()); }
 }
 

@@ -129,8 +129,10 @@ public class StageBuilder {
     protected boolean exitTarget(){ return true; }
     protected void stopTarget(){}
 
+    protected final Stage moveTarget(ReturnCodeSeg<PMotor> motor, double power, ReturnCodeSeg<Double> target){ return new Stage(usePart(), new Initial(() -> { motor.run().releasePosition(); motor.run().setTarget(target.run()); }), new Main(() -> motor.run().setPowerRaw(power)), new Exit(() -> motor.run().exitTarget()), new Stop(() -> motor.run().stopTarget()), returnPart()); }
     protected final Stage moveTarget(ReturnCodeSeg<PMotor> motor, double power, double target){ return new Stage(usePart(), new Initial(() -> { motor.run().releasePosition(); motor.run().setTarget(target); }), new Main(() -> motor.run().setPowerRaw(power)), new Exit(() -> motor.run().exitTarget()), new Stop(() -> motor.run().stopTarget()), returnPart()); }
     protected final Stage moveTarget(ReturnCodeSeg<PMotor> motor1, ReturnCodeSeg<PMotor> motor2, double power1, double power2, double target){return moveTarget(motor1, power1, target).combine(moveTarget(motor2, power2, target));}
+    protected final Stage moveTarget(ReturnCodeSeg<PMotor> motor1, ReturnCodeSeg<PMotor> motor2, double power1, double power2, ReturnCodeSeg<Double> target){return moveTarget(motor1, power1, target).combine(moveTarget(motor2, power2, target));}
 
     protected final Stage customTime(ParameterCodeSeg<Double> code, Exit exit){ final Timer timer = new Timer(); return new Stage(usePart(),  new Initial(timer::reset), new Main(() -> {double time = timer.seconds(); code.run(time);}), exit, returnPart());}
     protected final Stage customTime(StageBuilderTime stageBuilderTime){ return stageBuilderTime.getStage(); }

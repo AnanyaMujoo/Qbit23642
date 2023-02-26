@@ -275,4 +275,7 @@ public class PMotor extends Electronic {
         ROTATIONAL,
         LINEAR
     }
+
+
+    public void softReset(){ motorEncoder.softReset(); }
 }

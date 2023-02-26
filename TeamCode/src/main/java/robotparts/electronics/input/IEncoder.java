@@ -40,7 +40,7 @@ public class IEncoder extends Electronic {
     private final EncoderType encoderType;
 
 
-    private volatile double position, lastPosition, deltaPosition = 0; // ticks
+    private volatile double position, lastPosition, deltaPosition, startPosition = 0; // ticks
     private volatile double angularVelocity = 0; // radians
     private volatile double current = 0; // amps
 
@@ -70,7 +70,7 @@ public class IEncoder extends Electronic {
 
     private void updateCMotor(){ current = motor.getCurrent(CurrentUnit.AMPS); }
 
-    private void updatePMotor(){ position = motor.getCurrentPosition(); angularVelocity = motor.getVelocity(AngleUnit.RADIANS); current = motor.getCurrent(CurrentUnit.AMPS); }
+    public void updatePMotor(){ position = motor.getCurrentPosition(); angularVelocity = motor.getVelocity(AngleUnit.RADIANS); current = motor.getCurrent(CurrentUnit.AMPS); }
 
     public void updateNormal(){
         synchronized (motor) {
@@ -84,7 +84,7 @@ public class IEncoder extends Electronic {
 
     public void invert(){ inverted = !inverted; }
 
-    public double getPos() { return position; }
+    public double getPos() { return position - startPosition; }
 
     public double getAngularVelocity(){ return angularVelocity; }
 
@@ -108,6 +108,11 @@ public class IEncoder extends Electronic {
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         position = 0; lastPosition = 0; deltaPosition = 0;
+    }
+
+    public void softReset(){
+        updatePMotor();
+        startPosition = position;
     }
 
     /**

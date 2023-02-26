@@ -44,14 +44,14 @@ public class TerraOp extends Tele {
         /**
          * Gamepad 1 Normal
          */
-        gph1.link(Button.Y, heightMode.isMode(HIGH), () -> {if(lift.high){bot.addAutoModuleWithCancel(BackwardPlaceHighTele);}else{if(outtakeStatus.modeIs(DRIVING)){ bot.addAutoModuleWithCancel(BackwardGrabHighTele);}else{ bot.addAutoModuleWithCancel(ForwardTeleHigh);}}}, () -> bot.addAutoModuleWithCancel(BackwardGrabHighTele));
-        gph1.link(Button.X, heightMode.isMode(MIDDLE), () -> {if(lift.mid){ bot.addAutoModuleWithCancel(BackwardPlaceMiddleTele);}else{if(outtakeStatus.modeIs(DRIVING)){ bot.addAutoModuleWithCancel(BackwardGrabMiddleTele);}else{ bot.addAutoModuleWithCancel(ForwardTeleMiddle);}}}, () -> bot.addAutoModuleWithCancel(BackwardGrabMiddleTele));
-        gph1.link(Button.B, heightMode.isMode(LOW), () -> {if(lift.low){bot.addAutoModuleWithCancel(BackwardPlaceLowTele);}else{ if(outtakeStatus.modeIs(DRIVING)){ bot.addAutoModuleWithCancel(BackwardGrabLowTele);}else{ bot.addAutoModuleWithCancel(ForwardTeleLow);}}}, () -> bot.addAutoModuleWithCancel(BackwardGrabLowTele));
-        gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){bot.addAutoModuleWithCancel(BackwardPlaceGroundTele);}else{if(outtakeStatus.modeIs(DRIVING)){ bot.addAutoModuleWithCancel(BackwardGrabGroundTele);}else{ bot.addAutoModuleWithCancel(ForwardTeleGround);}}}, () -> bot.addAutoModuleWithCancel(BackwardGrabGroundTele));
+        gph1.link(Button.Y, heightMode.isMode(HIGH), () -> {if(lift.high){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceHighTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM);  bot.addAutoModuleWithCancel(BackwardGrabHighTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleHigh);}}}, () -> {driveMode.set(MEDIUM);  bot.addAutoModuleWithCancel(BackwardGrabHighTele);});
+        gph1.link(Button.X, heightMode.isMode(MIDDLE), () -> {if(lift.mid){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceMiddleTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabMiddleTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleMiddle);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabMiddleTele);});
+        gph1.link(Button.B, heightMode.isMode(LOW), () -> {if(lift.low){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceLowTele);}else{ if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabLowTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleLow);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabLowTele);});
+        gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceGroundTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleGround);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);});
 
 
-        gph1.link(DPAD_DOWN, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); bot.addAutoModule(ForwardTeleBottom);}, () -> odometry.adjustUp(1.0));
-        gph1.link(DPAD_UP, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); bot.addAutoModule(UprightCone);}, () -> odometry.adjustDown(1.0));
+        gph1.link(DPAD_DOWN, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); if(lift.upright){lift.upright = false; bot.addAutoModule(FixCone);}else{bot.addAutoModule(ForwardTeleBottom);}}, () -> odometry.adjustUp(1.0));
+        gph1.link(DPAD_UP, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); lift.upright = true; bot.addAutoModule(UprightCone);}, () -> odometry.adjustDown(1.0));
         gph1.link(DPAD_LEFT, () -> !bot.isMachineRunning(), () -> {lift.high = true; bot.addAutoModule(TakeOffCone);}, () -> odometry.adjustRight(1.0));
         gph1.link(DPAD_RIGHT, () -> !bot.isMachineRunning(), () -> {}, () -> odometry.adjustLeft(1.0));
 
@@ -107,14 +107,19 @@ public class TerraOp extends Tele {
 //        camera.resume();
     }
 //
-//    @Override
-//    public void startTele() {
-//        outtake.readyStart();
-//        outtake.openClaw();
-//    }
+    @Override
+    public void startTele() {
+        lift.resetLift();
+    }
 
     @Override
     public void loopTele() {
+
+        if(time > 0.5){
+
+        }
+
+
 //        double cutoff = 90;
 //        if(time > cutoff){
 //            if(time < cutoff+20) {
@@ -157,6 +162,8 @@ public class TerraOp extends Tele {
 //        junctionScannerAll.message();
 //        log.show("Right", lift.motorRight.getPosition());
 //        log.show("Left", lift.motorLeft.getPosition());
+//        log.show("TargetRight", lift.motorRight.getPositionHolder().getTarget());
+//        log.show("TargetLeft", lift.motorLeft.getPositionHolder().getTarget());
 //        log.show("Pose", odometry.getPose());
 //        log.show("SavedPose", bot.getSavedPose());
 //        log.show("Voltage", bot.getVoltage());

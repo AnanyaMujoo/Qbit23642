@@ -33,10 +33,6 @@ public class TerraAutoSafe extends AutoFramework {
 
     // TODO FIX SAFE AUTO
 
-    // TODO UPDATE CONTROL HUB/ CODE VERSION
-
-    // TODO MAKE UPRIGHT CONE
-
     // TODO MAKE ADJUST WHILE PAUSED
 
     // TODO MAKE Y MACHINE

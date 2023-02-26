@@ -8,7 +8,7 @@ import util.template.Precision;
 
 public class PositionHolder extends Controller1D {
 
-    private double restPower, extraRestPower, extraExtraRestPower, pCoefficient = 0;
+    private double restPower, extraRestPower, pCoefficient = 0;
     public final double deltaPowerUp = 0.007;
     public final double deltaPowerDown = -0.007;
     public final double velocityThreshold = Trig.rad(10);
@@ -43,13 +43,6 @@ public class PositionHolder extends Controller1D {
         if(isUsed) {
             if(isTargeting){
                 double error = (getTarget()-currentPosition);
-                if(error > 0.5){
-                    extraExtraRestPower += 0.005;
-                    Precision.clip(extraExtraRestPower, 0.2);
-                }else if(error < -1.5){
-                    extraExtraRestPower -= 0.001;
-                    Precision.clip(extraExtraRestPower, 0.2);
-                }
                 extraRestPower = pCoefficient*error;
             }else{
 //                if(!isWithinAccuracyRange() && Math.abs(getCurrentValue()) > velocityThreshold)
@@ -59,7 +52,7 @@ public class PositionHolder extends Controller1D {
     }
 
     @Override
-    protected double setOutput() { return isUsed ? restPowerFunction.run()+extraRestPower+extraExtraRestPower : 0; }
+    protected double setOutput() { return isUsed ? restPowerFunction.run()+extraRestPower : 0; }
 
     @Override
     protected boolean hasReachedTarget() { return false; }
