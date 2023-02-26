@@ -78,6 +78,8 @@ public class Lift extends RobotPart {
 
     // TODO FIX LIFT ADJUST
 
+    // TODO MAKE UP GLOBAL DOWN LOCAL
+
     public void adjustHolderTarget(double delta){
         currentCutoffPosition = 0;
         motorRight.holdPositionExact();
