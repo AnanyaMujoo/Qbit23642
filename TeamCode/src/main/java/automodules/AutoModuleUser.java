@@ -78,17 +78,15 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageEnd(0.0),
             outtake.stageOpen(0.0),
             lift.resetCutoff(),
-            lift.stageLift(0.9,0).attach(outtake.stageStartAfter(0.15))
+            lift.stageLift(0.7,0).attach(outtake.stageStartAfter(0.15))
     );
 
     AutoModule ForwardTeleMiddle = new AutoModule(
             outtakeStatus.ChangeMode(DRIVING),
             outtake.stageEnd(0.0),
             outtake.stageOpen(0.0),
-            drive.moveTime(1.0, 0.0, 0.0, 0.2),
-            outtake.stageStart(0.0),
             lift.resetCutoff(),
-            lift.stageLift(0.8,0)
+            lift.stageLift(0.6,0).attach(outtake.stageStartAfter(0.15))
     );
 
     AutoModule ForwardTeleLow = new AutoModule(
@@ -179,10 +177,10 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageStart(0.0),
             lift.moveTimeBack(-0.2, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.3;}else{return 0.0;}}),
             lift.changeCutoff(0.0),
-            outtake.stageReadyStart(0.0),
-            RobotPart.pause(1.2),
-            outtake.stageStart(0.0),
-            lift.stageLift(1.0, heightMode.getValue(GROUND)+10)
+            outtake.stage(0.3, 0.0),
+            RobotPart.pause(0.5),
+            lift.stageLift(1.0, heightMode.getValue(GROUND)+10),
+            outtake.stageStart(0.0)
     );
 
     AutoModule BackwardPlaceGroundTele = new AutoModule(
@@ -216,9 +214,10 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageOpen(0.0),
             outtake.stageStart(0.0),
 //            lift.moveTime(1.0, Math.max(0.23 - (i*0.23/5.0), 0)),
-            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(15.0 - (i*15.0/5.0), 0)),
+            lift.stageLift(1.0,  i == 0 ? 13.5 : Math.max(13.5 - (i*13.5/4.6), 0)),
             driveMode.ChangeMode(SLOW)
     );}
+
 
     /**
      * Misc
@@ -231,6 +230,7 @@ public interface AutoModuleUser extends RobotUser{
         @Override
         public void define() {
             addCustomCode(() -> {
+                drive.noStrafeLock = true;
                 ArrayList<Double> xs = new ArrayList<>(); ArrayList<Double> ys = new ArrayList<>();
                 whileNotExit(() -> xs.size() > 3, () -> {
                     distanceSensors.ready();
@@ -298,6 +298,7 @@ public interface AutoModuleUser extends RobotUser{
         @Override
         public void define() {
             addCustomCode(() -> {
+                drive.noStrafeLock = false;
                 ArrayList<Double> xs = new ArrayList<>(); ArrayList<Double> ys = new ArrayList<>();
                 whileNotExit(() -> xs.size() > 3, () -> {
                     distanceSensors.ready();
@@ -329,7 +330,7 @@ public interface AutoModuleUser extends RobotUser{
         @Override
         public void define() {
             addSegment(0.35, 0.2, mecanumNonstopSetPoint, -0.3, 16.0, 0.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 4.5), 0.2);
+            addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 4), 0.2);
             addWaypoint(0.52, -1.0, -26, 0.0);
             addSegment(0.3, 0.8, mecanumNonstopSetPoint, -1.5, -32.5, 0.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle);
@@ -353,6 +354,9 @@ public interface AutoModuleUser extends RobotUser{
                 addWaypoint(0.4, -0.3, 8.0, 0.0);
             }
         }
+
+        @Override
+        public void flip() {}
     };}
 
     Independent CycleLast = new Independent() {
@@ -461,7 +465,14 @@ public interface AutoModuleUser extends RobotUser{
                     addSegment(1.3, 0.6, mecanumNonstopSetPoint, -50, 45.0, -90);
                 }
             })
-            .addInstruction(DriveMode(false))
+            .addInstruction(() -> {
+                driveMode.set(MEDIUM);
+                bot.cancelAutoModules();
+                if(lift.skipping) {
+                    bot.addAutoModule(new AutoModule(outtake.stageReadyStart(0.0), lift.stageLift(0.6, 0.0), RobotPart.pause(0.2), outtake.stageFlip(0.0)));
+                    lift.skipping = false;
+                }
+            })
     ;
 
 }

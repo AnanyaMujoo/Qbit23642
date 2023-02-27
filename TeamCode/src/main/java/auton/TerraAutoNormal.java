@@ -49,13 +49,13 @@ public class TerraAutoNormal extends AutoFramework {
     AutoModule BackwardFirst = new AutoModule(
             lift.changeCutoff(1.0),
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyEndAfter(0.3))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+3.0).attach(outtake.stageReadyEndAfter(0.3))
     );
 
     AutoModule Backward = new AutoModule(
             RobotPart.pause(0.05),
             outtake.stageFlip(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.5).attach(outtake.stageReadyEndAfter(0.25))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+4.0).attach(outtake.stageReadyEndAfter(0.25))
     );
 
     AutoModule Forward(int i){return new AutoModule(

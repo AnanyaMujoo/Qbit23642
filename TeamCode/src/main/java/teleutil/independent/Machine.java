@@ -30,6 +30,7 @@ public class Machine {
     public volatile boolean quit = false;
     public volatile boolean skip = false;
     public volatile int skipTo = 0;
+    public volatile boolean skipToLastImmediate = false;
     /**
      * Is the machine running
      */
@@ -63,6 +64,7 @@ public class Machine {
     public void skipToNext(){ if(waiting) { pauseOrPlay(); }else{ quit = true; } }
     public void skipTo(int n){ skipTo = n; skip = true; }
     public void skipToLast(){ skipTo(stages.size()-1);}
+    public void skipToLastImmediate(){ skipToLastImmediate = true; quit = true; }
 
     public boolean isRunning(){ return running; }
 
@@ -106,7 +108,12 @@ public class Machine {
             }else{
                 bot.cancelIndependents(); bot.cancelAutoModules();
                 stages.get(stageNumber).runOnStop();
-                stageNumber+=2;
+                if(skipToLastImmediate){
+                    stageNumber = stages.size()-1;
+                    skipToLastImmediate = false;
+                }else {
+                    stageNumber += 2;
+                }
                 pause = false;
                 waiting = false;
                 quit = false;

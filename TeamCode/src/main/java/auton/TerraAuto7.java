@@ -220,4 +220,23 @@ public class TerraAuto7 extends AutoFramework {
     public void postProcess() {
         autoPlane.reflectY(); autoPlane.reflectX();
     }
+
+
+    // FOR SAFE
+
+    //        // Park
+//        customCase(() -> {
+//            addTimedWaypoint(0.6,0.3,  -58.5, 126.0, 129.0);
+//            addTimedWaypoint(0.3, 0.8, -61.5, 133.0, 0);
+//            addTimedSetpoint(1.0, 0.5, 1.2, -65, 78, 0);
+//        }, () -> {
+//            addSegment(0.6, mecanumDefaultWayPoint, -37 - x, 126 + s, 114);
+//            addSegment(0.6, mecanumDefaultWayPoint, -11.0, 114.5, 35.0);
+//            addTimedSetpoint(1.0, 0.5, 1.2, -4.0, 78, 0);
+//        }, () -> {
+//            addSegment(0.6, mecanumDefaultWayPoint, -37 - x, 123 + s, 110);
+//            addSegment(1.0, mecanumDefaultWayPoint, 15 - x, 123 + s, 91);
+//            addSegment(0.6, mecanumDefaultWayPoint, 45.0, 114.5, 35.0);
+//            addTimedSetpoint(1.0, 0.5, 1.3, 55, 78, 0);
+//        });
 }

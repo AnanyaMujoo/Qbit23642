@@ -30,6 +30,8 @@ public class Drive extends RobotPart {
     private final Precision precision = new Precision();
     private final Precision precision2 = new Precision();
 
+    public boolean noStrafeLock = false;
+
 //    public boolean slow = false;
 //    private PServo retract;
 
@@ -47,6 +49,8 @@ public class Drive extends RobotPart {
 //        retract.changePosition("end", 1.0);
 
 //        engage();
+
+        noStrafeLock = false;
 
         driveMode.set(MEDIUM);
         precision.reset();
@@ -98,7 +102,7 @@ public class Drive extends RobotPart {
             }
 
             if(driveMode.modeIs(SLOW)) {
-                drive.move(rm.fodd(f*0.4), rm.fodd(s*0.5), rt.fodd(t*0.6));
+                drive.move(rm.fodd(f*0.4),  noStrafeLock || !Precision.range(s, 0.7) ? rm.fodd(s*0.5) : 0.0, rt.fodd(t*0.6));
             }else if(driveMode.modeIs(MEDIUM)){
                 if(precision2.outputTrueForTime(precision2.isInputTrueForTime(Math.abs(t) > 0.9, 0.5), 0.2) && Math.abs(t) > 0.9){
                     drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, t);

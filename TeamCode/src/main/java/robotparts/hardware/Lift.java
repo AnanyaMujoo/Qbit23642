@@ -18,6 +18,7 @@ import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
 import static global.General.bot;
+import static global.General.fault;
 import static global.Modes.Height.GROUND;
 import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
@@ -42,6 +43,7 @@ public class Lift extends RobotPart {
     public boolean ground = false;
     public boolean stacked = false;
     public boolean upright = false;
+    public boolean skipping = false;
     public double globalOffset = 0;
 
     @Override
@@ -60,6 +62,7 @@ public class Lift extends RobotPart {
         stacked = false;
         ground = false;
         upright = false;
+        skipping = false;
         stackedMode = 0;
         globalOffset = 0;
     }

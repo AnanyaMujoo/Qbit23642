@@ -44,9 +44,9 @@ public class TerraOp extends Tele {
         /**
          * Gamepad 1 Normal
          */
-        gph1.link(Button.Y, heightMode.isMode(HIGH), () -> {if(lift.high){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceHighTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM);  bot.addAutoModuleWithCancel(BackwardGrabHighTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleHigh);}}}, () -> {driveMode.set(MEDIUM);  bot.addAutoModuleWithCancel(BackwardGrabHighTele);});
-        gph1.link(Button.X, heightMode.isMode(MIDDLE), () -> {if(lift.mid){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceMiddleTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabMiddleTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleMiddle);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabMiddleTele);});
-        gph1.link(Button.B, heightMode.isMode(LOW), () -> {if(lift.low){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceLowTele);}else{ if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabLowTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleLow);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabLowTele);});
+        gph1.link(Button.Y, heightMode.isMode(HIGH), () -> {if(lift.high){ bot.addAutoModuleWithCancel(BackwardPlaceHighTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM);  bot.addAutoModuleWithCancel(BackwardGrabHighTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleHigh);}}}, () -> {driveMode.set(MEDIUM);  bot.addAutoModuleWithCancel(BackwardGrabHighTele);});
+        gph1.link(Button.X, heightMode.isMode(MIDDLE), () -> {if(lift.mid){ bot.addAutoModuleWithCancel(BackwardPlaceMiddleTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabMiddleTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleMiddle);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabMiddleTele);});
+        gph1.link(Button.B, heightMode.isMode(LOW), () -> {if(lift.low){ bot.addAutoModuleWithCancel(BackwardPlaceLowTele);}else{ if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabLowTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleLow);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabLowTele);});
         gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceGroundTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleGround);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);});
 
 
@@ -59,8 +59,8 @@ public class TerraOp extends Tele {
         gph1.link(LEFT_BUMPER, () -> lift.adjustHolderTarget(-2.5));
 
 
-        gph1.link(LEFT_TRIGGER, () -> !MachineCycle.isRunning(), () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }}, MachineCycle::skipToLast);
-        gph1.link(RIGHT_TRIGGER, () -> !bot.isMachineRunning(), () -> {if(!driveMode.modeIs(SLOW)){driveMode.set(SLOW);}else{driveMode.set(MEDIUM);}},() -> {if(MachineCycle.isRunning()){ bot.pauseOrPlayMachine(); }else{ bot.skipToNextMachine(); }});
+        gph1.link(LEFT_TRIGGER, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }}, () -> {if(MachineCycle.isRunning()){ bot.skipToLastMachine();}else if(MachineCycleExtra.isRunning()){ lift.skipping = true; bot.skipToLastImmediate();}});
+        gph1.link(RIGHT_TRIGGER, () -> !bot.isMachineRunning(), () -> {if(!driveMode.modeIs(SLOW)){ drive.noStrafeLock = true; driveMode.set(SLOW);}else{ drive.noStrafeLock = false; driveMode.set(MEDIUM);}},() -> {if(MachineCycle.isRunning()){ bot.pauseOrPlayMachine(); }else{ bot.skipToNextMachine(); }});
 
 //        gph1.link(RIGHT_TRIGGER, () -> drive.slow = true);
 //        gph1.link(RIGHT_TRIGGER, OnNotHeldEventHandler.class, () -> drive.slow = false);
