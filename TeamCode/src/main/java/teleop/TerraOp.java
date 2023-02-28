@@ -6,14 +6,19 @@ import automodules.AutoModule;
 import automodules.AutoModuleUser;
 import autoutil.vision.JunctionScannerAll;
 import elements.FieldPlacement;
+import geometry.framework.Point;
+import geometry.position.Pose;
+import geometry.position.Vector;
 import math.polynomial.Linear;
 import robotparts.electronics.output.OLed;
 import teleutil.TeleTrack;
 import teleutil.button.Button;
 import teleutil.button.OnNotHeldEventHandler;
 import util.codeseg.CodeSeg;
+import util.template.Precision;
 
 import static global.General.bot;
+import static global.General.cameraMonitorViewId;
 import static global.General.fieldPlacement;
 import static global.General.gph1;
 import static global.General.gph2;
@@ -50,10 +55,10 @@ public class TerraOp extends Tele {
         gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceGroundTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleGround);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);});
 
 
-        gph1.link(DPAD_DOWN, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); if(lift.upright){lift.upright = false; bot.addAutoModule(FixCone);}else{bot.addAutoModule(ForwardTeleBottom);}}, () -> odometry.adjustUp(1.0));
-        gph1.link(DPAD_UP, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); lift.upright = true; bot.addAutoModule(UprightCone);}, () -> odometry.adjustDown(1.0));
-        gph1.link(DPAD_LEFT, () -> !bot.isMachineRunning(), () -> {lift.high = true; bot.addAutoModule(TakeOffCone);}, () -> odometry.adjustRight(1.0));
-        gph1.link(DPAD_RIGHT, () -> !bot.isMachineRunning(), () -> {}, () -> odometry.adjustLeft(1.0));
+        gph1.link(DPAD_DOWN, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); if(lift.upright){lift.upright = false; bot.addAutoModule(FixCone);}else{bot.addAutoModule(ForwardTeleBottom);}}, () -> odometry.adjustUp(MachineCycleExtra.isRunning() ? 2.0 : 1.0));
+        gph1.link(DPAD_UP, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); lift.upright = true; bot.addAutoModule(UprightCone);}, () -> odometry.adjustDown(MachineCycleExtra.isRunning() ? 2.0 : 1.0));
+        gph1.link(DPAD_LEFT, () -> !bot.isMachineRunning(), () -> {lift.high = true; bot.addAutoModule(TakeOffCone);}, () -> odometry.adjustRight(MachineCycleExtra.isRunning() ? 2.0 : 1.0));
+        gph1.link(DPAD_RIGHT, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); if(!lift.cap){bot.addAutoModule(CapGrab); lift.cap = true; }else{bot.addAutoModule(CapPick); lift.cap = false;}}, () -> odometry.adjustLeft(MachineCycleExtra.isRunning() ? 2.0 : 1.0));
 
         gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
         gph1.link(LEFT_BUMPER, () -> lift.adjustHolderTarget(-2.5));
@@ -115,8 +120,25 @@ public class TerraOp extends Tele {
     @Override
     public void loopTele() {
 
-        if(time > 0.5){
+        if(bot.isMachineRunning() && bot.getMachine().pause && lift.adjust){
 
+            if(gph1.ry > 0.9 || gph1.rx > 0.9 || gph1.lx > 0.9){
+                lift.adjust = false;
+                driveMode.set(MEDIUM);
+            }
+
+            Pose pose = bot.getMachine().getCurrentIndependent().getEndPose();
+            Pose error = pose.getSubtracted(odometry.getPose());
+            Linear rt = new Linear(0.05, 0.003);
+            Vector power = new Vector();
+            Linear rm = new Linear(0.15, 0.008);
+            if(error.getLength() > 0.3) {
+                double d = Precision.clip(error.getLength(), 5);
+                power = error.getVector().getUnitVector().getScaled(rm.fodd(d)).getRotated(-odometry.getHeading());
+            }
+            drive.move(Precision.clip(power.getY(), 0.2)+(gph1.ry*0.4), Precision.clip(power.getX(), 0.2)+(gph1.rx*0.4), Precision.clip(-rt.fodd(pose.getAngle()-odometry.getHeading()), 0.2)+(gph1.lx*0.4));
+        }else{
+            drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
         }
 
 
@@ -140,7 +162,7 @@ public class TerraOp extends Tele {
 //            }
 //        }
 
-        drive.moveSmooth(gph1.ry, gph1.rx, gph1.lx);
+
 
         lift.move(gph2.ry);
 

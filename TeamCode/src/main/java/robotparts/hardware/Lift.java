@@ -44,6 +44,8 @@ public class Lift extends RobotPart {
     public boolean stacked = false;
     public boolean upright = false;
     public boolean skipping = false;
+    public boolean cap = false;
+    public boolean adjust = false;
     public double globalOffset = 0;
 
     @Override
@@ -63,6 +65,8 @@ public class Lift extends RobotPart {
         ground = false;
         upright = false;
         skipping = false;
+        cap = false;
+        adjust = false;
         stackedMode = 0;
         globalOffset = 0;
     }

@@ -37,7 +37,7 @@ public class TerraAutoSafe extends AutoFramework {
         s = 0;
     }
 
-    // TODO MAKE ADJUST WHILE PAUSED
+    // TODO FIX PROBLEM SOMETIMES MACHINES DONT START
 
     // TODO MAKE Y MACHINE
 

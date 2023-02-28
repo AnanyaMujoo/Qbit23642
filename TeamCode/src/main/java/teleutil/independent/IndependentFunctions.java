@@ -61,4 +61,6 @@ public class IndependentFunctions {
      */
     public boolean isIndependentRunning(){ return isIndependentRunning; }
 
+    public Independent getCurrentIndependent(){ return currentIndependent; }
+
 }

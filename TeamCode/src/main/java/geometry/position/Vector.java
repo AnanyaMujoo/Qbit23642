@@ -82,6 +82,8 @@ public class Vector extends GeometryObject {
 
     public Vector getUnitVector(){ return getLength() == 0.0 ? this : getScaled(1.0/getLength()); }
 
+    public boolean isNonZero(){ return !this.equals(new Vector()); }
+
     public static Vector xHat(){ return new Vector(1,0); }
     public static Vector yHat(){ return new Vector(0,1); }
 

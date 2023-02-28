@@ -40,6 +40,7 @@ public class Machine {
      */
     public final ArrayList<Stage> stages = new ArrayList<>();
     public final ArrayList<Independent> independents = new ArrayList<>();
+    public volatile Independent currentIndependent;
 
     /**
      * Add instructions
@@ -48,7 +49,7 @@ public class Machine {
     public Machine addIndependent(Independent independent){
         independents.add(independent);
         return addInstruction(new Stage(
-            new Initial(() -> {bot.cancelIndependents(); bot.addIndependent(independent);}),
+            new Initial(() -> {bot.cancelIndependents(); currentIndependent = independent; bot.addIndependent(independent);}),
             new Exit(() -> !bot.isIndependentRunning())
         ));
     }
@@ -130,6 +131,10 @@ public class Machine {
      * Cancel the machine
      */
     public void cancel(){ pause = false; waiting = false; skip = false; skipTo = 0; running = false; stageNumber = 0; }
+
+    public Independent getCurrentIndependent(){
+        return currentIndependent;
+    }
 
     @FunctionalInterface
     public interface DoubleParameterCodeSeg<P, Q> {

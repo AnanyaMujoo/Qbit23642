@@ -105,6 +105,9 @@ public class Outtake extends RobotPart {
     public Stage stageReadyEndWithoutFlip(double t){ return super.customTime(() -> {armr.setPosition("endHalf"); arml.setPosition("endHalf");}, t); }
 
 
+    public double getArmPos(){ return armr.getPosition(); }
+    public boolean isClawClosed(){ return claw.getPosition() > 0.2; }
+
 
 
 //

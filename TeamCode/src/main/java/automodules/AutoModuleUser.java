@@ -103,8 +103,9 @@ public interface AutoModuleUser extends RobotUser{
             outtakeStatus.ChangeMode(DRIVING),
             outtake.stageOpen(0.0),
             driveMode.ChangeMode(MEDIUM),
-            RobotPart.pause(0.8),
+            RobotPart.pause(0.6),
             lift.resetCutoff(),
+            outtake.stageStart(0.0),
             lift.moveTime(-0.4, 0.4)
     );
 
@@ -180,7 +181,7 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stage(0.3, 0.0),
             RobotPart.pause(0.5),
             lift.stageLift(1.0, heightMode.getValue(GROUND)+10),
-            outtake.stageStart(0.0)
+            outtake.stage(0.1, 0.0)
     );
 
     AutoModule BackwardPlaceGroundTele = new AutoModule(
@@ -201,19 +202,21 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0,0)
     );
 
+    AutoModule CapGrab = new AutoModule(outtake.stageClose(0.0));
+    AutoModule CapPick = new AutoModule(lift.moveTime(1.0, 0.18));
+
 
     AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5),  lift.resetLift() );
 //    AutoModule RetractOdometry = new AutoModule(drive.stageRetract());
 //    AutoModule EngageOdometry = new AutoModule(drive.stageEngage());
-    AutoModule UprightCone = new AutoModule(lift.stageLift(1.0, 15), outtake.stage(0.1, 0.0), driveMode.ChangeMode(SLOW));
-    AutoModule FixCone = new AutoModule(lift.moveTimeBack(0.1, -0.43, () -> 0.4), lift.moveTimeBack(-0.2, -0.3, () -> 0.8), outtake.stageStart(0.0), driveMode.ChangeMode(MEDIUM));
+    AutoModule UprightCone = new AutoModule(lift.stageLift(1.0, 14), outtake.stage(0.08, 0.0), driveMode.ChangeMode(SLOW));
+    AutoModule FixCone = new AutoModule(lift.moveTimeBack(0.1, -0.5, () -> 0.4), lift.moveTimeBack(-0.2, -0.3, () -> 0.8), outtake.stageStart(0.0), driveMode.ChangeMode(MEDIUM));
     AutoModule TakeOffCone = new AutoModule(heightMode.ChangeMode(HIGH), outtakeStatus.ChangeMode(PLACING), outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.1),outtake.stageFlip(0.0));
 
     static AutoModule ForwardStackTele(int i){return new AutoModule(
             lift.changeCutoff(2),
             outtake.stageOpen(0.0),
             outtake.stageStart(0.0),
-//            lift.moveTime(1.0, Math.max(0.23 - (i*0.23/5.0), 0)),
             lift.stageLift(1.0,  i == 0 ? 13.5 : Math.max(13.5 - (i*13.5/4.6), 0)),
             driveMode.ChangeMode(SLOW)
     );}
@@ -329,13 +332,14 @@ public interface AutoModuleUser extends RobotUser{
     static Independent Cycle(int i) {return new Independent() {
         @Override
         public void define() {
+            addCustomCode(() -> {lift.adjust = false;});
             addSegment(0.35, 0.2, mecanumNonstopSetPoint, -0.3, 16.0, 0.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 4), 0.2);
+            addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 3), 0.2);
             addWaypoint(0.52, -1.0, -26, 0.0);
             addSegment(0.3, 0.8, mecanumNonstopSetPoint, -1.5, -32.5, 0.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle);
             if (i == 1 || i == 4) {
-                addSegment(1.4, 0.5, mecanumNonstopSetPoint, -0.3, 0.01, 0.0);
+                addSegment(0.8, 0.3, mecanumNonstopSetPoint, -0.3, -1.0, 0.0);
                 addCustomCode(() -> {
                     ArrayList<Double> xs = new ArrayList<>();
                     ArrayList<Double> ys = new ArrayList<>();
@@ -348,7 +352,6 @@ public interface AutoModuleUser extends RobotUser{
                     if(point.getDistanceTo(new Point()) < 10){
                         odometry.setPointUsingOffset(point);
                     }
-                    pause(0.1);
                 });
             }else{
                 addWaypoint(0.4, -0.3, 8.0, 0.0);
@@ -388,6 +391,7 @@ public interface AutoModuleUser extends RobotUser{
                 @Override
                 public void define() {
                     addCustomCode(() -> {
+                        lift.adjust = true;
                         ArrayList<Double> xs = new ArrayList<>(); ArrayList<Double> ys = new ArrayList<>();
                         whileNotExit(() -> xs.size() > 3, () -> {
                             distanceSensors.ready();
@@ -469,7 +473,11 @@ public interface AutoModuleUser extends RobotUser{
                 driveMode.set(MEDIUM);
                 bot.cancelAutoModules();
                 if(lift.skipping) {
-                    bot.addAutoModule(new AutoModule(outtake.stageReadyStart(0.0), lift.stageLift(0.6, 0.0), RobotPart.pause(0.2), outtake.stageFlip(0.0)));
+                    if(outtake.isClawClosed()) {
+                        bot.addAutoModule(new AutoModule(outtake.stageReadyStart(0.0), lift.stageLift(0.6, heightMode.getValue(LOW)+2), RobotPart.pause(0.2), outtake.stageFlip(0.0)));
+                    }else{
+                        bot.addAutoModule(new AutoModule(outtake.stageOpen(0.0), outtake.stageStart(0.0), lift.stageLift(0.6, 0.0)));
+                    }
                     lift.skipping = false;
                 }
             })

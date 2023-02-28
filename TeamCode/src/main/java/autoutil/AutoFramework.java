@@ -238,6 +238,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public Pose getStartPose(){ return startPose; }
 
+    public Pose getEndPose(){ return poses.get(poses.size() - 1); }
+
     public void setStartPose(Pose start){ startPose = start.getCopy(); }
 
     @Override

@@ -121,6 +121,7 @@ public class ThreeOdometry extends TwoOdometry {
     public void adjustDown(double delta){ adjust(new Vector(0,-abs(delta)));}
     public void adjustRight(double delta){ adjust(new Vector(abs(delta),0));}
     public void adjustLeft(double delta){ adjust(new Vector(-abs(delta), 0));}
+    public Vector getAdjust(){ return adjust; }
 
 
 
