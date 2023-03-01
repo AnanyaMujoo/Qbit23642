@@ -317,14 +317,25 @@ public interface AutoModuleUser extends RobotUser{
                     ys.add(-distanceSensors.getFrontDistance() - cyclePoint.getY());
                 });
                 Point point = new Point(Iterator.forAllAverage(xs), Iterator.forAllAverage(ys));
-                odometry.reset();
+                if(point.getDistanceTo(new Point()) < 15) {
+                    odometry.setPointUsingOffset(point);
+                }else{
+                    fault.warn("Distance sensors could not lock on, hard resetting odometry at point", Expectation.EXPECTED, Magnitude.MODERATE);
+                }
+                odometry.setHeadingUsingAdjust(0.0);
                 pause(0.05);
-                odometry.reset();
-                whileTime(() -> {
-                    fault.check("ODOMETRY RESET FAILED", Expectation.EXPECTED, Magnitude.CRITICAL, odometry.getPose().getDistanceTo(new Pose()) < 0.5 && Double.isFinite(odometry.getPose().getY()) && Double.isFinite(odometry.getPose().getX()), true);
-                }, 0.05);
-                odometry.setPointUsingOffset(point);
-                pause(0.05);
+                fault.check("ODOMETRY RESET FAILED", Expectation.EXPECTED, Magnitude.CRITICAL, odometry.getPose().getDistanceTo(new Pose()) < 0.5 && Double.isFinite(odometry.getPose().getY()) && Double.isFinite(odometry.getPose().getX()), true);
+
+                // TODO TEST
+
+//                odometry.reset();
+//                pause(0.05);
+//                odometry.reset();
+//                whileTime(() -> {
+//                    fault.check("ODOMETRY RESET FAILED", Expectation.EXPECTED, Magnitude.CRITICAL, odometry.getPose().getDistanceTo(new Pose()) < 0.5 && Double.isFinite(odometry.getPose().getY()) && Double.isFinite(odometry.getPose().getX()), true);
+//                }, 0.05);
+//                odometry.setPointUsingOffset(point);
+//                pause(0.05);
             });
         }
     };
@@ -407,16 +418,27 @@ public interface AutoModuleUser extends RobotUser{
                             ys.add(-distanceSensors.getFrontDistance() - cyclePoint.getY());
                         });
                         Point point = new Point(Iterator.forAllAverage(xs), Iterator.forAllAverage(ys));
-                        odometry.reset();
-                        pause(0.05);
-                        odometry.reset();
-                        whileTime(() -> {
-                            fault.check("ODOMETRY RESET FAILED", Expectation.EXPECTED, Magnitude.CRITICAL, odometry.getPose().getDistanceTo(new Pose()) < 0.5 && Double.isFinite(odometry.getPose().getY()) && Double.isFinite(odometry.getPose().getX()), true);
-                        }, 0.05);
-                        if(odometry.getPose().getDistanceTo(new Pose()) < 10) {
+                        if(point.getDistanceTo(new Point()) < 15) {
                             odometry.setPointUsingOffset(point);
+                        }else{
+                            fault.warn("Distance sensors could not lock on, hard resetting odometry at point", Expectation.EXPECTED, Magnitude.MODERATE);
                         }
+                        odometry.setHeadingUsingAdjust(0.0);
                         pause(0.05);
+                        fault.check("ODOMETRY RESET FAILED", Expectation.EXPECTED, Magnitude.CRITICAL, odometry.getPose().getDistanceTo(new Pose()) < 0.5 && Double.isFinite(odometry.getPose().getY()) && Double.isFinite(odometry.getPose().getX()), true);
+
+                        // TODO TEST
+
+//                        odometry.reset();
+//                        pause(0.05);
+//                        odometry.reset();
+//                        whileTime(() -> {
+//                            fault.check("ODOMETRY RESET FAILED", Expectation.EXPECTED, Magnitude.CRITICAL, odometry.getPose().getDistanceTo(new Pose()) < 0.5 && Double.isFinite(odometry.getPose().getY()) && Double.isFinite(odometry.getPose().getX()), true);
+//                        }, 0.05);
+//                        if(odometry.getPose().getDistanceTo(new Pose()) < 10) {
+//                            odometry.setPointUsingOffset(point);
+//                        }
+//                        pause(0.05);
                     });
                     addSegment(0.4, 0.4, mecanumNonstopSetPoint,  -2, 18,0.01);
                     addAutoModule(HoldMiddle);
@@ -497,7 +519,6 @@ public interface AutoModuleUser extends RobotUser{
                         Point point = new Point(Iterator.forAllAverage(xs), 57);
                         odometry.setPointUsingOffset(point);
                         odometry.setHeadingUsingAdjust(-91.0);
-                        // TODO CHECK IF PROBLEM WITH GYRO
                         pause(0.05);
                     });
                     addConcurrentAutoModuleWithCancel(BackwardCycleMove(LOW, 3.5));
@@ -637,7 +658,7 @@ public interface AutoModuleUser extends RobotUser{
                     bot.cancelAutoModules(); bot.addAutoModule(BackwardCycleHigh);
                     pause(0.5);
                 });
-                addWaypoint(0.65, 115-x, -79+s, -90.0);
+                addWaypoint(0.65, 115-x, -81+s, -90.0);
                 addSegment(1.2, 0.5, mecanumNonstopSetPoint, 76-x, -93+s, -50);
             }
         };
@@ -648,9 +669,9 @@ public interface AutoModuleUser extends RobotUser{
             @Override
             public void define() {
                 addConcurrentAutoModuleWithCancel(ForwardStackCycle(i), 0.15);
-                addWaypoint(0.5,103 - x, -83+s, -80);
-                addWaypoint(0.7,146 - x, -77+s, -87);
-                addSegment( 0.2 ,0.1, mecanumNonstopWayPoint,  153 - x, -82+s, -90);
+                addWaypoint(0.5,103 - x, -81.5+s, -83);
+                addWaypoint(0.7,146 - x, -81.5+s, -90);
+                addSegment( 0.2 ,0.1, mecanumNonstopWayPoint,  153 - x, -81.5+s, -90);
             }
         };
     }
