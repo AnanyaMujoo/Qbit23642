@@ -24,7 +24,7 @@ public class CaseScanner extends Scanner{
     { Arrays.fill(pastCases, caseDetected); }
 
     public int getCase(Mat input){
-        cropAndFill(input, getZoomedRect(input, 1.6));
+        cropAndFill(input, getZoomedRect(input, 1.6, 30));
         getHSV(input);
 
         computeRects(80, 150);

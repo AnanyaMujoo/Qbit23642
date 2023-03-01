@@ -215,7 +215,7 @@ public abstract class Scanner extends OpenCvPipeline {
         return new Rect((int) (center.x - width/2), (int) (center.y - height/2), width, height);
     }
 
-    public Rect getZoomedRect(Mat input, double zoom){ return getRectFromCenter(new Point(input.width()/2.0, input.height()/2.0), (int) (input.width()/zoom), (int) (input.height()/zoom)); }
+    public Rect getZoomedRect(Mat input, double zoom, double offset){ return getRectFromCenter(new Point(input.width()/2.0, (input.height()/2.0) + offset), (int) (input.width()/zoom), (int) (input.height()/zoom)); }
 
 
     public void cropAndFill(Mat input, Rect rect){

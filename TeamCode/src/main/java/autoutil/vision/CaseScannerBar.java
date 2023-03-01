@@ -20,7 +20,7 @@ public class CaseScannerBar extends CaseScanner {
     @SuppressLint("NewApi")
     @Override
     public int getCase(Mat input) {
-        cropAndFill(input, getZoomedRect(input, 2));
+        cropAndFill(input, getZoomedRect(input, 2, 40));
 
         getGray(input);
 
@@ -48,9 +48,9 @@ public class CaseScannerBar extends CaseScanner {
         double minArea = 400;
         for (int i = 0; i < contours.size(); i++) {
             Rect rect = Imgproc.boundingRect(contours.get(i));
-            if(getAspectRatio(rect) > minAspect && Imgproc.contourArea(contours.get(i)) > minArea && getCenter(rect).y > 120){
+            if(getAspectRatio(rect) > minAspect && Imgproc.contourArea(contours.get(i)) > minArea){
                 rects.add(rect);
-//                drawRectangle(input, scaleRectAroundCenter(rect, 1.4), BLUE);
+                drawRectangle(input, scaleRectAroundCenter(rect, 1.4), BLUE);
             }
         }
 

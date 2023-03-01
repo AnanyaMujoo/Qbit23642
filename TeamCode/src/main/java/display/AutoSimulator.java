@@ -49,10 +49,10 @@ public class AutoSimulator extends Drawer{
 //        setAuto(AutoModuleUser.CycleAround, startCycleAround);
 
 //        setAuto(new TerraAutoNormal.RIGHT());
-        setAuto(new TerraAutoSafe.RIGHT());
+//        setAuto(new TerraAutoSafe.RIGHT());
 
 //        setAuto(AutoModuleUser.MachineCycle, startCycle);
-//        setAuto(AutoModuleUser.MachineCycleExtra, startCycle);
+        setAuto(AutoModuleUser.MachineCycleExtra, startCycle);
 
 
         drawWindow(new AutoSimulator(), "Auto Simulator");
@@ -191,7 +191,7 @@ public class AutoSimulator extends Drawer{
                     CoordinatePlane plane = new CoordinatePlane(robotPose.getCopy());
                     plane.setStartInverse(startPose);
                     Pose localPose = plane.getPoses().get(0);
-                    System.out.printf(Locale.US, "Saved Pose %d, New %s Code %.1f, %.1f, %.1f %n", step, robotPose.toString(), -localPose.getX(), -localPose.getY(), localPose.getAngle());
+                    System.out.printf(Locale.US, "Saved Pose %d, New %s Code %.1f, %.1f, %.1f %n", step, robotPose.toString(), localPose.getX(), localPose.getY(), localPose.getAngle());
                     autoPlane.remove(convertToField(poses.get(step).getCopy()));
                     poses.set(step, robotPose);
                     autoPlane.add(convertToField(robotPose.getCopy()));

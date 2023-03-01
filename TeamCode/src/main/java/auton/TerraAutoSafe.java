@@ -39,10 +39,6 @@ public class TerraAutoSafe extends AutoFramework {
 
     // TODO FIX PROBLEM SOMETIMES MACHINES DONT START
 
-    // TODO MAKE Y MACHINE
-
-    // TODO MAKE TELE STACK
-
     AutoModule BackwardFirst = new AutoModule(
             RobotPart.pause(0.3),
             lift.changeCutoff(1.0),

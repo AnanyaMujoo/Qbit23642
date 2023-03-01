@@ -20,6 +20,7 @@ public class ThreeOdometry extends TwoOdometry {
     private final Vector leftOdometryCenterToRobotCenter = new Vector(10.5, 13.0);
     private Point offset = new Point();
     private Vector adjust = new Vector();
+    private double headingAdjust = 0;
 //    private final Precision precision = new Precision();
 
 
@@ -104,8 +105,17 @@ public class ThreeOdometry extends TwoOdometry {
     }
 
     @Override
-    protected void resetObjects() { odometryCenter.set(new Point()); offset = new Point(); adjust = new Vector(); }
+    protected void resetObjects() { odometryCenter.set(new Point()); offset = new Point(); adjust = new Vector(); headingAdjust = 0; }
 
+
+    @Override
+    public double getHeading() {
+        return super.getHeading() + headingAdjust;
+    }
+
+    public void setHeadingUsingAdjust(double heading) {
+        this.headingAdjust = heading - super.getHeading();
+    }
 
     @Override
     public Pose getPose() {
@@ -122,6 +132,7 @@ public class ThreeOdometry extends TwoOdometry {
     public void adjustRight(double delta){ adjust(new Vector(abs(delta),0));}
     public void adjustLeft(double delta){ adjust(new Vector(-abs(delta), 0));}
     public Vector getAdjust(){ return adjust; }
+
 
 
 

@@ -5,6 +5,7 @@ import automodules.stage.Exit;
 import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
+import geometry.position.Vector;
 import global.Constants;
 import global.Modes;
 import robot.BackgroundTask;
@@ -45,7 +46,8 @@ public class Lift extends RobotPart {
     public boolean upright = false;
     public boolean skipping = false;
     public boolean cap = false;
-    public boolean adjust = false;
+    public int adjust = 0;
+    public boolean adjusting = false;
     public double globalOffset = 0;
 
     @Override
@@ -66,7 +68,8 @@ public class Lift extends RobotPart {
         upright = false;
         skipping = false;
         cap = false;
-        adjust = false;
+        adjusting = false;
+        adjust = 0;
         stackedMode = 0;
         globalOffset = 0;
     }
