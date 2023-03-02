@@ -85,7 +85,7 @@ public abstract class Odometry extends RobotPart {
         updateCurrentPose(delta); currentPose.setAngle(getHeading()+deltaHeading);
     }
 
-    public final void setHeading(double heading){ currentPose.setAngle(heading); }
+    protected final void setHeading(double heading){ currentPose.setAngle(heading); }
 
     protected Vector toGlobalFrame(Vector v){ return v.getRotated(getHeading()); }
 

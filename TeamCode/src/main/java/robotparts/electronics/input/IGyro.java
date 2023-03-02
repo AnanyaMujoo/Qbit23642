@@ -18,7 +18,7 @@ public class IGyro extends Electronic {
     private final BNO055IMU gyro;
     private double heading, lastHeading, deltaHeading, startHeading = 0;
     private double pitch, startPitch = 0;
-    private Profiler pitchProfiler = new Profiler(() -> pitch);
+    private final Profiler pitchProfiler = new Profiler(() -> pitch);
 
     public IGyro(BNO055IMU gyro){
         this.gyro = gyro;
