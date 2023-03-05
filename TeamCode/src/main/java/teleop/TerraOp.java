@@ -90,7 +90,7 @@ public class TerraOp extends Tele {
 //        gph1.link(RIGHT_TRIGGER, AutoModuleUser::enableKappa, AUTOMATED);
 //        gph1.link(LEFT_TRIGGER, AutoModuleUser::disableKappa, AUTOMATED);
 
-        gph1.link(DPAD_DOWN, () -> {bot.cancelAutoModules(); bot.addAutoModule(ResetLift);}, AUTOMATED);
+        gph1.link(DPAD_DOWN, () -> {bot.cancelAutoModules(); driveMode.set(MEDIUM); bot.addAutoModule(ResetLift);}, AUTOMATED);
 
 //        gph1.link(DPAD_UP, RetractOdometry, AUTOMATED);
 //        gph1.link(DPAD_RIGHT, EngageOdometry, AUTOMATED);
