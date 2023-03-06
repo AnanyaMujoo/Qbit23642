@@ -41,25 +41,25 @@ public class TerraAutoSafe extends AutoFramework {
             RobotPart.pause(0.3),
             lift.changeCutoff(1.0),
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH) + 2.0).attach(outtake.stageWithFlipAfter(0.72, 0.3))
+            lift.stageLift(1.0, heightMode.getValue(HIGH) + 3.0).attach(outtake.stageWithFlipAfter(0.72, 0.3))
     );
 
     AutoModule Backward = new AutoModule(
             outtake.stageFlip(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH) + 3.0).attach(outtake.stageWithFlipAfter(0.72, 0.25))
+            lift.stageLift(1.0, heightMode.getValue(HIGH) + 4.0).attach(outtake.stageWithFlipAfter(0.72, 0.25))
     );
 
     AutoModule BackwardLeft = new AutoModule(
             RobotPart.pause(0.3),
             outtake.stageFlip(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH) + 3.0).attach(outtake.stageWithFlipAfter(0.72, 0.25))
+            lift.stageLift(1.0, heightMode.getValue(HIGH) + 4.0).attach(outtake.stageWithFlipAfter(0.72, 0.25))
     );
 
     AutoModule Forward(int i) { return new AutoModule(
             outtake.stageEnd(0.1),
             outtake.stageOpen(0.0),
             lift.moveTime(-0.7, 0.15),
-            lift.stageLift(1.0, i == 0 ? 13.5 : Math.max(13.5 - (i * 13.5 / 4.6), 0)).attach(outtake.stageStartAfter(0.1))
+            lift.stageLift(1.0, i == 0 ? 15.0 : Math.max(15.0 - (i * 15.0 / 4.5), 0)).attach(outtake.stageStartAfter(0.1))
     );}
 
 

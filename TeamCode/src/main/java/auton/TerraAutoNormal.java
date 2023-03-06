@@ -49,20 +49,20 @@ public class TerraAutoNormal extends AutoFramework {
     AutoModule BackwardFirst = new AutoModule(
             lift.changeCutoff(1.0),
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+2.0).attach(outtake.stageReadyEndAfter(0.3))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+3).attach(outtake.stageReadyEndAfter(0.3))
     );
 
     AutoModule Backward = new AutoModule(
             RobotPart.pause(0.05),
             outtake.stageFlip(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+3.0).attach(outtake.stageReadyEndAfter(0.25))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+4).attach(outtake.stageReadyEndAfter(0.25))
     );
 
     AutoModule Forward(int i){return new AutoModule(
             outtake.stageEnd(0.15),
             outtake.stageOpen(0.0),
             lift.moveTime(-0.7, 0.15),
-            lift.stageLift(1.0,  i == 0 ? 14.5 : Math.max(14.5 - (i*14.5/4.6), 0)).attach(outtake.stageStartAfter(0.2))
+            lift.stageLift(1.0,  i == 0 ? 15.0 : Math.max(15.0 - (i*15.0/4.5), 0)).attach(outtake.stageStartAfter(0.2))
     );}
 
 
@@ -90,7 +90,7 @@ public class TerraAutoNormal extends AutoFramework {
             addTimedSetpoint(1.0, 0.6, 0.9+startTime, -9.5, 140, 45);
         }, () -> {
             addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
-            addTimedSetpoint(1.0, 0.6, 0.9, -10.0, 137.5, 45);
+            addTimedSetpoint(1.0, 0.6, 0.9, -10.0, 137.5, 47);
         });
         addConcurrentAutoModuleWithCancel(Forward(0), 0.2);
 
