@@ -27,6 +27,7 @@ import static global.General.fieldPlacement;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
+import static global.General.voltageScale;
 import static global.Modes.Drive.MEDIUM;
 import static global.Modes.Drive.SLOW;
 import static global.Modes.GamepadMode.*;
@@ -44,6 +45,7 @@ public class TerraOp extends Tele {
 
     @Override
     public void initTele() {
+
 
         bot.loadLocationOnField();
 
@@ -71,7 +73,7 @@ public class TerraOp extends Tele {
 
         gph1.link(DPAD_DOWN, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); if(lift.upright){lift.upright = false; bot.addAutoModule(FixCone);}else{bot.addAutoModule(ForwardTeleBottom);}}, () -> {if(MachineCycle.isRunning()){odometry.adjustUp(1.0); }else{ lift.adjust = 1; }});
         gph1.link(DPAD_UP, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); lift.upright = true; bot.addAutoModule(UprightCone);}, () -> {if(MachineCycle.isRunning()){odometry.adjustDown(1.0); }else{ lift.adjust = 2; } });
-        gph1.link(DPAD_LEFT, () -> !bot.isMachineRunning(), () -> {lift.high = true; bot.addAutoModule(TakeOffCone);}, () -> {if(MachineCycle.isRunning()){odometry.adjustRight(1.0); }else{ lift.adjust = 3; }});
+        gph1.link(DPAD_LEFT, () -> !bot.isMachineRunning(), () -> {lift.high = true; bot.addAutoModule(TakeOffCone2);}, () -> {if(MachineCycle.isRunning()){odometry.adjustRight(1.0); }else{ lift.adjust = 3; }});
         gph1.link(DPAD_RIGHT, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); if(!lift.cap){bot.addAutoModule(CapGrab); lift.cap = true; }else{bot.addAutoModule(CapPick); lift.cap = false;}}, () -> {if(MachineCycle.isRunning()){odometry.adjustLeft(1.0); }else{ lift.adjust = 4; }});
 
         gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
@@ -134,6 +136,7 @@ public class TerraOp extends Tele {
 //
     @Override
     public void startTele() {
+        voltageScale = 1;
         lift.reset();
     }
 

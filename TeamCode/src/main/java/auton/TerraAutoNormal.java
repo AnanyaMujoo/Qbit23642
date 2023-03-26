@@ -151,7 +151,7 @@ public class TerraAutoNormal extends AutoFramework {
             addTimedSetpoint(1.0, 0.8, 1.2, -58, 78, 0);
         }, () -> {
             addTimedWaypoint(0.7, 0.5, 3.0, 122, 0);
-            addTimedSetpoint(1.0, 0.8, 1.2, 3.0, 78, 0);
+            addTimedSetpoint(1.0, 0.8, 1.2, 3.0, 75, 0);
         }, () -> {
             addSegment(0.7, mecanumDefaultWayPoint, 7, 130, 90);
             addSegment(0.7, mecanumDefaultWayPoint, 39, 130, 58);

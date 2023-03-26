@@ -243,6 +243,8 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule FixCone = new AutoModule(lift.moveTimeBack(0.1, -0.5, () -> 0.4), lift.moveTimeBack(-0.2, -0.3, () -> 0.8), outtake.stageStart(0.0), driveMode.ChangeMode(MEDIUM));
     AutoModule TakeOffCone = new AutoModule(heightMode.ChangeMode(HIGH), outtakeStatus.ChangeMode(PLACING), outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.1),outtake.stageFlip(0.0));
 
+    AutoModule TakeOffCone2 = new AutoModule(heightMode.ChangeMode(HIGH), outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.1),outtake.stageFlip(0.0));
+
     static AutoModule ForwardStackTele(int i){return new AutoModule(
             lift.changeCutoff(2),
             outtake.stageOpen(0.0),
@@ -370,28 +372,29 @@ public interface AutoModuleUser extends RobotUser{
         public void define() {
             addCustomCode(() -> {lift.adjust = 0;});
             addSegment(0.35, 0.2, mecanumNonstopSetPoint, -0.3, 16.0, 0.0);
-            addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 3), 0.2);
-            addWaypoint(0.52, -1.0, -26, 0.0);
-            addSegment(0.1, 0.8, mecanumNonstopSetPoint, -1.5, -32.5, 0.0);
+            addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 4.5), 0.2);
+            addWaypoint(0.5, -1.0, -26, 0.0);
+            addSegment(0.2, 0.1, mecanumNonstopSetPoint, -1.5, -32.5, 0.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle);
-            if (i == 1 || i == 4) {
-                addSegment(0.8, 0.3, mecanumNonstopSetPoint, -0.3, -1.0, 0.0);
-                addCustomCode(() -> {
-                    ArrayList<Double> xs = new ArrayList<>();
-                    ArrayList<Double> ys = new ArrayList<>();
-                    whileNotExit(() -> xs.size() > 3, () -> {
-                        distanceSensors.ready();
-                        xs.add(distanceSensors.getRightDistance() - cyclePoint.getX());
-                        ys.add(-distanceSensors.getFrontDistance() - cyclePoint.getY());
-                    });
-                    Point point = new Point(Iterator.forAllAverage(xs), Iterator.forAllAverage(ys));
-                    if(point.getDistanceTo(new Point()) < 10){
-                        odometry.setPointUsingOffset(point);
-                    }
-                });
-            }else{
-                addWaypoint(0.4, -0.3, 8.0, 0.0);
-            }
+//            if (i == 1 || i == 4) {
+//                addSegment(0.8, 0.3, mecanumNonstopSetPoint, -0.3, -1.0, 0.0);
+//                addCustomCode(() -> {
+//                    ArrayList<Double> xs = new ArrayList<>();
+//                    ArrayList<Double> ys = new ArrayList<>();
+//                    whileNotExit(() -> xs.size() > 3, () -> {
+//                        distanceSensors.ready();
+//                        xs.add(distanceSensors.getRightDistance() - cyclePoint.getX());
+//                        ys.add(-distanceSensors.getFrontDistance() - cyclePoint.getY());
+//                    });
+//                    Point point = new Point(Iterator.forAllAverage(xs), Iterator.forAllAverage(ys));
+//                    if(point.getDistanceTo(new Point()) < 10){
+//                        odometry.setPointUsingOffset(point);
+//                    }
+//                });
+//            }else{
+//                addWaypoint(0.38, -0.3, 8.0, 0.0);
+//            }
+            addWaypoint(0.38, -0.3, 8.0, 0.0);
         }
 
         @Override

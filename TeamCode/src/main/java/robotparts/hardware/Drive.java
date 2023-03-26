@@ -94,7 +94,7 @@ public class Drive extends RobotPart {
             Linear rx = new Linear(1.0, 0.4, 1.0);
 
             if(!driveMode.modeIs(SLOW)) {
-                if (precision.outputTrueForTime(precision.isInputTrueForTime(Math.abs(f) > 0.9, 0.5), 0.2) && Math.abs(f) > 0.9) {
+                if (precision.isInputTrueForTime(Math.abs(f) > 0.9, 0.5) && Math.abs(f) > 0.9) {
                     driveMode.set(FAST);
                 } else {
                     driveMode.set(MEDIUM);
@@ -104,10 +104,10 @@ public class Drive extends RobotPart {
             if(driveMode.modeIs(SLOW)) {
                 drive.move(rm.fodd(f*0.4),  noStrafeLock || !Precision.range(s, 0.7) ? rm.fodd(s)*0.3 : 0.0, rt.fodd(t*0.6));
             }else if(driveMode.modeIs(MEDIUM)){
-                if(precision2.outputTrueForTime(precision2.isInputTrueForTime(Math.abs(t) > 0.9, 0.5), 0.2) && Math.abs(t) > 0.9){
+                if(precision2.isInputTrueForTime(Math.abs(t) > 0.9, 0.5) && Math.abs(t) > 0.9){
                     drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, t);
                 }else{
-                    drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, rt.fodd(t*0.85));
+                    drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, 0.8*rt.fodd(t*0.85));
                 }
             }else{
                 drive.move(rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0), 0.0, rt.fodd(t*0.8));
