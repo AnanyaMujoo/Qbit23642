@@ -129,6 +129,16 @@ public interface AutoModuleUser extends RobotUser{
             lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2)
     );
 
+
+    AutoModule BackwardGrabHighTele2 = new AutoModule(
+            heightMode.ChangeMode(HIGH),
+            outtakeStatus.ChangeMode(PLACING),
+            outtake.stageClose(0.22),
+            lift.moveTimeBack(-0.2, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.3;}else{return 0.0;}}),
+            outtake.stageReadyEnd(0.0),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+2)
+    );
+
 //    OutputList BackwardHighTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabHighTele).addOption(PLACING, ForwardTeleHigh);
 
 
@@ -145,6 +155,15 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageClose(0.22),
             lift.moveTimeBack(-0.2, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.3;}else{return 0.0;}}),
             lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(outtake.stageWithFlipAfter(0.55,0.1))
+    );
+
+    AutoModule BackwardGrabMiddleTele2 = new AutoModule(
+            outtakeStatus.ChangeMode(PLACING),
+            heightMode.ChangeMode(MIDDLE),
+            lift.changeMid(true),
+            outtake.stageClose(0.22),
+            lift.moveTimeBack(-0.2, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.3;}else{return 0.0;}}),
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(outtake.stageReadyEndAfter(0.1))
     );
 
 //    OutputList BackwardMiddleTele = new OutputList(outtakeStatus::get).addOption(DRIVING, BackwardGrabMiddleTele).addOption(PLACING, ForwardTeleMiddle);
@@ -164,6 +183,17 @@ public interface AutoModuleUser extends RobotUser{
             lift.moveTimeBack(-0.2, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.3;}else{return 0.0;}}),
             lift.changeCutoff(0.0),
             outtake.stageWithFlip(0.55,0.0),
+            lift.stageLift(1.0, heightMode.getValue(LOW)+2)
+    );
+
+    AutoModule BackwardGrabLowTele2 = new AutoModule(
+            outtakeStatus.ChangeMode(PLACING),
+            heightMode.ChangeMode(LOW),
+            lift.changeLow(true),
+            outtake.stageClose(0.22),
+            lift.moveTimeBack(-0.2, 1.0, () -> {if(lift.stacked){ lift.stacked = false; return 0.3;}else{return 0.0;}}),
+            lift.changeCutoff(0.0),
+            outtake.stageReadyEnd(0.0),
             lift.stageLift(1.0, heightMode.getValue(LOW)+2)
     );
 //
@@ -217,8 +247,9 @@ public interface AutoModuleUser extends RobotUser{
             lift.changeCutoff(2),
             outtake.stageOpen(0.0),
             outtake.stageStart(0.0),
-            lift.stageLift(1.0,  i == 0 ? 13.5 : Math.max(13.5 - (i*13.5/4.6), 0)),
-            driveMode.ChangeMode(SLOW)
+            lift.stageLift(1.0,  i == 0 ? 13.5 : Math.max(13.5 - (i*13.5/4.6), 0))
+//            ,
+//            driveMode.ChangeMode(SLOW)
     );}
 
 
@@ -341,7 +372,7 @@ public interface AutoModuleUser extends RobotUser{
             addSegment(0.35, 0.2, mecanumNonstopSetPoint, -0.3, 16.0, 0.0);
             addConcurrentAutoModuleWithCancel(BackwardCycle(HIGH, 3), 0.2);
             addWaypoint(0.52, -1.0, -26, 0.0);
-            addSegment(0.3, 0.8, mecanumNonstopSetPoint, -1.5, -32.5, 0.0);
+            addSegment(0.1, 0.8, mecanumNonstopSetPoint, -1.5, -32.5, 0.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle);
             if (i == 1 || i == 4) {
                 addSegment(0.8, 0.3, mecanumNonstopSetPoint, -0.3, -1.0, 0.0);
@@ -377,7 +408,7 @@ public interface AutoModuleUser extends RobotUser{
 
     Machine MachineCycle = new Machine()
             .addIndependent(CycleFirst)
-            .addIndependent(7, AutoModuleUser::Cycle)
+            .addIndependent(8, AutoModuleUser::Cycle)
             .addIndependent(AutoModuleUser.CycleLast)
             ;
 

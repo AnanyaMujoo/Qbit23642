@@ -43,21 +43,11 @@ public class TerraAuto7 extends AutoFramework {
         fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90);
     }
 
-    // TOD4 MAKE
-
     private double x, s, y;
 
     @Override
     public void initialize() {
-        setConfig(mecanumNonstopConfig);
-
-        outtake.changeArmPosition("start", 0.03);
-
-        lift.maintain();
-        outtake.closeClaw();
-        ExceptionCatcher.catchInterrupted(() -> Thread.sleep(500));
-        outtake.readyStart();
-        scan(false);
+        TerraAutoNormal.normalInit(this);
         x = 0; s = 0; y = 119;
     }
 
@@ -93,43 +83,38 @@ public class TerraAuto7 extends AutoFramework {
 
 
         // Pre-loaded cone move
-        addWaypoint(1.0, 0, 100, 0);
-//        addConcurrentAutoModule(BackwardFirst);
+        addSegment(1.0, mecanumDefaultWayPoint, 0, 100, 0);
+        addConcurrentAutoModule(BackwardFirst);
         // Pre-loaded cone place
         addTimedSetpoint(1.0, 0.65, 1.2, -6.5, 138, 40);
         addConcurrentAutoModule(Forward(0));
-////
-////        // Start 5 cycle
-////        customNumber(5, i -> {
-////            switch (i){
-////                case 0: x = -0.5; s = -0.2;  break;
-////                case 1: x = 0.6;  s = 1.0;  break;
-////                case 2: x = 0.6;  s = 1.5;  break;
-////                case 3: x = 1.0;  s = 2.0;  break;
-////                case 4: x = 1.0;  s = 3.0;   break;
-////            }
-////            // Move to pick
-////            addSegment(0.8, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
-////            addSegment(0.8, mecanumDefaultWayPoint, 52-x, 125 + s, 87);
-////            addTimedWaypoint( 0.2, 0.2, 66-x, 126 + s, 87);
-////            // Pick
-////            addConcurrentAutoModuleWithCancel(Grab);
-////            addTimedWaypoint( 0.3, 0.3, 60-x, 126 + s, 89);
-////            // Move to place
-////            addConcurrentAutoModuleWithCancel(Backward(4));
-////            addSegment(0.8, mecanumDefaultWayPoint, 30-x, 124 + s, 75);
-////            addSegment(0.8, mecanumDefaultWayPoint, 15-x, 137 + s, 47);
-////            // Place
-////            addTimedSetpoint(1.0, 0.8, 0.6, -9 - x, 143 + s, 53);
-////            addConcurrentAutoModuleWithCancel(Forward(i+1 == 5 ? 0 : i+1), 0.1);
-////        });
-//        addPause(0.05);
-//        addTimedSetpoint(2.0, 0.6, 0.6, -8.5, 129, -93);
-
+        // Start 5 cycle
+        customNumber(5, i -> {
+            switch (i){
+                case 0: x = -0.5; s = -0.2;  break;
+                case 1: x = 0.6;  s = 1.0;  break;
+                case 2: x = 0.6;  s = 1.5;  break;
+                case 3: x = 1.0;  s = 2.0;  break;
+                case 4: x = 1.0;  s = 3.0;   break;
+            }
+            // Move to pick
+            addSegment(0.8, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
+            addSegment(0.8, mecanumDefaultWayPoint, 52-x, 125 + s, 87);
+            addTimedWaypoint( 0.2, 0.2, 66-x, 126 + s, 87);
+            // Pick
+            addConcurrentAutoModuleWithCancel(Grab);
+            addTimedWaypoint( 0.3, 0.3, 60-x, 126 + s, 89);
+            // Move to place
+            addConcurrentAutoModuleWithCancel(Backward(4));
+            addSegment(0.8, mecanumDefaultWayPoint, 30-x, 124 + s, 75);
+            addSegment(0.8, mecanumDefaultWayPoint, 15-x, 137 + s, 47);
+            // Place
+            addTimedSetpoint(1.0, 0.8, 0.6, -9 - x, 143 + s, 53);
+            addConcurrentAutoModuleWithCancel(Forward(i+1 == 5 ? 0 : i+1), 0.1);
+        });
+        addPause(0.05);
         // Move to other side
-
         addTimedSetpoint(2.0, 0.6, 0.6, -8.5, 129, -93);
-//        addTimedSetpoint(1.0, 0.4, 1.0, 0,0.01, -90);
         addCancelAutoModules();
         addCustomCode(() -> {
             ArrayList<Double> values = new ArrayList<>();
@@ -144,14 +129,6 @@ public class TerraAuto7 extends AutoFramework {
             odometry.setPointUsingOffset(point);
 
         });
-
-//        addCustomCode(() -> {
-//            distanceSensors.ready();
-//            Point point = new Point(odometry.getX(), Field.width - distanceSensors.getFrontDistance() - Robot.halfLength);
-//            odometry.setPoseUsingOffset(new Pose(point, 0));
-////            odometry.setCurrentPoint(point); odometry.setCurrentPoint(point);
-//        });
-//
 //        addTimedSetpoint(1.0, 0.8, 2.0, -200, y+6, -93);
 
 //        addCustomCode(() -> {
