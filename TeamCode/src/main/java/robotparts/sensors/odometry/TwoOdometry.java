@@ -18,6 +18,7 @@ public class TwoOdometry extends Odometry {
     protected void createEncoders(){
         enc1 = create("flEnc", ElectronicType.IENCODER_NORMAL);
         enc2 = create("blEnc", ElectronicType.IENCODER_NORMAL);
+        enc1.invert();
 
         addEncoders(enc1, enc2); useGyro();
     }

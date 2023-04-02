@@ -82,7 +82,8 @@ public class TeleUnitTester extends Tele implements UnitTester{
 
 
 //        add(new JunctionScannerTest());
-        add(new DistanceTest());
+//        add(new DistanceTest());
+        add(new OdometryTest());
     }
 
     /**

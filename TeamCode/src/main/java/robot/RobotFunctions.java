@@ -98,6 +98,7 @@ public class RobotFunctions {
      * @param autoModule
      */
     public final void addAutoModule(AutoModule autoModule){
+        autoModule.runStartCode();
         synchronized (rfsQueue) {
             if (rfsQueue.isEmpty()) { robotFunctionsThread.setStatus(Status.ACTIVE); }
             rfsQueue.addAll(autoModule.getStages());

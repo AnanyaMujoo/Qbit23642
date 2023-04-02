@@ -52,7 +52,7 @@ public class AutoSimulator extends Drawer{
 //        setAuto(new TerraAutoSafe.RIGHT());
 
 //        setAuto(AutoModuleUser.MachineCycle, startCycle);
-        setAuto(AutoModuleUser.MachineCycleExtra, startCycle);
+//        setAuto(AutoModuleUser.MachineCycleExtra, startCycle);
 
 
         drawWindow(new AutoSimulator(), "Auto Simulator");

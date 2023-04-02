@@ -1,25 +1,18 @@
 package robotparts.hardware;
 
-import automodules.AutoModule;
 import automodules.stage.Exit;
 import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
-import geometry.position.Vector;
 import global.Constants;
 import global.Modes;
-import robot.BackgroundTask;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
-import robotparts.electronics.positional.PServo;
-import util.User;
-import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
 import static global.General.bot;
-import static global.General.fault;
 import static global.Modes.Height.GROUND;
 import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
@@ -82,11 +75,15 @@ public class Lift extends RobotPart {
 
     public Stage changeGround(boolean ground){ return customTime(() -> this.ground = ground, 0.0);}
 
+    public void setGround(boolean ground){ this.ground = ground; }
+
 
     public Stage changeCutoff(double cutoffPosition){
         return customTime(() -> currentCutoffPosition = cutoffPosition, 0.0);
     }
-    public Stage resetCutoff(){ return customTime( () -> currentCutoffPosition = cutoffPosition, 0.0); }
+    public Stage ResetCutoff(){ return customTime( this::resetCutoff, 0.0); }
+    public void resetCutoff(){ currentCutoffPosition = cutoffPosition; }
+    public void setCutoffPosition(double cutoffPosition){ currentCutoffPosition = cutoffPosition; }
 
     @Override
     public void move(double p) {

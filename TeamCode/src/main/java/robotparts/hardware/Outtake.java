@@ -55,10 +55,9 @@ public class Outtake extends RobotPart {
         outtakeStatus.set(PLACING);
     }
 
-    public void changeArmPosition(String name, double pos){
-        armr.changePosition(name, pos);
-        arml.changePosition(name, pos);
-    }
+    public void changeArmPosition(String name, double pos){ armr.changePosition(name, pos); arml.changePosition(name, pos); }
+
+    public void setToTeleop(){ changeArmPosition("start", 0.06);}
 
     public void arm(double pos){ armr.setPosition(pos); arml.setPosition(pos); }
 

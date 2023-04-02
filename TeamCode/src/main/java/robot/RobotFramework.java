@@ -245,5 +245,6 @@ public class RobotFramework {
 //    public void loadPose(){ odometry.setCurrentPose(getSavedPose());; }
     public void saveLocationOnField(){ storage.addItem("FieldSide", fieldSide.toString()); storage.addItem("FieldPlacement", fieldPlacement.toString()); storage.saveItems(); }
     public void loadLocationOnField(){ fieldSide = FieldSide.create((String) storage.getItem("FieldSide").getValue()); fieldPlacement = FieldPlacement.create((String) storage.getItem("FieldPlacement").getValue()); }
+    public void loadFieldSide(){ fieldSide = FieldSide.create((String) storage.getItem("FieldSide").getValue()); fieldPlacement = FieldPlacement.LOWER; }
 
 }
