@@ -43,7 +43,7 @@ public class TerraOp extends Tele {
     public void initTele() {
 
         bot.loadFieldSide();
-        outtake.setToTeleop();
+//        outtake.setToTeleop();
         MachineCycle.reset();
         voltageScale = 1;
 
