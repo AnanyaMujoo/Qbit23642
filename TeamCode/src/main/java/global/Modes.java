@@ -24,7 +24,7 @@ public interface Modes {
     Mode heightMode = new Mode(Height.class)
             .set(Height.HIGH, Lift.maxPosition-9)
             .set(Height.MIDDLE, 30)
-            .set(Height.LOW, 9)
+            .set(Height.LOW, 8)
             .set(Height.GROUND, 9);
 
     // TOD5 MULTI DIMENSIONAL MODE

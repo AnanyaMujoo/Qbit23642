@@ -50,8 +50,8 @@ public class Lift extends RobotPart {
         // 0.25
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.66, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.66, 5);
-        motorRight.usePositionHolder(0.35, 0.2);
-        motorLeft.usePositionHolder(0.35, 0.2);
+        motorRight.usePositionHolder(0.2, 0.1);
+        motorLeft.usePositionHolder(0.2, 0.1);
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
         high = false;
