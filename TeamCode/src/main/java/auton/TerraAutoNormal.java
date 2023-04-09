@@ -26,9 +26,8 @@ import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
 
 public class TerraAutoNormal extends AutoFramework {
+
     private double x, s;
-    protected double minusTime = 0.0;
-    protected double startTime = 0.0;
 
     public static void normalInit(AutoFramework auto){
         auto.setConfig(mecanumNonstopConfig);
@@ -47,15 +46,13 @@ public class TerraAutoNormal extends AutoFramework {
     }
 
     AutoModule BackwardFirst = new AutoModule(
-            lift.changeCutoff(1.0),
             outtake.stageMiddle(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+3).attach(outtake.stageReadyEndAfter(0.3))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)).attach(outtake.stageReadyEndAfter(0.3))
     );
 
     AutoModule Backward = new AutoModule(
-            RobotPart.pause(0.05),
-            outtake.stageFlip(0.0),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+4).attach(outtake.stageReadyEndAfter(0.25))
+            outtake.stageFlipAfter(0.05),
+            lift.stageLift(1.0, heightMode.getValue(HIGH)).attach(outtake.stageReadyEndAfter(0.25))
     );
 
     AutoModule Forward(int i){return new AutoModule(
@@ -65,11 +62,9 @@ public class TerraAutoNormal extends AutoFramework {
             lift.stageLift(1.0,  i == 0 ? 15.0 : Math.max(15.0 - (i*15.0/4.5), 0)).attach(outtake.stageStartAfter(0.2))
     );}
 
-
-
     AutoModule GrabBack = new AutoModule(
             outtake.stageClose(0.2),
-            lift.moveTimeBack(-0.7, 0.5, () -> 0.3).attach(outtake.stageReadyStart(0.0))
+            outtake.stageReadyStart(0.0)
     );
 
     @Override
@@ -83,11 +78,12 @@ public class TerraAutoNormal extends AutoFramework {
             addWaypoint(1.0, 0, 126, 0);
             addWaypoint(0.7, -2, 110, 0);
         });
+
         // Pre-loaded cone place
         addConcurrentAutoModuleWithCancel(BackwardFirst);
         customFlipped(() -> {
             addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
-            addTimedSetpoint(1.0, 0.6, 0.9+startTime, -9.5, 140, 45);
+            addTimedSetpoint(1.0, 0.6, 0.9, -9.5, 140, 45);
         }, () -> {
             addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
             addTimedSetpoint(1.0, 0.6, 0.9, -10.0, 137.5, 47);
@@ -121,19 +117,18 @@ public class TerraAutoNormal extends AutoFramework {
             }, () -> {
                 addSegment(0.6, mecanumDefaultWayPoint, 61-x, 125 + s, 87);
             });
-            addTimedWaypoint( 0.1, 0.25, 68-x, 126 + s, 87);
+            addTimedWaypoint( 0.1, 0.3, 68-x, 126 + s, 87);
             addCustomCode(() -> {
-                bot.cancelAutoModules(); bot.addAutoModule(GrabBack);
+                bot.addAutoModuleWithCancel(GrabBack);
                 pause(0.5);
             });
-//            addTimedWaypoint( 0.1, 0.35, 63-x, 126 + s, 89);
             // Move to place
             addConcurrentAutoModuleWithCancel(Backward);
             addSegment(0.65, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
             // Place
             customFlipped(() -> {
                 addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.6, 1.5 - minusTime, -9 - x, 143 + s, 51.5);
+                addTimedSetpoint(1.0, 0.6, 0.9, -9 - x, 143 + s, 51.5);
             }, () -> {
                 addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 60);
                 addTimedSetpoint(1.0, 0.6, 1.5, -9 - x, 138 + s, 50);
@@ -282,4 +277,176 @@ public class TerraAutoNormal extends AutoFramework {
 
     // TOD 4 Convert to enter program that saves constants
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//    private double x, s;
+//    protected double minusTime = 0.0;
+//    protected double startTime = 0.0;
+//
+//    public static void normalInit(AutoFramework auto){
+//        auto.setConfig(mecanumNonstopConfig);
+//        bot.saveLocationOnField();
+//        lift.maintain();
+//        outtake.closeClaw();
+//        ExceptionCatcher.catchInterrupted(() -> Thread.sleep(500));
+//        outtake.readyStart();
+//        auto.scan(false);
+//    }
+//
+//    @Override
+//    public void initialize() {
+//        normalInit(this);
+//        x = 0; s = 0;
+//    }
+//
+//    AutoModule BackwardFirst = new AutoModule(
+//            outtake.stageMiddle(0.0),
+//            lift.stageLift(1.0, heightMode.getValue(HIGH)+3).attach(outtake.stageReadyEndAfter(0.3))
+//    );
+//
+//    AutoModule Backward = new AutoModule(
+//            RobotPart.pause(0.05),
+//            outtake.stageFlip(0.0),
+//            lift.stageLift(1.0, heightMode.getValue(HIGH)+4).attach(outtake.stageReadyEndAfter(0.25))
+//    );
+//
+//    AutoModule Forward(int i){return new AutoModule(
+//            outtake.stageEnd(0.15),
+//            outtake.stageOpen(0.0),
+//            lift.moveTime(-0.7, 0.15),
+//            lift.stageLift(1.0,  i == 0 ? 15.0 : Math.max(15.0 - (i*15.0/4.5), 0)).attach(outtake.stageStartAfter(0.2))
+//    );}
+//
+//
+//
+//    AutoModule GrabBack = new AutoModule(
+//            outtake.stageClose(0.2),
+//            lift.moveTimeBack(-0.7, 0.5, () -> 0.3).attach(outtake.stageReadyStart(0.0))
+//    );
+//
+//    @Override
+//    public void define() {
+//
+//        // Pre-loaded cone move
+//        customFlipped(() -> {
+//            addWaypoint(1.0, 2, 126, 0);
+//            addWaypoint(0.7, 9, 110, 0);
+//        }, () -> {
+//            addWaypoint(1.0, 0, 126, 0);
+//            addWaypoint(0.7, -2, 110, 0);
+//        });
+//        // Pre-loaded cone place
+//        addConcurrentAutoModuleWithCancel(BackwardFirst);
+//        customFlipped(() -> {
+//            addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
+//            addTimedSetpoint(1.0, 0.6, 0.9+startTime, -9.5, 140, 45);
+//        }, () -> {
+//            addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
+//            addTimedSetpoint(1.0, 0.6, 0.9, -10.0, 137.5, 47);
+//        });
+//        addConcurrentAutoModuleWithCancel(Forward(0), 0.2);
+//
+//        // Start 5 cycle
+//        customNumber(5, i -> {
+//            customFlipped(() -> {
+//                switch (i){
+//                    case 0: x = -0.5; s = -1.2;  break;
+//                    case 1: x = 0.6;  s = -0.5;  break;
+//                    case 2: x = 0.6;  s = 0.0;  break;
+//                    case 3: x = 1.0;  s = 0.5;  break;
+//                    case 4: x = 1.0;  s = 1.0;   break;
+//                }
+//            }, () -> {
+//                switch (i){
+//                    case 0: x = 2.0; s = -0.2;  break;
+//                    case 1: x = 3.0;  s = -0.4;  break;
+//                    case 2: x = 3.0;  s = -0.8;  break;
+//                    case 3: x = 4.0;  s = -1.2;  break;
+//                    case 4: x = 4.0;  s = -1.6;   break;
+//                }
+//            });
+//            // Move to pick
+//            addSegment(0.7, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
+//            // Pick
+//            customFlipped(() -> {
+//                addSegment(0.6, mecanumDefaultWayPoint, 60-x, 125 + s, 87);
+//            }, () -> {
+//                addSegment(0.6, mecanumDefaultWayPoint, 61-x, 125 + s, 87);
+//            });
+//            addTimedWaypoint( 0.1, 0.25, 68-x, 126 + s, 87);
+//            addCustomCode(() -> {
+//                bot.cancelAutoModules(); bot.addAutoModule(GrabBack);
+//                pause(0.5);
+//            });
+////            addTimedWaypoint( 0.1, 0.35, 63-x, 126 + s, 89);
+//            // Move to place
+//            addConcurrentAutoModuleWithCancel(Backward);
+//            addSegment(0.65, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
+//            // Place
+//            customFlipped(() -> {
+//                addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
+//                addTimedSetpoint(1.0, 0.6, 1.5 - minusTime, -9 - x, 143 + s, 51.5);
+//            }, () -> {
+//                addSegment(0.65, mecanumDefaultWayPoint, 11-x, 132 + s, 60);
+//                addTimedSetpoint(1.0, 0.6, 1.5, -9 - x, 138 + s, 50);
+//            });
+//            addConcurrentAutoModuleWithCancel(Forward(i+1));
+//            addPause(0.2);
+//        });
+//        addTimedWaypoint(0.8, 0.5, 2.4, 125, 53);
+////        // Park
+//        customCase(() -> {
+//            addSegment(0.7, mecanumDefaultWayPoint, -7, 128, 90);
+//            addSegment(0.7, mecanumDefaultWayPoint, -10, 128, 90);
+//            addSegment(0.7, mecanumDefaultWayPoint, -45, 125, 60);
+//            addSegment(0.7, mecanumDefaultWayPoint, -50, 126, 25);
+//            addTimedSetpoint(1.0, 0.8, 1.2, -58, 78, 0);
+//        }, () -> {
+//            addTimedWaypoint(0.7, 0.5, 3.0, 122, 0);
+//            addTimedSetpoint(1.0, 0.8, 1.2, 3.0, 75, 0);
+//        }, () -> {
+//            addSegment(0.7, mecanumDefaultWayPoint, 7, 130, 90);
+//            addSegment(0.7, mecanumDefaultWayPoint, 39, 130, 58);
+//            addSegment(0.7, mecanumDefaultWayPoint, 51, 114, 32);
+//            addSegment(0.7, mecanumDefaultWayPoint,  56, 98, 0);
+//            addTimedSetpoint(1.0, 0.8, 1.2, 65, 78, 0);
+//        });
+//        addPause(0.1);
+//        // End
+//    }
+
+//
+//    @Override
+//    public void postProcess() { autoPlane.reflectY(); autoPlane.reflectX(); }
 }

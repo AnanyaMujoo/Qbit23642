@@ -41,12 +41,7 @@ public class TerraOp extends Tele {
 
     @Override
     public void initTele() {
-
-        bot.loadFieldSide();
-//        outtake.setToTeleop();
-        MachineCycle.reset();
         voltageScale = 1;
-
 
         /**
          * Gamepad 1 Normal
@@ -57,23 +52,21 @@ public class TerraOp extends Tele {
         gph1.link(Button.B, heightMode.isMode(LOW).and(outtakeStatus.isMode(PLACING)), ForwardTeleLow, BackwardGrabLowTele);
         gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceGroundTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleGround);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);});
 
-        gph1.link(DPAD_DOWN, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); if(lift.upright){lift.upright = false; bot.addAutoModule(FixCone);}else{bot.addAutoModule(ForwardTeleBottom);}}, () -> {if(MachineCycle.isRunning()){odometry.adjustUp(1.0); }else{ lift.adjust = 1; }});
-        gph1.link(DPAD_UP, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); lift.upright = true; bot.addAutoModule(UprightCone);}, () -> {if(MachineCycle.isRunning()){odometry.adjustDown(1.0); }else{ lift.adjust = 2; } });
-        gph1.link(DPAD_LEFT, () -> !bot.isMachineRunning(), () -> {lift.high = true; bot.addAutoModule(TakeOffCone);}, () -> {if(MachineCycle.isRunning()){odometry.adjustRight(1.0); }else{ lift.adjust = 3; }});
-        gph1.link(DPAD_RIGHT, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); if(!lift.cap){bot.addAutoModule(CapGrab); lift.cap = true; }else{bot.addAutoModule(CapPick); lift.cap = false;}}, () -> {if(MachineCycle.isRunning()){odometry.adjustLeft(1.0); }else{ lift.adjust = 4; }});
+        gph1.link(DPAD_DOWN, () -> {if(lift.upright){lift.upright = false; bot.addAutoModuleWithCancel(FixCone);}else{bot.addAutoModuleWithCancel(ForwardTeleBottom);}});
+        gph1.link(DPAD_UP, () -> {lift.upright = true; bot.addAutoModuleWithCancel(UprightCone);});
+        gph1.link(DPAD_LEFT, () -> bot.addAutoModuleWithCancel(TakeOffCone));
+        gph1.link(DPAD_RIGHT, () -> {if(!lift.cap){bot.addAutoModuleWithCancel(CapGrab); lift.cap = true; }else{bot.addAutoModuleWithCancel(CapPick); lift.cap = false;}});
 
         gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
         gph1.link(LEFT_BUMPER, () -> lift.adjustHolderTarget(-2.5));
 
-        gph1.link(LEFT_TRIGGER, () -> !bot.isMachineRunning(), () -> {bot.cancelAutoModules(); if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModule(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }}, () -> {if(MachineCycle.isRunning()){ bot.skipToLastMachine();}});
-        gph1.link(RIGHT_TRIGGER, () -> !bot.isMachineRunning(), () -> {if(!driveMode.modeIs(SLOW)){ drive.noStrafeLock = true; driveMode.set(SLOW);}else{ drive.noStrafeLock = false; driveMode.set(MEDIUM);}}, () -> {if(MachineCycle.isRunning()){ bot.pauseOrPlayMachine(); }else{ lift.adjusting = false; lift.adjust = 0; bot.skipToNextMachine(); }});
+        gph1.link(RIGHT_TRIGGER, () -> {if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModuleWithCancel(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }});
 
         /**
          * Gamepad 1 Automated
          */
-        gph1.link(Button.B, MachineCycle, AUTOMATED);
         gph1.link(Button.X, bot::cancelMovements, AUTOMATED);
-        gph1.link(DPAD_DOWN, () -> bot.addAutoModuleWithCancel(ResetLift), AUTOMATED);
+        gph1.link(DPAD_DOWN, ResetLift, AUTOMATED);
 
         /**
          * Gamepad 2 Manual
@@ -87,12 +80,15 @@ public class TerraOp extends Tele {
         /**
          * Start code
          */
-        lift.move(-0.2);
+        lift.move(-0.15);
         outtake.readyStart();
         outtake.openClaw();
-        lift.reset();
     }
 
+    @Override
+    public void startTele() {
+        lift.reset();
+    }
 
     @Override
     public void loopTele() {
@@ -118,8 +114,8 @@ public class TerraOp extends Tele {
 //        log.show("heading", gyro.getHeading());
 
 //        junctionScannerAll.message();
-        log.show("Right", lift.motorRight.getPosition());
-        log.show("Left", lift.motorLeft.getPosition());
+//        log.show("Right", lift.motorRight.getPosition());
+//        log.show("Left", lift.motorLeft.getPosition());
 //        log.show("TargetRight", lift.motorRight.getPositionHolder().getTarget());
 //        log.show("TargetLeft", lift.motorLeft.getPositionHolder().getTarget());
 //        log.show("Pose", odometry.getPose());

@@ -22,10 +22,10 @@ public interface Modes {
 
     enum Height implements Mode.ModeType {HIGH, MIDDLE, LOW, GROUND}
     Mode heightMode = new Mode(Height.class)
-            .set(Height.HIGH, Lift.maxPosition-9)
-            .set(Height.MIDDLE, 30)
-            .set(Height.LOW, 8)
-            .set(Height.GROUND, 9);
+            .set(Height.HIGH, Lift.maxPosition-11)
+            .set(Height.MIDDLE, 28)
+            .set(Height.LOW, 6)
+            .set(Height.GROUND, 3);
 
     // TOD5 MULTI DIMENSIONAL MODE
     enum Drive implements Mode.ModeType {FAST, MEDIUM, SLOW}

@@ -27,13 +27,10 @@ public class Lift extends RobotPart {
     public PMotor motorLeft;
 
     public static final double maxPosition = 61;
-    public final double cutoffPosition = 10;
-    public volatile double currentCutoffPosition = 10;
+    public final double defaultCutoffPosition = 6;
+    public volatile double currentCutoffPosition = defaultCutoffPosition;
     public int stackedMode = 0;
     public boolean circuitMode = false;
-    public boolean high = false;
-    public boolean mid = false;
-    public boolean low = false;
     public boolean ground = false;
     public boolean stacked = false;
     public boolean upright = false;
@@ -54,9 +51,6 @@ public class Lift extends RobotPart {
         motorLeft.usePositionHolder(0.2, 0.1);
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
-        high = false;
-        mid = false;
-        low = false;
         stacked = false;
         ground = false;
         upright = false;
@@ -68,23 +62,7 @@ public class Lift extends RobotPart {
         globalOffset = 0;
     }
 
-    public Stage changeHigh(boolean high){ return customTime(() -> this.high = high, 0.0); }
-
-    public Stage changeMid(boolean mid){ return customTime(() -> this.mid = mid, 0.0); }
-
-    public Stage changeLow(boolean low){ return customTime(() -> this.low = low, 0.0); }
-
-    public Stage changeGround(boolean ground){ return customTime(() -> this.ground = ground, 0.0);}
-
     public void setGround(boolean ground){ this.ground = ground; }
-
-
-    public Stage changeCutoff(double cutoffPosition){
-        return customTime(() -> currentCutoffPosition = cutoffPosition, 0.0);
-    }
-    public Stage ResetCutoff(){ return customTime( this::resetCutoff, 0.0); }
-    public void resetCutoff(){ currentCutoffPosition = cutoffPosition; }
-    public void setCutoffPosition(double cutoffPosition){ currentCutoffPosition = cutoffPosition; }
 
     @Override
     public void move(double p) {
@@ -106,7 +84,7 @@ public class Lift extends RobotPart {
 
     @Override
     public Stage moveTime(double p, double t) {
-        return super.moveTime(p, t);
+        return super.moveTime(p, t).combine(new Initial(() -> currentCutoffPosition = p > 0 ? 0 : defaultCutoffPosition));
     }
 
     @Override
@@ -119,13 +97,14 @@ public class Lift extends RobotPart {
         new Exit(() -> { synchronized (val){ return bot.rfsHandler.getTimer().seconds() > val[0]; }}), stop(), drive.stop(), returnPart(), drive.returnPart());
     }
 
-    public Stage stageLift(double power, double target) { return moveTarget(() -> motorRight, () -> motorLeft, power, power, () -> {
+    public Stage stageLift(double power, double target) {
+        return moveTarget(() -> motorRight, () -> motorLeft, power, power, () -> {
         if(target == heightMode.getValue(LOW)+2 || target == heightMode.getValue(MIDDLE)+2 || target == heightMode.getValue(HIGH)+2){
             return target+globalOffset;
         }else{
             return target;
         }
-    }); }
+    }).combine(new Initial(() -> currentCutoffPosition = target < 1 ? defaultCutoffPosition : 0)); }
 
     @Override
     public void maintain() { super.maintain(); }

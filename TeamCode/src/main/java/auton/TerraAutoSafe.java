@@ -39,7 +39,6 @@ public class TerraAutoSafe extends AutoFramework {
 
     AutoModule BackwardFirst = new AutoModule(
             RobotPart.pause(0.3),
-            lift.changeCutoff(1.0),
             outtake.stageMiddle(0.0),
             lift.stageLift(1.0, heightMode.getValue(HIGH) + 3.0).attach(outtake.stageWithFlipAfter(0.72, 0.3))
     );
