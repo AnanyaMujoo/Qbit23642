@@ -48,12 +48,12 @@ public class TerraAutoNormal extends AutoFramework {
 
     AutoModule BackwardFirst = new AutoModule(
             lift.moveTime(1.0, 0.5).attach(outtake.stageReadyEndAfter(0.3)),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+2)
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+1.0)
     ).setStartCode(outtake::moveMiddle);
 
     AutoModule Backward = new AutoModule(
             lift.moveTime(1.0, 0.5).attach(outtake.stageReadyEndAfter(0.25)),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+2.5)
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+1.0)
     ).setStartCode(outtake::flip);
 
     AutoModule ForwardFirst = new AutoModule(
@@ -63,14 +63,20 @@ public class TerraAutoNormal extends AutoFramework {
             lift.stageLift(1.0,  13.5).attach(outtake.stageStartAfter(0.2))
     );
 
+    // TODO TEST
+
     AutoModule Forward(int i){return new AutoModule(
-            lift.moveTime(-1.0, 0.3),
-            lift.stageLift(1.0,  Math.max(13.5 - (i*13.5/4.6), 0)).attach(outtake.stageStartAfter(0.2))
-    ).setStartCode(outtake::openClaw);}
+            lift.moveTime(-0.8, 0.2),
+            outtake.stage(0.03, 0.0),
+            lift.stageLift(1.0,  Math.max(13.5 - (i*13.5/4.6), 0)).attach(outtake.stageFlipAfter(0.5))
+//                    .attach(outtake.stageStartAfter(0.3))
+    );}
+//            .setStartCode(outtake::openClaw);}
 
     AutoModule GrabBack = new AutoModule(
-            drive.moveTime(-0.1, 0.0, 0.0, 0.2),
-            lift.moveTime(1.0, 0.3)
+            RobotPart.pause(0.2),
+//            drive.moveTime(-0.1, 0.0, 0.0, 0.2),
+            lift.moveTimeBackOverride(-0.15, 1.0, 0.3)
     ).setStartCode(outtake::closeClaw);
 
     @Override
@@ -110,21 +116,21 @@ public class TerraAutoNormal extends AutoFramework {
             }, () -> {
                 switch (i){
                     case 0: x = 2.0; s = 0.0;  break;
-                    case 1: x = 3.0;  s = 0.1;  break;
-                    case 2: x = 3.0;  s = 0.2;  break;
-                    case 3: x = 4.0;  s = 0.3;  break;
-                    case 4: x = 4.0;  s = 0.4;   break;
+                    case 1: x = 3.0;  s = -0.1;  break;
+                    case 2: x = 3.0;  s = -0.2;  break;
+                    case 3: x = 4.0;  s = -0.3;  break;
+                    case 4: x = 4.0;  s = -0.4;   break;
                 }
             });
             // Move to pick
             addSegment(0.7, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
             // Pick
             customFlipped(() -> {
-                addSegment(0.6, mecanumDefaultWayPoint, 60-x, 127 + s, 87);
-                addTimedSetpoint(1.0, 0.1, 0.3, 66, 127, 87);
-            }, () -> {
                 addSegment(0.6, mecanumDefaultWayPoint, 61-x, 127 + s, 87);
-                addTimedSetpoint(1.0, 0.1, 0.3, 68, 127, 87);
+                addTimedSetpoint(1.0, 0.1, 0.3, 68-x, 127 +s , 87);
+            }, () -> {
+                addSegment(0.6, mecanumDefaultWayPoint, 63-x, 127 + s, 87);
+                addTimedSetpoint(1.0, 0.1, 0.3, 72-x, 127 + s, 87);
             });
             addCustomCode(() -> {
                 bot.addAutoModuleWithCancel(GrabBack);
@@ -136,15 +142,15 @@ public class TerraAutoNormal extends AutoFramework {
             // Place
             customFlipped(() -> {
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.6, 1.0, -9 - x, 141 + s, 51.5);
+                addTimedSetpoint(1.0, 0.6, 0.9, -9 - x, 141 + s, 51.5);
             }, () -> {
-                addSegment(0.65, mecanumDefaultWayPoint, 11-x, 134 + s, 60);
-                addTimedSetpoint(1.0, 0.6, 1.0, -9 - x, 143 + s, 50);
+                addSegment(0.5, mecanumDefaultWayPoint, 11-x, 134 + s, 55);
+                addTimedSetpoint(1.0, 0.4, 0.9, -8 - x, 143 + s, 50);
             });
             addCustomCode(() -> {
                 drive.move(0,0,0);
                 outtake.moveEnd();
-                pause(0.5);
+                pause(0.6);
                 outtake.openClaw();
             });
             addConcurrentAutoModuleWithCancel(Forward(i+1), 0.1);
