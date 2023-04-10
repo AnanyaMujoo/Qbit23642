@@ -63,13 +63,17 @@ public class TerraAutoNormal extends AutoFramework {
 
     AutoModule Forward(int i){return new AutoModule(
             lift.moveTime(-0.8, 0.2),
-            lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), 0)).attach(outtake.stageBack())
-//                    .attach(outtake.stageStartAfter(0.3))
-    );}
-//            .setStartCode(outtake::openClaw);}
+            lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), -0.5)).attach(outtake.stageBack())
+    ).setStartCode(outtake::openClaw);}
 
     AutoModule GrabBack = new AutoModule(
             RobotPart.pause(0.2),
+            lift.moveTimeBackOverride(-0.15, 1.0, 0.3)
+    ).setStartCode(outtake::closeClaw);
+
+
+    AutoModule GrabBackLast = new AutoModule(
+            drive.moveTime(-0.15, 0, 0,0.2),
             lift.moveTimeBackOverride(-0.15, 1.0, 0.3)
     ).setStartCode(outtake::closeClaw);
 
@@ -102,10 +106,10 @@ public class TerraAutoNormal extends AutoFramework {
             customFlipped(() -> {
                 switch (i){
                     case 0: x = -0.5; s = -1.2;  break;
-                    case 1: x = 0.6;  s = -0.5;  break;
-                    case 2: x = 0.6;  s = 0.0;  break;
-                    case 3: x = 1.0;  s = 0.5;  break;
-                    case 4: x = 1.0;  s = 1.0;   break;
+                    case 1: x = 0.6;  s = -0.3;  break;
+                    case 2: x = 0.6;  s = 0.4;  break;
+                    case 3: x = 1.0;  s = 1.1;  break;
+                    case 4: x = 1.0;  s = 1.8;   break;
                 }
             }, () -> {
                 switch (i){
@@ -129,8 +133,9 @@ public class TerraAutoNormal extends AutoFramework {
             });
             addCustomCode(() -> {
                 outtake.closeClaw();
-                bot.addAutoModuleWithCancel(GrabBack);
+                bot.addAutoModuleWithCancel(i+1 != 5 ? GrabBack : GrabBackLast);
                 pause(0.5);
+                outtake.flip();
             });
             // Move to place
             addConcurrentAutoModuleWithCancel(Backward);
@@ -138,7 +143,7 @@ public class TerraAutoNormal extends AutoFramework {
             // Place
             customFlipped(() -> {
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.6, 0.9, -8 - x, 140 + s, 51.5);
+                addTimedSetpoint(1.0, 0.6, 0.9, -9 - x, 141 + s, 51.5);
             }, () -> {
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 134 + s, 55);
                 addTimedSetpoint(1.0, 0.4, 0.9, -8 - x, 143 + s, 50);
@@ -147,6 +152,7 @@ public class TerraAutoNormal extends AutoFramework {
                 drive.move(0,0,0);
                 outtake.moveEnd();
                 pause(0.45);
+                bot.cancelAutoModules();
                 outtake.openClaw();
             });
             addConcurrentAutoModuleWithCancel(Forward(i+1), 0.2);
