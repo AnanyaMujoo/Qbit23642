@@ -47,35 +47,29 @@ public class TerraAutoNormal extends AutoFramework {
     }
 
     AutoModule BackwardFirst = new AutoModule(
-            lift.moveTime(1.0, 0.5).attach(outtake.stageReadyEndAfter(0.3)),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+1.0)
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+1.0).attach(outtake.stageReadyEndContinuous(0.6))
     ).setStartCode(outtake::moveMiddle);
 
     AutoModule Backward = new AutoModule(
-            lift.moveTime(1.0, 0.5).attach(outtake.stageReadyEndAfter(0.25)),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+1.0)
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+1.5).attach(outtake.stageReadyEndContinuous(0.9))
     ).setStartCode(outtake::flip);
 
     AutoModule ForwardFirst = new AutoModule(
             outtake.stageEnd(0.15),
             outtake.stageOpen(0.0),
             lift.moveTime(-1.0, 0.15),
-            lift.stageLift(1.0,  13.5).attach(outtake.stageStartAfter(0.2))
+            lift.stageLift(1.0,  13).attach(outtake.stageStartAfter(0.2))
     );
-
-    // TODO TEST
 
     AutoModule Forward(int i){return new AutoModule(
             lift.moveTime(-0.8, 0.2),
-            outtake.stage(0.03, 0.0),
-            lift.stageLift(1.0,  Math.max(13.5 - (i*13.5/4.6), 0)).attach(outtake.stageFlipAfter(0.5))
+            lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), 0)).attach(outtake.stageBack())
 //                    .attach(outtake.stageStartAfter(0.3))
     );}
 //            .setStartCode(outtake::openClaw);}
 
     AutoModule GrabBack = new AutoModule(
             RobotPart.pause(0.2),
-//            drive.moveTime(-0.1, 0.0, 0.0, 0.2),
             lift.moveTimeBackOverride(-0.15, 1.0, 0.3)
     ).setStartCode(outtake::closeClaw);
 
@@ -83,7 +77,7 @@ public class TerraAutoNormal extends AutoFramework {
     public void define() {
 
         // Pre-loaded cone move
-        addConcurrentAutoModuleWithCancel(new AutoModule(lift.stageLift(1.0, heightMode.getValue(LOW))));
+        addConcurrentAutoModuleWithCancel(new AutoModule(outtake.stageMiddle(0.0), lift.stageLift(1.0, heightMode.getValue(LOW))));
         customFlipped(() -> {
             addWaypoint(1.0, 2, 126, 0);
             addWaypoint(0.7, 9, 110, 0);
@@ -126,13 +120,15 @@ public class TerraAutoNormal extends AutoFramework {
             addSegment(0.7, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
             // Pick
             customFlipped(() -> {
-                addSegment(0.6, mecanumDefaultWayPoint, 61-x, 127 + s, 87);
-                addTimedSetpoint(1.0, 0.1, 0.3, 68-x, 127 +s , 87);
+                addSegment(0.55, mecanumDefaultWayPoint, 46-x, 127 + s, 88);
+                addSegment(0.4, mecanumDefaultWayPoint, 64-x, 127 + s, 88);
+                addTimedSetpoint(1.0, 0.1, 0.3, 68-x, 127 + s , 88);
             }, () -> {
                 addSegment(0.6, mecanumDefaultWayPoint, 63-x, 127 + s, 87);
                 addTimedSetpoint(1.0, 0.1, 0.3, 72-x, 127 + s, 87);
             });
             addCustomCode(() -> {
+                outtake.closeClaw();
                 bot.addAutoModuleWithCancel(GrabBack);
                 pause(0.5);
             });
@@ -142,7 +138,7 @@ public class TerraAutoNormal extends AutoFramework {
             // Place
             customFlipped(() -> {
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.6, 0.9, -9 - x, 141 + s, 51.5);
+                addTimedSetpoint(1.0, 0.6, 0.9, -8 - x, 140 + s, 51.5);
             }, () -> {
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 134 + s, 55);
                 addTimedSetpoint(1.0, 0.4, 0.9, -8 - x, 143 + s, 50);
@@ -150,11 +146,12 @@ public class TerraAutoNormal extends AutoFramework {
             addCustomCode(() -> {
                 drive.move(0,0,0);
                 outtake.moveEnd();
-                pause(0.6);
+                pause(0.45);
                 outtake.openClaw();
             });
-            addConcurrentAutoModuleWithCancel(Forward(i+1), 0.1);
+            addConcurrentAutoModuleWithCancel(Forward(i+1), 0.2);
         });
+        pause(0.1);
         addTimedWaypoint(0.8, 0.5, 2.4, 125, 53);
 //        // Park
         customCase(() -> {

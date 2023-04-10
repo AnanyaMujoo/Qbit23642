@@ -101,6 +101,8 @@ public class Outtake extends RobotPart {
 
     public Stage stageEndContinuous(double t){ return super.customContinuousTime(() -> armr, () -> arml, "end", t); }
 
+    public Stage stageReadyEndContinuous(double t){ return super.customContinuousTime(() -> armr, () -> arml, "endHalf", t); }
+
 
     public Stage stageMiddleWithoutFlip(double t){ return super.customTime(() -> {armr.setPosition("middle"); arml.setPosition("middle");}, t);}
     public Stage stageReadyEndWithoutFlip(double t){ return super.customTime(() -> {armr.setPosition("endHalf"); arml.setPosition("endHalf");}, t); }
@@ -108,6 +110,14 @@ public class Outtake extends RobotPart {
 
     public double getArmPos(){ return armr.getPosition(); }
     public boolean isClawClosed(){ return claw.getPosition() > 0.2; }
+
+    public Stage stageBack(){
+        return super.customTime(new StageBuilderTime(this)
+                .addSubStage(0.2, () -> {})
+                .addSubStage(0.2, () -> arm(0.0))
+                .addSubStage(0.1, this::unFlip)
+        );
+    }
 
 
 
