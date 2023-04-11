@@ -1,6 +1,7 @@
 package unittests.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
@@ -19,6 +20,7 @@ import unittests.auto.framework.movement.DistanceSensorStraightenTest;
 import unittests.auto.framework.movement.OdometryTest;
 import util.condition.Status;
 
+@Disabled
 @SuppressWarnings("ALL")
 @Autonomous(name = "AutoUnitTester", group = "UnitTests")
 public class AutoUnitTester extends Auto implements UnitTester {

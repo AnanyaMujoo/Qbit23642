@@ -43,6 +43,8 @@ public class TerraOp extends Tele {
     public void initTele() {
         voltageScale = 1;
 
+        outtake.setToTeleop();
+
         /**
          * Gamepad 1 Normal
          */

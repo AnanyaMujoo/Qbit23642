@@ -49,7 +49,7 @@ public class Outtake extends RobotPart {
         turn.addPosition("flipped", 0.86); //0.84
 
         claw.addPosition("open", 0.12); // 0.15
-        claw.addPosition("close", 0.32); //0.35
+        claw.addPosition("close", 0.29); //0.35
 
         unFlip();
         outtakeStatus.set(PLACING);
@@ -84,6 +84,7 @@ public class Outtake extends RobotPart {
     public Stage stageFlipAfter(double t){ return super.customTimeAfter(this::flip, t); }
     public Stage stageCloseAfter(double t){ return super.customTimeAfter(this::closeClaw, t);}
     public Stage stageUnFlip(double t){ return super.customTime(this::unFlip, t); }
+    public Stage stageUnFlipAfter(double t){ return super.customTimeAfter(this::unFlip, t); }
     public Stage stageEndAfter(double t){ return super.customTimeAfter(this::moveEnd, t); }
     public Stage stageOpenAfter(double t){ return super.customTimeAfter(this::openClaw, t); }
 
@@ -111,10 +112,10 @@ public class Outtake extends RobotPart {
     public double getArmPos(){ return armr.getPosition(); }
     public boolean isClawClosed(){ return claw.getPosition() > 0.2; }
 
-    public Stage stageBack(){
+    public Stage stageBack(double start){
         return super.customTime(new StageBuilderTime(this)
-                .addSubStage(0.2, () -> {})
-                .addSubStage(0.2, () -> arm(0.0))
+                .addSubStage(start, () -> {})
+                .addSubStage(0.1, () -> arm(0.0))
                 .addSubStage(0.1, this::unFlip)
         );
     }

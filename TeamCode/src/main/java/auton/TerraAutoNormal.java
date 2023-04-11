@@ -63,7 +63,7 @@ public class TerraAutoNormal extends AutoFramework {
 
     AutoModule Forward(int i){return new AutoModule(
             lift.moveTime(-0.8, 0.2),
-            lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), -0.5)).attach(outtake.stageBack())
+            lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), -0.5)).attach(outtake.stageBack(0.15))
     ).setStartCode(outtake::openClaw);}
 
     AutoModule GrabBack = new AutoModule(
@@ -104,32 +104,23 @@ public class TerraAutoNormal extends AutoFramework {
         // Start 5 cycle
         customNumber(5, i -> {
             customFlipped(() -> {
-                switch (i){
-                    case 0: x = -0.5; s = -1.2;  break;
-                    case 1: x = 0.6;  s = -0.3;  break;
-                    case 2: x = 0.6;  s = 0.4;  break;
-                    case 3: x = 1.0;  s = 1.1;  break;
-                    case 4: x = 1.0;  s = 1.8;   break;
-                }
+                x = 0.0;
+                s = -1+0.3*i;
             }, () -> {
-                switch (i){
-                    case 0: x = 2.0; s = 0.0;  break;
-                    case 1: x = 3.0;  s = -0.1;  break;
-                    case 2: x = 3.0;  s = -0.2;  break;
-                    case 3: x = 4.0;  s = -0.3;  break;
-                    case 4: x = 4.0;  s = -0.4;   break;
-                }
+                x = 2.0;
+                s = -0.3*i;
             });
             // Move to pick
-            addSegment(0.7, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
+            addSegment(0.6, mecanumDefaultWayPoint, 18-x, 128 + s, 80);
             // Pick
             customFlipped(() -> {
                 addSegment(0.55, mecanumDefaultWayPoint, 46-x, 127 + s, 88);
                 addSegment(0.4, mecanumDefaultWayPoint, 64-x, 127 + s, 88);
                 addTimedSetpoint(1.0, 0.1, 0.3, 68-x, 127 + s , 88);
             }, () -> {
-                addSegment(0.6, mecanumDefaultWayPoint, 63-x, 127 + s, 87);
-                addTimedSetpoint(1.0, 0.1, 0.3, 72-x, 127 + s, 87);
+                addSegment(0.55, mecanumDefaultWayPoint, 46-x, 127 + s, 88);
+                addSegment(0.4, mecanumDefaultWayPoint, 64-x, 127 + s, 88);
+                addTimedSetpoint(1.0, 0.1, 0.3, 72-x, 127 + s, 88);
             });
             addCustomCode(() -> {
                 outtake.closeClaw();
@@ -139,42 +130,48 @@ public class TerraAutoNormal extends AutoFramework {
             });
             // Move to place
             addConcurrentAutoModuleWithCancel(Backward);
-            addSegment(0.65, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
             // Place
             customFlipped(() -> {
+                addSegment(0.55, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.6, 0.9, -9 - x, 141 + s, 51.5);
+                addTimedSetpoint(1.0, 0.4, 1.0, -9 - x, 141 + s, 51.5);
             }, () -> {
+                addSegment(0.55, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 134 + s, 55);
-                addTimedSetpoint(1.0, 0.4, 0.9, -8 - x, 143 + s, 50);
+                addTimedSetpoint(1.0, 0.4, 1.0, -8 - x, 142 + s, 52);
             });
             addCustomCode(() -> {
                 drive.move(0,0,0);
                 outtake.moveEnd();
-                pause(0.45);
+                pause(0.15);
                 bot.cancelAutoModules();
                 outtake.openClaw();
+                pause(0.1);
             });
             addConcurrentAutoModuleWithCancel(Forward(i+1), 0.2);
         });
         pause(0.1);
-        addTimedWaypoint(0.8, 0.5, 2.4, 125, 53);
+        addTimedWaypoint(0.6, 0.5, 2.4, 125, 53);
 //        // Park
         customCase(() -> {
             addSegment(0.7, mecanumDefaultWayPoint, -7, 128, 90);
             addSegment(0.7, mecanumDefaultWayPoint, -10, 128, 90);
-            addSegment(0.7, mecanumDefaultWayPoint, -45, 125, 60);
-            addSegment(0.7, mecanumDefaultWayPoint, -50, 126, 25);
-            addTimedSetpoint(1.0, 0.8, 1.2, -58, 78, 0);
+            addSegment(0.7, mecanumDefaultWayPoint, -45, 125, 55);
+            addSegment(0.7, mecanumDefaultWayPoint, -54, 126, 5);
+            addTimedSetpoint(1.0, 0.7, 1.2, -58, 83, 0);
         }, () -> {
             addTimedWaypoint(0.7, 0.5, 3.0, 122, 0);
-            addTimedSetpoint(1.0, 0.8, 1.2, 3.0, 75, 0);
+            customFlipped(() -> {
+                addTimedSetpoint(1.0, 0.7, 1.2, 3.0, 83, 0);
+            }, () -> {
+                addTimedSetpoint(1.0, 0.7, 1.2, -1.0, 83, 0);
+            });
         }, () -> {
             addSegment(0.7, mecanumDefaultWayPoint, 7, 130, 90);
-            addSegment(0.7, mecanumDefaultWayPoint, 39, 130, 58);
+            addSegment(0.7, mecanumDefaultWayPoint, 39, 130, 90);
             addSegment(0.7, mecanumDefaultWayPoint, 51, 114, 32);
             addSegment(0.7, mecanumDefaultWayPoint,  56, 98, 0);
-            addTimedSetpoint(1.0, 0.8, 1.2, 65, 78, 0);
+            addTimedSetpoint(1.0, 0.7, 1.2, 65, 83, 0);
         });
         addPause(0.1);
         // End
