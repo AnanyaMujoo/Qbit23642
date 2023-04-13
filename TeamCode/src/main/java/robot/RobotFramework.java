@@ -177,7 +177,7 @@ public class RobotFramework {
     public void cancelMovements(){ rfsHandler.emptyQueue(); indHandler.stopCurrentIndependent(); machine.cancel(); setUserMainAndHalt(); }
     public void cancelAll(){ cancelMovements(); cancelBackgroundTasks();  }
 
-    public boolean isMachineRunning(){ return machine.isRunning(); }
+    public boolean isMachineNotRunning(){ return !machine.isRunning(); }
     public Machine getMachine(){ return machine; }
     public boolean isIndependentRunning(){ return bot.indHandler.isIndependentRunning(); }
     public Independent getIndependent(){ return bot.indHandler.getCurrentIndependent(); }

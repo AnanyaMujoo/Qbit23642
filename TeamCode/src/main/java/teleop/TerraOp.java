@@ -39,11 +39,15 @@ import static teleutil.TeleTrack.*;
 @TeleOp(name = "TerraOp", group = "TeleOp")
 public class TerraOp extends Tele {
 
+    // TODO SMOOTHER MOVEMENT
+
     @Override
     public void initTele() {
         voltageScale = 1;
 
         outtake.setToTeleop();
+
+        MachineCycle.reset();
 
         /**
          * Gamepad 1 Normal
@@ -54,20 +58,22 @@ public class TerraOp extends Tele {
         gph1.link(Button.B, heightMode.isMode(LOW).and(outtakeStatus.isMode(PLACING)), ForwardTeleLow, BackwardGrabLowTele);
         gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceGroundTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleGround);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);});
 
-        gph1.link(DPAD_DOWN, () -> {if(lift.upright){lift.upright = false; bot.addAutoModuleWithCancel(FixCone);}else{bot.addAutoModuleWithCancel(ForwardTeleBottom);}});
-        gph1.link(DPAD_UP, () -> {lift.upright = true; bot.addAutoModuleWithCancel(UprightCone);});
-        gph1.link(DPAD_LEFT, () -> bot.addAutoModuleWithCancel(TakeOffCone));
-        gph1.link(DPAD_RIGHT, () -> {if(!lift.cap){bot.addAutoModuleWithCancel(CapGrab); lift.cap = true; }else{bot.addAutoModuleWithCancel(CapPick); lift.cap = false;}});
+        gph1.link(DPAD_DOWN, () -> bot.isMachineNotRunning(), () -> {if(lift.upright){lift.upright = false; bot.addAutoModuleWithCancel(FixCone);}else{bot.addAutoModuleWithCancel(ForwardTeleBottom);}}, () -> odometry.adjustUp(1.0));
+        gph1.link(DPAD_UP, () -> bot.isMachineNotRunning(), () -> {lift.upright = true; bot.addAutoModuleWithCancel(UprightCone);}, () -> odometry.adjustDown(1.0));
+        gph1.link(DPAD_LEFT, () -> bot.isMachineNotRunning(), () -> bot.addAutoModuleWithCancel(TakeOffCone), () -> odometry.adjustRight(1.0));
+        gph1.link(DPAD_RIGHT, () -> bot.isMachineNotRunning(), () -> {lift.cap = true; bot.addAutoModuleWithCancel(CapGrab); }, () -> odometry.adjustLeft(1.0));
 
         gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
         gph1.link(LEFT_BUMPER, () -> lift.adjustHolderTarget(-2.5));
 
-        gph1.link(RIGHT_TRIGGER, () -> {if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModuleWithCancel(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }});
+        gph1.link(RIGHT_TRIGGER, () -> bot.isMachineNotRunning(), () -> {if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModuleWithCancel(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }} , () -> bot.pauseOrPlayMachine());
+        gph1.link(LEFT_TRIGGER, () -> bot.isMachineNotRunning(), () -> {}, ()->bot.skipToLastMachine() );
 
         /**
          * Gamepad 1 Automated
          */
         gph1.link(Button.X, bot::cancelMovements, AUTOMATED);
+        gph1.link(Button.B, MachineCycle, AUTOMATED);
         gph1.link(DPAD_DOWN, ResetLift, AUTOMATED);
 
         /**

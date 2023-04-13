@@ -4,11 +4,13 @@ import automodules.stage.Exit;
 import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
+import automodules.stage.Stop;
 import global.Constants;
 import global.Modes;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
+import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
@@ -47,8 +49,8 @@ public class Lift extends RobotPart {
         // 0.25
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.66, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.66, 5);
-        motorRight.usePositionHolder(0.2, 0.1);
-        motorLeft.usePositionHolder(0.2, 0.1);
+        motorRight.usePositionHolder(0.19, 0.1);
+        motorLeft.usePositionHolder(0.19, 0.1);
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
         stacked = false;
@@ -90,11 +92,13 @@ public class Lift extends RobotPart {
     @Override
     public Stage moveTime(double p, ReturnCodeSeg<Double> t) { return super.moveTime(p, t); }
 
-    public Stage moveTimeBack(double fp, double p, ReturnCodeSeg<Double> t){
+    public Stage moveTimeBack(double fp, double p, ReturnCodeSeg<Double> t){ return moveTimeBack(() -> fp, () -> p, t, () -> {}); }
+
+    public Stage moveTimeBack(ReturnCodeSeg<Double> fp, ReturnCodeSeg<Double> p, ReturnCodeSeg<Double> t, CodeSeg endCode){
         final Double[] val = {0.0};
         return new Stage(drive.usePart(), this.usePart(), new Initial(() -> val[0] = t.run()),
-        new Main(() -> {drive.move(fp, 0,0); move(p);}),
-        new Exit(() -> { synchronized (val){ return bot.rfsHandler.getTimer().seconds() > val[0]; }}), this.stop(), drive.stop(), this.returnPart(), drive.returnPart());
+                new Main(() -> {drive.move(fp.run(), 0,0); move(p.run());}),
+                new Exit(() -> { synchronized (val){ return val[0] == 0 || bot.rfsHandler.getTimer().seconds() > val[0]; }}), this.stop(), drive.stop(), new Stop(endCode), this.returnPart(), drive.returnPart());
     }
 
     public Stage moveTimeBackOverride(double fp, double p, double t){
@@ -119,5 +123,13 @@ public class Lift extends RobotPart {
     public void reset(){ motorRight.softReset(); motorLeft.softReset(); }
 
     public Stage resetLift(){ return new Stage(usePart(), new Main(this::reset), exitTime(0.1), stop(), returnPart()); }
+
+    public Stage checkAndLift(){
+        return lift.moveTimeBack(
+                () -> {if(lift.stacked){ return -0.2; }else { return 0.0; }},
+                () -> 1.0,
+                () -> {if(lift.stacked ){ return 0.35;}else if(lift.cap){return 0.35;}else{return 0.0;}},
+                () -> {lift.stacked = false; lift.cap = false; });
+    }
 }
 

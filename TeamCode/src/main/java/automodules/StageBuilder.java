@@ -125,6 +125,9 @@ public class StageBuilder {
 //        }),  t < 0.05 ? RobotPart.exitAlways() : new Exit(() -> exit[0]) , returnPart()); }
     protected final Stage customContinuousTime(ReturnCodeSeg<PServo> servo1, ReturnCodeSeg<PServo> servo2, String target, double t){ return new Stage(usePart(), new Initial(() -> {servo1.run().setContinuousTarget(target); servo2.run().setContinuousTarget(target);}), new Main(() -> {servo1.run().moveContinuous(t); servo2.run().moveContinuous(t);}), RobotPart.exitTime(t), returnPart());}
 
+    protected final Stage customContinuousTime(ReturnCodeSeg<PServo> servo1, ReturnCodeSeg<PServo> servo2, String target, double t, CodeSeg code, double t2){ return new Stage(usePart(), new Initial(() -> {servo1.run().setContinuousTarget(target); servo2.run().setContinuousTarget(target);}), new Main(() -> {servo1.run().moveContinuous(t); servo2.run().moveContinuous(t); if(bot.rfsHandler.getTimer().seconds() > t2){code.run();}}), RobotPart.exitTime(t), returnPart());}
+
+
     protected void setTarget(double target){}
     protected boolean exitTarget(){ return true; }
     protected void stopTarget(){}

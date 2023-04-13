@@ -29,6 +29,8 @@ public class Outtake extends RobotPart {
 
         arml.changePosition("start", 0.03);
         armr.changePosition("start", 0.03);
+        arml.addPosition("s", 0.03);
+        armr.addPosition("s", 0.03);
 
         arml.addPosition("startHalf", 0.38);
         armr.addPosition("startHalf", 0.38);
@@ -65,6 +67,11 @@ public class Outtake extends RobotPart {
     public void moveEnd(){ armr.setPosition("end"); arml.setPosition("end"); flip(); }
     public void openClaw(){ claw.setPosition("open"); }
     public void closeClaw(){ claw.setPosition("close"); }
+
+    public void dropConeRaw(){
+        armr.setPositionRaw("end"); arml.setPositionRaw("end"); claw.setPositionRaw("open");
+
+    }
 
     public void flip(){ turn.setPosition("flipped"); }
     public void unFlip(){ turn.setPosition("start"); }
@@ -103,6 +110,16 @@ public class Outtake extends RobotPart {
     public Stage stageEndContinuous(double t){ return super.customContinuousTime(() -> armr, () -> arml, "end", t); }
 
     public Stage stageReadyEndContinuous(double t){ return super.customContinuousTime(() -> armr, () -> arml, "endHalf", t); }
+
+
+
+    public Stage stageReadyEndContinuousWithFlip(double t, double flipT){ return super.customContinuousTime(() -> armr, () -> arml, "endHalf", t, this::flip, flipT); }
+
+
+
+
+    public Stage stageEndContinuousWithFlip(double t, double flipT){ return super.customContinuousTime(() -> armr, () -> arml, "end", t, this::flip, flipT); }
+
 
 
     public Stage stageMiddleWithoutFlip(double t){ return super.customTime(() -> {armr.setPosition("middle"); arml.setPosition("middle");}, t);}

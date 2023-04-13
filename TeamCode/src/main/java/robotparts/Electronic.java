@@ -26,7 +26,7 @@ public class Electronic extends StageBuilder {
     /**
      * Access represents the access the user has to use the electronic
      */
-    protected Access access = new Access();
+    protected final Access access = new Access();
 
     /**
      * Gets the current status
