@@ -49,8 +49,8 @@ public class Lift extends RobotPart {
         // 0.25
         motorRight.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.66, 5);
         motorLeft.setToLinear(Constants.ORBITAL_TICKS_PER_REV, 1.79, 0.66, 5);
-        motorRight.usePositionHolder(0.19, 0.1);
-        motorLeft.usePositionHolder(0.19, 0.1);
+        motorRight.usePositionHolder(0.12, 0.1);
+        motorLeft.usePositionHolder(0.12, 0.1);
         heightMode.set(Modes.Height.HIGH);
         circuitMode = false;
         stacked = false;
@@ -68,8 +68,8 @@ public class Lift extends RobotPart {
 
     @Override
     public void move(double p) {
-        motorRight.moveWithPositionHolder(p, currentCutoffPosition, 0.2);
-        motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.2);
+        motorRight.moveWithPositionHolder(p, currentCutoffPosition, 0.1);
+        motorLeft.moveWithPositionHolder(p, currentCutoffPosition, 0.1);
     }
 
     public void adjustHolderTarget(double delta){

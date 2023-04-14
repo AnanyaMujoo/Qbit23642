@@ -85,7 +85,7 @@ public class PMotor extends Electronic {
     /**
      * Hold the position exactly
      */
-    public void holdPositionExact(){ positionHolder.activate(getPosition()); move(0); }
+    public void holdPositionExact(){ positionHolder.activate(this::getPosition); move(0); }
 
     /**
      * Release the position

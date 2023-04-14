@@ -39,8 +39,6 @@ import static teleutil.TeleTrack.*;
 @TeleOp(name = "TerraOp", group = "TeleOp")
 public class TerraOp extends Tele {
 
-    // TODO SMOOTHER MOVEMENT
-
     @Override
     public void initTele() {
         voltageScale = 1;
@@ -67,7 +65,7 @@ public class TerraOp extends Tele {
         gph1.link(LEFT_BUMPER, () -> lift.adjustHolderTarget(-2.5));
 
         gph1.link(RIGHT_TRIGGER, () -> bot.isMachineNotRunning(), () -> {if(lift.stackedMode < 5){ lift.stacked = true; bot.addAutoModuleWithCancel(AutoModuleUser.ForwardStackTele(lift.stackedMode)); lift.stackedMode++;}else{lift.stackedMode = 0; }} , () -> bot.pauseOrPlayMachine());
-        gph1.link(LEFT_TRIGGER, () -> bot.isMachineNotRunning(), () -> {}, ()->bot.skipToLastMachine() );
+        gph1.link(LEFT_TRIGGER, () -> bot.isMachineNotRunning(), () -> {if(!driveMode.modeIs(SLOW)){driveMode.set(SLOW);}else{driveMode.set(MEDIUM);}}, ()->bot.skipToLastMachine() );
 
         /**
          * Gamepad 1 Automated
@@ -106,6 +104,24 @@ public class TerraOp extends Tele {
 
         log.show("DriveMode", driveMode.get());
         log.show("StackedMode", lift.stackedMode == 0 ? "N/A" : 6-lift.stackedMode);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //        log.show("TrackStatus", kappaBefore.isEnabled() ? "Kappa" : "None");

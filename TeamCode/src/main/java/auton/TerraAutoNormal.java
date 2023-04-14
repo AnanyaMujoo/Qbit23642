@@ -96,7 +96,7 @@ public class TerraAutoNormal extends AutoFramework {
             addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
             addTimedSetpoint(1.0, 0.6, 0.9, -9.5, 137, 45);
         }, () -> {
-            addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
+            addTimedSetpoint(1.0, 0.6, 0.5, 5, 123, 40);
             addTimedSetpoint(1.0, 0.6, 0.9, -9.0, 141, 45);
         });
         addConcurrentAutoModuleWithCancel(ForwardFirst, 0.2);
@@ -138,7 +138,7 @@ public class TerraAutoNormal extends AutoFramework {
             }, () -> {
                 addSegment(0.55, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 134 + s, 55);
-                addTimedSetpoint(1.0, 0.4, 1.0, -8 - x, 142 + s, 52);
+                addTimedSetpoint(1.0, 0.4, 1.0, -6 - x, 142.5 + s, 52);
             });
             addCustomCode(() -> {
                 drive.move(0,0,0);

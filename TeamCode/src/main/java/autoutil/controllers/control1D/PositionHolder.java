@@ -13,7 +13,7 @@ public class PositionHolder extends Controller1D {
     public final double deltaPowerDown = -0.007;
     public final double velocityThreshold = Trig.rad(10);
     private volatile boolean isUsed, isTargeting = false;
-    private double currentPosition = 0;
+    private ReturnCodeSeg<Double> currentPosition = () -> 0.0;
     private ReturnCodeSeg<Double> restPowerFunction = () -> restPower;
 
 
@@ -21,7 +21,7 @@ public class PositionHolder extends Controller1D {
     public void deactivate(){ isUsed = false; isTargeting = false; }
     public void activate(){ isUsed = true; isTargeting = false; }
 
-    public void activate(double currentPosition){ isUsed = true; isTargeting = true; this.currentPosition = currentPosition; }
+    public void activate(ReturnCodeSeg<Double> currentPosition){ isUsed = true; isTargeting = true; this.currentPosition = currentPosition; }
 
     @Override
     public void setRestOutput(double restOutput) { this.restPower = restOutput; }
@@ -42,9 +42,9 @@ public class PositionHolder extends Controller1D {
     protected void updateController(Pose pose, Generator generator) {
         if(isUsed) {
             if(isTargeting){
-                double error = (getTarget()-currentPosition);
+                double error = (getTarget()-currentPosition.run());
                 extraRestPower = pCoefficient*error;
-            }else{
+            } else{
 //                if(!isWithinAccuracyRange() && Math.abs(getCurrentValue()) > velocityThreshold)
                 extraRestPower = 0;
             }
