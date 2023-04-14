@@ -25,6 +25,10 @@ public abstract class Function {
      */
     public double feven(double x){return Math.abs(Math.signum(x))*f(Math.abs(x));}
 
+
+
+    public double fevenb(double x, double b){ return x != 0 ? feven(x) : b; }
+
     /**
      * Represents the odd version of this function (i.e. f(x) = -f(-x))
      * NOTE: f(0) will be automatically set to 0

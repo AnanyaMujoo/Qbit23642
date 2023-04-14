@@ -25,6 +25,10 @@ public class Linear extends Polynomial{
         this.b = b;
     }
 
+    public static Linear one(double y1, double y2){
+        return new Linear(y1, y2, 1.0);
+    }
+
     @Override
     public double f(double x) {
         return  (m*x) + b;

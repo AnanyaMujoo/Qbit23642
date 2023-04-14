@@ -37,6 +37,7 @@ public class Drive extends RobotPart {
     public double[] deltaPower = new double[3];
 
     public double fast1 = 0;
+    public double fast2 = 0;
 
 //    public boolean slow = false;
 //    private PServo retract;
@@ -72,6 +73,7 @@ public class Drive extends RobotPart {
         deltaPower = new double[3];
 
         fast1 = 0;
+        fast2 = 0;
         //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
@@ -118,57 +120,65 @@ public class Drive extends RobotPart {
     public void moveSmooth(double f, double s, double t) {
         if(!bot.indHandler.isIndependentRunning()) {
 
-//            double[] power = new double[]{f, s, t};
-//            help(power, 0, 0.3, 0.02, 0.06);
-//            help(power, 1, 0.3, 0.02, 0.06);
-//            help(power, 2, 0.3, 0.02, 0.06);
-//
-//            drive.move(currentPower[0], currentPower[1], currentPower[2]);
-
-
-//            double cut = 0.3;
-//            Vector power = new Vector(Precision.clip(s, 1), Precision.clip(f, 1));
-//            power.scaleX(1.2);
-//            power.limitLength(1);
-//            f = Precision.clip(power.getY(), cut);
-//            s = Precision.clip(power.getX(), cut);
-//            t = Precision.clip(t, cut);
-//
-//            fr.setPower(Precision.clip(f - s - t, cut));
-//            br.setPower(Precision.clip(f + s - t, cut));
-//            fl.setPower(Precision.clip(f + s + t, cut));
-//            bl.setPower(Precision.clip(f - s + t, cut));
-
 
             Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
             Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
-            Linear rx = new Linear(1.0, 0.4, 1.0);
+            Linear rx = Linear.one(1.0, 0.35);
 
-            if(!driveMode.modeIs(SLOW)) {
-                // TODO FIINISH
-                if (Math.abs(f) > 0.9) {
-                    driveMode.set(FAST);
-                    fast1+=0.04;
-                } else {
-                    driveMode.set(MEDIUM);
-                }
-            }
+            boolean forward = precision.isInputTrueForTime(Math.abs(f) > 0.9, 0.2) && Math.abs(f) > 0.9;
+            boolean turn = precision2.isInputTrueForTime(Math.abs(t) > 0.9, 0.2) && Math.abs(t) > 0.9;
+
+            double old = rm.fodd(f*0.6) * rx.fevenb(t, 1.0);
+            double real = rm.fodd(f) * rx.fevenb(Precision.clip(t*2.0, 1), 1.0);
+            Linear linear1 = Linear.one(old, real);
+
+            double old2 = rm.fodd(s*0.6) * rx.fevenb(Precision.clip(f*2.0, 1), 1.0);
+
+            double old3 = rt.fodd(t*0.7);
+            Linear linear3 = Linear.one(old3, t);
+
+
 
             if(driveMode.modeIs(SLOW)) {
-                drive.move(rm.fodd(f*0.4),  noStrafeLock || !Precision.range(s, 0.7) ? rm.fodd(s)*0.3 : 0.0, rt.fodd(t*0.6));
-            }else if(driveMode.modeIs(MEDIUM)){
-                if(precision2.isInputTrueForTime(Math.abs(t) > 0.9, 0.5) && Math.abs(t) > 0.9){
-                    drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, t);
-                }else{
-                    drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, 0.8*rt.fodd(t*0.85));
-                }
-                fast1 = 0;
-            }else{
-                double real = rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0);
-                double old = rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0);
-                Linear linear = new Linear(old, real, 1);
-                drive.move(linear.f(fast1), 0.0, rt.fodd(t*0.8));
+                drive.move(rm.fodd(f*0.4),  rm.fodd(s*0.9)*0.3, rt.fodd(t*0.6));
+                fast1 = 0; fast2 = 0;
+            }else {
+                double xraw = s*0.8;
+                double traw = t*0.8;
+                double xnew = Math.abs(f) > 0.5 ? Precision.attract(xraw, 0.0, 0.4) : xraw;
+                double tnew = Math.abs(f) > 0.5 ? traw : traw*0.5;
+                drive.move(f, xnew, tnew);
+
+//                if(forward){
+//                    fast1+=0.02;
+//                    if(turn){
+//                        fast2+=0.03;
+//                        drive.move(0.8*linear1.f(fast1), 0.0, linear3.f(fast2));
+//                    }else{
+//                        drive.move(linear1.f(fast1), 0.0, rt.fodd(t*0.7));
+//                        fast2 = Math.max(0, fast2 - 0.02);
+//                        if(fast2 != 0.0){
+//                            precision2.reset();
+//                        }
+//                    }
+//                }else{
+//                    if(turn){
+//                        fast2+=0.03;
+//                        drive.move(old, old2, linear3.f(fast2));
+//                    }else{
+//                        drive.move(old, old2, old3);
+//                        fast2 = Math.max(0, fast2 - 0.02);
+//                        if(fast2 != 0.0){
+//                            precision2.reset();
+//                        }
+//                    }
+//                    if(fast1 != 0.0){
+//                        precision.reset();
+//                    }
+//                    fast1 = 0;
+//                }
             }
+
 
 
 
