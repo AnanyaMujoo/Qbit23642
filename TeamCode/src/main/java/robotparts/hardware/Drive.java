@@ -6,6 +6,7 @@ import autoutil.reactors.MecanumJunctionReactor2;
 import geometry.position.Pose;
 import geometry.position.Vector;
 import global.Modes;
+import math.linearalgebra.Vector3D;
 import math.misc.Logistic;
 import math.polynomial.Linear;
 import robotparts.RobotPart;
@@ -31,6 +32,11 @@ public class Drive extends RobotPart {
     private final Precision precision2 = new Precision();
 
     public boolean noStrafeLock = false;
+
+    public double[] currentPower = new double[3];
+    public double[] deltaPower = new double[3];
+
+    public double fast1 = 0;
 
 //    public boolean slow = false;
 //    private PServo retract;
@@ -61,7 +67,12 @@ public class Drive extends RobotPart {
         driveMode.set(MEDIUM);
         precision.reset();
         precision2.reset();
-//        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
+
+        currentPower = new double[3];
+        deltaPower = new double[3];
+
+        fast1 = 0;
+        //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
 //    public void retract(){ retract.setPosition("end"); }
@@ -93,15 +104,51 @@ public class Drive extends RobotPart {
         bl.setPowerRaw(f - s + t);
     }
 
+    public void help(double[] power, int i, double cutoff, double accel, double decel){
+        if(Math.abs(power[i]) > cutoff){
+//            deltaPower[i] += Math.abs(accel*power[i]);
+//            currentPower[i] = Math.signum(power[i]) * (deltaPower[i] + cutoff);
+            currentPower[i] = Math.signum(power[i])*cutoff;
+        }else{
+            currentPower[i] = power[i];
+//            deltaPower[i] = Math.max(0, deltaPower[i] - decel);
+        }
+    }
+
     public void moveSmooth(double f, double s, double t) {
         if(!bot.indHandler.isIndependentRunning()) {
+
+//            double[] power = new double[]{f, s, t};
+//            help(power, 0, 0.3, 0.02, 0.06);
+//            help(power, 1, 0.3, 0.02, 0.06);
+//            help(power, 2, 0.3, 0.02, 0.06);
+//
+//            drive.move(currentPower[0], currentPower[1], currentPower[2]);
+
+
+//            double cut = 0.3;
+//            Vector power = new Vector(Precision.clip(s, 1), Precision.clip(f, 1));
+//            power.scaleX(1.2);
+//            power.limitLength(1);
+//            f = Precision.clip(power.getY(), cut);
+//            s = Precision.clip(power.getX(), cut);
+//            t = Precision.clip(t, cut);
+//
+//            fr.setPower(Precision.clip(f - s - t, cut));
+//            br.setPower(Precision.clip(f + s - t, cut));
+//            fl.setPower(Precision.clip(f + s + t, cut));
+//            bl.setPower(Precision.clip(f - s + t, cut));
+
+
             Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
             Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
             Linear rx = new Linear(1.0, 0.4, 1.0);
 
             if(!driveMode.modeIs(SLOW)) {
-                if (precision.isInputTrueForTime(Math.abs(f) > 0.9, 0.5) && Math.abs(f) > 0.9) {
+                // TODO FIINISH
+                if (Math.abs(f) > 0.9) {
                     driveMode.set(FAST);
+                    fast1+=0.04;
                 } else {
                     driveMode.set(MEDIUM);
                 }
@@ -115,9 +162,18 @@ public class Drive extends RobotPart {
                 }else{
                     drive.move(rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s*0.7) : 0.0, 0.8*rt.fodd(t*0.85));
                 }
+                fast1 = 0;
             }else{
-                drive.move(rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0), 0.0, rt.fodd(t*0.8));
+                double real = rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0);
+                double old = rm.fodd(f*0.7) * (t != 0 ? rx.feven(t) : 1.0);
+                Linear linear = new Linear(old, real, 1);
+                drive.move(linear.f(fast1), 0.0, rt.fodd(t*0.8));
             }
+
+
+
+
+
         }
     }
 
