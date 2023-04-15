@@ -276,20 +276,7 @@ public interface AutoModuleUser extends RobotUser{
                     addSegment(0.4, 0.4, mecanumNonstopSetPoint, -25.0, 26.0, -57.0);
                     addSegment(0.8, 0.35, mecanumNonstopSetPoint, -27.0, 10.0, 0.0);
                 }
-            })
-            .addInstruction(() -> {
-                driveMode.set(MEDIUM);
-                bot.cancelAutoModules();
-                if(lift.skipping) {
-                    if(outtake.isClawClosed()) {
-                        bot.addAutoModule(new AutoModule(outtake.stageReadyStart(0.0), lift.stageLift(0.6, heightMode.getValue(LOW)+2), RobotPart.pause(0.2), outtake.stageFlip(0.0)));
-                    }else{
-                        bot.addAutoModule(new AutoModule(outtake.stageOpen(0.0), outtake.stageStart(0.0), lift.stageLift(0.6, 0.0)));
-                    }
-                    lift.skipping = false;
-                }
-            })
-            ;
+            });
         ;
 
 }
