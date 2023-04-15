@@ -169,7 +169,7 @@ public interface AutoModuleUser extends RobotUser{
     );
 
     AutoModule ForwardCycle = new AutoModule(
-            lift.stageLift(1.0,0).attach(outtake.stageBack(0.4))
+            lift.stageLift(1.0,0).attach(outtake.stageBack(0.3))
     ).setStartCode(outtake::dropConeRaw);
 
     static Independent Cycle(int i) {return new Independent() {
@@ -177,7 +177,7 @@ public interface AutoModuleUser extends RobotUser{
         public void define() {
             double x = 0.0;
             if(i==0){ addSegment(0.3, 0.1, mecanumNonstopSetPoint, x, 5.0, 0.0);}
-            addConcurrentAutoModuleWithCancel(BackwardCycle, 0.2);
+            addConcurrentAutoModuleWithCancel(BackwardCycle, 0.25);
             addWaypoint(0.4, x, -38, 0);
             addSegment(0.3, 0.1, mecanumNonstopSetPoint, x+0.5, -44.0, 0.0);
             addConcurrentAutoModuleWithCancel(ForwardCycle, 0.1);
@@ -193,13 +193,103 @@ public interface AutoModuleUser extends RobotUser{
 
 
     Machine MachineCycle = new Machine()
-            .addInstruction(odometry::reset,0.1)
-            .addIndependent(8, AutoModuleUser::Cycle)
+    .addInstruction(odometry::reset,0.1)
+    .addIndependent(8, AutoModuleUser::Cycle)
+    .addIndependent(new Independent() {
+        @Override
+        public void define() {
+            addSegment(0.4, 0.5, mecanumNonstopSetPoint, 0, 0.0, 0);
+        }
+    });
+
+
+    AutoModule BackwardCycleMiddle = new AutoModule(
+            outtake.stageClose(0.2),
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+3).attach(outtake.stageReadyEndContinuousWithFlip(0.7, 0.15))
+    );
+
+    AutoModule BackwardCycleLow = new AutoModule(
+            outtake.stageClose(0.2),
+            lift.stageLift(1.0, heightMode.getValue(LOW)+1.5).attach(outtake.stageReadyEndContinuousWithFlip(1.1, 0.2))
+    );
+
+
+    AutoModule ForwardCycleMiddle = new AutoModule(
+            RobotPart.pause(0.1),
+            lift.stageLift(1.0,0).attach(outtake.stageBack(0.2))
+    ).setStartCode(outtake::dropConeRaw);
+
+
+    AutoModule ForwardCycleLow = new AutoModule(
+            RobotPart.pause(0.4),
+            lift.stageLift(1.0,0).attach(outtake.stageBack(0.2))
+    ).setStartCode(outtake::dropConeRaw);
+
+
+    AutoModule BackwardCycleLow2 = new AutoModule(
+            outtake.stageClose(0.2),
+            lift.stageLift(1.0, heightMode.getValue(LOW)+1.5).attach(outtake.stageReadyEndContinuousWithFlip(0.8, 0.2))
+    );
+
+    Machine MachineCycleExtra = new Machine()
+            .addInstruction(odometry::reset, 0.1)
+            .addIndependentWithPause(new Independent() {
+                @Override
+                public void define() {
+                    addSegment(0.2, 0.2, mecanumNonstopSetPoint, 0.0, 6.0, 0.0);
+                    addConcurrentAutoModuleWithCancel(BackwardCycleMiddle, 0.15);
+                    addWaypoint(0.8,-2,-15,-5.0);
+                    addSegment(1.0, 0.4, mecanumNonstopSetPoint, -31, -36.0, -50.0);
+                    addSegment(0.4, 0.4, mecanumNonstopSetPoint, -37, -42.0, -50.0);
+                }
+            })
+            .addIndependentWithPause(new Independent() {
+                @Override
+                public void define() {
+                    addConcurrentAutoModuleWithCancel(ForwardCycleMiddle, 0.2);
+                    addWaypoint(0.6, -32.0, 0.0, -21.0);
+                    addSegment(0.5, 0.34, mecanumNonstopSetPoint, -27.0, 26.0, -25.0);
+                    addConcurrentAutoModuleWithCancel(BackwardCycleLow, 0.15);
+                    addWaypoint(1.0, -25.0, 15.0, 0.0);
+                    addWaypoint(1.0, -30.0, -5.0, -45);
+                    addSegment(1.1, 0.4, mecanumNonstopSetPoint, -100.0, -45.0, -50);
+                }
+            })
+            .addIndependentWithPause(new Independent() {
+                @Override
+                public void define() {
+                    addConcurrentAutoModuleWithCancel(ForwardCycleLow, 0.15);
+                    addWaypoint(1.0, -70.0, -30.0, -75);
+                    addWaypoint(1.0, -50.0, -20.0, -70);
+                    addWaypoint(0.4, -40.0, -10.0, 0.0);
+                    addWaypoint(0.4, -27.0, 6.0, 0.0);
+                    addSegment(0.6, 0.34, mecanumNonstopSetPoint, -27.0, 26.0, -25.0);
+                    addConcurrentAutoModuleWithCancel(BackwardCycleLow2, 0.15);
+                    addSegment(0.7, 0.3, mecanumNonstopSetPoint, -25.0, 26.0, -57.0);
+                    addSegment(0.4, 0.4, mecanumNonstopSetPoint, -35.0, 9.0, -57.0);
+                }
+            })
             .addIndependent(new Independent() {
                 @Override
                 public void define() {
-                    addSegment(0.4, 0.5, mecanumNonstopSetPoint, 0, 0.0, 0);
+                    addConcurrentAutoModuleWithCancel(ForwardCycleLow,0.15);
+                    addSegment(0.4, 0.4, mecanumNonstopSetPoint, -25.0, 26.0, -57.0);
+                    addSegment(0.8, 0.35, mecanumNonstopSetPoint, -27.0, 10.0, 0.0);
                 }
-            });
+            })
+            .addInstruction(() -> {
+                driveMode.set(MEDIUM);
+                bot.cancelAutoModules();
+                if(lift.skipping) {
+                    if(outtake.isClawClosed()) {
+                        bot.addAutoModule(new AutoModule(outtake.stageReadyStart(0.0), lift.stageLift(0.6, heightMode.getValue(LOW)+2), RobotPart.pause(0.2), outtake.stageFlip(0.0)));
+                    }else{
+                        bot.addAutoModule(new AutoModule(outtake.stageOpen(0.0), outtake.stageStart(0.0), lift.stageLift(0.6, 0.0)));
+                    }
+                    lift.skipping = false;
+                }
+            })
+            ;
+        ;
 
 }

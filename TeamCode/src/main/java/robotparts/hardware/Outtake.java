@@ -70,7 +70,6 @@ public class Outtake extends RobotPart {
 
     public void dropConeRaw(){
         armr.setPositionRaw("end"); arml.setPositionRaw("end"); claw.setPositionRaw("open");
-
     }
 
     public void flip(){ turn.setPosition("flipped"); }
