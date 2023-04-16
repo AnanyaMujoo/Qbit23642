@@ -1,5 +1,9 @@
 package robotparts.hardware;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import static java.lang.Math.abs;
+
 import automodules.AutoModule;
 import automodules.stage.Stage;
 import autoutil.reactors.MecanumJunctionReactor2;
@@ -14,6 +18,7 @@ import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 import robotparts.electronics.positional.PServo;
 import teleutil.TeleTrack;
+import util.Timer;
 import util.codeseg.ReturnCodeSeg;
 import util.template.Precision;
 
@@ -31,13 +36,17 @@ public class Drive extends RobotPart {
     private final Precision precision = new Precision();
     private final Precision precision2 = new Precision();
 
+    private final Timer timer = new Timer();
+
+    private final Timer timer2 = new Timer();
+
     public boolean noStrafeLock = false;
 
     public double[] currentPower = new double[3];
     public double[] deltaPower = new double[3];
 
-    public double fast1 = 0;
-    public double fast2 = 0;
+    public boolean turnFast = false;
+
 
 //    public boolean slow = false;
 //    private PServo retract;
@@ -72,8 +81,9 @@ public class Drive extends RobotPart {
         currentPower = new double[3];
         deltaPower = new double[3];
 
-        fast1 = 0;
-        fast2 = 0;
+        turnFast = false;
+
+        timer.reset();
         //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
 
@@ -152,20 +162,48 @@ public class Drive extends RobotPart {
 
 
         if(!bot.indHandler.isIndependentRunning()) {
-
-
-            Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
-            Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
-
             if(driveMode.modeIs(SLOW)) {
+                Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
+                Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
                 drive.move(rm.fodd(f*0.4),  rm.fodd(s*0.9)*0.3, rt.fodd(t*0.6));
-                fast1 = 0; fast2 = 0;
             }else {
-                double xraw = s*0.8;
-                double traw = t*0.8;
-                double xnew = Math.abs(f) > 0.5 ? Precision.attract(xraw, 0.0, 0.4) : xraw;
-                double tnew = Math.abs(f) > 0.5 ? traw : traw*0.5;
-                drive.move(f, xnew, tnew);
+                double xraw = s*0.4;
+                double traw = t*0.7;
+                double tscale = 0.5;
+
+                double fraw = f*0.6;
+
+
+
+                if(driveMode.modeIs(FAST)){
+                    if(abs(f) < 0.9 || timer.seconds() > 1.2){
+                        driveMode.set(MEDIUM);
+                    }
+                    fraw *= Linear.one(1.0, 1.0/0.6).fevenb(timer.seconds()/1.2, 1.0);
+                }else{
+                    if(precision.isInputTrueForTime(abs(f) > 0.9 && abs(t) < 0.9, 0.5)){
+                        driveMode.set(FAST);
+                        timer.reset();
+                    }
+                }
+
+
+                if(turnFast){
+                    if(abs(t) < 0.9 || timer2.seconds() > 0.5){
+                        turnFast = false;
+                    }
+                    traw *= Linear.one(1.0, 3.0).fevenb(timer2.seconds()/0.5, 1.0);
+                }else{
+                    if(precision2.isInputTrueForTime(abs(t) > 0.9 && abs(f) < 0.5, 0.5)){
+                        turnFast = true;
+                        timer2.reset();
+                    }
+                }
+
+                Linear linear = Linear.one(tscale, 1.0);
+                double xnew = Math.abs(f) > 0.1 ? Precision.attract(xraw, 0.0, 0.4) : xraw;
+                double tnew = traw*linear.fevenb(fraw, tscale);
+                drive.move(fraw, xnew, tnew);
             }
         }
     }
