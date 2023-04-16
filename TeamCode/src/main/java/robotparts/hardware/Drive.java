@@ -6,6 +6,7 @@ import static java.lang.Math.abs;
 
 import automodules.AutoModule;
 import automodules.stage.Stage;
+import automodules.stage.Stop;
 import autoutil.reactors.MecanumJunctionReactor2;
 import geometry.position.Pose;
 import geometry.position.Vector;
@@ -47,6 +48,8 @@ public class Drive extends RobotPart {
 
     public boolean turnFast = false;
 
+    public boolean using = false;
+
 
 //    public boolean slow = false;
 //    private PServo retract;
@@ -82,6 +85,7 @@ public class Drive extends RobotPart {
         deltaPower = new double[3];
 
         turnFast = false;
+        using = false;
 
         timer.reset();
         //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
@@ -161,7 +165,7 @@ public class Drive extends RobotPart {
 
 
 
-        if(!bot.indHandler.isIndependentRunning()) {
+        if(!bot.indHandler.isIndependentRunning() && !using) {
             if(driveMode.modeIs(SLOW)) {
                 Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
                 Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import automodules.stage.Main;
 import automodules.stage.Stage;
+import automodules.stage.Stop;
 import elements.Field;
 import geometry.framework.Point;
 import geometry.position.Pose;
@@ -60,11 +61,12 @@ public interface AutoModuleUser extends RobotUser{
     });
 
     AutoModule ForwardTeleLow = new AutoModule(
-            RobotPart.pause(0.2),
-            drive.moveTime(1.0, 0.0, 0.0, 0.15),
+            RobotPart.pause(0.12),
+            drive.moveTime(1.0, 0.0, 0.0, 0.15).combine(new Stop(() -> drive.using = false)),
             outtake.stageStart(0.0),
             lift.stageLift(1.0,0)
     ).setStartCode(() -> {
+            drive.using = true;
             outtakeStatus.set(DRIVING);
             outtake.moveEnd();
             outtake.openClaw();
@@ -89,7 +91,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardGrabHighTele = new AutoModule(
             outtake.stageClose(0.2),
             lift.checkAndLift(),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+1).attach(outtake.stageReadyEndContinuousWithFlip(0.7, 0.1))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+2).attach(outtake.stageReadyEndContinuousWithFlip(0.7, 0.1))
     ).setStartCode(() -> {
             lift.setGround(false);
             heightMode.set(HIGH);
@@ -99,7 +101,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardGrabMiddleTele = new AutoModule(
             outtake.stageClose(0.22),
             lift.checkAndLift(),
-            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+1).attach(outtake.stageReadyEndContinuousWithFlip(0.5, 0.03))
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(outtake.stageReadyEndContinuousWithFlip(0.5, 0.03))
     ).setStartCode(() -> {
             lift.setGround(false);
             outtakeStatus.set(PLACING);
@@ -109,7 +111,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardGrabLowTele = new AutoModule(
             outtake.stageClose(0.22),
             lift.checkAndLift(),
-            lift.stageLift(1.0, heightMode.getValue(LOW)+1).attach(outtake.stageReadyEndContinuousWithFlip(0.5, 0.03))
+            lift.stageLift(1.0, heightMode.getValue(LOW)+2).attach(outtake.stageReadyEndContinuousWithFlip(0.5, 0.03))
     ).setStartCode(() -> {
             lift.setGround(false);
             outtakeStatus.set(PLACING);
