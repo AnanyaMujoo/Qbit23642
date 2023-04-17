@@ -43,11 +43,11 @@ public class TerraAutoSafe extends AutoFramework {
     }
 
     AutoModule BackwardFirst = new AutoModule(
-            lift.stageLift(1.0, heightMode.getValue(MIDDLE) + 1.0).attach(outtake.stageReadyEndContinuous(0.6))
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE) + 2.0).attach(outtake.stageReadyEndContinuous(0.6))
     );
 
     AutoModule Backward = new AutoModule(
-            lift.stageLift(0.8, heightMode.getValue(HIGH)+1.5).attach(outtake.stageReadyEndContinuous(1.1))
+            lift.stageLift(0.8, heightMode.getValue(HIGH) + 2.5).attach(outtake.stageReadyEndContinuous(1.1))
     ).setStartCode(outtake::flip);
 
 
@@ -75,7 +75,7 @@ public class TerraAutoSafe extends AutoFramework {
     ).setStartCode(outtake::closeClaw);
 
     AutoModule GrabBackLast = new AutoModule(
-            drive.moveTime(-0.15, 0, 0,0.2),
+            drive.moveTime(-0.2, 0, 0,0.2),
             lift.moveTimeBackOverride(-0.15, 1.0, 0.3)
     ).setStartCode(outtake::closeClaw);
 
@@ -137,7 +137,7 @@ public class TerraAutoSafe extends AutoFramework {
                 s = 0.5+1.5*i;
             }, () -> {
                 x = 0.0;
-                s = 0.5*i;
+                s = 0.6*i;
             });
             // Move to pick
             customFlipped(() -> {
@@ -174,7 +174,7 @@ public class TerraAutoSafe extends AutoFramework {
                 addSegment(1.0, mecanumDefaultWayPoint, 10 - x, 123 + s, 88);
                 addSegment(0.7, mecanumDefaultWayPoint, -20 - x, 123 + s, 88);
                 addSegment(0.5, mecanumDefaultWayPoint, -43 - x, 123 + s, 95);
-                addTimedSetpoint(1.0, 0.4, 1.0, -67.0 - x, 108 + s, 110.0);
+                addTimedSetpoint(1.0, 0.4, 1.0, -67.0 - x, 108.5 + s, 110.0);
             });
             // Place
             addConcurrentAutoModuleWithCancel(Forward(i + 2), 0.2);
@@ -182,7 +182,7 @@ public class TerraAutoSafe extends AutoFramework {
         addSegment(0.6, mecanumDefaultWayPoint, -37 - x, 126 + s, 114);
         customCase(() -> {
             addConcurrentAutoModule(new AutoModule(outtake.stage(0.55, 0.0)));
-            addTimedSetpoint(1.0, 0.4, 1.2, -60, 126+s, 90);
+            addTimedSetpoint(1.0, 0.4, 1.2, -58, 126+s, 90);
         }, () -> {
             addConcurrentAutoModule(new AutoModule(outtake.stage(0.55, 0.0)));
             addTimedSetpoint(1.0, 0.6, 1.2, 0, 126+s, 90);

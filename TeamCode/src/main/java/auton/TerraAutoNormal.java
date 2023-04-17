@@ -47,11 +47,11 @@ public class TerraAutoNormal extends AutoFramework {
     }
 
     AutoModule BackwardFirst = new AutoModule(
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+1.0).attach(outtake.stageReadyEndContinuous(0.6))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+2.5).attach(outtake.stageReadyEndContinuous(0.6))
     ).setStartCode(outtake::moveMiddle);
 
     AutoModule Backward = new AutoModule(
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+1.5).attach(outtake.stageReadyEndContinuous(0.9))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+3.0).attach(outtake.stageReadyEndContinuous(0.9))
     ).setStartCode(outtake::flip);
 
     AutoModule ForwardFirst = new AutoModule(
@@ -73,7 +73,7 @@ public class TerraAutoNormal extends AutoFramework {
 
 
     AutoModule GrabBackLast = new AutoModule(
-            drive.moveTime(-0.15, 0, 0,0.2),
+            drive.moveTime(-0.2, 0, 0,0.2),
             lift.moveTimeBackOverride(-0.15, 1.0, 0.3)
     ).setStartCode(outtake::closeClaw);
 
@@ -84,7 +84,7 @@ public class TerraAutoNormal extends AutoFramework {
         addConcurrentAutoModuleWithCancel(new AutoModule(outtake.stageMiddle(0.0), lift.stageLift(1.0, heightMode.getValue(LOW))));
         customFlipped(() -> {
             addWaypoint(1.0, 2, 126, 0);
-            addWaypoint(0.7, 9, 110, 0);
+            addWaypoint(0.7, 4, 110, 0);
         }, () -> {
             addWaypoint(1.0, 0, 126, 0);
             addWaypoint(0.7, -2, 110, 0);
@@ -105,7 +105,7 @@ public class TerraAutoNormal extends AutoFramework {
         customNumber(5, i -> {
             customFlipped(() -> {
                 x = 0.0;
-                s = -1+0.3*i;
+                s = -1.5+0.2*i;
             }, () -> {
                 x = 2.0;
                 s = -0.3*i;
@@ -134,7 +134,7 @@ public class TerraAutoNormal extends AutoFramework {
             customFlipped(() -> {
                 addSegment(0.55, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.4, 1.0, -9 - x, 141 + s, 51.5);
+                addTimedSetpoint(1.0, 0.4, 1.0, -10 - x, 141 + s, 51.5);
             }, () -> {
                 addSegment(0.55, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 134 + s, 55);
@@ -162,7 +162,7 @@ public class TerraAutoNormal extends AutoFramework {
         }, () -> {
             addTimedWaypoint(0.7, 0.5, 3.0, 122, 0);
             customFlipped(() -> {
-                addTimedSetpoint(1.0, 0.7, 1.2, 3.0, 83, 0);
+                addTimedSetpoint(1.0, 0.7, 1.2, 1.0, 83, 0);
             }, () -> {
                 addTimedSetpoint(1.0, 0.7, 1.2, -1.0, 83, 0);
             });

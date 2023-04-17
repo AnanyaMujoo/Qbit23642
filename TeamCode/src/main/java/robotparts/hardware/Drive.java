@@ -133,83 +133,85 @@ public class Drive extends RobotPart {
 
     public void moveSmooth(double f, double s, double t) {
 
-//
-//
-//        if(!bot.indHandler.isIndependentRunning()) {
-//            Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
-//            Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
-//            Linear rx = new Linear(1.0, 0.4, 1.0);
-//
-//            if (!driveMode.modeIs(SLOW)) {
-//                if (precision.isInputTrueForTime(Math.abs(f) > 0.9, 0.5) && Math.abs(f) > 0.9) {
-//                    driveMode.set(FAST);
-//                } else {
-//                    driveMode.set(MEDIUM);
-//                }
-//            }
-//
-//            if (driveMode.modeIs(SLOW)) {
-//                drive.move(rm.fodd(f * 0.4), noStrafeLock || !Precision.range(s, 0.7) ? rm.fodd(s) * 0.3 : 0.0, rt.fodd(t * 0.6));
-//            } else if (driveMode.modeIs(MEDIUM)) {
-//                if (precision2.isInputTrueForTime(Math.abs(t) > 0.9, 0.5) && Math.abs(t) > 0.9) {
-//                    drive.move(rm.fodd(f * 0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s * 0.7) : 0.0, t);
-//                } else {
-//                    drive.move(rm.fodd(f * 0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s * 0.7) : 0.0, 0.8 * rt.fodd(t * 0.85));
-//                }
-//            } else {
-//                drive.move(rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0), 0.0, rt.fodd(t * 0.8));
-//            }
-//        }
 
 
+        if(!bot.indHandler.isIndependentRunning()) {
+            Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
+            Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
+            Linear rx = new Linear(1.0, 0.4, 1.0);
 
-
-
-        if(!bot.indHandler.isIndependentRunning() && !using) {
-            if(driveMode.modeIs(SLOW)) {
-                Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
-                Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
-                drive.move(rm.fodd(f*0.4),  rm.fodd(s*0.9)*0.3, rt.fodd(t*0.6));
-            }else {
-                double xraw = s*0.4;
-                double traw = t*0.7;
-                double tscale = 0.5;
-
-                double fraw = f*0.6;
-
-
-
-                if(driveMode.modeIs(FAST)){
-                    if(abs(f) < 0.9 || timer.seconds() > 1.2){
-                        driveMode.set(MEDIUM);
-                    }
-                    fraw *= Linear.one(1.0, 1.0/0.6).fevenb(timer.seconds()/1.2, 1.0);
-                }else{
-                    if(precision.isInputTrueForTime(abs(f) > 0.9 && abs(t) < 0.9, 0.5)){
-                        driveMode.set(FAST);
-                        timer.reset();
-                    }
+            if (!driveMode.modeIs(SLOW)) {
+                if (precision.isInputTrueForTime(Math.abs(f) > 0.9, 0.5) && Math.abs(f) > 0.9) {
+                    driveMode.set(FAST);
+                } else {
+                    driveMode.set(MEDIUM);
                 }
+            }
 
-
-                if(turnFast){
-                    if(abs(t) < 0.9 || timer2.seconds() > 0.5){
-                        turnFast = false;
-                    }
-                    traw *= Linear.one(1.0, 3.0).fevenb(timer2.seconds()/0.5, 1.0);
-                }else{
-                    if(precision2.isInputTrueForTime(abs(t) > 0.9 && abs(f) < 0.5, 0.5)){
-                        turnFast = true;
-                        timer2.reset();
-                    }
+            if (driveMode.modeIs(SLOW)) {
+                drive.move(rm.fodd(f * 0.4), noStrafeLock || !Precision.range(s, 0.7) ? rm.fodd(s) * 0.3 : 0.0, rt.fodd(t * 0.6));
+            } else if (driveMode.modeIs(MEDIUM)) {
+                if (precision2.isInputTrueForTime(Math.abs(t) > 0.9, 0.5) && Math.abs(t) > 0.9) {
+                    drive.move(rm.fodd(f * 0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s * 0.7) : 0.0, t);
+                } else {
+                    drive.move(rm.fodd(f * 0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s * 0.7) : 0.0, 0.8 * rt.fodd(t * 0.85));
                 }
-
-                Linear linear = Linear.one(tscale, 1.0);
-                double xnew = Math.abs(f) > 0.1 ? Precision.attract(xraw, 0.0, 0.4) : xraw;
-                double tnew = traw*linear.fevenb(fraw, tscale);
-                drive.move(fraw, xnew, tnew);
+            } else {
+                drive.move(rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0), 0.0, rt.fodd(t * 0.8));
             }
         }
+
+
+
+//
+//
+//        if(!bot.indHandler.isIndependentRunning() && !using) {
+//            if(driveMode.modeIs(SLOW)) {
+//                Logistic rt = new Logistic(Logistic.LogisticParameterType.RP_K, 0.12, 1.0);
+//                Logistic rm = new Logistic(Logistic.LogisticParameterType.RP_K, 0.05, 5.0);
+//                drive.move(rm.fodd(f*0.4),  rm.fodd(s*0.9)*0.3, rt.fodd(t*0.6));
+//            }else {
+//
+////                drive.move(f, s, t);
+//                double xraw = s*0.4;
+//                double traw = t*0.7;
+//                double tscale = 0.6;
+//
+//                double fraw = f*0.6;
+//
+//
+//
+//                if(driveMode.modeIs(FAST)){
+//                    if(abs(f) < 0.9 || timer.seconds() > 1.2){
+//                        driveMode.set(MEDIUM);
+//                    }
+//                    fraw *= Linear.one(1.0, 1.0/0.6).fevenb(timer.seconds()/0.6, 1.0);
+//                }else{
+//                    if(precision.isInputTrueForTime(abs(f) > 0.9 && abs(t) < 0.9, 0.2)){
+//                        driveMode.set(FAST);
+//                        timer.reset();
+//                    }
+//                }
+//
+//
+//                if(turnFast){
+//                    if(abs(t) < 0.9 || timer2.seconds() > 0.5){
+//                        turnFast = false;
+//                    }
+//                    traw *= Linear.one(1.0, 3.0).fevenb(timer2.seconds()/0.5, 1.0);
+//                }else{
+//                    if(precision2.isInputTrueForTime(abs(t) > 0.9 && abs(f) < 0.5, 0.4)){
+//                        turnFast = true;
+//                        timer2.reset();
+//                    }
+//                }
+//
+//                Linear linear = Linear.one(tscale, 1.0);
+//                double xnew = Math.abs(f) > 0.1 ? Precision.attract(xraw, 0.0, 0.4) : xraw;
+//                double tnew = traw*linear.fevenb(fraw, tscale);
+//                drive.move(fraw, xnew, tnew);
+//            }
+//        }
     }
 
 
