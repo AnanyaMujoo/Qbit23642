@@ -39,36 +39,37 @@ public interface AutoModuleUser extends RobotUser{
 
 
     AutoModule ForwardTeleHigh = new AutoModule(
-            // 0.7
-            RobotPart.pause(0.1),
+            outtake.stageOpen(0.0),
+            outtake.stageEndAfter(0.05),
+            outtake.stageOpen(0.0),
             drive.moveTime(1.0, 0.0, 0.0, 0.1),
             lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.15))
     ).setStartCode(() -> {
             outtakeStatus.set(DRIVING);
-            outtake.moveEnd();
             outtake.openClaw();
     });
 
     // 0.6
     AutoModule ForwardTeleMiddle = new AutoModule(
-            RobotPart.pause(0.1),
+            outtake.stageOpen(0.0),
+            outtake.stageEndAfter(0.05),
+            outtake.stageOpen(0.0),
             drive.moveTime(1.0, 0.0, 0.0, 0.1),
             lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.15))
     ).setStartCode(() -> {
             outtakeStatus.set(DRIVING);
-            outtake.moveEnd();
             outtake.openClaw();
     });
 
     AutoModule ForwardTeleLow = new AutoModule(
-            RobotPart.pause(0.12),
+            outtake.stageOpen(0.0),
+            outtake.stageEndAfter(0.05),
+            outtake.stageOpen(0.0),
             drive.moveTime(1.0, 0.0, 0.0, 0.15).combine(new Stop(() -> drive.using = false)),
-            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0)
+            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.15))
     ).setStartCode(() -> {
             drive.using = true;
             outtakeStatus.set(DRIVING);
-            outtake.moveEnd();
             outtake.openClaw();
     });
 
