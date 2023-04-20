@@ -92,7 +92,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardGrabHighTele = new AutoModule(
             outtake.stageClose(0.2),
             lift.checkAndLift(),
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+2).attach(outtake.stageReadyEndContinuousWithFlip(0.7, 0.1))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+2).attach(outtake.stageReadyEndContinuousWithFlip(0.9, 0.1))
     ).setStartCode(() -> {
             lift.setGround(false);
             heightMode.set(HIGH);
@@ -102,7 +102,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardGrabMiddleTele = new AutoModule(
             outtake.stageClose(0.22),
             lift.checkAndLift(),
-            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(outtake.stageReadyEndContinuousWithFlip(0.5, 0.03))
+            lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(outtake.stageReadyEndContinuousWithFlip(0.8, 0.08))
     ).setStartCode(() -> {
             lift.setGround(false);
             outtakeStatus.set(PLACING);
@@ -112,7 +112,7 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardGrabLowTele = new AutoModule(
             outtake.stageClose(0.22),
             lift.checkAndLift(),
-            lift.stageLift(1.0, heightMode.getValue(LOW)+2).attach(outtake.stageReadyEndContinuousWithFlip(0.5, 0.03))
+            lift.stageLift(1.0, heightMode.getValue(LOW)+2).attach(outtake.stageReadyEndContinuousWithFlip(0.7, 0.06))
     ).setStartCode(() -> {
             lift.setGround(false);
             outtakeStatus.set(PLACING);
@@ -148,7 +148,7 @@ public interface AutoModuleUser extends RobotUser{
     });
 
     AutoModule CapGrab = new AutoModule(outtake.stageClose(0.2));
-    AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5),  lift.resetLift() );
+    AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5).attach(outtake.stageStartAfter(0.3)),  lift.resetLift() );
     AutoModule UprightCone = new AutoModule(outtake.stage(0.1, 0.0), lift.stageLift(1.0, 5), driveMode.ChangeMode(SLOW));
     AutoModule FixCone = new AutoModule(lift.moveTimeBack(0.1, -0.4, () -> 0.15), outtake.stageStart(0.0), lift.moveTimeBack(-0.35, -0.3, () -> 0.2), driveMode.ChangeMode(MEDIUM)).setStartCode(()->{lift.currentCutoffPosition = lift.defaultCutoffPosition;});
     AutoModule TakeOffCone = new AutoModule(heightMode.ChangeMode(HIGH), outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.1),outtake.stageFlip(0.0));
