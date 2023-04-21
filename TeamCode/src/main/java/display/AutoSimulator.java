@@ -9,6 +9,7 @@ import java.util.Locale;
 import automodules.AutoModuleUser;
 import auton.TerraAutoNormal;
 import auton.TerraAutoSafe;
+import auton.TerraAutoSafe2;
 import autoutil.AutoFramework;
 import elements.Field;
 import elements.GameItems;
@@ -19,6 +20,7 @@ import geometry.position.Line;
 import geometry.polygons.PolyLine;
 import geometry.position.Pose;
 import teleutil.independent.Machine;
+import util.template.Iterator;
 
 public class AutoSimulator extends Drawer{
 
@@ -31,7 +33,7 @@ public class AutoSimulator extends Drawer{
 //        setAuto(new TerraAuto.TerraAutoMegaRight());
 //        setAuto(AutoModuleUser.CycleMedium);
 
-//        setAuto(new TerraAutoNormal.TA_RIGHT_1());
+        setAuto(new TerraAutoSafe2.RIGHT());
 //        setAuto(new TerraAutoUpperBlue());
 //        setAuto(new TerraAutoLowerRed());
 //        setAuto(new TerraAutoUpperRed());
@@ -84,7 +86,13 @@ public class AutoSimulator extends Drawer{
     private static void setAuto(AutoFramework auto){ auto.setup(); setAuto(auto.getAutoPlane(), auto.getStartPose()); }
 
     private static void setAuto(CoordinatePlane auto, Pose start) {
+        double xs = 1.0;
+        double ys = 1.0;
+
         autoPlane = auto.getCopy();
+        autoPlane.scaleX(xs);
+        autoPlane.scaleY(ys);
+
         startPose = start.getCopy();
         autoPlane.removeRedundantObjects();
 
