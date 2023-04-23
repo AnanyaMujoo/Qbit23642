@@ -44,6 +44,9 @@ public class Outtake extends RobotPart {
         arml.changePosition("end", 0.84);
         armr.changePosition("end", 0.84);
 
+        armr.addPosition("e", 0.1);
+        arml.addPosition("e", 0.1);
+
         turn = create("turn", ElectronicType.PSERVO_REVERSE);
         claw = create("claw", ElectronicType.PSERVO_REVERSE);
 
@@ -109,6 +112,10 @@ public class Outtake extends RobotPart {
     public Stage stageEndContinuous(double t){ return super.customContinuousTime(() -> armr, () -> arml, "end", t); }
 
     public Stage stageReadyEndContinuous(double t){ return super.customContinuousTime(() -> armr, () -> arml, "endHalf", t); }
+
+
+
+    public Stage stageStartContinuous(double t){ return super.customContinuousTime(() -> armr, () -> arml, "e", t); }
 
 
 

@@ -253,13 +253,13 @@ public class TerraAutoSafe2 extends AutoFramework {
         autoPlane.reflectX();
     }
 
-
-    @Autonomous(name = "E. RIGHT SAFE 2", group = "auto", preselectTeleOp = "TerraOp")
-    public static class RIGHT extends TerraAutoSafe2 {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
-
-    @Autonomous(name = "F. LEFT SAFE 2", group = "auto", preselectTeleOp = "TerraOp")
-    public static class LEFT extends TerraAutoSafe2 {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
-
+//
+//    @Autonomous(name = "E. RIGHT SAFE 2", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class RIGHT extends TerraAutoSafe2 {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
+//
+//    @Autonomous(name = "F. LEFT SAFE 2", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class LEFT extends TerraAutoSafe2 {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
+//
 
 
 

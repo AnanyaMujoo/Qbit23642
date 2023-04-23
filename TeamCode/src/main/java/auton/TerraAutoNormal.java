@@ -64,12 +64,13 @@ public class TerraAutoNormal extends AutoFramework {
 
     AutoModule Forward(int i){return new AutoModule(
             lift.moveTime(-0.8, 0.2),
-            lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), -0.5)).attach(outtake.stageBack(0.15))
+            lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), -0.5)).attach(outtake.stageBack(i == 5 ? 0.3 : 0.2))
     );}
 
     AutoModule GrabBack = new AutoModule(
-            RobotPart.pause(0.2),
-            lift.moveTimeBackOverride(-0.15, 1.0, 0.4)
+            drive.moveTime(-0.02, 0, 0,0.1),
+            RobotPart.pause(0.1),
+            lift.moveTimeBackOverride(-0.1, 1.0, 0.4)
     ).setStartCode(outtake::closeClaw);
 
 
@@ -95,13 +96,15 @@ public class TerraAutoNormal extends AutoFramework {
             addSegment(0.65, mecanumDefaultWayPoint, -2, 120, 0);
         });
 
-        // Pre-loaded cone place
+
         addConcurrentAutoModuleWithCancel(BackwardFirst);
+
+        // Pre-loaded cone place
         customFlipped(() -> {
-            addTimedSetpoint(1.0, 0.6, 0.3, 5, 125, 40);
+            addTimedSetpoint(1.0, 0.6, 0.5, 5, 125, 40);
             addTimedSetpoint(1.0, 0.6, 0.9, -9.5, 137, 45);
         }, () -> {
-            addTimedSetpoint(1.0, 0.6, 0.3, 5, 123, 40);
+            addTimedSetpoint(1.0, 0.6, 0.5, 5, 123, 40);
             addTimedSetpoint(1.0, 0.6, 0.9, -10.0, 140, 45);
         });
         addConcurrentAutoModuleWithCancel(ForwardFirst, 0.2);
@@ -116,7 +119,7 @@ public class TerraAutoNormal extends AutoFramework {
                 s = -0.3*i;
             });
             // Move to pick
-            addSegment(0.6, mecanumDefaultWayPoint, 18-x, 130 + s, 80);
+            addSegment(0.7, mecanumDefaultWayPoint, 18-x, 130 + s, 80);
             // Pick
             customFlipped(() -> {
                 addSegment(0.55, mecanumDefaultWayPoint, 46-x, 129 + s, 88);
@@ -134,7 +137,6 @@ public class TerraAutoNormal extends AutoFramework {
                 pause(0.5);
                 outtake.flip();
                 outtake.readyStart();
-                pause(0.05);
             });
             // Move to place
             addConcurrentAutoModuleWithCancel(Backward);
@@ -142,22 +144,23 @@ public class TerraAutoNormal extends AutoFramework {
             customFlipped(() -> {
                 addSegment(0.55, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 132 + s, 50);
-                addTimedSetpoint(1.0, 0.4, 1.0, -10.5 - x, 140 + s, 51.5);
+                addTimedSetpoint(1.0, 0.5, 0.8, -10.5 - x, 140 + s, 51.5);
             }, () -> {
                 addSegment(0.55, mecanumDefaultWayPoint, 30-x, 124 + s, 80);
                 addSegment(0.5, mecanumDefaultWayPoint, 11-x, 134 + s, 55);
-                addTimedSetpoint(1.0, 0.4, 1.0, -6 - x, 140.5 + s, 52);
+                addTimedSetpoint(1.0, 0.5, 0.8, -6 - x, 140.5 + s, 52);
             });
             addCustomCode(() -> {
                 drive.move(0,0,0);
                 outtake.moveEnd();
-                pause(0.2);
+                pause(0.05);
+                outtake.moveEnd();
                 bot.cancelAutoModules();
                 outtake.openClaw();
                 pause(0.05);
                 outtake.openClaw();
             });
-            addConcurrentAutoModuleWithCancel(Forward(i+1), 0.2);
+            addConcurrentAutoModuleWithCancel(Forward(i+1), 0.1);
         });
         pause(0.1);
         addTimedWaypoint(0.6, 0.5, 2.4, 125, 53);
