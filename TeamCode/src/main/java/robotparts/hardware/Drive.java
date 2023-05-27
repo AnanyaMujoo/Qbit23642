@@ -57,16 +57,16 @@ public class Drive extends RobotPart {
 
     @Override
     public void init() {
-//        fr = create("fr", ElectronicType.CMOTOR_REVERSE);
-//        br = create("br", ElectronicType.CMOTOR_REVERSE);
-//        fl = create("fl", ElectronicType.CMOTOR_FORWARD);
-//        bl = create("bl", ElectronicType.CMOTOR_FORWARD);
+        fr = create("fr", ElectronicType.CMOTOR_REVERSE);
+        br = create("br", ElectronicType.CMOTOR_REVERSE);
+        fl = create("fl", ElectronicType.CMOTOR_FORWARD);
+        bl = create("bl", ElectronicType.CMOTOR_FORWARD);
 
 
-        fr = create("fr", ElectronicType.CMOTOR_REVERSE_FLOAT);
-        br = create("br", ElectronicType.CMOTOR_REVERSE_FLOAT);
-        fl = create("fl", ElectronicType.CMOTOR_FORWARD_FLOAT);
-        bl = create("bl", ElectronicType.CMOTOR_FORWARD_FLOAT);
+//        fr = create("fr", ElectronicType.CMOTOR_REVERSE_FLOAT);
+//        br = create("br", ElectronicType.CMOTOR_REVERSE_FLOAT);
+//        fl = create("fl", ElectronicType.CMOTOR_FORWARD_FLOAT);
+//        bl = create("bl", ElectronicType.CMOTOR_FORWARD_FLOAT);
 //
 //        retract = create("ret", ElectronicType.PSERVO_FORWARD);
 //
@@ -151,11 +151,12 @@ public class Drive extends RobotPart {
             if (driveMode.modeIs(SLOW)) {
                 drive.move(rm.fodd(f * 0.4), noStrafeLock || !Precision.range(s, 0.7) ? rm.fodd(s) * 0.3 : 0.0, rt.fodd(t * 0.6));
             } else if (driveMode.modeIs(MEDIUM)) {
-                if (precision2.isInputTrueForTime(Math.abs(t) > 0.9, 0.5) && Math.abs(t) > 0.9) {
-                    drive.move(rm.fodd(f * 0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s * 0.7) : 0.0, t);
-                } else {
-                    drive.move(rm.fodd(f * 0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s * 0.7) : 0.0, 0.8 * rt.fodd(t * 0.85));
-                }
+//                if (precision2.isInputTrueForTime(Math.abs(t) > 0.9, 0.5) && Math.abs(t) > 0.9) {
+//                    drive.move(rm.fodd(f * 0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s * 0.7) : 0.0, t);
+//                } else {
+//                    drive.move(rm.fodd(f * 0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s * 0.7) : 0.0, 0.8 * rt.fodd(t * 0.85));
+//                }
+                drive.move(rm.fodd(f * 0.7) * (t != 0 ? rx.feven(t) : 1.0), !Precision.range(s, 0.7) ? rm.fodd(s * 0.7) : 0.0, 0.8 * rt.fodd(t * 0.85));
             } else {
                 drive.move(rm.fodd(f) * (t != 0 ? rx.feven(t) : 1.0), 0.0, rt.fodd(t * 0.8));
             }
