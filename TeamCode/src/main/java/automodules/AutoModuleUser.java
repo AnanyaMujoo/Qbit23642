@@ -43,6 +43,7 @@ public interface AutoModuleUser extends RobotUser{
             drive.moveTime(1.0, 0.0, 0.0, 0.1),
             lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.15))
     ).setStartCode(() -> {
+            lift.cap = false;
             outtakeStatus.set(DRIVING);
             outtake.openClaw();
             outtake.moveEnd();
@@ -54,6 +55,7 @@ public interface AutoModuleUser extends RobotUser{
             drive.moveTime(1.0, 0.0, 0.0, 0.1),
             lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.15))
     ).setStartCode(() -> {
+            lift.cap = false;
             outtakeStatus.set(DRIVING);
             outtake.openClaw();
             outtake.moveEnd();
@@ -67,6 +69,7 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageStart(0.1),
             lift.stageLift(1.0,0)
     ).setStartCode(() -> {
+            lift.cap = false;
             drive.using = true;
             outtakeStatus.set(DRIVING);
             outtake.moveEnd();
@@ -79,6 +82,7 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageStart(0.0),
             lift.moveTime(-0.4, 0.4)
     ).setStartCode(() -> {
+            lift.cap = false;
             outtakeStatus.set(DRIVING);
             driveMode.set(MEDIUM);
             outtake.openClaw();
@@ -171,7 +175,27 @@ public interface AutoModuleUser extends RobotUser{
             lift.ground = false;
     });
 
-    AutoModule CapGrab = new AutoModule(outtake.stageClose(0.2));
+    AutoModule CapGrab = new AutoModule(
+            outtake.stageClose(0.25),
+            lift.stageLift(1.0, heightMode.getValue(LOW)+2).attach(
+                    outtake.stageReadyEndContinuousWithFlip(1.5, 0.15)
+            )
+    ).setStartCode(() -> {
+        lift.setGround(false);
+        outtakeStatus.set(PLACING);
+        heightMode.set(LOW);
+    });
+    AutoModule CapPlace = new AutoModule(
+            outtake.stageOpenCap(0.8),
+            outtake.stageClose(0.2),
+            outtake.stageReadyEnd(0.2)
+//            ,
+//            outtake.stageClose(0.2)
+    ).setStartCode(() -> {
+            outtake.openClawCap();
+            outtake.moveEnd();
+    });
+
     AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5),  lift.resetLift()).setStartCode(() -> {
         lift.ground = false;
         outtakeStatus.set(DRIVING);

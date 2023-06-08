@@ -56,6 +56,8 @@ public class Outtake extends RobotPart {
         claw.addPosition("open", 0.12); // 0.15
         claw.addPosition("close", 0.29); //0.35
 
+        claw.addPosition("cap", 0.2);
+
         unFlip();
         outtakeStatus.set(PLACING);
     }
@@ -69,6 +71,7 @@ public class Outtake extends RobotPart {
     public void moveStart(){ armr.setPosition("start"); arml.setPosition("start"); unFlip(); }
     public void moveEnd(){ armr.setPosition("end"); arml.setPosition("end"); flip(); }
     public void openClaw(){ claw.setPosition("open"); }
+    public void openClawCap() { claw.setPosition("cap"); }
     public void closeClaw(){ claw.setPosition("close"); }
 
     public void dropConeRaw(){
@@ -89,6 +92,7 @@ public class Outtake extends RobotPart {
     public Stage stageOpen(double t){ return super.customTime(this::openClaw, t); }
     public Stage stageClose(double t){ return super.customTime(this::closeClaw, t); }
     public Stage stageFlip(double t){ return super.customTime(this::flip, t); }
+    public Stage stageOpenCap(double t){ return super.customTime(this::openClawCap, t); }
 
     public Stage stageFlipAfter(double t){ return super.customTimeAfter(this::flip, t); }
     public Stage stageCloseAfter(double t){ return super.customTimeAfter(this::closeClaw, t);}

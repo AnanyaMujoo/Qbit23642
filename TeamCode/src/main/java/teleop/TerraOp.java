@@ -60,7 +60,13 @@ public class TerraOp extends Tele {
         gph1.link(DPAD_DOWN, () -> bot.isMachineNotRunning(), () -> {if(lift.upright){lift.upright = false; bot.addAutoModuleWithCancel(FixCone);}else{bot.addAutoModuleWithCancel(ForwardTeleBottom);}}, () -> odometry.adjustUp(1.0));
         gph1.link(DPAD_UP, () -> bot.isMachineNotRunning(), () -> {lift.upright = true; bot.addAutoModuleWithCancel(UprightCone);}, () -> odometry.adjustDown(1.0));
         gph1.link(DPAD_LEFT, () -> bot.isMachineNotRunning(), () -> bot.addAutoModuleWithCancel(TakeOffCone), () -> odometry.adjustRight(1.0));
-        gph1.link(DPAD_RIGHT, () -> bot.isMachineNotRunning(), () -> {lift.cap = true; bot.addAutoModuleWithCancel(CapGrab); }, () -> odometry.adjustLeft(1.0));
+        gph1.link(DPAD_RIGHT, () -> bot.isMachineNotRunning(), () -> {
+            if(!lift.cap){
+                lift.cap = true; bot.addAutoModuleWithCancel(CapGrab);
+            }else{
+                lift.cap = false; bot.addAutoModuleWithCancel(CapPlace);
+            }
+            }, () -> odometry.adjustLeft(1.0));
 
         gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
         gph1.link(LEFT_BUMPER, () -> lift.adjustHolderTarget(-2.5));
