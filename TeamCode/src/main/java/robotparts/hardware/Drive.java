@@ -57,16 +57,16 @@ public class Drive extends RobotPart {
 
     @Override
     public void init() {
-        fr = create("fr", ElectronicType.CMOTOR_REVERSE);
-        br = create("br", ElectronicType.CMOTOR_REVERSE);
-        fl = create("fl", ElectronicType.CMOTOR_FORWARD);
-        bl = create("bl", ElectronicType.CMOTOR_FORWARD);
+//        fr = create("fr", ElectronicType.CMOTOR_REVERSE);
+//        br = create("br", ElectronicType.CMOTOR_REVERSE);
+//        fl = create("fl", ElectronicType.CMOTOR_FORWARD);
+//        bl = create("bl", ElectronicType.CMOTOR_FORWARD);
 
 
-//        fr = create("fr", ElectronicType.CMOTOR_REVERSE_FLOAT);
-//        br = create("br", ElectronicType.CMOTOR_REVERSE_FLOAT);
-//        fl = create("fl", ElectronicType.CMOTOR_FORWARD_FLOAT);
-//        bl = create("bl", ElectronicType.CMOTOR_FORWARD_FLOAT);
+        fr = create("fr", ElectronicType.CMOTOR_REVERSE_FLOAT);
+        br = create("br", ElectronicType.CMOTOR_REVERSE_FLOAT);
+        fl = create("fl", ElectronicType.CMOTOR_FORWARD_FLOAT);
+        bl = create("bl", ElectronicType.CMOTOR_FORWARD_FLOAT);
 //
 //        retract = create("ret", ElectronicType.PSERVO_FORWARD);
 //
