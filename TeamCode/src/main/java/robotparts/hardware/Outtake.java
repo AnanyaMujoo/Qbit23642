@@ -27,6 +27,8 @@ public class Outtake extends RobotPart {
         armr = create("armr", ElectronicType.PSERVO_REVERSE);
         arml = create("arml", ElectronicType.PSERVO_FORWARD);
 
+        // this is a comment
+
         arml.changePosition("start", 0.03);
         armr.changePosition("start", 0.03);
         arml.addPosition("s", 0.03);
