@@ -32,7 +32,7 @@ import static global.Modes.driveMode;
 
 public class Drive extends RobotPart {
 
-    private CMotor fr, br, fl, bl;
+    public CMotor fr, br, fl, bl;
 
     private final Precision precision = new Precision();
     private final Precision precision2 = new Precision();

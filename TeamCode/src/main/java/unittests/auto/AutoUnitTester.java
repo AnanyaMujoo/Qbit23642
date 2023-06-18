@@ -14,13 +14,14 @@ import unittests.UnitTester;
 import unittests.auto.framework.VuforiaTest;
 import unittests.auto.framework.calibration.ArmRestPowerCalib;
 import unittests.auto.framework.calibration.OdometryCalib;
+import unittests.auto.framework.calibration.OdometryCalib2;
 import unittests.auto.framework.calibration.RestPowerCalib;
 import unittests.auto.framework.calibration.VoltageScaleCalib;
 import unittests.auto.framework.movement.DistanceSensorStraightenTest;
 import unittests.auto.framework.movement.OdometryTest;
 import util.condition.Status;
 
-@Disabled
+//@Disabled
 @SuppressWarnings("ALL")
 @Autonomous(name = "AutoUnitTester", group = "UnitTests")
 public class AutoUnitTester extends Auto implements UnitTester {
@@ -50,9 +51,9 @@ public class AutoUnitTester extends Auto implements UnitTester {
 
 //        add(new VoltageScaleCalib());
 //        add(new VuforiaTest());
-//        add(new OdometryCalib());
+        add(new OdometryCalib2());
 //        add(new RestPowerCalib());
-        add(new ArmRestPowerCalib());
+//        add(new ArmRestPowerCalib());
 
         /**
          * Framework (needs hardware, in movement package)

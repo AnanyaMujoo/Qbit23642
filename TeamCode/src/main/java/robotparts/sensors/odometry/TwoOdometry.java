@@ -9,7 +9,7 @@ import robotparts.electronics.input.IEncoder;
 
 
 public class TwoOdometry extends Odometry {
-    protected IEncoder enc1, enc2;
+    public IEncoder enc1, enc2;
     protected Pose enc1Pose, enc2Pose;
     private Vector dThetaVector;
     private Matrix2D dYdXMatrixInverted;

@@ -43,6 +43,9 @@ public class ThreeOdometry extends TwoOdometry {
 ////        enc3.invert();
 //    }
 
+    public double totalX = 0;
+    public double totalY = 0;
+
     @Override
     protected void update() {
 
@@ -51,6 +54,13 @@ public class ThreeOdometry extends TwoOdometry {
         dyl = enc1.getDeltaPosition();
 
         dx = enc2.getDeltaPosition();
+
+        totalX += dx;
+
+        totalY += dyl;
+
+
+
 
 //        dx = enc2.getDeltaPosition() + (xCorrectionScale*dyl);
 
@@ -91,16 +101,15 @@ public class ThreeOdometry extends TwoOdometry {
 //        setHeading(gyro.getHeading());
 
 
-        Vector localDelta = new Vector(dx, dyl);
 
-//        updateCurrentHeading(dh);
 
-        setHeading(gyro.getHeading());
-//        precision.throttle(() -> setHeading(gyro.getHeading()), 100);
-
-        odometryCenter.translate(toGlobalFrame(localDelta));
-        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(leftOdometryCenterToRobotCenter).getSubtracted(leftOdometryCenterToRobotCenter);
-        setCurrentPose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()));
+//        Vector localDelta = new Vector(dx, dyl);
+//
+//        setHeading(gyro.getHeading());
+//
+//        odometryCenter.translate(toGlobalFrame(localDelta));
+//        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(leftOdometryCenterToRobotCenter).getSubtracted(leftOdometryCenterToRobotCenter);
+//        setCurrentPose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()));
     }
 
     public void setHeadingUsingOffset(double heading) {

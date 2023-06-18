@@ -55,6 +55,10 @@ public class CMotor extends Electronic {
         motor.setPower(0);
     }
 
+    public DcMotor getMotor(){
+        return motor;
+    }
+
     /**
      * Enable stall detector
      */
