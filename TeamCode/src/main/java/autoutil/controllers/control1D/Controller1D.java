@@ -12,18 +12,18 @@ import static java.lang.Math.abs;
 
 public abstract class Controller1D {
 
-    private final Precision precision = new Precision();
+    protected final Precision precision = new Precision();
 
-    private ReturnCodeSeg<Double> processVariable = () -> 0.0;
-    private ReturnCodeSeg<Double> processError = this::getRawError;
+    protected ReturnCodeSeg<Double> processVariable = () -> 0.0;
+    protected ReturnCodeSeg<Double> processError = this::getRawError;
     protected Profiler processVariableProfiler = new Profiler(this::getCurrentValue);
     protected Profiler errorProfiler = new Profiler(this::getError);
 
     private double output = 0;
-    private boolean isAtTarget = false;
+    protected boolean isAtTarget = false;
 
-    private double currentValue = 0;
-    private double  targetValue = 0;
+    protected double currentValue = 0;
+    protected double  targetValue = 0;
 
     private double restOutput = setDefaultRestOutput();
     private double minimumTime = setDefaultMinimumTimeReachedTarget();
@@ -58,9 +58,7 @@ public abstract class Controller1D {
         output = (scale*Precision.clip(setOutput(), 1)) + getRestOutput();
     }
     public final void update(){ update(new Pose(new Point(0,0),0), new PoseGenerator()); }
-    protected double getCurrentValue(){
-        return currentValue;
-    }
+    protected double getCurrentValue(){ return currentValue; }
     public double getOutput(){
         return output;
     }

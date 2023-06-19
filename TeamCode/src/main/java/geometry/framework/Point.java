@@ -46,6 +46,7 @@ public class Point {
     }
     public Point getCopy(ParameterCodeSeg<Point> operation){ Point copy = getCopy(); operation.run(copy); return copy; }
     public Vector getVector(){ return new Vector(this); }
+    public double getLength(){ return getDistanceTo(new Point()); }
 
     @Override
     public boolean equals(Object o) {

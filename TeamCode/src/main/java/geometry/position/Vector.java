@@ -79,6 +79,7 @@ public class Vector extends GeometryObject {
 
     public double getCrossProduct(Vector in){ return Vector3D.getCrossProduct(this, in); }
     public double getDotProduct(Vector in){ return Vector3D.getDotProduct(this, in); }
+    public double getNormalizedDotProduct(Vector in){ return getDotProduct(in)/(this.getLength()*in.getLength());}
 
     public Vector getUnitVector(){ return getLength() == 0.0 ? this : getScaled(1.0/getLength()); }
     public Vector getXVector(){ return new Vector(getX(), 0); }

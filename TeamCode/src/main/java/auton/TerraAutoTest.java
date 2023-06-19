@@ -25,22 +25,26 @@ public class TerraAutoTest extends AutoFramework {
 
     @Override
     public void initialize() {
-        setConfig(mecanumNonstopConfig);
+        setConfig(noStopNewConfig);
     }
 
     @Override
     public void define() {
 
-        addTimedSetpoint(0.5, 0.3, 4.0, 0, 90, 0);
+//        addTimedSetpoint(0.5, 0.3, 4.0, 0, 90, 0);
 
-        addCustomCode(() -> {
-            log.show("Odometry Pose", odometry.getPose());
-        }, 10);
+
+        addSetpoint(1.0, 0.5, 0, 100, 0);
+
+
+//        addCustomCode(() -> {
+//            log.show("Odometry Pose", odometry.getPose());
+//        }, 10);
 
     }
 
 
-    @Override
-    public void postProcess() { autoPlane.reflectY(); autoPlane.reflectX(); }
+//    @Override
+//    public void postProcess() { autoPlane.reflectY(); autoPlane.reflectX(); }
 
 }

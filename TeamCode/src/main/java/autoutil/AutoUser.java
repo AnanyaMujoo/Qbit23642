@@ -8,6 +8,7 @@ import autoutil.reactors.MecanumJunctionReactor2;
 import autoutil.reactors.MecanumNonstopReactor;
 import autoutil.reactors.MecanumPIDReactor;
 import autoutil.reactors.MecanumPurePursuitReactor;
+import autoutil.reactors.NoStopNewReactor;
 import autoutil.reactors.Reactor;
 import autoutil.vision.Scanner;
 import util.codeseg.ReturnCodeSeg;
@@ -27,6 +28,7 @@ public interface AutoUser {
     ReturnCodeSeg<MecanumJunctionReactor2> mecanumJunctionReactor2 = reactor(MecanumJunctionReactor2.class);
     ReturnCodeSeg<MecanumNonstopReactor> mecanumNonstopReactor = reactor(MecanumNonstopReactor.class);
     ReturnCodeSeg<MecanumNonstopReactor.MecanumNonstopReactorSetpoint> mecanumNonstopReactorSetpoint = reactor(MecanumNonstopReactor.MecanumNonstopReactorSetpoint.class);
+    ReturnCodeSeg<NoStopNewReactor> noStopNewReactor = reactor(NoStopNewReactor.class);
 
 
     AutoSegment<?, ?> mecanumDefaultSetpoint = new AutoSegment<>(mecanumPIDReactor, poseGenerator);
@@ -35,9 +37,12 @@ public interface AutoUser {
     AutoSegment<?, ?> mecanumDefaultWayPoint = new AutoSegment<>(mecanumPurePursuitReactor, lineGenerator);
     AutoSegment<?, ?> mecanumNonstopWayPoint = new AutoSegment<>(mecanumNonstopReactor, lineGenerator);
     AutoSegment<?, ?> mecanumNonstopSetPoint = new AutoSegment<>(mecanumNonstopReactorSetpoint, lineGenerator);
+    AutoSegment<?, ?> noStopNewSetPoint = new AutoSegment<>(noStopNewReactor, lineGenerator);
 
     AutoConfig mecanumDefaultConfig = new AutoConfig(mecanumDefaultSetpoint, mecanumDefaultWayPoint);
     AutoConfig mecanumNonstopConfig = new AutoConfig(mecanumNonstopSetPoint, mecanumNonstopWayPoint);
+    AutoConfig noStopNewConfig = new AutoConfig(noStopNewSetPoint, mecanumDefaultWayPoint);
+
 
 
 

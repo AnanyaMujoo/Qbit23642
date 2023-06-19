@@ -2,28 +2,48 @@ package autoutil.controllers.control1D;
 
 import autoutil.generators.Generator;
 import geometry.position.Pose;
+import geometry.position.Vector;
 import util.Timer;
 
 public class RV extends Controller1D{
 
     public Timer timer = new Timer();
     public double targetTime;
-    public double kt;
-
-    public final double maxAccel = 10000;
+    public double kp;
+    public double minVelocity;
 
     public boolean stopMode = false;
-    public double stopDis;
+    public boolean endMode = false;
+    public double stopDis = 0;
+    public Vector velocityVector = new Vector();
+    public Vector errorVector = new Vector();
+    public double velocity = 0;
+    public double initialVelocity = 0;
+    public double lastPos = 0;
+    public double lastTime = 0;
+    public double accelPower = 1;
+    public double stopPower = 1;
+    public double stopConstant = 40;
+    public boolean oneD = false;
+    public double ratio = 1;
 
 
-    public RV(double restPower, double kt){ setRestOutput(restPower); this.kt = kt; }
+    public RV(double kp, double restPower, double minVelocity){
+        setRestOutput(restPower); this.kp = kp;
+        this.minVelocity = minVelocity;
+    }
+
+    public void scale(double scale){
+        this.accelPower = scale;
+        this.stopPower = scale*ratio;
+    }
 
 
     @Override
-    protected double setDefaultAccuracy() { return 0.25; }
+    protected double setDefaultAccuracy() { return 0.5; }
 
     @Override
-    protected double setDefaultMinimumTimeReachedTarget() { return 0.01; }
+    protected double setDefaultMinimumTimeReachedTarget() { return 0.1; }
 
     @Override
     protected double setDefaultRestOutput() { return 0; }
@@ -31,12 +51,47 @@ public class RV extends Controller1D{
     @Override
     protected void updateController(Pose pose, Generator generator) {}
 
+    public void setVelocity(){
+        double currentPos = getCurrentValue();
+        double deltaPos = currentPos - lastPos;
+        lastPos = currentPos;
+
+        double currentTime = timer.seconds();
+        double deltaTime = currentTime - lastTime;
+        lastTime = currentTime;
+
+        this.velocity = deltaPos/deltaTime;
+    }
+    public void setVelocity(Vector velocity){
+        this.velocityVector = velocity;
+        this.velocity = velocityVector.getLength();
+    }
+
+    public void setErrorVector(Vector errorVector){
+        this.errorVector = errorVector;
+    }
+
+    public void setStopConstant(double stop){
+        stopConstant = stop;
+    }
+
+    public void set1D(){
+        oneD = true;
+    }
+
+    public void setRatio(double ratio){ this.ratio = ratio; }
+
 
     @Override
     protected double setOutput() {
-        double velocity = Math.max(processVariableProfiler.getDerivative(), 0.1);
+        setVelocity();
 
-        double minDisToStop = (velocity*velocity)/(2*maxAccel);
+
+        double minDisToStop = accelPower*accelPower*stopConstant;
+
+
+//
+//        double minDisToStop = (velocity*velocity)/(2*maxAccel);
 
 
 
@@ -50,16 +105,42 @@ public class RV extends Controller1D{
 
 //        double deltaTime = (timeToTarget - timeRemaining)/timeToTarget;
 
-        if(stopMode){
-            return 0.2*distanceRemaining/stopDis;
+        if (stopMode) {
+
+            if(endMode){
+                if(!oneD && errorVector.getNormalizedDotProduct(velocityVector) > 0) {
+                    return 0.5 * kp * distanceRemaining;
+                }else{
+                    return kp * distanceRemaining;
+                }
+            }else{
+                if(velocity < minVelocity){
+                    endMode = true;
+                }
+                return -stopPower;
+            }
+//
+//            if(velocity > 20){
+//                endMode = true;
+//                return -0.5;
+//            }else{
+//
+//                return 0.01*distanceRemaining;
+//            }
+
+//                double targetVelocity = initialVelocity * distanceRemaining / stopDis;
+//                return 0.005 * distanceRemaining + 0.05*(targetVelocity-velocity);
+
+
 //            double targetVelocity = velocity * distanceRemaining/stopDis;
 //            return Math.signum(distanceRemaining) * (Math.abs(targetVelocity)-Math.abs(velocity))*kt;
-        }else {
-            if(Math.abs(distanceRemaining) < minDisToStop){
+        } else {
+            if (Math.abs(distanceRemaining) < minDisToStop) {
                 stopMode = true;
                 stopDis = minDisToStop;
+                initialVelocity = velocity;
             }
-            return Math.signum(distanceRemaining)*0.5;
+            return Math.signum(distanceRemaining)*accelPower;
         }
 
     }
@@ -72,9 +153,8 @@ public class RV extends Controller1D{
     }
 
     @Override
-    public void setTarget(double targetValue) {
-        stopMode = false;
-        timer.reset();
-        super.setTarget(targetValue);
+    public void reset() {
+        lastTime = 0; lastPos = 0; timer.reset();  endMode = false; stopMode = false;
+        super.reset();
     }
 }
