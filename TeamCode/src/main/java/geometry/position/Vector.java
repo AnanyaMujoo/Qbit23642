@@ -81,6 +81,8 @@ public class Vector extends GeometryObject {
     public double getDotProduct(Vector in){ return Vector3D.getDotProduct(this, in); }
 
     public Vector getUnitVector(){ return getLength() == 0.0 ? this : getScaled(1.0/getLength()); }
+    public Vector getXVector(){ return new Vector(getX(), 0); }
+    public Vector getYVector() { return new Vector(0, getY()); }
 
     public boolean isNonZero(){ return !this.equals(new Vector()); }
 

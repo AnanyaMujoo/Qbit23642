@@ -1,28 +1,17 @@
-package auton;
+package auton.unused;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.util.ArrayList;
-
 import automodules.AutoModule;
+import auton.TerraAutoNormal;
 import autoutil.AutoFramework;
-import autoutil.reactors.Reactor;
-import elements.Case;
 import elements.Field;
 import elements.FieldPlacement;
 import elements.FieldSide;
 import elements.GameItems;
-import elements.Robot;
 import geometry.framework.Point;
 import geometry.position.Pose;
 import robotparts.RobotPart;
-import util.ExceptionCatcher;
-import util.Timer;
-import util.User;
-import util.template.Iterator;
-import util.template.Mode;
 
 import static global.General.bot;
 import static global.General.fieldPlacement;
@@ -30,9 +19,8 @@ import static global.General.fieldSide;
 import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
 import static global.Modes.Height.MIDDLE;
-import static global.Modes.OuttakeStatus.DRIVING;
 
-public class TerraAutoSafe extends AutoFramework {
+public class TerraAutoSafe2 extends AutoFramework {
 
     private double x, s;
 
@@ -63,6 +51,14 @@ public class TerraAutoSafe extends AutoFramework {
         outtake.openClaw();
     });
 
+    AutoModule ForwardSecond = new AutoModule(
+            RobotPart.pause(0.1),
+            lift.stageLift(1.0,  10.2).attach(outtake.stageStartAfter(0.2))
+    ).setStartCode(() -> {
+        outtake.moveEnd();
+        outtake.openClaw();
+    });
+
     AutoModule Forward(int i){return new AutoModule(
         RobotPart.pause(0.1),
         lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), -0.5)).attach(outtake.stageBack(0.5))
@@ -88,26 +84,25 @@ public class TerraAutoSafe extends AutoFramework {
         addConcurrentAutoModuleWithCancel(new AutoModule(outtake.stageMiddle(0.0), lift.stageLift(1.0, heightMode.getValue(LOW))));
         customFlipped(() -> {
             addSegment(1.0, mecanumDefaultWayPoint, 2, 100, 0);
-            addSegment(0.6, mecanumDefaultWayPoint, 3, 109, 0);
-            addSegment(0.36, mecanumDefaultWayPoint, 3, 114, 0);
+            addSegment(0.6, mecanumDefaultWayPoint, 3, 105, 0);
+            addSegment(0.36, mecanumDefaultWayPoint, 3, 110, 0);
         }, () -> {
             addSegment(1.0, mecanumDefaultWayPoint, 0, 100, 0);
-            addSegment(0.6, mecanumDefaultWayPoint, -1, 109, 0);
-            addSegment(0.36, mecanumDefaultWayPoint, -1, 114, 0);
+            addSegment(0.6, mecanumDefaultWayPoint, -1, 105, 0);
+            addSegment(0.36, mecanumDefaultWayPoint, -1, 110, 0);
         });
         addConcurrentAutoModuleWithCancel(BackwardFirst);
         // Pre-loaded cone place
         customFlipped(() -> {
-            addTimedSetpoint(1.0, 0.7, 0.3, 5, 118, 120);
-            addTimedSetpoint(1.0, 0.3, 1.0, -5, 108, 120);
+            addTimedSetpoint(1.0, 0.7, 0.3, 7, 113, 100);
+            addTimedSetpoint(1.0, 0.3, 1.0, -5, 100, 100);
         }, () -> {
-            addTimedSetpoint(1.0, 0.7, 0.3, 5, 118, 120);
-            addTimedSetpoint(1.0, 0.3, 1.0, -5, 107.5, 120);
+            addTimedSetpoint(1.0, 0.7, 0.3, 7, 113, 100);
+            addTimedSetpoint(1.0, 0.3, 1.0, -5, 102.5, 100);
         });
         addConcurrentAutoModuleWithCancel(ForwardFirst, 0.1);
-
         addSegment(0.7, mecanumDefaultWayPoint, 18, 128, 80);
-        // Pick
+        // Pick 1st cone
         customFlipped(() -> {
             addSegment(0.6, mecanumDefaultWayPoint, 60-x, 127 + s, 87);
             addTimedSetpoint(1.0, 0.1, 0.2, 67, 127 , 87);
@@ -117,39 +112,82 @@ public class TerraAutoSafe extends AutoFramework {
         });
         addCustomCode(() -> {
             Point point = new Point(odometry.getX(), isFlipped() ? Field.width - 27 : 27);
-            odometry.setPointUsingOffset(point);
+//            odometry.setPointUsingOffset(point);
+            outtake.closeClaw();
+            bot.addAutoModuleWithCancel(GrabBack);
+            pause(0.5);
+            outtake.flip();
+        });
+        addConcurrentAutoModuleWithCancel(BackwardFirst);
+        // Place 1st cone
+        addSegment(0.7, mecanumDefaultWayPoint, 25, 127, 92);
+        customFlipped(() -> {
+            addTimedSetpoint(1.0, 0.3, 1.0, -5, 100, 100);
+        }, () -> {
+            addTimedSetpoint(1.0, 0.3, 1.0, -5, 102.5, 100);
+        });
+        addConcurrentAutoModuleWithCancel(ForwardSecond, 0.1);
+        addSegment(0.7, mecanumDefaultWayPoint, 18, 128, 80);
+        // Pick 2nd cone
+        customFlipped(() -> {
+            addSegment(0.6, mecanumDefaultWayPoint, 60-x, 127 + s, 87);
+            addTimedSetpoint(1.0, 0.1, 0.2, 67, 127 , 87);
+        }, () -> {
+            addSegment(0.6, mecanumDefaultWayPoint, 61-x, 125 + s, 87);
+            addTimedSetpoint(1.0, 0.1, 0.3, 72-x, 127 + s, 88);
+        });
+        addCustomCode(() -> {
+            Point point = new Point(odometry.getX(), isFlipped() ? Field.width - 27 : 27);
+//            odometry.setPointUsingOffset(point);
             outtake.closeClaw();
             bot.addAutoModuleWithCancel(GrabBack);
             pause(0.5);
             outtake.flip();
         });
         addConcurrentAutoModuleWithCancel(Backward);
-        addSegment(1.0, mecanumDefaultWayPoint, 10 - x, 122 + s, 88);
-        addSegment(0.7, mecanumDefaultWayPoint, -20 - x, 122 + s, 88);
-        addSegment(0.5, mecanumDefaultWayPoint, -43 - x, 122 + s, 95);
+        // Place 2nd cone
         customFlipped(() -> {
-            addTimedSetpoint(1.0, 0.3, 1.0, -67.0 - x, 108 + s, 113.0);
+            addSegment(1.0, mecanumDefaultWayPoint, 10 - x, 123 + s, 88);
+            addSegment(0.7, mecanumDefaultWayPoint, -20 - x, 123 + s, 88);
+            addSegment(0.52, mecanumDefaultWayPoint, -43 - x, 123 + s, 95);
+            addTimedSetpoint(1.0, 0.42, 1.0, -67.0 - x, 108 + (0.7*s), 113.0);
         }, () -> {
-            addTimedSetpoint(1.0, 0.3, 1.0, -67.0 - x, 108 + s, 113.0);
+            addSegment(1.0, mecanumDefaultWayPoint, 10 - x, 123 + s, 88);
+            addSegment(0.7, mecanumDefaultWayPoint, -20 - x, 123 + s, 88);
+            addSegment(0.52, mecanumDefaultWayPoint, -43 - x, 123 + s, 95);
+            addTimedSetpoint(1.0, 0.42, 1.0, -67.0 - x, 108 + (0.8*s), 113.0);
         });
-        addConcurrentAutoModuleWithCancel(Forward(1), 0.1);
+        addCustomCode(() -> {
+            bot.cancelAutoModules();
+            outtake.moveEnd();
+            pause(0.05);
+            outtake.openClaw();
+        });
+        addConcurrentAutoModule(Forward(2));
+        addPause(0.15);
 
-        // Start 4 cycle
-        customNumber(4, i -> {
+        // Start 3 cycle
+        customNumber(3, i -> {
             customFlipped(() -> {
                 x = 0.0;
-                s = 1.0+0.4*i;
+                s = 1.0+0.4*(i+1);
             }, () -> {
                 x = 0.0;
                 s = 0.6*i;
             });
             // Move to pick
             customFlipped(() -> {
-                addSegment(0.6, mecanumDefaultWayPoint, i == 0 ? -50 : -45 - x, 125 + s, 110);
-                addSegment(1.0, mecanumDefaultWayPoint, 20 - x, 124 + s, 90);
-                addSegment(0.55, mecanumDefaultWayPoint, 46-x, 127 + s, 88);
+                addSegment(0.6, mecanumDefaultWayPoint, -45 - x, 125 + s, 110);
+                if(i==0) {
+                    addTimedSetpoint(1.0, 0.3, 0.5, -45 - x, 125 + s, 50);
+                    addSegment(1.0, mecanumDefaultWayPoint, 20 - x, 127 + s, 50);
+                    addSegment(0.55, mecanumDefaultWayPoint, 46 - x, 127 + s, 70);
+                }else{
+                    addSegment(1.0, mecanumDefaultWayPoint, 20 - x, 124 + s, 90);
+                    addSegment(0.55, mecanumDefaultWayPoint, 46-x, 127 + s, 88);
+                }
                 addSegment(0.4, mecanumDefaultWayPoint, 64-x, 127 + s, 88);
-                addTimedSetpoint(1.0, 0.1, 0.3, 68-x, 127 + s , 88);
+                addTimedSetpoint(1.0, 0.1, 0.3, 68 - x, 127 + s, 88);
             }, () -> {
                 addSegment(0.6, mecanumDefaultWayPoint, i == 0 ? -52 : -42 - x, i == 0 ? 127 : 122 + s, 110);
                 addSegment(1.0, mecanumDefaultWayPoint, 20 - x, 125 + s, 90);
@@ -163,9 +201,9 @@ public class TerraAutoSafe extends AutoFramework {
                 bot.cancelAutoModules();
                 outtake.closeClaw();
                 pause(0.05);
-                bot.addAutoModuleWithCancel(i+1 != 5 ? GrabBack : GrabBackLast);
+                bot.addAutoModuleWithCancel(i+1 != 3 ? GrabBack : GrabBackLast);
                 Point point = new Point(odometry.getX(), isFlipped() ? Field.width - 27 : 27);
-                odometry.setPointUsingOffset(point);
+//                odometry.setPointUsingOffset(point);
                 pause(0.45);
                 outtake.flip();
             });
@@ -189,7 +227,7 @@ public class TerraAutoSafe extends AutoFramework {
                 pause(0.05);
                 outtake.openClaw();
             });
-            addConcurrentAutoModule(Forward(i + 2));
+            addConcurrentAutoModule(Forward(i + 3));
             addPause(0.15);
         });
         addSegment(0.6, mecanumDefaultWayPoint, -37 - x, 126 + s, 114);
@@ -216,13 +254,13 @@ public class TerraAutoSafe extends AutoFramework {
         autoPlane.reflectX();
     }
 
-
-    @Autonomous(name = "C. RIGHT SAFE", group = "auto", preselectTeleOp = "TerraOp")
-    public static class RIGHT extends TerraAutoSafe {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
-
-    @Autonomous(name = "D. LEFT SAFE", group = "auto", preselectTeleOp = "TerraOp")
-    public static class LEFT extends TerraAutoSafe {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
-
+//
+//    @Autonomous(name = "E. RIGHT SAFE 2", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class RIGHT extends TerraAutoSafe2 {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
+//
+//    @Autonomous(name = "F. LEFT SAFE 2", group = "auto", preselectTeleOp = "TerraOp")
+//    public static class LEFT extends TerraAutoSafe2 {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
+//
 
 
 

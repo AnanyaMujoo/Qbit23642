@@ -1,5 +1,6 @@
 package robot;
 
+import robotparts.sensors.odometry.NewOdometry;
 import robotparts.sensors.odometry.ThreeOdometry;
 import robotparts.sensors.odometry.TwoOdometry;
 import robotparts.sensors.odometry.Odometry;
@@ -36,7 +37,8 @@ public interface RobotUser {
     Cameras camera = new Cameras();
 
 //    Odometry odometry = new TwoOdometry();
-    ThreeOdometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS
+//    ThreeOdometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS
+    NewOdometry odometry = new NewOdometry();
     /**
      * UNUSED
      */

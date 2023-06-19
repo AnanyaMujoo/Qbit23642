@@ -85,7 +85,7 @@ public class MecanumJunctionReactor extends MecanumPIDReactor{
                     double angle = (detection.getVector().getRotated(-90).getTheta()+startJunctionPose.getAngle());
 //                    log.record("angle", angle);
                     Pose robotPose = new Pose(position, (angle + startOdometryPose.getAngle())/2.0);
-                    odometry.setCurrentPose(robotPose);
+                    odometry.reset(robotPose);
                 }
                 exit = true;
             }

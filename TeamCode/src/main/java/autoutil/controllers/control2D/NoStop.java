@@ -7,16 +7,11 @@ import geometry.framework.Point;
 import geometry.position.Line;
 import geometry.position.Pose;
 import geometry.position.Vector;
-import math.polynomial.Linear;
 import util.Timer;
 import util.codeseg.ReturnCodeSeg;
-import util.condition.Expectation;
-import util.condition.Magnitude;
 import util.template.Precision;
 
-import static global.General.fault;
-
-public class Nonstop extends Controller2D{
+public class NoStop extends Controller2D{
 
     private Line currentLine = new Line();
     private final RP rpController;
@@ -29,7 +24,7 @@ public class Nonstop extends Controller2D{
     private boolean setpoint = false;
 
 
-    public Nonstop(double kp, double restPower, double accuracy){
+    public NoStop(double kp, double restPower, double accuracy){
         rpController = new RP(kp, restPower); rpController.setProcessVariable(() -> 0.0);
         rpController.setMinimumTime(0.01); rpController.setAccuracy(0.0);
         setAccuracy(accuracy);

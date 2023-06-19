@@ -6,21 +6,13 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import automodules.AutoModuleUser;
-import auton.TerraAutoNormal;
-import auton.TerraAutoSafe;
-import auton.TerraAutoSafe2;
 import autoutil.AutoFramework;
-import elements.Field;
-import elements.GameItems;
-import elements.Robot;
 import geometry.framework.CoordinatePlane;
 import geometry.framework.Point;
 import geometry.position.Line;
 import geometry.polygons.PolyLine;
 import geometry.position.Pose;
 import teleutil.independent.Machine;
-import util.template.Iterator;
 
 public class AutoSimulator extends Drawer{
 

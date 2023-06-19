@@ -65,6 +65,8 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new ThreadTest());
 //        add(new BackgroundTest());
 
+        add(new OdometryTest());
+
 
         /**
          * Framework (needs hardware, in movement package)
@@ -83,7 +85,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
 
 //        add(new JunctionScannerTest());
 //        add(new DistanceTest());
-        add(new OdometryTest());
+//        add(new OdometryTest());
     }
 
     /**

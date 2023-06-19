@@ -98,18 +98,18 @@ public class ThreeOdometry extends TwoOdometry {
 //        localDelta = localDelta.getRotated(0.3);
 //        localDelta.scaleY(1.01);
 //        localDelta.scaleX(1.01);
-//        setHeading(gyro.getHeading());
+        setHeading(gyro.getHeading());
 
 
 
 
-//        Vector localDelta = new Vector(dx, dyl);
+        Vector localDelta = new Vector(dx, dyl);
 //
 //        setHeading(gyro.getHeading());
 //
-//        odometryCenter.translate(toGlobalFrame(localDelta));
-//        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(leftOdometryCenterToRobotCenter).getSubtracted(leftOdometryCenterToRobotCenter);
-//        setCurrentPose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()));
+        odometryCenter.translate(toGlobalFrame(localDelta));
+        Vector globalOdometryCenterToRobotCenter = toGlobalFrame(leftOdometryCenterToRobotCenter).getSubtracted(leftOdometryCenterToRobotCenter);
+        setCurrentPose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()));
     }
 
     public void setHeadingUsingOffset(double heading) {

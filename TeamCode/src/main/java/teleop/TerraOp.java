@@ -57,16 +57,30 @@ public class TerraOp extends Tele {
         gph1.linkWithCancel(Button.B, heightMode.isMode(LOW).and(outtakeStatus.isMode(PLACING)), ForwardTeleLow, BackwardGrabLowTele);
         gph1.link(Button.A, heightMode.isMode(GROUND), () -> {if(lift.ground){ driveMode.set(SLOW); bot.addAutoModuleWithCancel(BackwardPlaceGroundTele);}else{if(outtakeStatus.modeIs(DRIVING)){ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele);}else{ driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(ForwardTeleGround);}}}, () -> {driveMode.set(MEDIUM); bot.addAutoModuleWithCancel(BackwardGrabGroundTele2);});
 
-        gph1.link(DPAD_DOWN, () -> bot.isMachineNotRunning(), () -> {if(lift.upright){lift.upright = false; bot.addAutoModuleWithCancel(FixCone);}else{bot.addAutoModuleWithCancel(ForwardTeleBottom);}}, () -> odometry.adjustUp(1.0));
-        gph1.link(DPAD_UP, () -> bot.isMachineNotRunning(), () -> {lift.upright = true; bot.addAutoModuleWithCancel(UprightCone);}, () -> odometry.adjustDown(1.0));
-        gph1.link(DPAD_LEFT, () -> bot.isMachineNotRunning(), () -> bot.addAutoModuleWithCancel(TakeOffCone), () -> odometry.adjustRight(1.0));
-        gph1.link(DPAD_RIGHT, () -> bot.isMachineNotRunning(), () -> {
+
+        gph1.link(DPAD_DOWN, () -> {if(lift.upright){lift.upright = false; bot.addAutoModuleWithCancel(FixCone);}else{bot.addAutoModuleWithCancel(ForwardTeleBottom);}});
+        gph1.link(DPAD_UP, () -> {lift.upright = true; bot.addAutoModuleWithCancel(UprightCone);});
+        gph1.link(DPAD_LEFT, () -> bot.addAutoModuleWithCancel(TakeOffCone));
+        gph1.link(DPAD_RIGHT, () -> {
             if(!lift.cap){
                 lift.cap = true; bot.addAutoModuleWithCancel(CapGrab);
             }else{
                 lift.cap = false; bot.addAutoModuleWithCancel(CapPlace);
             }
-            }, () -> odometry.adjustLeft(1.0));
+        });
+
+
+
+//        gph1.link(DPAD_DOWN, () -> bot.isMachineNotRunning(), () -> {if(lift.upright){lift.upright = false; bot.addAutoModuleWithCancel(FixCone);}else{bot.addAutoModuleWithCancel(ForwardTeleBottom);}}, () -> odometry.adjustUp(1.0));
+//        gph1.link(DPAD_UP, () -> bot.isMachineNotRunning(), () -> {lift.upright = true; bot.addAutoModuleWithCancel(UprightCone);}, () -> odometry.adjustDown(1.0));
+//        gph1.link(DPAD_LEFT, () -> bot.isMachineNotRunning(), () -> bot.addAutoModuleWithCancel(TakeOffCone), () -> odometry.adjustRight(1.0));
+//        gph1.link(DPAD_RIGHT, () -> bot.isMachineNotRunning(), () -> {
+//            if(!lift.cap){
+//                lift.cap = true; bot.addAutoModuleWithCancel(CapGrab);
+//            }else{
+//                lift.cap = false; bot.addAutoModuleWithCancel(CapPlace);
+//            }
+//            }, () -> odometry.adjustLeft(1.0));
 
         gph1.link(RIGHT_BUMPER, () -> lift.adjustHolderTarget(2.5));
         gph1.link(LEFT_BUMPER, () -> lift.adjustHolderTarget(-2.5));

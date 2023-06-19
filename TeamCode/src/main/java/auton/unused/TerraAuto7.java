@@ -1,4 +1,4 @@
-package auton;
+package auton.unused;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -9,6 +9,7 @@ import automodules.stage.Exit;
 import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
+import auton.TerraAutoNormal;
 import autoutil.AutoFramework;
 import autoutil.reactors.MecanumJunctionReactor2;
 import autoutil.reactors.Reactor;
@@ -126,7 +127,7 @@ public class TerraAuto7 extends AutoFramework {
             });
             double avgDis = Iterator.forAllAverage(values);
             Point point = new Point(135+avgDis, Field.width - 46 - Robot.halfLength);
-            odometry.setPointUsingOffset(point);
+//            odometry.setPointUsingOffset(point);
 
         });
 //        addTimedSetpoint(1.0, 0.8, 2.0, -200, y+6, -93);

@@ -17,18 +17,18 @@ public class OdometryCalib2 extends AutoUnitTest {
     @Override
     protected void run() {
 
-        odometry.totalY = 0;
-        odometry.totalX = 0;
-
-
-        drive.move(0.3, -0.2, 0);
-        whileActive(() -> odometry.totalY < 50, () -> {
-
-        });
-        drive.halt();
-
-        log.show("Ratio (X/Y)", odometry.totalX/odometry.totalY);
-        pause(10);
+//        odometry.totalY = 0;
+//        odometry.totalX = 0;
+//
+//
+//        drive.move(0.3, -0.2, 0);
+//        whileActive(() -> odometry.totalY < 50, () -> {
+//
+//        });
+//        drive.halt();
+//
+//        log.show("Ratio (X/Y)", odometry.totalX/odometry.totalY);
+//        pause(10);
 
 //
 //

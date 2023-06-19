@@ -1,20 +1,17 @@
 package autoutil.reactors;
 
-import autoutil.controllers.control1D.PID;
 import autoutil.controllers.control1D.RP;
-import autoutil.controllers.control2D.Nonstop;
-import autoutil.controllers.control2D.PurePursuit;
+import autoutil.controllers.control2D.NoStop;
 import autoutil.generators.PoseGenerator;
-import util.template.Precision;
 
 public class MecanumNonstopReactor extends MecanumReactor {
 
-    public Nonstop nonstop = new Nonstop(0.15, 0.1, 100.0);
+    public NoStop nostop = new NoStop(0.15, 0.1, 100.0);
     public RP hRP = new RP(0.012, 0.08);
 //    public PID hPID = new PID(PID.PIDParameterType.STANDARD_FORM_ALL, 0.01, 6.0, 0.2, 50.0, 20.0);
 
     public MecanumNonstopReactor(){
-        hRP.setMinimumTime(0.1); hRP.setAccuracy(2.0); setControllers(nonstop, hRP);
+        hRP.setMinimumTime(0.1); hRP.setAccuracy(2.0); setControllers(nostop, hRP);
 //        hPID.setMinimumTime(0.1); hPID.setAccuracy(2.0); hPID.setRestOutput(0.06); setControllers(nonstop, hPID);
     }
 
@@ -38,7 +35,7 @@ public class MecanumNonstopReactor extends MecanumReactor {
 
 
     public static class MecanumNonstopReactorSetpoint extends MecanumNonstopReactor {
-        public MecanumNonstopReactorSetpoint(){ super(); nonstop.setpoint(); movementController.setAccuracy(2.0);  }
+        public MecanumNonstopReactorSetpoint(){ super(); nostop.setpoint(); movementController.setAccuracy(2.0);  }
     }
 
 }

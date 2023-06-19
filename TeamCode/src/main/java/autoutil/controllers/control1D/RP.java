@@ -5,7 +5,7 @@ import geometry.position.Pose;
 
 public class RP extends Controller1D {
 
-    private double skp;
+    private final double skp;
     private double kp;
 
     public RP(double kp, double restPower){ setRestOutput(restPower); this.skp = kp; this.kp = skp; }

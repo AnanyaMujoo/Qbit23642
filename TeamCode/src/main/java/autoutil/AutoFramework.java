@@ -92,7 +92,13 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         postProcess();
         if(isFlipped()){ flip(); }
 //        autoPlane.rotate(-90);
-        autoPlane.setStart(startPose);
+
+
+        // TODO FIX
+//        autoPlane.setStart(startPose);
+
+
+
 //        autoPlane.toPoses(p -> p.rotateOrientation(90));
     }
 
@@ -137,7 +143,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
 
     protected void resetBeforeRun(){
-        odometry.setCurrentPose(startPose); odometry.setCurrentPose(startPose);
+        odometry.reset();
+//        odometry.reset(startPose);
     }
 
     @Override
@@ -236,7 +243,9 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public ArrayList<AutoSegment.Type> getSegmentTypes(){ return segmentTypes; }
     public CoordinatePlane getAutoPlane(){ return autoPlane; }
 
-    public Pose getStartPose(){ return startPose; }
+    public Pose getStartPose(){
+        return startPose;
+    }
 
     public Pose getEndPose(){ return poses.get(poses.size() - 1); }
 
