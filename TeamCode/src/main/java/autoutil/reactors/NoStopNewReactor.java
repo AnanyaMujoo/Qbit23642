@@ -1,36 +1,67 @@
 package autoutil.reactors;
 
 import autoutil.controllers.control1D.RP;
+import autoutil.controllers.control1D.RV;
 import autoutil.controllers.control2D.NoStop;
 import autoutil.controllers.control2D.NoStopNew;
 import autoutil.generators.PoseGenerator;
+import geometry.position.Pose;
 
-public class NoStopNewReactor extends MecanumReactor{
+public class NoStopNewReactor extends Reactor{
 
-    public NoStopNew noStopNew = new NoStopNew(0.014, 0.07,50,0.6,   100.0);
-    public RP hRP = new RP(0.012, 0.08);
+    public NoStopNew noStopNew = new NoStopNew(0.01, 0.07,20, 1.0,  1);
+    public RV rvHeading = new RV(0.01, 0.1, 40, 0);
 
     public NoStopNewReactor(){
-        hRP.setMinimumTime(0.05); hRP.setAccuracy(2.0);
-//        setControllers(noStopNew, hRP);
+        rvHeading.setProcessVariable(odometry::getHeading);
+        rvHeading.setMinimumTime(0.05);
+        rvHeading.setAccuracy(1);
+        rvHeading.set1D();
+        rvHeading.setStopConstant(45);
+        rvHeading.scale(1);
+        noStopNew.reset();
+        rvHeading.reset();
     }
 
 
     @Override
     public void scale(double scale) {
-        movementController.scale(scale);
+        noStopNew.scale(scale);
     }
 
     @Override
-    public void firstTarget() { movementController.reset(); }
+    public void firstTarget() {
+//        noStopNew.reset(); rvHeading.reset();
+    }
 
     @Override
-    public boolean isAtTarget() { return movementController.isAtTarget(); }
+    public void init() { rvHeading.setProcessVariable(odometry::getHeading); }
+
+    @Override
+    public Pose getPose() { return odometry.getPose(); }
+
+    @Override
+    public void setTarget(Pose target) { rvHeading.setTarget(target.getAngle()); }
+
+    @Override
+    public void nextTarget() {  firstTarget();  }
+
+    @Override
+    public boolean isAtTarget() { return noStopNew.hasReachedTarget() && rvHeading.isAtTarget(); }
 
     @Override
     public void moveToTarget(PoseGenerator generator) {
-        movementController.update(getPose(), generator); headingController.update(getPose(), generator);
-        drive.move(movementController.getOutputY(), 1.2*movementController.getOutputX(), -headingController.getOutput());
+        noStopNew.updateController(getPose(), generator); rvHeading.update(getPose(), generator);
+        drive.move(noStopNew.getOutputY(), 1.2*noStopNew.getOutputX(), -rvHeading.getOutput());
     }
 
+    @Override
+    public void setTime(double time) {
+
+    }
+
+    @Override
+    public void scaleAccuracy(double scale) {
+        noStopNew.scaleAccuracy(scale);
+    }
 }

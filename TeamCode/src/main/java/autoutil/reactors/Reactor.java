@@ -36,12 +36,12 @@ public abstract class Reactor implements RobotUser {
         headingController.scale(scale);
     }
 
-    public final void scaleAccuracy(double scale){
+    public void scaleAccuracy(double scale){
         movementController.scaleAccuracy(scale);
         headingController.scaleAccuracy(scale);
     }
 
-    public final void setTime(double time){
+    public void setTime(double time){
         movementController.setTime(time);
     }
 

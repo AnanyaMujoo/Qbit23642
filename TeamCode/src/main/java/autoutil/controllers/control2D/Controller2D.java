@@ -77,6 +77,10 @@ public abstract class Controller2D extends Controller1D {
     @Override
     protected double setOutput() { return 0; }
 
+    public final boolean notAtTarget(){
+        return !hasReachedTarget();
+    }
+
 
     public <T extends Generator> void checkGenerator(Generator generator, Class<T> type, ParameterCodeSeg<T> code){
         if(type.isInstance(generator)){

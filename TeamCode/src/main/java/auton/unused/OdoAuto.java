@@ -17,7 +17,7 @@ import util.template.Iterator;
 
 import static global.General.log;
 
-
+@Disabled
 @Autonomous(name = "OdoAuto")
 public class OdoAuto extends Auto {
 
@@ -36,12 +36,12 @@ public class OdoAuto extends Auto {
         noStopNew = new NoStopNew(0.02, 0.08,50, 0.4,  0.5);
 
 
-        rvHeading = new RV(0.012, 0.08, 40);
+        rvHeading = new RV(0.012, 0.08, 40, 0.1);
         rvHeading.setProcessVariable(odometry::getHeading);
         rvHeading.setMinimumTime(0.05);
         rvHeading.setAccuracy(1);
         rvHeading.set1D();
-        rvHeading.setStopConstant(90);
+        rvHeading.setStopConstant(60);
 
 
 
@@ -92,11 +92,11 @@ public class OdoAuto extends Auto {
         noStopNew.scale(1.0);
         noStopNew.reset();
         LineGenerator lineGenerator = new LineGenerator();
-        lineGenerator.add(new Pose(), new Pose(0,100, 0));
+        lineGenerator.add(new Pose(), new Pose(30,-20, 0));
 
         rvHeading.reset();
         rvHeading.scale(1.0);
-        rvHeading.setTarget(0);
+        rvHeading.setTarget(90);
         whileActive(() -> noStopNew.notAtTarget() || rvHeading.notAtTarget(),() -> {
             noStopNew.updateController(odometry.getPose(), lineGenerator);
             rvHeading.update();

@@ -28,9 +28,10 @@ public class RV extends Controller1D{
     public double ratio = 1;
 
 
-    public RV(double kp, double restPower, double minVelocity){
+    public RV(double kp, double restPower, double minVelocity, double ratio){
         setRestOutput(restPower); this.kp = kp;
         this.minVelocity = minVelocity;
+        this.ratio = ratio;
     }
 
     public void scale(double scale){
@@ -79,8 +80,6 @@ public class RV extends Controller1D{
         oneD = true;
     }
 
-    public void setRatio(double ratio){ this.ratio = ratio; }
-
 
     @Override
     protected double setOutput() {
@@ -108,10 +107,14 @@ public class RV extends Controller1D{
         if (stopMode) {
 
             if(endMode){
-                if(!oneD && errorVector.getNormalizedDotProduct(velocityVector) > 0) {
-                    return 0.5 * kp * distanceRemaining;
-                }else{
+                if(oneD){
                     return kp * distanceRemaining;
+                }else {
+                    if (errorVector.getNormalizedDotProduct(velocityVector) > 0) {
+                        return 0.5 * kp * distanceRemaining;
+                    } else {
+                        return kp * distanceRemaining;
+                    }
                 }
             }else{
                 if(velocity < minVelocity){

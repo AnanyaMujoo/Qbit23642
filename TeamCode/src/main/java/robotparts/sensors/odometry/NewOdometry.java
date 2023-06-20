@@ -9,6 +9,7 @@ import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IEncoder;
 import util.codeseg.ExceptionCodeSeg;
+import util.template.Precision;
 
 import static global.General.hardwareMap;
 import static robot.RobotFramework.odometryThread;
@@ -22,6 +23,7 @@ public class NewOdometry extends RobotPart {
     public DcMotor y2Odo;
     public final Vector leftOdometryCenterToRobotCenter = new Vector(10.5, 13.0);
     public final double wheelDiameter = 3.55; // cm
+    public final Precision precision = new Precision();
 
     @Override
     public void init() {
@@ -35,19 +37,27 @@ public class NewOdometry extends RobotPart {
     public void update(){
         double currentX = getEncX();
         double currentY = getEncY();
-        double currentY2 = getEncY2();
+//        double currentY2 = getEncY2();
         double deltaX = currentX - lastX;
         double deltaY = currentY - lastY;
-        double deltaY2 = currentY2 - lastY2;
+//        double deltaY2 = currentY2 - lastY2;
         lastX = currentX;
         lastY = currentY;
-        lastY2 = currentY2;
+//        lastY2 = currentY2;
+
+//        0.012*deltaX
+//        double deltaHeading = (deltaY2-deltaY)*2.7;
 
 
-        double deltaHeading = (deltaY2-deltaY)*2.7;
+//        h += deltaHeading;
+
+        gyro.update();
+
+        h = gyro.getHeading();
+
+//        precision.throttle(() -> h = gyro.getHeading(), 100);
 
 
-        h += deltaHeading;
 
 
 //        gyro.update();
@@ -72,13 +82,14 @@ public class NewOdometry extends RobotPart {
         yo += globalDelta.getY();
 
 
-        x = xo;
-        y = yo;
+//        x = xo;
+//        y = yo;
 
 
-//        Vector globalOdometryCenterToRobotCenter = leftOdometryCenterToRobotCenter.getRotated(getHeading()).getSubtracted(leftOdometryCenterToRobotCenter);
-//        x = xo + globalOdometryCenterToRobotCenter.getX();
-//        y = yo + globalOdometryCenterToRobotCenter.getY();
+        Vector globalOdometryCenterToRobotCenter = leftOdometryCenterToRobotCenter.getRotated(getHeading()).getSubtracted(leftOdometryCenterToRobotCenter);
+
+        x = xo + globalOdometryCenterToRobotCenter.getX();
+        y = yo + globalOdometryCenterToRobotCenter.getY();
 
 
     }
@@ -100,6 +111,8 @@ public class NewOdometry extends RobotPart {
 
 
     public void reset(Pose pose){
+        gyro.reset();
+        precision.reset();
         x = pose.getX(); y = pose.getY(); h = pose.getAngle(); xo = pose.getX(); yo = pose.getY();
         gyro.reset();
         startX = xOdo.getCurrentPosition();

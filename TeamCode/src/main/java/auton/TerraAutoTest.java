@@ -1,6 +1,7 @@
 package auton;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import automodules.AutoModule;
 import autoutil.AutoFramework;
@@ -20,6 +21,7 @@ import static global.General.log;
 import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
 
+@Disabled
 @Autonomous(name = "TerraAutoTest", group = "auto")
 public class TerraAutoTest extends AutoFramework {
 
@@ -35,6 +37,8 @@ public class TerraAutoTest extends AutoFramework {
 
 
         addSetpoint(1.0, 0.5, 0, 100, 0);
+
+//        addSegment();
 
 
 //        addCustomCode(() -> {

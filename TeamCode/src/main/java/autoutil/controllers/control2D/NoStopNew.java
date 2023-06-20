@@ -23,13 +23,12 @@ public class NoStopNew extends Controller2DNew {
 
 
     public NoStopNew(double kp, double restPower, double minVel, double ratio, double accuracy){
-        rvController =  new RV(kp, restPower, minVel){
+        rvController =  new RV(kp, restPower, minVel, ratio){
             @Override
             public void setVelocity() {
 
             }
         };
-        rvController.setRatio(ratio);
         rvController.setProcessVariable(() -> 0.0);
         rvController.setMinimumTime(0.05);
         rvController.setAccuracy(accuracy);

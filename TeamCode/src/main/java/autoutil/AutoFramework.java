@@ -256,6 +256,12 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         if(scanning && !haltCameraAfterInit){ camera.halt(); }
     }
 
+
+    public static void wait(double time){
+        Timer timer = new Timer(); timer.reset();
+        while(timer.seconds() < time){}
+    }
+
     public void reset(){
         config = null;
         autoPlane = new CoordinatePlane();
