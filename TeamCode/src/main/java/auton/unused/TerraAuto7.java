@@ -1,19 +1,9 @@
 package auton.unused;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import java.util.ArrayList;
 
 import automodules.AutoModule;
-import automodules.stage.Exit;
-import automodules.stage.Initial;
-import automodules.stage.Main;
-import automodules.stage.Stage;
-import auton.TerraAutoNormal;
 import autoutil.AutoFramework;
-import autoutil.reactors.MecanumJunctionReactor2;
-import autoutil.reactors.Reactor;
-import elements.Case;
 import elements.Field;
 import elements.FieldPlacement;
 import elements.FieldSide;
@@ -22,18 +12,11 @@ import elements.Robot;
 import geometry.framework.Point;
 import geometry.position.Pose;
 import robotparts.RobotPart;
-import util.ExceptionCatcher;
 import util.template.Iterator;
-import util.template.Mode;
-import util.template.Precision;
 
-import static global.General.bot;
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
-import static global.General.log;
 import static global.Modes.Height.HIGH;
-import static global.Modes.Height.LOW;
-import static global.Modes.Height.MIDDLE;
 
 
 //    preselectTeleOp = "TerraOp"

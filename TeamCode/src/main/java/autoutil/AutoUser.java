@@ -29,7 +29,8 @@ public interface AutoUser {
     ReturnCodeSeg<MecanumNonstopReactor> mecanumNonstopReactor = reactor(MecanumNonstopReactor.class);
     ReturnCodeSeg<MecanumNonstopReactor.MecanumNonstopReactorSetpoint> mecanumNonstopReactorSetpoint = reactor(MecanumNonstopReactor.MecanumNonstopReactorSetpoint.class);
     ReturnCodeSeg<NoStopNewReactor> noStopNewReactor = reactor(NoStopNewReactor.class);
-
+    ReturnCodeSeg<NoStopNewReactor.NoStopNewReactorHalt> noStopNewReactorHalt = reactor(NoStopNewReactor.NoStopNewReactorHalt.class);
+    ReturnCodeSeg<NoStopNewReactor.NoStopNewReactorNoHeading> noStopNewReactorNoHeading = reactor(NoStopNewReactor.NoStopNewReactorNoHeading.class);
 
     AutoSegment<?, ?> mecanumDefaultSetpoint = new AutoSegment<>(mecanumPIDReactor, poseGenerator);
     AutoSegment<?, ?> mecanumJunctionSetpoint = new AutoSegment<>(mecanumJunctionReactor, poseGenerator);
@@ -38,6 +39,8 @@ public interface AutoUser {
     AutoSegment<?, ?> mecanumNonstopWayPoint = new AutoSegment<>(mecanumNonstopReactor, lineGenerator);
     AutoSegment<?, ?> mecanumNonstopSetPoint = new AutoSegment<>(mecanumNonstopReactorSetpoint, lineGenerator);
     AutoSegment<?, ?> noStopNewSetPoint = new AutoSegment<>(noStopNewReactor, lineGenerator);
+    AutoSegment<?, ?> noStopNewHaltSetPoint = new AutoSegment<>(noStopNewReactorHalt, lineGenerator);
+    AutoSegment<?, ?> noStopNewNoHeadingSetPoint = new AutoSegment<>(noStopNewReactorNoHeading, lineGenerator);
 
     AutoConfig mecanumDefaultConfig = new AutoConfig(mecanumDefaultSetpoint, mecanumDefaultWayPoint);
     AutoConfig mecanumNonstopConfig = new AutoConfig(mecanumNonstopSetPoint, mecanumNonstopWayPoint);

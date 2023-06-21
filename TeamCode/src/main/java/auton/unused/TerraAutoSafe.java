@@ -1,37 +1,15 @@
 package auton.unused;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.checkerframework.checker.units.qual.A;
-
-import java.util.ArrayList;
-
 import automodules.AutoModule;
-import auton.TerraAutoNormal;
 import autoutil.AutoFramework;
-import autoutil.reactors.Reactor;
-import elements.Case;
 import elements.Field;
-import elements.FieldPlacement;
-import elements.FieldSide;
-import elements.GameItems;
-import elements.Robot;
 import geometry.framework.Point;
-import geometry.position.Pose;
 import robotparts.RobotPart;
-import util.ExceptionCatcher;
-import util.Timer;
-import util.User;
-import util.template.Iterator;
-import util.template.Mode;
 
 import static global.General.bot;
-import static global.General.fieldPlacement;
-import static global.General.fieldSide;
 import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
 import static global.Modes.Height.MIDDLE;
-import static global.Modes.OuttakeStatus.DRIVING;
 
 public class TerraAutoSafe extends AutoFramework {
 

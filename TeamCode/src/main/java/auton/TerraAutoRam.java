@@ -30,7 +30,7 @@ public class TerraAutoRam extends AutoFramework {
         outtake.closeClaw();
         wait(0.5);
         outtake.readyStart();
-        auto.scan(false);
+//        auto.scan(false);
     }
 
     static AutoModule BackwardFirst = new AutoModule(
@@ -47,25 +47,37 @@ public class TerraAutoRam extends AutoFramework {
     @Override
     public void initialize() {
         normalInit(this);
-        caseDetected = Case.FIRST;
+        caseDetected = Case.SECOND;
+    }
+
+    public static void signal(AutoFramework f){
+        f.customSide(() -> {
+            f.addSegment(0.8, mecanumDefaultWayPoint, 0, 30, 0);
+            f.addSegment(0.5, mecanumDefaultWayPoint, -3,90,-30);
+            f.addSegment(1.0, noStopNewHaltSetPoint, 11, 120, -30);
+        }, () -> {
+            f.addSegment(0.8, mecanumDefaultWayPoint, 0, 30, 0);
+            f.addSegment(0.5, mecanumDefaultWayPoint, -3,90,-30);
+            f.addSegment(0.9, mecanumDefaultWayPoint, 15, 130, -30);
+        });
     }
 
     @Override
     public void define() {
-
-        customSide(() -> {
-            addSegment(0.8, mecanumDefaultWayPoint, 0, 30, 0);
-            addSegment(0.5, mecanumDefaultWayPoint, -3,90,-30);
-            addSegment(0.9, mecanumDefaultWayPoint, 15, 130, -30);
-            addSegment(0.5, mecanumDefaultWayPoint, 5, 115, -30);
-        }, () -> {
-            addSegment(0.8, mecanumDefaultWayPoint, 0, 30, 0);
-            addSegment(0.5, mecanumDefaultWayPoint, -3,90,-30);
-            addSegment(0.9, mecanumDefaultWayPoint, 15, 130, -30);
-            addSegment(0.5, mecanumDefaultWayPoint, 5, 115, -30);
-        });
-
-
+        signal(this);
+//
+//        customSide(() -> {
+//            addSegment(0.8, mecanumDefaultWayPoint, 0, 30, 0);
+//            addSegment(0.5, mecanumDefaultWayPoint, -3,90,-30);
+//
+//            addSegment(1.0, noStopNewHaltSetPoint, 10, 116, -30);
+////            addSegment(1.0, mecanumDefaultWayPoint, 15, 128, -30);
+//        }, () -> {
+//            addSegment(0.8, mecanumDefaultWayPoint, 0, 30, 0);
+//            addSegment(0.5, mecanumDefaultWayPoint, -3,90,-30);
+//            addSegment(0.9, mecanumDefaultWayPoint, 15, 130, -30);
+//        });
+        addSegment(0.5, mecanumDefaultWayPoint, 5, 115, -30);
 
         customNumber(5, i -> {
             addTimedSetpoint(1.0, 0.5,1.5,2, 70, 0);

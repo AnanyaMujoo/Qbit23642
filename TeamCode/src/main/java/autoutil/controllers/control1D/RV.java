@@ -1,6 +1,7 @@
 package autoutil.controllers.control1D;
 
 import autoutil.generators.Generator;
+import debugging.Fault;
 import geometry.position.Pose;
 import geometry.position.Vector;
 import util.Timer;
@@ -27,6 +28,12 @@ public class RV extends Controller1D{
     public boolean oneD = false;
     public double ratio = 1;
 
+    public boolean isEndModeExit = false;
+
+    public void setRatio(double ratio){
+        this.ratio = ratio;
+    }
+
 
     public RV(double kp, double restPower, double minVelocity, double ratio){
         setRestOutput(restPower); this.kp = kp;
@@ -37,6 +44,10 @@ public class RV extends Controller1D{
     public void scale(double scale){
         this.accelPower = scale;
         this.stopPower = scale*ratio;
+    }
+
+    public void setMinVelocity(double mv){
+        minVelocity = mv;
     }
 
 
@@ -86,7 +97,7 @@ public class RV extends Controller1D{
         setVelocity();
 
 
-        double minDisToStop = accelPower*accelPower*stopConstant;
+        double minDisToStop = accelPower*stopConstant;
 
 
 //
@@ -148,12 +159,24 @@ public class RV extends Controller1D{
 
     }
 
+    public void setToEndModeExit(){
+        isEndModeExit = true;
+    }
+
     @Override
-    protected boolean hasReachedTarget() { return isWithinAccuracyRange(); }
+    protected boolean hasReachedTarget() {
+        if(!isEndModeExit){
+            return isWithinAccuracyRange();
+        }else{
+            return endMode;
+        }
+    }
 
     public void setTargetTime(double time){
         targetTime = time;
     }
+
+
 
     @Override
     public void reset() {

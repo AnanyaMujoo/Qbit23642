@@ -1,21 +1,12 @@
 package auton.unused;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import automodules.AutoModule;
-import auton.TerraAutoNormal;
 import autoutil.AutoFramework;
 import elements.Field;
-import elements.FieldPlacement;
-import elements.FieldSide;
-import elements.GameItems;
 import geometry.framework.Point;
-import geometry.position.Pose;
 import robotparts.RobotPart;
 
 import static global.General.bot;
-import static global.General.fieldPlacement;
-import static global.General.fieldSide;
 import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
 import static global.Modes.Height.MIDDLE;
