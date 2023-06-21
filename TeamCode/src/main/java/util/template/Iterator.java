@@ -93,6 +93,10 @@ public interface Iterator {
         log.setShouldUpdateOnShow(oldShouldUpdate);
     }
 
+    default void showForTime(String caption, Object message, double time){
+        whileTime(() -> log.show(caption, message), time);
+    }
+
     /**
      * Pause for some amount of seconds
      * @param secs

@@ -1,20 +1,15 @@
 package robot;
 
 import robotparts.sensors.odometry.NewOdometry;
-import robotparts.sensors.odometry.ThreeOdometry;
-import robotparts.sensors.odometry.TwoOdometry;
-import robotparts.sensors.odometry.Odometry;
-import teleutil.TeleTrack;
 import unittests.tele.framework.movement.AutoModuleTest;
 import robotparts.hardware.Drive;
-import robotparts.hardware.Intake;
+import robotparts.unused.Intake;
 import robotparts.hardware.Lift;
 import robotparts.hardware.Outtake;
 import robotparts.sensors.Cameras;
 import robotparts.sensors.ColorSensors;
 import robotparts.sensors.GyroSensors;
 import robotparts.unused.DistanceSensors;
-import robotparts.unused.Leds;
 import robotparts.unused.CustomTestPart;
 import robotparts.unused.TouchSensors;
 

@@ -9,11 +9,14 @@ import geometry.position.Pose;
 
 public class NoStopNewReactor extends Reactor{
 
-    public NoStopNew noStopNew = new NoStopNew(0.02, 0.09,30, 1.0,2);
+    public NoStopNew noStopNew = new NoStopNew(0.01, 0.08,20, 1.0,2);
     public RP hRP = new RP(0.01, 0.07);
 //    public RV rvHeading = new RV(0.008, 0.05, 40, 0);
 
     public NoStopNewReactor(){
+        noStopNew.rvController.setMinimumTime(0.2);
+        noStopNew.rvController.setStopConstant(60);
+
         hRP.setMinimumTime(0.1);
         hRP.setAccuracy(2.0);
 
@@ -35,7 +38,7 @@ public class NoStopNewReactor extends Reactor{
     }
 
     @Override
-    public void firstTarget() { }
+    public void firstTarget() { noStopNew.rvController.timer.reset(); }
 
     @Override
     public void init() { hRP.setProcessVariable(odometry::getHeading); }
@@ -72,8 +75,9 @@ public class NoStopNewReactor extends Reactor{
         public NoStopNewReactorHalt(){
             super();
             noStopNew.rvController.setStopConstant(1);
-            noStopNew.rvController.setAccuracy(4);
+            noStopNew.rvController.setAccuracy(5);
             noStopNew.rvController.setToEndModeExit();
+            noStopNew.rvController.setMaxTime(0.3);
         }
 
         @Override

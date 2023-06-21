@@ -38,10 +38,9 @@ public class TerraAutoRam extends AutoFramework {
     ).setStartCode(outtake::moveMiddle);
 
     AutoModule Forward = new AutoModule(
-            RobotPart.pause(0.1),
-            outtake.stageOpen(0.1),
-            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0)
+            RobotPart.pause(1.0),
+            outtake.stageOpen(0.4),
+            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.2))
     ).setStartCode(outtake::moveEnd);
 
     @Override
@@ -54,30 +53,19 @@ public class TerraAutoRam extends AutoFramework {
         f.customSide(() -> {
             f.addSegment(0.8, mecanumDefaultWayPoint, 0, 30, 0);
             f.addSegment(0.5, mecanumDefaultWayPoint, -3,90,-30);
-            f.addSegment(1.0, noStopNewHaltSetPoint, 11, 120, -30);
+            f.addSegment(1.0, noStopNewHaltSetPoint, 11, 123, -30);
         }, () -> {
             f.addSegment(0.8, mecanumDefaultWayPoint, 0, 30, 0);
             f.addSegment(0.5, mecanumDefaultWayPoint, -3,90,-30);
-            f.addSegment(0.9, mecanumDefaultWayPoint, 15, 130, -30);
+            f.addSegment(1.0, noStopNewHaltSetPoint, 11, 123, -30);
         });
     }
 
     @Override
     public void define() {
         signal(this);
-//
-//        customSide(() -> {
-//            addSegment(0.8, mecanumDefaultWayPoint, 0, 30, 0);
-//            addSegment(0.5, mecanumDefaultWayPoint, -3,90,-30);
-//
-//            addSegment(1.0, noStopNewHaltSetPoint, 10, 116, -30);
-////            addSegment(1.0, mecanumDefaultWayPoint, 15, 128, -30);
-//        }, () -> {
-//            addSegment(0.8, mecanumDefaultWayPoint, 0, 30, 0);
-//            addSegment(0.5, mecanumDefaultWayPoint, -3,90,-30);
-//            addSegment(0.9, mecanumDefaultWayPoint, 15, 130, -30);
-//        });
-        addSegment(0.5, mecanumDefaultWayPoint, 5, 115, -30);
+
+        addSegment(0.6, mecanumDefaultWayPoint, 5, 105, -30);
 
         customNumber(5, i -> {
             addTimedSetpoint(1.0, 0.5,1.5,2, 70, 0);
@@ -86,7 +74,6 @@ public class TerraAutoRam extends AutoFramework {
                 if (odometry.getY() < -155) {
                     halt[0] = true;
                 }
-//                log.show("HALT", halt[0]);
                 drive.halt();
             });
             addBreakpoint(() -> halt[0]);
@@ -94,16 +81,16 @@ public class TerraAutoRam extends AutoFramework {
         addBreakpointReturn();
 
         customSide(() -> {
-            addTimedSetpoint(1.0, 0.5, 0.6, -12, 125, 30);
+            addTimedSetpoint(1.0, 0.5, 0.6, -9, 126, 30);
             addConcurrentAutoModuleWithCancel(BackwardFirst, 0.2);
-            addTimedSetpoint(1.0, 0.5, 1.3, -16, 136, 30);
+            addTimedSetpoint(1.0, 0.5, 1.3, -13, 138, 30);
         }, () -> {
             addTimedSetpoint(1.0, 0.5, 0.6, -12, 125, 30);
             addConcurrentAutoModuleWithCancel(BackwardFirst, 0.2);
             addTimedSetpoint(1.0, 0.5, 1.3, -16, 136, 30);
         });
-        addConcurrentAutoModuleWithCancel(Forward, 0.5);
-        addSegment(0.4, mecanumDefaultWayPoint, 0, 120, 0);
+        addConcurrentAutoModuleWithCancel(Forward, 1.2);
+        addTimedSetpoint(1.0, 0.4, 1.0, 0, 120, 0);
         addSegment(0.5, noStopNewSetPoint, 0, 73, 0);
         customCase(() -> {
             addTimedSetpoint(1.0, 0.5,2.0,-58, 73, 0);

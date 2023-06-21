@@ -31,6 +31,9 @@ public class OdometryTest extends TeleUnitTest {
 //        gph1.link(Button.DPAD_LEFT, () -> odometry.angleRight -= Trig.rad(0.2));
 //        gph1.link(Button.RIGHT_BUMPER, () -> odometry.mode += 1);
 //        gph1.link(Button.LEFT_BUMPER, () -> odometry.mode -= 1);
+
+//        gph1.link(Button.RIGHT_BUMPER, drive::endSignal);
+//        gph1.link(Button.LEFT_BUMPER, drive::startSignal);
     }
 
     @Override

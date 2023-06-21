@@ -9,6 +9,7 @@ import util.Timer;
 public class RV extends Controller1D{
 
     public Timer timer = new Timer();
+    public Timer time2 = new Timer();
     public double targetTime;
     public double kp;
     public double minVelocity;
@@ -27,6 +28,7 @@ public class RV extends Controller1D{
     public double stopConstant = 40;
     public boolean oneD = false;
     public double ratio = 1;
+    public double maxTime = 0;
 
     public boolean isEndModeExit = false;
 
@@ -45,6 +47,7 @@ public class RV extends Controller1D{
         this.accelPower = scale;
         this.stopPower = scale*ratio;
     }
+
 
     public void setMinVelocity(double mv){
         minVelocity = mv;
@@ -91,6 +94,10 @@ public class RV extends Controller1D{
         oneD = true;
     }
 
+    public void setMaxTime(double time){
+        maxTime = time;
+    }
+
 
     @Override
     protected double setOutput() {
@@ -131,6 +138,9 @@ public class RV extends Controller1D{
                 if(velocity < minVelocity){
                     endMode = true;
                 }
+                if(isEndModeExit && time2.seconds() > maxTime){
+                    endMode = true;
+                }
                 return -stopPower;
             }
 //
@@ -149,10 +159,21 @@ public class RV extends Controller1D{
 //            double targetVelocity = velocity * distanceRemaining/stopDis;
 //            return Math.signum(distanceRemaining) * (Math.abs(targetVelocity)-Math.abs(velocity))*kt;
         } else {
-            if (Math.abs(distanceRemaining) < minDisToStop) {
-                stopMode = true;
-                stopDis = minDisToStop;
-                initialVelocity = velocity;
+            if(!isEndModeExit) {
+                if (Math.abs(distanceRemaining) < minDisToStop) {
+                    stopMode = true;
+                    stopDis = minDisToStop;
+                    initialVelocity = velocity;
+                }
+            }else{
+                if (isWithinAccuracyRange()) {
+                    stopMode = true;
+                    stopDis = minDisToStop;
+                    initialVelocity = velocity;
+                    if (maxTime > 0) {
+                        time2.reset();
+                    }
+                }
             }
             return Math.signum(distanceRemaining)*accelPower;
         }

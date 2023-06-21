@@ -39,8 +39,6 @@ public class Drive extends RobotPart {
 
     private final Timer timer = new Timer();
 
-    private final Timer timer2 = new Timer();
-
     public boolean noStrafeLock = false;
 
     public double[] currentPower = new double[3];
@@ -67,6 +65,7 @@ public class Drive extends RobotPart {
         br = create("br", ElectronicType.CMOTOR_REVERSE_FLOAT);
         fl = create("fl", ElectronicType.CMOTOR_FORWARD_FLOAT);
         bl = create("bl", ElectronicType.CMOTOR_FORWARD_FLOAT);
+
 //
 //        retract = create("ret", ElectronicType.PSERVO_FORWARD);
 //
@@ -88,8 +87,12 @@ public class Drive extends RobotPart {
         using = false;
 
         timer.reset();
+
         //        throw new RuntimeException("HA HA YOU NOOB VIRUS VIRUS VIRUS");
     }
+
+
+
 
 //    public void retract(){ retract.setPosition("end"); }
 //    public void engage(){ retract.setPosition("start"); }

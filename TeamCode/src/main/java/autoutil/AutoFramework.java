@@ -70,6 +70,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     private int pauseIndex, autoModuleIndex, customSegmentIndex, breakpointIndex = 0;
 
     protected Timer timer = new Timer();
+    public boolean skipping = false;
 
     // TOD5 better breakpoint system
 
@@ -185,15 +186,22 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addTimedSetpoint(double acc, double scale, double time, double x, double y, double h){ addTime(time); addSetpoint(acc, scale, x, y, h); }
     public void addTimedWaypoint(double scale, double time, double x, double y, double h){ addTime(time); addWaypoint(scale, x, y, h);}
 
-    public void addCustomCode(CodeSeg code){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(code); addLastPose(); }
+
+    private void addCustomCodeInternal(CodeSeg code){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(code); addLastPose(); }
+    public void addCustomCode(CodeSeg code){ addCustomCodeInternal(() -> {
+        if(!skipping){
+            code.run();
+        }
+    });}
     public void addCustomCode(CodeSeg code, double time){ addCustomCode(code); addPause(time); }
     public void addSynchronisedDecision(DecisionList decisionList){ addCustomCode(decisionList::check); }
-    public void addBreakpoint(ReturnCodeSeg<Boolean> exit){ addCustomCode(() -> {
+    public void addBreakpoint(ReturnCodeSeg<Boolean> exit){ addCustomCodeInternal(() -> {
         if(exit.run()){
+            skipping = true;
             Iterator.forAll(segments, AutoSegment::skip);
         }
     });}
-    public void addBreakpointReturn(){ addCustomCode(() -> Iterator.forAll(segments, AutoSegment::reset));}
+    public void addBreakpointReturn(){ addCustomCodeInternal(() -> Iterator.forAll(segments, AutoSegment::reset));}
 
     private void createSegments(){
         Iterator.forAll(segmentTypes, type -> {
@@ -285,6 +293,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         autoModuleIndex = 0;
         customSegmentIndex = 0;
         breakpointIndex = 0;
+        skipping = false;
         startPose = new Pose();
         poses.add(new Pose()); movementScales.addAll(Collections.nCopies(200,1.0)); accuracyScales.addAll(Collections.nCopies(200,1.0)); times.addAll(Collections.nCopies(200,100.0));
     }

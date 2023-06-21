@@ -17,6 +17,7 @@ import static global.Modes.outtakeStatus;
 public class Outtake extends RobotPart {
 
     public PServo armr, arml, turn, claw;
+    public PServo forklift;
 
 //    public boolean cycleMachine = false;
 //    public boolean pauseMachine = false;
@@ -51,17 +52,28 @@ public class Outtake extends RobotPart {
 
         turn = create("turn", ElectronicType.PSERVO_REVERSE);
         claw = create("claw", ElectronicType.PSERVO_REVERSE);
+//
+//        turn.changePosition("start", 0.07); // 0.05
 
-        turn.changePosition("start", 0.07); // 0.05
+        turn.changePosition("start", 0.1); // 0.05
 //        turn.addPosition("flipped", 0.86); //0.84
         turn.addPosition("flipped", 0.84);
 
-        claw.addPosition("open", 0.14); // 0.15
+        claw.addPosition("openComp", 0.0);
+        claw.addPosition("open", 0.1); // 0.15
 //        claw.addPosition("close", 0.29); //0.35
         claw.addPosition("close", 0.36);
 
         claw.addPosition("cap", 0.2);
 
+        forklift = create("pa", ElectronicType.PSERVO_REVERSE);
+
+        forklift.changePosition("start", 0.1);
+        forklift.changePosition("readyStart", 0.17);
+        forklift.changePosition("end", 0.45);
+
+
+//        startSignal();
         unFlip();
         outtakeStatus.set(PLACING);
     }
@@ -74,6 +86,7 @@ public class Outtake extends RobotPart {
 
     public void moveStart(){ armr.setPosition("start"); arml.setPosition("start"); unFlip(); }
     public void moveEnd(){ armr.setPosition("end"); arml.setPosition("end"); flip(); }
+    public void openClawComp(){ claw.setPosition("openComp"); }
     public void openClaw(){ claw.setPosition("open"); }
     public void openClawCap() { claw.setPosition("cap"); }
     public void closeClaw(){ claw.setPosition("close"); }
@@ -97,6 +110,7 @@ public class Outtake extends RobotPart {
     public Stage stageClose(double t){ return super.customTime(this::closeClaw, t); }
     public Stage stageFlip(double t){ return super.customTime(this::flip, t); }
     public Stage stageOpenCap(double t){ return super.customTime(this::openClawCap, t); }
+    public Stage stageOpenComp(double t){ return super.customTime(this::openClawComp, t); }
 
     public Stage stageFlipAfter(double t){ return super.customTimeAfter(this::flip, t); }
     public Stage stageCloseAfter(double t){ return super.customTimeAfter(this::closeClaw, t);}
@@ -148,6 +162,59 @@ public class Outtake extends RobotPart {
                 .addSubStage(start, () -> {})
                 .addSubStage(0.1, () -> arm(0.0))
                 .addSubStage(0.1, this::unFlip)
+        );
+    }
+
+
+    public void startSignal(){
+//        forklift.setPosition("start");
+    }
+
+
+    public void startReadySignal(){
+//        forklift.setPosition("readyStart");
+    }
+
+    public void endSignal(){
+//        forklift.setPosition("end");
+    }
+
+
+    public Stage stageStartSignal(double t){
+        return super.customTime(this::startSignal, t);
+    }
+
+    public Stage stageEndSignal(double t){
+        return super.customTime(this::endSignal, t);
+    }
+
+    public Stage stageStartReadySignal(double t){
+        return super.customTime(this::startReadySignal, t);
+    }
+
+    public Stage stageStartSignalAfter(double t){
+        return super.customTimeAfter(this::startSignal, t);
+    }
+
+    public Stage stageStartReadySignalAfter(double t) {
+        return super.customTimeAfter(this::startReadySignal, t);
+    }
+
+
+    public Stage stageEndSignalAfter(double t){
+        return super.customTimeAfter(this::endSignal, t);
+    }
+
+
+
+
+    public Stage stageStartAndSignal(){
+        return super.customTime(new StageBuilderTime(this)
+                .addSubStage(0.1, this::startReadySignal)
+                .addSubStage(0.0, this::unFlip)
+                .addSubStage(0.2, this::moveStart)
+                .addSubStage(0.1, this::endSignal)
+                .addSubStage(0.1, this::startSignal)
         );
     }
 
