@@ -23,6 +23,8 @@ import static global.Modes.Height.HIGH;
 public class TerraAutoRam extends AutoFramework {
     boolean[] halt = {false};
 
+    boolean normal = false;
+
     public static void normalInit(AutoFramework auto){
         auto.setConfig(mecanumNonstopConfig);
         bot.saveLocationOnField();
@@ -37,7 +39,7 @@ public class TerraAutoRam extends AutoFramework {
             lift.stageLift(1.0, heightMode.getValue(HIGH)+1).attach(outtake.stageReadyEndContinuous(0.6))
     ).setStartCode(outtake::moveMiddle);
 
-    AutoModule Forward = new AutoModule(
+    static AutoModule Forward = new AutoModule(
             RobotPart.pause(1.0),
             outtake.stageOpen(0.4),
             lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.2))
@@ -107,10 +109,17 @@ public class TerraAutoRam extends AutoFramework {
     public void postProcess() { autoPlane.reflectY(); autoPlane.reflectX(); }
 
 
-    @Autonomous(name = "E. RIGHT RAM", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "E. RIGHT RAM (No SS) ", group = "auto", preselectTeleOp = "TerraOp")
     public static class RIGHT extends TerraAutoRam {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
 
-    @Autonomous(name = "F. LEFT RAM", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "F. LEFT RAM (No SS) ", group = "auto", preselectTeleOp = "TerraOp")
     public static class LEFT extends TerraAutoRam {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
+
+
+    @Autonomous(name = "G. RIGHT RAM (SS) ", group = "auto", preselectTeleOp = "TerraOp")
+    public static class RIGHT_RAM extends TerraAutoRam {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
+
+    @Autonomous(name = "H. LEFT RAM (SS) ", group = "auto", preselectTeleOp = "TerraOp")
+    public static class LEFT_RAM extends TerraAutoRam {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
 
 }

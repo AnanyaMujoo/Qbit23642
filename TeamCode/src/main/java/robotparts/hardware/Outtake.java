@@ -141,6 +141,10 @@ public class Outtake extends RobotPart {
 
 
 
+
+
+    public Stage stageStartContinuousWithFlip(double t, double flipT){ return super.customContinuousTime(() -> armr, () -> arml, "start", t, this::unFlip, flipT); }
+
     public Stage stageReadyEndContinuousWithFlip(double t, double flipT){ return super.customContinuousTime(() -> armr, () -> arml, "endHalf", t, this::flip, flipT); }
 
 
@@ -211,7 +215,7 @@ public class Outtake extends RobotPart {
     public Stage stageStartAndSignal(){
         return super.customTime(new StageBuilderTime(this)
                 .addSubStage(0.1, this::startReadySignal)
-                .addSubStage(0.0, this::unFlip)
+                .addSubStage(0.1, this::unFlip)
                 .addSubStage(0.2, this::moveStart)
                 .addSubStage(0.1, this::endSignal)
                 .addSubStage(0.1, this::startSignal)

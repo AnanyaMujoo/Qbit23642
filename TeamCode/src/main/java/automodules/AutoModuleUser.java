@@ -41,8 +41,8 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule ForwardTeleHigh = new AutoModule(
             RobotPart.pause(0.05),
             drive.moveTime(1.0, 0.0, 0.0, 0.1),
-            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0)
+//            outtake.stageStart(0.0),
+            lift.stageLift(1.0,0).attach(outtake.stageStartContinuousWithFlip(0.7, 0.0))
     ).setStartCode(() -> {
             lift.cap = false;
             outtakeStatus.set(DRIVING);
@@ -54,8 +54,8 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule ForwardTeleMiddle = new AutoModule(
             RobotPart.pause(0.05),
             drive.moveTime(1.0, 0.0, 0.0, 0.1),
-            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0)
+//            outtake.stageStart(0.0),
+            lift.stageLift(1.0,0).attach(outtake.stageStartContinuousWithFlip(0.7, 0.0))
     ).setStartCode(() -> {
             lift.cap = false;
             outtakeStatus.set(DRIVING);
@@ -66,8 +66,8 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule ForwardTeleLow = new AutoModule(
             RobotPart.pause(0.05),
             drive.moveTime(1.0, 0.0, 0.0, 0.15).combine(new Stop(() -> drive.using = false)),
-            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0)
+//            outtake.stageStart(0.0),
+            lift.stageLift(1.0,0).attach(outtake.stageStartContinuousWithFlip(0.7, 0.0))
     ).setStartCode(() -> {
             lift.cap = false;
             drive.using = true;
@@ -97,8 +97,8 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageClose(0.2),
             lift.checkAndLift(),
             lift.stageLift(1.0, heightMode.getValue(HIGH)+2).attach(
-//                    outtake.stageReadyEndContinuousWithFlip(0.9, 0.1)
-                    outtake.stageReadyEnd(0.0)
+                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.1)
+//                    outtake.stageReadyEnd(0.0)
             )
     ).setStartCode(() -> {
             lift.setGround(false);
@@ -110,8 +110,9 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageClose(0.22),
             lift.checkAndLift(),
             lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(
+                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.1)
 //                    outtake.stageReadyEndContinuousWithFlip(0.8, 0.08)
-                    outtake.stageReadyEnd(0.0)
+//                    outtake.stageReadyEnd(0.0)
             )
     ).setStartCode(() -> {
             lift.setGround(false);
@@ -123,8 +124,9 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageClose(0.22),
             lift.checkAndLift(),
             lift.stageLift(1.0, heightMode.getValue(LOW)+2).attach(
+                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.1)
 //                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.06)
-                    outtake.stageReadyEnd(0.0)
+//                    outtake.stageReadyEnd(0.0)
             )
     ).setStartCode(() -> {
             lift.setGround(false);
@@ -175,33 +177,38 @@ public interface AutoModuleUser extends RobotUser{
             lift.ground = false;
     });
 
-    AutoModule CapGrab = new AutoModule(
-            outtake.stageClose(0.25),
-            lift.stageLift(1.0, heightMode.getValue(LOW)+2).attach(
-                    outtake.stageReadyEndContinuousWithFlip(1.5, 0.15)
-            )
-    ).setStartCode(() -> {
-        lift.setGround(false);
-        outtakeStatus.set(PLACING);
-        heightMode.set(LOW);
-    });
-    AutoModule CapPlace = new AutoModule(
-            outtake.stageOpenCap(0.8),
-            outtake.stageClose(0.2),
-            outtake.stageReadyEnd(0.2)
-//            ,
-//            outtake.stageClose(0.2)
-    ).setStartCode(() -> {
-            outtake.openClawCap();
-            outtake.moveEnd();
-    });
+    AutoModule CapGrab = new AutoModule(outtake.stageClose(0.25));
+
+//    AutoModule CapGrab = new AutoModule(
+////            outtake.stageClose(0.25)
+////    );
+////            ,
+////            lift.stageLift(1.0, heightMode.getValue(LOW)+2).attach(
+////                    outtake.stageReadyEndContinuousWithFlip(1.5, 0.15)
+////            )
+//    ).setStartCode(() -> {
+//        lift.setGround(false);
+////        outtakeStatus.set(PLACING);
+////        heightMode.set(LOW);
+//    });
+
+//    AutoModule CapPlace = new AutoModule(
+//            outtake.stageOpenCap(0.8),
+//            outtake.stageClose(0.2),
+//            outtake.stageReadyEnd(0.2)
+////            ,
+////            outtake.stageClose(0.2)
+//    ).setStartCode(() -> {
+//            outtake.openClawCap();
+//            outtake.moveEnd();
+//    });
 
     AutoModule ResetLift = new AutoModule(lift.moveTime(-0.3, 0.5),  lift.resetLift()).setStartCode(() -> {
         lift.ground = false;
         outtakeStatus.set(DRIVING);
     });
     AutoModule UprightCone = new AutoModule(outtake.stage(0.1, 0.0), lift.stageLift(1.0, 5), driveMode.ChangeMode(SLOW));
-    AutoModule FixCone = new AutoModule(lift.moveTimeBack(0.1, -0.4, () -> 0.15), outtake.stageStart(0.0), lift.moveTimeBack(-0.35, -0.3, () -> 0.2), driveMode.ChangeMode(MEDIUM)).setStartCode(()->{lift.currentCutoffPosition = lift.defaultCutoffPosition;});
+    AutoModule FixCone = new AutoModule(lift.moveTimeBack(0.1, -0.4, () -> 0.15), outtake.stageStart(0.0), lift.moveTimeBack(-0.35, -0.3, () -> 0.3), driveMode.ChangeMode(MEDIUM)).setStartCode(()->{lift.currentCutoffPosition = lift.defaultCutoffPosition;});
     AutoModule TakeOffCone = new AutoModule(heightMode.ChangeMode(HIGH), outtake.stageClose(0.0), lift.stageLift(1.0, heightMode.getValue(HIGH)+3.5).attach(outtake.stageReadyStartAfter(0.5)),RobotPart.pause(0.1),outtake.stageFlip(0.0));
 
     static AutoModule ForwardStackTele(int i){return new AutoModule(

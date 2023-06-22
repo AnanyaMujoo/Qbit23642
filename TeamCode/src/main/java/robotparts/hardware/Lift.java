@@ -124,15 +124,23 @@ public class Lift extends RobotPart {
 
     public Stage resetLift(){ return new Stage(usePart(), new Main(this::reset), exitTime(0.1), stop(), returnPart()); }
 
+//    public Stage checkAndLift(){
+//        return lift.moveTimeBack(
+//                () -> {if(lift.stacked){ return -0.2; }else { return 0.0; }}, //fp
+//                () -> 1.0, //p
+////                () -> {if(lift.stacked ){ return 0.35;}else if(lift.cap){return 0.0;}else{return 0.0;}}, //t
+//                () -> {if(lift.stacked ){ return 0.35;}else if(lift.cap){return 0.35;}else{return 0.0;}},
+//                () -> {lift.stacked = false;
+//                    lift.cap = false;
+//                });
+//    }
+
     public Stage checkAndLift(){
         return lift.moveTimeBack(
-                () -> {if(lift.stacked){ return -0.2; }else { return 0.0; }}, //fp
-                () -> 1.0, //p
-                () -> {if(lift.stacked ){ return 0.35;}else if(lift.cap){return 0.0;}else{return 0.0;}}, //t
-//                () -> {if(lift.stacked ){ return 0.35;}else if(lift.cap){return 0.35;}else{return 0.0;}},
-                () -> {lift.stacked = false;
-//                    lift.cap = false;
-                });
+                () -> {if(lift.stacked){ return -0.2; }else { return 0.0; }},
+                () -> 1.0,
+                () -> {if(lift.stacked ){ return 0.35;}else if(lift.cap){return 0.35;}else{return 0.0;}},
+                () -> {lift.stacked = false; lift.cap = false; });
     }
 }
 

@@ -38,4 +38,14 @@ public class MecanumNonstopReactor extends MecanumReactor {
         public MecanumNonstopReactorSetpoint(){ super(); nostop.setpoint(); movementController.setAccuracy(2.0);  }
     }
 
+    public static class MecanumNonstopReactorTurnSetpoint extends MecanumNonstopReactor {
+        public MecanumNonstopReactorTurnSetpoint(){ super(); nostop.setpoint(); movementController.setAccuracy(2.0);}
+
+        @Override
+        public void scale(double scale) {
+            movementController.scale(scale);
+            headingController.scale(scale);
+        }
+    }
+
 }

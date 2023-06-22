@@ -44,7 +44,7 @@ public class TerraOp extends Tele {
         voltageScale = 1;
 
         outtake.setToTeleop();
-        outtake.turn.changePosition("flipped", 0.82);
+//        outtake.turn.changePosition("flipped", 0.82);
 
         MachineCycle.reset();
 
@@ -61,14 +61,17 @@ public class TerraOp extends Tele {
 
         gph1.link(DPAD_DOWN, () -> {if(lift.upright){lift.upright = false; bot.addAutoModuleWithCancel(FixCone);}else{bot.addAutoModuleWithCancel(ForwardTeleBottom);}});
         gph1.link(DPAD_UP, () -> {lift.upright = true; bot.addAutoModuleWithCancel(UprightCone);});
+
         gph1.link(DPAD_LEFT, () -> bot.addAutoModuleWithCancel(TakeOffCone));
-        gph1.link(DPAD_RIGHT, () -> {
-            if(!lift.cap){
-                lift.cap = true; bot.addAutoModuleWithCancel(CapGrab);
-            }else{
-                lift.cap = false; bot.addAutoModuleWithCancel(CapPlace);
-            }
-        });
+
+        gph1.link(DPAD_RIGHT, () -> {lift.cap = true; bot.addAutoModuleWithCancel(CapGrab); });
+//        gph1.link(DPAD_RIGHT, () -> {
+//            if(!lift.cap){
+//                lift.cap = true; bot.addAutoModuleWithCancel(CapGrab);
+//            }else{
+//                lift.cap = false; bot.addAutoModuleWithCancel(CapPlace);
+//            }
+//        });
 
 
 
@@ -113,7 +116,8 @@ public class TerraOp extends Tele {
          * Start code
          */
         lift.move(-0.15);
-        outtake.readyStart();
+        outtake.moveStart();
+//        outtake.readyStart();
         outtake.openClaw();
     }
 

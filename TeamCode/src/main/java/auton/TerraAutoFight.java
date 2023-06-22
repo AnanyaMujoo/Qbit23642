@@ -23,6 +23,7 @@ import static global.Modes.Height.HIGH;
 public class TerraAutoFight extends AutoFramework {
 
     double y = 0;
+    boolean normal = false;
 
     @Override
     public void initialize() {
@@ -56,23 +57,34 @@ public class TerraAutoFight extends AutoFramework {
     @Override
     public void define() {
 
-        TerraAutoRam.signal(this);
+        if(!normal) {
+            TerraAutoRam.signal(this);
+        }else{
+            addTimedSetpoint(1.0, 0.4, 0.6, 0, 40, -90);
+            addSegment(0.5, mecanumDefaultWayPoint, 0, 70, 0);
+            addTimedSetpoint(1.0, 0.5, 0.6, 0, 100, 0);
+        }
 
-        customSide(() -> {
+
+        if(!normal) {
             addConcurrentAutoModuleWithCancel(new AutoModule(outtake.stageFlip(0.0), outtake.stageMiddle(0.0)));
             addTimedSetpoint(1.0, 0.6, 0.35, 7, 126, -30);
             addConcurrentAutoModuleWithCancel(new AutoModule(lift.moveTime(1, 0.3)));
+        }else{
+            addConcurrentAutoModuleWithCancel(new AutoModule(outtake.stageFlip(0.0), outtake.stageMiddle(0.0), lift.moveTime(1, 0.3)));
+        }
+
+        customSide(() -> {
             addTimedSetpoint(1.0, 0.5, 0.4, -6, 134, 35);
             addConcurrentAutoModuleWithCancel(TerraAutoRam.BackwardFirst);
             addTimedSetpoint(1.0, 0.4, 0.8, -12, 140, 40);
         }, () -> {
-            addConcurrentAutoModuleWithCancel(new AutoModule(outtake.stageFlip(0.0), outtake.stageMiddle(0.0)));
-            addTimedSetpoint(1.0, 0.6, 0.35, 7, 126, -30);
-            addConcurrentAutoModuleWithCancel(new AutoModule(lift.moveTime(1, 0.3)));
             addTimedSetpoint(1.0, 0.5, 0.4, -8, 134, 35);
             addConcurrentAutoModuleWithCancel(TerraAutoRam.BackwardFirst);
             addTimedSetpoint(1.0, 0.4, 0.8, -13, 140, 40);
         });
+
+
         addConcurrentAutoModuleWithCancel(ForwardFirst, 0.4);
         customNumber(5, i -> {
             customFlipped(() -> {
@@ -90,8 +102,8 @@ public class TerraAutoFight extends AutoFramework {
 
             addSegment(0.7, mecanumDefaultWayPoint, 18, 129+y, 90);
             customFlipped(() -> {
-                addSegment(0.6, mecanumDefaultWayPoint, 48, 127+y, 90);
-                addSegment(0.4, slowDownStopSetPoint, 70, 127+y, 90);
+                addSegment(0.6, mecanumDefaultWayPoint, 50, 127+y, 90);
+                addSegment(0.4, slowDownStopSetPoint, 71, 127+y, 90);
             }, () -> {
                 addSegment(0.6, mecanumDefaultWayPoint, 52, 127+y, 90);
                 addSegment(0.4, slowDownStopSetPoint, 74, 127+y, 90);
@@ -139,14 +151,21 @@ public class TerraAutoFight extends AutoFramework {
 
 
 
+    @Autonomous(name = "A. RIGHT NORMAL (No SS)", group = "auto", preselectTeleOp = "TerraOp")
+    public static class RIGHT extends TerraAutoFight {{ normal = true; fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
 
-//    @Autonomous(name = "A. RIGHT FIGHT", group = "auto", preselectTeleOp = "TerraOp")
+    @Autonomous(name = "B. LEFT NORMAL (No SS)", group = "auto", preselectTeleOp = "TerraOp")
+    public static class LEFT extends TerraAutoFight {{ normal = true; fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
 
-    @Autonomous(name = "A. RIGHT FIGHT", group = "auto")
-    public static class RIGHT extends TerraAutoFight {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
 
-    @Autonomous(name = "B. LEFT FIGHT", group = "auto", preselectTeleOp = "TerraOp")
-    public static class LEFT extends TerraAutoFight {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
+
+
+    @Autonomous(name = "C. RIGHT FIGHT (SS)", group = "auto", preselectTeleOp = "TerraOp")
+    public static class RIGHT_FIGHT extends TerraAutoFight {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.LOWER; startPose = new Pose(20.5, Field.width/2.0 - Field.tileWidth - GameItems.Cone.height - 16,90); }}
+
+    @Autonomous(name = "D. LEFT FIGHT (SS)", group = "auto", preselectTeleOp = "TerraOp")
+    public static class LEFT_FIGHT extends TerraAutoFight {{ fieldSide = FieldSide.BLUE; fieldPlacement = FieldPlacement.UPPER; startPose = new Pose(20.5, Field.width/2.0 + Field.tileWidth + GameItems.Cone.height + 16,90); }}
+
 
 
 
