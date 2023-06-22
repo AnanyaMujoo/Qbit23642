@@ -14,6 +14,7 @@ public class SlowDownStopReactor extends Reactor{
         hRP.setMinimumTime(0.0);
         hRP.setAccuracy(2.0);
         hRP.setProcessVariable(odometry::getHeading);
+        hRP.reset();
     }
 
 
@@ -37,7 +38,7 @@ public class SlowDownStopReactor extends Reactor{
     public void setTarget(Pose target) { hRP.setTarget(target.getAngle()); }
 
     @Override
-    public void nextTarget() {  firstTarget();  }
+    public void nextTarget() {  firstTarget(); hRP.reset();  }
 
     @Override
     public boolean isAtTarget() {

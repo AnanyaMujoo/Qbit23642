@@ -1,5 +1,6 @@
 package unittests.tele;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import autoutil.vision.JunctionScanner;
@@ -32,6 +33,7 @@ import unittests.tele.sensor.JunctionScannerTest;
 import static global.General.*;
 
 @SuppressWarnings("ALL")
+//@Disabled
 @TeleOp(name = "TeleUnitTester", group = "UnitTests")
 public class TeleUnitTester extends Tele implements UnitTester{
 

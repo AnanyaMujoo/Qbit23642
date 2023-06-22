@@ -23,6 +23,7 @@ import util.condition.Status;
 
 //@Disabled
 @SuppressWarnings("ALL")
+@Disabled
 @Autonomous(name = "AutoUnitTester", group = "UnitTests")
 public class AutoUnitTester extends Auto implements UnitTester {
     /**

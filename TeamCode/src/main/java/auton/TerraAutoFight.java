@@ -19,7 +19,6 @@ import static global.General.fieldSide;
 import static global.General.log;
 import static global.Modes.Height.HIGH;
 
-// , preselectTeleOp = "TerraOp"
 public class TerraAutoFight extends AutoFramework {
 
     double y = 0;
