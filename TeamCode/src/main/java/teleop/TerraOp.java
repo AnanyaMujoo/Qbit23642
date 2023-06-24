@@ -44,7 +44,8 @@ public class TerraOp extends Tele {
         voltageScale = 1;
 
         outtake.setToTeleop();
-//        outtake.turn.changePosition("flipped", 0.82);
+        outtake.changeArmPosition("start", 0.0);
+//        outtake.armr.changePosition("flipped", 0.82);
 
         MachineCycle.reset();
 

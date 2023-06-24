@@ -41,8 +41,9 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule ForwardTeleHigh = new AutoModule(
             RobotPart.pause(0.05),
             drive.moveTime(1.0, 0.0, 0.0, 0.1),
+            outtake.stageReadyStartAfter(0.1),
 //            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0).attach(outtake.stageStartContinuousWithFlip(0.7, 0.0))
+            lift.stageLift(1.0,0).attach(outtake.stageStartContinuousWithFlip(0.9, 0.0))
     ).setStartCode(() -> {
             lift.cap = false;
             outtakeStatus.set(DRIVING);
@@ -54,8 +55,9 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule ForwardTeleMiddle = new AutoModule(
             RobotPart.pause(0.05),
             drive.moveTime(1.0, 0.0, 0.0, 0.1),
+            outtake.stageReadyStartAfter(0.1),
 //            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0).attach(outtake.stageStartContinuousWithFlip(0.7, 0.0))
+            lift.stageLift(1.0,0).attach(outtake.stageStartContinuousWithFlip(0.9, 0.0))
     ).setStartCode(() -> {
             lift.cap = false;
             outtakeStatus.set(DRIVING);
@@ -66,8 +68,9 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule ForwardTeleLow = new AutoModule(
             RobotPart.pause(0.05),
             drive.moveTime(1.0, 0.0, 0.0, 0.15).combine(new Stop(() -> drive.using = false)),
+            outtake.stageReadyStartAfter(0.1),
 //            outtake.stageStart(0.0),
-            lift.stageLift(1.0,0).attach(outtake.stageStartContinuousWithFlip(0.7, 0.0))
+            lift.stageLift(1.0,0).attach(outtake.stageStartContinuousWithFlip(0.9, 0.0))
     ).setStartCode(() -> {
             lift.cap = false;
             drive.using = true;
@@ -96,21 +99,30 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardGrabHighTele = new AutoModule(
             outtake.stageClose(0.2),
             lift.checkAndLift(),
+//            outtake.stageFlip(0.0),
+//            outtake.stageReadyStart(0.0),
+            outtake.stageFlip(0.0),
+            outtake.stageReadyStartCond(0.0),
             lift.stageLift(1.0, heightMode.getValue(HIGH)+2).attach(
-                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.1)
+                    outtake.stageReadyEndAfter(0.48)
+//                    outtake.stageFlipThing()
+//                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.1)
 //                    outtake.stageReadyEnd(0.0)
             )
     ).setStartCode(() -> {
             lift.setGround(false);
-            heightMode.set(HIGH);
             outtakeStatus.set(PLACING);
+            heightMode.set(HIGH);
     });
 
     AutoModule BackwardGrabMiddleTele = new AutoModule(
             outtake.stageClose(0.22),
             lift.checkAndLift(),
+            outtake.stageFlip(0.0),
+            outtake.stageReadyStartCond(0.0),
             lift.stageLift(1.0, heightMode.getValue(MIDDLE)+2).attach(
-                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.1)
+                    outtake.stageReadyEndAfter(0.48)
+//                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.1)
 //                    outtake.stageReadyEndContinuousWithFlip(0.8, 0.08)
 //                    outtake.stageReadyEnd(0.0)
             )
@@ -123,8 +135,11 @@ public interface AutoModuleUser extends RobotUser{
     AutoModule BackwardGrabLowTele = new AutoModule(
             outtake.stageClose(0.22),
             lift.checkAndLift(),
+            outtake.stageFlip(0.0),
+            outtake.stageReadyStartCond(0.0),
             lift.stageLift(1.0, heightMode.getValue(LOW)+2).attach(
-                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.1)
+                    outtake.stageReadyEndAfter(0.48)
+//                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.1)
 //                    outtake.stageReadyEndContinuousWithFlip(0.7, 0.06)
 //                    outtake.stageReadyEnd(0.0)
             )

@@ -55,13 +55,19 @@ public class Outtake extends RobotPart {
 //
 //        turn.changePosition("start", 0.07); // 0.05
 
-        turn.changePosition("start", 0.1); // 0.05
+        turn.changePosition("start", 0.08);
+//        turn.changePosition("start", 0.1); // 0.05 // OL
 //        turn.addPosition("flipped", 0.86); //0.84
-        turn.addPosition("flipped", 0.84);
 
-        claw.addPosition("openComp", 0.0);
-        claw.addPosition("open", 0.1); // 0.15
+//        turn.addPosition("flipped", 0.84); // LOL
+        turn.addPosition("flipped", 0.75);
+
+
+        claw.addPosition("openComp", 0.05);
+        double offset = 0.06;
+        claw.addPosition("open", 0.1+offset); // 0.15
 //        claw.addPosition("close", 0.29); //0.35
+//        claw.addPosition("close", 0.36+offset); LOL
         claw.addPosition("close", 0.36);
 
         claw.addPosition("cap", 0.2);
@@ -75,7 +81,7 @@ public class Outtake extends RobotPart {
 
 //        startSignal();
         unFlip();
-        outtakeStatus.set(PLACING);
+        outtakeStatus.set(DRIVING);
     }
 
     public void changeArmPosition(String name, double pos){ armr.changePosition(name, pos); arml.changePosition(name, pos); }
@@ -90,6 +96,7 @@ public class Outtake extends RobotPart {
     public void openClaw(){ claw.setPosition("open"); }
     public void openClawCap() { claw.setPosition("cap"); }
     public void closeClaw(){ claw.setPosition("close"); }
+
 
     public void dropConeRaw(){
         armr.setPositionRaw("end"); arml.setPositionRaw("end"); claw.setPositionRaw("open");
@@ -215,12 +222,24 @@ public class Outtake extends RobotPart {
     public Stage stageStartAndSignal(){
         return super.customTime(new StageBuilderTime(this)
                 .addSubStage(0.1, this::startReadySignal)
-                .addSubStage(0.1, this::unFlip)
+                .addSubStage(0.13, this::unFlip)
                 .addSubStage(0.2, this::moveStart)
                 .addSubStage(0.1, this::endSignal)
                 .addSubStage(0.1, this::startSignal)
         );
     }
+
+    public void readyStartCond(){
+        if(armr.getPosition() < 0.4){
+            readyStart();
+        }
+    }
+
+    public Stage stageReadyStartCond(double time){
+        return super.customTime(this::readyStartCond, time);
+    }
+
+
 
 
 

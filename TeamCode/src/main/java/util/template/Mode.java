@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import automodules.stage.Main;
 import automodules.stage.Stage;
+import automodules.stage.StageComponent;
 import util.codeseg.CodeSeg;
 import util.codeseg.ReturnCodeSeg;
 import util.condition.Decision;
