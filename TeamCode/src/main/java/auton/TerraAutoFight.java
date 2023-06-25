@@ -12,6 +12,7 @@ import elements.GameItems;
 import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.User;
+import util.template.Precision;
 
 import static global.General.bot;
 import static global.General.fieldPlacement;
@@ -22,13 +23,16 @@ import static global.Modes.Height.HIGH;
 public class TerraAutoFight extends AutoFramework {
 
     double y = 0;
+    double x = 0;
     boolean normal = false;
+
 
     @Override
     public void initialize() {
         TerraAutoRam.normalInit(this);
 //        caseDetected = Case.SECOND;
         y = 0;
+        x = 0;
     }
 
 
@@ -88,47 +92,60 @@ public class TerraAutoFight extends AutoFramework {
         customNumber(5, i -> {
             customFlipped(() -> {
                 y = 0.5;
-                y += -0.5;
-//                if(i > 1){
-//                    y += -1;
-//                }
+                y += -0.25;
             }, () -> {
                 if(i > 1){
                     y += -0.5;
                 }else{
                     y = -1;
                 }
+                x -= 0.1;
             });
 
 
-            addSegment(0.7, mecanumDefaultWayPoint, 18, 129+y, 90);
+            addSegment(0.7, mecanumDefaultWayPoint, 18+x, 129+y, 90);
             customFlipped(() -> {
-                addSegment(0.6, mecanumDefaultWayPoint, 50, 127+y, 90);
-                addSegment(0.4, slowDownStopSetPoint, 71, 127+y, 90);
+                addSegment(0.6, mecanumDefaultWayPoint, 50+x, 127+y, 90);
+                addSegment(0.4, slowDownStopSetPoint, 71+x, 127+y, 90);
+                addTimedSetpoint(1.0, 0.1,0.2, 74+x, 127+y, 90);
             }, () -> {
-                addSegment(0.6, mecanumDefaultWayPoint, 52, 127+y, 90);
-                addSegment(0.4, slowDownStopSetPoint, 74, 127+y, 90);
+                addSegment(0.6, mecanumDefaultWayPoint, 52+x, 127+y, 90);
+                addSegment(0.4, slowDownStopSetPoint, 74+x, 127+y, 90);
+                addTimedSetpoint(1.0, 0.1,0.2, 77+x, 127+y, 90);
             });
-            addCustomCode(() -> whileTime(() -> {}, 0.07));
             // Increase number to make exit more likely
             // Decrease number to make exit less likely
-            customFlipped(() -> {
-                addBreakpoint(() -> odometry.getX() > -62.5+(0.2*i));
-            }, () -> {
-                addBreakpoint(() -> odometry.getX() < 62.5-(0.2*i));
+            boolean[] exit = {false};
+            addCustomCode(() -> {
+                customFlipped(() -> {
+                    double end = -64+(0.2*i);
+                    exit[0] = Precision.range(odometry.getX(), end, end+10);
+                }, () -> {
+                    double end = 64-(0.2*i);
+                    exit[0] = Precision.range(odometry.getX(), end-10, end);
+                });
+                if (exit[0]) {
+                    double startX = odometry.getX();
+                    whileTime(() -> {
+                        drive.move(0.15, 0, 0);
+                    }, 0.2);
+                    double deltaX = odometry.getX() - startX;
+                    exit[0] = Math.abs(deltaX) < 3;
+                }
             });
+            addBreakpoint(() -> exit[0]);
             addCustomCode(() -> {
 //                showForTime("Pos", odometry.getX(), 10);
                 bot.addAutoModuleWithCancel(GrabBack);
                 pause(0.43);
             });
-            addSegment(0.6, mecanumDefaultWayPoint, 20, 129+y, 85);
-            addTimedSetpoint(1.0, 0.4, 0.4, -9, 132+y, 55);
+            addSegment(0.6, mecanumDefaultWayPoint, 20+x, 129+y, 85);
+            addTimedSetpoint(1.0, 0.4, 0.4, -9+x, 132+y, 55);
             addConcurrentAutoModuleWithCancel(TerraAutoRam.BackwardFirst);
             customFlipped(() -> {
-                addTimedSetpoint(1.0, 0.4, 0.8, -13, 140+y, 40);
+                addTimedSetpoint(1.0, 0.4, 0.8, -13+x, 140+y, 40);
             }, () -> {
-                addTimedSetpoint(1.0, 0.4, 0.8, -15, 140+y, 43);
+                addTimedSetpoint(1.0, 0.4, 0.8, -15+x, 140+y, 46);
             });
             addConcurrentAutoModuleWithCancel(Forward(i+1), 0.4);
         });
@@ -137,17 +154,26 @@ public class TerraAutoFight extends AutoFramework {
         addSegment(0.5, mecanumDefaultWayPoint, 18, 127, 90);
         addConcurrentAutoModule(new AutoModule(outtake.stage(0.2, 0.1), outtake.stageOpenComp(0.0),  lift.stageLift(1.0,  -0.5)));
         customCase(() -> {
-            addTimedSetpoint(1.0, 0.6, 1.0, -58, 127, 90);
-            addTimedSetpoint(1.0, 0.2, 1.0, -59, 127, 0);
+            addTimedSetpoint(1.0, 0.7, 0.7, -58, 127, 90);
+            customFlipped(() -> {
+                addTimedSetpoint(1.0, 0.2, 1.0, -59, 127, 0);
+            }, () -> {
+
+            });
 //            addSegment(0.8, noStopNewSetPoint, -57, 127, 90);
         }, () -> {
 //            addSegment(0.4, noStopNewSetPoint, 0, 127, 90);
-            addTimedSetpoint(1.0, 0.6, 1.0, 0, 127, 90);
+            addTimedSetpoint(1.0, 0.7, 0.7, 0, 127, 90);
             addTimedSetpoint(1.0, 0.2, 1.0, 0, 126, 0);
         }, () -> {
 //            addSegment(0.8, noStopNewSetPoint, 58, 127, 90);
-            addTimedSetpoint(1.0, 0.6, 1.0, 58, 127, 90);
-            addTimedSetpoint(1.0, 0.2, 1.0, 59, 127, 0);
+            addTimedSetpoint(1.0, 0.7, 0.7, 58, 127, 90);
+            customFlipped(() -> {
+
+            }, () -> {
+                addTimedSetpoint(1.0, 0.2, 1.0, 59, 127, 0);
+            });
+
         });
         addPause(0.5);
 

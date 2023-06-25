@@ -32,12 +32,11 @@ public class TerraAutoRam extends AutoFramework {
         outtake.closeClaw();
         wait(0.5);
         outtake.arm(0.42);
-//        outtake.readyStart();
         auto.scan(false);
     }
 
     static AutoModule BackwardFirst = new AutoModule(
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+1).attach(outtake.stageReadyEndContinuous(0.6))
+            lift.stageLift(1.0, heightMode.getValue(HIGH)+2).attach(outtake.stageReadyEndContinuous(0.6))
     ).setStartCode(outtake::moveMiddle);
 
     static AutoModule Forward = new AutoModule(

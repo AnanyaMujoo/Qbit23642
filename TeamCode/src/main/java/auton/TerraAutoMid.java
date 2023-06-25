@@ -12,6 +12,7 @@ import elements.GameItems;
 import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.User;
+import util.template.Precision;
 
 import static global.General.bot;
 import static global.General.fieldPlacement;
@@ -66,8 +67,8 @@ public class TerraAutoMid extends AutoFramework {
     public void define() {
 
         addSegment(0.7, mecanumDefaultWayPoint, 0, 40, 0);
-        addSegment(0.5, mecanumDefaultWayPoint, 0, 87, 17);
-        addSegment(0.5, mecanumDefaultWayPoint, -4, 105, 40);
+        addSegment(0.6, mecanumDefaultWayPoint, 0, 87, 17);
+        addSegment(0.55, mecanumDefaultWayPoint, -4, 105, 40);
         addSegment(0.5, mecanumDefaultWayPoint, -12, 118, 66);
 
         addTimedSetpoint(1.0, 0.5, 0.6, 4, 115, 113);
@@ -78,55 +79,73 @@ public class TerraAutoMid extends AutoFramework {
         customNumber(5, i -> {
             customFlipped(() -> {
                 y = 0.5;
-                y += -0.5;
-//                if(i > 1){
-//                    y += -1;
-//                }
+                y += -0.2;
+
             }, () -> {
-                if(i > 1){
-                    y += -0.5;
-                }else{
-                    y = -0.2;
-                }
+                y = 0.0;
+                y += -0.2;
             });
 
             addSegment(0.5, mecanumDefaultWayPoint, 18, 127+y, 108);
             customFlipped(() -> {
                 addSegment(0.5, mecanumDefaultWayPoint, 49, 128+y, 90);
                 addSegment(0.4, slowDownStopSetPoint, 69, 128+y, 90);
+                addTimedSetpoint(1.0, 0.1,0.2, 74, 128+y, 91);
             }, () -> {
                 addSegment(0.5, mecanumDefaultWayPoint, 51, 128+y, 90);
                 addSegment(0.4, slowDownStopSetPoint, 72, 128+y, 90);
+                addTimedSetpoint(1.0, 0.1,0.2, 76, 128+y, 89);
             });
-            addCustomCode(() -> whileTime(() -> {}, 0.1));
-
-            customFlipped(() -> {
-                addBreakpoint(() -> odometry.getX() > -61+(0.2*i));
-            }, () -> {
-                addBreakpoint(() -> odometry.getX() < 64-(0.2*i));
+            boolean[] exit = {false};
+            addCustomCode(() -> {
+                customFlipped(() -> {
+                    double end = -64+(0.2*i);
+                    exit[0] = Precision.range(odometry.getX(), end, end+10);
+                }, () -> {
+                    double end = 64-(0.2*i);
+                    exit[0] = Precision.range(odometry.getX(), end-10, end);
+                });
+                if (exit[0]) {
+                    double startX = odometry.getX();
+                    whileTime(() -> {
+                        drive.move(0.15, 0, 0);
+                    }, 0.2);
+                    double deltaX = odometry.getX() - startX;
+                    exit[0] = Math.abs(deltaX) < 3;
+                }
             });
+            addBreakpoint(() -> exit[0]);
             addCustomCode(() -> {
                 bot.addAutoModuleWithCancel(GrabBack);
                 pause(0.45);
             });
             addSegment(0.45, mecanumDefaultWayPoint, 20, 127+y, 95);
             addConcurrentAutoModuleWithCancel(Backward);
-            addTimedSetpoint(1.0, 0.2, 1.1, -6, 110, 113);
+            addTimedSetpoint(1.0, 0.2, 1.1, -8, 109, 113);
             addConcurrentAutoModuleWithCancel(Forward(i+1), 0.3);
         });
+        addTimedSetpoint(1.0, 0.5, 1.0, 4, 115, 113);
         addBreakpointReturn();
         addCustomCode(outtake::openClaw);
-        addTimedSetpoint(1.0, 0.5, 1.0, 4, 115, 113);
         addConcurrentAutoModule(new AutoModule(outtake.stage(0.2, 0.1), outtake.stageOpenComp(0.0),  lift.stageLift(1.0,  -0.5)));
         customCase(() -> {
-            addTimedSetpoint(1.0, 0.6, 1.0, -58, 127, 90);
-            addTimedSetpoint(1.0, 0.2, 1.0, -59, 127, 0);
+            addTimedSetpoint(1.0, 0.7, 0.7, -58, 127, 90);
+            customFlipped(() -> {
+                addTimedSetpoint(1.0, 0.2, 1.0, -59, 127, 0);
+            }, () -> {
+
+            });
         }, () -> {
-            addTimedSetpoint(1.0, 0.6, 1.0, 0, 127, 90);
+            addTimedSetpoint(1.0, 0.7, 0.7, 0, 127, 90);
             addTimedSetpoint(1.0, 0.2, 1.0, 0, 126, 0);
         }, () -> {
-            addTimedSetpoint(1.0, 0.6, 1.0, 58, 127, 90);
-            addTimedSetpoint(1.0, 0.2, 1.0, 59, 127, 0);
+            addTimedSetpoint(1.0, 0.7, 0.7, 58, 127, 90);
+            customFlipped(() -> {
+
+            }, () -> {
+                addTimedSetpoint(1.0, 0.2, 1.0, 59, 127, 0);
+            });
+
         });
         addPause(0.5);
 
