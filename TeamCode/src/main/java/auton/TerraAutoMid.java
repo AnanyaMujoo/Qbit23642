@@ -41,7 +41,7 @@ public class TerraAutoMid extends AutoFramework {
     AutoModule ForwardFirst = new AutoModule(
             outtake.stageEnd(0.1),
             outtake.stageOpen(0.2),
-            lift.stageLift(1.0,  11.5).attach(outtake.stageStartAndSignal())
+            lift.stageLift(1.0,  11.5).attach(outtake.stageStartAndSignal2())
     ).setStartCode(outtake::moveEnd);
 
 
@@ -59,7 +59,7 @@ public class TerraAutoMid extends AutoFramework {
             outtake.stageEnd(0.05),
             outtake.stageOpen(0.2),
             outtake.stageUnFlip(0.0),
-            lift.stageLift(1.0,  Math.max(11.5 - (i*11.5/4.6), -0.5)).attach(outtake.stageStartAndSignal())
+            lift.stageLift(1.0,  Math.max(11.5 - (i*11.5/4.6), -0.5)).attach(outtake.stageStartAndSignal2())
     );}
 
 
@@ -90,19 +90,19 @@ public class TerraAutoMid extends AutoFramework {
             customFlipped(() -> {
                 addSegment(0.5, mecanumDefaultWayPoint, 49, 128+y, 90);
                 addSegment(0.4, slowDownStopSetPoint, 69, 128+y, 90);
-                addTimedSetpoint(1.0, 0.1,0.2, 74, 128+y, 91);
+                addTimedSetpoint(1.0, 0.1,0.1, 72, 128+y, 91);
             }, () -> {
                 addSegment(0.5, mecanumDefaultWayPoint, 51, 128+y, 90);
                 addSegment(0.4, slowDownStopSetPoint, 72, 128+y, 90);
-                addTimedSetpoint(1.0, 0.1,0.2, 76, 128+y, 89);
+                addTimedSetpoint(1.0, 0.1,0.1, 74, 128+y, 89);
             });
             boolean[] exit = {false};
             addCustomCode(() -> {
                 customFlipped(() -> {
-                    double end = -64+(0.2*i);
+                    double end = -63.5+(0.2*i);
                     exit[0] = Precision.range(odometry.getX(), end, end+10);
                 }, () -> {
-                    double end = 64-(0.2*i);
+                    double end = 63.5-(0.2*i);
                     exit[0] = Precision.range(odometry.getX(), end-10, end);
                 });
                 if (exit[0]) {
@@ -113,15 +113,24 @@ public class TerraAutoMid extends AutoFramework {
                     double deltaX = odometry.getX() - startX;
                     exit[0] = Math.abs(deltaX) < 3;
                 }
+                if(exit[0]) {
+                    customFlipped(() -> {
+                        double end = -63.5 + (0.2 * i);
+                        exit[0] = Precision.range(odometry.getX(), end, end + 10);
+                    }, () -> {
+                        double end = 63.5 - (0.2 * i);
+                        exit[0] = Precision.range(odometry.getX(), end - 10, end);
+                    });
+                }
             });
             addBreakpoint(() -> exit[0]);
             addCustomCode(() -> {
                 bot.addAutoModuleWithCancel(GrabBack);
                 pause(0.45);
             });
-            addSegment(0.45, mecanumDefaultWayPoint, 20, 127+y, 95);
+            addSegment(0.4, mecanumDefaultWayPoint, 20, 127+y, 95);
             addConcurrentAutoModuleWithCancel(Backward);
-            addTimedSetpoint(1.0, 0.2, 1.1, -8, 109, 113);
+            addTimedSetpoint(1.0, 0.15, 1.1, -8, 109, 113);
             addConcurrentAutoModuleWithCancel(Forward(i+1), 0.3);
         });
         addTimedSetpoint(1.0, 0.5, 1.0, 4, 115, 113);
@@ -130,22 +139,12 @@ public class TerraAutoMid extends AutoFramework {
         addConcurrentAutoModule(new AutoModule(outtake.stage(0.2, 0.1), outtake.stageOpenComp(0.0),  lift.stageLift(1.0,  -0.5)));
         customCase(() -> {
             addTimedSetpoint(1.0, 0.7, 0.7, -58, 127, 90);
-            customFlipped(() -> {
-                addTimedSetpoint(1.0, 0.2, 1.0, -59, 127, 0);
-            }, () -> {
-
-            });
+            addTimedSetpoint(1.0, 0.2, 1.0, -59, 127, 0);
         }, () -> {
             addTimedSetpoint(1.0, 0.7, 0.7, 0, 127, 90);
             addTimedSetpoint(1.0, 0.2, 1.0, 0, 126, 0);
         }, () -> {
             addTimedSetpoint(1.0, 0.7, 0.7, 58, 127, 90);
-            customFlipped(() -> {
-
-            }, () -> {
-                addTimedSetpoint(1.0, 0.2, 1.0, 59, 127, 0);
-            });
-
         });
         addPause(0.5);
 

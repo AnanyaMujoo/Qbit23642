@@ -229,6 +229,17 @@ public class Outtake extends RobotPart {
         );
     }
 
+
+    public Stage stageStartAndSignal2(){
+        return super.customTime(new StageBuilderTime(this)
+                .addSubStage(0.15, this::startReadySignal)
+                .addSubStage(0.05, this::unFlip)
+                .addSubStage(0.2, this::moveStart)
+                .addSubStage(0.1, this::endSignal)
+                .addSubStage(0.1, this::startSignal)
+        );
+    }
+
     public void readyStartCond(){
         if(armr.getPosition() < 0.4){
             readyStart();

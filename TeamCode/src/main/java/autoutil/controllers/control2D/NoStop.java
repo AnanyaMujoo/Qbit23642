@@ -20,7 +20,7 @@ public class NoStop extends Controller2D{
     private double t = 0;
     private static final double tOffset = 0.05;
     private static final double maxVelocity = 100; // cm/s
-    private static final double endTp = 0.1;
+    private double endTp = 0.1;
     private boolean setpoint = false;
 
 
@@ -28,6 +28,10 @@ public class NoStop extends Controller2D{
         rpController = new RP(kp, restPower); rpController.setProcessVariable(() -> 0.0);
         rpController.setMinimumTime(0.01); rpController.setAccuracy(0.0);
         setAccuracy(accuracy);
+    }
+
+    public void setEndTp(double tp){
+        this.endTp = endTp;
     }
 
     public void setpoint(){ setpoint = true; }

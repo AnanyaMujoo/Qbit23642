@@ -80,7 +80,7 @@ public class TerraAutoFight extends AutoFramework {
         customSide(() -> {
             addTimedSetpoint(1.0, 0.5, 0.4, -6, 134, 35);
             addConcurrentAutoModuleWithCancel(TerraAutoRam.BackwardFirst);
-            addTimedSetpoint(1.0, 0.4, 0.8, -12, 140, 40);
+            addTimedSetpoint(1.0, 0.4, 0.8, -11, 140, 40);
         }, () -> {
             addTimedSetpoint(1.0, 0.5, 0.4, -8, 134, 35);
             addConcurrentAutoModuleWithCancel(TerraAutoRam.BackwardFirst);
@@ -106,31 +106,44 @@ public class TerraAutoFight extends AutoFramework {
             addSegment(0.7, mecanumDefaultWayPoint, 18+x, 129+y, 90);
             customFlipped(() -> {
                 addSegment(0.6, mecanumDefaultWayPoint, 50+x, 127+y, 90);
-                addSegment(0.4, slowDownStopSetPoint, 71+x, 127+y, 90);
-                addTimedSetpoint(1.0, 0.1,0.2, 74+x, 127+y, 90);
+                double ang = 90;
+                if(i > 2){
+                    ang = 88.5;
+                }
+                addSegment(0.35, slowDownStopSetPoint, 68+x, 127+y, ang);
+                addTimedSetpoint(1.0, 0.1,0.1, 72+x, 127+y, ang);
             }, () -> {
                 addSegment(0.6, mecanumDefaultWayPoint, 52+x, 127+y, 90);
-                addSegment(0.4, slowDownStopSetPoint, 74+x, 127+y, 90);
-                addTimedSetpoint(1.0, 0.1,0.2, 77+x, 127+y, 90);
+                addSegment(0.35, slowDownStopSetPoint, 70+x, 127+y, 90);
+                addTimedSetpoint(1.0, 0.1,0.1, 73+x, 127+y, 90);
             });
             // Increase number to make exit more likely
             // Decrease number to make exit less likely
             boolean[] exit = {false};
             addCustomCode(() -> {
                 customFlipped(() -> {
-                    double end = -64+(0.2*i);
+                    double end = -63+(0.2*i);
                     exit[0] = Precision.range(odometry.getX(), end, end+10);
                 }, () -> {
-                    double end = 64-(0.2*i);
-                    exit[0] = Precision.range(odometry.getX(), end-10, end);
+                    double end = 63-(0.2*i);
+                    exit[0] = Precision.range(odometry.getX(), end - 10, end);
                 });
                 if (exit[0]) {
                     double startX = odometry.getX();
                     whileTime(() -> {
-                        drive.move(0.15, 0, 0);
-                    }, 0.2);
+                        drive.move(0.25, 0, 0);
+                    }, 0.4);
                     double deltaX = odometry.getX() - startX;
                     exit[0] = Math.abs(deltaX) < 3;
+                }
+                if(exit[0]) {
+                    customFlipped(() -> {
+                        double end = -63 + (0.2 * i);
+                        exit[0] = Precision.range(odometry.getX(), end, end + 10);
+                    }, () -> {
+                        double end = 63 - (0.2 * i);
+                        exit[0] = Precision.range(odometry.getX(), end - 10, end);
+                    });
                 }
             });
             addBreakpoint(() -> exit[0]);
@@ -143,7 +156,7 @@ public class TerraAutoFight extends AutoFramework {
             addTimedSetpoint(1.0, 0.4, 0.4, -9+x, 132+y, 55);
             addConcurrentAutoModuleWithCancel(TerraAutoRam.BackwardFirst);
             customFlipped(() -> {
-                addTimedSetpoint(1.0, 0.4, 0.8, -13+x, 140+y, 40);
+                addTimedSetpoint(1.0, 0.4, 0.8, -12+x, 140+y, 40);
             }, () -> {
                 addTimedSetpoint(1.0, 0.4, 0.8, -15+x, 140+y, 46);
             });
@@ -154,26 +167,16 @@ public class TerraAutoFight extends AutoFramework {
         addSegment(0.5, mecanumDefaultWayPoint, 18, 127, 90);
         addConcurrentAutoModule(new AutoModule(outtake.stage(0.2, 0.1), outtake.stageOpenComp(0.0),  lift.stageLift(1.0,  -0.5)));
         customCase(() -> {
-            addTimedSetpoint(1.0, 0.7, 0.7, -58, 127, 90);
-            customFlipped(() -> {
-                addTimedSetpoint(1.0, 0.2, 1.0, -59, 127, 0);
-            }, () -> {
-
-            });
+            addTimedSetpoint(1.0, 0.7, 0.8, -58, 127, 90);
+            addTimedSetpoint(1.0, 0.2, 1.0, -59, 127, 0);
 //            addSegment(0.8, noStopNewSetPoint, -57, 127, 90);
         }, () -> {
 //            addSegment(0.4, noStopNewSetPoint, 0, 127, 90);
-            addTimedSetpoint(1.0, 0.7, 0.7, 0, 127, 90);
+            addTimedSetpoint(1.0, 0.7, 0.8, 0, 127, 90);
             addTimedSetpoint(1.0, 0.2, 1.0, 0, 126, 0);
         }, () -> {
 //            addSegment(0.8, noStopNewSetPoint, 58, 127, 90);
-            addTimedSetpoint(1.0, 0.7, 0.7, 58, 127, 90);
-            customFlipped(() -> {
-
-            }, () -> {
-                addTimedSetpoint(1.0, 0.2, 1.0, 59, 127, 0);
-            });
-
+            addTimedSetpoint(1.0, 0.7, 0.8, 58, 127, 90);
         });
         addPause(0.5);
 

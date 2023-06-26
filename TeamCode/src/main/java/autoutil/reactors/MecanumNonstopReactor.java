@@ -48,4 +48,9 @@ public class MecanumNonstopReactor extends MecanumReactor {
         }
     }
 
+
+    public static class MecanumNonstopReactorSetpointSLOW extends MecanumNonstopReactor {
+        public MecanumNonstopReactorSetpointSLOW(){ super(); nostop.setpoint(); nostop.setEndTp(0.05); movementController.setAccuracy(2.0);  }
+    }
+
 }
