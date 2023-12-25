@@ -5,10 +5,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+
 import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -60,9 +57,9 @@ public class ICamera extends Electronic {
      */
     private final int height = 240;
 
-    private VuforiaLocalizer vuforia;
-    private VuforiaTrackables targets;
-    private ArrayList<VuforiaTrackable> allTrackables = new ArrayList<>();
+//    private VuforiaLocalizer vuforia;
+//    private VuforiaTrackables targets;
+//    private ArrayList<VuforiaTrackable> allTrackables = new ArrayList<>();
 
 
     private final Point cameraLocation = new Point(10,-20); // cm
@@ -132,71 +129,73 @@ public class ICamera extends Electronic {
 
 
     public void startVuforia(boolean view){
-        VuforiaLocalizer.Parameters parameters;
-        if(view){
-            parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-            camera = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters, cameraMonitorViewId);
-        }else {
-            parameters = new VuforiaLocalizer.Parameters();
-            camera = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters);
-        }
-
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = name;
-        parameters.useExtendedTracking = false;
-
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        targets = this.vuforia.loadTrackablesFromAsset("PowerPlay");
-
-        allTrackables = new ArrayList<>();
-        allTrackables.addAll(targets);
-
-        float halfField = (float) (Field.width *10*0.5);
-        float oneAndHalfTile = (float) (Field.tileWidth*10*1.5);
-        float mmTargetHeight = (float) (VUFORIA_TARGET_HEIGHT_CM*10);
-        identifyTarget(0, "Red Audience Wall",   -halfField,  -oneAndHalfTile, mmTargetHeight, 90, 0,  90);
-        identifyTarget(1, "Red Rear Wall",        halfField,  -oneAndHalfTile, mmTargetHeight, 90, 0, -90);
-        identifyTarget(2, "Blue Audience Wall",  -halfField,   oneAndHalfTile, mmTargetHeight, 90, 0,  90);
-        identifyTarget(3, "Blue Rear Wall",       halfField,   oneAndHalfTile, mmTargetHeight, 90, 0, -90);
-
-        OpenGLMatrix cameraLocationOnRobot = OpenGLMatrix
-                .translation((float) cameraLocation.getY(), (float) -cameraLocation.getX(), (float) cameraHeightFromField)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XZY, DEGREES, 90, 90, 0));
-
-        Iterator.forAll(allTrackables, trackable -> ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(name, cameraLocationOnRobot));
-
-        targets.activate();
-
-        start(view);
+        // TODO FIX VUFORIA OR REMOVE
+//        VuforiaLocalizer.Parameters parameters;
+//        if(view){
+//            parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+//            camera = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters, cameraMonitorViewId);
+//        }else {
+//            parameters = new VuforiaLocalizer.Parameters();
+//            camera = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters);
+//        }
+//
+//        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+//        parameters.cameraName = name;
+//        parameters.useExtendedTracking = false;
+//
+//        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+//        targets = this.vuforia.loadTrackablesFromAsset("PowerPlay");
+//
+//        allTrackables = new ArrayList<>();
+//        allTrackables.addAll(targets);
+//
+//        float halfField = (float) (Field.width *10*0.5);
+//        float oneAndHalfTile = (float) (Field.tileWidth*10*1.5);
+//        float mmTargetHeight = (float) (VUFORIA_TARGET_HEIGHT_CM*10);
+//        identifyTarget(0, "Red Audience Wall",   -halfField,  -oneAndHalfTile, mmTargetHeight, 90, 0,  90);
+//        identifyTarget(1, "Red Rear Wall",        halfField,  -oneAndHalfTile, mmTargetHeight, 90, 0, -90);
+//        identifyTarget(2, "Blue Audience Wall",  -halfField,   oneAndHalfTile, mmTargetHeight, 90, 0,  90);
+//        identifyTarget(3, "Blue Rear Wall",       halfField,   oneAndHalfTile, mmTargetHeight, 90, 0, -90);
+//
+//        OpenGLMatrix cameraLocationOnRobot = OpenGLMatrix
+//                .translation((float) cameraLocation.getY(), (float) -cameraLocation.getX(), (float) cameraHeightFromField)
+//                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XZY, DEGREES, 90, 90, 0));
+//
+//        Iterator.forAll(allTrackables, trackable -> ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(name, cameraLocationOnRobot));
+//
+//        targets.activate();
+//
+//        start(view);
     }
 
     public boolean updateVuforia(){
-        boolean targetVisible = false;
-
-        for (VuforiaTrackable trackable : allTrackables) {
-            if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
-//                telemetry.addData("Visible Target", trackable.getName());
-                targetVisible = true;
-                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
-                if (robotLocationTransform != null) {
-                    lastLocation = robotLocationTransform;
-                }
-                break;
-            }
-        }
-
-        if (targetVisible) {
-            VectorF translation = lastLocation.getTranslation();
-            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-            currentPose = new Pose(translation.get(0)/10.0, translation.get(1)/10.0, rotation.thirdAngle);
-//            telemetry.addData("Pos (inches)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-//                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-//            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-        }
-        else {
-//            telemetry.addData("Visible Target", "none");
-        }
-        return targetVisible;
+//        boolean targetVisible = false;
+//
+//        for (VuforiaTrackable trackable : allTrackables) {
+//            if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+////                telemetry.addData("Visible Target", trackable.getName());
+//                targetVisible = true;
+//                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+//                if (robotLocationTransform != null) {
+//                    lastLocation = robotLocationTransform;
+//                }
+//                break;
+//            }
+//        }
+//
+//        if (targetVisible) {
+//            VectorF translation = lastLocation.getTranslation();
+//            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+//            currentPose = new Pose(translation.get(0)/10.0, translation.get(1)/10.0, rotation.thirdAngle);
+////            telemetry.addData("Pos (inches)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+////                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+////            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+//        }
+//        else {
+////            telemetry.addData("Visible Target", "none");
+//        }
+//        return targetVisible;
+        return false;
     }
 
     public Pose getPose(){
@@ -216,10 +215,10 @@ public class ICamera extends Electronic {
      * @param rx, ry, rz  Target rotations in x,y,z axes
      */
     public void identifyTarget(int targetIndex, String targetName, float dx, float dy, float dz, float rx, float ry, float rz) {
-        VuforiaTrackable aTarget = targets.get(targetIndex);
-        aTarget.setName(targetName);
-        aTarget.setLocation(OpenGLMatrix.translation(dx, dy, dz)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, rx, ry, rz)));
+//        VuforiaTrackable aTarget = targets.get(targetIndex);
+//        aTarget.setName(targetName);
+//        aTarget.setLocation(OpenGLMatrix.translation(dx, dy, dz)
+//                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, rx, ry, rz)));
     }
 
     /**
@@ -239,9 +238,9 @@ public class ICamera extends Electronic {
             @Override
             public void onClose() {}
         });
-        if(targets != null) {
-            targets.deactivate();
-        }
+//        if(targets != null) {
+//            targets.deactivate();
+//        }
     }
 
     /**
