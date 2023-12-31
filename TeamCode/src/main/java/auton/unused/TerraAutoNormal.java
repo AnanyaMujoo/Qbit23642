@@ -1,31 +1,14 @@
 package auton.unused;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import automodules.AutoModule;
-import automodules.stage.Main;
-import automodules.stage.Stage;
 import autoutil.AutoFramework;
-import autoutil.reactors.MecanumJunctionReactor2;
-import autoutil.reactors.Reactor;
-import elements.Case;
-import elements.Field;
-import elements.FieldPlacement;
-import elements.FieldSide;
-import elements.GameItems;
-import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.ExceptionCatcher;
 import util.User;
-import util.template.Mode;
 
 import static global.General.bot;
-import static global.General.fieldPlacement;
-import static global.General.fieldSide;
-import static global.General.log;
 import static global.Modes.Height.HIGH;
 import static global.Modes.Height.LOW;
-import static global.Modes.Height.MIDDLE;
 
 public class TerraAutoNormal extends AutoFramework {
 
@@ -152,9 +135,9 @@ public class TerraAutoNormal extends AutoFramework {
             });
             addCustomCode(() -> {
                 drive.move(0,0,0);
-                outtake.moveEnd();
+                outtake.moveFlipEnd();
                 pause(0.05);
-                outtake.moveEnd();
+                outtake.moveFlipEnd();
                 bot.cancelAutoModules();
                 outtake.openClaw();
                 pause(0.05);

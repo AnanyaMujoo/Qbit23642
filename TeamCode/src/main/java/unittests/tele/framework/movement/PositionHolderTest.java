@@ -3,7 +3,6 @@ package unittests.tele.framework.movement;
 import autoutil.controllers.control1D.PositionHolder;
 import robotparts.electronics.positional.PMotor;
 import robotparts.hardware.Lift;
-import teleutil.button.Button;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.gph1;
@@ -12,7 +11,7 @@ import static global.General.log;
 public class PositionHolderTest extends TeleUnitTest {
 
     private final Lift part = lift;
-    private final PMotor motor = part.motorRight;
+    private final PMotor motor = part.liftRight;
     private final PositionHolder positionHolder = motor.getPositionHolder();
 
     @Override

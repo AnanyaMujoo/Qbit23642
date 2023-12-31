@@ -4,21 +4,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import automodules.AutoModule;
 import autoutil.AutoFramework;
-import elements.Case;
 import elements.Field;
 import elements.FieldPlacement;
 import elements.FieldSide;
 import elements.GameItems;
 import geometry.position.Pose;
-import robotparts.RobotPart;
-import util.User;
 import util.template.Precision;
 
 import static global.General.bot;
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
-import static global.General.log;
-import static global.Modes.Height.HIGH;
 
 public class TerraAutoFight extends AutoFramework {
 
@@ -40,7 +35,7 @@ public class TerraAutoFight extends AutoFramework {
             outtake.stageEnd(0.15),
             outtake.stageOpen(0.25),
             lift.stageLift(1.0,  11.5).attach(outtake.stageStartAndSignal())
-    ).setStartCode(outtake::moveEnd);
+    ).setStartCode(outtake::moveFlipEnd);
 
     AutoModule GrabBack = new AutoModule(
             outtake.stageClose(0.1),

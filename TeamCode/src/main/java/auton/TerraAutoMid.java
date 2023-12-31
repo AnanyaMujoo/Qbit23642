@@ -10,15 +10,11 @@ import elements.FieldPlacement;
 import elements.FieldSide;
 import elements.GameItems;
 import geometry.position.Pose;
-import robotparts.RobotPart;
-import util.User;
 import util.template.Precision;
 
 import static global.General.bot;
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
-import static global.General.log;
-import static global.Modes.Height.HIGH;
 import static global.Modes.Height.MIDDLE;
 
 public class TerraAutoMid extends AutoFramework {
@@ -42,7 +38,7 @@ public class TerraAutoMid extends AutoFramework {
             outtake.stageEnd(0.1),
             outtake.stageOpen(0.2),
             lift.stageLift(1.0,  11.5).attach(outtake.stageStartAndSignal2())
-    ).setStartCode(outtake::moveEnd);
+    ).setStartCode(outtake::moveFlipEnd);
 
 
 

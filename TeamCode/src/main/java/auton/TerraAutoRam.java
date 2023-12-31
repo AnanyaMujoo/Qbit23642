@@ -12,12 +12,10 @@ import elements.FieldSide;
 import elements.GameItems;
 import geometry.position.Pose;
 import robotparts.RobotPart;
-import util.Timer;
 
 import static global.General.bot;
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
-import static global.General.log;
 import static global.Modes.Height.HIGH;
 
 public class TerraAutoRam extends AutoFramework {
@@ -31,7 +29,7 @@ public class TerraAutoRam extends AutoFramework {
         lift.maintain();
         outtake.closeClaw();
         wait(0.5);
-        outtake.arm(0.42);
+        outtake.moveFlip(0.42);
         auto.scan(false);
     }
 
@@ -43,7 +41,7 @@ public class TerraAutoRam extends AutoFramework {
             RobotPart.pause(1.0),
             outtake.stageOpen(0.4),
             lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.2))
-    ).setStartCode(outtake::moveEnd);
+    ).setStartCode(outtake::moveFlipEnd);
 
     @Override
     public void initialize() {

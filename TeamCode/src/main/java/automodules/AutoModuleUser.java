@@ -1,25 +1,11 @@
 package automodules;
 
-import java.util.ArrayList;
-
-import automodules.stage.Main;
-import automodules.stage.Stage;
 import automodules.stage.Stop;
-import elements.Field;
-import geometry.framework.Point;
-import geometry.position.Pose;
 import robot.RobotUser;
 import robotparts.RobotPart;
 import teleutil.independent.Independent;
 import teleutil.independent.Machine;
-import util.codeseg.CodeSeg;
-import util.condition.Expectation;
-import util.condition.Magnitude;
-import util.template.Iterator;
-import util.template.Precision;
 
-import static global.General.bot;
-import static global.General.fault;
 import static global.Modes.*;
 import static global.Modes.Drive.MEDIUM;
 import static global.Modes.Drive.SLOW;
@@ -48,7 +34,7 @@ public interface AutoModuleUser extends RobotUser{
             lift.cap = false;
             outtakeStatus.set(DRIVING);
             outtake.openClaw();
-            outtake.moveEnd();
+            outtake.moveFlipEnd();
     });
 
     // 0.6
@@ -62,7 +48,7 @@ public interface AutoModuleUser extends RobotUser{
             lift.cap = false;
             outtakeStatus.set(DRIVING);
             outtake.openClaw();
-            outtake.moveEnd();
+            outtake.moveFlipEnd();
     });
 
     AutoModule ForwardTeleLow = new AutoModule(
@@ -75,7 +61,7 @@ public interface AutoModuleUser extends RobotUser{
             lift.cap = false;
             drive.using = true;
             outtakeStatus.set(DRIVING);
-            outtake.moveEnd();
+            outtake.moveFlipEnd();
             outtake.openClaw();
     });
 
@@ -179,7 +165,7 @@ public interface AutoModuleUser extends RobotUser{
             lift.setGround(false);
             outtakeStatus.set(PLACING);
             heightMode.set(GROUND);
-            outtake.moveStart();
+            outtake.moveFlipStart();
     });
 
     AutoModule ForwardTeleBottom = new AutoModule(
@@ -187,7 +173,7 @@ public interface AutoModuleUser extends RobotUser{
             outtake.stageStart(0.1)
     ).setStartCode(() -> {
             outtakeStatus.set(DRIVING);
-            outtake.moveStart();
+            outtake.moveFlipStart();
             outtake.openClaw();
             lift.ground = false;
     });
@@ -230,7 +216,7 @@ public interface AutoModuleUser extends RobotUser{
         lift.stageLift(1.0,  Math.max(13 - ((i+1)*13/4.6), -0.5))
     ).setStartCode(() -> {
         outtake.openClaw();
-        outtake.moveStart();
+        outtake.moveFlipStart();
     });}
 
 

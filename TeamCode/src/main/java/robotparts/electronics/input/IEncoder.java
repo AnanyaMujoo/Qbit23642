@@ -75,7 +75,7 @@ public class IEncoder extends Electronic {
     public void updateNormal(){
         synchronized (motor) {
             position = !inverted ? motor.getCurrentPosition() : -motor.getCurrentPosition();
-            deltaPosition = (position - lastPosition) * wheelDiameter * Math.PI / Constants.ENCODER_TICKS_PER_REV;
+            deltaPosition = (position - lastPosition) * wheelDiameter * Math.PI / Constants.ODOMETRY_ENCODER_TICKS_PER_REV;
             lastPosition = position;
         }
     }

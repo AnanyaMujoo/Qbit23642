@@ -1,9 +1,7 @@
 package unittests.tele.framework.movement;
 
 import robotparts.electronics.positional.PMotor;
-import robotparts.hardware.Lift;
 import teleutil.button.Button;
-import teleutil.button.OnPressEventHandler;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.bot;
@@ -13,7 +11,7 @@ import static global.General.log;
 public class CustomPMotorPIDTest extends TeleUnitTest {
 
 
-    private final PMotor motor = lift.motorRight;
+    private final PMotor motor = lift.liftRight;
 
     @Override
     public void init() {

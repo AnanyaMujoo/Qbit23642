@@ -8,7 +8,6 @@ import teleutil.button.Button;
 import teleutil.button.OnPressEventHandler;
 import unittests.tele.TeleUnitTest;
 
-import static global.General.bot;
 import static global.General.gph1;
 import static global.General.log;
 
@@ -39,7 +38,7 @@ public class ElectronicsTest extends TeleUnitTest {
         gph1.link(Button.A, OnPressEventHandler.class, () -> in.setPower(0.2));
         gph1.link(Button.B, OnPressEventHandler.class, () -> cr.setPower(0.2));
         gph1.link(Button.Y, OnPressEventHandler.class, () -> li.move(0.2));
-        gph1.link(Button.RIGHT_BUMPER, OnPressEventHandler.class, () -> lo.setPosition("start"));
+        gph1.link(Button.RIGHT_BUMPER, OnPressEventHandler.class, () -> lo.moveToPosition("start"));
     }
 
     @Override

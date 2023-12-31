@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import robotparts.Electronic;
 import util.Timer;
 
+
 public class PServo extends Electronic {
     /**
      * Servo and related paramters
@@ -35,8 +36,8 @@ public class PServo extends Electronic {
         servo = s;
         direction = dir;
         servo.setDirection(direction);
-        addPosition("start", 0.0);
-        addPosition("end", 1.0);
+        setPosition("start", 0.0);
+        setPosition("end", 1.0);
         timer.reset();
     }
 
@@ -56,53 +57,35 @@ public class PServo extends Electronic {
      * @param name
      * @param p
      */
-    public void addPosition(String name, double p){
+    public void setPosition(String name, double p){
+        positions.remove(name);
         positions.put(name, p);
     }
 
 
-    /**
-     * Change position to another value
-     * @param name
-     * @param p
-     */
-    public void changePosition(String name, double p){
-        positions.remove(name);
-        addPosition(name, p);
-    }
 
     /**
      * Set the position to the pservo based on the name
      * @param name
      */
-    public void setPosition(String name){
-        if(access != null) {
-            if (access.isAllowed()) {
-                servo.setPosition(positions.get(name));
-            }
+    public void moveToPosition(String name){
+        if (Objects.requireNonNull(access).isAllowed()) {
+            servo.setPosition(positions.get(name));
         }
-//        else{
-//            servo.setPosition(positions.get(name));
-//        }
     }
 
-    public void setPositionRaw(String name){
+    public void moveToPositionWithoutAccess(String name){
         servo.setPosition(positions.get(name));
     }
 
-    public void setPositionRaw(double pos){
+    public void moveToPositionWithoutAccess(double pos){
         servo.setPosition(pos);
     }
 
-    public void setPosition(double pos){
-        if(access != null){
-            if (access.isAllowed()) {
-                servo.setPosition(pos);
-            }
+    public void moveToPosition(double position){
+        if (Objects.requireNonNull(access).isAllowed()) {
+            servo.setPosition(position);
         }
-//        else{
-//            servo.setPosition(pos);
-//        }
     }
 
     /**

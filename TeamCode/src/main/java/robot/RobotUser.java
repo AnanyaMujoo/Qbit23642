@@ -1,5 +1,7 @@
 package robot;
 
+import robotparts.hardware.Drone;
+import robotparts.hardware.Hanging;
 import robotparts.sensors.odometry.NewOdometry;
 import unittests.tele.framework.movement.AutoModuleTest;
 import robotparts.hardware.Drive;
@@ -30,6 +32,8 @@ public interface RobotUser {
     DistanceSensors distanceSensors = new DistanceSensors();
     GyroSensors gyro = new GyroSensors();
     Cameras camera = new Cameras();
+    Drone drone = new Drone();
+    Hanging hang = new Hanging();
 
 //    Odometry odometry = new TwoOdometry();
 //    ThreeOdometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS

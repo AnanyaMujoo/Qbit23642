@@ -38,7 +38,7 @@ public class TerraAutoSafe2 extends AutoFramework {
         RobotPart.pause(0.1),
         lift.stageLift(1.0,  13.5).attach(outtake.stageStartAfter(0.2))
     ).setStartCode(() -> {
-        outtake.moveEnd();
+        outtake.moveFlipEnd();
         outtake.openClaw();
     });
 
@@ -46,7 +46,7 @@ public class TerraAutoSafe2 extends AutoFramework {
             RobotPart.pause(0.1),
             lift.stageLift(1.0,  10.2).attach(outtake.stageStartAfter(0.2))
     ).setStartCode(() -> {
-        outtake.moveEnd();
+        outtake.moveFlipEnd();
         outtake.openClaw();
     });
 
@@ -55,7 +55,7 @@ public class TerraAutoSafe2 extends AutoFramework {
         lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), -0.5)).attach(outtake.stageBack(0.5))
     ).setStartCode(() -> {
         outtake.openClaw();
-        outtake.moveEnd();
+        outtake.moveFlipEnd();
     });}
 
     AutoModule GrabBack = new AutoModule(
@@ -150,7 +150,7 @@ public class TerraAutoSafe2 extends AutoFramework {
         });
         addCustomCode(() -> {
             bot.cancelAutoModules();
-            outtake.moveEnd();
+            outtake.moveFlipEnd();
             pause(0.05);
             outtake.openClaw();
         });
@@ -214,7 +214,7 @@ public class TerraAutoSafe2 extends AutoFramework {
             // Place
             addCustomCode(() -> {
                 bot.cancelAutoModules();
-                outtake.moveEnd();
+                outtake.moveFlipEnd();
                 pause(0.05);
                 outtake.openClaw();
             });
