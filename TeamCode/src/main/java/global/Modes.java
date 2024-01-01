@@ -20,9 +20,10 @@ public interface Modes {
     enum OuttakeStatus implements Mode.ModeType { DRIVING, PLACING}
     Mode outtakeStatus = new Mode(OuttakeStatus.class);
 
+    // TODO FIX MODES
     enum Height implements Mode.ModeType {HIGH, MIDDLE, LOW, GROUND}
     Mode heightMode = new Mode(Height.class)
-            .set(Height.HIGH, Lift.maxPosition-11)
+            .set(Height.HIGH,50-11)
             .set(Height.MIDDLE, 28)
             .set(Height.LOW, 6)
             .set(Height.GROUND, 3);

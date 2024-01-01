@@ -27,21 +27,19 @@ public class TerraAutoRam extends AutoFramework {
         auto.setConfig(mecanumNonstopConfig);
         bot.saveLocationOnField();
         lift.maintain();
-        outtake.closeClaw();
         wait(0.5);
-        outtake.moveFlip(0.42);
         auto.scan(false);
     }
 
-    static AutoModule BackwardFirst = new AutoModule(
-            lift.stageLift(1.0, heightMode.getValue(HIGH)+2).attach(outtake.stageReadyEndContinuous(0.6))
-    ).setStartCode(outtake::moveMiddle);
-
-    static AutoModule Forward = new AutoModule(
-            RobotPart.pause(1.0),
-            outtake.stageOpen(0.4),
-            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.2))
-    ).setStartCode(outtake::moveFlipEnd);
+//    static AutoModule BackwardFirst = new AutoModule(
+//            lift.stageLift(1.0, heightMode.getValue(HIGH)+2).attach(outtake.stageReadyEndContinuous(0.6))
+//    ).setStartCode(outtake::moveMiddle);
+//
+//    static AutoModule Forward = new AutoModule(
+//            RobotPart.pause(1.0),
+//            outtake.stageOpen(0.4),
+//            lift.stageLift(1.0,0).attach(outtake.stageStartAfter(0.2))
+//    ).setStartCode(outtake::moveFlipEnd);
 
     @Override
     public void initialize() {
@@ -63,49 +61,49 @@ public class TerraAutoRam extends AutoFramework {
 
     @Override
     public void define() {
-
-        if(!normal) {
-            signal(this);
-            addSegment(0.6, mecanumDefaultWayPoint, 5, 105, -30);
-        }else{
-            addTimedSetpoint(1.0, 0.4, 0.6, 0, 40, -90);
-            addSegment(0.5, mecanumDefaultWayPoint, 0, 70, 0);
-            addTimedSetpoint(1.0, 0.5, 0.8, -20, 100, 0);
-        }
-
-        customNumber(5, i -> {
-            addTimedSetpoint(1.0, 0.5,1.5,2, 70, 0);
-            addSegment(1.5, 1.0, mecanumNonstopSetPoint, 2, 155, 0);
-            addCustomCode(() -> {
-                if (odometry.getY() < -155) {
-                    halt[0] = true;
-                }
-                drive.halt();
-            });
-            addBreakpoint(() -> halt[0]);
-        });
-        addBreakpointReturn();
-
-        customSide(() -> {
-            addTimedSetpoint(1.0, 0.5, 0.6, -9, 126, 30);
-            addConcurrentAutoModuleWithCancel(BackwardFirst, 0.2);
-            addTimedSetpoint(1.0, 0.5, 1.3, -13, 138, 30);
-        }, () -> {
-            addTimedSetpoint(1.0, 0.5, 0.6, -14, 125, 30);
-            addConcurrentAutoModuleWithCancel(BackwardFirst, 0.2);
-            addTimedSetpoint(1.0, 0.5, 1.3, -18, 136, 30);
-        });
-        addConcurrentAutoModuleWithCancel(Forward, 1.2);
-        addTimedSetpoint(1.0, 0.4, 1.0, 0, 120, 0);
-        addSegment(0.5, noStopNewSetPoint, 0, 73, 0);
-        customCase(() -> {
-            addTimedSetpoint(1.0, 0.5,2.0,-58, 73, 0);
-        }, () -> {
-
-        }, () -> {
-            addTimedSetpoint(1.0, 0.5,2.0,58, 73, 0);
-        });
-        addPause(0.1);
+//
+//        if(!normal) {
+//            signal(this);
+//            addSegment(0.6, mecanumDefaultWayPoint, 5, 105, -30);
+//        }else{
+//            addTimedSetpoint(1.0, 0.4, 0.6, 0, 40, -90);
+//            addSegment(0.5, mecanumDefaultWayPoint, 0, 70, 0);
+//            addTimedSetpoint(1.0, 0.5, 0.8, -20, 100, 0);
+//        }
+//
+//        customNumber(5, i -> {
+//            addTimedSetpoint(1.0, 0.5,1.5,2, 70, 0);
+//            addSegment(1.5, 1.0, mecanumNonstopSetPoint, 2, 155, 0);
+//            addCustomCode(() -> {
+//                if (odometry.getY() < -155) {
+//                    halt[0] = true;
+//                }
+//                drive.halt();
+//            });
+//            addBreakpoint(() -> halt[0]);
+//        });
+//        addBreakpointReturn();
+//
+//        customSide(() -> {
+//            addTimedSetpoint(1.0, 0.5, 0.6, -9, 126, 30);
+//            addConcurrentAutoModuleWithCancel(BackwardFirst, 0.2);
+//            addTimedSetpoint(1.0, 0.5, 1.3, -13, 138, 30);
+//        }, () -> {
+//            addTimedSetpoint(1.0, 0.5, 0.6, -14, 125, 30);
+//            addConcurrentAutoModuleWithCancel(BackwardFirst, 0.2);
+//            addTimedSetpoint(1.0, 0.5, 1.3, -18, 136, 30);
+//        });
+//        addConcurrentAutoModuleWithCancel(Forward, 1.2);
+//        addTimedSetpoint(1.0, 0.4, 1.0, 0, 120, 0);
+//        addSegment(0.5, noStopNewSetPoint, 0, 73, 0);
+//        customCase(() -> {
+//            addTimedSetpoint(1.0, 0.5,2.0,-58, 73, 0);
+//        }, () -> {
+//
+//        }, () -> {
+//            addTimedSetpoint(1.0, 0.5,2.0,58, 73, 0);
+//        });
+//        addPause(0.1);
     }
 
 

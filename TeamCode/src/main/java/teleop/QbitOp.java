@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import teleutil.button.Button;
 
 
-@TeleOp(name = "TestOp", group = "TeleOp")
+@TeleOp(name = "QbitOp", group = "TeleOp")
 public class QbitOp extends Tele {
 
     @Override

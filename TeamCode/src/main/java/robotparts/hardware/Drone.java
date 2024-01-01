@@ -10,9 +10,9 @@ public class Drone extends RobotPart {
 
     @Override
     public void init() {
-        drone = create("drone", ElectronicType.PSERVO_FORWARD);
-        drone.setPosition("start", 0.0);
-        drone.setPosition("release", 1.0);
+        drone = create("drone", ElectronicType.PSERVO_REVERSE);
+        drone.setPosition("start", 0.54);
+        drone.setPosition("release", 0.65);
         moveDroneStart();
     }
     public void moveDroneStart(){ drone.moveToPosition("start"); }

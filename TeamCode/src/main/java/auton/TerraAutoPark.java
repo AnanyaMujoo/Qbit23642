@@ -36,31 +36,31 @@ public class TerraAutoPark extends AutoFramework {
     @Override
     public void define() {
 
-        addSegment(0.5, mecanumDefaultWayPoint, 0, 90, 0);
-        addSegment(0.5, mecanumDefaultWayPoint, 7, 80, 45);
-        addSegment(0.5, mecanumDefaultWayPoint, -7, 70, 90);
-        addSegment(0.5, mecanumDefaultWayPoint, -40, 70, 90);
-
-        customFlipped(() -> {
-            addTimedSetpoint(1.0,0.5,1.5, -68,81,56);
-        }, () -> {
-            addTimedSetpoint(1.0,0.5,1.5, -68,81,45);
-        });
-        addConcurrentAutoModuleWithCancel(TerraAutoRam.BackwardFirst, 2.0);
-        addConcurrentAutoModuleWithCancel(TerraAutoRam.Forward, 1.2);
-        addTimedSetpoint(1.0,0.6,1.0, -53,70,56);
-        addTimedSetpoint(1.0, 0.5,0.6, -57, 70, 90);
-        addConcurrentAutoModule(new AutoModule(outtake.stage(0.2, 0.1), outtake.stageOpenComp(0.0),  lift.stageLift(1.0,  -0.5)));
-        customCase(() -> {
-            addTimedSetpoint(1.0, 0.5,1.0, -57, 70, 0);
-        }, () -> {
-            addSegment(0.5, noStopNewSetPoint, 0, 70, 90);
-            addTimedSetpoint(1.0, 0.5,1.0, 0, 70, 0);
-        }, () -> {
-            addSegment(0.5, noStopNewSetPoint, 58, 70, 90);
-            addTimedSetpoint(1.0, 0.5,1.0, 58, 70, 0);
-        });
-        addPause(0.1);
+//        addSegment(0.5, mecanumDefaultWayPoint, 0, 90, 0);
+//        addSegment(0.5, mecanumDefaultWayPoint, 7, 80, 45);
+//        addSegment(0.5, mecanumDefaultWayPoint, -7, 70, 90);
+//        addSegment(0.5, mecanumDefaultWayPoint, -40, 70, 90);
+//
+//        customFlipped(() -> {
+//            addTimedSetpoint(1.0,0.5,1.5, -68,81,56);
+//        }, () -> {
+//            addTimedSetpoint(1.0,0.5,1.5, -68,81,45);
+//        });
+//        addConcurrentAutoModuleWithCancel(TerraAutoRam.BackwardFirst, 2.0);
+//        addConcurrentAutoModuleWithCancel(TerraAutoRam.Forward, 1.2);
+//        addTimedSetpoint(1.0,0.6,1.0, -53,70,56);
+//        addTimedSetpoint(1.0, 0.5,0.6, -57, 70, 90);
+//        addConcurrentAutoModule(new AutoModule(outtake.stage(0.2, 0.1), outtake.stageOpenComp(0.0),  lift.stageLift(1.0,  -0.5)));
+//        customCase(() -> {
+//            addTimedSetpoint(1.0, 0.5,1.0, -57, 70, 0);
+//        }, () -> {
+//            addSegment(0.5, noStopNewSetPoint, 0, 70, 90);
+//            addTimedSetpoint(1.0, 0.5,1.0, 0, 70, 0);
+//        }, () -> {
+//            addSegment(0.5, noStopNewSetPoint, 58, 70, 90);
+//            addTimedSetpoint(1.0, 0.5,1.0, 58, 70, 0);
+//        });
+//        addPause(0.1);
 
     }
 

@@ -14,26 +14,26 @@ public class Outtake extends RobotPart {
         flipRight = create("flipr", ElectronicType.PSERVO_REVERSE);
         flipLeft = create("flipl", ElectronicType.PSERVO_FORWARD);
 
-        flipLeft.setPosition("start", 0.0);
-        flipRight.setPosition("start", 0.0);
+        flipLeft.setPosition("start", 0.1);
+        flipRight.setPosition("start", 0.1);
 
-        flipRight.setPosition("middle", 0.75);
-        flipLeft.setPosition("middle", 0.75);
+        flipRight.setPosition("middle", 0.5);
+        flipLeft.setPosition("middle", 0.5);
 
-        flipLeft.setPosition("end", 1.0);
-        flipRight.setPosition("end", 1.0);
+        flipLeft.setPosition("end", 0.8);
+        flipRight.setPosition("end", 0.8);
 
 
 
         clawRight = create("clawr", ElectronicType.PSERVO_REVERSE);
-        clawLeft = create("clawl", ElectronicType.PSERVO_REVERSE);
+        clawLeft = create("clawl", ElectronicType.PSERVO_FORWARD);
 
 
-        clawRight.setPosition("open", 0.0);
-        clawLeft.setPosition("open", 0.0);
+        clawRight.setPosition("open", 0.4);
+        clawLeft.setPosition("open", 0.42);
 
-        clawRight.setPosition("close", 0.2);
-        clawLeft.setPosition("close", 0.2);
+        clawRight.setPosition("close", 0.55);
+        clawLeft.setPosition("close", 0.59);
 
 
         moveOuttakeToStart();
