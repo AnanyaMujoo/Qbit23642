@@ -45,7 +45,7 @@ public interface RobotUser {
     Intake intake = new Intake();
     TouchSensors touchSensors = new TouchSensors();
 
-    ColorSensors color = new ColorSensors();
+    ColorSensors colorSensors = new ColorSensors();
 
     /**
      * Test Part

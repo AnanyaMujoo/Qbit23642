@@ -264,7 +264,7 @@ public class PMotor extends Electronic {
             releasePosition(); move(power); holdingExact = false;
         } else if (lastTarget != 0) {
             if (holdingExact) { holdPositionExact(); } else { holdPosition(); }
-        } else {
+        } else if(getPosition() > 0.2){
             releasePosition();
             move(-Math.abs(backPowerWhenTargetingZero));
         }

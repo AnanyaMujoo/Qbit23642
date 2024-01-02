@@ -1,9 +1,8 @@
 package robotparts.unused;
 
-import static global.General.bot;
-
 import automodules.AutoModule;
-import automodules.stage.Main;
+import automodules.stage.Exit;
+import automodules.stage.Initial;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robotparts.RobotPart;
@@ -25,17 +24,24 @@ public class Intake extends RobotPart {
     }
 
     @Override
-    public Stage moveTime(double p, double t) {
-        return super.moveTime(p, t);
+    public Stage moveTime(double power, double time) {
+        return super.moveTime(power, time);
     }
+
+    public Stage stageMoveUntilPixelsAreLoaded(double power) {
+        return new Stage(
+                new Initial(()->intake.move(0.1)),
+                new Exit(colorSensors::arePixelsLoaded),
+                new Stop(()-> intake.move(0.0))
+        );
+    }
+
+
 
     @Override
     public AutoModule MoveTime(double p, double t) {
         return super.MoveTime(p, t);
     }
 
-    public Stage intakeUntilFreight(double p) {
-        return super.customExit(p, color.exitFreight());
-    }
 
 }

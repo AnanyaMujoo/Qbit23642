@@ -1,5 +1,6 @@
 package robotparts.hardware;
 
+import automodules.stage.Stage;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
@@ -15,4 +16,5 @@ public class Intake extends RobotPart {
     public void move(double intakePower) {
         intake.setPower(intakePower);
     }
+
 }

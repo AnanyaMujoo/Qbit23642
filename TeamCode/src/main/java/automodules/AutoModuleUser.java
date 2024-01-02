@@ -6,6 +6,7 @@ import robotparts.RobotPart;
 import teleutil.independent.Independent;
 import teleutil.independent.Machine;
 
+import static global.General.gph2;
 import static global.Modes.*;
 import static global.Modes.Drive.MEDIUM;
 import static global.Modes.Drive.SLOW;
@@ -17,11 +18,61 @@ import static global.Modes.OuttakeStatus.DRIVING;
 import static global.Modes.OuttakeStatus.PLACING;
 
 
-public interface AutoModuleUser extends RobotUser{
+public interface AutoModuleUser extends RobotUser {
 
-    /**
-     * Forward
-     */
+
+    AutoModule Deposit = new AutoModule(
+            outtake.stageClawOpen(0.5),
+            outtake.stageFlipStart(0.5),
+            lift.stageLift(0.1,0)
+    );
+
+    default AutoModule Prepare (double height){return new AutoModule(
+            lift.stageLift(0.1,0.1),
+            outtake.stageFlipEnd(0.5),
+            lift.stageLift(0.1,height)
+    );}
+
+    AutoModule Intake = new AutoModule(
+            intake.stageMoveUntilPixelsAreLoaded(0.1),
+            outtake.stageClawClose(0.0),
+            intake.moveTime(-0.1,1.0),
+            outtake.stageFlipMiddle(0.5)
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    /**
+//     * Forward
+//     */
 
 
 //    AutoModule ForwardTeleHigh = new AutoModule(

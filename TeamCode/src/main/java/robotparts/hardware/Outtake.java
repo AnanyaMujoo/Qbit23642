@@ -14,8 +14,8 @@ public class Outtake extends RobotPart {
         flipRight = create("flipr", ElectronicType.PSERVO_REVERSE);
         flipLeft = create("flipl", ElectronicType.PSERVO_FORWARD);
 
-        flipLeft.setPosition("start", 0.1);
-        flipRight.setPosition("start", 0.1);
+        flipLeft.setPosition("start", 0.2);
+        flipRight.setPosition("start", 0.2);
 
         flipRight.setPosition("middle", 0.5);
         flipLeft.setPosition("middle", 0.5);
@@ -28,15 +28,15 @@ public class Outtake extends RobotPart {
         clawRight = create("clawr", ElectronicType.PSERVO_REVERSE);
         clawLeft = create("clawl", ElectronicType.PSERVO_FORWARD);
 
-
-        clawRight.setPosition("open", 0.4);
-        clawLeft.setPosition("open", 0.42);
+        // 0.4, 0.42
+        clawRight.setPosition("open", 0.45);
+        clawLeft.setPosition("open", 0.48);
 
         clawRight.setPosition("close", 0.55);
         clawLeft.setPosition("close", 0.59);
 
 
-        moveOuttakeToStart();
+        moveClawOpen();
 
     }
 
@@ -64,6 +64,7 @@ public class Outtake extends RobotPart {
 
 
     public Stage stageFlipStart(double t){ return super.customTime(this::moveFlipStart, t); }
+    public Stage stageFlipMiddle(double t){ return super.customTime(this::moveFlipMiddle, t); }
     public Stage stageFlipEnd(double t){ return super.customTime(this::moveFlipEnd, t); }
     public Stage stageClawOpen(double t){ return super.customTime(this::moveClawOpen, t); }
     public Stage stageClawClose(double t){ return super.customTime(this::moveClawClose, t); }
