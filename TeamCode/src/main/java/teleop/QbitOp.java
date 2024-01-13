@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import automodules.AutoModuleUser;
 import teleutil.button.Button;
 
-
 @TeleOp(name = "QbitOp", group = "TeleOp")
 public class QbitOp extends Tele {
 
@@ -23,14 +22,17 @@ public class QbitOp extends Tele {
         gph1.link(Button.RIGHT_BUMPER, outtake::moveClawClose);
         gph1.link(Button.LEFT_BUMPER, outtake::moveClawOpen);
 
-        gph1.link(Button.DPAD_UP, drone::moveDroneStart);
-        gph1.link(Button.DPAD_DOWN, drone::moveDroneRelease);
+         gph1.link(Button.DPAD_UP, drone::moveDroneStart);
+         gph1.link(Button.DPAD_DOWN, drone::moveDroneRelease);
+
+        gph2.link(Button.DPAD_UP, () -> lift.move(0.1));
+        gph2.link(Button.DPAD_DOWN, () -> lift.move(-0.1));
+
+        gph1.link(Button.A, () -> intake.move(1));
+
 //        gph2.link(Button.B, Deposit);
-//        gph2.link(Button.X, Intake);
-//        gph2.link(Button.Y, Prepare(1));
 
-
-
+        lift.reset();
 
 
 
@@ -43,8 +45,8 @@ public class QbitOp extends Tele {
 //        log.show("Claw (bumpers):   right:close, left:open");
 //        log.show("Drone (dpad):   up:start, down:release");
         drive.move(gph1.ry,gph1.rx,gph1.lx);
-        intake.move(gph2.ry);
-//        lift.move(gph2.ly);
+        //intake.move(gph2.ry);
+        // lift no longer controlled by left stick lift.move(gph2.ly);
         //hang.move(gph2.ly);
 
         log.show(colorSensors.leftPixelDistance());
@@ -61,7 +63,7 @@ public class QbitOp extends Tele {
                 "Drone Release, 1, Dpad down\n" +
                 "Drive, 1, joysticks\n" +
                 "Intake, 2, right up down joystick\n" +
-                "Lift, left up down joystick\n");
+                "Lift, 2, up down dpad \n");
 
 
         log.show(lift.liftLeft.getPosition());
