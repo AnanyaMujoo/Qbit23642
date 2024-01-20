@@ -1,5 +1,6 @@
 package robotparts.hardware;
 
+import java.util.concurrent.*;
 import automodules.stage.Stage;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
@@ -12,9 +13,17 @@ public class Intake extends RobotPart {
         intake = create("in", ElectronicType.CMOTOR_REVERSE_FLOAT);
 
     }
-    @Override
-    public void move(double intakePower) {
-        intake.setPower(intakePower);
+    private boolean didThePixelGoIn(){
+        return false;
     }
 
+
+
+    @Override
+    public void move(double intakePower) {
+                intake.setPower(intakePower);
+        }
+
+
+    public Stage moveTime(double p, double t) { return super.moveTime(p, t); }
 }
