@@ -33,6 +33,7 @@ public class Outtake extends RobotPart {
         clawLeft.setPosition("open", 0.48);
 
         clawRight.setPosition("close", 0.55);
+        //TODO - tweak so the claw is closer
         clawLeft.setPosition("close", 0.59);
 
 

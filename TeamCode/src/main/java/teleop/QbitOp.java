@@ -1,5 +1,7 @@
 package teleop;
 
+import static java.lang.Math.abs;
+import static global.General.bot;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
@@ -16,20 +18,32 @@ public class QbitOp extends Tele {
     @Override
     public void initTele() {
 
-        gph1.link(Button.B, outtake::moveFlipStart);
-        gph1.link(Button.Y, outtake::moveFlipMiddle);
-        gph1.link(Button.X, outtake::moveFlipEnd);
+        gph2.link(Button.DPAD_LEFT, outtake::moveFlipStart);
+        gph2.link(Button.DPAD_UP, outtake::moveFlipMiddle);
+        gph2.link(Button.DPAD_RIGHT, outtake::moveFlipEnd);
+
+        gph1.link(Button.X, bot::cancelAutoModules);
+
+        gph2.link(Button.RIGHT_BUMPER, hang::moveHangStart);
+        gph2.link(Button.LEFT_BUMPER, hang::moveHangEnd);
 
         gph1.link(Button.RIGHT_BUMPER, outtake::moveClawClose);
         gph1.link(Button.LEFT_BUMPER, outtake::moveClawOpen);
 
-        gph1.link(Button.DPAD_UP, drone::moveDroneStart);
-        gph1.link(Button.DPAD_DOWN, drone::moveDroneRelease);
-//        gph2.link(Button.B, Deposit);
-//        gph2.link(Button.X, Intake);
-//        gph2.link(Button.Y, Prepare(1));
+        gph1.link(Button.A, drone::moveDroneStart);
+        gph1.link(Button.B, drone::moveDroneRelease);
+
+        gph1.linka(Button.DPAD_UP, lift.lifttarget(5));
+        gph1.linka(Button.DPAD_DOWN, lift.lifttarget(-5));
 
 
+        gph2.link(Button.B, Deposit);
+        gph2.link(Button.X, Intake);
+        gph2.link(Button.Y, Prepare(10));
+
+
+
+//TODO --> fix the telemetry for buttons (make it accurate)
 
 
 
@@ -42,13 +56,21 @@ public class QbitOp extends Tele {
 //        log.show("Flip (buttons):   b:start, y:middle, x:end");
 //        log.show("Claw (bumpers):   right:close, left:open");
 //        log.show("Drone (dpad):   up:start, down:release");
-        drive.move(gph1.ry,gph1.rx,gph1.lx);
+        drive.move(gph1.ry*0.5,gph1.rx*0.5,gph1.lx*0.4);
+   //     drive.move((gph1.rt-gph1.lt)*0.5,gph1.lx*0.5,gph1.rx*0.4);
+
         intake.move(gph2.ry);
-//        lift.move(gph2.ly);
-        //hang.move(gph2.ly);
+      //  lift.move(gph2.ly*0.2);
+        hang.move(gph2.rt);
 
         log.show(colorSensors.leftPixelDistance());
         log.show(colorSensors.rightPixelDistance());
+        log.show("Claw Left");
+        log.show(outtake.clawLeft.getPosition());
+        log.show("Claw Right");
+        log.show(outtake.clawRight.getPosition());
+
+
 
 
 
@@ -61,7 +83,16 @@ public class QbitOp extends Tele {
                 "Drone Release, 1, Dpad down\n" +
                 "Drive, 1, joysticks\n" +
                 "Intake, 2, right up down joystick\n" +
-                "Lift, left up down joystick\n");
+                "Hang Servo, 2, button a\n");
+        log.show("B Deposit");
+        log.show("Y Prepare");
+        log.show("X Intake");
+        log.show("Hang Motor, 2, left joystick up down");
+        log.show("Cancel Automodule, gamepad 2, dpad down");
+        log.show("Lift Target",lift.target);
+
+
+
 
 
         log.show(lift.liftLeft.getPosition());

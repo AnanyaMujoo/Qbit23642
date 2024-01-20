@@ -1,5 +1,7 @@
 package robotparts.hardware;
 
+import automodules.AutoModule;
+import automodules.AutoModuleUser;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import global.Constants;
@@ -8,10 +10,12 @@ import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
 import util.codeseg.ReturnCodeSeg;
 
-public class Lift extends RobotPart {
+public class Lift extends RobotPart implements AutoModuleUser {
 
     public PMotor liftRight;
     public PMotor liftLeft;
+    public double target = 0;
+    public final double MAXHEIGHT = 40;
 
 
     @Override
@@ -25,6 +29,19 @@ public class Lift extends RobotPart {
         liftRight.usePositionHolder(0.05, 0.05);
         liftLeft.usePositionHolder(0.05, 0.05);
 
+        target = 0;
+
+
+    }
+    public ReturnCodeSeg<AutoModule> lifttarget(double inc){
+        return ()->{
+            if ((target+inc>=0)&&(target+inc<=MAXHEIGHT)){
+                target+=inc;
+                return Lift(target);
+
+            }
+          return new AutoModule();
+        };
     }
 
 

@@ -3,6 +3,7 @@ package robotparts.unused;
 import automodules.AutoModule;
 import automodules.stage.Exit;
 import automodules.stage.Initial;
+import automodules.stage.Main;
 import automodules.stage.Stage;
 import automodules.stage.Stop;
 import robotparts.RobotPart;
@@ -30,10 +31,13 @@ public class Intake extends RobotPart {
 
     public Stage stageMoveUntilPixelsAreLoaded(double power) {
         return new Stage(
-                new Initial(()->intake.move(0.1)),
-                new Exit(colorSensors::arePixelsLoaded),
-                new Stop(()-> intake.move(0.0))
-        );
+                usePart(),
+                new Main(()->move(1)),
+               new Exit(colorSensors::arePixelsLoaded),
+                new Stop(()->move(0.0)),
+                returnPart()
+
+                );
     }
 
 

@@ -17,6 +17,8 @@ import static global.Modes.Height.MIDDLE;
 import static global.Modes.OuttakeStatus.DRIVING;
 import static global.Modes.OuttakeStatus.PLACING;
 
+import com.sun.tools.javac.comp.Todo;
+
 
 public interface AutoModuleUser extends RobotUser {
 
@@ -28,18 +30,21 @@ public interface AutoModuleUser extends RobotUser {
     );
 
     default AutoModule Prepare (double height){return new AutoModule(
-            lift.stageLift(0.1,0.1),
-            outtake.stageFlipEnd(0.5),
-            lift.stageLift(0.1,height)
+            lift.stageLift(0.1,height),
+            outtake.stageFlipEnd(0.5)
     );}
+    default AutoModule Lift (double height){return new AutoModule(
+            lift.stageLift(0.2,height)
+    );
+    }
 
     AutoModule Intake = new AutoModule(
-            intake.stageMoveUntilPixelsAreLoaded(0.1),
+            intake.stageMoveUntilPixelsAreLoaded(0.3),
+            RobotPart.pause(5),
             outtake.stageClawClose(0.0),
-            intake.moveTime(-0.1,1.0),
-            outtake.stageFlipMiddle(0.5)
+            intake.moveTime(-0.3,1.0)
+            //outtake.stageFlipMiddle(0.5)
     );
-
 
 
 
