@@ -30,7 +30,7 @@ public class Lift extends RobotPart implements AutoModuleUser {
         liftLeft.usePositionHolder(0.05, 0.05);
 
         target = 0;
-
+//TODO Test life and stages (max height and intervals)
 
     }
     public ReturnCodeSeg<AutoModule> lifttarget(double inc){

@@ -61,7 +61,7 @@ public class QbitOp extends Tele {
 
         intake.move(gph2.ry);
       //  lift.move(gph2.ly*0.2);
-        hang.move(gph2.rt);
+        hang.move(gph2.ly);
 
         log.show(colorSensors.leftPixelDistance());
         log.show(colorSensors.rightPixelDistance());
