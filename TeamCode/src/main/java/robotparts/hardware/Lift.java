@@ -40,6 +40,10 @@ public class Lift extends RobotPart implements AutoModuleUser {
                 return Lift(target);
 
             }
+            else if(target+inc<=0){
+                target=0;
+                return Lift(target);
+            }
           return new AutoModule();
         };
     }
