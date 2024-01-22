@@ -140,7 +140,7 @@ public abstract class RobotPart extends StageBuilder implements RobotUser {
             case PSERVO_REVERSE:
                 return new PServo(hardwareMap.get(Servo.class, name), Servo.Direction.REVERSE);
             case ICAMERA_EXTERNAL:
-                return new ICamera(hardwareMap.get(WebcamName.class, name), ICamera.CameraType.EXTERNAL, OpenCvCameraRotation.UPRIGHT);
+                return new ICamera(hardwareMap.get(WebcamName.class, name), ICamera.CameraType.EXTERNAL, OpenCvCameraRotation.UPSIDE_DOWN);
             case ICAMERA_INTERNAL:
                 return new ICamera(ICamera.CameraType.INTERNAL, OpenCvCameraRotation.UPRIGHT);
             case ICOLOR:

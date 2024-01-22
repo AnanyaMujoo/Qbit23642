@@ -35,8 +35,13 @@ public interface AutoModuleUser extends RobotUser {
     );}
     default AutoModule Lift (double height){return new AutoModule(
             lift.stageLift(0.2,height)
-    );
-    }
+    ); }
+        default AutoModule DropPurple (double height2) {return new AutoModule(
+                lift.stageLift(0.2, height2),
+                outtake.stageClawClose(0),
+                outtake.stageFlipEnd(0),
+                outtake.stageClawOpen(0)
+        );    }
 
     AutoModule Intake = new AutoModule(
             intake.stageMoveUntilPixelsAreLoaded(0.3),

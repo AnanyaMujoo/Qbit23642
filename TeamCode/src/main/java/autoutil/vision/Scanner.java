@@ -37,6 +37,7 @@ public abstract class Scanner extends OpenCvPipeline {
     public static final Scalar CYAN = new Scalar(0,255,255);
     public static final Scalar MAGENTA = new Scalar(255,0,255);
     public static final Scalar ORANGE = new Scalar(255,165,0);
+    public static final Scalar WHITE = new Scalar(255, 255, 255);
 
     protected final Mat Hierarchy = new Mat();
     protected final Mat Mask = new Mat();

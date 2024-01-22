@@ -22,8 +22,8 @@ public class Cameras extends RobotPart {
     public void pause(){ cam.pause(); }
     public void resume(){ cam.resume(); }
     public void setScanner(Scanner scanner){ cam.setScanner(scanner);}
-    public void startVuforia(boolean view){ cam.startVuforia(view); }
-    public boolean updateVuforia(){ return cam.updateVuforia(); }
+    //public void startVuforia(boolean view){ cam.startVuforia(view); }
+    //public boolean updateVuforia(){ return cam.updateVuforia(); }
     public Pose getPoseFromVuforia(){ return cam.getPose(); }
     @Override
     public void halt(){ cam.halt(); }
