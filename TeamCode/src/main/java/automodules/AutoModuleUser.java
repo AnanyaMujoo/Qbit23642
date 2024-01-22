@@ -37,9 +37,9 @@ public interface AutoModuleUser extends RobotUser {
     default AutoModule Lift (double height){return new AutoModule(
             lift.stageLift(0.2,height)
     ); }
-        default AutoModule DropPurpleR (double height2) {return new AutoModule(
-                drive.moveTime(-0.3,-0.2,0,0.7),
-                drive.moveTime(-0.3,0,0,0.5)
+        default AutoModule DropPurpleR (double side) {return new AutoModule(
+                drive.moveTime(-0.3*side,-0.2*side,0,0.7),
+                drive.moveTime(-0.3*side,0,0,0.5)
 //                lift.stageLift(0.2, height2),
 //                outtake.stageClawClose(0),
 //                outtake.stageFlipEnd(0),
@@ -47,18 +47,18 @@ public interface AutoModuleUser extends RobotUser {
 //                outtake.stageLeftOpen(1)
         );    }
 
-    default AutoModule DropPurpleL (double height2) {
+    default AutoModule DropPurpleL (double side) {
         return new AutoModule(
-                drive.moveTime(-0.6, 0.0, -0.28, 0.72),
+                drive.moveTime(-0.6*side, 0.0, -0.28*side, 0.72),
                 pause(1),
-                drive.moveTime(0.6, 0.0, 0.28, 0.72)
+                drive.moveTime(0.6*side, 0.0, 0.28*side, 0.72)
         );
     }
 
 
-    default AutoModule DropPurpleC (double height3) {
+    default AutoModule DropPurpleC (double side) {
         return new AutoModule(
-                drive.moveTime(-0.6, 0.2, 0, 0.86)
+                drive.moveTime(-0.6*side, 0.2*side, 0, 0.86)
 
 
 

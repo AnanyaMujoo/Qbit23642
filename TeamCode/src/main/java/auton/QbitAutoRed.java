@@ -17,6 +17,7 @@ public class QbitAutoRed extends Auto {
     public final void initAuto() {
             log.show("yeet");
             scan(true,"red","left");
+
             while (!isStarted() && !isStopRequested()){ propCaseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
             camera.halt();
 
@@ -28,13 +29,21 @@ public class QbitAutoRed extends Auto {
         pause(3);
 
 
-        bot.addAutoModule(DropPurpleL(0));
-        lift.DropPurpleL(0);
+        bot.addAutoModule(DropPurpleL(1));
+        bot.addAutoModule(DropPurpleC(1));
+        bot.addAutoModule(DropPurpleR(1));
+
+        if (propCaseDetected.equals(TeamProp.LEFT)) {
+           DropPurpleL(1);
+        }
+        else if (propCaseDetected.equals(TeamProp.CENTER)){
+            DropPurpleC(1);
+        }
+        else if(propCaseDetected.equals(TeamProp.RIGHT)){
+            DropPurpleR(1);
+        }
 
         pause(10);
-     //   if (propCaseDetected.equals(TeamProp.FIRST)) {
-           // moveTime(0.5,0,0,0);
-     //   }
 
     }
 

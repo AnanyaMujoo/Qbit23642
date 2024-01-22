@@ -1,5 +1,6 @@
 package auton;
 
+import static global.General.bot;
 import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -24,13 +25,25 @@ public class QbitAutoBlue extends Auto {
 
     @Override
     public void runAuto() {
-        //  moveTime(0, 0, 0, 0);
-        //  bot.addAutoModule(DropPurple(10));
-        //  lift.DropPurple(10);
-        // pause(10);
-        //   if (propCaseDetected.equals(TeamProp.FIRST)) {
-        // moveTime(0.5,0,0,0);
-        //   }
+        outtake.moveClawClose();
+        pause(3);
+
+
+        bot.addAutoModule(DropPurpleL(1));
+        bot.addAutoModule(DropPurpleC(1));
+        bot.addAutoModule(DropPurpleR(1));
+
+        if (propCaseDetected.equals(TeamProp.LEFT)) {
+            DropPurpleL(-1);
+        }
+        else if (propCaseDetected.equals(TeamProp.CENTER)){
+            DropPurpleC(-1);
+        }
+        else if(propCaseDetected.equals(TeamProp.RIGHT)){
+            DropPurpleR(-1);
+        }
+
+        pause(10);
 
     }
 
