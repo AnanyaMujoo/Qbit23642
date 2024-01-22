@@ -1,9 +1,8 @@
-package auton;
+package auton.old;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import automodules.AutoModule;
 import autoutil.AutoFramework;
 import elements.Case;
 import elements.Field;
@@ -11,12 +10,10 @@ import elements.FieldPlacement;
 import elements.FieldSide;
 import elements.GameItems;
 import geometry.position.Pose;
-import robotparts.RobotPart;
 
 import static global.General.bot;
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
-import static global.Modes.Height.HIGH;
 
 public class TerraAutoRam extends AutoFramework {
     boolean[] halt = {false};

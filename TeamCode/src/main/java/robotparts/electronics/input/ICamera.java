@@ -54,11 +54,11 @@ public class ICamera extends Electronic {
     /**
      * Width of stream
      */
-    private final int width = 320;
+    private final int width = 640; // 320;
     /**
      * Height of stream
      */
-    private final int height = 240;
+    private final int height = 480; //240;
 
 //    private VuforiaLocalizer vuforia;
 //    private VuforiaTrackables targets;

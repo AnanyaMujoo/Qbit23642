@@ -1,19 +1,6 @@
-package auton;
+package auton.old;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import automodules.AutoModule;
 import autoutil.AutoFramework;
-import elements.Field;
-import elements.FieldPlacement;
-import elements.FieldSide;
-import elements.GameItems;
-import geometry.position.Pose;
-import util.template.Precision;
-
-import static global.General.bot;
-import static global.General.fieldPlacement;
-import static global.General.fieldSide;
 
 public class TerraAutoFight extends AutoFramework {
 

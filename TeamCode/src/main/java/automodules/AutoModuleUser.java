@@ -6,6 +6,7 @@ import robotparts.RobotPart;
 import teleutil.independent.Independent;
 import teleutil.independent.Machine;
 
+import static automodules.StageBuilder.pause;
 import static global.General.gph2;
 import static global.Modes.*;
 import static global.Modes.Drive.MEDIUM;
@@ -36,16 +37,43 @@ public interface AutoModuleUser extends RobotUser {
     default AutoModule Lift (double height){return new AutoModule(
             lift.stageLift(0.2,height)
     ); }
-        default AutoModule DropPurple (double height2) {return new AutoModule(
-                lift.stageLift(0.2, height2),
-                outtake.stageClawClose(0),
-                outtake.stageFlipEnd(0),
-                outtake.stageClawOpen(0)
+        default AutoModule DropPurpleR (double height2) {return new AutoModule(
+                drive.moveTime(-0.3,-0.2,0,0.7),
+                drive.moveTime(-0.3,0,0,0.5)
+//                lift.stageLift(0.2, height2),
+//                outtake.stageClawClose(0),
+//                outtake.stageFlipEnd(0),
+//                pause(1),
+//                outtake.stageLeftOpen(1)
         );    }
+
+    default AutoModule DropPurpleL (double height2) {
+        return new AutoModule(
+                drive.moveTime(-0.6, 0.0, -0.28, 0.72),
+                pause(1),
+                drive.moveTime(0.6, 0.0, 0.28, 0.72)
+        );
+    }
+
+
+    default AutoModule DropPurpleC (double height3) {
+        return new AutoModule(
+                drive.moveTime(-0.6, 0.2, 0, 0.86)
+
+
+
+//            drive.moveTime(0,0,-0.3,0.7),
+//            lift.stageLift(0.2, height2),
+//            outtake.stageClawClose(0),
+//            outtake.stageFlipEnd(0),
+//            pause(1),
+//            outtake.stageLeftOpen(1)
+    );    }
+
 
     AutoModule Intake = new AutoModule(
             intake.stageMoveUntilPixelsAreLoaded(0.3),
-            RobotPart.pause(5),
+            pause(5),
             outtake.stageClawClose(0.0),
             intake.moveTime(-0.3,1.0)
             //outtake.stageFlipMiddle(0.5)

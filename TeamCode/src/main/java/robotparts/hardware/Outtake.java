@@ -49,6 +49,7 @@ public class Outtake extends RobotPart {
     private void moveClaw(String positionName){ clawRight.moveToPosition(positionName); clawLeft.moveToPosition(positionName); }
     public void moveClawOpen(){ moveClaw("open"); }
     public void moveClawClose(){ moveClaw("close"); }
+    public void moveLeftOpen(){ clawLeft.moveToPosition("open"); }
 
     public void moveOuttakeToStart(){ moveClawOpen(); moveFlipStart(); }
     public void moveOuttakeToEnd(){ moveClawClose(); moveFlipEnd(); }
@@ -69,6 +70,9 @@ public class Outtake extends RobotPart {
     public Stage stageFlipEnd(double t){ return super.customTime(this::moveFlipEnd, t); }
     public Stage stageClawOpen(double t){ return super.customTime(this::moveClawOpen, t); }
     public Stage stageClawClose(double t){ return super.customTime(this::moveClawClose, t); }
+
+    public Stage stageLeftOpen(double t){ return super.customTime(this::moveLeftOpen, t); }
+
 
     public Stage stageFlipStartAfter(double t){ return super.customTimeAfter(this::moveFlipStart, t); }
     public Stage stageFlipEndAfter(double t){ return super.customTimeAfter(this::moveFlipEnd, t);}

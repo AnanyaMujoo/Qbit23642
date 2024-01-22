@@ -4,14 +4,13 @@ import static global.General.bot;
 import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import autoutil.vision.CaseScannerRect;
 import elements.TeamProp;
-@Autonomous(name = "QbitAuto", group = "Autonomous")
-public class QbitAuto extends Auto {
+@Autonomous(name = "QbitAutoRed", group = "Autonomous")
+public class QbitAutoRed extends Auto {
     public CaseScannerRect caseScanner;
-    protected TeamProp propCaseDetected = TeamProp.FIRST;
+    protected TeamProp propCaseDetected = TeamProp.LEFT;
 
 
     @Override
@@ -23,13 +22,16 @@ public class QbitAuto extends Auto {
 
     }
 
-
     @Override
     public void runAuto() {
-      //  moveTime(0, 0, 0, 0);
-      //  bot.addAutoModule(DropPurple(10));
-      //  lift.DropPurple(10);
-       // pause(10);
+        outtake.moveClawClose();
+        pause(3);
+
+
+        bot.addAutoModule(DropPurpleL(0));
+        lift.DropPurpleL(0);
+
+        pause(10);
      //   if (propCaseDetected.equals(TeamProp.FIRST)) {
            // moveTime(0.5,0,0,0);
      //   }

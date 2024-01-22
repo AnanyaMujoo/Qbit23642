@@ -3,9 +3,9 @@ package elements;
 import util.template.Mode;
 
 public enum TeamProp implements Mode.ModeType{
-    FIRST("Left, Location 1"),
-    SECOND("Center, Location 2"),
-    THIRD("Right, Location 3");
+    LEFT("Left, Location 1"),
+    CENTER("Center, Location 2"),
+    RIGHT("Right, Location 3");
 
     private final String value;
 
