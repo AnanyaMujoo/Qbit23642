@@ -49,7 +49,8 @@ public class NewOdometry extends RobotPart {
 
 //        h += deltaHeading;
 
-        gyro.update();
+//        gyro.update();
+        // TODO FIX GYRO DOESNT UPDATE?
 
         h = gyro.getHeading();
 
@@ -119,6 +120,7 @@ public class NewOdometry extends RobotPart {
         lastX = 0;
         lastY = 0;
         lastY2 = 0;
-        gyro.setHeading(pose.getAngle());
+        // TODO FIX GYRO SET HEADING
+//        gyro.setHeading(pose.getAngle());
     }
 }

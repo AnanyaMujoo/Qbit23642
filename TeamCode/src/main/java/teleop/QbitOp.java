@@ -33,8 +33,8 @@ public class QbitOp extends Tele {
         gph1.link(Button.A, drone::moveDroneStart);
         gph1.link(Button.B, drone::moveDroneRelease);
 
-        gph1.linka(Button.DPAD_UP, lift.lifttarget(5));
-        gph1.linka(Button.DPAD_DOWN, lift.lifttarget(-5));
+        gph1.linka(Button.DPAD_UP, lift.lifttarget(3));
+        gph1.linka(Button.DPAD_DOWN, lift.lifttarget(-3));
 
 
         gph2.link(Button.B, Deposit);
@@ -50,6 +50,10 @@ public class QbitOp extends Tele {
 
     }
 
+    @Override
+    public void startTele() {
+        gyro.reset();
+    }
 
     @Override
     public void loopTele() {
@@ -62,6 +66,8 @@ public class QbitOp extends Tele {
         intake.move(gph2.ry);
       //  lift.move(gph2.ly*0.2);
         hang.move(gph2.ly);
+
+        log.show("Gyro Heading: ", gyro.getHeading());
 
         log.show(colorSensors.leftPixelDistance());
         log.show(colorSensors.rightPixelDistance());

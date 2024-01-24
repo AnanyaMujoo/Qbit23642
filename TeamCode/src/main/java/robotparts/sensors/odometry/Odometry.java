@@ -48,7 +48,8 @@ public abstract class Odometry extends RobotPart {
 
     private void internalUpdate(){
         Iterator.forAll(encoders, IEncoder::updateNormal);
-        if(usingGyro){ gyro.update(); }
+//        if(usingGyro){ gyro.update(); }
+        // TODO FIX GRO NO UPDATE
         update();
     }
 
@@ -61,7 +62,8 @@ public abstract class Odometry extends RobotPart {
         synchronized (currentPose){
             if (usingGyro) {
                 synchronized (gyro) {
-                    gyro.setHeading(pose.getAngle());
+                    // TODO GYRO SET HEADING FIX
+//                    gyro.setHeading(pose.getAngle());
                 }
             }
             currentPose.setX(pose.getX());

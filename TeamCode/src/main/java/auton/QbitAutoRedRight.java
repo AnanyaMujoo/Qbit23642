@@ -7,8 +7,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import autoutil.vision.CaseScannerRect;
 import elements.TeamProp;
-@Autonomous(name = "QbitAutoRed", group = "Autonomous")
-public class QbitAutoRed extends Auto {
+import math.polynomial.Linear;
+
+@Autonomous(name = "QbitAutoRedRight", group = "Autonomous")
+public class QbitAutoRedRight extends Auto {
     public CaseScannerRect caseScanner;
     protected TeamProp propCaseDetected = TeamProp.LEFT;
 
@@ -20,27 +22,34 @@ public class QbitAutoRed extends Auto {
 
             while (!isStarted() && !isStopRequested()){ propCaseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
             camera.halt();
+        log.show(propCaseDetected);
+
 
     }
 
     @Override
     public void runAuto() {
-        outtake.moveClawClose();
-        pause(3);
+        pause(1);
 
 
-        bot.addAutoModule(DropPurpleL(1));
-        bot.addAutoModule(DropPurpleC(1));
-        bot.addAutoModule(DropPurpleR(1));
+
+
+
 
         if (propCaseDetected.equals(TeamProp.LEFT)) {
-           DropPurpleL(1);
+            bot.addAutoModule(DropPurpleL(1));
+            log.show("left");
+           DropPurpleL(0);
         }
         else if (propCaseDetected.equals(TeamProp.CENTER)){
-            DropPurpleC(1);
+            bot.addAutoModule(DropPurpleC(1));
+            log.show("center");
+            DropPurpleC(0);
         }
         else if(propCaseDetected.equals(TeamProp.RIGHT)){
-            DropPurpleR(1);
+            bot.addAutoModule(DropPurpleR(1));
+            log.show("right");
+            DropPurpleR(0);
         }
 
         pause(10);
@@ -59,6 +68,23 @@ public class QbitAutoRed extends Auto {
         caseScanner.setColor(color);
         caseScanner.setSide(side);
         caseScanner.start();
+    }
+
+    // https://www.desmos.com/calculator/gfycx0gxgw
+    // Initial Power is p
+    // Minimum Power is m
+    // Turning Distance (Degrees) is d
+    // X axis is the current error
+    // Y axis is the current turning power to output
+    public void moveTurnGyro(double initialPower, double target){
+        double start = gyro.getHeading();
+        final double minPower = 0.1;
+        whileActive(() -> Math.abs(target - gyro.getHeading()) > 2,() -> {
+            double error = target - gyro.getHeading();
+            Linear linear = new Linear(minPower, initialPower, Math.abs(start-target));
+            drive.move(0,0,linear.fodd(error));
+        });
+        drive.halt();
     }
 
 }

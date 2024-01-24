@@ -19,6 +19,7 @@ import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
 import autoutil.vision.CaseScanner;
 import autoutil.vision.CaseScannerBar;
+import autoutil.vision.CaseScannerRect;
 import autoutil.vision.Scanner;
 import elements.Case;
 import elements.FieldPlacement;
@@ -63,6 +64,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     protected boolean scanning = false;
     protected boolean haltCameraAfterInit = true;
     protected CaseScanner caseScanner;
+    protected CaseScannerRect caseScannerRect;
     protected Scanner scannerAfterInit;
     protected Case caseDetected = Case.FIRST;
 
@@ -128,6 +130,15 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         camera.setScanner(caseScanner);
         camera.start(view);
     }
+    public void scanRect(boolean view, String color, String side){
+        caseScannerRect = new CaseScannerRect();
+        camera.start(true);
+        camera.setScanner(caseScannerRect);
+        caseScannerRect.setColor(color);
+        caseScannerRect.setSide(side);
+        caseScannerRect.start();
+    }
+
 
     @Override
     public final void initAuto() {

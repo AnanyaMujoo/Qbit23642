@@ -19,7 +19,7 @@ public class Hanging extends RobotPart {
     public void init() {
         hang = create("hang", ElectronicType.PMOTOR_FORWARD);
         hang.setToRotational(Constants.ORBITAL_ENCODER_TICKS_PER_REVOLUTION, 7);
-        hangServo = create("hangservo", ElectronicType.PSERVO_REVERSE);
+        hangServo = create("hangservo", ElectronicType.PSERVO_FORWARD);
         hangServo.setPosition("start", 0);
         hangServo.setPosition("end", 0.75);
       //  moveHangStart();
