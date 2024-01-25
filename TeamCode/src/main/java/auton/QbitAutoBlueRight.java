@@ -1,6 +1,5 @@
 package auton;
 
-import static automodules.StageBuilder.pause;
 import static global.General.bot;
 import static global.General.log;
 
@@ -10,7 +9,6 @@ import autoutil.vision.CaseScannerRect;
 import elements.TeamProp;
 import math.polynomial.Linear;
 import util.Timer;
-import util.iter.FinalDouble;
 
 @Autonomous(name = "QbitAutoBlueRight", group = "Autonomous")
 public class QbitAutoBlueRight extends Auto {
@@ -28,47 +26,59 @@ public class QbitAutoBlueRight extends Auto {
         log.show(propCaseDetected);
 
         gyro.reset();
+        oneOdometry.reset();
     }
 
     @Override
     public void runAuto() {
         pause(1);
 
-
-
+        // Remove this when testing with scanning
+        propCaseDetected = TeamProp.LEFT;
 
 
         if (propCaseDetected.equals(TeamProp.LEFT)) {
-            //bot.addAutoModule(DropPurpleL(1));
-//            moveTurnGyro(0.2, 90);
-//            moveTurnGyro(0.2, -90);
-            outtake.moveClawClose();
-            moveTurnGyroMoveSmooth(-0.55, 1.1, 0.3, -70);
-            pause(0.5);
-            moveTurnGyroMoveSmooth(0.45, 1.1, 0.4, 0);
-            pause(0.5);
-            moveForward(0.4,0.34);
-            drive.halt();
-            moveTurnGyro(0.4,-90);
-            drive.halt();
-            moveForward(-0.6,3);
-            drive.halt();
-            bot.addAutoModule(AutoYellow());
-            AutoYellow();
-            pause(0.5);
-            moveTime(0,-0.4, 0.0,1.05);
-            pause(0.5);
-            moveForward(-0.4,0.7);
-            pause(0.5);
-            outtake.moveClawOpen();
-            drive.halt();
+            log.show(oneOdometry.getOdometry2Distance());
+            MoveSmoothDistanceStrafe(0.2, -10);
+
+            // Use this for curved paths (distance in cm) backward is negative distance
+            //moveTurnGyroMoveSmoothDistanceForward(0.5, -50, 0.3, -70);
+
+            // Use this for forward backward straight
+            //moveForwardDistance(0.2, 20);
+
+            // Use this for turn in place
+            //moveTurnGyro(0.4, -90);
+
+            //use this to turn and move forward and strafe with odometry
+
+//            moveTurnGyroMoveSmoothDistanceStrafe(0.4,-20, 0.0, 0);
+//
 
 
+//            outtake.moveClawClose();
+//            moveTurnGyroMoveSmooth(-0.55, 1.1, 0.3, -70);
+//            pause(0.5);
+//            moveTurnGyroMoveSmooth(0.45, 1.1, 0.4, 0);
+//            pause(0.5);
+//            moveForward(0.4,0.34);
+//            drive.halt();
+//            moveTurnGyro(0.4,-90);
+//            drive.halt();
+//            moveForward(-0.6,3);
+//            drive.halt();
+//            bot.addAutoModule(AutoYellow());
+//            AutoYellow();
+//            pause(0.5);
+//            moveTime(0,-0.4, 0.0,1.05);
+//            pause(0.5);
+//            moveForward(-0.4,0.7);
+//            pause(0.5);
+//            outtake.moveClawOpen();
+//            drive.halt();
 
-            //moveForward(-0.6, 0.0, -0.28, 0.76)
 
 //            log.show("left");
-//            DropPurpleL(0);
         }
         else if (propCaseDetected.equals(TeamProp.CENTER)){
             outtake.moveClawClose();
@@ -116,12 +126,13 @@ public class QbitAutoBlueRight extends Auto {
         pause(10);
 
     }
-
+    @Deprecated
     public void moveTime(double f, double s, double t, double time) {
         drive.move(f, s, t);
         pause(time);
         drive.halt();
     }
+    @Deprecated
     public void moveForward(double forwardPower, double time) {
         drive.move(forwardPower, 0, 0);
         pause(time);
@@ -154,7 +165,7 @@ public class QbitAutoBlueRight extends Auto {
     }
 
 
-
+    @Deprecated
     public void moveTurnGyroMoveSmooth(double forwardPower, double forwardTime, double initialTurningPower, double targetDegrees){
         double start = gyro.getHeading();
         final double minimumTurningPower = 0.1;
@@ -170,6 +181,71 @@ public class QbitAutoBlueRight extends Auto {
             }else{
                 drive.move(forwardPower,0, linearTurnPower.fodd(error));
             }
+        });
+        drive.halt();
+    }
+
+
+    public void moveTurnGyroMoveSmoothDistanceForward(double initialForwardPower, double forwardDistance, double initialTurningPower, double targetDegrees){
+        double start = gyro.getHeading();
+        final double minimumTurningPower = 0.1;
+        final double minimumForwardPower = 0.06;
+        oneOdometry.reset();
+        Linear linearTurnTarget = new Linear(start, targetDegrees, Math.abs(forwardDistance));
+        Linear linearTurnPower = new Linear(minimumTurningPower, initialTurningPower, Math.abs(start-targetDegrees));
+        Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
+        whileActive(() -> Math.abs(targetDegrees - gyro.getHeading()) > 2 || Math.abs(forwardDistance-oneOdometry.getOdometry1Distance()) > 1,() -> {
+            double currentTarget = linearTurnTarget.f(Math.abs(oneOdometry.getOdometry1Distance()));
+            double errorTurn = currentTarget - gyro.getHeading();
+            double errorForward = forwardDistance- oneOdometry.getOdometry1Distance();
+            drive.move(linearForwardPower.fodd(errorForward),0, linearTurnPower.fodd(errorTurn));
+        });
+        drive.halt();
+
+    }
+
+    public void MoveSmoothDistanceStrafe(double initialStrafePower, double strafeDistance){
+        final double minimumStrafePower = 0.03;
+        oneOdometry.reset();
+        Linear linearStrafePower = new Linear(minimumStrafePower, initialStrafePower, Math.abs(strafeDistance));
+        whileActive(() -> (Math.abs(strafeDistance-oneOdometry.getOdometry2Distance()) > 1), () -> {
+            double errorStrafe = strafeDistance- oneOdometry.getOdometry2Distance();
+            drive.move(0,linearStrafePower.fodd(errorStrafe), 0);
+            log.show(oneOdometry.getOdometry2Distance());
+        });
+        drive.halt();
+
+    }
+
+    public void moveTurnGyroMoveSmoothDistance(double initialForwardPower, double forwardDistance, double initialStrafePower, double strafeDistance, double initialTurningPower, double targetDegrees){
+        double start = gyro.getHeading();
+        final double minimumTurningPower = 0.1;
+        final double minimumStrafePower = 0.06;
+        final double minimumForwardPower = 0.06;
+        oneOdometry.reset();
+        Linear linearTurnTarget = new Linear(start, targetDegrees, Math.abs(forwardDistance));
+        Linear linearTurnPower = new Linear(minimumTurningPower, initialTurningPower, Math.abs(start-targetDegrees));
+        Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
+        Linear linearStrafePower = new Linear(minimumStrafePower, initialStrafePower, Math.abs(strafeDistance));
+        whileActive(() -> Math.abs(targetDegrees - gyro.getHeading()) > 2 || Math.abs(strafeDistance-oneOdometry.getOdometry2Distance())> 1 || Math.abs(forwardDistance-oneOdometry.getOdometry1Distance()) > 1,() -> {
+            double currentTarget = linearTurnTarget.f(Math.abs(oneOdometry.getOdometry1Distance()));
+            double errorTurn = currentTarget - gyro.getHeading();
+            double errorForward = forwardDistance- oneOdometry.getOdometry1Distance();
+            double errorStrafe = strafeDistance- oneOdometry.getOdometry2Distance();
+            drive.move(linearForwardPower.fodd(errorForward),linearStrafePower.fodd(errorStrafe), 0);
+        });
+
+        drive.halt();
+
+    }
+
+    public void moveForwardDistance(double initialForwardPower, double forwardDistance) {
+        final double minimumForwardPower = 0.06;
+        oneOdometry.reset();
+        Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
+        whileActive(() -> Math.abs(forwardDistance-oneOdometry.getOdometry1Distance()) > 1,() -> {
+            double errorForward = forwardDistance- oneOdometry.getOdometry1Distance();
+            drive.move(linearForwardPower.fodd(errorForward),0, 0);
         });
         drive.halt();
     }

@@ -8,7 +8,6 @@ import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import automodules.AutoModuleUser;
 import teleutil.button.Button;
 
 
@@ -53,6 +52,7 @@ public class QbitOp extends Tele {
     @Override
     public void startTele() {
         gyro.reset();
+        oneOdometry.reset();
     }
 
     @Override
@@ -60,14 +60,16 @@ public class QbitOp extends Tele {
 //        log.show("Flip (buttons):   b:start, y:middle, x:end");
 //        log.show("Claw (bumpers):   right:close, left:open");
 //        log.show("Drone (dpad):   up:start, down:release");
-        drive.move(gph1.ry*0.5,gph1.rx*0.5,gph1.lx*0.4);
+        drive.move(gph1.ry,gph1.rx,gph1.lx*0.4);
    //     drive.move((gph1.rt-gph1.lt)*0.5,gph1.lx*0.5,gph1.rx*0.4);
 
         intake.move(gph2.ry);
       //  lift.move(gph2.ly*0.2);
         hang.move(gph2.ly);
 
-        log.show("Gyro Heading: ", gyro.getHeading());
+        // TODO COMMENT THIS OUT WHEN DONE
+        log.show("Odometry Distance: ", oneOdometry.getOdometry1Distance());
+//        log.show("Gyro Heading: ", gyro.getHeading());
 
         log.show(colorSensors.leftPixelDistance());
         log.show(colorSensors.rightPixelDistance());
