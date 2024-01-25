@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import autoutil.vision.CaseScannerRect;
 import elements.TeamProp;
 import math.polynomial.Linear;
+import util.Timer;
+import util.iter.FinalDouble;
 
 @Autonomous(name = "QbitAutoBlueRight", group = "Autonomous")
 public class QbitAutoBlueRight extends Auto {
@@ -24,7 +26,7 @@ public class QbitAutoBlueRight extends Auto {
         camera.halt();
         log.show(propCaseDetected);
 
-
+        gyro.reset();
     }
 
     @Override
@@ -34,12 +36,33 @@ public class QbitAutoBlueRight extends Auto {
 
 
 
-
+        propCaseDetected = TeamProp.LEFT;
 
         if (propCaseDetected.equals(TeamProp.LEFT)) {
-            bot.addAutoModule(DropPurpleL(1));
-            log.show("left");
-            DropPurpleL(0);
+            //bot.addAutoModule(DropPurpleL(1));
+//            moveTurnGyro(0.2, 90);
+//            moveTurnGyro(0.2, -90);
+            moveTurnGyroMoveSmooth(-0.55, 1.1, 0.3, -70);
+            pause(0.5);
+            moveTurnGyroMoveSmooth(0.45, 1.1, 0.4, 0);
+            pause(0.5);
+            moveForward(0.4,0.34);
+            drive.halt();
+            moveTurnGyro(0.4,-90);
+            drive.halt();
+            moveForward(-0.6,3);
+            drive.halt();
+            bot.addAutoModule(AutoYellow());
+            AutoYellow();
+            moveTime(0,-0.4,0.0,0.3);
+            drive.halt();
+
+
+
+            //moveForward(-0.6, 0.0, -0.28, 0.76)
+
+//            log.show("left");
+//            DropPurpleL(0);
         }
         else if (propCaseDetected.equals(TeamProp.CENTER)){
             bot.addAutoModule(DropPurpleC(1));
@@ -58,6 +81,11 @@ public class QbitAutoBlueRight extends Auto {
 
     public void moveTime(double f, double s, double t, double time) {
         drive.move(f, s, t);
+        pause(time);
+        drive.halt();
+    }
+    public void moveForward(double forwardPower, double time) {
+        drive.move(forwardPower, 0, 0);
         pause(time);
         drive.halt();
     }
@@ -81,8 +109,29 @@ public class QbitAutoBlueRight extends Auto {
         final double minPower = 0.1;
         whileActive(() -> Math.abs(target - gyro.getHeading()) > 2,() -> {
             double error = target - gyro.getHeading();
-            Linear linear = new Linear(minPower, initialPower, Math.abs(start-target));
+            Linear linear = new Linear(minPower, Math.abs(initialPower), Math.abs(start-target));
             drive.move(0,0,linear.fodd(error));
+        });
+        drive.halt();
+    }
+
+
+
+    public void moveTurnGyroMoveSmooth(double forwardPower, double forwardTime, double initialTurningPower, double targetDegrees){
+        double start = gyro.getHeading();
+        final double minimumTurningPower = 0.1;
+        Timer timer = new Timer();
+        timer.reset();
+        Linear linearTurnTarget = new Linear(start, targetDegrees, forwardTime);
+        Linear linearTurnPower = new Linear(minimumTurningPower, initialTurningPower, Math.abs(start-targetDegrees));
+        whileActive(() -> Math.abs(targetDegrees - gyro.getHeading()) > 2 || timer.seconds() < forwardTime,() -> {
+            double currentTarget = linearTurnTarget.f(timer.seconds());
+            double error = currentTarget - gyro.getHeading();
+            if(timer.seconds() > forwardTime){
+                drive.move(0,0, linearTurnPower.fodd(error));
+            }else{
+                drive.move(forwardPower,0, linearTurnPower.fodd(error));
+            }
         });
         drive.halt();
     }

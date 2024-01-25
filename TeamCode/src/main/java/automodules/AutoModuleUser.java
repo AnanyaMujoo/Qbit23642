@@ -37,6 +37,13 @@ public interface AutoModuleUser extends RobotUser {
     default AutoModule Lift (double height){return new AutoModule(
             lift.stageLift(0.2,height)
     ); }
+    default AutoModule AutoYellow(){return new AutoModule(
+            lift.stageLift(0.2,5),
+            outtake.stageFlipStart(0.5),
+            outtake.stageFlipEnd(0.5),
+            outtake.stageClawOpen(0.5)
+
+    );}
         default AutoModule DropPurpleR (double height2) {return new AutoModule(
                 drive.moveTime(-0.3,-0.2,0,0.7),
                 drive.moveTime(-0.3,0,0,0.5),
