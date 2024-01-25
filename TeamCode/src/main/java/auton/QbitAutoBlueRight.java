@@ -1,5 +1,6 @@
 package auton;
 
+import static automodules.StageBuilder.pause;
 import static global.General.bot;
 import static global.General.log;
 
@@ -36,12 +37,12 @@ public class QbitAutoBlueRight extends Auto {
 
 
 
-        propCaseDetected = TeamProp.LEFT;
 
         if (propCaseDetected.equals(TeamProp.LEFT)) {
             //bot.addAutoModule(DropPurpleL(1));
 //            moveTurnGyro(0.2, 90);
 //            moveTurnGyro(0.2, -90);
+            outtake.moveClawClose();
             moveTurnGyroMoveSmooth(-0.55, 1.1, 0.3, -70);
             pause(0.5);
             moveTurnGyroMoveSmooth(0.45, 1.1, 0.4, 0);
@@ -54,7 +55,12 @@ public class QbitAutoBlueRight extends Auto {
             drive.halt();
             bot.addAutoModule(AutoYellow());
             AutoYellow();
-            moveTime(0,-0.4,0.0,0.3);
+            pause(0.5);
+            moveTime(0,-0.4, 0.0,1.05);
+            pause(0.5);
+            moveForward(-0.4,0.7);
+            pause(0.5);
+            outtake.moveClawOpen();
             drive.halt();
 
 
@@ -65,12 +71,44 @@ public class QbitAutoBlueRight extends Auto {
 //            DropPurpleL(0);
         }
         else if (propCaseDetected.equals(TeamProp.CENTER)){
-            bot.addAutoModule(DropPurpleC(1));
-            log.show("center");
-            DropPurpleC(0);
+            outtake.moveClawClose();
+            moveTime(-0.3, 0.1, 0, 0.94*2);
+            pause(1);
+            moveTime(0.53/2, -0.1, 0, 0.80*2);
+            moveTurnGyro(0.4,-90);
+            drive.halt();
+            moveForward(-0.6/2,3*2);
+            drive.halt();
+            bot.addAutoModule(AutoYellow());
+            AutoYellow();
+            pause(0.5);
+            moveTime(0,-0.4, 0.0,1.45);
+            pause(0.5);
+            moveForward(-0.4/2,0.7*2);
+            pause(0.5);
+            outtake.moveClawOpen();
+            drive.halt();
+            log.show("right");
+            DropPurpleR(0);
         }
         else if(propCaseDetected.equals(TeamProp.RIGHT)){
-            bot.addAutoModule(DropPurpleR(1));
+            outtake.moveClawClose();
+            drive.moveTime(-0.6, 0.1, 0, 0.94);
+            pause(1);
+            drive.moveTime(0.53, -0.1, 0, 0.8);
+            moveTurnGyro(0.4,-90);
+            drive.halt();
+            moveForward(-0.6,3);
+            drive.halt();
+            bot.addAutoModule(AutoYellow());
+            AutoYellow();
+            pause(0.5);
+            moveTime(0,-0.4, 0.0,1.05);
+            pause(0.5);
+            moveForward(-0.4,0.7);
+            pause(0.5);
+            outtake.moveClawOpen();
+            drive.halt();
             log.show("right");
             DropPurpleR(0);
         }

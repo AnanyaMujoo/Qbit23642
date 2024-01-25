@@ -29,6 +29,9 @@ public interface AutoModuleUser extends RobotUser {
             outtake.stageFlipStart(0.5),
             lift.stageLift(0.1,0)
     );
+    default AutoModule DepositYellow (){return new AutoModule(
+            outtake.stageClawOpen(0.5)
+    );}
 
     default AutoModule Prepare (double height){return new AutoModule(
             lift.stageLift(0.1,height),
@@ -40,15 +43,16 @@ public interface AutoModuleUser extends RobotUser {
     default AutoModule AutoYellow(){return new AutoModule(
             lift.stageLift(0.2,5),
             outtake.stageFlipStart(0.5),
-            outtake.stageFlipEnd(0.5),
-            outtake.stageClawOpen(0.5)
+            outtake.stageFlipEnd(0.5)
+
 
     );}
+
         default AutoModule DropPurpleR (double height2) {return new AutoModule(
                 drive.moveTime(-0.3,-0.2,0,0.7),
                 drive.moveTime(-0.3,0,0,0.5),
                 pause(1),
-                drive.moveTime(0.3,0,0,0.45),
+                drive.moveTime(0.23,0,0,0.45),
                 drive.moveTime(0.3,0.2,0,0.6)
 
 
@@ -71,9 +75,9 @@ public interface AutoModuleUser extends RobotUser {
 
     default AutoModule DropPurpleC (double height3) {
         return new AutoModule(
-                drive.moveTime(-0.6, 0.2, 0, 0.86),
+                drive.moveTime(-0.6, 0.1, 0, 0.86),
                 pause(1),
-                drive.moveTime(0.6, -0.2, 0, 0.8)
+                drive.moveTime(0.53, -0.1, 0, 0.8)
 
 
 
