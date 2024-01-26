@@ -60,7 +60,7 @@ public class QbitOp extends Tele {
 //        log.show("Flip (buttons):   b:start, y:middle, x:end");
 //        log.show("Claw (bumpers):   right:close, left:open");
 //        log.show("Drone (dpad):   up:start, down:release");
-        drive.move(gph1.ry,gph1.rx,gph1.lx*0.4);
+        drive.move(gph1.ry*0.8,gph1.rx*0.8,gph1.lx*0.4);
    //     drive.move((gph1.rt-gph1.lt)*0.5,gph1.lx*0.5,gph1.rx*0.4);
 
         intake.move(gph2.ry);
@@ -68,7 +68,7 @@ public class QbitOp extends Tele {
         hang.move(gph2.ly);
 
         // TODO COMMENT THIS OUT WHEN DONE
-        log.show("Odometry Distance: ", oneOdometry.getOdometry1Distance());
+        log.show("Odometry Distance: ", oneOdometry.getOdometryDistance());
 //        log.show("Gyro Heading: ", gyro.getHeading());
 
         log.show(colorSensors.leftPixelDistance());

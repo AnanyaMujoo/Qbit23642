@@ -11,8 +11,8 @@ import math.polynomial.Linear;
 //import robotparts.sensors.odometry.SecondOdometry;
 import util.Timer;
 
-@Autonomous(name = "QbitAutoRedRight", group = "Autonomous")
-public class QbitAutoRedRight extends Auto {
+@Autonomous(name = "QbitAutoRedLeft", group = "Autonomous", preselectTeleOp="QbitOp")
+public class QbitAutoRedLeft extends Auto {
     public CaseScannerRect caseScanner;
     protected TeamProp propCaseDetected = TeamProp.LEFT;
 
@@ -20,7 +20,7 @@ public class QbitAutoRedRight extends Auto {
     @Override
     public final void initAuto() {
         log.show("yeet");
-        scan(true,"red","left");
+        scan(true,"blue","left");
 
         while (!isStarted() && !isStopRequested()){ propCaseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
         camera.halt();
@@ -44,21 +44,25 @@ public class QbitAutoRedRight extends Auto {
             // Use this for curved paths (distance in cm) backward is negative distance
             moveTurnGyroMoveSmoothDistanceForward(0.5, -50, 0.3, -70);
             pause(0.5);
+            drive.halt();
             moveTurnGyroMoveSmoothDistanceForward(0.5, 60, 0.3, 0);
             drive.halt();
             moveDistanceForward(0.3,-7);
             drive.halt();
             moveTurnGyro(0.4,-90);
             drive.halt();
-            moveTurnGyroMoveSmoothDistanceForward(0.3,-243, 0, 0);
+            moveDistanceForward(0.5,-142);
             bot.addAutoModule(AutoYellow());
             AutoYellow();
             pause(0.5);
             moveTurnGyro(0.4,0);
-            moveTurnGyroMoveSmoothDistanceForward(0.2,-34, 0, 0);
+            moveDistanceForward(0.2,-34);
             moveTurnGyro(0.4,-90);
             outtake.moveClawOpen();
             drive.halt();
+            moveTime(-0.2,0.4,0.0,0.7);
+            lift.reset();
+            outtake.moveFlipStart();
             pause(10);
 
             // Use this for forward backward straight
@@ -100,6 +104,7 @@ public class QbitAutoRedRight extends Auto {
         else if (propCaseDetected.equals(TeamProp.CENTER)){
             outtake.moveClawClose();
             moveDistanceForward(0.4, -68);
+            drive.halt();
             moveDistanceForward(0.4, 63);
             pause(0.5);
             drive.halt();
@@ -107,7 +112,7 @@ public class QbitAutoRedRight extends Auto {
             drive.halt();
             moveTurnGyro(0.4,-90);
             drive.halt();
-            moveDistanceForward(0.5,-223);
+            moveDistanceForward(0.5,-121);
             bot.addAutoModule(AutoYellow());
             AutoYellow();
             pause(0.5);
@@ -135,11 +140,16 @@ public class QbitAutoRedRight extends Auto {
 //            pause(0.5);
 //            moveForward(-0.4/2,0.7*2);
 //            pause(0.5);
+//            outtake.moveClawOpen();
+//            drive.halt();
+//            log.show("right");
+//            DropPurpleR(0);
         }
         else if(propCaseDetected.equals(TeamProp.RIGHT)){
             outtake.moveClawClose();
             moveTurnGyro(0.4,20);
             moveDistanceForward(0.4, -60);
+            drive.halt();
             moveDistanceForward(0.4, 60);
             moveTurnGyro(0.4,-20);
             pause(0.5);
@@ -148,7 +158,7 @@ public class QbitAutoRedRight extends Auto {
             drive.halt();
             moveTurnGyro(0.4,-90);
             drive.halt();
-            moveDistanceForward(0.5,-223);
+            moveDistanceForward(0.5,-121);
             bot.addAutoModule(AutoYellow());
             AutoYellow();
             pause(0.5);
@@ -254,11 +264,12 @@ public class QbitAutoRedRight extends Auto {
         Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
         whileActive(() -> Math.abs(targetDegrees - gyro.getHeading()) > 2 || Math.abs(forwardDistance-oneOdometry.getOdometryDistance()) > 1,() -> {
             double currentTarget = linearTurnTarget.f(Math.abs(oneOdometry.getOdometryDistance()));
-            double errorTurn;
-            if (targetDegrees!=0){
-                errorTurn = currentTarget - gyro.getHeading();}
+            double errorTurn=currentTarget - gyro.getHeading();
+            if(initialTurningPower!=0 && linearTurnPower.fodd(errorTurn)>0.11){
+                errorTurn=currentTarget - gyro.getHeading();
+            }
             else{
-                errorTurn= 0;
+                errorTurn=0;
             }
             double errorForward = forwardDistance- oneOdometry.getOdometryDistance();
             drive.move(linearForwardPower.fodd(errorForward),0, linearTurnPower.fodd(errorTurn));
@@ -266,6 +277,7 @@ public class QbitAutoRedRight extends Auto {
         drive.halt();
 
     }
+
 
     public void moveDistanceForward(double initialForwardPower, double forwardDistance){
         final double minimumForwardPower = 0.3;
@@ -278,6 +290,7 @@ public class QbitAutoRedRight extends Auto {
         drive.halt();
 
     }
+
 //    public void MoveSmoothDistanceStrafe(double initialStrafePower, double strafeDistance){
 //        final double minimumStrafePower = 0.03;
 //        secondOdometry.reset();
@@ -318,17 +331,17 @@ public class QbitAutoRedRight extends Auto {
 //        drive.halt();
 //
 //    }
-
-    public void moveForwardDistance(double initialForwardPower, double forwardDistance) {
-        final double minimumForwardPower = 0.06;
-        oneOdometry.reset();
-        Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
-        whileActive(() -> Math.abs(forwardDistance-oneOdometry.getOdometryDistance()) > 1,() -> {
-            double errorForward = forwardDistance- oneOdometry.getOdometryDistance();
-            drive.move(linearForwardPower.fodd(errorForward),0, 0);
-        });
-        drive.halt();
-    }
+//
+//    public void moveForwardDistance(double initialForwardPower, double forwardDistance) {
+//        final double minimumForwardPower = 0.06;
+//        oneOdometry.reset();
+//        Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
+//        whileActive(() -> Math.abs(forwardDistance-oneOdometry.getOdometryDistance()) > 1,() -> {
+//            double errorForward = forwardDistance- oneOdometry.getOdometryDistance();
+//            drive.move(linearForwardPower.fodd(errorForward),0, 0);
+//        });
+//        drive.halt();
+//    }
 
 }
 

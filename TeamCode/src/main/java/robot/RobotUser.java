@@ -4,6 +4,7 @@ import robotparts.hardware.Drone;
 import robotparts.hardware.Hanging;
 import robotparts.sensors.odometry.NewOdometry;
 import robotparts.sensors.odometry.OneOdometry;
+//import robotparts.sensors.odometry.SecondOdometry;
 import unittests.tele.framework.movement.AutoModuleTest;
 import robotparts.hardware.Drive;
 import robotparts.unused.Intake;
@@ -40,6 +41,7 @@ public interface RobotUser {
 //    ThreeOdometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS
     NewOdometry odometry = new NewOdometry();
     OneOdometry oneOdometry = new OneOdometry();
+//    SecondOdometry secondOdometry = new SecondOdometry();
     /**
      * UNUSED
      */
