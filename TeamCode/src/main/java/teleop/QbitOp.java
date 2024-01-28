@@ -20,7 +20,7 @@ public class QbitOp extends Tele {
         gph2.link(Button.DPAD_LEFT, outtake::moveFlipStart);
         gph2.link(Button.DPAD_UP, outtake::moveFlipMiddle);
         gph2.link(Button.DPAD_RIGHT, outtake::moveFlipEnd);
-
+        gph1.link(Button.Y,lift::liftEmergency);
         gph1.link(Button.X, bot::cancelAutoModules);
 
         gph2.link(Button.RIGHT_BUMPER, hang::moveHangStart);

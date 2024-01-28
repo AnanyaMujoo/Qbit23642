@@ -5,8 +5,7 @@ import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import autoutil.vision.CaseScannerRectBottom;
-import autoutil.vision.CaseScannerRectTop;
+import autoutil.vision.CaseScannerRectBl;
 import elements.TeamProp;
 import math.polynomial.Linear;
 //import robotparts.sensors.odometry.SecondOdometry;
@@ -14,7 +13,7 @@ import util.Timer;
 
 @Autonomous(name = "QbitAutoBlueLeft", group = "Autonomous", preselectTeleOp = "QbitOp")
 public class QbitAutoBlueLeft extends Auto {
-    public CaseScannerRectTop caseScanner;
+    public CaseScannerRectBl caseScanner;
     protected TeamProp propCaseDetected = TeamProp.RIGHT;
 
 
@@ -261,7 +260,7 @@ public class QbitAutoBlueLeft extends Auto {
         drive.halt();
     }
     public void scan(boolean view, String color, String side){
-        caseScanner = new CaseScannerRectTop();
+        caseScanner = new CaseScannerRectBl();
         camera.start(true);
         camera.setScanner(caseScanner);
         caseScanner.setColor(color);

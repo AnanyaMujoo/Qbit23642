@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import elements.TeamProp;
 
-public class CaseScannerRectTop extends Scanner {
+public class CaseScannerRectRr extends Scanner {
 
     private volatile TeamProp caseDetected = TeamProp.LEFT;
     protected final TeamProp[] cases = new TeamProp[]{TeamProp.LEFT, TeamProp.CENTER, TeamProp.RIGHT};
@@ -22,7 +22,7 @@ public class CaseScannerRectTop extends Scanner {
     String color;
     String side;
     public double centerAverage;
-    public double leftAverage;
+    public double rightAverage;
 
     public int getCase(Mat input, String color) {
         cropAndFill(input, getZoomedRect(input, 1.6, 30));
@@ -37,7 +37,7 @@ public class CaseScannerRectTop extends Scanner {
         Point center = getCenter(input);
         Point pictureCenter = new Point(center.x + 10, center.y + 30);
         drawRectangle(input, getRectFromCenter(pictureCenter, 100, 150), GREEN);
-
+    //TODO CHANGE VALUES BEFORE COMPETITION
         double redValue = getBestRectStDev(input, 350, 10, RED);
         double blueValue = getBestRectStDev(input, 230, 180, BLUE);
 
@@ -57,8 +57,8 @@ public class CaseScannerRectTop extends Scanner {
         TeamProp caseDetected;
 
         // Define regions to crop
-        Rect leftRect = new Rect(70, 180, 130, 130);
-        Rect centerRect = new Rect(385, 150, 130, 130);
+        Rect centerRect = new Rect(116, 180, 140, 140);
+        Rect rightRect = new Rect(490, 160, 140, 200);
 
 
         // Convert to different color space
@@ -85,12 +85,12 @@ public class CaseScannerRectTop extends Scanner {
         Color.copyTo(input);
 
         // Crop the red mat
-        Mat leftCrop = getSubmat(Color, leftRect);
         Mat centerCrop = getSubmat(Color, centerRect);
+        Mat rightCrop = getSubmat(Color, rightRect);
 
         // Calculate the averages
         centerAverage = getAverageValue(centerCrop);
-        leftAverage = getAverageValue(leftCrop);
+        rightAverage = getAverageValue(rightCrop);
 
 
 
@@ -108,7 +108,7 @@ public class CaseScannerRectTop extends Scanner {
         // Decide the case based on the averages
         if(centerAverage > threshold){
             caseDetected = TeamProp.CENTER;
-        }else if(leftAverage > threshold){
+        }else if(rightAverage > threshold){
             caseDetected = TeamProp.LEFT;
         }else{
             caseDetected = TeamProp.RIGHT;
@@ -120,8 +120,8 @@ public class CaseScannerRectTop extends Scanner {
 
 
         // Draw to screen
-        drawRectangle(input, leftRect, GREEN);
         drawRectangle(input, centerRect, GREEN);
+        drawRectangle(input, rightRect, GREEN);
 
         return caseDetected;
 

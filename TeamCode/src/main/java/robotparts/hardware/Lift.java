@@ -48,6 +48,21 @@ public class Lift extends RobotPart implements AutoModuleUser {
         };
     }
 
+    public ReturnCodeSeg<AutoModule> liftEmergency(){
+        return ()->{
+            target=-5;
+            if ((target>=-5)&&(target<=MAXHEIGHT)){
+                target=-5;
+                return Lift(target);
+
+            }
+            else if(target<=-5){
+                target=-5;
+                return Lift(target);
+            }
+            return new AutoModule();
+        };
+    }
 
 
     @Override
