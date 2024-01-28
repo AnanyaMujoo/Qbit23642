@@ -25,21 +25,21 @@ public class OneOdometry extends RobotPart {
     }
 
     public void update() {
-        odoDistance = getCurrentOdoDistance() - startOdoDistance;
+        odoDistance = getRightCurrentOdoDistance() - startOdoDistance;
     }
 
-    private double getCurrentOdoDistance(){
+    private double getRightCurrentOdoDistance(){
         return odo.getCurrentPosition() * wheelDiameter * Math.PI / Constants.ODOMETRY_ENCODER_TICKS_PER_REV;
     }
 
 
-    public double getOdometryDistance() {
+    public double getRightOdometryDistance() {
         return odoDistance;
     }
 
     @Override
     public void reset(){
-        startOdoDistance = getCurrentOdoDistance();
+        startOdoDistance = getRightCurrentOdoDistance();
     }
 
 }

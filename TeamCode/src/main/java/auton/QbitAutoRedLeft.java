@@ -5,7 +5,7 @@ import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import autoutil.vision.CaseScannerRect;
+import autoutil.vision.CaseScannerRectBottom;
 import elements.TeamProp;
 import math.polynomial.Linear;
 //import robotparts.sensors.odometry.SecondOdometry;
@@ -13,14 +13,14 @@ import util.Timer;
 
 @Autonomous(name = "QbitAutoRedLeft", group = "Autonomous", preselectTeleOp="QbitOp")
 public class QbitAutoRedLeft extends Auto {
-    public CaseScannerRect caseScanner;
+    public CaseScannerRectBottom caseScanner;
     protected TeamProp propCaseDetected = TeamProp.LEFT;
 
 
     @Override
     public final void initAuto() {
         log.show("yeet");
-        scan(true,"blue","left");
+        scan(true,"red","left");
 
         while (!isStarted() && !isStopRequested()){ propCaseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
         camera.halt();
@@ -207,7 +207,7 @@ public class QbitAutoRedLeft extends Auto {
         drive.halt();
     }
     public void scan(boolean view, String color, String side){
-        caseScanner = new CaseScannerRect();
+        caseScanner = new CaseScannerRectBottom();
         camera.start(true);
         camera.setScanner(caseScanner);
         caseScanner.setColor(color);
@@ -262,8 +262,8 @@ public class QbitAutoRedLeft extends Auto {
         Linear linearTurnTarget = new Linear(start, targetDegrees, Math.abs(forwardDistance));
         Linear linearTurnPower = new Linear(minimumTurningPower, initialTurningPower, Math.abs(start-targetDegrees));
         Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
-        whileActive(() -> Math.abs(targetDegrees - gyro.getHeading()) > 2 || Math.abs(forwardDistance-oneOdometry.getOdometryDistance()) > 1,() -> {
-            double currentTarget = linearTurnTarget.f(Math.abs(oneOdometry.getOdometryDistance()));
+        whileActive(() -> Math.abs(targetDegrees - gyro.getHeading()) > 2 || Math.abs(forwardDistance-oneOdometry.getRightOdometryDistance()) > 1,() -> {
+            double currentTarget = linearTurnTarget.f(Math.abs(oneOdometry.getRightOdometryDistance()));
             double errorTurn=currentTarget - gyro.getHeading();
             if(initialTurningPower!=0 && linearTurnPower.fodd(errorTurn)>0.11){
                 errorTurn=currentTarget - gyro.getHeading();
@@ -271,7 +271,7 @@ public class QbitAutoRedLeft extends Auto {
             else{
                 errorTurn=0;
             }
-            double errorForward = forwardDistance- oneOdometry.getOdometryDistance();
+            double errorForward = forwardDistance- oneOdometry.getRightOdometryDistance();
             drive.move(linearForwardPower.fodd(errorForward),0, linearTurnPower.fodd(errorTurn));
         });
         drive.halt();
@@ -283,8 +283,8 @@ public class QbitAutoRedLeft extends Auto {
         final double minimumForwardPower = 0.3;
         oneOdometry.reset();
         Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
-        whileActive(() -> Math.abs(forwardDistance-oneOdometry.getOdometryDistance()) > 1,() -> {
-            double errorForward = forwardDistance- oneOdometry.getOdometryDistance();
+        whileActive(() -> Math.abs(forwardDistance-oneOdometry.getRightOdometryDistance()) > 1,() -> {
+            double errorForward = forwardDistance- oneOdometry.getRightOdometryDistance();
             drive.move(linearForwardPower.fodd(errorForward),0, 0);
         });
         drive.halt();
@@ -295,10 +295,10 @@ public class QbitAutoRedLeft extends Auto {
 //        final double minimumStrafePower = 0.03;
 //        secondOdometry.reset();
 //        Linear linearStrafePower = new Linear(minimumStrafePower, initialStrafePower, Math.abs(strafeDistance));
-//        whileActive(() -> (Math.abs(strafeDistance-secondOdometry.getOdometryDistance()) > 1), () -> {
-//            double errorStrafe = strafeDistance- secondOdometry.getOdometryDistance();
+//        whileActive(() -> (Math.abs(strafeDistance-secondOdometry.getRightOdometryDistance()) > 1), () -> {
+//            double errorStrafe = strafeDistance- secondOdometry.getRightOdometryDistance();
 //            drive.move(0,linearStrafePower.fodd(errorStrafe), 0);
-//            log.show(secondOdometry.getOdometryDistance());
+//            log.show(secondOdometry.getRightOdometryDistance());
 //        });
 //        drive.halt();
 //
@@ -315,16 +315,16 @@ public class QbitAutoRedLeft extends Auto {
 //        Linear linearTurnPower = new Linear(minimumTurningPower, initialTurningPower, Math.abs(start-targetDegrees));
 //        Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
 //        Linear linearStrafePower = new Linear(minimumStrafePower, initialStrafePower, Math.abs(strafeDistance));
-//        whileActive(() -> Math.abs(targetDegrees - gyro.getHeading()) > 2 || Math.abs(strafeDistance-secondOdometry.getOdometryDistance())> 1 || Math.abs(forwardDistance-oneOdometry.getOdometryDistance()) > 1,() -> {
-//            double currentTarget = linearTurnTarget.f(Math.abs(secondOdometry.getOdometryDistance()));
+//        whileActive(() -> Math.abs(targetDegrees - gyro.getHeading()) > 2 || Math.abs(strafeDistance-secondOdometry.getRightOdometryDistance())> 1 || Math.abs(forwardDistance-oneOdometry.getRightOdometryDistance()) > 1,() -> {
+//            double currentTarget = linearTurnTarget.f(Math.abs(secondOdometry.getRightOdometryDistance()));
 //            double errorTurn;
 //            if (targetDegrees!=0){
 //                errorTurn = currentTarget - gyro.getHeading();}
 //            else{
 //                errorTurn= 0;
 //            }
-//            double errorForward = forwardDistance- oneOdometry.getOdometryDistance();
-//            double errorStrafe = strafeDistance- secondOdometry.getOdometryDistance();
+//            double errorForward = forwardDistance- oneOdometry.getRightOdometryDistance();
+//            double errorStrafe = strafeDistance- secondOdometry.getRightOdometryDistance();
 //            drive.move(linearForwardPower.fodd(errorForward),linearStrafePower.fodd(errorStrafe), linearTurnPower.fodd(errorTurn));
 //        });
 //
@@ -336,8 +336,8 @@ public class QbitAutoRedLeft extends Auto {
 //        final double minimumForwardPower = 0.06;
 //        oneOdometry.reset();
 //        Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
-//        whileActive(() -> Math.abs(forwardDistance-oneOdometry.getOdometryDistance()) > 1,() -> {
-//            double errorForward = forwardDistance- oneOdometry.getOdometryDistance();
+//        whileActive(() -> Math.abs(forwardDistance-oneOdometry.getRightOdometryDistance()) > 1,() -> {
+//            double errorForward = forwardDistance- oneOdometry.getRightOdometryDistance();
 //            drive.move(linearForwardPower.fodd(errorForward),0, 0);
 //        });
 //        drive.halt();

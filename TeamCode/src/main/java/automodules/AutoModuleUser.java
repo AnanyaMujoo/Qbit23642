@@ -46,6 +46,12 @@ public interface AutoModuleUser extends RobotUser {
             outtake.stageFlipEnd(0.5)
 
 
+
+
+    );}
+    default AutoModule WhyWontLiftWork(){return new AutoModule(
+        lift.stageLift(0.3,0),
+            outtake.stageFlipStart(0.5)
     );}
 
         default AutoModule DropPurpleR (double height2) {return new AutoModule(

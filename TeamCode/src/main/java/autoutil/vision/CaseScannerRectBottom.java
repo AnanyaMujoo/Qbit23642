@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import elements.TeamProp;
 
-public class CaseScannerRect extends Scanner {
+public class CaseScannerRectBottom extends Scanner {
 
     private volatile TeamProp caseDetected = TeamProp.LEFT;
     protected final TeamProp[] cases = new TeamProp[]{TeamProp.LEFT, TeamProp.CENTER, TeamProp.RIGHT};
@@ -57,8 +57,8 @@ public class CaseScannerRect extends Scanner {
             TeamProp caseDetected;
 
             // Define regions to crop
-            Rect centerRect = new Rect(60, 180, 140, 140);
-            Rect rightRect = new Rect(450, 160, 140, 200);
+            Rect centerRect = new Rect(116, 180, 140, 140);
+            Rect rightRect = new Rect(490, 160, 140, 200);
 
 
             // Convert to different color space
