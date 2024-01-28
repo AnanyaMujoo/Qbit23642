@@ -39,51 +39,51 @@ public class QbitAutoBlueLeft extends Auto {
 //
 //        propCaseDetected=TeamProp.CENTER;
         if (propCaseDetected.equals(TeamProp.LEFT)) {
+
             outtake.moveClawClose();
-            //move to team prop
-            moveTurnGyroMoveSmoothDistanceForward(0.5, -45, 0.3, -70);
+
+            moveTurnGyro(0.4,-20);
+            moveDistanceForward(0.4, -46);
+            drive.halt();
+            moveDistanceForward(0.4, 46);
+            moveTurnGyro(0.4,20);
             pause(0.5);
-            drive.halt();
-            //move to start
-            moveTurnGyroMoveSmoothDistanceForward(0.5, 55, 0.3, 0);
-            drive.halt();
-            //move away from the start forward
+            //move 7 along y axis
             moveDistanceForward(0.5,-7);
             drive.halt();
-            //rotate with the back of the robot moving forward
+            //turn to back moving along y
             moveTurnGyro(0.4,-90);
             drive.halt();
-            //move to backstage
-            moveDistanceForward(0.6,-200);
-            //automodule yellow
-            bot.addAutoModule(AutoYellow());
-            AutoYellow();
-            pause(0.5);
-            //rotate to original position
-            moveTurnGyro(0.4,0);
-            //move to right backstage pixel
+            //move to back along y
             moveDistanceForward(0.6,-40);
-            //back of the robot moving forward
+            drive.halt();
+            moveTurnGyro(0.4,0);
+            drive.halt();
+//            //move to correct april tag
+            moveDistanceForward(0.6,-36);
+            pause(0.5);
+            //drive.halt();
             moveTurnGyro(0.4,-90);
-            //move to backstage along y
-            moveDistanceForward(0.6,-42);
-            // open the claw
-            outtake.moveClawOpen();
+            bot.addAutoModule(AutoYellow());
+            pause(0.5);
+            AutoYellow();
             pause(1);
             outtake.moveClawClose();
-            //move backward
-            moveDistanceForward(0.6,10);
+            moveTime(-0.3,0,0,1.5);
+        outtake.moveClawOpen();
+            pause(1);
+            moveDistanceForward(0.4,10);
             drive.halt();
-            //reset lift and claw
             bot.addAutoModule(WhyWontLiftWork());
             WhyWontLiftWork();
             //moveTime(0,0.4,0.0,1.4);
             moveTurnGyro(0.4,0);
-            moveDistanceForward(0.5,-65);
+            moveDistanceForward(0.6,-67);
             //moveTime(0,-0.4,0.0,2.1);
             moveTurnGyro(0.4,-90);
-            moveDistanceForward(0.5,-30);
+            moveDistanceForward(0.4,-17);
             pause(30);
+            pause(1);
 
 //
 
@@ -120,7 +120,6 @@ public class QbitAutoBlueLeft extends Auto {
             //move to start
             moveDistanceForward(0.5, 67);
             pause(0.5);
-            drive.halt();
             //move 7 along y axis
             moveDistanceForward(0.5,-7);
             drive.halt();
@@ -128,12 +127,12 @@ public class QbitAutoBlueLeft extends Auto {
             moveTurnGyro(0.4,-90);
             drive.halt();
             //move to back along y
-            moveDistanceForward(0.6,-180);
+            moveDistanceForward(0.6,-40);
             drive.halt();
             moveTurnGyro(0.4,0);
             drive.halt();
 //            //move to correct april tag
-            moveDistanceForward(0.6,-63);
+            moveDistanceForward(0.6,-50);
             pause(0.5);
             //drive.halt();
             moveTurnGyro(0.4,-90);
@@ -142,20 +141,23 @@ public class QbitAutoBlueLeft extends Auto {
             AutoYellow();
             pause(1);
             outtake.moveClawClose();
-            moveDistanceForward(0.6,-35);
+            moveTime(-0.3,0,0,1);
+            outtake.moveClawOpen();
+            outtake.moveClawClose();
             outtake.moveClawOpen();
             pause(1);
-            moveDistanceForward(0.6,10);
+            moveDistanceForward(0.4,10);
             drive.halt();
             bot.addAutoModule(WhyWontLiftWork());
             WhyWontLiftWork();
             //moveTime(0,0.4,0.0,1.4);
             moveTurnGyro(0.4,0);
-            moveDistanceForward(0.6,-49);
+            moveDistanceForward(0.6,-62);
             //moveTime(0,-0.4,0.0,2.1);
             moveTurnGyro(0.4,-90);
             moveDistanceForward(0.4,-17);
             pause(30);
+            pause(1);
 
 //            moveTime(-0.3, 0.1, 0, 0.94*2);
 //            pause(1);
@@ -178,26 +180,26 @@ public class QbitAutoBlueLeft extends Auto {
         }
         else if(propCaseDetected.equals(TeamProp.RIGHT)){
             outtake.moveClawClose();
-
-            moveTurnGyro(0.4,20);
-            moveDistanceForward(0.4, -46);
+            //move to team prop
+            moveTurnGyroMoveSmoothDistanceForward(0.5, -85, 0.3, 90);
+            pause(0.5);
             drive.halt();
-            moveDistanceForward(0.4, 46);
-            moveTurnGyro(0.4,-20);
+            //move to start
+            moveTurnGyroMoveSmoothDistanceForward(0.5, 80, 0.3, 0);
             pause(0.5);
             //move 7 along y axis
-            moveDistanceForward(0.5,-7);
+            moveDistanceForward(0.5,15);
             drive.halt();
             //turn to back moving along y
             moveTurnGyro(0.4,-90);
             drive.halt();
             //move to back along y
-            moveDistanceForward(0.6,-180);
+            moveDistanceForward(0.6,-15);
             drive.halt();
             moveTurnGyro(0.4,0);
             drive.halt();
 //            //move to correct april tag
-            moveDistanceForward(0.6,-73);
+            moveDistanceForward(0.6,-50);
             pause(0.5);
             //drive.halt();
             moveTurnGyro(0.4,-90);
@@ -206,16 +208,20 @@ public class QbitAutoBlueLeft extends Auto {
             AutoYellow();
             pause(1);
             outtake.moveClawClose();
-            moveDistanceForward(0.6,-38);
+            moveTime(-0.3,0,0,0.6);
+            outtake.moveClawOpen();
+            pause(0.2);
+            outtake.moveClawClose();
+            pause(0.2);
             outtake.moveClawOpen();
             pause(1);
-            moveDistanceForward(0.6,10);
+            moveDistanceForward(0.4,10);
             drive.halt();
             bot.addAutoModule(WhyWontLiftWork());
             WhyWontLiftWork();
             //moveTime(0,0.4,0.0,1.4);
             moveTurnGyro(0.4,0);
-            moveDistanceForward(0.6,-45);
+            moveDistanceForward(0.6,-56);
             //moveTime(0,-0.4,0.0,2.1);
             moveTurnGyro(0.4,-90);
             moveDistanceForward(0.4,-17);

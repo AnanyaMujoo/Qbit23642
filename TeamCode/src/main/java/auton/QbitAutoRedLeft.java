@@ -6,15 +6,16 @@ import static global.General.log;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import autoutil.vision.CaseScannerRectBottom;
+import autoutil.vision.CaseScannerRectTop;
 import elements.TeamProp;
 import math.polynomial.Linear;
 //import robotparts.sensors.odometry.SecondOdometry;
 import util.Timer;
 
-@Autonomous(name = "QbitAutoRedLeft", group = "Autonomous", preselectTeleOp="QbitOp")
+@Autonomous(name = "QbitAutoRedLeft", group = "Autonomous", preselectTeleOp = "QbitOp")
 public class QbitAutoRedLeft extends Auto {
-    public CaseScannerRectBottom caseScanner;
-    protected TeamProp propCaseDetected = TeamProp.LEFT;
+    public CaseScannerRectTop caseScanner;
+    protected TeamProp propCaseDetected = TeamProp.RIGHT;
 
 
     @Override
@@ -22,6 +23,7 @@ public class QbitAutoRedLeft extends Auto {
         log.show("yeet");
         scan(true,"red","left");
 
+        log.show(gyro.getHeading());
         while (!isStarted() && !isStopRequested()){ propCaseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
         camera.halt();
         log.show(propCaseDetected);
@@ -33,47 +35,56 @@ public class QbitAutoRedLeft extends Auto {
 
     @Override
     public void runAuto() {
-        pause(1);
-
         // Remove this when testing with scanning
-//        propCaseDetected = TeamProp.LEFT;
+//
+        propCaseDetected=TeamProp.RIGHT;
+        if (propCaseDetected.equals(TeamProp.RIGHT)) {
 
-
-        if (propCaseDetected.equals(TeamProp.LEFT)) {
             outtake.moveClawClose();
-            // Use this for curved paths (distance in cm) backward is negative distance
-            moveTurnGyroMoveSmoothDistanceForward(0.5, -50, 0.3, -70);
+
+            moveTurnGyro(0.4,20);
+            moveDistanceForward(0.4, -46);
+            drive.halt();
+            moveDistanceForward(0.4, 46);
+            moveTurnGyro(0.4,-20);
             pause(0.5);
+            //move 7 along y axis
+            moveDistanceForward(0.5,-7);
             drive.halt();
-            moveTurnGyroMoveSmoothDistanceForward(0.5, 60, 0.3, 0);
+            //turn to back moving along y
+            moveTurnGyro(0.4,90);
             drive.halt();
-            moveDistanceForward(0.3,-7);
+            //move to back along y
+            moveDistanceForward(0.6,-40);
             drive.halt();
-            moveTurnGyro(0.4,-90);
-            drive.halt();
-            moveDistanceForward(0.5,-142);
-            bot.addAutoModule(AutoYellow());
-            AutoYellow();
-            pause(0.5);
             moveTurnGyro(0.4,0);
-            moveDistanceForward(0.2,-34);
-            moveTurnGyro(0.4,-90);
-            outtake.moveClawOpen();
             drive.halt();
-            moveTime(-0.2,0.4,0.0,0.7);
-            lift.reset();
-            outtake.moveFlipStart();
-            pause(10);
+//            //move to correct april tag
+            moveDistanceForward(0.6,-36);
+            pause(0.5);
+            //drive.halt();
+            moveTurnGyro(0.4,90);
+            bot.addAutoModule(AutoYellow());
+            pause(0.5);
+            AutoYellow();
+            pause(1);
+            outtake.moveClawClose();
+            moveTime(-0.3,0,0,1.5);
+            outtake.moveClawOpen();
+            pause(1);
+            moveDistanceForward(0.4,10);
+            drive.halt();
+            bot.addAutoModule(WhyWontLiftWork());
+            WhyWontLiftWork();
+            //moveTime(0,0.4,0.0,1.4);
+            moveTurnGyro(0.4,0);
+            moveDistanceForward(0.6,-67);
+            //moveTime(0,-0.4,0.0,2.1);
+            moveTurnGyro(0.4,90);
+            moveDistanceForward(0.4,-17);
+            pause(30);
+            pause(1);
 
-            // Use this for forward backward straight
-            //moveForwardDistance(0.2, 20);
-
-            // Use this for turn in place
-            //moveTurnGyro(0.4, -90);
-
-            //use this to turn and move forward and strafe with odometry
-
-//            moveTurnGyroMoveSmoothDistanceStrafe(0.4,-20, 0.0, 0);
 //
 
 
@@ -103,29 +114,51 @@ public class QbitAutoRedLeft extends Auto {
         }
         else if (propCaseDetected.equals(TeamProp.CENTER)){
             outtake.moveClawClose();
-            moveDistanceForward(0.4, -68);
+            //move forward
+            moveDistanceForward(0.5, -70);
             drive.halt();
-            moveDistanceForward(0.4, 63);
+            //move to start
+            moveDistanceForward(0.5, 67);
             pause(0.5);
+            //move 7 along y axis
+            moveDistanceForward(0.5,-7);
             drive.halt();
-            moveDistanceForward(0.3,-7);
+            //turn to back moving along y
+            moveTurnGyro(0.4,90);
             drive.halt();
-            moveTurnGyro(0.4,-90);
+            //move to back along y
+            moveDistanceForward(0.6,-40);
             drive.halt();
-            moveDistanceForward(0.5,-121);
-            bot.addAutoModule(AutoYellow());
-            AutoYellow();
-            pause(0.5);
             moveTurnGyro(0.4,0);
-            moveDistanceForward(0.2,-40);
-            moveTurnGyro(0.4,-90);
-            outtake.moveClawOpen();
             drive.halt();
-            moveTime(0.0,0.3,0.0,1.2);
-            moveDistanceForward(0.5,-23);
-            lift.stageLift(0.2,-5);
-            outtake.moveFlipStart();
-            pause(10);
+//            //move to correct april tag
+            moveDistanceForward(0.6,-50);
+            pause(0.5);
+            //drive.halt();
+            moveTurnGyro(0.4,90);
+            bot.addAutoModule(AutoYellow());
+            pause(0.5);
+            AutoYellow();
+            pause(1);
+            outtake.moveClawClose();
+            moveTime(-0.3,0,0,1);
+            outtake.moveClawOpen();
+            outtake.moveClawClose();
+            outtake.moveClawOpen();
+            pause(1);
+            moveDistanceForward(0.4,10);
+            drive.halt();
+            bot.addAutoModule(WhyWontLiftWork());
+            WhyWontLiftWork();
+            //moveTime(0,0.4,0.0,1.4);
+            moveTurnGyro(0.4,0);
+            moveDistanceForward(0.6,-62);
+            //moveTime(0,-0.4,0.0,2.1);
+            moveTurnGyro(0.4,90);
+            moveDistanceForward(0.4,-17);
+            pause(30);
+            pause(1);
+
 //            moveTime(-0.3, 0.1, 0, 0.94*2);
 //            pause(1);
 //            moveTime(0.53/2, -0.1, 0, 0.80*2);
@@ -145,34 +178,55 @@ public class QbitAutoRedLeft extends Auto {
 //            log.show("right");
 //            DropPurpleR(0);
         }
-        else if(propCaseDetected.equals(TeamProp.RIGHT)){
+        else if(propCaseDetected.equals(TeamProp.LEFT)){
             outtake.moveClawClose();
-            moveTurnGyro(0.4,20);
-            moveDistanceForward(0.4, -60);
-            drive.halt();
-            moveDistanceForward(0.4, 60);
-            moveTurnGyro(0.4,-20);
+            //move to team prop
+            moveTurnGyroMoveSmoothDistanceForward(0.5, -85, 0.3, -90);
             pause(0.5);
             drive.halt();
-            moveDistanceForward(0.3,-7);
-            drive.halt();
-            moveTurnGyro(0.4,-90);
-            drive.halt();
-            moveDistanceForward(0.5,-121);
-            bot.addAutoModule(AutoYellow());
-            AutoYellow();
+            //move to start
+            moveTurnGyroMoveSmoothDistanceForward(0.5, 80, 0.3, 0);
             pause(0.5);
+            //move 7 along y axis
+            moveDistanceForward(0.5,15);
+            drive.halt();
+            //turn to back moving along y
+            moveTurnGyro(0.4,90);
+            drive.halt();
+            //move to back along y
+            moveDistanceForward(0.6,-15);
+            drive.halt();
             moveTurnGyro(0.4,0);
-            moveDistanceForward(0.2,-50);
-            moveTurnGyro(0.4,-90);
-            outtake.moveClawOpen();
             drive.halt();
-            moveTime(0.0,0.3,0.0,1.2);
-            moveDistanceForward(0.5,-23);
-            lift.stageLift(0.2,-5);
-            outtake.moveFlipStart();
-            pause(10);
-//            pause(1);
+//            //move to correct april tag
+            moveDistanceForward(0.6,-50);
+            pause(0.5);
+            //drive.halt();
+            moveTurnGyro(0.4,90);
+            bot.addAutoModule(AutoYellow());
+            pause(0.5);
+            AutoYellow();
+            pause(1);
+            outtake.moveClawClose();
+            moveTime(-0.3,0,0,0.6);
+            outtake.moveClawOpen();
+            pause(0.2);
+            outtake.moveClawClose();
+            pause(0.2);
+            outtake.moveClawOpen();
+            pause(1);
+            moveDistanceForward(0.4,10);
+            drive.halt();
+            bot.addAutoModule(WhyWontLiftWork());
+            WhyWontLiftWork();
+            //moveTime(0,0.4,0.0,1.4);
+            moveTurnGyro(0.4,0);
+            moveDistanceForward(0.6,-56);
+            //moveTime(0,-0.4,0.0,2.1);
+            moveTurnGyro(0.4,90);
+            moveDistanceForward(0.4,-17);
+            pause(30);
+            pause(1);
 //            drive.moveTime(0.53, -0.1, 0, 0.8);
 //            moveTurnGyro(0.4,-90);
 //            drive.halt();
@@ -207,7 +261,7 @@ public class QbitAutoRedLeft extends Auto {
         drive.halt();
     }
     public void scan(boolean view, String color, String side){
-        caseScanner = new CaseScannerRectBottom();
+        caseScanner = new CaseScannerRectTop();
         camera.start(true);
         camera.setScanner(caseScanner);
         caseScanner.setColor(color);
@@ -265,7 +319,7 @@ public class QbitAutoRedLeft extends Auto {
         whileActive(() -> Math.abs(targetDegrees - gyro.getHeading()) > 2 || Math.abs(forwardDistance-oneOdometry.getRightOdometryDistance()) > 1,() -> {
             double currentTarget = linearTurnTarget.f(Math.abs(oneOdometry.getRightOdometryDistance()));
             double errorTurn=currentTarget - gyro.getHeading();
-            if(initialTurningPower!=0 && linearTurnPower.fodd(errorTurn)>0.11){
+            if(initialTurningPower!=0){
                 errorTurn=currentTarget - gyro.getHeading();
             }
             else{
@@ -280,17 +334,33 @@ public class QbitAutoRedLeft extends Auto {
 
 
     public void moveDistanceForward(double initialForwardPower, double forwardDistance){
-        final double minimumForwardPower = 0.3;
+        final double minimumForwardPower = 0.15;
+        oneOdometry.reset();
+        pause(0.1);
         oneOdometry.reset();
         Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
         whileActive(() -> Math.abs(forwardDistance-oneOdometry.getRightOdometryDistance()) > 1,() -> {
             double errorForward = forwardDistance- oneOdometry.getRightOdometryDistance();
             drive.move(linearForwardPower.fodd(errorForward),0, 0);
+
         });
         drive.halt();
 
     }
+    public void moveDistanceForwardInaccurate(double initialForwardPower, double forwardDistance){
+        final double minimumForwardPower = 0.3;
+        oneOdometry.reset();
+        Linear linearForwardPower = new Linear(minimumForwardPower, initialForwardPower, Math.abs(forwardDistance));
+        whileActive(() -> Math.abs(forwardDistance-oneOdometry.getRightOdometryDistance()) > 1,() -> {
+            double errorForward = forwardDistance- oneOdometry.getRightOdometryDistance();
+            if (forwardDistance<0){
+                drive.move(-initialForwardPower,0, 0);}
+            else if (forwardDistance>0){
+                drive.move(initialForwardPower,0, 0);}
+        });
+        drive.halt();
 
+    }
 //    public void MoveSmoothDistanceStrafe(double initialStrafePower, double strafeDistance){
 //        final double minimumStrafePower = 0.03;
 //        secondOdometry.reset();

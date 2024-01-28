@@ -57,8 +57,8 @@ public class CaseScannerRectTop extends Scanner {
         TeamProp caseDetected;
 
         // Define regions to crop
-        Rect centerRect = new Rect(70, 180, 130, 130);
-        Rect leftRect = new Rect(385, 150, 130, 130);
+        Rect leftRect = new Rect(70, 180, 130, 130);
+        Rect centerRect = new Rect(385, 150, 130, 130);
 
 
         // Convert to different color space
@@ -85,12 +85,12 @@ public class CaseScannerRectTop extends Scanner {
         Color.copyTo(input);
 
         // Crop the red mat
-        Mat centerCrop = getSubmat(Color, leftRect);
-        Mat rightCrop = getSubmat(Color, leftRect);
+        Mat leftCrop = getSubmat(Color, leftRect);
+        Mat centerCrop = getSubmat(Color, centerRect);
 
         // Calculate the averages
         centerAverage = getAverageValue(centerCrop);
-        leftAverage = getAverageValue(rightCrop);
+        leftAverage = getAverageValue(leftCrop);
 
 
 
@@ -98,10 +98,10 @@ public class CaseScannerRectTop extends Scanner {
         int threshold = 0;
         if(color.equalsIgnoreCase("red")){
             // Red case threshold
-            threshold = 145;
+            threshold = 160;
         }else if(color.equalsIgnoreCase("blue")){
             // Blue case threshold
-            threshold = 145;
+            threshold = 160;
         }
 
 
@@ -121,7 +121,7 @@ public class CaseScannerRectTop extends Scanner {
 
         // Draw to screen
         drawRectangle(input, leftRect, GREEN);
-        drawRectangle(input, leftRect, GREEN);
+        drawRectangle(input, centerRect, GREEN);
 
         return caseDetected;
 
