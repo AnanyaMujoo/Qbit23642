@@ -41,14 +41,18 @@ public class QbitAutoRedRight extends Auto {
         if (propCaseDetected.equals(TeamProp.RIGHT)) {
             outtake.moveClawClose();
             //move to team prop
-            moveTurnGyroMoveSmoothDistanceForward(0.5, -45, 0.3, 70);
+            moveDistanceForward(0.5, -40);
+
+            moveTurnGyro(0.4,50);
+            moveDistanceForward(0.5, -31);
             pause(0.5);
             drive.halt();
             //move to start
-            moveTurnGyroMoveSmoothDistanceForward(0.5, 55, 0.3, 0);
-            drive.halt();
+
+            moveDistanceForward(0.5, 31);
+            moveTurnGyro(0.4,-50);
+            moveDistanceForward(0.5, 48);
             //move away from the start forward
-            moveDistanceForward(0.5,-7);
             drive.halt();
             //rotate with the back of the robot moving forward
             moveTurnGyro(0.4,90);
@@ -66,7 +70,8 @@ public class QbitAutoRedRight extends Auto {
             //back of the robot moving forward
             moveTurnGyro(0.4,90);
             //move to backstage along y
-            moveDistanceForward(0.6,-41);
+//            moveDistanceForward(0.6,-41);
+            moveTime(-0.35,0,0,1);
             // open the claw
             outtake.moveClawOpen();
             pause(1);
@@ -80,10 +85,10 @@ public class QbitAutoRedRight extends Auto {
             WhyWontLiftWork();
             //moveTime(0,0.4,0.0,1.4);
             moveTurnGyro(0.4,0);
-            moveDistanceForward(0.5,-65);
+            moveTime(0.5,0,0,1.3);
             //moveTime(0,-0.4,0.0,2.1);
-            moveTurnGyro(0.4,90);
-            moveDistanceForward(0.5,-30);
+            //moveTurnGyro(0.4,90);
+            //moveDistanceForward(0.5,-30);
             pause(30);
 
 //
@@ -144,7 +149,7 @@ public class QbitAutoRedRight extends Auto {
             pause(1);
             outtake.moveClawClose();
 //            moveDistanceForward(0.6,-35);
-            moveTime(-0.35,0,0,1.5);
+            moveTime(-0.35,0,0,1);
             outtake.moveClawOpen();
             pause(1);
             moveDistanceForward(0.4,10);
@@ -208,7 +213,7 @@ public class QbitAutoRedRight extends Auto {
             AutoYellow();
             pause(1);
             outtake.moveClawClose();
-            moveTime(-0.35,0,0,1.5);
+            moveTime(-0.35,0,0,1);
             outtake.moveClawOpen();
             pause(1);
             moveDistanceForward(0.4,10);

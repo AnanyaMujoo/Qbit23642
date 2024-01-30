@@ -57,8 +57,8 @@ public class CaseScannerRectRr extends Scanner {
         TeamProp caseDetected;
 
         // Define regions to crop
-        Rect centerRect = new Rect(116, 180, 140, 140);
-        Rect rightRect = new Rect(490, 160, 140, 200);
+        Rect rightRect = new Rect(0, 180, 140, 140);
+        Rect centerRect = new Rect(360, 160, 140, 200);
 
 
         // Convert to different color space

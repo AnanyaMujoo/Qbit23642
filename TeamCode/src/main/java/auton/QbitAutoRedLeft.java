@@ -54,12 +54,12 @@ public class QbitAutoRedLeft extends Auto {
             moveTurnGyro(0.4,90);
             drive.halt();
             //move to back along y
-            moveDistanceForward(0.6,-40);
+            moveDistanceForward(0.6,-50);
             drive.halt();
             moveTurnGyro(0.4,0);
             drive.halt();
 //            //move to correct april tag
-            moveDistanceForward(0.6,-36);
+            moveDistanceForward(0.6,-44);
             pause(0.5);
             //drive.halt();
             moveTurnGyro(0.4,90);
@@ -177,28 +177,31 @@ public class QbitAutoRedLeft extends Auto {
 //            log.show("right");
 //            DropPurpleR(0);
         }
-        else if(propCaseDetected.equals(TeamProp.LEFT)){
+        else if(propCaseDetected.equals(TeamProp.RIGHT)){
             outtake.moveClawClose();
             //move to team prop
-            moveTurnGyroMoveSmoothDistanceForward(0.5, -85, 0.3, -90);
+            moveDistanceForward(0.4,-20);
+            moveTurnGyro(0.4,-40);
+            moveDistanceForward(0.5, -51);
             pause(0.5);
             drive.halt();
             //move to start
-            moveTurnGyroMoveSmoothDistanceForward(0.5, 80, 0.3, 0);
+            moveDistanceForward(0.5, 71);
+            moveTurnGyro(0.4,40);
             pause(0.5);
             //move 7 along y axis
-            moveDistanceForward(0.5,15);
+            moveDistanceForward(0.5,17);
             drive.halt();
             //turn to back moving along y
             moveTurnGyro(0.4,90);
             drive.halt();
             //move to back along y
-            moveDistanceForward(0.6,-15);
+            moveDistanceForward(0.6,-13);
             drive.halt();
             moveTurnGyro(0.4,0);
             drive.halt();
 //            //move to correct april tag
-            moveDistanceForward(0.6,-50);
+            moveDistanceForward(0.6,-57);
             pause(0.5);
             //drive.halt();
             moveTurnGyro(0.4,90);

@@ -57,8 +57,8 @@ public class CaseScannerRectRl extends Scanner {
         TeamProp caseDetected;
 
         // Define regions to crop
-        Rect leftRect = new Rect(70, 180, 130, 130);
-        Rect centerRect = new Rect(385, 150, 130, 130);
+        Rect centerRect = new Rect(95, 180, 130, 130);
+        Rect leftRect = new Rect(480, 150, 130, 130);
 
 
         // Convert to different color space
@@ -108,10 +108,11 @@ public class CaseScannerRectRl extends Scanner {
         // Decide the case based on the averages
         if(centerAverage > threshold){
             caseDetected = TeamProp.CENTER;
+            //LEFT IS RIGHT TODO CHANGE
         }else if(leftAverage > threshold){
             caseDetected = TeamProp.RIGHT;
         }else{
-            caseDetected = TeamProp.LEFT;
+            caseDetected = TeamProp.RIGHT;
         }
 
         // Release the memory
