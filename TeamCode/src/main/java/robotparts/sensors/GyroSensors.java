@@ -22,9 +22,11 @@ public class GyroSensors extends RobotPart {
         // TOD 5 Cant turn past 540 degs
     }
 
-//    public void setHeading(double heading){ gs.setHeading(heading); }
+    public void setHeading(double heading){ gs.setHeading(heading); }
 
-    public double getHeading(){ return -gs.getHeading(); }
+    public double getHeading(){ return gs.getHeading(); }
+
+
 //    public double getPitch(){ return gsr.getPitch(); }
 //    public double getPitchDerivative(){ return gsr.getPitchDerivative(); }
 

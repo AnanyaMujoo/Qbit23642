@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import autoutil.AutoFramework;
+import elements.Case;
+import elements.TeamProp;
 import util.codeseg.ParameterCodeSeg;
 
 import static global.General.gamepad1;
@@ -244,4 +246,9 @@ public abstract class Scanner extends OpenCvPipeline {
         }
     }
 
+    public void setColor(String color) {}
+
+    public void setSide(String side) {}
+
+    public TeamProp getCase() { return null; }
 }

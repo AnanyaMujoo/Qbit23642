@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 import elements.TeamProp;
 
-public class CaseScannerRectBr extends Scanner {
+public class CaseScannerRectBottom extends Scanner {
 
     private volatile TeamProp caseDetected = TeamProp.LEFT;
     protected final TeamProp[] cases = new TeamProp[]{TeamProp.LEFT, TeamProp.CENTER, TeamProp.RIGHT};

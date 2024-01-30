@@ -15,13 +15,12 @@ import autoutil.generators.BreakpointGenerator;
 import autoutil.generators.Generator;
 import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
-import autoutil.vision.CaseScanner;
-import autoutil.vision.CaseScannerBar;
-import autoutil.vision.CaseScannerRectBr;
+import autoutil.vision.CaseScannerRectBottom;
 import autoutil.vision.Scanner;
 import elements.Case;
 import elements.FieldPlacement;
 import elements.FieldSide;
+import elements.TeamProp;
 import geometry.framework.CoordinatePlane;
 import geometry.position.Pose;
 import robotparts.RobotPart;
@@ -61,10 +60,9 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     protected boolean scanning = false;
     protected boolean haltCameraAfterInit = true;
-    protected CaseScanner caseScanner;
-    protected CaseScannerRectBr caseScannerRect;
+    protected Scanner caseScannerRect;
     protected Scanner scannerAfterInit;
-    protected Case caseDetected = Case.FIRST;
+    protected TeamProp caseDetected = TeamProp.LEFT;
 
     private int segmentIndex = 1;
     private int pauseIndex, autoModuleIndex, customSegmentIndex, breakpointIndex = 0;
@@ -105,7 +103,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public static boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }
     public void flip(){ autoPlane.reflectX(); autoPlane.reflectPoses(); }
-    public void flipCases(){ if(caseDetected.equals(Case.FIRST)){ caseDetected = Case.THIRD; }else if(caseDetected.equals(Case.THIRD)){ caseDetected = Case.FIRST; }}
+    public void flipCases(){ if(caseDetected.equals(TeamProp.LEFT)){ caseDetected = TeamProp.RIGHT; }else if(caseDetected.equals(TeamProp.RIGHT)){ caseDetected = TeamProp.LEFT; }}
 
     public void addDecision(DecisionList decisionList){ decisionList.check(); }
     public void addAutomodule(DecisionList decisionList){ addAutoModule(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways()))); }
@@ -122,14 +120,16 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         scannerAfterInit = scanner;
     }
 
-    public void scan(boolean view){
+    public void scan(Scanner scanner, boolean view, String color, String side){
         scanning = true;
-        caseScanner = new CaseScannerBar();
-        camera.setScanner(caseScanner);
+        caseScannerRect = scanner;
+        caseScannerRect.setColor(color);
+        caseScannerRect.setSide(side);
+        camera.setScanner(caseScannerRect);
         camera.start(view);
     }
     public void scanRect(boolean view, String color, String side){
-        caseScannerRect = new CaseScannerRectBr();
+        caseScannerRect = new CaseScannerRectBottom();
         camera.start(true);
         camera.setScanner(caseScannerRect);
         caseScannerRect.setColor(color);
@@ -142,7 +142,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public final void initAuto() {
         initialize();
         if(scanning){
-            while (!isStarted() && !isStopRequested()){ caseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
+            while (!isStarted() && !isStopRequested()){ caseDetected = caseScannerRect.getCase(); caseScannerRect.log(); log.showTelemetry(); }
             if(haltCameraAfterInit) { camera.halt(); }else{ camera.setScanner(scannerAfterInit); }
         }
         setup();
@@ -294,9 +294,9 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         breakpoints = new ArrayList<>();
         scanning = false;
         haltCameraAfterInit = true;
-        caseScanner = null;
+        caseScannerRect = null;
         scannerAfterInit = null;
-        caseDetected = Case.FIRST;
+        caseDetected = TeamProp.LEFT;
         segmentIndex = 1;
         pauseIndex = 0;
         autoModuleIndex = 0;

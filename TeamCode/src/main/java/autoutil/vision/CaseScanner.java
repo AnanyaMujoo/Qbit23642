@@ -10,6 +10,7 @@ import org.opencv.core.Rect;
 import java.util.Arrays;
 
 import elements.Case;
+import elements.TeamProp;
 import util.Timer;
 import util.template.Iterator;
 
@@ -77,5 +78,9 @@ public class CaseScanner extends Scanner{
         caseDetected = getCaseStable(cases[getCase(input)]);
     }
 
-    public final Case getCase(){ return caseDetected; }
+    public final TeamProp getCase(){
+        // TODO FIX
+        return null;
+//        return caseDetected;
+    }
 }

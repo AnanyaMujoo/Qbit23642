@@ -40,6 +40,8 @@ public class QbitOp extends Tele {
         gph2.link(Button.X, Intake);
         gph2.link(Button.Y, Prepare(10));
 
+        odometry.reset();
+
 
 
 //TODO --> fix the telemetry for buttons (make it accurate)
@@ -51,8 +53,7 @@ public class QbitOp extends Tele {
 
     @Override
     public void startTele() {
-        gyro.reset();
-        oneOdometry.reset();
+        odometry.reset();
     }
 
     @Override
@@ -74,17 +75,20 @@ public class QbitOp extends Tele {
 
         }
         // TODO COMMENT THIS OUT WHEN DONE
+//        log.show(odometry.getEncX());
+//        log.show(odometry.getEncY());
+        log.show(odometry.getPose());
 //        log.show("Right Odometry Distance: ", oneOdometry.getRightOdometryDistance());
 //        log.show("Back Odometry: ", oneOdometry.getBackOdometryDistance());
 //        log.show("Gyro Heading: ", gyro.getHeading());
 
-        log.show(colorSensors.leftPixelDistance());
-        log.show(colorSensors.rightPixelDistance());
-        log.show("Claw Left");
-        log.show(outtake.clawLeft.getPosition());
-        log.show("Claw Right");
-        log.show(outtake.clawRight.getPosition());
-        log.show(gyro.getHeading());
+//        log.show(colorSensors.leftPixelDistance());
+//        log.show(colorSensors.rightPixelDistance());
+//        log.show("Claw Left");
+//        log.show(outtake.clawLeft.getPosition());
+//        log.show("Claw Right");
+//        log.show(outtake.clawRight.getPosition());
+//        log.show(gyro.getHeading());
 
 
 
@@ -112,8 +116,8 @@ public class QbitOp extends Tele {
 
 
 
-        log.show(lift.liftLeft.getPosition());
-        log.show(lift.liftRight.getPosition());
+//        log.show(lift.liftLeft.getPosition());
+//        log.show(lift.liftRight.getPosition());
 
     }
 

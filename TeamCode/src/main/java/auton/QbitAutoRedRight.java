@@ -5,7 +5,6 @@ import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import autoutil.vision.CaseScannerRectBr;
 import autoutil.vision.CaseScannerRectRr;
 import elements.TeamProp;
 import math.polynomial.Linear;
