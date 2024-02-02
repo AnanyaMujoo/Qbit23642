@@ -29,16 +29,16 @@ public class Intake extends RobotPart {
         return super.moveTime(power, time);
     }
 
-    public Stage stageMoveUntilPixelsAreLoaded(double power) {
-        return new Stage(
-                usePart(),
-                new Main(()->move(1)),
-               new Exit(colorSensors::arePixelsLoaded),
-                new Stop(()->move(0.0)),
-                returnPart()
-
-                );
-    }
+//    public Stage stageMoveUntilPixelsAreLoaded(double power) {
+//        return new Stage(
+//                usePart(),
+//                new Main(()->move(1)),
+//               new Exit(colorSensors::arePixelsLoaded),
+//                new Stop(()->move(0.0)),
+//                returnPart()
+//
+//                );
+//    }
 
 
 

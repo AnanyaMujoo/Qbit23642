@@ -49,6 +49,12 @@ public interface AutoModuleUser extends RobotUser {
 
 
     );}
+    default AutoModule closeClaw(){return new AutoModule(
+        outtake.stageClawClose(0.5)
+    );}
+    default AutoModule openClaw(){return new AutoModule(
+            outtake.stageClawOpen(0.5)
+    );}
     default AutoModule WhyWontLiftWork(){return new AutoModule(
         lift.stageLift(0.3,0),
             outtake.stageFlipStart(0.5)
@@ -98,7 +104,7 @@ public interface AutoModuleUser extends RobotUser {
 
 
     AutoModule Intake = new AutoModule(
-            intake.stageMoveUntilPixelsAreLoaded(0.3),
+//            intake.stageMoveUntilPixelsAreLoaded(0.3),
             pause(5),
             outtake.stageClawClose(0.0),
             intake.moveTime(-0.3,1.0)

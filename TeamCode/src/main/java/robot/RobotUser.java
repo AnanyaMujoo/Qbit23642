@@ -11,7 +11,7 @@ import robotparts.unused.Intake;
 import robotparts.hardware.Lift;
 import robotparts.hardware.Outtake;
 import robotparts.sensors.Cameras;
-import robotparts.sensors.ColorSensors;
+//import robotparts.sensors.ColorSensors;
 import robotparts.sensors.GyroSensors;
 import robotparts.unused.DistanceSensors;
 import robotparts.unused.CustomTestPart;
@@ -49,7 +49,7 @@ public interface RobotUser {
     Intake intake = new Intake();
     TouchSensors touchSensors = new TouchSensors();
 
-    ColorSensors colorSensors = new ColorSensors();
+//    ColorSensors colorSensors = new ColorSensors();
 
     /**
      * Test Part

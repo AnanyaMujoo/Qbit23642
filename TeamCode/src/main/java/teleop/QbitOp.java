@@ -32,8 +32,8 @@ public class QbitOp extends Tele {
         gph1.link(Button.A, drone::moveDroneStart);
         gph1.link(Button.B, drone::moveDroneRelease);
 
-        gph1.linka(Button.DPAD_UP, lift.lifttarget(3));
-        gph1.linka(Button.DPAD_DOWN, lift.lifttarget(-3));
+        gph2.linka(Button.DPAD_UP, lift.lifttarget(3));
+        gph2.linka(Button.DPAD_DOWN, lift.lifttarget(-3));
 
 
         gph2.link(Button.B, Deposit);
@@ -61,7 +61,7 @@ public class QbitOp extends Tele {
 //        log.show("Flip (buttons):   b:start, y:middle, x:end");
 //        log.show("Claw (bumpers):   right:close, left:open");
 //        log.show("Drone (dpad):   up:start, down:release");
-        drive.move(gph1.ry,gph1.rx,gph1.lx*0.4);
+        drive.move(gph1.ry,gph1.rx,gph1.lx*0.5);
    //     drive.move((gph1.rt-gph1.lt)*0.5,gph1.lx*0.5,gph1.rx*0.4);
 
         intake.move(gph2.ry);
@@ -77,7 +77,7 @@ public class QbitOp extends Tele {
         // TODO COMMENT THIS OUT WHEN DONE
 //        log.show(odometry.getEncX());
 //        log.show(odometry.getEncY());
-        log.show(odometry.getPose());
+//        log.show(odometry.getPose());
 //        log.show("Right Odometry Distance: ", oneOdometry.getRightOdometryDistance());
 //        log.show("Back Odometry: ", oneOdometry.getBackOdometryDistance());
 //        log.show("Gyro Heading: ", gyro.getHeading());

@@ -22,7 +22,7 @@ public class CaseScannerRectRl extends Scanner {
     String color;
     String side;
     public double centerAverage;
-    public double leftAverage;
+    public double rightAverage;
 
     public int getCase(Mat input, String color) {
         cropAndFill(input, getZoomedRect(input, 1.6, 30));
@@ -58,7 +58,7 @@ public class CaseScannerRectRl extends Scanner {
 
         // Define regions to crop
         Rect centerRect = new Rect(95, 180, 130, 130);
-        Rect leftRect = new Rect(480, 150, 130, 130);
+        Rect rightRect = new Rect(480, 150, 130, 130);
 
 
         // Convert to different color space
@@ -85,12 +85,12 @@ public class CaseScannerRectRl extends Scanner {
         Color.copyTo(input);
 
         // Crop the red mat
-        Mat leftCrop = getSubmat(Color, leftRect);
+        Mat rightCrop = getSubmat(Color, rightRect);
         Mat centerCrop = getSubmat(Color, centerRect);
 
         // Calculate the averages
         centerAverage = getAverageValue(centerCrop);
-        leftAverage = getAverageValue(leftCrop);
+        rightAverage = getAverageValue(rightCrop);
 
 
 
@@ -109,7 +109,7 @@ public class CaseScannerRectRl extends Scanner {
         if(centerAverage > threshold){
             caseDetected = TeamProp.CENTER;
             //LEFT IS RIGHT TODO CHANGE
-        }else if(leftAverage > threshold){
+        }else if(rightAverage > threshold){
             caseDetected = TeamProp.RIGHT;
         }else{
             caseDetected = TeamProp.RIGHT;
@@ -121,7 +121,7 @@ public class CaseScannerRectRl extends Scanner {
 
 
         // Draw to screen
-        drawRectangle(input, leftRect, GREEN);
+        drawRectangle(input, rightRect, GREEN);
         drawRectangle(input, centerRect, GREEN);
 
         return caseDetected;

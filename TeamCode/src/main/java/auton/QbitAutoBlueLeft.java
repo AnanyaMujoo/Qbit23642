@@ -66,7 +66,7 @@ public class QbitAutoBlueLeft extends Auto {
             bot.addAutoModule(AutoYellow());
             pause(0.5);
             AutoYellow();
-            pause(1);
+            pause(3);
             outtake.moveClawClose();
             moveTime(-0.3,0,0,1.5);
         outtake.moveClawOpen();
