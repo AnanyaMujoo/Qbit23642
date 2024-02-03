@@ -112,7 +112,7 @@ public class CaseScannerRectRl extends Scanner {
         }else if(rightAverage > threshold){
             caseDetected = TeamProp.RIGHT;
         }else{
-            caseDetected = TeamProp.RIGHT;
+            caseDetected = TeamProp.LEFT;
         }
 
         // Release the memory

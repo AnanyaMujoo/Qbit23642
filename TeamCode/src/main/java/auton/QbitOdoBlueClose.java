@@ -14,15 +14,16 @@ import geometry.position.Pose;
 
 import static global.General.fieldPlacement;
 import static global.General.fieldSide;
+import static global.General.log;
 
 
-@Autonomous(name = "QbitoOdoBlueClose", group = "Autonomous")
+@Autonomous(name = "QbitOdoBlueClose", group = "Autonomous")
 public class QbitOdoBlueClose extends AutoFramework {
-    protected TeamProp propCaseDetected = TeamProp.RIGHT;
+    protected CaseScannerRectBottom CaseScanner = new CaseScannerRectBottom();
 
     {
         fieldSide = FieldSide.BLUE;
-        fieldPlacement = FieldPlacement.UPPER;
+        fieldPlacement = FieldPlacement.LOWER;
         startPose = new Pose(20.5, Field.width / 2.0 - 1.5*Field.tileWidth, 90);
     }
 
@@ -30,46 +31,46 @@ public class QbitOdoBlueClose extends AutoFramework {
     @Override
     public void initialize() {
         setConfig(mecanumNonstopConfig);
+
         lift.maintain();
         wait(0.5);
-        scan(new CaseScannerRectBl(), true, "blue", "left");
+        scan(new CaseScannerRectBl(), true, "blue", "right");
+
+
     }
 
 
     @Override
     public void define() {
         if (caseDetected==TeamProp.RIGHT) {
-            addSegment(0.4, mecanumDefaultWayPoint, 0, -70, -50);
+            addSegment(0.4, mecanumDefaultWayPoint, 0, -74, -50);
             addConcurrentAutoModule(closeClaw());
             closeClaw();
 
-            addTimedSetpoint(1.0, 0.4, 1.0, -13, -70, -60);
+            addTimedSetpoint(1.0, 0.4, 1.0, -13, -76, -60);
             addSegment(0.4, mecanumDefaultWayPoint, 0, -30, 0);
 
             addTimedSetpoint(1.0, 0.4, 1.0, 0, -10, 0);
-            addSegment(0.8, mecanumDefaultWayPoint, 86, 0, 0);
-            addTimedSetpoint(1.0, 0.4, 1.0, 86, 0, 0);
-            addSegment(0.4, mecanumDefaultWayPoint, 86, 0, 80);
-            addTimedSetpoint(1.0, 0.3, 1.0, 117, -75, 90);
+            addSegment(0.8, mecanumDefaultWayPoint, 70, 0, 0);
+            addTimedSetpoint(1.0, 0.4, 1.0, 75, 0, 0);
+            addSegment(0.4, mecanumDefaultWayPoint, 80, 0, 89);
+            addTimedSetpoint(1.0, 0.3, 1.0, 107, -120, 90);
 
             addConcurrentAutoModule(AutoYellow());
             AutoYellow();
-            addPause(0.5);
-            AutoYellow();
+            addPause(1);
             addConcurrentAutoModule(openClaw());
             addPause(1);
             openClaw();
-            addPause(3);
-            addSegment(1.0, 0.3, mecanumDefaultWayPoint, 86, -85, 0);
+            addPause(1.5);
+            closeClaw();
+            openClaw();
+            closeClaw();
+            addSegment(1.0, 0.3, mecanumDefaultWayPoint, 40, -120, 90);
             addConcurrentAutoModule(WhyWontLiftWork());
             WhyWontLiftWork();
-            addSegment(1.0, 0.4, mecanumDefaultWayPoint, 117, -85, 0);
-            addTimedSetpoint(1.0, 0.4, 1.0, 117, -115, 0);
-            //park on other side
-
-//            addTimedSetpoint(1.0, 0.4, 1.0, 117, -10, 0);
-
-
+            addSegment(1.0, 0.4, mecanumDefaultWayPoint, 80, -125, 90);
+            addTimedSetpoint(1.0, 0.4, 1.0, 107, -130, 90);
 
 
 
@@ -85,46 +86,10 @@ public class QbitOdoBlueClose extends AutoFramework {
             addSegment(0.4, mecanumDefaultWayPoint, 0, -30, 0);
 
             addTimedSetpoint(1.0, 0.4, 1.0, 0, -10, 0);
-            addSegment(0.8, mecanumDefaultWayPoint, 86, 0, 0);
-            addTimedSetpoint(1.0, 0.4, 1.0, 86, 0, 0);
-            addSegment(0.4, mecanumDefaultWayPoint, 86, 0, 80);
-            addTimedSetpoint(1.0, 0.3, 1.0, 117, -65, 90);
-
-            addConcurrentAutoModule(AutoYellow());
-            AutoYellow();
-            addPause(0.5);
-            AutoYellow();
-            addConcurrentAutoModule(openClaw());
-            addPause(1);
-            openClaw();
-            addPause(3);
-            addSegment(1.0, 0.3, mecanumDefaultWayPoint, 86, -75, 0);
-            addConcurrentAutoModule(WhyWontLiftWork());
-            WhyWontLiftWork();
-            addSegment(1.0, 0.4, mecanumDefaultWayPoint, 117, -75, 0);
-            addTimedSetpoint(1.0, 0.4, 1.0, 117, -115, 0);
-            //park on other side
-//            addTimedSetpoint(1.0, 0.4, 1.0, 117, -10, 0);
-
-
-
-
-
-
-        }
-        if (caseDetected==TeamProp.LEFT) {
-            addConcurrentAutoModule(closeClaw());
-            closeClaw();
-            addSegment(0.4, mecanumDefaultWayPoint, 0, -55, -20);
-
-            addTimedSetpoint(1.0, 0.4, 1.0, 0, -60, -20);
-            addSegment(0.4, mecanumDefaultWayPoint, 0, -30, 0);
-
-            addTimedSetpoint(1.0, 0.4, 1.0, 0, -10, 0);
-            addSegment(0.8, mecanumDefaultWayPoint, -86, 0, 0);
-            addTimedSetpoint(1.0, 0.4, 1.0, -86, 0, 0);
-            addSegment(0.4, mecanumDefaultWayPoint, -86, 0, -80);
-            addTimedSetpoint(1.0, 0.3, 1.0, -117, -58, -90);
+            addSegment(0.8, mecanumDefaultWayPoint, 70, -10, 0);
+            addTimedSetpoint(1.0, 0.4, 1.0, 75, -10, 0);
+            addSegment(0.4, mecanumDefaultWayPoint, 80, -10, 89);
+            addTimedSetpoint(1.0, 0.3, 1.0, 107, -90, 90);
 
             addConcurrentAutoModule(AutoYellow());
             AutoYellow();
@@ -136,23 +101,44 @@ public class QbitOdoBlueClose extends AutoFramework {
             closeClaw();
             openClaw();
             closeClaw();
-            lift.stageLift(0.3,5);
-            addPause(3);
-            addSegment(1.0, 0.3, mecanumDefaultWayPoint, -86, -58, -90);
+            addSegment(1.0, 0.3, mecanumDefaultWayPoint, 40, -100, 90);
             addConcurrentAutoModule(WhyWontLiftWork());
             WhyWontLiftWork();
-            addSegment(1.0, 0.3, mecanumDefaultWayPoint, -117, -65, 0);
-            addSegment(1.0, 0.4, mecanumDefaultWayPoint, -117, -65, 0);
-            addTimedSetpoint(1.0, 0.4, 1.0, -235, -117, 0);
-
-            //park on other side
-
-//            addTimedSetpoint(1.0, 0.4, 1.0, 117, -10, 0);
+            addSegment(1.0, 0.4, mecanumDefaultWayPoint, 80, -125, 90);
+            addTimedSetpoint(1.0, 0.4, 1.0, 107, -130, 90);
 
 
 
+        }
+        if (caseDetected==TeamProp.LEFT) {
+            addConcurrentAutoModule(closeClaw());
+            closeClaw();
+            addSegment(0.4, mecanumDefaultWayPoint, 0, -50, 30);
 
+            addTimedSetpoint(1.0, 0.4, 1.0, 0, -60, 30);
+            addSegment(0.4, mecanumDefaultWayPoint, 0, -30, 0);
 
+            addTimedSetpoint(1.0, 0.4, 1.0, 0, -10, 0);
+            addSegment(0.8, mecanumDefaultWayPoint, 70, -10, 0);
+            addTimedSetpoint(1.0, 0.4, 1.0, 75, -10, 0);
+            addSegment(0.4, mecanumDefaultWayPoint, 80, -49, 89);
+            addTimedSetpoint(1.0, 0.3, 1.0, 107, -49, 90);
+
+            addConcurrentAutoModule(AutoYellow());
+            AutoYellow();
+            addPause(1);
+            addConcurrentAutoModule(openClaw());
+            addPause(1);
+            openClaw();
+            addPause(1.5);
+            closeClaw();
+            openClaw();
+            closeClaw();
+            addSegment(1.0, 0.3, mecanumDefaultWayPoint, 40, -100, 90);
+            addConcurrentAutoModule(WhyWontLiftWork());
+            WhyWontLiftWork();
+            addSegment(1.0, 0.4, mecanumDefaultWayPoint, 80, -125, 90);
+            addTimedSetpoint(1.0, 0.4, 1.0, 107, -130, 90);
 
 
         }
