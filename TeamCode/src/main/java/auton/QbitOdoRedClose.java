@@ -20,7 +20,7 @@ import static global.General.log;
 
 @Autonomous(name = "QbitOdoRedClose", group = "Autonomous")
 public class QbitOdoRedClose extends AutoFramework {
-    protected CaseScannerRectBottom CaseScanner = new CaseScannerRectBottom();
+    protected CaseScannerRectRl CaseScanner = new CaseScannerRectRl();
 
     {
         fieldSide = FieldSide.RED;
@@ -40,7 +40,7 @@ public class QbitOdoRedClose extends AutoFramework {
 
     }
 
-
+//TODO MAYBE FIX LEFT AND RIGHT CASE DETECTED
     @Override
     public void define() {
         if (caseDetected==TeamProp.RIGHT) {
@@ -54,8 +54,8 @@ public class QbitOdoRedClose extends AutoFramework {
             addTimedSetpoint(1.0, 0.4, 1.0, 0, -10, 0);
             addSegment(0.8, mecanumDefaultWayPoint, 70, 0, 0);
             addTimedSetpoint(1.0, 0.4, 1.0, 75, 0, 0);
-            addSegment(0.4, mecanumDefaultWayPoint, 80, -160, 89);
-            addTimedSetpoint(1.0, 0.3, 1.0, 107, -160, 90);
+            addSegment(0.4, mecanumDefaultWayPoint, 80, -90, 89);
+            addTimedSetpoint(1.0, 0.3, 1.0, 100, -90, 90);
 
             addConcurrentAutoModule(AutoYellow());
             AutoYellow();
@@ -65,7 +65,9 @@ public class QbitOdoRedClose extends AutoFramework {
             openClaw();
             addPause(1.5);
             closeClaw();
+            addPause(0.5);
             openClaw();
+            addPause(0.5);
             closeClaw();
             addSegment(1.0, 0.3, mecanumDefaultWayPoint, 40, -120, 90);
             addConcurrentAutoModule(WhyWontLiftWork());
@@ -112,18 +114,19 @@ public class QbitOdoRedClose extends AutoFramework {
 
         }
         if (caseDetected==TeamProp.LEFT) {
+            //ACTUALLY RIGHT
             addConcurrentAutoModule(closeClaw());
             closeClaw();
             addSegment(0.4, mecanumDefaultWayPoint, 0, -50, 30);
 
             addTimedSetpoint(1.0, 0.4, 1.0, 0, -60, 30);
-            addSegment(0.4, mecanumDefaultWayPoint, 0, -30, 0);
+            addSegment(0.4, mecanumDefaultWayPoint, 0, -25, 0);
 
             addTimedSetpoint(1.0, 0.4, 1.0, 0, -10, 0);
             addSegment(0.8, mecanumDefaultWayPoint, 70, -10, 0);
             addTimedSetpoint(1.0, 0.4, 1.0, 75, -10, 0);
-            addSegment(0.4, mecanumDefaultWayPoint, 80, -90, 89);
-            addTimedSetpoint(1.0, 0.3, 1.0, 107, -90, 90);
+            addSegment(0.4, mecanumDefaultWayPoint, 80, -50, 89);
+            addTimedSetpoint(1.0, 0.3, 1.0, 107, -60, 90);
 
             addConcurrentAutoModule(AutoYellow());
             AutoYellow();
