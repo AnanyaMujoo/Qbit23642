@@ -40,6 +40,9 @@ public interface AutoModuleUser extends RobotUser {
     default AutoModule Lift (double height){return new AutoModule(
             lift.stageLift(0.2,height)
     ); }
+    default AutoModule pleaseDontLift (){return new AutoModule(
+            lift.stageLift(0.2,5)
+    );}
     default AutoModule AutoYellow(){return new AutoModule(
             lift.stageLift(0.2,5),
             outtake.stageFlipStart(0.5),

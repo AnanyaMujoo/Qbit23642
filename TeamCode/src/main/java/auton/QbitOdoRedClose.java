@@ -39,7 +39,7 @@ public class QbitOdoRedClose extends AutoFramework {
 
     @Override
     public void define() {
-        if (propCaseDetected==TeamProp.LEFT) {
+        if (caseDetected==TeamProp.LEFT) {
             addSegment(0.4, mecanumDefaultWayPoint, 0, -70, 50);
             addConcurrentAutoModule(closeClaw());
             closeClaw();
@@ -77,7 +77,7 @@ public class QbitOdoRedClose extends AutoFramework {
 
 //            addTimedSetpoint(1.0, 0.4, 1.0, 0, -15, 0);
         }
-        if (propCaseDetected==TeamProp.CENTER) {
+        if (caseDetected==TeamProp.CENTER) {
             addConcurrentAutoModule(closeClaw());
             closeClaw();
             addSegment(0.4, mecanumDefaultWayPoint, 0, -70, 0);
@@ -113,7 +113,7 @@ public class QbitOdoRedClose extends AutoFramework {
 
 
         }
-        if (propCaseDetected==TeamProp.RIGHT) {
+        if (caseDetected==TeamProp.RIGHT) {
             addConcurrentAutoModule(closeClaw());
             closeClaw();
             addSegment(0.4, mecanumDefaultWayPoint, 0, -50, 20);
