@@ -22,6 +22,8 @@ import elements.FieldPlacement;
 import elements.FieldSide;
 import elements.TeamProp;
 import geometry.framework.CoordinatePlane;
+import geometry.framework.Point;
+import geometry.position.Bezier;
 import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.Timer;
@@ -182,6 +184,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addSegment(double scale, AutoSegment<?,?> segment, double x, double y, double h){addScale(scale); addSegment(segment, x, y, h); }
     public void addSegment(AutoSegment<?,?> segment, double x, double y, double h){ customSegments.add(segment); segmentTypes.add(AutoSegment.Type.CUSTOM); poses.add(new Pose(x, y, h)); }
 
+
     private void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(config.getSetpointSegment().getReactorReference(), generator); }
 
     public void addScale(double scale){ movementScales.set(poses.size()-1, scale); }
@@ -195,6 +198,34 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addTimedSetpoint(double acc, double scale, double time, double x, double y, double h){ addTime(time); addSetpoint(acc, scale, x, y, h); }
     public void addTimedWaypoint(double scale, double time, double x, double y, double h){ addTime(time); addWaypoint(scale, x, y, h);}
 
+    public void addBezierWaypoints(double scale, double time, Point start, Point control1, Point control2, Point end, double h, int indices){
+        Bezier newBezier = new Bezier(start, control1, control2, end);
+        for (int t=0; t<1; t+=1/indices) {
+            Point currentPoint= newBezier.getAt(t,time);
+            double x=currentPoint.getX();
+            double y= currentPoint.getY();
+            addWaypoint(scale, x,y,h/indices);
+        }
+        Point currentPoint= newBezier.getAt(time);
+        double x=currentPoint.getX();
+        double y= currentPoint.getY();
+        addTimedSetpoint(1, scale, time, x, y, h/indices);
+    }
+
+    public void addBezierSegments(double scale, double time, Point start, Point control1, Point control2, Point end, double h, int indices){
+        Bezier newBezier = new Bezier(start, control1, control2, end);
+        for (int t=0; t<1; t+=1/indices) {
+            Point currentPoint= newBezier.getAt(t,time);
+            double x=currentPoint.getX();
+            double y= currentPoint.getY();
+            AutoSegment<?,?> segment= new AutoSegment<>(mecanumPurePursuitReactor, lineGenerator);
+            addSegment(segment, x, y, h/indices);
+        }
+        Point currentPoint= newBezier.getAt(time);
+        double x=currentPoint.getX();
+        double y= currentPoint.getY();
+        addTimedSetpoint(1, scale, time/indices, x, y, h/indices);
+    }
 
     private void addCustomCodeInternal(CodeSeg code){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(code); addLastPose(); }
     public void addCustomCode(CodeSeg code){ addCustomCodeInternal(() -> {
