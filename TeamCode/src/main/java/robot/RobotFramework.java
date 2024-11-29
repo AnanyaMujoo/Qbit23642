@@ -23,8 +23,8 @@ import util.template.Iterator;
 import util.template.Precision;
 
 import static global.General.*;
-import static robot.RobotUser.gyro;
-import static robot.RobotUser.odometry;
+//import static robot.RobotUser.gyro;
+//import static robot.RobotUser.odometry;
 
 public class RobotFramework {
     /**

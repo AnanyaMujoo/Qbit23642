@@ -17,9 +17,6 @@ public class TestOp extends Tele {
     @Override
     public void initTele() {
 
-//TODO --> fix the telemetry for buttons (make it accurate)
-
-
 
 
     }
