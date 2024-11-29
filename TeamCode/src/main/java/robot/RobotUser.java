@@ -2,6 +2,7 @@ package robot;
 
 import robotparts.hardware.Drone;
 import robotparts.hardware.Hanging;
+import robotparts.hardware.Intake2;
 import robotparts.sensors.odometry.NewOdometry;
 import robotparts.sensors.odometry.OneOdometry;
 //import robotparts.sensors.odometry.SecondOdometry;
@@ -47,6 +48,8 @@ public interface RobotUser {
      */
 
     Intake intake = new Intake();
+    Intake2 intake2 = new Intake2();
+
     TouchSensors touchSensors = new TouchSensors();
 
 //    ColorSensors colorSensors = new ColorSensors();
