@@ -112,9 +112,7 @@ public class ThreeOdometry extends TwoOdometry {
         setCurrentPose(odometryCenter.getAdded(globalOdometryCenterToRobotCenter.getPoint()));
     }
 
-    public void setHeadingUsingOffset(double heading) {
-        gyro.setHeading(heading);
-    }
+
 
     @Override
     protected void resetObjects() { odometryCenter.set(new Point()); offset = new Point(); adjust = new Vector();  }

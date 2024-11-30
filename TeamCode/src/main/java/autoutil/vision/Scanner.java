@@ -1,6 +1,7 @@
 package autoutil.vision;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -15,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import autoutil.AutoFramework;
-import elements.FieldSide;
+import elements.Case;
+import elements.TeamProp;
 import util.codeseg.ParameterCodeSeg;
 
-import static global.General.fieldSide;
 import static global.General.gamepad1;
 import static global.General.log;
 import static java.lang.Math.abs;
@@ -37,6 +38,7 @@ public abstract class Scanner extends OpenCvPipeline {
     public static final Scalar CYAN = new Scalar(0,255,255);
     public static final Scalar MAGENTA = new Scalar(255,0,255);
     public static final Scalar ORANGE = new Scalar(255,165,0);
+    public static final Scalar WHITE = new Scalar(255, 255, 255);
 
     protected final Mat Hierarchy = new Mat();
     protected final Mat Mask = new Mat();
@@ -76,7 +78,7 @@ public abstract class Scanner extends OpenCvPipeline {
         return input;
     }
 
-    private void toYCrCb(Mat input, Mat output) { Imgproc.cvtColor(input, output, Imgproc.COLOR_RGB2YCrCb); }
+    public void convertToYCrCb(Mat input, Mat output) { Imgproc.cvtColor(input, output, Imgproc.COLOR_RGB2YCrCb); }
     private void toCb(Mat YCrCb, Mat output){ Core.extractChannel(YCrCb, output, 2); }
     protected void getHSV(Mat input){ Imgproc.cvtColor(input, HSV, Imgproc.COLOR_RGB2HSV); }
     protected void getGray(Mat input){ Imgproc.cvtColor(input, Gray, Imgproc.COLOR_RGB2GRAY);}
@@ -167,8 +169,17 @@ public abstract class Scanner extends OpenCvPipeline {
         return new Rect[]{rectLeft, rectCenter, rectRight};
     }
 
+    public void getChannel(Mat input, Mat output, int index){
+        Core.extractChannel(input, output, index);
+    }
+
+    public void increaseContrast(Mat input, double alpha, double beta){
+        input.convertTo(input, input.type(), alpha, beta);
+    }
+
     public Mat getSubmat(Mat input, Rect region){ return input.submat(region); }
     public Scalar getAverage(Mat mat){ return Core.mean(mat); }
+    public double getAverageValue(Mat mat){ return Core.mean(mat).val[0]; }
     public double getAverageHue(Mat mat, Rect region){ return getAverage(mat, region).val[0]; }
     public Scalar getAverage(Mat input, Rect region){ return getAverage(getSubmat(input, region));}
     public Scalar getAverageSquareFromCenter(Mat input, Point center, int size){ return getAverage(input, getSquareFromCenter(center, size)); }
@@ -235,4 +246,9 @@ public abstract class Scanner extends OpenCvPipeline {
         }
     }
 
+    public void setColor(String color) {}
+
+    public void setSide(String side) {}
+
+    public TeamProp getCase() { return null; }
 }

@@ -21,168 +21,168 @@ public class TerraAutoSafe extends AutoFramework {
         x = 0;
         s = 0;
     }
-
-    AutoModule BackwardFirst = new AutoModule(
-            lift.stageLift(1.0, heightMode.getValue(MIDDLE) + 2.0).attach(outtake.stageReadyEndContinuous(0.6))
-    );
-
-    AutoModule Backward = new AutoModule(
-            lift.stageLift(0.8, heightMode.getValue(HIGH) + 2.5).attach(outtake.stageReadyEndContinuous(1.1))
-    ).setStartCode(outtake::flip);
-
-
-
-
-
-    AutoModule ForwardFirst = new AutoModule(
-        RobotPart.pause(0.1),
-        lift.stageLift(1.0,  13.5).attach(outtake.stageStartAfter(0.2))
-    ).setStartCode(() -> {
-        outtake.moveEnd();
-        outtake.openClaw();
-    });
-
-    AutoModule Forward(int i){return new AutoModule(
-        RobotPart.pause(0.1),
-        lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), -0.5)).attach(outtake.stageBack(0.5))
-    ).setStartCode(() -> {
-        outtake.openClaw();
-        outtake.moveEnd();
-    });}
-
-    AutoModule GrabBack = new AutoModule(
-            RobotPart.pause(0.2),
-            lift.moveTimeBackOverride(-0.15, 1.0, 0.3)
-    ).setStartCode(outtake::closeClaw);
-
-    AutoModule GrabBackLast = new AutoModule(
-            drive.moveTime(-0.2, 0, 0,0.2),
-            lift.moveTimeBackOverride(-0.15, 1.0, 0.3)
-    ).setStartCode(outtake::closeClaw);
+//
+//    AutoModule BackwardFirst = new AutoModule(
+//            lift.stageLift(1.0, heightMode.getValue(MIDDLE) + 2.0).attach(outtake.stageReadyEndContinuous(0.6))
+//    );
+//
+//    AutoModule Backward = new AutoModule(
+//            lift.stageLift(0.8, heightMode.getValue(HIGH) + 2.5).attach(outtake.stageReadyEndContinuous(1.1))
+//    ).setStartCode(outtake::flip);
+//
+//
+//
+//
+//
+//    AutoModule ForwardFirst = new AutoModule(
+//        RobotPart.pause(0.1),
+//        lift.stageLift(1.0,  13.5).attach(outtake.stageStartAfter(0.2))
+//    ).setStartCode(() -> {
+//        outtake.moveFlipEnd();
+//        outtake.openClaw();
+//    });
+//
+//    AutoModule Forward(int i){return new AutoModule(
+//        RobotPart.pause(0.1),
+//        lift.stageLift(1.0,  Math.max(13 - (i*13/4.6), -0.5)).attach(outtake.stageBack(0.5))
+//    ).setStartCode(() -> {
+//        outtake.openClaw();
+//        outtake.moveFlipEnd();
+//    });}
+//
+//    AutoModule GrabBack = new AutoModule(
+//            RobotPart.pause(0.2),
+//            lift.moveTimeBackOverride(-0.15, 1.0, 0.3)
+//    ).setStartCode(outtake::closeClaw);
+//
+//    AutoModule GrabBackLast = new AutoModule(
+//            drive.moveTime(-0.2, 0, 0,0.2),
+//            lift.moveTimeBackOverride(-0.15, 1.0, 0.3)
+//    ).setStartCode(outtake::closeClaw);
 
     @Override
     public void define() {
 
         // Pre-loaded cone move
-        addConcurrentAutoModuleWithCancel(new AutoModule(outtake.stageMiddle(0.0), lift.stageLift(1.0, heightMode.getValue(LOW))));
-        customFlipped(() -> {
-            addSegment(1.0, mecanumDefaultWayPoint, 2, 100, 0);
-            addSegment(0.6, mecanumDefaultWayPoint, 3, 109, 0);
-            addSegment(0.36, mecanumDefaultWayPoint, 3, 114, 0);
-        }, () -> {
-            addSegment(1.0, mecanumDefaultWayPoint, 0, 100, 0);
-            addSegment(0.6, mecanumDefaultWayPoint, -1, 109, 0);
-            addSegment(0.36, mecanumDefaultWayPoint, -1, 114, 0);
-        });
-        addConcurrentAutoModuleWithCancel(BackwardFirst);
-        // Pre-loaded cone place
-        customFlipped(() -> {
-            addTimedSetpoint(1.0, 0.7, 0.3, 5, 118, 120);
-            addTimedSetpoint(1.0, 0.3, 1.0, -5, 108, 120);
-        }, () -> {
-            addTimedSetpoint(1.0, 0.7, 0.3, 5, 118, 120);
-            addTimedSetpoint(1.0, 0.3, 1.0, -5, 107.5, 120);
-        });
-        addConcurrentAutoModuleWithCancel(ForwardFirst, 0.1);
-
-        addSegment(0.7, mecanumDefaultWayPoint, 18, 128, 80);
-        // Pick
-        customFlipped(() -> {
-            addSegment(0.6, mecanumDefaultWayPoint, 60-x, 127 + s, 87);
-            addTimedSetpoint(1.0, 0.1, 0.2, 67, 127 , 87);
-        }, () -> {
-            addSegment(0.6, mecanumDefaultWayPoint, 61-x, 125 + s, 87);
-            addTimedSetpoint(1.0, 0.1, 0.3, 72-x, 127 + s, 88);
-        });
-        addCustomCode(() -> {
-            Point point = new Point(odometry.getX(), isFlipped() ? Field.width - 27 : 27);
-//            odometry.setPointUsingOffset(point);
-            outtake.closeClaw();
-            bot.addAutoModuleWithCancel(GrabBack);
-            pause(0.5);
-            outtake.flip();
-        });
-        addConcurrentAutoModuleWithCancel(Backward);
-        addSegment(1.0, mecanumDefaultWayPoint, 10 - x, 122 + s, 88);
-        addSegment(0.7, mecanumDefaultWayPoint, -20 - x, 122 + s, 88);
-        addSegment(0.5, mecanumDefaultWayPoint, -43 - x, 122 + s, 95);
-        customFlipped(() -> {
-            addTimedSetpoint(1.0, 0.3, 1.0, -67.0 - x, 108 + s, 113.0);
-        }, () -> {
-            addTimedSetpoint(1.0, 0.3, 1.0, -67.0 - x, 108 + s, 113.0);
-        });
-        addConcurrentAutoModuleWithCancel(Forward(1), 0.1);
-
-        // Start 4 cycle
-        customNumber(4, i -> {
-            customFlipped(() -> {
-                x = 0.0;
-                s = 1.0+0.4*i;
-            }, () -> {
-                x = 0.0;
-                s = 0.6*i;
-            });
-            // Move to pick
-            customFlipped(() -> {
-                addSegment(0.6, mecanumDefaultWayPoint, i == 0 ? -50 : -45 - x, 125 + s, 110);
-                addSegment(1.0, mecanumDefaultWayPoint, 20 - x, 124 + s, 90);
-                addSegment(0.55, mecanumDefaultWayPoint, 46-x, 127 + s, 88);
-                addSegment(0.4, mecanumDefaultWayPoint, 64-x, 127 + s, 88);
-                addTimedSetpoint(1.0, 0.1, 0.3, 68-x, 127 + s , 88);
-            }, () -> {
-                addSegment(0.6, mecanumDefaultWayPoint, i == 0 ? -52 : -42 - x, i == 0 ? 127 : 122 + s, 110);
-                addSegment(1.0, mecanumDefaultWayPoint, 20 - x, 125 + s, 90);
-                addSegment(0.55, mecanumDefaultWayPoint, 46-x, 126.5 + s, 88);
-                addSegment(0.4, mecanumDefaultWayPoint, 64-x, 126.5 + s, 88);
-                addTimedSetpoint(1.0, 0.1, 0.25, 72-x, 126.5 + s, 88);
-            });
-            // Pick
-            addCustomCode(() -> {
-                drive.move(0,0,0);
-                bot.cancelAutoModules();
-                outtake.closeClaw();
-                pause(0.05);
-                bot.addAutoModuleWithCancel(i+1 != 5 ? GrabBack : GrabBackLast);
-                Point point = new Point(odometry.getX(), isFlipped() ? Field.width - 27 : 27);
-//                odometry.setPointUsingOffset(point);
-                pause(0.45);
-                outtake.flip();
-            });
-            customFlipped(() -> {
-                addConcurrentAutoModuleWithCancel(Backward);
-                addSegment(1.0, mecanumDefaultWayPoint, 10 - x, 123 + s, 88);
-                addSegment(0.7, mecanumDefaultWayPoint, -20 - x, 123 + s, 88);
-                addSegment(0.52, mecanumDefaultWayPoint, -43 - x, 123 + s, 95);
-                addTimedSetpoint(1.0, 0.42, 1.0, -67.0 - x, 108 + (0.7*s), 113.0);
-            }, () -> {
-                addConcurrentAutoModuleWithCancel(Backward);
-                addSegment(1.0, mecanumDefaultWayPoint, 10 - x, 123 + s, 88);
-                addSegment(0.7, mecanumDefaultWayPoint, -20 - x, 123 + s, 88);
-                addSegment(0.52, mecanumDefaultWayPoint, -43 - x, 123 + s, 95);
-                addTimedSetpoint(1.0, 0.42, 1.0, -67.0 - x, 108 + (0.8*s), 113.0);
-            });
-            // Place
-            addCustomCode(() -> {
-                bot.cancelAutoModules();
-                outtake.moveEnd();
-                pause(0.05);
-                outtake.openClaw();
-            });
-            addConcurrentAutoModule(Forward(i + 2));
-            addPause(0.15);
-        });
-        addSegment(0.6, mecanumDefaultWayPoint, -37 - x, 126 + s, 114);
-        customCase(() -> {
-            addConcurrentAutoModule(new AutoModule(outtake.stage(0.55, 0.0)));
-            addTimedSetpoint(1.0, 0.4, 1.2, -58, 126+s, 90);
-        }, () -> {
-            addConcurrentAutoModule(new AutoModule(outtake.stage(0.55, 0.0)));
-            addTimedSetpoint(1.0, 0.6, 1.2, 0, 126+s, 90);
-        }, () -> {
-            addConcurrentAutoModule(new AutoModule(outtake.stage(0.1, 0.0)));
-            addTimedSetpoint(1.0, 0.7, 1.2, 60, 123+s, 90);
-        });
-        addAutoModule(new AutoModule(outtake.stage(0.55, 1.0)));
+//        addConcurrentAutoModuleWithCancel(new AutoModule(outtake.stageMiddle(0.0), lift.stageLift(1.0, heightMode.getValue(LOW))));
+//        customFlipped(() -> {
+//            addSegment(1.0, mecanumDefaultWayPoint, 2, 100, 0);
+//            addSegment(0.6, mecanumDefaultWayPoint, 3, 109, 0);
+//            addSegment(0.36, mecanumDefaultWayPoint, 3, 114, 0);
+//        }, () -> {
+//            addSegment(1.0, mecanumDefaultWayPoint, 0, 100, 0);
+//            addSegment(0.6, mecanumDefaultWayPoint, -1, 109, 0);
+//            addSegment(0.36, mecanumDefaultWayPoint, -1, 114, 0);
+//        });
+//        addConcurrentAutoModuleWithCancel(BackwardFirst);
+//        // Pre-loaded cone place
+//        customFlipped(() -> {
+//            addTimedSetpoint(1.0, 0.7, 0.3, 5, 118, 120);
+//            addTimedSetpoint(1.0, 0.3, 1.0, -5, 108, 120);
+//        }, () -> {
+//            addTimedSetpoint(1.0, 0.7, 0.3, 5, 118, 120);
+//            addTimedSetpoint(1.0, 0.3, 1.0, -5, 107.5, 120);
+//        });
+//        addConcurrentAutoModuleWithCancel(ForwardFirst, 0.1);
+//
+//        addSegment(0.7, mecanumDefaultWayPoint, 18, 128, 80);
+//        // Pick
+//        customFlipped(() -> {
+//            addSegment(0.6, mecanumDefaultWayPoint, 60-x, 127 + s, 87);
+//            addTimedSetpoint(1.0, 0.1, 0.2, 67, 127 , 87);
+//        }, () -> {
+//            addSegment(0.6, mecanumDefaultWayPoint, 61-x, 125 + s, 87);
+//            addTimedSetpoint(1.0, 0.1, 0.3, 72-x, 127 + s, 88);
+//        });
+//        addCustomCode(() -> {
+//            Point point = new Point(odometry.getX(), isFlipped() ? Field.width - 27 : 27);
+////            odometry.setPointUsingOffset(point);
+//            outtake.closeClaw();
+//            bot.addAutoModuleWithCancel(GrabBack);
+//            pause(0.5);
+//            outtake.flip();
+//        });
+//        addConcurrentAutoModuleWithCancel(Backward);
+//        addSegment(1.0, mecanumDefaultWayPoint, 10 - x, 122 + s, 88);
+//        addSegment(0.7, mecanumDefaultWayPoint, -20 - x, 122 + s, 88);
+//        addSegment(0.5, mecanumDefaultWayPoint, -43 - x, 122 + s, 95);
+//        customFlipped(() -> {
+//            addTimedSetpoint(1.0, 0.3, 1.0, -67.0 - x, 108 + s, 113.0);
+//        }, () -> {
+//            addTimedSetpoint(1.0, 0.3, 1.0, -67.0 - x, 108 + s, 113.0);
+//        });
+//        addConcurrentAutoModuleWithCancel(Forward(1), 0.1);
+//
+//        // Start 4 cycle
+//        customNumber(4, i -> {
+//            customFlipped(() -> {
+//                x = 0.0;
+//                s = 1.0+0.4*i;
+//            }, () -> {
+//                x = 0.0;
+//                s = 0.6*i;
+//            });
+//            // Move to pick
+//            customFlipped(() -> {
+//                addSegment(0.6, mecanumDefaultWayPoint, i == 0 ? -50 : -45 - x, 125 + s, 110);
+//                addSegment(1.0, mecanumDefaultWayPoint, 20 - x, 124 + s, 90);
+//                addSegment(0.55, mecanumDefaultWayPoint, 46-x, 127 + s, 88);
+//                addSegment(0.4, mecanumDefaultWayPoint, 64-x, 127 + s, 88);
+//                addTimedSetpoint(1.0, 0.1, 0.3, 68-x, 127 + s , 88);
+//            }, () -> {
+//                addSegment(0.6, mecanumDefaultWayPoint, i == 0 ? -52 : -42 - x, i == 0 ? 127 : 122 + s, 110);
+//                addSegment(1.0, mecanumDefaultWayPoint, 20 - x, 125 + s, 90);
+//                addSegment(0.55, mecanumDefaultWayPoint, 46-x, 126.5 + s, 88);
+//                addSegment(0.4, mecanumDefaultWayPoint, 64-x, 126.5 + s, 88);
+//                addTimedSetpoint(1.0, 0.1, 0.25, 72-x, 126.5 + s, 88);
+//            });
+//            // Pick
+//            addCustomCode(() -> {
+//                drive.move(0,0,0);
+//                bot.cancelAutoModules();
+//                outtake.closeClaw();
+//                pause(0.05);
+//                bot.addAutoModuleWithCancel(i+1 != 5 ? GrabBack : GrabBackLast);
+//                Point point = new Point(odometry.getX(), isFlipped() ? Field.width - 27 : 27);
+////                odometry.setPointUsingOffset(point);
+//                pause(0.45);
+//                outtake.flip();
+//            });
+//            customFlipped(() -> {
+//                addConcurrentAutoModuleWithCancel(Backward);
+//                addSegment(1.0, mecanumDefaultWayPoint, 10 - x, 123 + s, 88);
+//                addSegment(0.7, mecanumDefaultWayPoint, -20 - x, 123 + s, 88);
+//                addSegment(0.52, mecanumDefaultWayPoint, -43 - x, 123 + s, 95);
+//                addTimedSetpoint(1.0, 0.42, 1.0, -67.0 - x, 108 + (0.7*s), 113.0);
+//            }, () -> {
+//                addConcurrentAutoModuleWithCancel(Backward);
+//                addSegment(1.0, mecanumDefaultWayPoint, 10 - x, 123 + s, 88);
+//                addSegment(0.7, mecanumDefaultWayPoint, -20 - x, 123 + s, 88);
+//                addSegment(0.52, mecanumDefaultWayPoint, -43 - x, 123 + s, 95);
+//                addTimedSetpoint(1.0, 0.42, 1.0, -67.0 - x, 108 + (0.8*s), 113.0);
+//            });
+//            // Place
+//            addCustomCode(() -> {
+//                bot.cancelAutoModules();
+//                outtake.moveFlipEnd();
+//                pause(0.05);
+//                outtake.openClaw();
+//            });
+//            addConcurrentAutoModule(Forward(i + 2));
+//            addPause(0.15);
+//        });
+//        addSegment(0.6, mecanumDefaultWayPoint, -37 - x, 126 + s, 114);
+//        customCase(() -> {
+//            addConcurrentAutoModule(new AutoModule(outtake.stage(0.55, 0.0)));
+//            addTimedSetpoint(1.0, 0.4, 1.2, -58, 126+s, 90);
+//        }, () -> {
+//            addConcurrentAutoModule(new AutoModule(outtake.stage(0.55, 0.0)));
+//            addTimedSetpoint(1.0, 0.6, 1.2, 0, 126+s, 90);
+//        }, () -> {
+//            addConcurrentAutoModule(new AutoModule(outtake.stage(0.1, 0.0)));
+//            addTimedSetpoint(1.0, 0.7, 1.2, 60, 123+s, 90);
+//        });
+//        addAutoModule(new AutoModule(outtake.stage(0.55, 1.0)));
 
 
         // End

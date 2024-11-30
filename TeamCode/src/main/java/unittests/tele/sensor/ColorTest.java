@@ -23,12 +23,12 @@ public class ColorTest extends TeleUnitTest {
          * s is the saturation
          * v is the value or brightness
          */
-        log.show("Color sensor reading", Arrays.toString(bot.color.getOuttakeColorHSV()));
-        /**
-         * These should turn true depending on the type of freight
-         */
-        log.show("Is a ball in the intake?", bot.color.isBall());
-        log.show("Is a cube in the intake?", bot.color.isCube());
-        log.show("Is a freight in the intake?", bot.color.isFreight());
+//        log.show("Color sensor reading", Arrays.toString(bot.colorSensors.getOuttakeColorHSV()));
+//        /**
+//         * These should turn true depending on the type of freight
+//         */
+//        log.show("Is a ball in the intake?", bot.colorSensors.isBall());
+//        log.show("Is a cube in the intake?", bot.colorSensors.isCube());
+//        log.show("Is a freight in the intake?", bot.colorSensors.isFreight());
     }
 }

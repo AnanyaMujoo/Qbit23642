@@ -1,7 +1,5 @@
 package unittests.tele.framework.movement;
 import automodules.AutoModule;
-import automodules.stage.Initial;
-import automodules.stage.Main;
 import automodules.stage.Stage;
 import global.Constants;
 import robotparts.RobotPart;
@@ -9,11 +7,8 @@ import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
 import teleutil.button.Button;
 import unittests.tele.TeleUnitTest;
-import util.Timer;
-import util.template.Iterator;
 
 import static global.General.bot;
-import static global.General.gamepad1;
 import static global.General.gph1;
 import static global.General.log;
 
@@ -28,7 +23,7 @@ public class AutoModuleTest extends TeleUnitTest {
         @Override
         public void init() {
             car = create("car", ElectronicType.PMOTOR_FORWARD);
-            car.setToRotational(Constants.ORBITAL_TICKS_PER_REV, 1);
+            car.setToRotational(Constants.ORBITAL_ENCODER_TICKS_PER_REVOLUTION, 1);
         }
 
         @Override

@@ -39,6 +39,8 @@ public class PMotor extends Electronic {
     private static final double exitTimeDelay = 0.1;
     private boolean holdingExact = false;
 
+    private double lastTarget = 0;
+
     /**
      * Constructor to create a pmotor
      * @param m
@@ -64,6 +66,7 @@ public class PMotor extends Electronic {
 
         motorEncoder.reset();
         holdingExact = false;
+        lastTarget = 0;
     }
 
     // TOD 5 Make way for custom PID and custom rest pow function (feedforward)
@@ -100,25 +103,28 @@ public class PMotor extends Electronic {
 
     /**
      * Set the motor to linear mode
-     * @param ticksPerRev
-     * @param radius
-     * @param ratio
-     * @param angle
+     * @param ticksPerRevolution
+     * @param pulleyRadius
+     * @param motorToPulleyGearRatio
+     * @param angleToVertical
      */
-    public void setToLinear(double ticksPerRev, double radius, double ratio, double angle){
+    public void setToLinear(double ticksPerRevolution, double pulleyRadius, double motorToPulleyGearRatio, double angleToVertical){
         movementType = MovementType.LINEAR;
-        outputToTicks = distance -> (distance/(2*Math.PI*radius))*ticksPerRev*(ratio/cos(toRadians(angle)));
+        outputToTicks = distance -> (distance/(2*Math.PI*pulleyRadius))*ticksPerRevolution*(motorToPulleyGearRatio/cos(toRadians(angleToVertical)));
         ticksToOutput = Precision.invert(outputToTicks);
     }
 
     /**
      * Set the motor to rotational mode
-     * @param ticksPerRev
-     * @param ratio
+     * For every x rotations of motor, y rotations of output shaft
+     * Has an x:y gear ratio or (x/y)
+     * Big gear ratio means small gear to big gear and vice-versa
+     * @param ticksPerRevolution
+     * @param motorToOutputGearRatio
      */
-    public void setToRotational(double ticksPerRev, double ratio){
+    public void setToRotational(double ticksPerRevolution, double motorToOutputGearRatio){
         movementType = MovementType.ROTATIONAL;
-        outputToTicks = distance -> (distance/360)*ticksPerRev*ratio;
+        outputToTicks = distance -> (distance/360)*ticksPerRevolution*motorToOutputGearRatio;
         ticksToOutput = Precision.invert(outputToTicks);
     }
 
@@ -157,6 +163,9 @@ public class PMotor extends Electronic {
             }
         }
     }
+    // TODO FIX THERE SHOULDNT BE TWO METHODS THAT DO THE SAME THING (setPower and move) sus??
+
+    public void setPower(double power){ move(power); }
 
     /**
      * Sets the power of motor without access checking, stall detection, or restPower
@@ -166,14 +175,15 @@ public class PMotor extends Electronic {
 
     /**
      * Set the position to move to
-     * @param distance
+     * @param target
      */
     @Override
-    public final void setTarget(double distance){
+    public final void setTarget(double target){
         motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motor.setTargetPosition(outputToTicks.run(distance).intValue());
+        motor.setTargetPosition(outputToTicks.run(target).intValue());
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        setPositionHolderTarget(distance);
+        lastTarget = target;
+        setPositionHolderTarget(target);
     }
 
     public final void setPositionHolderTarget(double target){ positionHolder.setTarget(target); }
@@ -246,18 +256,17 @@ public class PMotor extends Electronic {
 
     /**
      * Default move with position holder
-     * @param p
-     * @param cutOffPosition
-     * @param backPower
+     * @param power
+     * @param backPowerWhenTargetingZero
      */
-    public void moveWithPositionHolder(double p, double cutOffPosition, double backPower) {
-        if (p != 0) {
-            releasePosition(); move(p); holdingExact = false;
-        } else if (getPosition() > cutOffPosition) {
+    public void moveWithPositionHolder(double power, double backPowerWhenTargetingZero) {
+        if (power != 0) {
+            releasePosition(); move(power); holdingExact = false;
+        } else if (lastTarget != 0) {
             if (holdingExact) { holdPositionExact(); } else { holdPosition(); }
-        } else {
+        } else if(getPosition() > 0.2){
             releasePosition();
-            move(-Math.abs(backPower));
+            move(-Math.abs(backPowerWhenTargetingZero));
         }
     }
 

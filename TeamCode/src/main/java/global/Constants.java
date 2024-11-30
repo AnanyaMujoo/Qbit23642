@@ -32,8 +32,8 @@ public class Constants {
      *  Minimum  refresh rate allowed before robot is considered to be lagging
      */
     public static final int MINIMUM_REFRESH_RATE = 30; //hz
-    public static final double ORBITAL_TICKS_PER_REV = 537.6;
-    public static final double ENCODER_TICKS_PER_REV = 8192;
+    public static final double ORBITAL_ENCODER_TICKS_PER_REVOLUTION = 537.6;
+    public static final double ODOMETRY_ENCODER_TICKS_PER_REV = 8192;
 
     public static final double DEFAULT_VOLTAGE = 12.5;
 

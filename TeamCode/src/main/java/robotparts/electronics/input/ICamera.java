@@ -5,7 +5,10 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
+//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+//import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -51,11 +54,11 @@ public class ICamera extends Electronic {
     /**
      * Width of stream
      */
-    private final int width = 320;
+    private final int width = 640; // 320;
     /**
      * Height of stream
      */
-    private final int height = 240;
+    private final int height = 480; //240;
 
 //    private VuforiaLocalizer vuforia;
 //    private VuforiaTrackables targets;
@@ -113,7 +116,7 @@ public class ICamera extends Electronic {
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
             @Override
             public void onOpened() {
-                camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                //camera.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
                 if(cameraType.equals(CameraType.INTERNAL)) {
                     camera.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
                 }
@@ -128,8 +131,7 @@ public class ICamera extends Electronic {
     }
 
 
-    public void startVuforia(boolean view){
-        // TODO FIX VUFORIA OR REMOVE
+//    public void startVuforia(boolean view){
 //        VuforiaLocalizer.Parameters parameters;
 //        if(view){
 //            parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -148,27 +150,27 @@ public class ICamera extends Electronic {
 //
 //        allTrackables = new ArrayList<>();
 //        allTrackables.addAll(targets);
-//
-//        float halfField = (float) (Field.width *10*0.5);
-//        float oneAndHalfTile = (float) (Field.tileWidth*10*1.5);
-//        float mmTargetHeight = (float) (VUFORIA_TARGET_HEIGHT_CM*10);
+
+    float halfField = (float) (Field.width *10*0.5);
+    float oneAndHalfTile = (float) (Field.tileWidth*10*1.5);
+    float mmTargetHeight = (float) (VUFORIA_TARGET_HEIGHT_CM*10);
 //        identifyTarget(0, "Red Audience Wall",   -halfField,  -oneAndHalfTile, mmTargetHeight, 90, 0,  90);
 //        identifyTarget(1, "Red Rear Wall",        halfField,  -oneAndHalfTile, mmTargetHeight, 90, 0, -90);
 //        identifyTarget(2, "Blue Audience Wall",  -halfField,   oneAndHalfTile, mmTargetHeight, 90, 0,  90);
 //        identifyTarget(3, "Blue Rear Wall",       halfField,   oneAndHalfTile, mmTargetHeight, 90, 0, -90);
-//
-//        OpenGLMatrix cameraLocationOnRobot = OpenGLMatrix
-//                .translation((float) cameraLocation.getY(), (float) -cameraLocation.getX(), (float) cameraHeightFromField)
-//                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XZY, DEGREES, 90, 90, 0));
-//
+
+    OpenGLMatrix cameraLocationOnRobot = OpenGLMatrix
+            .translation((float) cameraLocation.getY(), (float) -cameraLocation.getX(), (float) cameraHeightFromField)
+            .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XZY, DEGREES, 90, 90, 0));
+
 //        Iterator.forAll(allTrackables, trackable -> ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(name, cameraLocationOnRobot));
 //
 //        targets.activate();
-//
-//        start(view);
-    }
 
-    public boolean updateVuforia(){
+//        start(view);
+//    }
+
+//    public boolean updateVuforia(){
 //        boolean targetVisible = false;
 //
 //        for (VuforiaTrackable trackable : allTrackables) {
@@ -182,7 +184,7 @@ public class ICamera extends Electronic {
 //                break;
 //            }
 //        }
-//
+
 //        if (targetVisible) {
 //            VectorF translation = lastLocation.getTranslation();
 //            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
@@ -195,8 +197,7 @@ public class ICamera extends Electronic {
 ////            telemetry.addData("Visible Target", "none");
 //        }
 //        return targetVisible;
-        return false;
-    }
+//    }
 
     public Pose getPose(){
         return currentPose;
@@ -214,12 +215,12 @@ public class ICamera extends Electronic {
      * @param dx, dy, dz  Target offsets in x,y,z axes
      * @param rx, ry, rz  Target rotations in x,y,z axes
      */
-    public void identifyTarget(int targetIndex, String targetName, float dx, float dy, float dz, float rx, float ry, float rz) {
+//    public void identifyTarget(int targetIndex, String targetName, float dx, float dy, float dz, float rx, float ry, float rz) {
 //        VuforiaTrackable aTarget = targets.get(targetIndex);
 //        aTarget.setName(targetName);
 //        aTarget.setLocation(OpenGLMatrix.translation(dx, dy, dz)
 //                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, rx, ry, rz)));
-    }
+//    }
 
     /**
      * Get frames per second
@@ -238,9 +239,7 @@ public class ICamera extends Electronic {
             @Override
             public void onClose() {}
         });
-//        if(targets != null) {
-//            targets.deactivate();
-//        }
+
     }
 
     /**

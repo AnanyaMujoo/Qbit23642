@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -140,7 +141,7 @@ public abstract class RobotPart extends StageBuilder implements RobotUser {
             case PSERVO_REVERSE:
                 return new PServo(hardwareMap.get(Servo.class, name), Servo.Direction.REVERSE);
             case ICAMERA_EXTERNAL:
-                return new ICamera(hardwareMap.get(WebcamName.class, name), ICamera.CameraType.EXTERNAL, OpenCvCameraRotation.UPRIGHT);
+                return new ICamera(hardwareMap.get(WebcamName.class, name), ICamera.CameraType.EXTERNAL, OpenCvCameraRotation.UPSIDE_DOWN);
             case ICAMERA_INTERNAL:
                 return new ICamera(ICamera.CameraType.INTERNAL, OpenCvCameraRotation.UPRIGHT);
             case ICOLOR:
@@ -154,7 +155,7 @@ public abstract class RobotPart extends StageBuilder implements RobotUser {
             case IENCODER_CMOTOR:
                 return new IEncoder(hardwareMap.get(DcMotor.class, IEncoder.getMotorName(name)), IEncoder.EncoderType.CMOTOR);
             case IGYRO:
-                return new IGyro(hardwareMap.get(BNO055IMU.class, name));
+                return new IGyro(hardwareMap.get(IMU.class, name));
             case ITOUCH:
                 return new ITouch(hardwareMap.get(TouchSensor.class, name));
             case OLED:

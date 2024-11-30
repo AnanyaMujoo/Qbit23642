@@ -1,13 +1,18 @@
 package robot;
 
+import robotparts.hardware.Drone;
+import robotparts.hardware.Hanging;
+import robotparts.hardware.IntakeTest;
 import robotparts.sensors.odometry.NewOdometry;
+import robotparts.sensors.odometry.OneOdometry;
+//import robotparts.sensors.odometry.SecondOdometry;
 import unittests.tele.framework.movement.AutoModuleTest;
 import robotparts.hardware.Drive;
 import robotparts.unused.Intake;
 import robotparts.hardware.Lift;
 import robotparts.hardware.Outtake;
 import robotparts.sensors.Cameras;
-import robotparts.sensors.ColorSensors;
+//import robotparts.sensors.ColorSensors;
 import robotparts.sensors.GyroSensors;
 import robotparts.unused.DistanceSensors;
 import robotparts.unused.CustomTestPart;
@@ -30,18 +35,24 @@ public interface RobotUser {
     DistanceSensors distanceSensors = new DistanceSensors();
     GyroSensors gyro = new GyroSensors();
     Cameras camera = new Cameras();
+    Drone drone = new Drone();
+    Hanging hang = new Hanging();
 
 //    Odometry odometry = new TwoOdometry();
 //    ThreeOdometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS
     NewOdometry odometry = new NewOdometry();
+    OneOdometry oneOdometry = new OneOdometry();
+//    SecondOdometry secondOdometry = new SecondOdometry();
     /**
      * UNUSED
      */
 
     Intake intake = new Intake();
+    IntakeTest intake2 = new IntakeTest();
+
     TouchSensors touchSensors = new TouchSensors();
 
-    ColorSensors color = new ColorSensors();
+//    ColorSensors colorSensors = new ColorSensors();
 
     /**
      * Test Part

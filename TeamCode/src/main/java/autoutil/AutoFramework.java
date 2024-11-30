@@ -2,8 +2,6 @@ package autoutil;
 
 
 
-import org.firstinspires.ftc.teamcode.R;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -17,13 +15,15 @@ import autoutil.generators.BreakpointGenerator;
 import autoutil.generators.Generator;
 import autoutil.generators.PauseGenerator;
 import autoutil.reactors.Reactor;
-import autoutil.vision.CaseScanner;
-import autoutil.vision.CaseScannerBar;
+import autoutil.vision.CaseScannerRectBottom;
 import autoutil.vision.Scanner;
 import elements.Case;
 import elements.FieldPlacement;
 import elements.FieldSide;
+import elements.TeamProp;
 import geometry.framework.CoordinatePlane;
+import geometry.framework.Point;
+import geometry.position.Bezier;
 import geometry.position.Pose;
 import robotparts.RobotPart;
 import util.Timer;
@@ -62,9 +62,9 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     protected boolean scanning = false;
     protected boolean haltCameraAfterInit = true;
-    protected CaseScanner caseScanner;
+    protected Scanner caseScannerRect;
     protected Scanner scannerAfterInit;
-    protected Case caseDetected = Case.FIRST;
+    protected TeamProp caseDetected = TeamProp.LEFT;
 
     private int segmentIndex = 1;
     private int pauseIndex, autoModuleIndex, customSegmentIndex, breakpointIndex = 0;
@@ -105,7 +105,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public static boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }
     public void flip(){ autoPlane.reflectX(); autoPlane.reflectPoses(); }
-    public void flipCases(){ if(caseDetected.equals(Case.FIRST)){ caseDetected = Case.THIRD; }else if(caseDetected.equals(Case.THIRD)){ caseDetected = Case.FIRST; }}
+    public void flipCases(){ if(caseDetected.equals(TeamProp.LEFT)){ caseDetected = TeamProp.RIGHT; }else if(caseDetected.equals(TeamProp.RIGHT)){ caseDetected = TeamProp.LEFT; }}
 
     public void addDecision(DecisionList decisionList){ decisionList.check(); }
     public void addAutomodule(DecisionList decisionList){ addAutoModule(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways()))); }
@@ -122,18 +122,29 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         scannerAfterInit = scanner;
     }
 
-    public void scan(boolean view){
+    public void scan(Scanner scanner, boolean view, String color, String side){
         scanning = true;
-        caseScanner = new CaseScannerBar();
-        camera.setScanner(caseScanner);
+        caseScannerRect = scanner;
+        caseScannerRect.setColor(color);
+        caseScannerRect.setSide(side);
+        camera.setScanner(caseScannerRect);
         camera.start(view);
     }
+    public void scanRect(boolean view, String color, String side){
+        caseScannerRect = new CaseScannerRectBottom();
+        camera.start(true);
+        camera.setScanner(caseScannerRect);
+        caseScannerRect.setColor(color);
+        caseScannerRect.setSide(side);
+        caseScannerRect.start();
+    }
+
 
     @Override
     public final void initAuto() {
         initialize();
         if(scanning){
-            while (!isStarted() && !isStopRequested()){ caseDetected = caseScanner.getCase(); caseScanner.log(); log.showTelemetry(); }
+            while (!isStarted() && !isStopRequested()){ caseDetected = caseScannerRect.getCase(); caseScannerRect.log(); log.showTelemetry(); }
             if(haltCameraAfterInit) { camera.halt(); }else{ camera.setScanner(scannerAfterInit); }
         }
         setup();
@@ -173,6 +184,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addSegment(double scale, AutoSegment<?,?> segment, double x, double y, double h){addScale(scale); addSegment(segment, x, y, h); }
     public void addSegment(AutoSegment<?,?> segment, double x, double y, double h){ customSegments.add(segment); segmentTypes.add(AutoSegment.Type.CUSTOM); poses.add(new Pose(x, y, h)); }
 
+
     private void addStationarySegment(ReturnCodeSeg<Generator> generator){ addSegment(config.getSetpointSegment().getReactorReference(), generator); }
 
     public void addScale(double scale){ movementScales.set(poses.size()-1, scale); }
@@ -186,6 +198,34 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addTimedSetpoint(double acc, double scale, double time, double x, double y, double h){ addTime(time); addSetpoint(acc, scale, x, y, h); }
     public void addTimedWaypoint(double scale, double time, double x, double y, double h){ addTime(time); addWaypoint(scale, x, y, h);}
 
+    public void addBezierWaypoints(double scale, double time, Point start, Point control1, Point control2, Point end, double h, int indices){
+        Bezier newBezier = new Bezier(start, control1, control2, end);
+        for (int t=0; t<1; t+=1/indices) {
+            Point currentPoint= newBezier.getAt(t,time);
+            double x=currentPoint.getX();
+            double y= currentPoint.getY();
+            addWaypoint(scale, x,y,h/indices);
+        }
+        Point currentPoint= newBezier.getAt(time);
+        double x=currentPoint.getX();
+        double y= currentPoint.getY();
+        addTimedSetpoint(1, scale, time, x, y, h/indices);
+    }
+
+    public void addBezierSegments(double scale, double time, Point start, Point control1, Point control2, Point end, double h, int indices){
+        Bezier newBezier = new Bezier(start, control1, control2, end);
+        for (int t=0; t<1; t+=1/indices) {
+            Point currentPoint= newBezier.getAt(t,time);
+            double x=currentPoint.getX();
+            double y= currentPoint.getY();
+            AutoSegment<?,?> segment= new AutoSegment<>(mecanumPurePursuitReactor, lineGenerator);
+            addSegment(segment, x, y, h/indices);
+        }
+        Point currentPoint= newBezier.getAt(time);
+        double x=currentPoint.getX();
+        double y= currentPoint.getY();
+        addTimedSetpoint(1, scale, time/indices, x, y, h/indices);
+    }
 
     private void addCustomCodeInternal(CodeSeg code){ addSegmentType(AutoSegment.Type.BREAKPOINT);  breakpoints.add(code); addLastPose(); }
     public void addCustomCode(CodeSeg code){ addCustomCodeInternal(() -> {
@@ -285,9 +325,9 @@ public abstract class AutoFramework extends Auto implements AutoUser {
         breakpoints = new ArrayList<>();
         scanning = false;
         haltCameraAfterInit = true;
-        caseScanner = null;
+        caseScannerRect = null;
         scannerAfterInit = null;
-        caseDetected = Case.FIRST;
+        caseDetected = TeamProp.LEFT;
         segmentIndex = 1;
         pauseIndex = 0;
         autoModuleIndex = 0;

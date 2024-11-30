@@ -101,6 +101,8 @@ public class GamepadHandler {
     public void link(Button b, CodeSeg code){ link(b, code, Modes.GamepadMode.NORMAL); }
     public void link(Button b, Class<? extends ButtonEventHandler> type, CodeSeg codeSeg) { Objects.requireNonNull(handlerMap.get(b)).addEvent(type, codeSeg); }
     public void link(Button b, AutoModule list) { link(b, () -> bot.addAutoModule(list), Modes.GamepadMode.NORMAL); }
+    public void linka(Button b, ReturnCodeSeg<AutoModule> list) { link(b, () -> bot.addAutoModule(list.run()), Modes.GamepadMode.NORMAL); }
+
     public void link(Button b, DecisionList decisionList){ link(b,  decisionList::check, Modes.GamepadMode.NORMAL); }
     public void link(Button b, OutputList outputList){ link(b, () -> bot.addAutoModule(outputList.check()), Modes.GamepadMode.NORMAL); }
     public void link(Button b, Independent independent){ link(b, () -> bot.addIndependent(independent), Modes.GamepadMode.NORMAL); }
