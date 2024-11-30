@@ -26,13 +26,14 @@ public class Configs implements RobotUser{
 
 RobotConfig CenterStageBasicConfig = new RobotConfig(outtake, drone, lift, hang, drive, intake, camera, gyro, odometry);
 
+    RobotConfig TestConfig4 = new RobotConfig(intake2);
 
 
     /**
      * Current Config
      */
     public void setCurrentConfig(){
-        setConfig(CenterStageBasicConfig);
+        setConfig(TestConfig4);
     }
 
 }
