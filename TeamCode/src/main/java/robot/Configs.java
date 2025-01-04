@@ -2,8 +2,6 @@ package robot;
 
 import static robot.RobotConfig.setConfig;
 
-import robotparts.hardware.Outtake;
-
 public class Configs implements RobotUser{
 
     /**
@@ -21,21 +19,22 @@ public class Configs implements RobotUser{
      * Used for CenterStage robot
      */
 
-    RobotConfig CenterStageTestConfig = new RobotConfig(outtake, drone);
+  //  RobotConfig CenterStageTestConfig = new RobotConfig(outtake, drone);
 
 
 //    RobotConfig CenterStageBasicConfig = new RobotConfig(outtake, drone, lift, hang, drive, intake, colorSensors, camera, gyro, odometry);
 
-RobotConfig CenterStageBasicConfig = new RobotConfig(outtake, drone, lift, hang, drive, intake, camera, gyro, odometry);
+//RobotConfig CenterStageBasicConfig = new RobotConfig(outtake, drone, lift, hang, drive, intake, camera, gyro, odometry);
 
-    RobotConfig TestConfig4 = new RobotConfig(intake2);
+    RobotConfig TestConfig4 = new RobotConfig(intake);
     RobotConfig TestConfig5 = new RobotConfig(drive);
 
-    RobotConfig TestConfig6 = new RobotConfig(outtakeSpecimen);
+    RobotConfig TestConfig6 = new RobotConfig(intaketest);
 
 
-    RobotConfig IntoTheDeepBasicConfig = new RobotConfig(drive, lift, liftVertical, outtakeSpecimen);
+    RobotConfig IntoTheDeepBasicConfig = new RobotConfig(drive, liftIntake, RobotUser.liftOuttake);
 
+    RobotConfig IntoTheDeepConfig = new RobotConfig(drive, lift, liftVertical, claw, bucket, flip, intake, odometry);
     /**
      * Current Config
      */

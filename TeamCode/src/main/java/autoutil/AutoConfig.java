@@ -12,4 +12,5 @@ public class AutoConfig {
 
     public AutoSegment<?,?> getWaypointSegment(){ return getWaypointSegment; }
     public AutoSegment<?, ?> getSetpointSegment(){ return getSetpointSegment; }
+
 }

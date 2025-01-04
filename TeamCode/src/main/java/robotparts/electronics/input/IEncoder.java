@@ -106,6 +106,12 @@ public class IEncoder extends Electronic {
      */
     public void reset(){
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        position = 0; lastPosition = 0; deltaPosition = 0;
+    }
+
+    public void resetReal(){
+        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         position = 0; lastPosition = 0; deltaPosition = 0;
     }

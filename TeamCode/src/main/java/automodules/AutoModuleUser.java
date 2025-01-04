@@ -1,70 +1,102 @@
 package automodules;
 
-import automodules.stage.Stop;
 import robot.RobotUser;
-import robotparts.RobotPart;
-import teleutil.independent.Independent;
-import teleutil.independent.Machine;
 
 import static automodules.StageBuilder.pause;
-import static global.General.gph2;
-import static global.Modes.*;
-import static global.Modes.Drive.MEDIUM;
-import static global.Modes.Drive.SLOW;
-import static global.Modes.Height.GROUND;
-import static global.Modes.Height.HIGH;
-import static global.Modes.Height.LOW;
-import static global.Modes.Height.MIDDLE;
-import static global.Modes.OuttakeStatus.DRIVING;
-import static global.Modes.OuttakeStatus.PLACING;
-
-import com.sun.tools.javac.comp.Todo;
 
 
 public interface AutoModuleUser extends RobotUser {
 
 
-    AutoModule Deposit = new AutoModule(
-            outtake.stageClawOpen(0.5),
-            outtake.stageFlipStart(0.5),
-            lift.stageLift(0.1,0)
-    );
-    default AutoModule DepositYellow (){return new AutoModule(
-            outtake.stageClawOpen(0.5)
-    );}
-
-    default AutoModule Prepare (double height){return new AutoModule(
-            lift.stageLift(0.1,height),
-            outtake.stageFlipEnd(0.5)
-    );}
+//    AutoModule Deposit = new AutoModule(
+//            outtake.stageClawOpen(0.5),
+//            outtake.stageFlipStart(0.5),
+//            lift.stageLift(0.1,0)
+//    );
+//    default AutoModule DepositYellow (){return new AutoModule(
+//            outtake.stageClawOpen(0.5)
+//    );}
+//
+//    default AutoModule Prepare (double height){return new AutoModule(
+//            lift.stageLift(0.1,height),
+//            outtake.stageFlipEnd(0.5)
+//    );}
     default AutoModule Lift (double height){return new AutoModule(
             lift.stageLift(0.2,height)
     ); }
     default AutoModule LiftVertical (double height){return new AutoModule(
-            lift.stageLift(0.2,height)
+            liftVertical.stageLift(0.2,height)
     ); }
+    default AutoModule ClawDeposit(){return new AutoModule(
+            liftVertical.stageLift(0.5,15),
+            claw.stageRelease(0.5),
+            liftVertical.stageLift(0.5,0)
+    );}
+
+    default AutoModule ClawReceive(){return new AutoModule(
+      liftVertical.stageLift(0.5,10),
+      claw.stageHold(0.5),
+        liftVertical.stageLift(0.5,20)
+            );}
+
+    //TOD0 FINISH THeSe
+    default AutoModule IntakeOut(){return new AutoModule(
+      lift.stageLift(0.5,20),
+            intake.moveTime(0.5, 2)
+
+    );}
+
+    default AutoModule IntakeIn(){return new AutoModule(
+            intake.stageClose(0.5),
+            flip.moveTime(0.5,1),
+            lift.stageLift(0.5,0),
+            intake.stageOpen(0.5),
+            intake.stageClose(0.5),
+            lift.stageLift(0.5,20)
+
+            );}
+    default AutoModule BucketDeposit(){return new AutoModule(
+            liftVertical.stageLift(0.5,50),
+            bucket.moveTime(0.1,1),
+            bucket.moveTime(-0.5,1),
+            liftVertical.stageLift(0.5,0)
+            );}
+
+    default AutoModule VerticalEmergency(){return new AutoModule
+        (
+                liftVertical.stageLift(0.1,-5),
+                liftVertical.resetLift()
+                );
+    }
+    default AutoModule HorizontalEmergency(){return new AutoModule
+            (
+                    lift.stageLift(0.1,-5),
+                    lift.resetLift()
+            );
+    }
     default AutoModule pleaseDontLift (){return new AutoModule(
             lift.stageLift(0.2,5)
     );}
-    default AutoModule AutoYellow(){return new AutoModule(
-            lift.stageLift(0.2,5),
-            outtake.stageFlipStart(0.5),
-            outtake.stageFlipEnd(0.5)
 
-
-
-
-    );}
-    default AutoModule closeClaw(){return new AutoModule(
-        outtake.stageClawClose(0.5)
-    );}
-    default AutoModule openClaw(){return new AutoModule(
-            outtake.stageClawOpen(0.5)
-    );}
-    default AutoModule WhyWontLiftWork(){return new AutoModule(
-        lift.stageLift(0.3,0),
-            outtake.stageFlipStart(0.5)
-    );}
+//    default AutoModule AutoYellow(){return new AutoModule(
+//            lift.stageLift(0.2,5),
+//            outtake.stageFlipStart(0.5),
+//            outtake.stageFlipEnd(0.5)
+//
+//
+//
+//
+//    );}
+//    default AutoModule closeClaw(){return new AutoModule(
+//        outtake.stageClawClose(0.5)
+//    );}
+//    default AutoModule openClaw(){return new AutoModule(
+//            outtake.stageClawOpen(0.5)
+//    );}
+//    default AutoModule WhyWontLiftWork(){return new AutoModule(
+//        lift.stageLift(0.3,0),
+//            outtake.stageFlipStart(0.5)
+//    );}
 
         default AutoModule DropPurpleR (double height2) {return new AutoModule(
                 drive.moveTime(-0.3,-0.2,0,0.7),
@@ -109,13 +141,13 @@ public interface AutoModuleUser extends RobotUser {
     );    }
 
 
-    AutoModule Intake = new AutoModule(
-//            intake.stageMoveUntilPixelsAreLoaded(0.3),
-            pause(5),
-            outtake.stageClawClose(0.0),
-            intake.moveTime(-0.3,1.0)
-            //outtake.stageFlipMiddle(0.5)
-    );
+//    AutoModule Intake = new AutoModule(
+////            intake.stageMoveUntilPixelsAreLoaded(0.3),
+//            pause(5),
+//            outtake.stageClawClose(0.0),
+//            intake.moveTime(-0.3,1.0)
+//            //outtake.stageFlipMiddle(0.5)
+//    );
 
 
 

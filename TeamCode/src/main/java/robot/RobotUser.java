@@ -1,18 +1,22 @@
 package robot;
 
-import robotparts.hardware.Drone;
-import robotparts.hardware.Hanging;
-import robotparts.hardware.IntakeTest;
+//import robotparts.hardware.old.Drone;
+//import robotparts.hardware.old.Hanging;
+import robotparts.hardware.Bucket;
+import robotparts.hardware.Flip;
+import robotparts.hardware.Intake;
+import robotparts.hardware.Intaketest;
+import robotparts.hardware.LiftIntake;
+import robotparts.hardware.LiftOuttake;
 import robotparts.hardware.LiftVertical;
-import robotparts.hardware.OuttakeSpecimen;
+import robotparts.hardware.Claw;
 import robotparts.sensors.odometry.NewOdometry;
 import robotparts.sensors.odometry.OneOdometry;
 //import robotparts.sensors.odometry.SecondOdometry;
 import unittests.tele.framework.movement.AutoModuleTest;
 import robotparts.hardware.Drive;
-import robotparts.unused.Intake;
 import robotparts.hardware.Lift;
-import robotparts.hardware.Outtake;
+//import robotparts.hardware.old.Outtake;
 import robotparts.sensors.Cameras;
 //import robotparts.sensors.ColorSensors;
 import robotparts.sensors.GyroSensors;
@@ -32,13 +36,15 @@ public interface RobotUser {
      */
     Drive drive = new Drive();
     Lift lift = new Lift();
-    Outtake outtake = new Outtake();
+    LiftIntake liftIntake = new LiftIntake();
+    LiftOuttake liftOuttake = new LiftOuttake();
+//    Outtake outtake = new Outtake();
 //    Leds leds = new Leds();
     DistanceSensors distanceSensors = new DistanceSensors();
     GyroSensors gyro = new GyroSensors();
     Cameras camera = new Cameras();
-    Drone drone = new Drone();
-    Hanging hang = new Hanging();
+//    Drone drone = new Drone();
+//    Hanging hang = new Hanging();
 
 //    Odometry odometry = new TwoOdometry();
 //    ThreeOdometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS
@@ -49,12 +55,15 @@ public interface RobotUser {
      * UNUSED
      */
 
+    //robotparts.unused.Intake intake = new robotparts.unused.Intake();
     Intake intake = new Intake();
-    IntakeTest intake2 = new IntakeTest();
     LiftVertical liftVertical = new LiftVertical();
-    OuttakeSpecimen outtakeSpecimen = new OuttakeSpecimen();
-    TouchSensors touchSensors = new TouchSensors();
+    Claw claw = new Claw();
 
+    Bucket bucket = new Bucket();
+    Flip flip = new Flip();
+    TouchSensors touchSensors = new TouchSensors();
+    Intaketest intaketest = new Intaketest();
 //    ColorSensors colorSensors = new ColorSensors();
 
     /**

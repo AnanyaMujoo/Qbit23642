@@ -78,6 +78,7 @@ public class Lift extends RobotPart implements AutoModuleUser {
     public void maintain() { super.maintain(); }
 
     public void reset(){ liftRight.softReset(); liftLeft.softReset(); }
+    public void hardReset(){ liftRight.resetPosition(); liftLeft.resetPosition(); }
 
     public Stage resetLift(){ return new Stage(usePart(), new Main(this::reset), exitTime(0.1), stop(), returnPart()); }
 

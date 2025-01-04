@@ -48,21 +48,6 @@ public class LiftVertical extends RobotPart implements AutoModuleUser {
         };
     }
 
-    public ReturnCodeSeg<AutoModule> liftEmergency(){
-        return ()->{
-            target=-5;
-            if ((target>=-5)&&(target<=MAXHEIGHT)){
-                target=-5;
-                return LiftVertical(target);
-
-            }
-            else if(target<=-5){
-                target=-5;
-                return LiftVertical(target);
-            }
-            return new AutoModule();
-        };
-    }
 
 
     @Override
@@ -94,6 +79,9 @@ public class LiftVertical extends RobotPart implements AutoModuleUser {
     public void maintain() { super.maintain(); }
 
     public void reset(){ liftRight.softReset(); liftLeft.softReset(); }
+    public void hardReset(){ liftRight.resetPosition(); liftLeft.resetPosition(); }
+
+    public Stage hardResetLift(){ return new Stage(usePart(), new Main(this::hardReset), exitTime(0.1), stop(), returnPart()); }
 
     public Stage resetLift(){ return new Stage(usePart(), new Main(this::reset), exitTime(0.1), stop(), returnPart()); }
 
