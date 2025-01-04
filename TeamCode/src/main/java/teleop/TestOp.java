@@ -17,6 +17,10 @@ public class TestOp extends Tele {
     @Override
     public void initTele() {
 
+//TODO --> fix the telemetry for buttons (make it accurate)
+
+
+
 
     }
 
@@ -27,7 +31,10 @@ public class TestOp extends Tele {
 
     @Override
     public void loopTele() {
-        intake.move(gph2.ry);
+        drive.move(gph1.ry,-gph1.rx,gph1.lx*0.5);
+        liftVertical.move(gph2.ry);
+        lift.move(gph2.ly);
+
 
     }
 

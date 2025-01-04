@@ -2,6 +2,8 @@ package robot;
 
 import static robot.RobotConfig.setConfig;
 
+import robotparts.hardware.Outtake;
+
 public class Configs implements RobotUser{
 
     /**
@@ -27,13 +29,18 @@ public class Configs implements RobotUser{
 RobotConfig CenterStageBasicConfig = new RobotConfig(outtake, drone, lift, hang, drive, intake, camera, gyro, odometry);
 
     RobotConfig TestConfig4 = new RobotConfig(intake2);
+    RobotConfig TestConfig5 = new RobotConfig(drive);
 
+    RobotConfig TestConfig6 = new RobotConfig(outtakeSpecimen);
+
+
+    RobotConfig IntoTheDeepBasicConfig = new RobotConfig(drive, lift, liftVertical, outtakeSpecimen);
 
     /**
      * Current Config
      */
     public void setCurrentConfig(){
-        setConfig(TestConfig4);
+        setConfig(IntoTheDeepBasicConfig);
     }
 
 }

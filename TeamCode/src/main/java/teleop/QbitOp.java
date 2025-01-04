@@ -20,7 +20,6 @@ public class QbitOp extends Tele {
         gph2.link(Button.DPAD_LEFT, outtake::moveFlipStart);
         gph2.link(Button.DPAD_UP, outtake::moveFlipMiddle);
         gph2.link(Button.DPAD_RIGHT, outtake::moveFlipEnd);
-        gph1.link(Button.Y,lift::liftEmergency);
         gph1.link(Button.X, bot::cancelAutoModules);
 
         gph2.link(Button.RIGHT_BUMPER, hang::moveHangStart);
@@ -62,6 +61,7 @@ public class QbitOp extends Tele {
 //        log.show("Claw (bumpers):   right:close, left:open");
 //        log.show("Drone (dpad):   up:start, down:release");
         drive.move(gph1.ry,gph1.rx,gph1.lx*0.5);
+
    //     drive.move((gph1.rt-gph1.lt)*0.5,gph1.lx*0.5,gph1.rx*0.4);
 
         intake.move(gph2.ry);

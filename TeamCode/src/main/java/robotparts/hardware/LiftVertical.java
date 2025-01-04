@@ -10,18 +10,18 @@ import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PMotor;
 import util.codeseg.ReturnCodeSeg;
 
-public class Lift extends RobotPart implements AutoModuleUser {
+public class LiftVertical extends RobotPart implements AutoModuleUser {
 
     public PMotor liftRight;
     public PMotor liftLeft;
     public double target = 0;
-    public final double MAXHEIGHT = 40;
+    public final double MAXHEIGHT = 60;
 
 
     @Override
     public void init() {
-        liftRight = create("rlh", ElectronicType.PMOTOR_FORWARD);
-        liftLeft = create("llh", ElectronicType.PMOTOR_REVERSE);
+        liftRight = create("rlv", ElectronicType.PMOTOR_FORWARD);
+        liftLeft = create("llv", ElectronicType.PMOTOR_REVERSE);
 
         liftRight.setToLinear(Constants.ORBITAL_ENCODER_TICKS_PER_REVOLUTION, 2.4, 1.0, 30);
         liftLeft.setToLinear(Constants.ORBITAL_ENCODER_TICKS_PER_REVOLUTION, 2.4, 1.0, 30);
@@ -37,14 +37,30 @@ public class Lift extends RobotPart implements AutoModuleUser {
         return ()->{
             if ((target+inc>=0)&&(target+inc<=MAXHEIGHT)){
                 target+=inc;
-                return Lift(target);
+                return LiftVertical(target);
 
             }
             else if(target+inc<=0){
                 target=0;
-                return Lift(target);
+                return LiftVertical(target);
             }
-          return new AutoModule();
+            return new AutoModule();
+        };
+    }
+
+    public ReturnCodeSeg<AutoModule> liftEmergency(){
+        return ()->{
+            target=-5;
+            if ((target>=-5)&&(target<=MAXHEIGHT)){
+                target=-5;
+                return LiftVertical(target);
+
+            }
+            else if(target<=-5){
+                target=-5;
+                return LiftVertical(target);
+            }
+            return new AutoModule();
         };
     }
 
