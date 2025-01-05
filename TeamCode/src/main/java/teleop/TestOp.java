@@ -7,14 +7,19 @@ import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import teleutil.button.Button;
+
 @TeleOp(name = "TestOp", group = "TeleOp")
 public class TestOp extends Tele {
 
     @Override
     public void initTele() {
+        gph2.link(Button.X, bucket::bottom);
+        gph2.link(Button.Y, bucket::top);
 
+        gph2.link(Button.A, claw::hold);
+        gph2.link(Button.B, claw::release);
 
-//TODO --> fix the telemetry for buttons (make it accurate)
 
 
     }
