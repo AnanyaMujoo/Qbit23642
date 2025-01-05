@@ -29,7 +29,7 @@ public class Configs implements RobotUser{
     RobotConfig TestConfig4 = new RobotConfig(intake);
     RobotConfig TestConfig5 = new RobotConfig(drive);
 
-    RobotConfig TestConfig6 = new RobotConfig(intaketest);
+    RobotConfig TestConfig6 = new RobotConfig(bucket,claw);
 
 
     RobotConfig IntoTheDeepBasicConfig = new RobotConfig(drive, liftIntake, RobotUser.liftOuttake);
@@ -39,7 +39,7 @@ public class Configs implements RobotUser{
      * Current Config
      */
     public void setCurrentConfig(){
-        setConfig(IntoTheDeepBasicConfig);
+        setConfig(TestConfig6);
     }
 
 }

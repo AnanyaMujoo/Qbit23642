@@ -14,16 +14,17 @@ public class Claw extends RobotPart {
         outtake1 = create("rc", ElectronicType.PSERVO_REVERSE);
         outtake2 = create("lc", ElectronicType.PSERVO_FORWARD);
         //outtake 2 not configured yet
-        outtake1.setPosition("hold", 0.2);
-        outtake2.setPosition("hold", 0.2);
-        outtake1.setPosition("release", 0.2);
-        outtake2.setPosition("release", 0.2);
+        outtake1.setPosition("hold", 1.3);
+        outtake1.setPosition("release", 0.5);
+
+        outtake2.setPosition("hold", 0.5);
+        outtake2.setPosition("release", 1);
 
     }
-    private void move(String positionName){ outtake1.moveToPosition(positionName); outtake2.moveToPosition(positionName); }
+    private void move(String positionName){ outtake2.moveToPosition(positionName); outtake1.moveToPosition(positionName);  }//outtake2.moveToPosition(positionName); }
 
-    public void hold(){ move("start"); }
-    public void release(){ move("middle"); }
+    public void hold(){ move("hold"); }
+    public void release(){ move("release"); }
 
     public Stage stageHold(double t){ return super.customTime(this::hold, t); }
     public Stage stageRelease(double t){ return super.customTime(this::release, t); }
