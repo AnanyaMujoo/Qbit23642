@@ -1,11 +1,112 @@
 package automodules;
 
+import global.Modes;
 import robot.RobotUser;
 
 import static automodules.StageBuilder.pause;
+import static global.Modes.driveMode;
 
 
 public interface AutoModuleUser extends RobotUser {
+
+    AutoModule PrepareRam = new AutoModule(
+            claw.stageReady(0.5),
+            claw.stageDisable(0.1),
+            driveMode.ChangeMode(Modes.Drive.SLOW)
+    );
+
+    AutoModule Ram = new AutoModule(
+            claw.stageSqueeze(0.3),
+            liftOuttake.stageLift(0.2, 10),
+            drive.moveTime(0.3,0,0,0.3),
+            claw.stageHold(0.3),
+            driveMode.ChangeMode(Modes.Drive.FAST),
+            liftOuttake.stageLift(0.2, 42)
+    );
+    AutoModule Specimen = new AutoModule(
+            liftOuttake.stageDown(-0.2, 32),
+            claw.stageReady(0.3),
+            drive.moveTime(0.3,0,0,0.4),
+            claw.stageRelease(0.3),
+            liftOuttake.stageDown(-0.15, 0)
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //    AutoModule Deposit = new AutoModule(

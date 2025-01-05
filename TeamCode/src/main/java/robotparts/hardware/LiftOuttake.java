@@ -1,6 +1,10 @@
 package robotparts.hardware;
 
 import automodules.AutoModuleUser;
+import automodules.stage.Exit;
+import automodules.stage.Initial;
+import automodules.stage.Main;
+import automodules.stage.Stage;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
@@ -13,9 +17,15 @@ public class LiftOuttake extends RobotPart implements AutoModuleUser {
     public PMotor liftLeft;
 
 //    public double target = 0;
-//    public final double MAXHEIGHT = 40;
+    public final double MAX_HEIGHT = 93.8;
+
+
     public final ReturnParameterCodeSeg<Double, Double> restPowerFunction = height -> {
-        return (height/40)*0.01;
+        if (height > 30) {
+            return Math.pow(height / 40, 2) * 0.02;
+        }else {
+            return  0.0;
+        }
     };
 
 
@@ -61,10 +71,21 @@ public class LiftOuttake extends RobotPart implements AutoModuleUser {
 
     @Override
     public void move(double liftPower) {
-        liftRight.moveWithPositionHolder(liftPower);
-        liftLeft.moveWithPositionHolder(liftPower);
-//        liftLeft.setPower(liftPower);
-//        liftRight.setPower(liftPower);
+        if ((liftRight.getPosition() < 0 || liftLeft.getPosition() < 0) && liftPower < 0) {
+            liftRight.getPositionHolder().deactivate();
+            liftRight.move(0.0);
+            liftLeft.getPositionHolder().deactivate();
+            liftLeft.move(0.0);
+        }else if((liftRight.getPosition() > MAX_HEIGHT || liftLeft.getPosition() > MAX_HEIGHT) && liftPower > 0){
+            liftRight.getPositionHolder().deactivate();
+            liftRight.move(restPowerFunction.run(liftRight.getPosition()));
+            liftLeft.getPositionHolder().deactivate();
+            liftLeft.move(restPowerFunction.run(liftLeft.getPosition()));
+        }else {
+            liftRight.moveWithPositionHolder(liftPower);
+            liftLeft.moveWithPositionHolder(liftPower);
+        }
+
     }
 
 
@@ -84,7 +105,20 @@ public class LiftOuttake extends RobotPart implements AutoModuleUser {
 //
 //
 //
-//    public Stage stageLift(double power, double target) { return moveTarget(() -> liftRight, () -> liftLeft, power, power, target); }
+    public Stage stageLift(double power, double target) { return moveTarget(() -> liftRight, () -> liftLeft, power, power, target); }
+
+    public Stage stageDown(double power, double target){
+        return new Stage(
+                usePart(),
+                new Main(() -> {
+                    liftRight.move(-Math.abs(power));
+                    liftLeft.move(-Math.abs(power));
+                }),
+                new Exit(() -> liftLeft.getPosition() < target || liftRight.getPosition() < target),
+                stop(),
+                returnPart()
+        );
+    }
 //
 //    @Override
 //    public void maintain() { super.maintain(); }

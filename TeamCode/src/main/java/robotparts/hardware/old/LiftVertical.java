@@ -1,4 +1,4 @@
-package robotparts.hardware;
+package robotparts.hardware.old;
 
 import automodules.AutoModule;
 import automodules.AutoModuleUser;

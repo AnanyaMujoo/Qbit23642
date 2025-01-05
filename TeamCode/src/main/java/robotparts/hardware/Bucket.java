@@ -3,28 +3,30 @@ package robotparts.hardware;
 import automodules.stage.Stage;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
-import robotparts.electronics.continuous.CServo;
 import robotparts.electronics.positional.PServo;
 
 public class Bucket extends RobotPart {
-    public PServo intake1;
-    public PServo intake2;
+    public PServo rbucket;
+    public PServo lbucket;
     @Override
     public void init() {
-        intake1 = create("rs", ElectronicType.PSERVO_REVERSE);
-        intake2 = create("ls", ElectronicType.PSERVO_FORWARD);
-        intake1.setPosition("bottom", 0);
-        intake2.setPosition("bottom", 0);
-        intake1.setPosition("top", 0.66);
-        intake2.setPosition("top", 0.66);
+        rbucket = create("rs", ElectronicType.PSERVO_REVERSE);
+        lbucket = create("ls", ElectronicType.PSERVO_FORWARD);
+        rbucket.setPosition("bottom", 0);
+        lbucket.setPosition("bottom", 0);
+        rbucket.setPosition("top", 0.66);
+        lbucket.setPosition("top", 0.66);
+        lbucket.setPosition("hold", 0.33);
+        rbucket.setPosition("hold", 0.33);
 
 
     }
 
-    private void move(String positionName){ intake1.moveToPosition(positionName); intake2.moveToPosition(positionName);}
+    private void move(String positionName){ rbucket.moveToPosition(positionName); lbucket.moveToPosition(positionName);}
 
     public void bottom(){ move("bottom"); }
     public void top(){ move("top"); }
+    public void hold(){ move("hold"); }
 
     public Stage stageBottom(double t){ return super.customTime(this::bottom, t); }
     public Stage stageTop(double t){ return super.customTime(this::top, t); }

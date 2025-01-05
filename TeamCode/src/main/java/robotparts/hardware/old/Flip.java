@@ -1,4 +1,4 @@
-package robotparts.hardware;
+package robotparts.hardware.old;
 
 import automodules.stage.Stage;
 import robotparts.RobotPart;

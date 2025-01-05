@@ -2,7 +2,7 @@ package unittests.tele.framework.movement;
 
 import autoutil.controllers.control1D.PositionHolder;
 import robotparts.electronics.positional.PMotor;
-import robotparts.hardware.Lift;
+import robotparts.hardware.old.Lift;
 import unittests.tele.TeleUnitTest;
 
 import static global.General.gph1;

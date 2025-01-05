@@ -1,12 +1,15 @@
 package teleop;
 
 import static java.lang.Math.abs;
+import static global.General.bot;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import automodules.AutoModule;
+import global.Modes;
 import teleutil.button.Button;
 
 @TeleOp(name = "TestOp", group = "TeleOp")
@@ -20,8 +23,16 @@ public class TestOp extends Tele {
         gph2.link(Button.A, claw::hold);
         gph2.link(Button.B, claw::release);
 
+        gph2.link(Button.RIGHT_BUMPER, claw::disable);
+        gph2.link(Button.LEFT_BUMPER, claw::ready);
+        gph2.link(Button.DPAD_UP, claw::squeeze);
+        gph2.link(Button.DPAD_DOWN, bucket::hold);
 
+        gph1.link(Button.DPAD_UP, PrepareRam);
+        gph1.link(Button.DPAD_RIGHT, Ram);
+        gph1.link(Button.DPAD_DOWN, Specimen);
 
+        gph1.link(Button.RIGHT_BUMPER, () -> driveMode.set(Drive.SLOW), () -> driveMode.set(Drive.FAST));
     }
 
     @Override
@@ -33,15 +44,28 @@ public class TestOp extends Tele {
     public void loopTele() {
         liftIntake.move(gph2.ry*0.1);
         liftOuttake.move(gph2.ly*0.2);
+
+        double speed;
+        if (driveMode.modeIs(Drive.FAST)) {
+            speed = 0.6;
+        }else{
+            speed = 0.2;
+        }
+        drive.move(gph1.ry * speed, gph1.rx * speed, gph1.lx * speed);
+
+        log.show("DriveMode", driveMode.get());
+
+//        log.show("stages", bot.rfsHandler.getRfsQueue().size());
+//        log.show("stage0", bot.rfsHandler.getRfsQueue().peek().isPause());
+////        log.show("stage");
+//        log.show("thread", bot.robotFunctionsThread.getStatus());
+
+
 //
-//        lift.move(gph2.lx*0.1);
-//        liftVertical.move(gph2.ly*0.1);
-        drive.move(gph1.ry*0.1,gph1.rx*0.1,gph1.lx*0.1);
-//
-        log.show("Right pos", liftOuttake.liftRight.getPosition());
-        log.show("Left pos", liftOuttake.liftLeft.getPosition());
-        log.show(liftOuttake.liftLeft.getPower());
-        log.show(liftOuttake.liftRight.getPower());
+//        log.show("Right pos", liftOuttake.liftRight.getPosition());
+//        log.show("Left pos", liftOuttake.liftLeft.getPosition());
+//        log.show(liftOuttake.liftLeft.getPower());
+//        log.show(liftOuttake.liftRight.getPower());
 
     }
 

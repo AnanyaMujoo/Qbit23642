@@ -62,6 +62,10 @@ public class PServo extends Electronic {
         positions.put(name, p);
     }
 
+    public void disable(){
+        servo.getController().pwmDisable();
+    }
+
 
 
     /**

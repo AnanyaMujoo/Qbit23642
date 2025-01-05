@@ -6,27 +6,44 @@ import robotparts.electronics.ElectronicType;
 import robotparts.electronics.positional.PServo;
 
 public class Claw extends RobotPart {
-    public PServo outtake1;
-    public PServo outtake2;
+    public PServo outtaker;
+    public PServo outtakel;
 
     @Override
     public void init() {
-        outtake1 = create("rc", ElectronicType.PSERVO_REVERSE);
-        outtake2 = create("lc", ElectronicType.PSERVO_FORWARD);
+        outtaker = create("rc", ElectronicType.PSERVO_FORWARD);
+        outtakel = create("lc", ElectronicType.PSERVO_REVERSE);
         //outtake 2 not configured yet
-        outtake1.setPosition("hold", 1.3);
-        outtake1.setPosition("release", 0.5);
+        outtaker.setPosition("hold", 0);
+        outtaker.setPosition("release", 0.85);
+        outtaker.setPosition("ready",0.4);
+        outtaker.setPosition("squeeze",0.2);
 
-        outtake2.setPosition("hold", 0.5);
-        outtake2.setPosition("release", 1);
+        outtakel.setPosition("hold", 0);
+        outtakel.setPosition("release", 0.85);
+        outtakel.setPosition("ready",0.4);
+        outtakel.setPosition("squeeze",0.2);
 
     }
-    private void move(String positionName){ outtake2.moveToPosition(positionName); outtake1.moveToPosition(positionName);  }//outtake2.moveToPosition(positionName); }
-
+    private void move(String positionName){ outtakel.moveToPosition(positionName); outtaker.moveToPosition(positionName);  }//outtake2.moveToPosition(positionName); }
+    public void disable(){
+        outtaker.disable();
+        outtakel.disable();
+    }
     public void hold(){ move("hold"); }
     public void release(){ move("release"); }
+    public void ready(){ move("ready");}
+    public void squeeze(){move("squeeze");}
+
+//    public void ram(){
+//        ready();
+//        disable();
+//    }
 
     public Stage stageHold(double t){ return super.customTime(this::hold, t); }
     public Stage stageRelease(double t){ return super.customTime(this::release, t); }
+    public Stage stageReady(double t){ return super.customTime(this::ready, t); }
+    public Stage stageSqueeze(double t){ return super.customTime(this::squeeze, t); }
+    public Stage stageDisable(double t){ return super.customTime(this::disable, t); }
 
 }

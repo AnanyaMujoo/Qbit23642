@@ -1,11 +1,15 @@
 package robotparts.hardware;
 
+import static global.Modes.driveMode;
+
 import automodules.AutoModule;
 import automodules.stage.Stage;
+import global.Modes;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
 import util.codeseg.ReturnCodeSeg;
+import util.template.Mode;
 
 public class Drive extends RobotPart {
 
@@ -20,6 +24,7 @@ public class Drive extends RobotPart {
         frontLeft = create("fl", ElectronicType.CMOTOR_FORWARD_FLOAT);
         backLeft = create("bl", ElectronicType.CMOTOR_FORWARD_FLOAT);
 
+        driveMode.set(Modes.Drive.FAST);
     }
 
 

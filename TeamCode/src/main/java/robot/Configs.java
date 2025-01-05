@@ -26,20 +26,20 @@ public class Configs implements RobotUser{
 
 //RobotConfig CenterStageBasicConfig = new RobotConfig(outtake, drone, lift, hang, drive, intake, camera, gyro, odometry);
 
-    RobotConfig TestConfig4 = new RobotConfig(intake);
-    RobotConfig TestConfig5 = new RobotConfig(drive);
+//    RobotConfig TestConfig4 = new RobotConfig(intake);
+//    RobotConfig TestConfig5 = new RobotConfig(drive);
+//
+//    RobotConfig TestConfig6 = new RobotConfig(bucket,claw);
 
-    RobotConfig TestConfig6 = new RobotConfig(bucket,claw);
 
+    RobotConfig IntoTheDeepBasicConfig = new RobotConfig(drive, liftIntake, liftOuttake, bucket, claw);
 
-    RobotConfig IntoTheDeepBasicConfig = new RobotConfig(drive, liftIntake, RobotUser.liftOuttake);
-
-    RobotConfig IntoTheDeepConfig = new RobotConfig(drive, lift, liftVertical, claw, bucket, flip, intake, odometry);
+//    RobotConfig IntoTheDeepConfig = new RobotConfig(drive, lift, liftVertical, claw, bucket, flip, intake, odometry);
     /**
      * Current Config
      */
     public void setCurrentConfig(){
-        setConfig(TestConfig6);
+        setConfig(IntoTheDeepBasicConfig);
     }
 
 }

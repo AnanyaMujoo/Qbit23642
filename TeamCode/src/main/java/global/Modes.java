@@ -1,7 +1,5 @@
 package global;
 
-import robotparts.hardware.Drive;
-import robotparts.hardware.Lift;
 import util.template.Mode;
 
 
