@@ -4,27 +4,40 @@ import automodules.AutoModuleUser;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CMotor;
+import robotparts.electronics.positional.PMotor;
+import util.codeseg.ReturnParameterCodeSeg;
 
 public class LiftOuttake extends RobotPart implements AutoModuleUser {
 
-    public CMotor liftRight;
-    public CMotor liftLeft;
+    public PMotor liftRight;
+    public PMotor liftLeft;
+
 //    public double target = 0;
 //    public final double MAXHEIGHT = 40;
+    public final ReturnParameterCodeSeg<Double, Double> restPowerFunction = height -> {
+        return (height/40)*0.01;
+    };
 
 
     @Override
     public void init() {
 //        liftRight = create("rlh", ElectronicType.PMOTOR_FORWARD);
 //        liftLeft = create("llh", ElectronicType.PMOTOR_REVERSE);
-        liftLeft = create("llv", ElectronicType.CMOTOR_FORWARD);
-        liftRight = create("rlv", ElectronicType.CMOTOR_REVERSE);
+        liftLeft = create("llift", ElectronicType.PMOTOR_FORWARD);
+        liftRight = create("rlift", ElectronicType.PMOTOR_REVERSE);
 
-//        liftRight.setToLinear(Constants.ORBITAL_ENCODER_TICKS_PER_REVOLUTION, 2.4, 1.0, 30);
-//        liftLeft.setToLinear(Constants.ORBITAL_ENCODER_TICKS_PER_REVOLUTION, 2.4, 1.0, 30);
-//
-//        liftRight.usePositionHolder(0.05, 0.05);
-//        liftLeft.usePositionHolder(0.05, 0.05);
+//        liftLeft = create("llv", ElectronicType.CMOTOR_FORWARD);
+//        liftRight = create("rlv", ElectronicType.CMOTOR_REVERSE);
+
+        liftLeft.setToLinearOrbitalMotorVertical(2.7);
+        liftRight.setToLinearOrbitalMotorVertical(2.7);
+
+        liftLeft.usePositionHolder(restPowerFunction, 0.05);
+        liftRight.usePositionHolder(restPowerFunction, 0.05);
+
+        liftLeft.useSnapToZero(2, -0.05);
+        liftRight.useSnapToZero(2, -0.05);
+
 //
 //        target = 0;
 //TODO Test life and stages (max height and intervals)
@@ -48,10 +61,10 @@ public class LiftOuttake extends RobotPart implements AutoModuleUser {
 
     @Override
     public void move(double liftPower) {
-//        liftRight.moveWithPositionHolder(liftPower,  0.05);
-//        liftLeft.moveWithPositionHolder(liftPower,  0.05);
-        liftLeft.setPower(liftPower);
-        liftRight.setPower(liftPower);
+        liftRight.moveWithPositionHolder(liftPower);
+        liftLeft.moveWithPositionHolder(liftPower);
+//        liftLeft.setPower(liftPower);
+//        liftRight.setPower(liftPower);
     }
 
 

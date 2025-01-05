@@ -51,8 +51,8 @@ public class Lift extends RobotPart implements AutoModuleUser {
 
     @Override
     public void move(double liftPower) {
-        liftRight.moveWithPositionHolder(liftPower,  0.05);
-        liftLeft.moveWithPositionHolder(liftPower,  0.05);
+//        liftRight.moveWithPositionHolder(liftPower,  0.05);
+//        liftLeft.moveWithPositionHolder(liftPower,  0.05);
     }
 
 

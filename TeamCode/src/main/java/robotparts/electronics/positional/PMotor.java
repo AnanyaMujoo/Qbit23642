@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import autoutil.controllers.control1D.PositionHolder;
 import debugging.StallDetector;
+import global.Constants;
 import robotparts.Electronic;
 import robotparts.electronics.input.IEncoder;
 import util.codeseg.ReturnCodeSeg;
@@ -30,16 +31,19 @@ public class PMotor extends Electronic {
     private final DcMotor.ZeroPowerBehavior zeroPowerBehavior;
     private final IEncoder motorEncoder;
     private final StallDetector detector;
-    private final PIDFCoefficients defaultCoeffs;
+    private final PIDFCoefficients defaultCoeffs = new PIDFCoefficients();
     private final PositionHolder positionHolder = new PositionHolder();
     private MovementType movementType = MovementType.ROTATIONAL;
     private ReturnParameterCodeSeg<Double, Double> outputToTicks = input -> input;
     private ReturnParameterCodeSeg<Double, Double> ticksToOutput = input -> input;
+    private ReturnParameterCodeSeg<Double, Double> restPowerFunction = dis -> 0.0;
     private PIDFCoefficients currentCoeffs;
     private static final double exitTimeDelay = 0.1;
-    private boolean holdingExact = false;
+    private double snapToZeroPower;
+//    private boolean holdingExact = false;
 
-    private double lastTarget = 0;
+    private double lastTarget;
+    private double snapToZeroDistance ; // cm
 
     /**
      * Constructor to create a pmotor
@@ -49,14 +53,12 @@ public class PMotor extends Electronic {
      * @param mode
      */
     public PMotor(DcMotor m, DcMotor.Direction dir, DcMotor.ZeroPowerBehavior zpb, DcMotor.RunMode mode){
+
         motor = (DcMotorEx) m;
-        motorEncoder = new IEncoder(motor, IEncoder.EncoderType.PMOTOR);
-        detector = new StallDetector(motorEncoder, 10, 13);
-        positionHolder.setProcessVariable(motorEncoder::getAngularVelocity);
-        defaultCoeffs = motor.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
-        currentCoeffs = defaultCoeffs;
         direction = dir;
         zeroPowerBehavior = zpb;
+        motorEncoder = new IEncoder(motor, IEncoder.EncoderType.PMOTOR);
+        detector = new StallDetector(motorEncoder, 10, 13);
 
         motor.setDirection(direction);
         motor.setZeroPowerBehavior(zeroPowerBehavior);
@@ -65,8 +67,14 @@ public class PMotor extends Electronic {
         motor.setPower(0);
 
         motorEncoder.reset();
-        holdingExact = false;
         lastTarget = 0;
+        snapToZeroPower = 0;
+        snapToZeroDistance = 2;
+        restPowerFunction = dis -> 0.0;
+        positionHolder.deactivate();
+
+
+//
     }
 
     // TOD 5 Make way for custom PID and custom rest pow function (feedforward)
@@ -77,18 +85,23 @@ public class PMotor extends Electronic {
      * @param restPower
      */
     public void usePositionHolder(double restPower){ positionHolder.setRestOutput(restPower); resetPosition(); }
-    public void usePositionHolder(double restPower, double pCoefficient){ positionHolder.setPCoefficient(pCoefficient); usePositionHolder(restPower); }
-    public void usePositionHolder(ReturnCodeSeg<Double> restPowerFunction, double pCoefficient){ positionHolder.setRestPowerFunction(restPowerFunction); positionHolder.setPCoefficient(pCoefficient); resetPosition();}
+    public void usePositionHolder(double restPower, double pCoefficient){ positionHolder.setPCoefficient(pCoefficient); restPowerFunction = dis -> restPower; }
+    public void usePositionHolder(ReturnParameterCodeSeg<Double, Double> restPowerFunction, double pCoefficient){ this.restPowerFunction = restPowerFunction; positionHolder.setPCoefficient(pCoefficient); resetPosition();}
 
+
+    public void useSnapToZero(double snapToZeroDistance, double snapToZeroPower){
+        this.snapToZeroDistance = snapToZeroDistance;
+        this.snapToZeroPower = snapToZeroPower;
+    }
     /**
      * Hold position by activating the position holder
      */
-    public void holdPosition(){ positionHolder.activate(); move(0); }
+//    public void holdPosition(){ positionHolder.activate(this::getPosition); move(0); }
 
     /**
      * Hold the position exactly
      */
-    public void holdPositionExact(){ positionHolder.activate(this::getPosition); move(0); }
+//    public void holdPositionExact(){ positionHolder.activate(this::getPosition); move(0); }
 
     /**
      * Release the position
@@ -112,6 +125,21 @@ public class PMotor extends Electronic {
         movementType = MovementType.LINEAR;
         outputToTicks = distance -> (distance/(2*Math.PI*pulleyRadius))*ticksPerRevolution*(motorToPulleyGearRatio/cos(toRadians(angleToVertical)));
         ticksToOutput = Precision.invert(outputToTicks);
+    }
+
+
+    /**
+     * Set an orbital motor to linear mode when movement is horizontal
+     * @param pulleyRadius
+     */
+    public void setToLinearOrbitalMotorHorizontal(double pulleyRadius){
+        movementType = MovementType.LINEAR;
+        outputToTicks = distance -> (distance/(2*Math.PI*pulleyRadius))*Constants.ORBITAL_ENCODER_TICKS_PER_REVOLUTION;
+        ticksToOutput = Precision.invert(outputToTicks);
+    }
+
+    public void setToLinearOrbitalMotorVertical(double pulleyRadius){
+        setToLinearOrbitalMotorHorizontal(pulleyRadius);
     }
 
     /**
@@ -155,7 +183,7 @@ public class PMotor extends Electronic {
         if(access.isAllowed()){
             if(!detector.isStalling()){
                 positionHolder.update();
-                motor.setPower(Precision.clip(positionHolder.getOutput() + p, 1)*voltageScale);
+                motor.setPower(Precision.clip( p, 1)*voltageScale);
             }else{
                 motor.setPower(0);
                 fault.warn("Motor is stalling, stopped all AutoModules", Expectation.EXPECTED, Magnitude.CRITICAL);
@@ -228,7 +256,7 @@ public class PMotor extends Electronic {
     public void stopTarget(){
         halt();
         motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        holdingExact = true;
+//        holdingExact = true;
     }
 
     /**
@@ -257,16 +285,32 @@ public class PMotor extends Electronic {
     /**
      * Default move with position holder
      * @param power
-     * @param backPowerWhenTargetingZero
      */
-    public void moveWithPositionHolder(double power, double backPowerWhenTargetingZero) {
-        if (power != 0) {
-            releasePosition(); move(power); holdingExact = false;
-        } else if (lastTarget != 0) {
-            if (holdingExact) { holdPositionExact(); } else { holdPosition(); }
-        } else if(getPosition() > 0.2){
-            releasePosition();
-            move(-Math.abs(backPowerWhenTargetingZero));
+    public void moveWithPositionHolder(double power) {
+        if(power != 0){
+            log.show("Manual movement");
+            // Manual movement (no position holding, yes rest power)
+            positionHolder.deactivate();
+            move(power + restPowerFunction.run(getPosition()));
+        }else if (lastTarget != 0){
+            log.show("Not moving, nonzero target");
+            // Not moving, nonzero target (yes position holding, yes rest power)
+            positionHolder.activate();
+            move(restPowerFunction.run(getPosition()));
+        }else if(getPosition() > snapToZeroDistance){
+            log.show("Above snap range");
+            // Above snap range (any position holding, yes rest power
+            move(restPowerFunction.run(getPosition()));
+        }else if(getPosition() > 0.2 && getPosition() < snapToZeroDistance){
+            log.show("In snap range");
+            // In snap range (no position holding, no rest power, yes down power)
+            positionHolder.deactivate();
+            move(-Math.abs(snapToZeroPower));
+        }else{
+            log.show("Below snap range");
+            // Below snap range (no position holding, no rest power, no down power)
+            positionHolder.deactivate();
+            move(0.0);
         }
     }
 

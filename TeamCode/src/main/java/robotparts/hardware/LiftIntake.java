@@ -13,8 +13,8 @@ import util.codeseg.ReturnCodeSeg;
 
 public class LiftIntake extends RobotPart implements AutoModuleUser {
 
-    public CMotor liftRight;
-    public CMotor liftLeft;
+    public PMotor liftRight;
+    public PMotor liftLeft;
 //    public double target = 0;
 //    public final double MAXHEIGHT = 40;
 
@@ -23,14 +23,17 @@ public class LiftIntake extends RobotPart implements AutoModuleUser {
     public void init() {
 //        liftRight = create("rlh", ElectronicType.PMOTOR_FORWARD);
 //        liftLeft = create("llh", ElectronicType.PMOTOR_REVERSE);
-        liftLeft = create("llh", ElectronicType.CMOTOR_REVERSE);
-        liftRight = create("rlh", ElectronicType.CMOTOR_FORWARD);
+        liftLeft = create("llh", ElectronicType.PMOTOR_REVERSE);
+        liftRight = create("rlh", ElectronicType.PMOTOR_FORWARD);
 
-//        liftRight.setToLinear(Constants.ORBITAL_ENCODER_TICKS_PER_REVOLUTION, 2.4, 1.0, 30);
-//        liftLeft.setToLinear(Constants.ORBITAL_ENCODER_TICKS_PER_REVOLUTION, 2.4, 1.0, 30);
-//
-//        liftRight.usePositionHolder(0.05, 0.05);
-//        liftLeft.usePositionHolder(0.05, 0.05);
+
+        liftRight.setToLinearOrbitalMotorHorizontal(2.3);
+        liftLeft.setToLinearOrbitalMotorHorizontal(2.3);
+
+        liftRight.usePositionHolder(0.0, 0.05);
+        liftLeft.usePositionHolder(0.0, 0.05);
+        liftLeft.useSnapToZero(2, -0.05);
+        liftRight.useSnapToZero(2, -0.05);
 //
 //        target = 0;
 //TODO Test life and stages (max height and intervals)
@@ -54,10 +57,10 @@ public class LiftIntake extends RobotPart implements AutoModuleUser {
 
     @Override
     public void move(double liftPower) {
-//        liftRight.moveWithPositionHolder(liftPower,  0.05);
-//        liftLeft.moveWithPositionHolder(liftPower,  0.05);
-        liftLeft.setPower(liftPower);
-        liftRight.setPower(liftPower);
+        liftRight.moveWithPositionHolder(liftPower);
+        liftLeft.moveWithPositionHolder(liftPower);
+//        liftLeft.setPower(liftPower);
+//        liftRight.setPower(liftPower);
     }
 
 

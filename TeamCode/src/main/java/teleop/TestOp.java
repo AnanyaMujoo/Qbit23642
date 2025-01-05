@@ -3,6 +3,7 @@ package teleop;
 import static java.lang.Math.abs;
 import static global.General.gph1;
 import static global.General.gph2;
+import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -31,7 +32,11 @@ public class TestOp extends Tele {
 //        lift.move(gph2.lx*0.1);
 //        liftVertical.move(gph2.ly*0.1);
         drive.move(gph1.ry*0.1,gph1.rx*0.1,gph1.lx*0.1);
-
+//
+        log.show("Right pos", liftOuttake.liftRight.getPosition());
+        log.show("Left pos", liftOuttake.liftLeft.getPosition());
+        log.show(liftOuttake.liftLeft.getPower());
+        log.show(liftOuttake.liftRight.getPower());
 
     }
 

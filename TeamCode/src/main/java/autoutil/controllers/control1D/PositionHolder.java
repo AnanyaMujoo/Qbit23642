@@ -8,20 +8,32 @@ import util.template.Precision;
 
 public class PositionHolder extends Controller1D {
 
-    private double restPower, extraRestPower, pCoefficient = 0;
+    private double restPower, power, pCoefficient = 0;
     public final double deltaPowerUp = 0.007;
     public final double deltaPowerDown = -0.007;
     public final double velocityThreshold = Trig.rad(10);
-    private volatile boolean isUsed, isTargeting = false;
+    private volatile boolean isTargeting;
+//    private volatile boolean isUsed, isTargeting = false;
     private ReturnCodeSeg<Double> currentPosition = () -> 0.0;
     private ReturnCodeSeg<Double> restPowerFunction = () -> restPower;
 
 
+    public void init(ReturnCodeSeg<Double> currentPosition){
+        this.currentPosition = currentPosition;
+    }
 
-    public void deactivate(){ isUsed = false; isTargeting = false; }
-    public void activate(){ isUsed = true; isTargeting = false; }
+    public void deactivate(){
+        isTargeting = false;
+    }
 
-    public void activate(ReturnCodeSeg<Double> currentPosition){ isUsed = true; isTargeting = true; this.currentPosition = currentPosition; }
+    public void activate(){
+        isTargeting = true;
+    }
+
+//    public void deactivate(){ isUsed = false; isTargeting = false; }
+//    public void activate(){ isUsed = true; isTargeting = false; }
+//
+//    public void activate(ReturnCodeSeg<Double> currentPosition){ isUsed = true; isTargeting = true; this.currentPosition = currentPosition; }
 
     @Override
     public void setRestOutput(double restOutput) { this.restPower = restOutput; }
@@ -40,19 +52,25 @@ public class PositionHolder extends Controller1D {
 
     @Override
     protected void updateController(Pose pose, Generator generator) {
-        if(isUsed) {
-            if(isTargeting){
-                double error = (getTarget()-currentPosition.run());
-                extraRestPower = pCoefficient*error;
-            } else{
-//                if(!isWithinAccuracyRange() && Math.abs(getCurrentValue()) > velocityThreshold)
-                extraRestPower = 0;
-            }
+//        if(isUsed) {
+//            if(isTargeting){
+//                double error = (getTarget()-currentPosition.run());
+//                extraRestPower = pCoefficient*error;
+//            } else{
+////                if(!isWithinAccuracyRange() && Math.abs(getCurrentValue()) > velocityThreshold)
+//                extraRestPower = 0;
+//            }
+//        }
+        if(isTargeting){
+            double error = getTarget()-currentPosition.run();
+            power = pCoefficient*error;
+        }else{
+            power = 0;
         }
     }
 
     @Override
-    protected double setOutput() { return isUsed ? restPowerFunction.run()+extraRestPower : 0; }
+    protected double setOutput() { return isTargeting ? power : 0.0; }
 
     @Override
     protected boolean hasReachedTarget() { return false; }
