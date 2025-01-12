@@ -2,6 +2,7 @@ package robotparts.hardware;
 
 import automodules.AutoModule;
 import automodules.AutoModuleUser;
+import automodules.stage.Exit;
 import automodules.stage.Main;
 import automodules.stage.Stage;
 import global.Constants;
@@ -39,6 +40,8 @@ public class LiftIntake extends RobotPart implements AutoModuleUser {
 //TODO Test life and stages (max height and intervals)
 
     }
+    public Stage stageLift(double power, double target) { return moveTarget(() -> liftRight, () -> liftLeft, power, power, target); }
+
 //    public ReturnCodeSeg<AutoModule> lifttarget(double inc){
 //        return ()->{
 //            if ((target+inc>=0)&&(target+inc<=MAXHEIGHT)){
@@ -65,7 +68,18 @@ public class LiftIntake extends RobotPart implements AutoModuleUser {
 
 
 
-
+    public Stage stageDown(double power, double target){
+        return new Stage(
+                usePart(),
+                new Main(() -> {
+                    liftRight.move(-Math.abs(power));
+                    liftLeft.move(-Math.abs(power));
+                }),
+                new Exit(() -> liftLeft.getPosition() < target || liftRight.getPosition() < target),
+                stop(),
+                returnPart()
+        );
+    }
 
 
 

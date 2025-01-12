@@ -31,153 +31,70 @@ public interface AutoModuleUser extends RobotUser {
             liftOuttake.stageDown(-0.15, 0)
     );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    AutoModule Deposit = new AutoModule(
-//            outtake.stageClawOpen(0.5),
-//            outtake.stageFlipStart(0.5),
-//            lift.stageLift(0.1,0)
-//    );
-//    default AutoModule DepositYellow (){return new AutoModule(
-//            outtake.stageClawOpen(0.5)
-//    );}
-//
-//    default AutoModule Prepare (double height){return new AutoModule(
-//            lift.stageLift(0.1,height),
-//            outtake.stageFlipEnd(0.5)
-//    );}
-    default AutoModule Lift (double height){return new AutoModule(
-            lift.stageLift(0.2,height)
-    ); }
-    default AutoModule LiftVertical (double height){return new AutoModule(
-            liftVertical.stageLift(0.2,height)
-    ); }
-    default AutoModule ClawDeposit(){return new AutoModule(
-            liftVertical.stageLift(0.5,15),
-            claw.stageRelease(0.5),
-            liftVertical.stageLift(0.5,0)
-    );}
-
-    default AutoModule ClawReceive(){return new AutoModule(
-      liftVertical.stageLift(0.5,10),
-      claw.stageHold(0.5),
-        liftVertical.stageLift(0.5,20)
-            );}
-
-    //TOD0 FINISH THeSe
-    default AutoModule IntakeOut(){return new AutoModule(
-      lift.stageLift(0.5,20),
-            intake.moveTime(0.5, 2)
-
-    );}
-
-    default AutoModule IntakeIn(){return new AutoModule(
-            intake.stageClose(0.5),
-            flip.moveTime(0.5,1),
-            lift.stageLift(0.5,0),
+    AutoModule Intake= new AutoModule(
+      intake.stageFlipHalf(0.1),
+            liftIntake.stageLift(0.5, 25),
             intake.stageOpen(0.5),
-            intake.stageClose(0.5),
-            lift.stageLift(0.5,20)
+            driveMode.ChangeMode(Modes.Drive.SLOW)
 
-            );}
-    default AutoModule BucketDeposit(){return new AutoModule(
-            liftVertical.stageLift(0.5,50),
-            bucket.moveTime(0.1,1),
-            bucket.moveTime(-0.5,1),
-            liftVertical.stageLift(0.5,0)
-            );}
+    );
 
-    default AutoModule VerticalEmergency(){return new AutoModule
-        (
-                liftVertical.stageLift(0.1,-5),
-                liftVertical.resetLift()
-                );
-    }
-    default AutoModule HorizontalEmergency(){return new AutoModule
-            (
-                    lift.stageLift(0.1,-5),
-                    lift.resetLift()
+    AutoModule IntakeIn = new AutoModule(
+            intake.stageClose(0.1),
+            intake.stageFlipAlmost(0.1),
+            liftIntake.stageDown(0.5, 0),
+            intake.stageFlipIn(0.1),
+            intake.stageOpen(0.1),
+            intake.moveTime(0.2,0.5)
+            //intake.stageClose(0.5)
+            //remember to flip after
+
+    );
+
+    AutoModule MoveIntake = new AutoModule(
+            intake.stageFlipOut(0.1),
+            intake.moveTime(1,5)
+//            drive.moveTime(-0.1,0,-0,0.5),
+//
+//            drive.moveTime(0,0,-0.2,0.3),
+//            drive.moveTime(0,0,0.4,0.3),
+//            drive.moveTime(0,0,-0.2,0.3)
+
+            //intake.stageClose(0.5)
+            //remember to flip after
+
+    );
+    AutoModule PrepareBucket= new AutoModule(
+      intake.stageFlipOut(0.1),
+      claw.stageHold(0.1),
+      liftOuttake.stageLift(0.2,93.8),
+      bucket.stageHold(0.1),
+            claw.stageSqueeze(0.1)
+
+    );
+    AutoModule Deposit = new AutoModule(
+            bucket.stageTop(0.5),
+            bucket.stageBottom(0.5)
+
             );
-    }
-    default AutoModule pleaseDontLift (){return new AutoModule(
-            lift.stageLift(0.2,5)
-    );}
+    AutoModule LiftDown = new AutoModule(
+            claw.stageHold(0.1),
+      liftOuttake.stageDown(0.2, 0),
+            bucket.stageBottom(0.1),
+            intake.stageFlipIn(0.1)
+
+    );
+    AutoModule testIntakeLift = new AutoModule(
+
+            liftIntake.stageLift(0.1,5),
+            liftIntake.stageDown(0.1,0)
+    );
+    AutoModule RamBucket = new AutoModule(
+            claw.stageSqueeze(0.3),
+            drive.moveTime(0.3,0,0,0.5),
+            driveMode.ChangeMode(Modes.Drive.FAST),
+            liftOuttake.stageLift(0.2, 42)
+    );
 
 //    default AutoModule AutoYellow(){return new AutoModule(
 //            lift.stageLift(0.2,5),

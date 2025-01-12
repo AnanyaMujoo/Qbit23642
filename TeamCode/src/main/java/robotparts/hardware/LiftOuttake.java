@@ -17,7 +17,7 @@ public class LiftOuttake extends RobotPart implements AutoModuleUser {
     public PMotor liftLeft;
 
 //    public double target = 0;
-    public final double MAX_HEIGHT = 93.8;
+    public final double MAX_HEIGHT = 94.3;
 
 
     public final ReturnParameterCodeSeg<Double, Double> restPowerFunction = height -> {

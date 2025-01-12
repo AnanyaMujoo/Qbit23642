@@ -33,20 +33,20 @@ public class Lift extends RobotPart implements AutoModuleUser {
 //TODO Test life and stages (max height and intervals)
 
     }
-    public ReturnCodeSeg<AutoModule> lifttarget(double inc){
-        return ()->{
-            if ((target+inc>=0)&&(target+inc<=MAXHEIGHT)){
-                target+=inc;
-                return Lift(target);
-
-            }
-            else if(target+inc<=0){
-                target=0;
-                return Lift(target);
-            }
-          return new AutoModule();
-        };
-    }
+//    public ReturnCodeSeg<AutoModule> lifttarget(double inc){
+//        return ()->{
+//            if ((target+inc>=0)&&(target+inc<=MAXHEIGHT)){
+//                target+=inc;
+//                return Lift(target);
+//
+//            }
+//            else if(target+inc<=0){
+//                target=0;
+//                return Lift(target);
+//            }
+//          return new AutoModule();
+//        };
+//    }
 
 
     @Override

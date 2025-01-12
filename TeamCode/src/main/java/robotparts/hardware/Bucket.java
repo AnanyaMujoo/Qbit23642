@@ -31,6 +31,8 @@ public class Bucket extends RobotPart {
     public Stage stageBottom(double t){ return super.customTime(this::bottom, t); }
     public Stage stageTop(double t){ return super.customTime(this::top, t); }
 
+    public Stage stageHold(double t){ return super.customTime(this::hold, t); }
+
 
 
 }

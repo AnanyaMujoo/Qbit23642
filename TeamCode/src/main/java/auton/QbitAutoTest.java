@@ -16,28 +16,28 @@ import static global.General.fieldSide;
 
 @Autonomous(name = "QbitAutoTest", group = "Autonomous")
 public class QbitAutoTest extends AutoFramework {
-    {
-        fieldSide = FieldSide.BLUE;
-        fieldPlacement = FieldPlacement.LOWER;
-        startPose = new Pose(20.5, Field.width / 2.0 - 1.5*Field.tileWidth, 90);
-    }
+//    {
+//        fieldSide = FieldSide.BLUE;
+//        fieldPlacement = FieldPlacement.LOWER;
+//        startPose = new Pose(20.5, Field.width / 2.0 - 1.5*Field.tileWidth, 90);
+
 
 
     @Override
     public void initialize() {
         setConfig(mecanumNonstopConfig);
-        lift.maintain();
-        wait(0.5);
-        scan(new CaseScannerRectBottom(), true, "blue", "left");
+//        lift.maintain();
+//        wait(0.5);
+//        scan(new CaseScannerRectBottom(), true, "blue", "left");
     }
 
 
     @Override
     public void define() {
 
-        addTimedSetpoint(1.0, 0.6, 1.0, 0, 40, 0);
-        addTimedSetpoint(1.0, 0.6, 1.0, -20, 40, 0);
-        addTimedSetpoint(1.0, 0.6, 1.0, -20, 40, 90);
+        addTimedSetpoint(1.0, 0.1, 1.0, 17, -28, 0);
+
+
 
 //        addSegment(0.5, mecanumDefaultWayPoint, 0, 90, 0);
 //

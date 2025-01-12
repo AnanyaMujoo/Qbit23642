@@ -18,7 +18,7 @@ public class NewOdometry extends RobotPart {
     public final ExceptionCodeSeg<RuntimeException> odometryUpdateCode = this::update;
     public DcMotor yOdo;
     public DcMotor xOdo;
-    public final Vector odometryCenterToRobotCenter = new Vector(-15.5, 17.0);
+    public final Vector odometryCenterToRobotCenter = new Vector(-4.2, 14.25);
     public final double wheelDiameter = 3.5; // cm
 
     @Override

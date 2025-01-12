@@ -1,15 +1,12 @@
 package teleop;
 
 import static java.lang.Math.abs;
-import static global.General.bot;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import automodules.AutoModule;
-import global.Modes;
 import teleutil.button.Button;
 
 @TeleOp(name = "TestOp", group = "TeleOp")
@@ -17,22 +14,41 @@ public class TestOp extends Tele {
 
     @Override
     public void initTele() {
+        claw.hold();
         gph2.link(Button.X, bucket::bottom);
         gph2.link(Button.Y, bucket::top);
+//
+//        gph2.link(Button.A, claw::hold);
+//        gph2.link(Button.B, claw::release);
+        gph2.link(Button.X, Deposit);
+        gph2.link(Button.Y, LiftDown);
 
-        gph2.link(Button.A, claw::hold);
-        gph2.link(Button.B, claw::release);
+
+        gph1.link(Button.B, IntakeIn);
+        gph1.link(Button.A, Intake);
+        gph1.link(Button.X, PrepareBucket);
+        gph1.link(Button.Y, MoveIntake);
+
 
         gph2.link(Button.RIGHT_BUMPER, claw::disable);
         gph2.link(Button.LEFT_BUMPER, claw::ready);
         gph2.link(Button.DPAD_UP, claw::squeeze);
         gph2.link(Button.DPAD_DOWN, bucket::hold);
+        gph2.link(Button.LEFT_TRIGGER, intake::flipOut);
+        gph2.link(Button.RIGHT_TRIGGER, intake::flipIn);
+
+//        gph2.link(Button.LEFT_BUMPER, intake::openDoor);
+//        gph2.link(Button.RIGHT_BUMPER, intake::closeDoor);
+        gph1.link(Button.DPAD_DOWN, Specimen);
+
+
 
         gph1.link(Button.DPAD_UP, PrepareRam);
         gph1.link(Button.DPAD_RIGHT, Ram);
-        gph1.link(Button.DPAD_DOWN, Specimen);
-
         gph1.link(Button.RIGHT_BUMPER, () -> driveMode.set(Drive.SLOW), () -> driveMode.set(Drive.FAST));
+
+
+
     }
 
     @Override
@@ -42,9 +58,9 @@ public class TestOp extends Tele {
 
     @Override
     public void loopTele() {
-        liftIntake.move(gph2.ry*0.1);
         liftOuttake.move(gph2.ly*0.2);
-
+        liftIntake.move(gph2.lx*0.2);
+        intake.move(gph2.ry*0.8);
         double speed;
         if (driveMode.modeIs(Drive.FAST)) {
             speed = 0.6;
