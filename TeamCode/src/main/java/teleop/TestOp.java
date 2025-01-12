@@ -20,14 +20,14 @@ public class TestOp extends Tele {
 //
 //        gph2.link(Button.A, claw::hold);
 //        gph2.link(Button.B, claw::release);
-        gph2.link(Button.X, Deposit);
-        gph2.link(Button.Y, LiftDown);
+        gph1.link(Button.LEFT_TRIGGER, Deposit);
+        //gph2.link(Button.Y, LiftDown);
 
 
-        gph1.link(Button.B, IntakeIn);
-        gph1.link(Button.A, Intake);
-        gph1.link(Button.X, PrepareBucket);
-        gph1.link(Button.Y, MoveIntake);
+        gph1.link(Button.A, IntakeIn);
+        gph1.link(Button.Y, Intake);
+        gph1.link(Button.RIGHT_TRIGGER, PrepareBucket);
+        gph1.link(Button.B, MoveIntake);
 
 
         gph2.link(Button.RIGHT_BUMPER, claw::disable);
@@ -46,6 +46,7 @@ public class TestOp extends Tele {
         gph1.link(Button.DPAD_UP, PrepareRam);
         gph1.link(Button.DPAD_RIGHT, Ram);
         gph1.link(Button.RIGHT_BUMPER, () -> driveMode.set(Drive.SLOW), () -> driveMode.set(Drive.FAST));
+        gph1.link(Button.LEFT_BUMPER, () -> driveMode.set(Drive.SLOW), () -> driveMode.set(Drive.FAST));
 
 
 

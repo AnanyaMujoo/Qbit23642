@@ -10,9 +10,11 @@ import static global.Modes.driveMode;
 public interface AutoModuleUser extends RobotUser {
 
     AutoModule PrepareRam = new AutoModule(
+            bucket.stageSpecimen(0.1),
             claw.stageReady(0.5),
             claw.stageDisable(0.1),
             driveMode.ChangeMode(Modes.Drive.SLOW)
+
     );
 
     AutoModule Ram = new AutoModule(
@@ -22,13 +24,16 @@ public interface AutoModuleUser extends RobotUser {
             claw.stageHold(0.3),
             driveMode.ChangeMode(Modes.Drive.FAST),
             liftOuttake.stageLift(0.2, 42)
-    );
+
+
+            );
     AutoModule Specimen = new AutoModule(
-            liftOuttake.stageDown(-0.2, 32),
+            liftOuttake.stageDown(-0.3, 30),
             claw.stageReady(0.3),
             drive.moveTime(0.3,0,0,0.4),
-            claw.stageRelease(0.3),
+            claw.stageHold(0.1),
             liftOuttake.stageDown(-0.15, 0)
+
     );
 
     AutoModule Intake= new AutoModule(
@@ -74,7 +79,12 @@ public interface AutoModuleUser extends RobotUser {
     );
     AutoModule Deposit = new AutoModule(
             bucket.stageTop(0.5),
-            bucket.stageBottom(0.5)
+            bucket.stageBottom(0.5),
+            drive.moveTime(0.4,0,0,0.5),
+            claw.stageHold(0.1),
+            liftOuttake.stageDown(0.1, 0),
+            bucket.stageBottom(0.1),
+            intake.stageFlipIn(0.1)
 
             );
     AutoModule LiftDown = new AutoModule(

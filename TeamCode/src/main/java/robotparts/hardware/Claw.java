@@ -14,15 +14,15 @@ public class Claw extends RobotPart {
         outtaker = create("rc", ElectronicType.PSERVO_FORWARD);
         outtakel = create("lc", ElectronicType.PSERVO_REVERSE);
         //outtake 2 not configured yet
-        outtaker.setPosition("hold", 0);
-        outtaker.setPosition("release", 0.85);
-        outtaker.setPosition("ready",0.4);
-        outtaker.setPosition("squeeze",0.2);
+        outtaker.setPosition("hold", 0.07);
+        outtaker.setPosition("release", 0.92);
+        outtaker.setPosition("ready",0.47);
+        outtaker.setPosition("squeeze",0.27);
 
-        outtakel.setPosition("hold", 0);
-        outtakel.setPosition("release", 0.85);
-        outtakel.setPosition("ready",0.4);
-        outtakel.setPosition("squeeze",0.2);
+        outtakel.setPosition("hold", 0.04);
+        outtakel.setPosition("release", 0.89);
+        outtakel.setPosition("ready",0.44);
+        outtakel.setPosition("squeeze",0.24);
 
     }
     private void move(String positionName){ outtakel.moveToPosition(positionName); outtaker.moveToPosition(positionName);  }//outtake2.moveToPosition(positionName); }
