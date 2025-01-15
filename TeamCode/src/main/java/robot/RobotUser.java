@@ -10,8 +10,6 @@ import robotparts.hardware.LiftIntake;
 import robotparts.hardware.LiftOuttake;
 import robotparts.hardware.old.LiftVertical;
 import robotparts.hardware.Claw;
-import robotparts.sensors.odometry.NewOdometry;
-import robotparts.sensors.odometry.OneOdometry;
 //import robotparts.sensors.odometry.SecondOdometry;
 import robotparts.sensors.odometry.RealOdometry;
 import unittests.tele.framework.movement.AutoModuleTest;
@@ -36,7 +34,7 @@ public interface RobotUser {
      * USED
      */
     Drive drive = new Drive();
-    Lift lift = new Lift();
+    Lift liftDONOTUSE = new Lift();
     LiftIntake liftIntake = new LiftIntake();
     LiftOuttake liftOuttake = new LiftOuttake();
 //    Outtake outtake = new Outtake();

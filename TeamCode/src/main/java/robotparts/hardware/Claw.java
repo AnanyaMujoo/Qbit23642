@@ -17,12 +17,12 @@ public class Claw extends RobotPart {
         outtaker.setPosition("hold", 0.07);
         outtaker.setPosition("release", 0.92);
         outtaker.setPosition("ready",0.47);
-        outtaker.setPosition("squeeze",0.27);
+        outtaker.setPosition("squeeze",0.26);
 
         outtakel.setPosition("hold", 0.04);
         outtakel.setPosition("release", 0.89);
         outtakel.setPosition("ready",0.44);
-        outtakel.setPosition("squeeze",0.24);
+        outtakel.setPosition("squeeze",0.23);
 
     }
     private void move(String positionName){ outtakel.moveToPosition(positionName); outtaker.moveToPosition(positionName);  }//outtake2.moveToPosition(positionName); }

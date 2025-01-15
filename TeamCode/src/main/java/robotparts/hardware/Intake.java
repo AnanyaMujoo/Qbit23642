@@ -54,6 +54,10 @@ public class Intake extends RobotPart {
         flipl.setPosition("almostOut", 0.1);
         flipr.setPosition("almostOut", 0.1);
 
+        flipl.setPosition("auto", 0.45);
+        flipr.setPosition("auto", 0.45);
+
+
 
         ld.setPosition("open", 0);
         rd.setPosition("open", 0);
@@ -85,6 +89,8 @@ public class Intake extends RobotPart {
     public void flipHalf(){moveFlip("half");}
     public void flipAlmost(){moveFlip("almost");}
     public void flipAlmostOut(){moveFlip("almostOut");}
+    public void flipAuto(){moveFlip("auto");}
+
 
 
     public void disable(){
@@ -100,6 +106,7 @@ public class Intake extends RobotPart {
     public Stage stageFlipHalf(double t){return super.customTime(this::flipHalf, t);}
     public Stage stageFlipAlmost(double t){return super.customTime(this::flipAlmost, t);}
     public Stage stageFlipAlmostOut(double t){ return super.customTime(this::flipAlmostOut, t);}
+    public Stage stageFlipAuto(double t){ return super.customTime(this::flipAuto, t);}
     public Stage stageDisable(double t){ return super.customTime(this::disable, t); }
     public Stage moveTime(double p, double t) { return super.moveTime(p, t); }
     public Stage moveUntilStop(double p) { return customExit(p, () -> stopSpin).combine(new Initial(() -> stopSpin = false)); }

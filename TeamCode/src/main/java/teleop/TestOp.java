@@ -77,6 +77,7 @@ public class TestOp extends Tele {
 
 
         gph1.link(Button.DPAD_DOWN, Specimen);
+        gph1.link(Button.DPAD_LEFT, EmergencyBucket);
 
 
 

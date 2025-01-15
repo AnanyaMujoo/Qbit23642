@@ -66,7 +66,7 @@ public interface AutoModuleUser extends RobotUser {
             driveMode.ChangeMode(Modes.Drive.FAST),
             intake.stageFlipIn(0.1),
             intake.stageOpen(0.1),
-            intake.moveTime(1,0.5),
+            intake.moveTime(1,0.8),
             intake.stageFlipHalf(0.1)
     );
 
@@ -103,6 +103,11 @@ public interface AutoModuleUser extends RobotUser {
             intake.stageDisable(0.05)
     );
 
+    AutoModule EmergencyBucket = new AutoModule(
+            liftOuttake.stageLift(0.3,40),
+            bucket.stageSpecimen(0.3)
+
+            );
 
 
 

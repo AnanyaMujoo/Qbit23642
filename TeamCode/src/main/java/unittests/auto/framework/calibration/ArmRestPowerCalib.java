@@ -10,11 +10,11 @@ public class ArmRestPowerCalib extends AutoUnitTest {
     @Override
     protected void run() {
         FinalDouble power = new FinalDouble();
-        whileActive(() -> lift.liftRight.getPosition() < 20, () -> {
-            lift.move(power.get());
+        whileActive(() -> liftDONOTUSE.liftRight.getPosition() < 20, () -> {
+            liftDONOTUSE.move(power.get());
             power.increment(0.001);
         });
-        lift.halt();
+        liftDONOTUSE.halt();
         whileTime(() -> {log.show("Lift Rest Power", power.get());}, 10);
     }
 }

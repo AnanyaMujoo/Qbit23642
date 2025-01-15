@@ -20,6 +20,8 @@ public class Bucket extends RobotPart {
         rbucket.setPosition("hold", 0.33);
         lbucket.setPosition("specimen", 0.55);
         rbucket.setPosition("specimen", 0.55);
+        lbucket.setPosition("emergency", 0.45);
+        rbucket.setPosition("emergency", 0.45);
 
 
     }
@@ -29,6 +31,7 @@ public class Bucket extends RobotPart {
     public void bottom(){ move("bottom"); }
     public void top(){ move("top"); }
     public void hold(){ move("hold"); }
+    public void emergency(){ move("emergency"); }
 
     public void specimen(){ move("specimen"); }
 
@@ -36,6 +39,8 @@ public class Bucket extends RobotPart {
     public Stage stageTop(double t){ return super.customTime(this::top, t); }
 
     public Stage stageHold(double t){ return super.customTime(this::hold, t); }
+
+    public Stage stageEmergency(double t){ return super.customTime(this::emergency, t); }
 
     public Stage stageSpecimen(double t){ return super.customTime(this::specimen, t); }
 

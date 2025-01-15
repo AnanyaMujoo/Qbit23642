@@ -11,7 +11,7 @@ import static global.General.log;
 public class CustomPMotorPIDTest extends TeleUnitTest {
 
 
-    private final PMotor motor = lift.liftRight;
+    private final PMotor motor = liftDONOTUSE.liftRight;
 
     @Override
     public void init() {
@@ -23,7 +23,7 @@ public class CustomPMotorPIDTest extends TeleUnitTest {
 //        gph1.link(Button.B, LiftUpTopFast);
 //        gph1.link(Button.Y, LiftReset);
         gph1.link(Button.X, bot::cancelAutoModules);
-        lift.maintain();
+        liftDONOTUSE.maintain();
     }
 
     @Override

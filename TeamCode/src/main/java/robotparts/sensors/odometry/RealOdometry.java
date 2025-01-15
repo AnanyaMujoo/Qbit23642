@@ -14,7 +14,7 @@ import static robot.RobotFramework.odometryThread;
 
 public class RealOdometry extends RobotPart {
 
-    public double x, y, h, xo, yo, startX, startY, lastX, lastY, lastY2;
+    public double x, y, h, xo, yo, startX, startY, lastX, lastY, lastY2, xOffset, yOffset;
     public final ExceptionCodeSeg<RuntimeException> odometryUpdateCode = this::update;
     public DcMotor yOdo;
     public DcMotor xOdo;
@@ -97,7 +97,7 @@ public class RealOdometry extends RobotPart {
     public double getEncX() { return (-xOdo.getCurrentPosition()-startX) * wheelDiameter * Math.PI / Constants.ODOMETRY_ENCODER_TICKS_PER_REV; }
     public double getEncY() { return (-yOdo.getCurrentPosition()-startY) * wheelDiameter * Math.PI / Constants.ODOMETRY_ENCODER_TICKS_PER_REV; }
 
-    public final double getX(){ return x; }
+    public final double getX(){ return x + xOffset; }
     public final double getY(){ return y; }
     public double getHeading() { return h; }
     public Pose getPose() { return new Pose(x, y, h); }
@@ -107,6 +107,13 @@ public class RealOdometry extends RobotPart {
         reset(new Pose());
     }
 
+    public void resetX(double newX){
+        xOffset = newX-getX();
+    }
+
+    public void resetY(double newY){
+        yOffset = newY-getY();
+    }
 
     public void reset(Pose pose){
         gyro.reset();
@@ -118,6 +125,8 @@ public class RealOdometry extends RobotPart {
         lastX = 0;
         lastY = 0;
         lastY2 = 0;
+        xOffset = 0;
+        yOffset = 0;
         gyro.setHeading(pose.getAngle());
     }
 }

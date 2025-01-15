@@ -10,7 +10,7 @@ import static global.General.log;
 
 public class PositionHolderTest extends TeleUnitTest {
 
-    private final Lift part = lift;
+    private final Lift part = liftDONOTUSE;
     private final PMotor motor = part.liftRight;
     private final PositionHolder positionHolder = motor.getPositionHolder();
 
