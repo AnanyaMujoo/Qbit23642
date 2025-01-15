@@ -9,12 +9,12 @@ import static global.Modes.driveMode;
 
 public interface AutoModuleUser extends RobotUser {
 
+
     AutoModule PrepareRam = new AutoModule(
             bucket.stageSpecimen(0.1),
             claw.stageReady(0.5),
             claw.stageDisable(0.1),
             driveMode.ChangeMode(Modes.Drive.SLOW)
-
     );
 
     AutoModule Ram = new AutoModule(
@@ -36,75 +36,117 @@ public interface AutoModuleUser extends RobotUser {
 
     );
 
-    AutoModule Intake= new AutoModule(
-      intake.stageFlipHalf(0.1),
-            liftIntake.stageLift(0.5, 25),
-            intake.stageOpen(0.5),
-            driveMode.ChangeMode(Modes.Drive.SLOW)
 
+
+    // INTAKE
+
+    AutoModule Intake = new AutoModule(
+            intake.stageFlipHalf(0.05),
+            driveMode.ChangeMode(Modes.Drive.SLOW),
+            liftIntake.stageLift(0.6, 25),
+            intake.stageFlipAlmostOut(0.05),
+            intake.stageOpen(0.05),
+            bucket.stageBottom(0.05)
+    );
+
+
+    AutoModule MoveIntake = new AutoModule(
+            intake.stageFlipOut(0.05),
+            intake.moveUntilStop(1)
+    );
+
+    AutoModule Shimmy = new AutoModule(
+            intake.stageFlipOut(0.05),
+            intake.shimmyUntilStopDir(0.3, 1)
     );
 
     AutoModule IntakeIn = new AutoModule(
-            intake.stageClose(0.1),
-            intake.stageFlipAlmost(0.1),
-            liftIntake.stageDown(0.5, 0),
+            intake.stagepPickUp(),
+            liftIntake.stageDown(0.6, 0),
+            driveMode.ChangeMode(Modes.Drive.FAST),
             intake.stageFlipIn(0.1),
             intake.stageOpen(0.1),
-            intake.moveTime(0.2,0.5)
-            //intake.stageClose(0.5)
-            //remember to flip after
-
+            intake.moveTime(1,0.5),
+            intake.stageFlipHalf(0.1)
     );
 
-    AutoModule MoveIntake = new AutoModule(
-            intake.stageFlipOut(0.1),
-            intake.moveTime(1,5)
-//            drive.moveTime(-0.1,0,-0,0.5),
-//
-//            drive.moveTime(0,0,-0.2,0.3),
-//            drive.moveTime(0,0,0.4,0.3),
-//            drive.moveTime(0,0,-0.2,0.3)
-
-            //intake.stageClose(0.5)
-            //remember to flip after
-
+    AutoModule MoveIntakeOut = new AutoModule(
+            intake.stageFlipOut(0.05),
+            intake.moveUntilStop(-1)
     );
-    AutoModule PrepareBucket= new AutoModule(
-      intake.stageFlipOut(0.1),
-      claw.stageHold(0.1),
-      liftOuttake.stageLift(0.2,93.8),
-      bucket.stageHold(0.1),
-            claw.stageSqueeze(0.1)
 
+    AutoModule IntakeDeltaOut = new AutoModule(intake.stageFlipAlmostOut(0.05), liftIntake.stageDelta(0.5, 10));
+    AutoModule IntakeDeltaIn = new AutoModule(intake.stageFlipAlmostOut(0.05), liftIntake.stageDelta(0.5, -10));
+
+
+
+    // Bucket
+
+
+    AutoModule PrepareBucket = new AutoModule(
+            claw.stageHold(0.05),
+            bucket.stageHold(0.05),
+            driveMode.ChangeMode(Modes.Drive.SLOW),
+            liftOuttake.stageLift(0.6,93.8),
+            claw.stageSqueeze(0.05)
     );
+
     AutoModule Deposit = new AutoModule(
             bucket.stageTop(0.5),
-            bucket.stageBottom(0.5),
-            drive.moveTime(0.4,0,0,0.5),
-            claw.stageHold(0.1),
-            liftOuttake.stageDown(0.1, 0),
             bucket.stageBottom(0.1),
-            intake.stageFlipIn(0.1)
-
-            );
-    AutoModule LiftDown = new AutoModule(
-            claw.stageHold(0.1),
-      liftOuttake.stageDown(0.2, 0),
-            bucket.stageBottom(0.1),
-            intake.stageFlipIn(0.1)
-
-    );
-    AutoModule testIntakeLift = new AutoModule(
-
-            liftIntake.stageLift(0.1,5),
-            liftIntake.stageDown(0.1,0)
-    );
-    AutoModule RamBucket = new AutoModule(
-            claw.stageSqueeze(0.3),
             drive.moveTime(0.3,0,0,0.5),
+            claw.stageHold(0.05),
+            bucket.stageSpecimen(0.05),
             driveMode.ChangeMode(Modes.Drive.FAST),
-            liftOuttake.stageLift(0.2, 42)
+            liftOuttake.stageDown(0.4, 0),
+            intake.stageFlipIn(0.2),
+            intake.stageDisable(0.05)
     );
+
+
+
+
+
+
+    AutoModule Dance = new AutoModule(
+            drive.moveTime(0.7, 0, 0, 0.3),
+            drive.moveTime(-1, 0, 0, 0.3)
+    );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //    default AutoModule AutoYellow(){return new AutoModule(
 //            lift.stageLift(0.2,5),

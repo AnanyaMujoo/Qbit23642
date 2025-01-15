@@ -13,6 +13,7 @@ import robotparts.hardware.Claw;
 import robotparts.sensors.odometry.NewOdometry;
 import robotparts.sensors.odometry.OneOdometry;
 //import robotparts.sensors.odometry.SecondOdometry;
+import robotparts.sensors.odometry.RealOdometry;
 import unittests.tele.framework.movement.AutoModuleTest;
 import robotparts.hardware.Drive;
 import robotparts.hardware.old.Lift;
@@ -48,8 +49,9 @@ public interface RobotUser {
 
 //    Odometry odometry = new TwoOdometry();
 //    ThreeOdometry odometry = new ThreeOdometry(); // TOD 5 EXTEND THIS CONCEPT TO ALL ROBOT PARTS
-    NewOdometry odometry = new NewOdometry();
-    OneOdometry oneOdometry = new OneOdometry();
+//    NewOdometry odometry = new NewOdometry();
+//    OneOdometry oneOdometry = new OneOdometry();
+    RealOdometry odometry = new RealOdometry();
 //    SecondOdometry secondOdometry = new SecondOdometry();
     /**
      * UNUSED

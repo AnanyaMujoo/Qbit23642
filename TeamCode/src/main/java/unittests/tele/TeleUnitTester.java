@@ -1,34 +1,12 @@
 package unittests.tele;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import autoutil.vision.JunctionScanner;
-import elements.FieldPlacement;
-import elements.FieldSide;
 import teleop.Tele;
 
 import unittests.UnitTester;
-import unittests.tele.framework.AccessTest;
-import unittests.tele.framework.AutoModuleInitialTest;
-import unittests.tele.framework.BackgroundTest;
-import unittests.tele.framework.CommonTest;
-import unittests.tele.framework.DecisionTest;
-import unittests.tele.framework.FaultTest;
-import unittests.tele.framework.GamepadTest;
-import unittests.tele.framework.LagTest;
-import unittests.tele.framework.LoggerTest;
-import unittests.tele.framework.MathTest;
-import unittests.tele.framework.ParameterConstructorTest;
-import unittests.tele.framework.PhysicsTest;
-import unittests.tele.framework.SelectorTest;
-import unittests.tele.framework.StorageTest;
-import unittests.tele.framework.SynchroniserTest;
-import unittests.tele.framework.ThreadTest;
-import unittests.tele.framework.movement.OdometryTest;
-import unittests.tele.other.GeometryTest;
-import unittests.tele.sensor.DistanceTest;
-import unittests.tele.sensor.JunctionScannerTest;
+import unittests.tele.sensor.GyroTest;
+import unittests.tele.sensor.OdometryTest;
 
 import static global.General.*;
 
@@ -67,6 +45,7 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new ThreadTest());
 //        add(new BackgroundTest());
 
+//        add(new GyroTest());
         add(new OdometryTest());
 
 

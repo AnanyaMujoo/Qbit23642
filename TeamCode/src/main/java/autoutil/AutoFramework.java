@@ -108,7 +108,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void flipCases(){ if(caseDetected.equals(TeamProp.LEFT)){ caseDetected = TeamProp.RIGHT; }else if(caseDetected.equals(TeamProp.RIGHT)){ caseDetected = TeamProp.LEFT; }}
 
     public void addDecision(DecisionList decisionList){ decisionList.check(); }
-    public void addAutomodule(DecisionList decisionList){ addAutoModule(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways()))); }
+    public void addAutomodule(DecisionList decisionList){ addAutoModuleDONOTUSE(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways()))); }
     public void customSide(CodeSeg one, CodeSeg two){ addDecision(new DecisionList(() -> fieldSide).addOption(FieldSide.BLUE, one).addOption(FieldSide.RED, two)); }
     public void customFlipped(CodeSeg one, CodeSeg two){ if(!isFlipped()){ one.run();}else{two.run();}}
     public void customPlacement(CodeSeg one, CodeSeg two){ addDecision(new DecisionList(() -> fieldPlacement).addOption(FieldPlacement.LOWER, one).addOption(FieldPlacement.UPPER, two)); }
@@ -175,10 +175,12 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addPause(double time){ addSegmentType(time); }
     public void addSetpoint(double x, double y, double h){ addSegmentType(AutoSegment.Type.SETPOINT); poses.add(new Pose(x,y,h)); }
     public void addWaypoint(double x, double y, double h){ addSegmentType(AutoSegment.Type.WAYPOINT); poses.add(new Pose(x,y,h)); }
-    public void addAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.AUTOMODULE, autoModule); }
+    public void addAutoModuleDONOTUSE(AutoModule autoModule){ addSegmentType(AutoSegment.Type.AUTOMODULE, autoModule); }
     public void addConcurrentAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.CONCURRENT_AUTOMODULE, autoModule);}
     public void addConcurrentAutoModuleWithCancel(AutoModule autoModule, double pauseAfter){ addCancelAutoModules(); addConcurrentAutoModule(autoModule); addPause(pauseAfter);}
     public void addConcurrentAutoModuleWithCancel(AutoModule autoModule){ addCancelAutoModules(); addConcurrentAutoModule(autoModule);}
+    public void addAutoModule(AutoModule autoModule){ addCancelAutoModules(); addConcurrentAutoModule(autoModule);}
+
     public void addCancelAutoModules(){ addSegmentType(AutoSegment.Type.CANCEL_AUTOMODULE); addLastPose(); }
     public void addSegment(double time, double scale, AutoSegment<?,?> segment, double x, double y, double h){addTime(time); addSegment(scale, segment, x, y, h); }
     public void addSegment(double scale, AutoSegment<?,?> segment, double x, double y, double h){addScale(scale); addSegment(segment, x, y, h); }
@@ -196,6 +198,8 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
     public void addSetpoint(double acc, double scale, double x, double y, double h){ addAccuracy(acc); addSetpoint(scale, x, y, h);}
     public void addTimedSetpoint(double acc, double scale, double time, double x, double y, double h){ addTime(time); addSetpoint(acc, scale, x, y, h); }
+    public void addTimedSetpoint(double scale, double time, double x, double y, double h){ addTime(time); addSetpoint(1.0, scale, x, y, h); }
+
     public void addTimedWaypoint(double scale, double time, double x, double y, double h){ addTime(time); addWaypoint(scale, x, y, h);}
 
     public void addBezierWaypoints(double scale, double time, Point start, Point control1, Point control2, Point end, double h, int indices){

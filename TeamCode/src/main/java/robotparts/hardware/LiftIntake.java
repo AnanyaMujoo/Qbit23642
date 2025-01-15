@@ -17,7 +17,7 @@ public class LiftIntake extends RobotPart implements AutoModuleUser {
     public PMotor liftRight;
     public PMotor liftLeft;
 //    public double target = 0;
-//    public final double MAXHEIGHT = 40;
+    public final double MAX_HEIGHT = 45;
 
 
     @Override
@@ -41,6 +41,18 @@ public class LiftIntake extends RobotPart implements AutoModuleUser {
 
     }
     public Stage stageLift(double power, double target) { return moveTarget(() -> liftRight, () -> liftLeft, power, power, target); }
+
+    public Stage stageDelta(double power, double delta){ return moveTarget(() -> liftRight, () -> liftLeft, power, power, () -> {
+            double newTarget = liftRight.getTarget() + delta;
+            if(newTarget < 0){
+                return 0.0;
+            }else if(newTarget > MAX_HEIGHT){
+                return MAX_HEIGHT;
+            }else{
+                return newTarget;
+            }
+        }
+    );}
 
 //    public ReturnCodeSeg<AutoModule> lifttarget(double inc){
 //        return ()->{

@@ -1,4 +1,4 @@
-package unittests.tele.framework.movement;
+package unittests.tele.sensor;
 
 import automodules.AutoModule;
 import automodules.stage.Exit;
@@ -38,7 +38,12 @@ public class OdometryTest extends TeleUnitTest {
 
     @Override
     protected void loop() {
-        log.show("Odometry Pose", odometry.getPose());
+//        log.show("Odometry Pose", odometry.getPose());
+//        log.show("X", Math.round(1000.0*odometry.getX())/1000.0);
+//        log.show("Y", Math.round(1000.0*odometry.getY())/1000.0);
+        log.show("X", Math.round(1000.0*odometry.xo)/1000.0);
+        log.show("Y", Math.round(1000.0*odometry.yo)/1000.0);
+        log.show("Heading", Math.round(1000.0*odometry.getHeading())/1000.0);
 //        log.show("Y2", odometryNew.getEncY2());
         drive.move(gph1.ry*0.5, gph1.rx*0.5, gph1.lx*0.5);
 //        log.show("Mode", odometry.mode);

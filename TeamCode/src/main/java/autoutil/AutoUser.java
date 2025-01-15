@@ -51,6 +51,7 @@ public interface AutoUser {
 
     AutoConfig mecanumDefaultConfig = new AutoConfig(mecanumDefaultSetpoint, mecanumDefaultWayPoint);
     AutoConfig mecanumNonstopConfig = new AutoConfig(mecanumNonstopSetPoint, mecanumNonstopWayPoint);
+    AutoConfig mecanumMixedConfig = new AutoConfig(mecanumNonstopSetPoint, mecanumDefaultWayPoint);
     AutoConfig noStopNewConfig = new AutoConfig(noStopNewSetPoint, mecanumDefaultWayPoint);
 
 

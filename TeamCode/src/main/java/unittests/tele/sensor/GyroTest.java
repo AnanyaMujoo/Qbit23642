@@ -13,6 +13,8 @@ public class GyroTest extends TeleUnitTest {
          * These should range from -180 to 180 and are in degrees
          */
         log.show("Right gyro reading", gyro.getHeading());
+
+        drive.move(0, 0, 0.5*gph1.lx);
 //        log.show("Left gyro reading", bot.gyro.getLeftHeadingDeg());
     }
 }

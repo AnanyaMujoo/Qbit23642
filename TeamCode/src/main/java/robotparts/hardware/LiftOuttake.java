@@ -96,13 +96,9 @@ public class LiftOuttake extends RobotPart implements AutoModuleUser {
 
 
 
-//
-//    @Override
-//    public Stage moveTime(double p, double t) { return super.moveTime(p, t); }
-//
-//    @Override
-//    public Stage moveTime(double p, ReturnCodeSeg<Double> t) { return super.moveTime(p, t); }
-//
+
+    @Override
+    public Stage moveTime(double p, double t) { return super.moveTime(p, t); }
 //
 //
     public Stage stageLift(double power, double target) { return moveTarget(() -> liftRight, () -> liftLeft, power, power, target); }
