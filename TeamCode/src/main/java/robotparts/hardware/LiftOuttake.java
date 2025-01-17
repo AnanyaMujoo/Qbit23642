@@ -53,6 +53,12 @@ public class LiftOuttake extends RobotPart implements AutoModuleUser {
 //TODO Test life and stages (max height and intervals)
 
     }
+
+    public void setToAuto(){
+        liftLeft.useSnapToZero(0.01, -0.01);
+        liftRight.useSnapToZero(0.01, -0.01);
+    }
+
 //    public ReturnCodeSeg<AutoModule> lifttarget(double inc){
 //        return ()->{
 //            if ((target+inc>=0)&&(target+inc<=MAXHEIGHT)){
@@ -115,7 +121,12 @@ public class LiftOuttake extends RobotPart implements AutoModuleUser {
                 returnPart()
         );
     }
-//
+
+    @Override
+    public void maintain() {
+        super.maintain();
+    }
+    //
 //    @Override
 //    public void maintain() { super.maintain(); }
 //

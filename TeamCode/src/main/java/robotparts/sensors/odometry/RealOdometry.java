@@ -7,14 +7,19 @@ import geometry.position.Vector;
 import global.Constants;
 import robotparts.RobotPart;
 import util.codeseg.ExceptionCodeSeg;
+import util.iter.FinalDouble;
 import util.template.Precision;
 
 import static global.General.hardwareMap;
 import static robot.RobotFramework.odometryThread;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class RealOdometry extends RobotPart {
 
-    public double x, y, h, xo, yo, startX, startY, lastX, lastY, lastY2, xOffset, yOffset;
+    public FinalDouble xo = new FinalDouble();
+    public FinalDouble yo = new FinalDouble();
+    public volatile double x, y, h, startX, startY, lastX, lastY, lastY2, xOffset, yOffset, hOffset;
     public final ExceptionCodeSeg<RuntimeException> odometryUpdateCode = this::update;
     public DcMotor yOdo;
     public DcMotor xOdo;
@@ -77,8 +82,9 @@ public class RealOdometry extends RobotPart {
 //        xo += localDelta.getX();
 //        yo += localDelta.getY();
 
-        xo += globalDelta.getX();
-        yo += globalDelta.getY();
+        xo.increment(globalDelta.getX());
+//        xo += globalDelta.getX();
+        yo.increment(globalDelta.getY());
 
 
 //        x = xo;
@@ -87,8 +93,8 @@ public class RealOdometry extends RobotPart {
 
         Vector globalOdometryCenterToRobotCenter = this.globalOdometryCenterToRobotCenter.getRotated(getHeading()).getSubtracted(this.globalOdometryCenterToRobotCenter);
 
-        x = xo + globalOdometryCenterToRobotCenter.getX();
-        y = yo + globalOdometryCenterToRobotCenter.getY();
+        x = xo.get() + globalOdometryCenterToRobotCenter.getX();
+        y = yo.get() + globalOdometryCenterToRobotCenter.getY();
 
 
     }
@@ -97,36 +103,55 @@ public class RealOdometry extends RobotPart {
     public double getEncX() { return (-xOdo.getCurrentPosition()-startX) * wheelDiameter * Math.PI / Constants.ODOMETRY_ENCODER_TICKS_PER_REV; }
     public double getEncY() { return (-yOdo.getCurrentPosition()-startY) * wheelDiameter * Math.PI / Constants.ODOMETRY_ENCODER_TICKS_PER_REV; }
 
-    public final double getX(){ return x + xOffset; }
-    public final double getY(){ return y; }
-    public double getHeading() { return h; }
-    public Pose getPose() { return new Pose(x, y, h); }
+    public final synchronized double getX(){ return x+xOffset; }
+    public final synchronized double getY(){ return y+yOffset; }
+    public final synchronized double getHeading() { return h+hOffset; }
+
+
+    public final synchronized double getRawX(){ return x; }
+    public final synchronized double getRawY(){ return y; }
+    public final synchronized double getRawHeading() { return h; }
+    public final synchronized Pose getPose() { return new Pose(getX(), getY(), getHeading()); }
 
 
     public void reset(){
         reset(new Pose());
     }
 
-    public void resetX(double newX){
-        xOffset = newX-getX();
+    public final synchronized void resetX(double newX){
+        xOffset = newX-x;
     }
 
-    public void resetY(double newY){
-        yOffset = newY-getY();
+    public final synchronized void resetH(double newH){
+        hOffset = newH-h;
+    }
+
+    public final synchronized void resetX(double newX, double xAvg){
+        xOffset = newX-xAvg;
+    }
+
+    public final synchronized void resetH(double newH, double hAvg){
+        hOffset = newH-hAvg;
+    }
+
+
+    public final synchronized void resetY(double newY){
+        yOffset = newY-y;
     }
 
     public void reset(Pose pose){
+        xOffset = 0;
+        yOffset = 0;
+        hOffset = 0;
         gyro.reset();
         precision.reset();
-        x = pose.getX(); y = pose.getY(); h = pose.getAngle(); xo = pose.getX(); yo = pose.getY();
+        x = pose.getX(); y = pose.getY(); h = pose.getAngle(); xo.set(getX()); yo.set(pose.getY());
         gyro.reset();
         startX = -xOdo.getCurrentPosition();
         startY = -yOdo.getCurrentPosition();
         lastX = 0;
         lastY = 0;
         lastY2 = 0;
-        xOffset = 0;
-        yOffset = 0;
         gyro.setHeading(pose.getAngle());
     }
 }

@@ -98,7 +98,7 @@ public class ThreeOdometry extends TwoOdometry {
 //        localDelta = localDelta.getRotated(0.3);
 //        localDelta.scaleY(1.01);
 //        localDelta.scaleX(1.01);
-        setHeading(gyro.getHeading());
+//        setHeading(gyro.getHeading());
 
 
 

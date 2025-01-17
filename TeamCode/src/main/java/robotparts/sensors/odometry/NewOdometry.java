@@ -40,7 +40,7 @@ public class NewOdometry extends RobotPart {
         lastY = currentY;
 
 
-        h = gyro.getHeading();
+//        h = gyro.getHeading();
 
 
 

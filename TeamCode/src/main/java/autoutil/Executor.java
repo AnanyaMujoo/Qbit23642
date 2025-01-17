@@ -13,6 +13,8 @@ import util.codeseg.ReturnCodeSeg;
 import util.template.Iterator;
 
 import static global.General.bot;
+import static global.General.log;
+import static robot.RobotUser.odometry;
 
 public class Executor implements Iterator {
 
@@ -29,7 +31,10 @@ public class Executor implements Iterator {
         reactor.setTarget(generator.getTarget());
         Stage stage = generator.getStage(reactor);
         stage.start();
-        whileActive(() -> !stage.shouldStop(), stage::loop);
+        whileActive(() -> !stage.shouldStop(), () -> {
+            stage.loop();
+//            log.show("ome", odometry.getHeading());
+        });
         stage.runOnStop();
     }
 

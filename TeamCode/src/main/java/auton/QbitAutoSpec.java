@@ -4,39 +4,48 @@ import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import java.util.ArrayList;
+
 import automodules.AutoModule;
 import autoutil.AutoFramework;
 import geometry.position.Pose;
+import util.template.Iterator;
 
 
 //@Autonomous(name = "QbitAutoSpec", group = "auto", preselectTeleOp = "TerraOp")
 @Autonomous(name = "QbitAutoSpec", group = "auto")
 public class QbitAutoSpec extends AutoFramework {
 
+    double x = 0;
+
     @Override
     public void initialize() {
         setConfig(mecanumMixedConfig);
-        liftDONOTUSE.maintain();
+        liftOuttake.setToAuto();
+        liftOuttake.maintain();
+        x=0;
+
 //        wait(0.1);
     }
 
     AutoModule Up = new AutoModule(
-            intake.stageFlipAuto(0.05),
-            claw.stageHold(0.05),
-            liftOuttake.stageLift(0.9, 42)
-    );
+            liftOuttake.stageLift(1.0, 42)
+    ).setStartCode(() -> {
+        intake.flipAlmost();
+        claw.hold();
+    });
 
     AutoModule Specimen = new AutoModule(
-            liftOuttake.stageDown(0.3, 32),
+            liftOuttake.stageDown(0.7, 33),
             claw.stageReady(0.3),
             claw.stageHold(0.05),
-            liftOuttake.stageDown(-0.3,0)
+            liftOuttake.stageDown(-0.7,1)
     );
 
     AutoModule SpecimenNoHold = new AutoModule(
-            liftOuttake.stageDown(0.3, 32),
+            liftOuttake.stageDown(0.7, 33),
             claw.stageReady(0.2),
-            liftOuttake.stageDown(-0.6,0)
+            liftOuttake.stageDown(-0.7,1)
     );
 //    AutoModule Reset = new AutoModule(
 ////            intake.stageFlipAlmostOut(0.1),
@@ -103,78 +112,167 @@ public class QbitAutoSpec extends AutoFramework {
 //    );
 
     AutoModule Ram = new AutoModule(
-            bucket.stageSpecimen(0.05),
             claw.stageReady(0.3),
             claw.stageDisable(0.05)
-    );
+    ).setStartCode(bucket::specimen);
+
     AutoModule LiftAway = new AutoModule(
-            claw.stageSqueeze(0.3),
-            liftOuttake.moveTime(1.0, 0.2),
+            claw.stageSqueeze(0.15),
+            liftOuttake.moveTime(1.0, 0.1),
             claw.stageHold(0.05),
-            liftOuttake.stageLift(0.8, 42)
+            liftOuttake.stageLift(1.0, 42)
     );
 
     @Override
     public void define() {
-        addAutoModule(Up);
-        addWaypoint(0.6, 0, 60, 0);
-        addTimedSetpoint(0.2, 0.7, 0, 85, 0);
-        addAutoModule(Specimen);
-        addPause(0.3);
-//        addAutoModule(Reset);
-        addWaypoint(0.8,40,60,45);
-        addWaypoint(0.8,70,60,135);
-        addWaypoint(0.8,90,100,180);
-        addWaypoint(0.8,120,130,180);
-        addWaypoint(0.8,120,30,180);
-        addWaypoint(0.8,120,100,180);
-        addWaypoint(0.8,145,130,180);
-        addWaypoint(0.8,145,30,180);
-        addWaypoint(0.8,145,100,180);
-        addTimedSetpoint(0.4, 0.7, 170,130,180);
-        addCustomCode(() -> odometry.resetX(-155), 0.1);
-        addWaypoint(0.8,153,40,180);
-        addAutoModule(Ram);
-        addWaypoint(0.8,100,45,180);
-        addTimedSetpoint(0.4,0.7, 92,-3,180);
-        addAutoModule(LiftAway);
-        addPause(0.5);
-        addWaypoint(0.8,60,35,90);
-        addWaypoint(0.8,5,50,0);
-        addTimedSetpoint(0.2, 1.0, 5, 90, 0);
-        addCustomCode(() -> odometry.resetY(80), 0.1);
-        addAutoModule(SpecimenNoHold);
-        addPause(0.3);
-        addWaypoint(0.8,10,50,0);
-        addWaypoint(0.6,60,35,90);
-        addAutoModule(Ram);
-        addTimedSetpoint(0.3,1.2, 92,-5,180);
-        addAutoModule(LiftAway);
-        addPause(0.5);
-        addWaypoint(0.8,60,35,90);
-        addWaypoint(0.8,10,50,0);
-        addTimedSetpoint(0.2, 1.0, 10, 90, 0);
-        addAutoModule(SpecimenNoHold);
-        addPause(0.3);
-        addWaypoint(0.8,15,50,0);
-        addWaypoint(0.8,30,50,0);
-        addWaypoint(0.6,80,40,90);
-        addAutoModule(Ram);
-        addTimedSetpoint(0.3,1.0, 92,-5,180);
-        addAutoModule(LiftAway);
-        addPause(0.5);
-        addWaypoint(0.8,60,35,90);
-        addWaypoint(0.8,15,50,0);
-        addTimedSetpoint(0.2, 1.0, 15, 90, 0);
-        addAutoModule(SpecimenNoHold);
-        addPause(0.3);
-        addWaypoint(0.8,15,50,0);
+        addCustomCode(intake::flipAlmost);
+//        addAutoModule(Up);
+        addWaypoint(1.0, -5, 45, 0);
+//        addWaypoint(0.07, -5, 70, 0);
+//        addTimedSetpoint(0.2, 0.5, -5, 85, 0);
+//        addAutoModule(Specimen);
+//        addPause(0.15);
+        addWaypoint(1.0,40,70,90);
+//        addWaypoint(1,80,80,145);
+//        addWaypoint(1,90,105,180);
+//        addWaypoint(1,120,118,180);
+//        addWaypoint(1,120,30,180);
+//        addWaypoint(1,120,100,180);
+//        addWaypoint(1,145,114,180);
+        addWaypoint(1,145,35,180);
+        addWaypoint(1,145,110,180);
+        addTimedSetpoint(0.05, 1, 170, 130, 180);
+        addPause(0.1);
+        addCustomCode(() -> {
+            odometry.resetX(-160);
+            odometry.resetH(180);
+        });
+        addPause(0.1);
+//        addWaypoint(1, 160, 130, 180);
+        addWaypoint(1, 157, 45, 180);
+
+
+//        addCustomCode(() -> {
+//            whileTime(() -> {
+//                drive.move(0, 1.0, 0);
+//            }, 0.25);
+//            whileTime(() -> {
+//                drive.move(-1, 0, 0);
+//            }, 0.75);
+//        });
+
+//            whileTime(() -> {
+//                drive.move(0, 0.4, 0);
+//            }, 0.5);
+//            ArrayList<Double> headings = new ArrayList<>();
+//            ArrayList<Double> xs = new ArrayList<>();
+//            whileTime(() -> {
+//                double rawX = odometry.getRawX();
+//                double rawH = odometry.getRawHeading();
+//                if(rawX > -165 && rawX < -155){
+//                    xs.add(rawX);
+//                }
+//                if(Math.abs(rawH) < 190 && Math.abs(rawH) > 170){
+//                    headings.add(rawH);
+//                }
+//
+////                log.show("Rawx", odometry.getRawX());
+////                log.show("Rawh", odometry.getRawHeading());
+//
+//                drive.move(0, 0.4, 0);
+//            }, 0.1);
+//            double xAvg = Iterator.forAllAverage(xs);
+//            double hAvg = Iterator.forAllAverage(headings);
+////            log.show("Avgx", xAvg);
+////            log.show("Avgh", hAvg);
+//            odometry.resetX(-155, xAvg);
+//            odometry.resetH(180, hAvg);
+//            whileTime(() -> {
+//                drive.move(0,0,0);
+//            }, 0.05);
+//            whileTime(() -> {
+//                log.show("YYYEEE");
+//                drive.move(-1, 0, 0);
+//            }, 0.75);
+//        });
+//        addPause(5);
+//        addTimedSetpoint(0.15, 0.4, 170, 123, 180);
+//        addCustomCode(() -> {
+//            whileTime(() -> {
+//                log.show("X", odometry.getX());
+//                log.show("Y", odometry.getY());
+//                log.show("Hoff", odometry.hOffset);
+//                log.show("Headin", odometry.getHeading());
+//                log.show("H", odometry.h);
+//            }, 20);
+//        });
+//        addWaypoint(1.0,157,40,177);
+
+//
+//
+        customNumber(4, i -> {
+            if(i == 1){
+                x += 4;
+            }else if(i == 2){
+                x+= 2;
+            }else if(i == 3){
+                x+= 2.5;
+            }
+            if(i == 0) {
+                addAutoModule(Ram);
+                addWaypoint(1.0, 100+x, 40, 180);
+//                addTimedSetpoint(0.2, 0.4, 92+x, 40, 180);
+                addWaypoint(1.0, 92+x, 15, 180);
+            }else{
+                addWaypoint(1.0,40+x,45,170);
+                addWaypoint(1.0, 86+x, 40, 180);
+                addAutoModule(Ram);
+                addWaypoint(0.8, 92+x, 20, 180);
+            }
+            // 0.35
+            addTimedSetpoint(0.1,1, 92+x,-7,180);
+
+            addAutoModule(LiftAway);
+            addPause(0.25);
+            addCustomCode(()->{
+
+                log.show("X", Math.round(1000.0*odometry.getX())/1000.0);
+                log.show("Y", Math.round(1000.0*odometry.getY())/1000.0);
+                log.show("Heading", Math.round(1000.0*odometry.getHeading())/1000.0);
+//                log.show("Y", odometry.getY());
+//                log.show("Hoff", odometry.hOffset);
+//                log.show("Headin", odometry.getHeading());
+//                log.show("H", odometry.h);
+            });
+
+            addWaypoint(1.0,60+x+2.5*i,35,30);
+            addWaypoint(1.0,15+x+2.5*i,50,0);
+            addWaypoint(0.7, 10+x+2.5*i, 70, 0);
+            if(i < 4) {
+                addTimedSetpoint(0.2, 0.7, 5 + x + 2.5*i, 100, 0);
+            }else{
+                addTimedSetpoint(0.2, 0.6, 5 + x + 2.5 * i, 100, 0);
+            }
+            addAutoModule(SpecimenNoHold);
+            addCustomCode(() -> {
+                if(i < 4) {
+                    odometry.resetY(-80);
+                }
+                whileTime(() -> {
+                    drive.move(-0.5, 0, 0);
+                }, 0.15);
+            });
+        });
+        addWaypoint(1.0,80,60,160);
 
 
 
 
 
 
+        addCustomCode(() -> {
+            log.show("Time", timer.seconds());
+        }, 10);
 
 
 
