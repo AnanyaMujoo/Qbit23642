@@ -1,7 +1,5 @@
 package automodules;
 
-import org.checkerframework.checker.units.qual.A;
-
 import java.util.ArrayList;
 
 import automodules.stage.Exit;
