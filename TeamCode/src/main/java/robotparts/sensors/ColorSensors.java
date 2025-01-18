@@ -1,7 +1,9 @@
 package robotparts.sensors;
 
-import automodules.stage.Exit;
-import elements.GameElement;
+import static global.General.fieldSide;
+
+import elements.FieldSide;
+import elements.SampleColor;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.input.IColor;
@@ -11,93 +13,65 @@ public class ColorSensors extends RobotPart {
     /**
      * Color sensor input for intake
      */
-    private IColor ColorSensor;
+    private IColor colorSensor;
 
-
-    // TODO4 NEW
-    // Make more methods
-//    private final ArrayList<Double> runningAvg = new ArrayList<>();
-//    private final int runningAvgSize = 3;
-//    private final ArrayList<Double> runningAvg2 = new ArrayList<>();
 
     @Override
     public void init() {
-        ColorSensor = create("colsense", ElectronicType.ICOLOR);
+        colorSensor = create("colsense", ElectronicType.ICOLOR);
     }
-    public double Distance(){return ColorSensor.getDistance(); }
+    public double getDistance(){
+        return colorSensor.getDistance();
+    }
 
-public boolean isSampleLoaded() {
-    double Distance = Distance();
-//    if ((leftPixDistance < 1) && (rightPixDistance < 1)) {
-//        return true;
-//    }
-//    return false;
-    return (Distance<1);
-}
+    public SampleColor getSampleColor(){
+        if(getHue() > 165){
+            return SampleColor.BLUE;
+        }else if(getHue() < 135){
+            return SampleColor.YELLOW;
+        }else if (getHue() < 40) {
+            return SampleColor.RED;
+        }else {
+            return SampleColor.NONE;
+        }
+    }
 
-//    /**
-//     * Get the color that is sensed in HSV format
-//     * @return hsv color
-//     */
+    public boolean isSampleLoaded() {
+        return getDistance() < 6 || !getSampleColor().equals(SampleColor.NONE);
+    }
+
     public float[] getOuttakeColorHSV(){
         float[] color = new float[3];
-        android.graphics.Color.RGBToHSV(ColorSensor.getRed(), ColorSensor.getGreen(), ColorSensor.getBlue(), color);
+        android.graphics.Color.RGBToHSV(colorSensor.getRed(), colorSensor.getGreen(), colorSensor.getBlue(), color);
         return color;
     }
-//
-//    /**
-//     * Get the type of freight being sensed
-//     * @return freight type
-//     */
-//    public GameElement getFreightType(){
-//        double h = getOuttakeColorHSV()[0];
-//        double v = getOuttakeColorHSV()[2];
-//        runningAvg.add(h);
-//        runningAvg2.add(v);
-//        if(runningAvg.size() == runningAvgSize){
-//            h = (runningAvg.get(0) + runningAvg.get(1) + runningAvg.get(2))/3.0;
-//            runningAvg.remove(0);
-//        }
-//        if(runningAvg2.size() == runningAvgSize){
-//            v = (runningAvg2.get(0) + runningAvg2.get(1) + runningAvg2.get(2))/3.0;
-//            runningAvg2.remove(0);
-//        }
-//        if(130 < h && h < 200 && (v > 1.2)){
-//            return GameElement.BALL;
-//        }else if(40 < h && h < 100 && (v > 1.2)){
-//            return GameElement.CUBE;
-//        }else{
-//            return GameElement.NONE;
-//        }
-//    }
-//
-//    /**
-//     * Is a ball being sensed?
-//     * @return is ball
-//     */
-//    public boolean isBall(){
-//        return getFreightType().equals(GameElement.BALL);
-//    }
+    public double getHue(){
+        float[] color = getOuttakeColorHSV();
+        return color[0];
+    }
 
-//    /**
-//     * Is a cube being sensed?
-//     * @return is cube
-//     */
-//    public boolean isCube(){
-//        return getFreightType().equals(GameElement.CUBE);
-//    }
-//
-//    /**
-//     * Is there a freight at all?
-//     * @return is freight
-//     */
-//    public boolean isFreight(){
-//        GameElement element = getFreightType();
-//        boolean hasFreightNear = element.equals(GameElement.BALL) || element.equals(GameElement.CUBE);
-//        return hasFreightNear && cso.getDistance() < 4;
-//    }
-//
-//
-//    public Exit exitFreight(){return new Exit(this::isFreight);}
+
+    public int correctColor(SampleColor color){
+        if(color.equals(SampleColor.NONE)){
+            return 0;
+        }
+        if(fieldSide.equals(FieldSide.RED)){
+            if(color.equals(SampleColor.YELLOW) || color.equals(SampleColor.RED)){
+                return 2;
+            }else{
+                return 1;
+            }
+        }else if(fieldSide.equals(FieldSide.BLUE)){
+            if(color.equals(SampleColor.BLUE)){
+                return 2;
+            }else if(color.equals(SampleColor.RED)){
+                return 1;
+            }else{
+                return 0;
+            }
+        }else{
+            return 0;
+        }
+    }
 
 }

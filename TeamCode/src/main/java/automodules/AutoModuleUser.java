@@ -52,7 +52,7 @@ public interface AutoModuleUser extends RobotUser {
 
     AutoModule MoveIntake = new AutoModule(
             intake.stageFlipOut(0.05),
-            intake.moveUntilStop(1)
+            intake.moveUntilColor()
     );
 
     AutoModule Shimmy = new AutoModule(
@@ -71,8 +71,9 @@ public interface AutoModuleUser extends RobotUser {
     );
 
     AutoModule MoveIntakeOut = new AutoModule(
-            intake.stageFlipOut(0.05),
-            intake.moveUntilStop(-1)
+            intake.stageFlipAlmostOut(0.05),
+            intake.moveUntilColorOut(),
+            intake.moveTime(-1, 0.5)
     );
 
     AutoModule IntakeDeltaOut = new AutoModule(intake.stageFlipAlmostOut(0.05), liftIntake.stageDelta(0.5, 10));

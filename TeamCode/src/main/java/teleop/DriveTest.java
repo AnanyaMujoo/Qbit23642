@@ -6,11 +6,12 @@ import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import teleutil.button.Button;
 
-
+@Disabled
 @TeleOp(name = "DriveTest", group = "TeleOp")
 public class DriveTest extends Tele {
 

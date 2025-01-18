@@ -1,6 +1,9 @@
 package robotparts.hardware;
 
+import static global.General.fieldSide;
+
 import java.sql.Time;
+import java.util.ArrayList;
 
 import automodules.AutoModule;
 import automodules.StageBuilder;
@@ -8,12 +11,17 @@ import automodules.stage.Exit;
 import automodules.stage.Initial;
 import automodules.stage.Main;
 import automodules.stage.Stage;
+import automodules.stage.Stop;
+import elements.FieldSide;
+import elements.SampleColor;
 import robotparts.RobotPart;
 import robotparts.electronics.ElectronicType;
 import robotparts.electronics.continuous.CServo;
 import robotparts.electronics.positional.PServo;
+import robotparts.sensors.ColorSensors;
 import util.Timer;
 import util.codeseg.ReturnCodeSeg;
+import util.template.Iterator;
 
 public class Intake extends RobotPart {
     public CServo rturn;
@@ -26,6 +34,12 @@ public class Intake extends RobotPart {
     public Timer timer = new Timer();
     public boolean shimmy = false;
     public boolean intakeMode = false;
+    public boolean sampleLoaded = false;
+    public ArrayList<SampleColor> lastColors = new ArrayList<>();
+    public int code = 0;
+    public final int lastNum = 2;
+
+//    public ArrayList<Double> lastCounts = new ArrayList<>();
 
     @Override
     public void init() {
@@ -68,6 +82,10 @@ public class Intake extends RobotPart {
         shimmy = false;
         timer.reset();
         intakeMode = false;
+        sampleLoaded = false;
+        lastColors = new ArrayList<>();
+        code = 0;
+//        lastCounts = new ArrayList<>();
     }
 
 
@@ -111,6 +129,88 @@ public class Intake extends RobotPart {
     public Stage moveTime(double p, double t) { return super.moveTime(p, t); }
     public Stage moveUntilStop(double p) { return customExit(p, () -> stopSpin).combine(new Initial(() -> stopSpin = false)); }
 
+    public ArrayList<SampleColor> getLastValues(ArrayList<SampleColor> values,int n){
+        ArrayList<SampleColor> out = new ArrayList<>();
+        int s = values.size();
+        if(values.size() > n){
+            for (int i = s - n; i < s; i++) {
+                out.add(values.get(i));
+            }
+            return out;
+        }else{
+            return values;
+        }
+    }
+
+    public SampleColor getColor(){
+        ArrayList<SampleColor> last = getLastValues(lastColors, lastNum);
+        SampleColor color = last.get(0);
+        for(int i = 1; i < last.size(); i++){
+            if(!last.get(i).equals(color)){
+                return SampleColor.NONE;
+            }
+        }
+        return color;
+    }
+
+    public Stage moveUntilColor(){
+        return new Stage(
+                usePart(),
+                colorSensors.usePart(),
+                new Initial(() -> {
+                    stopSpin = false;
+                    lastColors = new ArrayList<>();
+                    code = 1;
+                }),
+                new Main(() -> {
+                    move(1);
+//                    lastColors.add(colorSensors.getSampleColor());
+//                    lastCounts.add(colorSensors.isSampleLoaded() ? 1.0 : 0.0);
+                }),
+                new Exit(() -> {
+                    code = colorSensors.correctColor(colorSensors.getSampleColor());
+//                    if(lastColors.size() > lastNum) {
+//                        code = colorSensors.correctColor(getColor());
+                        if (code != 0) {
+                            stopSpin = true;
+                            sampleLoaded = true;
+                            return true;
+                        } else {
+                            return stopSpin;
+                        }
+//                    }else {
+//                        return stopSpin;
+//                    }
+                }),
+                stop(),
+                returnPart(),
+                colorSensors.returnPart()
+        );
+    }
+
+    public Stage moveUntilColorOut(){
+        return new Stage(
+                usePart(),
+                colorSensors.usePart(),
+                new Initial(() -> stopSpin = false),
+                new Main(() -> {
+                    move(-1);
+                }),
+                new Exit(() -> {
+                    if(!colorSensors.isSampleLoaded()){
+                        stopSpin = true;
+                        sampleLoaded = false;
+                        return true;
+                    }else{
+                        return stopSpin;
+                    }
+                }),
+                stop(),
+                returnPart(),
+                colorSensors.returnPart()
+        );
+    }
+
 
     public Stage shimmyUntilStopDir(double pow, double freq){
         return new Stage(
@@ -122,7 +222,15 @@ public class Intake extends RobotPart {
                     move(1);
                     drive.move(0.0, 0.0, pow*Math.sin(timer.seconds()*2*Math.PI*freq));
                 }),
-                new Exit(() -> stopSpin),
+                new Exit(() -> {
+                    if(colorSensors.isSampleLoaded()){
+                        stopSpin = true;
+                        sampleLoaded = true;
+                        return true;
+                    }else{
+                        return stopSpin;
+                    }
+                }),
                 stop(),
                 drive.stop(),
                 returnPart(),

@@ -2,15 +2,20 @@ package teleop;
 
 import static java.lang.Math.abs;
 import static global.General.bot;
+import static global.General.fieldSide;
 import static global.General.gph1;
 import static global.General.gph2;
 import static global.General.log;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import automodules.AutoModule;
+import elements.FieldSide;
+import elements.SampleColor;
 import teleutil.button.Button;
+import util.template.Iterator;
 
-@TeleOp(name = "TestOp", group = "TeleOp")
+
 public class TestOp extends Tele {
 
     @Override
@@ -108,7 +113,7 @@ public class TestOp extends Tele {
 //        gph2.link(Button.LEFT_BUMPER, intake::openDoor);
 //        gph2.link(Button.RIGHT_BUMPER, intake::closeDoor);
 
-
+//        fieldSide = FieldSide.RED;
 
 
     }
@@ -120,6 +125,22 @@ public class TestOp extends Tele {
 
     @Override
     public void loopTele() {
+
+        if(intake.sampleLoaded){
+            intake.sampleLoaded = false;
+            intake.stopSpin = true;
+            intake.shimmy = false;
+            if(intake.code == 2){
+                intake.intakeMode = false;
+                bot.addAutoModule(new AutoModule(intake.moveTime(1, 0.1)));
+                bot.addAutoModule(IntakeIn);
+            }else if(intake.code == 1){
+                bot.addAutoModule(MoveIntakeOut);
+            }
+        }
+
+
+
         liftOuttake.move(gph2.ly*0.2);
         liftIntake.move(gph2.lx*0.2);
         intake.move(gph2.ry*0.8);
@@ -132,6 +153,11 @@ public class TestOp extends Tele {
         drive.move(gph1.ry * speed, gph1.rx * speed, gph1.lx * speed*0.6);
 
         log.show("DriveMode", driveMode.get());
+        log.show("intake code", intake.code);
+
+//        log.show("avgcorrect", intake.avgCorrect);
+//        log.show("samplecolor", colorSensors.getSampleColor().toString());
+
 
 //        log.show("stages", bot.rfsHandler.getRfsQueue().size());
 //        log.show("stage0", bot.rfsHandler.getRfsQueue().peek().isPause());
@@ -146,6 +172,12 @@ public class TestOp extends Tele {
 //        log.show(liftOuttake.liftRight.getPower());
 
     }
+
+    @TeleOp(name = "BlueTeleOp", group = "TeleOp")
+    public static class BlueTeleOp extends TestOp {{fieldSide = FieldSide.BLUE; }}
+
+    @TeleOp(name = "RedTeleOp", group = "TeleOp")
+    public static class RedTeleOp extends TestOp {{fieldSide = FieldSide.RED; }}
 
 }
 
