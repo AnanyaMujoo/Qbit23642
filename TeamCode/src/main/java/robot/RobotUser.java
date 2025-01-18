@@ -11,6 +11,7 @@ import robotparts.hardware.LiftOuttake;
 import robotparts.hardware.old.LiftVertical;
 import robotparts.hardware.Claw;
 //import robotparts.sensors.odometry.SecondOdometry;
+import robotparts.sensors.ColorSensors;
 import robotparts.sensors.odometry.RealOdometry;
 import unittests.tele.framework.movement.AutoModuleTest;
 import robotparts.hardware.Drive;
@@ -64,7 +65,7 @@ public interface RobotUser {
     Flip flip = new Flip();
     TouchSensors touchSensors = new TouchSensors();
     Intaketest intaketest = new Intaketest();
-//    ColorSensors colorSensors = new ColorSensors();
+    ColorSensors colorSensors = new ColorSensors();
 
     /**
      * Test Part

@@ -29,23 +29,24 @@ public class QbitAutoSpec extends AutoFramework {
     }
 
     AutoModule Up = new AutoModule(
-            liftOuttake.stageLift(1.0, 42)
+            liftOuttake.stageLift(1.0, 44),
+            claw.stageDisable(0.05)
     ).setStartCode(() -> {
         intake.flipAlmost();
-        claw.hold();
+        claw.hold2();
     });
 
     AutoModule Specimen = new AutoModule(
             liftOuttake.stageDown(0.7, 33),
             claw.stageReady(0.3),
             claw.stageHold(0.05),
-            liftOuttake.stageDown(-0.7,1)
+            liftOuttake.stageDown(-0.7,2)
     );
 
     AutoModule SpecimenNoHold = new AutoModule(
             liftOuttake.stageDown(0.7, 33),
             claw.stageReady(0.2),
-            liftOuttake.stageDown(-0.7,1)
+            liftOuttake.stageDown(-0.7,2)
     );
 //    AutoModule Reset = new AutoModule(
 ////            intake.stageFlipAlmostOut(0.1),
@@ -119,37 +120,39 @@ public class QbitAutoSpec extends AutoFramework {
     AutoModule LiftAway = new AutoModule(
             claw.stageSqueeze(0.15),
             liftOuttake.moveTime(1.0, 0.1),
-            claw.stageHold(0.05),
-            liftOuttake.stageLift(1.0, 42)
+            claw.stageHold2(0.05),
+            liftOuttake.stageLift(1.0, 44),
+            claw.stageDisable(0.05)
     );
 
     @Override
     public void define() {
-        addCustomCode(intake::flipAlmost);
-//        addAutoModule(Up);
+//        addCustomCode(intake::flipAlmost);
+        addAutoModule(Up);
         addWaypoint(1.0, -5, 45, 0);
-//        addWaypoint(0.07, -5, 70, 0);
-//        addTimedSetpoint(0.2, 0.5, -5, 85, 0);
-//        addAutoModule(Specimen);
-//        addPause(0.15);
+        addWaypoint(0.2, -5, 70, 0);
+        addTimedSetpoint(0.1, 0.4, -5, 90, 0);
+        addAutoModule(Specimen);
+        addPause(0.15);
         addWaypoint(1.0,40,70,90);
-//        addWaypoint(1,80,80,145);
-//        addWaypoint(1,90,105,180);
-//        addWaypoint(1,120,118,180);
-//        addWaypoint(1,120,30,180);
-//        addWaypoint(1,120,100,180);
-//        addWaypoint(1,145,114,180);
-        addWaypoint(1,145,35,180);
+        addWaypoint(1,80,80,145);
+        addWaypoint(1,90,105,180);
+        addWaypoint(1,120,118,180);
+        addWaypoint(1,120,30,185);
+        addWaypoint(1,120,100,180);
+        addWaypoint(1,145,114,180);
+        addWaypoint(1,145,40,180);
         addWaypoint(1,145,110,180);
-        addTimedSetpoint(0.05, 1, 170, 130, 180);
-        addPause(0.1);
+        addTimedSetpoint(0.09, 0.8, 170, 122, 180);
+//        addPause(0.05);
         addCustomCode(() -> {
             odometry.resetX(-160);
             odometry.resetH(180);
         });
-        addPause(0.1);
+        addTimedSetpoint(1.0, 0.05, 156, 122, 180);
+//        addPause(0.05);
 //        addWaypoint(1, 160, 130, 180);
-        addWaypoint(1, 157, 45, 180);
+        addWaypoint(1, 156, 60, 180);
 
 
 //        addCustomCode(() -> {
@@ -212,7 +215,7 @@ public class QbitAutoSpec extends AutoFramework {
 //
         customNumber(4, i -> {
             if(i == 1){
-                x += 4;
+                x += 3;
             }else if(i == 2){
                 x+= 2;
             }else if(i == 3){
@@ -220,9 +223,8 @@ public class QbitAutoSpec extends AutoFramework {
             }
             if(i == 0) {
                 addAutoModule(Ram);
-                addWaypoint(1.0, 100+x, 40, 180);
-//                addTimedSetpoint(0.2, 0.4, 92+x, 40, 180);
-                addWaypoint(1.0, 92+x, 15, 180);
+                addWaypoint(1.0, 100+x, 35, 180);
+                addWaypoint(0.7, 92+x, 20, 180);
             }else{
                 addWaypoint(1.0,40+x,45,170);
                 addWaypoint(1.0, 86+x, 40, 180);
@@ -230,49 +232,51 @@ public class QbitAutoSpec extends AutoFramework {
                 addWaypoint(0.8, 92+x, 20, 180);
             }
             // 0.35
-            addTimedSetpoint(0.1,1, 92+x,-7,180);
+            addTimedSetpoint(0.15,i == 0 ? 0.3 : 0.38, 92+x,-7,180);
 
             addAutoModule(LiftAway);
             addPause(0.25);
-            addCustomCode(()->{
+//            addCustomCode(()->{
+//
+//                log.show("X", Math.round(1000.0*odometry.getX())/1000.0);
+//                log.show("Y", Math.round(1000.0*odometry.getY())/1000.0);
+//                log.show("Heading", Math.round(1000.0*odometry.getHeading())/1000.0);
+////                log.show("Y", odometry.getY());
+////                log.show("Hoff", odometry.hOffset);
+////                log.show("Headin", odometry.getHeading());
+////                log.show("H", odometry.h);
+//            });
 
-                log.show("X", Math.round(1000.0*odometry.getX())/1000.0);
-                log.show("Y", Math.round(1000.0*odometry.getY())/1000.0);
-                log.show("Heading", Math.round(1000.0*odometry.getHeading())/1000.0);
-//                log.show("Y", odometry.getY());
-//                log.show("Hoff", odometry.hOffset);
-//                log.show("Headin", odometry.getHeading());
-//                log.show("H", odometry.h);
-            });
+            double delta = 3*i;
 
-            addWaypoint(1.0,60+x+2.5*i,35,30);
-            addWaypoint(1.0,15+x+2.5*i,50,0);
-            addWaypoint(0.7, 10+x+2.5*i, 70, 0);
-            if(i < 4) {
-                addTimedSetpoint(0.2, 0.7, 5 + x + 2.5*i, 100, 0);
-            }else{
-                addTimedSetpoint(0.2, 0.6, 5 + x + 2.5 * i, 100, 0);
-            }
+            addWaypoint(1.0,60+x+delta,35,30);
+            addWaypoint(1.0,15+x+delta,50,0);
+            addWaypoint(0.6, 10+x+delta, 75, 0);
+            addTimedSetpoint(0.1, 0.38, 5 + x + delta, 100, 0);
             addAutoModule(SpecimenNoHold);
             addCustomCode(() -> {
-                if(i < 4) {
+                if(i < 3) {
                     odometry.resetY(-80);
                 }
-                whileTime(() -> {
-                    drive.move(-0.5, 0, 0);
-                }, 0.15);
             });
+            addTimedSetpoint(0.1, 0.15, 5 + x + delta, 100, 0);
+            if(i < 3){
+                addWaypoint(1.0,x + delta,70,160);
+            }else{
+                addWaypoint(1.0,5 + x + delta,70,0);
+                addWaypoint(1.0,100,20,45);
+            }
         });
-        addWaypoint(1.0,80,60,160);
 
 
 
 
 
 
-        addCustomCode(() -> {
-            log.show("Time", timer.seconds());
-        }, 10);
+//
+//        addCustomCode(() -> {
+//            log.show("Time", timer.seconds());
+//        }, 10);
 
 
 

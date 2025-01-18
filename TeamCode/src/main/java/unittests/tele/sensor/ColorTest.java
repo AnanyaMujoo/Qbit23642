@@ -23,7 +23,8 @@ public class ColorTest extends TeleUnitTest {
          * s is the saturation
          * v is the value or brightness
          */
-//        log.show("Color sensor reading", Arrays.toString(bot.colorSensors.getOuttakeColorHSV()));
+        log.show("Color sensor reading", Arrays.toString(bot.colorSensors.getOuttakeColorHSV()));
+        log.show("Color sensor reading", bot.colorSensors.isSampleLoaded());
 //        /**
 //         * These should turn true depending on the type of freight
 //         */

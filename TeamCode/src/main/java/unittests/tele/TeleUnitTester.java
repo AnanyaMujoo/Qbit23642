@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import teleop.Tele;
 
 import unittests.UnitTester;
+import unittests.tele.sensor.ColorTest;
 import unittests.tele.sensor.GyroTest;
 import unittests.tele.sensor.OdometryTest;
 
@@ -46,7 +47,8 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new BackgroundTest());
 
 //        add(new GyroTest());
-        add(new OdometryTest());
+//        add(new OdometryTest());
+        add(new ColorTest());
 
 
         /**

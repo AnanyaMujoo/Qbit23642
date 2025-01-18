@@ -32,7 +32,7 @@ public class Configs implements RobotUser{
 //    RobotConfig TestConfig6 = new RobotConfig(bucket,claw);
 
 
-    RobotConfig IntoTheDeepBasicConfig = new RobotConfig(drive, liftIntake, liftOuttake, bucket, claw, intake, gyro, odometry);
+    RobotConfig IntoTheDeepBasicConfig = new RobotConfig(drive, liftIntake, liftOuttake, bucket, claw, intake, gyro, odometry, colorSensors);
 
 //    RobotConfig IntoTheDeepConfig = new RobotConfig(drive, lift, liftVertical, claw, bucket, flip, intake, odometry);
     /**
