@@ -16,6 +16,7 @@ public class Drive extends RobotPart {
     public CMotor frontRight, backRight, frontLeft, backLeft;
 
     public boolean machineMode = false;
+    public int n = 0;
 
 
     @Override
@@ -28,6 +29,7 @@ public class Drive extends RobotPart {
 
         driveMode.set(Modes.Drive.FAST);
         machineMode = false;
+        n = 0;
     }
 
 

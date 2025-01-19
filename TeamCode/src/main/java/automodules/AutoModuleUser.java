@@ -156,15 +156,15 @@ public interface AutoModuleUser extends RobotUser {
             intake.stageFlipHalf(0.05),
             claw.stageHold(0.05),
             bucket.stageHold(0.05),
-            liftOuttake.stageLift(0.8,93.8),
+            liftOuttake.stageLift(0.82,93.8),
             claw.stageSqueeze(0.05)
     );
 
     AutoModule Deposit2 = new AutoModule(
-            bucket.stageTop(0.5),
-            bucket.stageSpecimen(0.3),
+            bucket.stageTop(0.45),
+            bucket.stageSpecimen(0.2),
             claw.stageHold(0.05),
-            liftOuttake.stageDown(0.5, 0),
+            liftOuttake.stageDown(0.6, 0),
             intake.stageFlipIn(0.2),
             intake.stageDisable(0.05)
     );
@@ -174,22 +174,24 @@ public interface AutoModuleUser extends RobotUser {
             .addIndependentWithPause(new Independent() {
                 @Override
                 public void define() {
+//                    addSegment(0.5, 4, mecanumNonstopSetPoint, 10, 0, 0);
                     addAutoModuleWAIT(new AutoModule(drive.moveTime(-0.9, 0, -0.8, 0.3)));
                     addAutoModule(PrepareBucket2);
-                    addTimedSetpoint(0.5,3,  -90, -77, -45);
-                    addPause(1);
-                    addTimedSetpoint(0.4,3,  -106, -93, -45);
+                    addSegment(2.2, 0.4, mecanumNonstopSetPoint, -90, -77, -45);
+                    addSegment(0.6, 0.4, mecanumNonstopSetPoint, -106, -93, -45);
                 }
             })
             .addIndependent(new Independent() {
                 @Override
                 public void define() {
                     addAutoModule(Deposit2);
-                    addPause(0.5);
-                    addWaypoint(0.5, -25, -60, 70);
-                    addTimedSetpoint(0.5, 3, 10, -10, 0);
+                    addPause(0.45);
+                    addWaypoint(0.6, -25, -60, -70);
+                    addWaypoint(0.6, -0, -50, -30);
+                    addWaypoint(0.5, 20, -10, 0);
                 }
             });
+
 
 
 

@@ -22,6 +22,7 @@ import util.template.Iterator;
 
 public class TestOp extends Tele{
 
+
     @Override
     public void initTele() {
         claw.hold();
@@ -62,6 +63,7 @@ public class TestOp extends Tele{
         gph1.link(Button.RIGHT_BUMPER, () ->{
             if (intake.intakeMode) {
                 intake.stopSpin = true;
+                intake.shimmy = false;
                 bot.addAutoModule(IntakeDeltaOut);
             } else if (!drive.machineMode){
                 if (driveMode.modeIs(Drive.FAST)) {
@@ -76,6 +78,7 @@ public class TestOp extends Tele{
         gph1.link(Button.LEFT_BUMPER, () -> {
             if(intake.intakeMode) {
                 intake.stopSpin = true;
+                intake.shimmy = false;
                 bot.addAutoModule(IntakeDeltaIn);
             }else if(!drive.machineMode){
                 bot.cancelAutoModules();
@@ -91,7 +94,7 @@ public class TestOp extends Tele{
             if(!drive.machineMode) {
                 bot.addAutoModule(PrepareBucket);
             }else {
-                bot.addMachine(Drop);
+                bot.addMachine(Drop(drive.n, drive.n));
             }
         });
         gph1.link(Button.LEFT_TRIGGER, () -> {
@@ -104,32 +107,36 @@ public class TestOp extends Tele{
 
 
         gph1.link(Button.DPAD_DOWN, () -> {
-            if(!drive.machineMode) {
-                bot.addAutoModule(Specimen);
-            }else{
-                bot.addAutoModule(Shift(-0.2, 0.2, 0.0, 0.2));
-            }
+            bot.addAutoModule(Specimen);
+//            if(!drive.machineMode) {
+//                bot.addAutoModule(Specimen);
+//            }else{
+//                bot.addAutoModule(Shift(-0.2, 0.2, 0.0, 0.2));
+//            }
         });
         gph1.link(Button.DPAD_LEFT, () -> {
-            if(!drive.machineMode) {
-                bot.addAutoModule(EmergencyBucket);
-            }else{
-                bot.addAutoModule(Shift(-0.2, -0.2, 0.0, 0.2));
-            }
+            bot.addAutoModule(EmergencyBucket);
+//            if(!drive.machineMode) {
+//                bot.addAutoModule(EmergencyBucket);
+//            }else{
+//                bot.addAutoModule(Shift(-0.2, -0.2, 0.0, 0.2));
+//            }
         });
         gph1.link(Button.DPAD_UP, () -> {
-            if(!drive.machineMode) {
-                bot.addAutoModule(PrepareRam);
-            }else{
-                bot.addAutoModule(Shift(0.2, -0.2, 0.0, 0.2));
-            }
+            bot.addAutoModule(PrepareRam);
+//            if(!drive.machineMode) {
+//                bot.addAutoModule(PrepareRam);
+//            }else{
+//                bot.addAutoModule(Shift(0.2, -0.2, 0.0, 0.2));
+//            }
         });
         gph1.link(Button.DPAD_RIGHT, () -> {
-            if(!drive.machineMode) {
-                bot.addAutoModule(Ram);
-            }else{
-                bot.addAutoModule(Shift(0.2, 0.2, 0.0, 0.2));
-            }
+            bot.addAutoModule(Ram);
+//            if(!drive.machineMode) {
+//                bot.addAutoModule(Ram);
+//            }else{
+//                bot.addAutoModule(Shift(0.2, 0.2, 0.0, 0.2));
+//            }
         });
 //        gph1.link(Button.DPAD_LEFT, EmergencyBucket);
 //        gph1.link(Button.DPAD_UP, PrepareRam);
@@ -172,6 +179,8 @@ public class TestOp extends Tele{
 
         intake.flipIn();
         bucket.specimen();
+
+        n = 0;
 
     }
 
