@@ -67,14 +67,7 @@ public class Machine {
             new Exit(() -> !bot.isIndependentRunning())
         ));
     }
-    public Machine addIndependentForPause(Independent independent){
-        independents.add(independent);
-        return addInstruction(new Stage(
-                new Initial(() -> {bot.cancelIndependents(); currentIndependent = independent; pause = true; bot.addIndependent(independent);}),
-                new Exit(() -> !bot.isIndependentRunning())
-        ));
-    }
-    public Machine addIndependentWithPause(Independent independent){ return addIndependentForPause(independent).addInstruction(new Stage(new Exit(() -> !pause || skippingToNext), new Stop(() -> {pause = false; skippingToNext = false; }))); }
+    public Machine addIndependentWithPause(Independent independent){ return addIndependent(independent).addInstruction(new Stage(new Initial(this::pause), new Exit(() -> !pause || skippingToNext), new Stop(() -> {pause = false; skippingToNext = false; }))); }
     public Machine addIndependent(int n, Independent independent){ return addIndependent(n, i -> independent); }
     public Machine addIndependent(int n, ReturnParameterCodeSeg<Integer, Independent> independent){ for (int i = 0; i < n; i++) { addIndependent(independent.run(i)); } return this; }
     public Machine addInstruction(CodeSeg code, double time){ return addInstruction(new Stage(new Main(code), RobotPart.exitTime(time))); }

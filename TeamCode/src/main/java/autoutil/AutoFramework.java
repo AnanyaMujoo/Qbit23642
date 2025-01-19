@@ -108,7 +108,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void flipCases(){ if(caseDetected.equals(TeamProp.LEFT)){ caseDetected = TeamProp.RIGHT; }else if(caseDetected.equals(TeamProp.RIGHT)){ caseDetected = TeamProp.LEFT; }}
 
     public void addDecision(DecisionList decisionList){ decisionList.check(); }
-    public void addAutomodule(DecisionList decisionList){ addAutoModuleWAIT(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways()))); }
+    public void addAutomodule(DecisionList decisionList){ addAutoModuleDONOTUSE(new AutoModule(new Stage(new Main(decisionList::check), RobotPart.exitAlways()))); }
     public void customSide(CodeSeg one, CodeSeg two){ addDecision(new DecisionList(() -> fieldSide).addOption(FieldSide.BLUE, one).addOption(FieldSide.RED, two)); }
     public void customFlipped(CodeSeg one, CodeSeg two){ if(!isFlipped()){ one.run();}else{two.run();}}
     public void customPlacement(CodeSeg one, CodeSeg two){ addDecision(new DecisionList(() -> fieldPlacement).addOption(FieldPlacement.LOWER, one).addOption(FieldPlacement.UPPER, two)); }
@@ -175,7 +175,7 @@ public abstract class AutoFramework extends Auto implements AutoUser {
     public void addPause(double time){ addSegmentType(time); }
     public void addSetpoint(double x, double y, double h){ addSegmentType(AutoSegment.Type.SETPOINT); poses.add(new Pose(x,y,h)); }
     public void addWaypoint(double x, double y, double h){ addSegmentType(AutoSegment.Type.WAYPOINT); poses.add(new Pose(x,y,h)); }
-    public void addAutoModuleWAIT(AutoModule autoModule){ addSegmentType(AutoSegment.Type.AUTOMODULE, autoModule); }
+    public void addAutoModuleDONOTUSE(AutoModule autoModule){ addSegmentType(AutoSegment.Type.AUTOMODULE, autoModule); }
     public void addConcurrentAutoModule(AutoModule autoModule){ addSegmentType(AutoSegment.Type.CONCURRENT_AUTOMODULE, autoModule);}
     public void addConcurrentAutoModuleWithCancel(AutoModule autoModule, double pauseAfter){ addCancelAutoModules(); addConcurrentAutoModule(autoModule); addPause(pauseAfter);}
     public void addConcurrentAutoModuleWithCancel(AutoModule autoModule){ addCancelAutoModules(); addConcurrentAutoModule(autoModule);}

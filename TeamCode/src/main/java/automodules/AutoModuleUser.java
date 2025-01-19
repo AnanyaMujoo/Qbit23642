@@ -170,26 +170,26 @@ public interface AutoModuleUser extends RobotUser {
     );
 
 
-    Machine Drop = new Machine()
-            .addIndependentWithPause(new Independent() {
-                @Override
-                public void define() {
-                    addAutoModuleWAIT(new AutoModule(drive.moveTime(-0.9, 0, -0.8, 0.3)));
-                    addAutoModule(PrepareBucket2);
-                    addTimedSetpoint(0.5,3,  -90, -77, -45);
-                    addPause(1);
-                    addTimedSetpoint(0.4,3,  -106, -93, -45);
-                }
-            })
-            .addIndependent(new Independent() {
-                @Override
-                public void define() {
-                    addAutoModule(Deposit2);
-                    addPause(0.5);
-                    addWaypoint(0.5, -25, -60, 70);
-                    addTimedSetpoint(0.5, 3, 10, -10, 0);
-                }
-            });
+//    Machine Drop = new Machine()
+//            .addIndependentWithPause(new Independent() {
+//                @Override
+//                public void define() {
+//                    addAutoModuleWAIT(new AutoModule(drive.moveTime(-0.9, 0, -0.8, 0.3)));
+//                    addAutoModule(PrepareBucket2);
+//                    addTimedSetpoint(0.5,3,  -90, -77, -45);
+//                    addPause(1);
+//                    addTimedSetpoint(0.4,3,  -106, -93, -45);
+//                }
+//            })
+//            .addIndependent(new Independent() {
+//                @Override
+//                public void define() {
+//                    addAutoModule(Deposit2);
+//                    addPause(0.5);
+//                    addWaypoint(0.5, -25, -60, 70);
+//                    addTimedSetpoint(0.5, 3, 10, -10, 0);
+//                }
+//            });
 
 
 

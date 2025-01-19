@@ -61,75 +61,49 @@ public class TestOp extends Tele{
         });
         gph1.link(Button.RIGHT_BUMPER, () ->{
             if (intake.intakeMode) {
+                intake.shimmy = false;
                 intake.stopSpin = true;
                 bot.addAutoModule(IntakeDeltaOut);
-            } else if (!drive.machineMode){
+            } else {
                 if (driveMode.modeIs(Drive.FAST)) {
                     driveMode.set(Drive.SLOW);
                 } else {
                     driveMode.set(Drive.FAST);
                 }
-            }else{
-                bot.addAutoModule(Reset);
             }
         });
         gph1.link(Button.LEFT_BUMPER, () -> {
             if(intake.intakeMode) {
+                intake.shimmy = false;
                 intake.stopSpin = true;
                 bot.addAutoModule(IntakeDeltaIn);
-            }else if(!drive.machineMode){
+            }else {
                 bot.cancelAutoModules();
                 bot.addAutoModule(Dance);
-            }else{
-                bot.cancelMovements();
             }
         });
 
 
 
         gph1.link(Button.RIGHT_TRIGGER, () -> {
-            if(!drive.machineMode) {
-                bot.addAutoModule(PrepareBucket);
-            }else {
-                bot.addMachine(Drop);
-            }
+            bot.addAutoModule(PrepareBucket);
         });
         gph1.link(Button.LEFT_TRIGGER, () -> {
-            if(!drive.machineMode) {
-                bot.addAutoModule(Deposit);
-            }else {
-                bot.machine.play();
-            }
+            bot.addAutoModule(Deposit);
         });
 
 
         gph1.link(Button.DPAD_DOWN, () -> {
-            if(!drive.machineMode) {
-                bot.addAutoModule(Specimen);
-            }else{
-                bot.addAutoModule(Shift(-0.2, 0.2, 0.0, 0.2));
-            }
+            bot.addAutoModule(Specimen);
         });
         gph1.link(Button.DPAD_LEFT, () -> {
-            if(!drive.machineMode) {
-                bot.addAutoModule(EmergencyBucket);
-            }else{
-                bot.addAutoModule(Shift(-0.2, -0.2, 0.0, 0.2));
-            }
+            bot.addAutoModule(EmergencyBucket);
         });
         gph1.link(Button.DPAD_UP, () -> {
-            if(!drive.machineMode) {
-                bot.addAutoModule(PrepareRam);
-            }else{
-                bot.addAutoModule(Shift(0.2, -0.2, 0.0, 0.2));
-            }
+            bot.addAutoModule(PrepareRam);
         });
         gph1.link(Button.DPAD_RIGHT, () -> {
-            if(!drive.machineMode) {
-                bot.addAutoModule(Ram);
-            }else{
-                bot.addAutoModule(Shift(0.2, 0.2, 0.0, 0.2));
-            }
+            bot.addAutoModule(Ram);
         });
 //        gph1.link(Button.DPAD_LEFT, EmergencyBucket);
 //        gph1.link(Button.DPAD_UP, PrepareRam);
@@ -161,7 +135,7 @@ public class TestOp extends Tele{
 //        gph2.link(Button.RIGHT_TRIGGER, intake::flipIn);
 
 
-        gph2.link(Button.X, () -> drive.machineMode = true, () -> drive.machineMode = false);
+//        gph2.link(Button.X, () -> drive.machineMode = true, () -> drive.machineMode = false);
 
 //        gph2.link(Button.LEFT_BUMPER, intake::openDoor);
 //        gph2.link(Button.RIGHT_BUMPER, intake::closeDoor);
@@ -178,7 +152,7 @@ public class TestOp extends Tele{
     @Override
     public void startTele() {
 //        act = false;
-        drive.machineMode = true;
+//        drive.machineMode = true;
     }
 
     @Override
@@ -214,7 +188,7 @@ public class TestOp extends Tele{
             drive.move(gph1.ry * speed, gph1.rx * speed, gph1.lx * speed * 0.6);
         }
 
-        log.show("MachineMode", drive.machineMode);
+//        log.show("MachineMode", drive.machineMode);
         log.show("DriveMode", driveMode.get());
         log.show("SampleColor", intake.color);
         log.show("IsSampleVertical", intake.isSampleVertical);

@@ -40,13 +40,13 @@ public class QbitAutoSpec extends AutoFramework {
             liftOuttake.stageDown(0.7, 33),
             claw.stageReady(0.3),
             claw.stageHold(0.05),
-            liftOuttake.stageDown(-0.7,2)
+            liftOuttake.stageDown(-0.7,3)
     );
 
     AutoModule SpecimenNoHold = new AutoModule(
             liftOuttake.stageDown(0.7, 33),
             claw.stageReady(0.2),
-            liftOuttake.stageDown(-0.7,2)
+            liftOuttake.stageDown(-0.7,3)
     );
 //    AutoModule Reset = new AutoModule(
 ////            intake.stageFlipAlmostOut(0.1),
@@ -152,7 +152,7 @@ public class QbitAutoSpec extends AutoFramework {
         addTimedSetpoint(1.0, 0.05, 156, 122, 180);
 //        addPause(0.05);
 //        addWaypoint(1, 160, 130, 180);
-        addWaypoint(1, 156, 60, 180);
+        addWaypoint(1, 156, 55, 180);
 
 
 //        addCustomCode(() -> {
@@ -232,7 +232,7 @@ public class QbitAutoSpec extends AutoFramework {
                 addWaypoint(0.8, 92+x, 20, 180);
             }
             // 0.35
-            addTimedSetpoint(0.15,i == 0 ? 0.3 : 0.38, 92+x,-7,180);
+            addTimedSetpoint(0.15,i == 0 ? 0.3 : 0.45, 92+x,-7,180);
 
             addAutoModule(LiftAway);
             addPause(0.25);
@@ -247,7 +247,12 @@ public class QbitAutoSpec extends AutoFramework {
 ////                log.show("H", odometry.h);
 //            });
 
-            double delta = 3*i;
+            double delta;
+            if(i == 0){
+                delta = -2;
+            }else {
+                delta = 3 * i;
+            }
 
             addWaypoint(1.0,60+x+delta,35,30);
             addWaypoint(1.0,15+x+delta,50,0);
@@ -261,7 +266,7 @@ public class QbitAutoSpec extends AutoFramework {
             });
             addTimedSetpoint(0.1, 0.15, 5 + x + delta, 100, 0);
             if(i < 3){
-                addWaypoint(1.0,x + delta,70,160);
+                addWaypoint(1.0,-5 + x + delta,70,170);
             }else{
                 addWaypoint(1.0,5 + x + delta,70,0);
                 addWaypoint(1.0,100,20,45);

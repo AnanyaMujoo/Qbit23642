@@ -15,7 +15,7 @@ public class Drive extends RobotPart {
 
     public CMotor frontRight, backRight, frontLeft, backLeft;
 
-    public boolean machineMode = false;
+//    public boolean machineMode = false;
 
 
     @Override
@@ -27,7 +27,7 @@ public class Drive extends RobotPart {
         backLeft = create("bl", ElectronicType.CMOTOR_FORWARD_FLOAT);
 
         driveMode.set(Modes.Drive.FAST);
-        machineMode = false;
+//        machineMode = false;
     }
 
 
