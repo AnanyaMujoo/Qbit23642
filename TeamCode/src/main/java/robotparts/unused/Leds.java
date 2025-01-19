@@ -25,12 +25,20 @@ public class Leds extends RobotPart {
 
     @Override
     public void init() {
-        ledFront = create("ledf", ElectronicType.OLED);
+        ledFront = create("led", ElectronicType.OLED);
 //        ledBack = create("ledb", ElectronicType.OLED);
 //        ledfl = create("ledfl", ElectronicType.OLED);
 //        ledbl = create("ledbl", ElectronicType.OLED);
         setColor(LEDColor.OFF);
         timer.reset();
+    }
+
+    public void setLED(boolean on){
+        if(on){
+            setColor(LEDColor.ORANGE);
+        }else{
+            setColor(LEDColor.OFF);
+        }
     }
 
     /**

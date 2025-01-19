@@ -1,9 +1,18 @@
 package automodules;
 
+import automodules.stage.Exit;
+import automodules.stage.Initial;
+import automodules.stage.Main;
+import automodules.stage.Stage;
+import automodules.stage.Stop;
 import global.Modes;
 import robot.RobotUser;
+import robotparts.RobotPart;
+import teleutil.independent.Independent;
+import teleutil.independent.Machine;
 
 import static automodules.StageBuilder.pause;
+import static global.General.bot;
 import static global.Modes.driveMode;
 
 
@@ -43,7 +52,7 @@ public interface AutoModuleUser extends RobotUser {
     AutoModule Intake = new AutoModule(
             intake.stageFlipHalf(0.05),
             driveMode.ChangeMode(Modes.Drive.SLOW),
-            liftIntake.stageLift(0.6, 25),
+            liftIntake.stageLift(0.8, 25),
             intake.stageFlipAlmostOut(0.05),
             intake.stageOpen(0.05),
             bucket.stageBottom(0.05)
@@ -64,16 +73,24 @@ public interface AutoModuleUser extends RobotUser {
             intake.stagepPickUp(),
             liftIntake.stageDown(0.6, 0),
             driveMode.ChangeMode(Modes.Drive.FAST),
-            intake.stageFlipIn(0.1),
-            intake.stageOpen(0.1),
-            intake.moveTime(1,0.8),
-            intake.stageFlipHalf(0.1)
+            intake.stageFlipIn(0.05),
+            intake.stageOpen(0.05),
+            intake.moveTime(1,1.0),
+            intake.isSampleStillThere(),
+            intake.stageFlipHalf(0.05),
+            intake.showIfVertical()
     );
 
     AutoModule MoveIntakeOut = new AutoModule(
             intake.stageFlipAlmostOut(0.05),
             intake.moveUntilColorOut(),
             intake.moveTime(-1, 0.5)
+    );
+
+    AutoModule MoveIntakeOut2 = new AutoModule(
+            intake.stageFlipOut(0.05),
+            intake.moveTime(-1, 1),
+            intake.stageFlipAlmostOut(0.05)
     );
 
     AutoModule IntakeDeltaOut = new AutoModule(intake.stageFlipAlmostOut(0.05), liftIntake.stageDelta(0.5, 10));
@@ -85,6 +102,7 @@ public interface AutoModuleUser extends RobotUser {
 
 
     AutoModule PrepareBucket = new AutoModule(
+            intake.stageFlipHalf(0.05),
             claw.stageHold(0.05),
             bucket.stageHold(0.05),
             driveMode.ChangeMode(Modes.Drive.SLOW),
@@ -117,7 +135,61 @@ public interface AutoModuleUser extends RobotUser {
     AutoModule Dance = new AutoModule(
             drive.moveTime(0.7, 0, 0, 0.3),
             drive.moveTime(-1, 0, 0, 0.3)
+    ).setStartCode(() -> {
+        intake.isSampleVertical = false;
+    });
+
+
+    AutoModule Reset = new AutoModule(
+            drive.moveTime(0.05, 0.4, 0, 1),
+            new Stage(new Main(odometry::reset), RobotPart.exitTime(0.1)),
+            drive.moveTime(-0.3, -0.4, 0, 0.4)
     );
+
+
+
+    default AutoModule Shift(double f, double s, double t, double time){
+        return new AutoModule(drive.moveTime(f, s, t, time));
+    }
+
+    AutoModule PrepareBucket2 = new AutoModule(
+            intake.stageFlipHalf(0.05),
+            claw.stageHold(0.05),
+            bucket.stageHold(0.05),
+            liftOuttake.stageLift(0.8,93.8),
+            claw.stageSqueeze(0.05)
+    );
+
+    AutoModule Deposit2 = new AutoModule(
+            bucket.stageTop(0.5),
+            bucket.stageSpecimen(0.3),
+            claw.stageHold(0.05),
+            liftOuttake.stageDown(0.5, 0),
+            intake.stageFlipIn(0.2),
+            intake.stageDisable(0.05)
+    );
+
+
+    Machine Drop = new Machine()
+            .addIndependentWithPause(new Independent() {
+                @Override
+                public void define() {
+                    addAutoModuleWAIT(new AutoModule(drive.moveTime(-0.9, 0, -0.8, 0.3)));
+                    addAutoModule(PrepareBucket2);
+                    addTimedSetpoint(0.5,3,  -90, -77, -45);
+                    addPause(1);
+                    addTimedSetpoint(0.4,3,  -106, -93, -45);
+                }
+            })
+            .addIndependent(new Independent() {
+                @Override
+                public void define() {
+                    addAutoModule(Deposit2);
+                    addPause(0.5);
+                    addWaypoint(0.5, -25, -60, 70);
+                    addTimedSetpoint(0.5, 3, 10, -10, 0);
+                }
+            });
 
 
 

@@ -2,6 +2,8 @@ package robotparts.hardware;
 
 import static global.General.fieldSide;
 
+import com.qualcomm.ftccommon.SoundPlayer;
+
 import java.sql.Time;
 import java.util.ArrayList;
 
@@ -35,9 +37,13 @@ public class Intake extends RobotPart {
     public boolean shimmy = false;
     public boolean intakeMode = false;
     public boolean sampleLoaded = false;
+
     public ArrayList<SampleColor> lastColors = new ArrayList<>();
     public int code = 0;
-    public final int lastNum = 2;
+    public SampleColor color = SampleColor.NONE;
+    public final int lastNum = 3;
+
+    public boolean isSampleVertical = false;
 
 //    public ArrayList<Double> lastCounts = new ArrayList<>();
 
@@ -85,6 +91,8 @@ public class Intake extends RobotPart {
         sampleLoaded = false;
         lastColors = new ArrayList<>();
         code = 0;
+        color = SampleColor.NONE;
+        isSampleVertical = false;
 //        lastCounts = new ArrayList<>();
     }
 
@@ -159,25 +167,26 @@ public class Intake extends RobotPart {
                 colorSensors.usePart(),
                 new Initial(() -> {
                     stopSpin = false;
+                    color = SampleColor.NONE;
                     lastColors = new ArrayList<>();
-                    code = 1;
+                    code = 0;
                 }),
                 new Main(() -> {
                     move(1);
-//                    lastColors.add(colorSensors.getSampleColor());
+                    lastColors.add(colorSensors.getSampleColor());
 //                    lastCounts.add(colorSensors.isSampleLoaded() ? 1.0 : 0.0);
                 }),
                 new Exit(() -> {
-                    code = colorSensors.correctColor(colorSensors.getSampleColor());
-//                    if(lastColors.size() > lastNum) {
-//                        code = colorSensors.correctColor(getColor());
-                        if (code != 0) {
-                            stopSpin = true;
-                            sampleLoaded = true;
-                            return true;
-                        } else {
-                            return stopSpin;
-                        }
+//                    color = colorSensors.getSampleColor();
+                    color = getColor();
+                    code = colorSensors.determineCodeFromColor(color);
+                    if (code != 0) {
+                        stopSpin = true;
+                        sampleLoaded = true;
+                        return true;
+                    } else {
+                        return stopSpin;
+                    }
 //                    }else {
 //                        return stopSpin;
 //                    }
@@ -216,18 +225,26 @@ public class Intake extends RobotPart {
         return new Stage(
                 usePart(),
                 drive.usePart(),
-                new Initial(() -> stopSpin = false),
+                new Initial(() -> {
+                    stopSpin = false;
+                    lastColors = new ArrayList<>();
+                    code = 0;
+                    color = SampleColor.NONE;
+                }),
                 new Initial(timer::reset),
                 new Main(() -> {
                     move(1);
                     drive.move(0.0, 0.0, pow*Math.sin(timer.seconds()*2*Math.PI*freq));
+                    lastColors.add(colorSensors.getSampleColor());
                 }),
                 new Exit(() -> {
-                    if(colorSensors.isSampleLoaded()){
+                    color = getColor();
+                    code = colorSensors.determineCodeFromColor(color);
+                    if (code != 0) {
                         stopSpin = true;
                         sampleLoaded = true;
                         return true;
-                    }else{
+                    } else {
                         return stopSpin;
                     }
                 }),
@@ -247,6 +264,42 @@ public class Intake extends RobotPart {
         );
     }
 
+
+    public Stage isSampleStillThere(){
+        return new Stage(
+                usePart(),
+                colorSensors.usePart(),
+                new Main(() -> {
+                    if(colorSensors.getDistance() < 5){
+                        isSampleVertical = true;
+                    }
+                }),
+                RobotPart.exitAlways(),
+                stop(),
+                returnPart(),
+                colorSensors.returnPart()
+        );
+    }
+
+
+    public Stage showIfVertical(){
+        return new Stage(
+                usePart(),
+                new Initial(timer::reset),
+                new Main(() -> {
+                    double freq = 2;
+                    if(isSampleVertical){
+                        move(Math.sin(timer.seconds()*2*Math.PI*freq));
+                    }
+                }),
+                new Exit(() -> timer.seconds() > 2 || !isSampleVertical),
+                new Stop(() -> {
+                    isSampleVertical = false;
+                }),
+                stop(),
+                returnPart()
+        );
+    }
 
 
 }

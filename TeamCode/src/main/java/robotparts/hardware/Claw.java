@@ -15,13 +15,13 @@ public class Claw extends RobotPart {
         outtakel = create("lc", ElectronicType.PSERVO_REVERSE);
         //outtake 2 not configured yet
         outtaker.setPosition("hold", 0.13);
-        outtaker.setPosition("hold2", 0.19);
+        outtaker.setPosition("hold2", 0.21);
         outtaker.setPosition("release", 0.92);
         outtaker.setPosition("ready",0.47);
         outtaker.setPosition("squeeze",0.24);
 
         outtakel.setPosition("hold", 0.08);
-        outtakel.setPosition("hold2", 0.14);
+        outtakel.setPosition("hold2", 0.16);
         outtakel.setPosition("release", 0.89);
         outtakel.setPosition("ready",0.43);
         outtakel.setPosition("squeeze",0.21);
