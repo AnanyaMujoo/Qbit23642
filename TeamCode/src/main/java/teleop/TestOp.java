@@ -113,6 +113,10 @@ public class TestOp extends Tele{
 //
 //        gph2.link(Button.A, () -> leds.setLED(true), () -> leds.setLED(false));
 
+        gph2.link(Button.Y, ResetLift);
+        gph2.link(Button.X, bot::cancelAutoModules);
+        gph2.link(Button.B, ResetLift2);
+
 
 
 //        gph1.link(Button.RIGHT_BUMPER, () -> driveMode.set(Drive.SLOW), () -> driveMode.set(Drive.FAST));
@@ -195,6 +199,8 @@ public class TestOp extends Tele{
 //        log.show("Pause", bot.machine.pause);
 //        log.show("Skipping to next", bot.machine.skippingToNext);
         log.show("Odo", odometry.getPose());
+
+        log.show("Hiehgy", liftOuttake.liftLeft.getPosition());
 
 //        log.show("Colors", Arrays.toString(colorSensors.getOuttakeColorRGB()));
 //        log.show("Colors", Arrays.toString(colorSensors.redtolight()));

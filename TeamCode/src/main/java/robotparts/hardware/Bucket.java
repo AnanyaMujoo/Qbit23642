@@ -16,8 +16,8 @@ public class Bucket extends RobotPart {
         lbucket.setPosition("bottom", 0);
         rbucket.setPosition("top", 0.66);
         lbucket.setPosition("top", 0.66);
-        lbucket.setPosition("hold", 0.33);
-        rbucket.setPosition("hold", 0.33);
+        lbucket.setPosition("hold", 0.3);
+        rbucket.setPosition("hold", 0.3);
         lbucket.setPosition("specimen", 0.55);
         rbucket.setPosition("specimen", 0.55);
         lbucket.setPosition("emergency", 0.45);

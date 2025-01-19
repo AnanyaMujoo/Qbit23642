@@ -100,11 +100,21 @@ public class LiftOuttake extends RobotPart implements AutoModuleUser {
 
 
 
-
+    public void softReset(){
+        liftRight.resetPosition();
+        liftLeft.resetPosition();
+    }
 
 
     @Override
     public Stage moveTime(double p, double t) { return super.moveTime(p, t); }
+
+    public Stage moveTimeSus(double p, double t){
+        return new Stage(usePart(), new Main(() -> {
+            liftRight.setPowerRaw(p);
+            liftLeft.setPowerRaw(p);
+        }), exitTime(t), stop(), returnPart());
+    }
 //
 //
     public Stage stageLift(double power, double target) { return moveTarget(() -> liftRight, () -> liftLeft, power, power, target); }

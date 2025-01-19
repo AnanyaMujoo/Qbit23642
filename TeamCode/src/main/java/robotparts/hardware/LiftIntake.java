@@ -54,6 +54,12 @@ public class LiftIntake extends RobotPart implements AutoModuleUser {
         }
     );}
 
+
+    public void softReset(){
+        liftRight.resetPosition();
+        liftLeft.resetPosition();
+    }
+
 //    public ReturnCodeSeg<AutoModule> lifttarget(double inc){
 //        return ()->{
 //            if ((target+inc>=0)&&(target+inc<=MAXHEIGHT)){
@@ -68,6 +74,14 @@ public class LiftIntake extends RobotPart implements AutoModuleUser {
 //          return new AutoModule();
 //        };
 //    }
+
+
+    public Stage moveTimeSus(double p, double t){
+        return new Stage(usePart(), new Main(() -> {
+            liftRight.setPowerRaw(p);
+            liftLeft.setPowerRaw(p);
+        }), exitTime(t), stop(), returnPart());
+    }
 
 
     @Override

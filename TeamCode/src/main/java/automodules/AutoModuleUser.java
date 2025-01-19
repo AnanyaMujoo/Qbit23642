@@ -170,6 +170,18 @@ public interface AutoModuleUser extends RobotUser {
     );
 
 
+    AutoModule ResetLift = new AutoModule(
+            intake.stageFlipHalf(0.1),
+            liftOuttake.moveTimeSus(-0.1, 2),
+            new Stage(liftOuttake.usePart(), new Main(liftOuttake::softReset), RobotPart.exitTime(0.1), liftOuttake.stop(), liftOuttake.returnPart())
+    );
+
+    AutoModule ResetLift2 = new AutoModule(
+            liftIntake.moveTimeSus(-0.1, 2),
+            new Stage(liftIntake.usePart(), new Main(liftIntake::softReset), RobotPart.exitTime(0.1), liftIntake.stop(), liftIntake.returnPart())
+    );
+
+
 //    Machine Drop = new Machine()
 //            .addIndependentWithPause(new Independent() {
 //                @Override
