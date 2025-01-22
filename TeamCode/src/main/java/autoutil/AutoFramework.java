@@ -102,8 +102,9 @@ public abstract class AutoFramework extends Auto implements AutoUser {
 
 //        autoPlane.toPoses(p -> p.rotateOrientation(90));
     }
+    public static boolean isFlipped(){ return false; }
 
-    public static boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }
+   // public static boolean isFlipped(){ return fieldSide.equals(FieldSide.RED) ^ fieldPlacement.equals(FieldPlacement.UPPER); }
     public void flip(){ autoPlane.reflectX(); autoPlane.reflectPoses(); }
     public void flipCases(){ if(caseDetected.equals(TeamProp.LEFT)){ caseDetected = TeamProp.RIGHT; }else if(caseDetected.equals(TeamProp.RIGHT)){ caseDetected = TeamProp.LEFT; }}
 
