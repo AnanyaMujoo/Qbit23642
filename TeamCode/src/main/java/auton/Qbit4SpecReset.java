@@ -9,8 +9,8 @@ import autoutil.AutoFramework;
 
 
 //@Autonomous(name = "QbitAutoSpec", group = "auto", preselectTeleOp = "TerraOp")
-@Autonomous(name = "Qbit4SpecNoReset", group = "auto")
-public class Qbit4SpecNoReset extends AutoFramework {
+@Autonomous(name = "Qbit4SpecReset", group = "auto")
+public class Qbit4SpecReset extends AutoFramework {
 
     double x = 0;
 
@@ -44,6 +44,7 @@ public class Qbit4SpecNoReset extends AutoFramework {
             claw.stageReady(0.2),
             liftOuttake.stageDown(-0.7,3)
     );
+
 //    AutoModule Reset = new AutoModule(
 ////            intake.stageFlipAlmostOut(0.1),
 //            claw.stageHold(0.05),
@@ -200,12 +201,15 @@ public class Qbit4SpecNoReset extends AutoFramework {
             addWaypoint(0.5, 10+x+delta, 50, 0);
             addWaypoint(0.6, 10+x+delta, 70, 0);
             addTimedSetpoint(0.1, 0.38, 5 + x + delta, 90, 0);
-        addTimedSetpoint(0.05, 0.17, 5 + x + delta, 100, 0);
+            addTimedSetpoint(0.05, 0.17, 5 + x + delta, 100, 0);
 
-        addAutoModule(SpecimenNoHold);
-        addPause(0.4);
+            addAutoModule(SpecimenNoHold);
+            addPause(0.4);
 
             addCustomCode(() -> {
+                if(i==0){
+                    addTimedSetpoint(0.05, 0.17, 15, 100, 0);
+                }
                 if(i < 2) {
                     odometry.resetY(-80);
                 }

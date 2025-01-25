@@ -31,13 +31,13 @@ public class QbitAutoSamp extends AutoFramework {
     AutoModule Up = new AutoModule(
             intake.stageFlipHalf(0.1),
             claw.stageHold(0.05),
-            bucket.stageHold(0.05),
+            bucket.stageBottom(0.05),
             liftOuttake.stageLift(0.9,93.8),
             claw.stageSqueeze(0.05)
     );
 
     AutoModule Dep = new AutoModule(
-            bucket.stageTop(0.45),
+            bucket.stageTop(0.9),
             claw.stageHold(0.05),
             bucket.stageBottom(0.3),
             liftOuttake.stageDown(0.6, 0)
@@ -114,10 +114,10 @@ public class QbitAutoSamp extends AutoFramework {
         addPause(0.45);
 
         addTimedSetpoint(0.5, 0.4, -34, 24, -45);
-        addTimedSetpoint(0.5, 1, -51, 73, 45);
+        addTimedSetpoint(0.5, 1, -54, 70, 30);
         addAutoModuleDONOTUSE(In);
 //        addWaypoint(0.7, -30, , 45);
-        addWaypoint(1, -35, 40, 45);
+        addWaypoint(1, -35, 40, 30);
         addAutoModule(Up);
         addTimedSetpoint(0.5, 1.8, -36, 27, -45);
         addTimedSetpoint(0.5, 0.5, -57, 6, -45);

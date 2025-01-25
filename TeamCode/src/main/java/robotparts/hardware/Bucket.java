@@ -10,8 +10,8 @@ public class Bucket extends RobotPart {
     public PServo lbucket;
     @Override
     public void init() {
-        rbucket = create("rs", ElectronicType.PSERVO_REVERSE);
-        lbucket = create("ls", ElectronicType.PSERVO_FORWARD);
+        rbucket = create("rs", ElectronicType.PSERVO_FORWARD);
+        lbucket = create("ls", ElectronicType.PSERVO_REVERSE);
         rbucket.setPosition("bottom", 0);
         lbucket.setPosition("bottom", 0);
         rbucket.setPosition("top", 0.66);

@@ -104,14 +104,14 @@ public interface AutoModuleUser extends RobotUser {
     AutoModule PrepareBucket = new AutoModule(
             intake.stageFlipHalf(0.05),
             claw.stageHold(0.05),
-            bucket.stageHold(0.05),
+            bucket.stageBottom(0.05),
             driveMode.ChangeMode(Modes.Drive.SLOW),
             liftOuttake.stageLift(0.6,93.8),
             claw.stageSqueeze(0.05)
     );
 
     AutoModule Deposit = new AutoModule(
-            bucket.stageTop(0.5),
+            bucket.stageTop(0.9),
             bucket.stageBottom(0.1),
             drive.moveTime(0.3,0,0,0.5),
             claw.stageHold(0.05),

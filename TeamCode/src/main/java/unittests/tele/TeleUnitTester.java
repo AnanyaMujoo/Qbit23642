@@ -47,8 +47,8 @@ public class TeleUnitTester extends Tele implements UnitTester{
 //        add(new BackgroundTest());
 
 //        add(new GyroTest());
-//        add(new OdometryTest());
-        add(new ColorTest());
+        add(new OdometryTest());
+//        add(new ColorTest());
 
 
         /**
