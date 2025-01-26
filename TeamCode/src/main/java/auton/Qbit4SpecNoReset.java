@@ -25,7 +25,7 @@ public class Qbit4SpecNoReset extends AutoFramework {
     }
 
     AutoModule Up = new AutoModule(
-            liftOuttake.stageLift(1.0, 44),
+            liftOuttake.stageLift(0.56 , 44),
             claw.stageDisable(0.05)
     ).setStartCode(() -> {
         intake.flipAlmost();
@@ -35,14 +35,19 @@ public class Qbit4SpecNoReset extends AutoFramework {
     AutoModule Specimen = new AutoModule(
             liftOuttake.stageDown(0.7, 33),
             claw.stageReady(0.3),
-            claw.stageHold(0.05),
-            liftOuttake.stageDown(-0.7,3)
+            claw.stageHold2(0.05),
+            liftOuttake.stageDown(-0.85,3)
     );
 
-    AutoModule SpecimenNoHold = new AutoModule(
+            AutoModule SpecimenNoHold = new AutoModule(
             liftOuttake.stageDown(0.7, 33),
             claw.stageReady(0.2),
-            liftOuttake.stageDown(-0.7,3)
+            liftOuttake.stageDown(-0.85,3)
+    );
+    AutoModule SpecimenNoHoldFinal = new AutoModule(
+            liftOuttake.stageDown(0.7, 33),
+            claw.stageReady(0.2),
+            liftOuttake.stageDown(-0.85,0)
     );
 //    AutoModule Reset = new AutoModule(
 ////            intake.stageFlipAlmostOut(0.1),
@@ -115,9 +120,9 @@ public class Qbit4SpecNoReset extends AutoFramework {
 
     AutoModule LiftAway = new AutoModule(
             claw.stageSqueeze(0.15),
-            liftOuttake.moveTime(1.0, 0.1),
+            liftOuttake.moveTime(0.7, 0.3),
             claw.stageHold(0.05),
-            liftOuttake.stageLift(1.0, 44),
+            liftOuttake.stageLift(0.35, 44),
             claw.stageDisable(0.05)
     );
 
@@ -126,10 +131,10 @@ public class Qbit4SpecNoReset extends AutoFramework {
         addCustomCode(intake::flipAlmost);
         addAutoModule(Up);
         addWaypoint(0.6, -5, 45, 0);
-        addWaypoint(0.2, -5, 70, 0);
+        addWaypoint(0.25, -5, 70, 0);
         addTimedSetpoint(0.1, 0.42, -5, 87, 0);
-        addTimedSetpoint(0.05, 0.05, -5, 90, 0);
         addAutoModule(Specimen);
+        addTimedSetpoint(0.05, 0.10, -5, 90, 0);
         addPause(0.19);
         addWaypoint(1.0,40,70,90);
         addWaypoint(1,80,80,145);
@@ -200,10 +205,15 @@ public class Qbit4SpecNoReset extends AutoFramework {
             addWaypoint(0.5, 10+x+delta, 50, 0);
             addWaypoint(0.6, 10+x+delta, 70, 0);
             addTimedSetpoint(0.1, 0.38, 5 + x + delta, 90, 0);
+
+            if (i<2){
+                addAutoModule(SpecimenNoHold);
+            }
+            else{
+            addAutoModule(SpecimenNoHoldFinal);}
         addTimedSetpoint(0.05, 0.17, 5 + x + delta, 100, 0);
 
-        addAutoModule(SpecimenNoHold);
-        addPause(0.4);
+        addPause(0.2);
 
             addCustomCode(() -> {
                 if(i < 2) {

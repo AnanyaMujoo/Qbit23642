@@ -59,6 +59,9 @@ public class LiftIntake extends RobotPart implements AutoModuleUser {
         liftRight.resetPosition();
         liftLeft.resetPosition();
     }
+    public void maintain() {
+        super.maintain();
+    }
 
 //    public ReturnCodeSeg<AutoModule> lifttarget(double inc){
 //        return ()->{
@@ -107,7 +110,18 @@ public class LiftIntake extends RobotPart implements AutoModuleUser {
         );
     }
 
-
+    public Stage stageUp(double power, double target){
+        return new Stage(
+                usePart(),
+                new Main(() -> {
+                    liftRight.move(Math.abs(power));
+                    liftLeft.move(Math.abs(power));
+                }),
+                new Exit(() -> liftLeft.getPosition() < target || liftRight.getPosition() < target),
+                stop(),
+                returnPart()
+        );
+    }
 
 
 

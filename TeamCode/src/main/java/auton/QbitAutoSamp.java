@@ -40,10 +40,11 @@ public class QbitAutoSamp extends AutoFramework {
             bucket.stageTop(0.9),
             claw.stageHold(0.05),
             bucket.stageBottom(0.3),
-            liftOuttake.stageDown(0.6, 0)
-    );
+            liftOuttake.stageDown(-0.85, 0)
 
+    );
     AutoModule In = new AutoModule(
+            liftIntake.stageLift(0.9,5),
             intake.stageOpen(0.05),
             bucket.stageBottom(0.05),
             intake.stageFlipOut(0.05),
@@ -60,7 +61,9 @@ public class QbitAutoSamp extends AutoFramework {
             liftOuttake.stageDown(0.7, 33),
             claw.stageReady(0.3),
             claw.stageHold(0.05),
-            liftOuttake.stageDown(-0.7,3)
+            liftOuttake.stageDown(-0.7,3),
+            liftIntake.stageUp(0.7,5)
+
     );
 
     AutoModule SpecimenNoHold = new AutoModule(
@@ -89,10 +92,11 @@ public class QbitAutoSamp extends AutoFramework {
         addTimedSetpoint(0.5, 2, -34, 24, -45);
         addTimedSetpoint(0.5, 0.5, -54, 4, -45);
         addAutoModule(Dep);
-        addPause(0.45);
+
+        addPause(0.4);
 
         addTimedSetpoint(0.5, 0.4, -34, 24, -45);
-        addTimedSetpoint(0.5, 1, -22, 61, 0);
+        addTimedSetpoint(0.5, 1, -22, 55, 0);
         addAutoModuleDONOTUSE(In);
         addWaypoint(0.7, -22, 80, 0);
         addWaypoint(1, -22, 50, 0);
@@ -100,21 +104,23 @@ public class QbitAutoSamp extends AutoFramework {
         addTimedSetpoint(0.5, 1.8, -34, 24, -45);
         addTimedSetpoint(0.5, 0.5, -55, 3, -45);
         addAutoModule(Dep);
-        addPause(0.45);
+        addPause(0.4);
 
         addTimedSetpoint(0.5, 0.4, -34, 24, -45);
-        addTimedSetpoint(0.5, 1, -45, 63, 0);
+        addTimedSetpoint(0.5, 1, -45, 55, 0);
         addAutoModuleDONOTUSE(In);
         addWaypoint(0.7, -44, 80, 0);
         addWaypoint(1, -44, 50, 0);
         addAutoModule(Up);
         addTimedSetpoint(0.5, 1.8, -34, 24, -45);
         addTimedSetpoint(0.5, 0.5, -55, 3, -45);
+
         addAutoModule(Dep);
-        addPause(0.45);
+
+        addPause(0.4);
 
         addTimedSetpoint(0.5, 0.4, -34, 24, -45);
-        addTimedSetpoint(0.5, 1, -54, 70, 30);
+        addTimedSetpoint(0.5, 1, -54, 65, 30);
         addAutoModuleDONOTUSE(In);
 //        addWaypoint(0.7, -30, , 45);
         addWaypoint(1, -35, 40, 30);

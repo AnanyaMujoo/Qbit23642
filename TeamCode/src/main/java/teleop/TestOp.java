@@ -113,9 +113,36 @@ public class TestOp extends Tele{
 //
 //        gph2.link(Button.A, () -> leds.setLED(true), () -> leds.setLED(false));
 
-        gph2.link(Button.Y, ResetLift);
-        gph2.link(Button.X, bot::cancelAutoModules);
-        gph2.link(Button.B, ResetLift2);
+        gph2.link(Button.DPAD_UP, ResetLift);
+        gph2.link(Button.DPAD_LEFT, bot::cancelAutoModules);
+        gph2.link(Button.DPAD_RIGHT, ResetLiftIntake);
+        gph2.link(Button.Y, () ->{
+            intake.intakeMode = true;
+            bot.addAutoModule(Intake);
+        });
+        gph2.link(Button.B, () -> {
+            intake.stopSpin = true;
+            if (!intake.shimmy) {
+                bot.addAutoModule(MoveIntakeSpec);
+            } else {
+                bot.addAutoModule(Shimmy);
+            }
+            intake.shimmy = !intake.shimmy;
+        });
+        gph2.link(Button.A, () -> {
+            intake.stopSpin = true;
+            intake.shimmy = false;
+            intake.intakeMode = false;
+            bot.addAutoModule(IntakeSpecimen);
+        });
+        gph2.link(Button.X, () -> {
+            intake.stopSpin = true;
+            intake.shimmy = false;
+            bot.cancelAutoModules();
+            bot.addAutoModule(MoveIntakeOut2);
+            intake.flipHalf();
+        });
+
 
 
 
@@ -149,7 +176,7 @@ public class TestOp extends Tele{
 //        colorSensors.enableLED(false);
 
         intake.flipIn();
-        bucket.specimen();
+
 
     }
 
@@ -179,8 +206,8 @@ public class TestOp extends Tele{
 
 
         liftOuttake.move(gph2.ly*0.2);
-        liftIntake.move(gph2.lx*0.2);
-        intake.move(gph2.ry*0.8);
+        liftIntake.move(gph2.ry*0.2);
+//        intake.move(gph2.ry*0.8);
         double speed;
         if (driveMode.modeIs(Drive.FAST)) {
             speed = 0.8;

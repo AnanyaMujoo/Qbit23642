@@ -164,17 +164,20 @@ public class Intake extends RobotPart {
     public Stage moveUntilColor(){
         return new Stage(
                 usePart(),
+                exitTime(1),
                 colorSensors.usePart(),
                 new Initial(() -> {
                     stopSpin = false;
                     color = SampleColor.NONE;
                     lastColors = new ArrayList<>();
                     code = 0;
+
                 }),
                 new Main(() -> {
                     move(1);
                     lastColors.add(colorSensors.getSampleColor());
 //                    lastCounts.add(colorSensors.isSampleLoaded() ? 1.0 : 0.0);
+
                 }),
                 new Exit(() -> {
 //                    color = colorSensors.getSampleColor();
@@ -184,7 +187,8 @@ public class Intake extends RobotPart {
                         stopSpin = true;
                         sampleLoaded = true;
                         return true;
-                    } else {
+                    }
+                    else {
                         return stopSpin;
                     }
 //                    }else {

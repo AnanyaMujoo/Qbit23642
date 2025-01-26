@@ -32,7 +32,7 @@ public interface AutoModuleUser extends RobotUser {
             drive.moveTime(0.3,0,0,0.3),
             claw.stageHold(0.3),
             driveMode.ChangeMode(Modes.Drive.FAST),
-            liftOuttake.stageLift(0.2, 42)
+            liftOuttake.stageLift(0.7, 42)
 
 
             );
@@ -63,6 +63,11 @@ public interface AutoModuleUser extends RobotUser {
             intake.stageFlipOut(0.05),
             intake.moveUntilColor()
     );
+    AutoModule MoveIntakeSpec = new AutoModule(
+            intake.stageFlipOut(0.05),
+            intake.moveUntilStop(1)
+    );
+
 
     AutoModule Shimmy = new AutoModule(
             intake.stageFlipOut(0.05),
@@ -80,6 +85,8 @@ public interface AutoModuleUser extends RobotUser {
             intake.stageFlipHalf(0.05),
             intake.showIfVertical()
     );
+
+
 
     AutoModule MoveIntakeOut = new AutoModule(
             intake.stageFlipAlmostOut(0.05),
@@ -168,6 +175,12 @@ public interface AutoModuleUser extends RobotUser {
             intake.stageFlipIn(0.2),
             intake.stageDisable(0.05)
     );
+    AutoModule IntakeSpecimen = new AutoModule(
+
+            intake.stageFlipHalf(0.1),
+            liftIntake.stageDown(0.6, 0),
+            driveMode.ChangeMode(Modes.Drive.FAST)
+    );
 
 
     AutoModule ResetLift = new AutoModule(
@@ -176,7 +189,7 @@ public interface AutoModuleUser extends RobotUser {
             new Stage(liftOuttake.usePart(), new Main(liftOuttake::softReset), RobotPart.exitTime(0.1), liftOuttake.stop(), liftOuttake.returnPart())
     );
 
-    AutoModule ResetLift2 = new AutoModule(
+    AutoModule ResetLiftIntake = new AutoModule(
             liftIntake.moveTimeSus(-0.1, 2),
             new Stage(liftIntake.usePart(), new Main(liftIntake::softReset), RobotPart.exitTime(0.1), liftIntake.stop(), liftIntake.returnPart())
     );

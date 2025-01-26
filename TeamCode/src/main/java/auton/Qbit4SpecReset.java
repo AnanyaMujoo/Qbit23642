@@ -29,7 +29,7 @@ public class Qbit4SpecReset extends AutoFramework {
             claw.stageDisable(0.05)
     ).setStartCode(() -> {
         intake.flipAlmost();
-        claw.hold2();
+        claw.hold();
     });
 
     AutoModule Specimen = new AutoModule(
@@ -129,7 +129,7 @@ public class Qbit4SpecReset extends AutoFramework {
         addWaypoint(0.6, -5, 45, 0);
         addWaypoint(0.2, -5, 70, 0);
         addTimedSetpoint(0.1, 0.42, -5, 87, 0);
-        addTimedSetpoint(0.05, 0.05, -5, 90, 0);
+        addTimedSetpoint(0.05, 0.15, -5, 90, 0);
         addAutoModule(Specimen);
         addPause(0.19);
         addWaypoint(1.0,40,70,90);
