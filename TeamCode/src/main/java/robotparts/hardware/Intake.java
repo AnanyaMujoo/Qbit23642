@@ -164,7 +164,7 @@ public class Intake extends RobotPart {
     public Stage moveUntilColor(){
         return new Stage(
                 usePart(),
-                exitTime(1),
+                exitTime(3),
                 colorSensors.usePart(),
                 new Initial(() -> {
                     stopSpin = false;
@@ -264,6 +264,14 @@ public class Intake extends RobotPart {
                 .addSubStage(0.05, () -> move(1))
                 .addSubStage(0.05, this::flipAlmost)
                 .addSubStage(0.05, this::closeDoor)
+                .addSubStage(0.05, () -> move(0))
+        );
+    }
+    public Stage stagepPickUp3Samp(){
+        return super.customTime(new StageBuilderTime(this)
+                .addSubStage(0.05, () -> move(1))
+                .addSubStage(0.05, this::flipAlmost)
+                .addSubStage(0.2, this::closeDoor)
                 .addSubStage(0.05, () -> move(0))
         );
     }

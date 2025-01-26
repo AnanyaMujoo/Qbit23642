@@ -41,9 +41,11 @@ public class Qbit4SpecNoReset extends AutoFramework {
 
             AutoModule SpecimenNoHold = new AutoModule(
             liftOuttake.stageDown(0.7, 33),
-            claw.stageReady(0.2),
-            liftOuttake.stageDown(-0.85,3)
-    );
+            claw.stageReady(0.3),
+                    claw.stageReady(0.3),
+                    liftOuttake.stageDown(-0.85,3)
+
+                    );
     AutoModule SpecimenNoHoldFinal = new AutoModule(
             liftOuttake.stageDown(0.7, 33),
             claw.stageReady(0.2),
@@ -122,7 +124,7 @@ public class Qbit4SpecNoReset extends AutoFramework {
             claw.stageSqueeze(0.15),
             liftOuttake.moveTime(0.7, 0.3),
             claw.stageHold(0.05),
-            liftOuttake.stageLift(0.35, 44),
+            liftOuttake.stageLift(0.30, 44),
             claw.stageDisable(0.05)
     );
 
@@ -178,7 +180,7 @@ public class Qbit4SpecNoReset extends AutoFramework {
             }
             // 0.35
             addTimedSetpoint(0.15, 0.5, 92+x,15,180);
-            addTimedSetpoint(0.15, 0.4, 92+x,-7,180);
+            addTimedSetpoint(0.2, 0.5, 92+x,-8,180);
 
             addAutoModule(LiftAway);
             addPause(0.4);
@@ -203,17 +205,18 @@ public class Qbit4SpecNoReset extends AutoFramework {
             addWaypoint(0.6,60+x+delta,35,30);
             addWaypoint(0.6,15+x+delta,50,0);
             addWaypoint(0.5, 10+x+delta, 50, 0);
-            addWaypoint(0.6, 10+x+delta, 70, 0);
-            addTimedSetpoint(0.1, 0.38, 5 + x + delta, 90, 0);
+            addWaypoint(0.4, 10+x+delta, 70, 0);
+            addTimedSetpoint(0.1, 0.38, 5 + x + delta, 85, 0);
+            addTimedSetpoint(0.03, 0.17, 5 + x + delta, 92, 0);
 
+            addPause(0.5);
             if (i<2){
                 addAutoModule(SpecimenNoHold);
             }
             else{
             addAutoModule(SpecimenNoHoldFinal);}
-        addTimedSetpoint(0.05, 0.17, 5 + x + delta, 100, 0);
 
-        addPause(0.2);
+            addPause(0.25);
 
             addCustomCode(() -> {
                 if(i < 2) {
