@@ -3,6 +3,7 @@ package robot;
 //import robotparts.hardware.Drone;
 //import robotparts.hardware.Hanging;
 import robotparts.hardware.Intake2;
+import robotparts.hardware.Mahiya;
 //import robotparts.sensors.odometry.NewOdometry;
 //import robotparts.sensors.odometry.OneOdometry;
 ////import robotparts.sensors.odometry.SecondOdometry;
@@ -50,6 +51,7 @@ public interface RobotUser {
 
 //    Intake intake = new Intake();
     Intake2 intake2 = new Intake2();
+    Mahiya mahiya = new Mahiya();
 
 //    TouchSensors touchSensors = new TouchSensors();
 

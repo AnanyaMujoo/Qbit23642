@@ -3,7 +3,6 @@ package teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import androidx.annotation.CallSuper;
-import automodules.AutoModuleUser;
 import elements.FieldSide;
 import global.Common;
 import global.General;
@@ -14,7 +13,7 @@ import util.condition.Magnitude;
 
 import static global.General.*;
 
-public abstract class Tele extends OpMode implements Common, RobotUser, AutoModuleUser, Modes {
+public abstract class Tele extends OpMode implements Common, RobotUser,  Modes {
     /**
      * Base class for teleops
      * NOTE: If you are creating a real teleop then call activate in initTele

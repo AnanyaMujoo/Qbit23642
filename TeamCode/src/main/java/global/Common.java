@@ -17,6 +17,7 @@ import util.store.Storage;
 import static global.General.*;
 
 public interface Common{
+
     /**
      * Reference initializes all of the robotParts using the opmode
      * @param thisOpMode

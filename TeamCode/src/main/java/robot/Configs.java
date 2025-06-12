@@ -2,6 +2,8 @@ package robot;
 
 import static robot.RobotConfig.setConfig;
 
+import robotparts.RobotPart;
+
 public class Configs implements RobotUser{
 
     /**
@@ -26,6 +28,8 @@ public class Configs implements RobotUser{
 
 //RobotConfig CenterStageBasicConfig = new RobotConfig(outtake, drone, lift, hang, drive, intake, camera, gyro, odometry);
     RobotConfig TestConfig = new RobotConfig(intake2);
+    RobotConfig MahiyaConfig = new RobotConfig(mahiya);
+
 
 
 
@@ -33,7 +37,7 @@ public class Configs implements RobotUser{
      * Current Config
      */
     public void setCurrentConfig(){
-        setConfig(TestConfig);
+        setConfig(MahiyaConfig);
     }
 
 }
