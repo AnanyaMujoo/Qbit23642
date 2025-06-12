@@ -3,6 +3,7 @@ package robot;
 //import robotparts.hardware.old.Drone;
 //import robotparts.hardware.old.Hanging;
 import robotparts.hardware.Bucket;
+import robotparts.hardware.CampDrive;
 import robotparts.hardware.old.Flip;
 import robotparts.hardware.Intake;
 import robotparts.hardware.old.Intaketest;
@@ -51,6 +52,8 @@ public interface RobotUser {
 //    NewOdometry odometry = new NewOdometry();
 //    OneOdometry oneOdometry = new OneOdometry();
     RealOdometry odometry = new RealOdometry();
+    CampDrive CampDrive = new CampDrive();
+
 //    SecondOdometry secondOdometry = new SecondOdometry();
     /**
      * UNUSED

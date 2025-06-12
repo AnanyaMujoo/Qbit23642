@@ -2,6 +2,8 @@ package robot;
 
 import static robot.RobotConfig.setConfig;
 
+import robotparts.hardware.CampDrive;
+
 public class Configs implements RobotUser{
 
     /**
@@ -30,16 +32,15 @@ public class Configs implements RobotUser{
 //    RobotConfig TestConfig5 = new RobotConfig(drive);
 //
 //    RobotConfig TestConfig6 = new RobotConfig(bucket,claw);
-
-
-    RobotConfig IntoTheDeepBasicConfig = new RobotConfig(drive, liftIntake, liftOuttake, bucket, claw, intake, gyro, odometry, colorSensors);
+    //RobotConfig IntoTheDeepBasicConfig = new RobotConfig(drive, liftIntake, liftOuttake, bucket, claw, intake, gyro, odometry, colorSensors);
+    RobotConfig CampConfig = new RobotConfig(CampDrive);
 
 //    RobotConfig IntoTheDeepConfig = new RobotConfig(drive, lift, liftVertical, claw, bucket, flip, intake, odometry);
     /**
      * Current Config
      */
     public void setCurrentConfig(){
-        setConfig(IntoTheDeepBasicConfig);
+        setConfig(CampConfig);
     }
 
 }
