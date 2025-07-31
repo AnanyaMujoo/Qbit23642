@@ -93,8 +93,6 @@ public class TestOp extends Tele{
         gph1.link(Button.RIGHT_TRIGGER, () -> {
             if(!drive.machineMode) {
                 bot.addAutoModule(PrepareBucket);
-            }else {
-                bot.addMachine(Drop(drive.n, drive.n));
             }
         });
         gph1.link(Button.LEFT_TRIGGER, () -> {
@@ -179,8 +177,6 @@ public class TestOp extends Tele{
 
         intake.flipIn();
         bucket.specimen();
-
-        n = 0;
 
     }
 
